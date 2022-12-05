@@ -1,0 +1,918 @@
+------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  N:\My_files\siman\Ian_example\testing_simandescribe.log
+  log type:  text
+ opened on:  24 Jan 2022, 17:22:46
+
+. 
+. 
+. * Format 1: Long-long
+. ***********************
+. use long_long_formats\simlongESTPM_longE_longM.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se
+> ) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. siman_reshape, longwide  
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 3: long-wide
+The import format for targets is: long
+The import format for methods is: wide
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates stub is:            est
+The se stub is:                   se
+The df stub is:                   N/A
+The ci stubs are:                 N/A
+The p stub is:                    N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. siman_reshape, longlong                   
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. 
+. 
+. use long_long_formats\simlongESTPM_longE_longM1.dta, clear
+
+. siman_setup, rep(repit) dgm(d) target(estim) method(meth) estimate(est_data) se(se
+> _data) 
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  d
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est_data
+The se variable is:               se_data
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       N/A
+_____________________________________________________
+
+. siman_reshape, longwide  
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 3: long-wide
+The import format for targets is: long
+The import format for methods is: wide
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  d
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates stub is:            est_data
+The se stub is:                   se_data
+The df stub is:                   N/A
+The ci stubs are:                 N/A
+The p stub is:                    N/A
+The true-value stub is:           N/A
+_____________________________________________________
+
+. siman_reshape, longlong
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  d
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est_data
+The se variable is:               se_data
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       N/A
+_____________________________________________________
+
+. 
+. use long_long_formats\estimates.dta, clear
+
+. siman_setup, rep(idrep) dgm(dgm) method(method) estimate(theta) se(se)  
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         N/A
+The target values are:            N/A
+
+The number of methods is:         3
+The method values are:            1 2 3
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        theta
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       N/A
+_____________________________________________________
+
+. siman_reshape, longwide  
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 3: long-wide
+The import format for targets is: long
+The import format for methods is: wide
+The number of targets is:         N/A
+The target values are:            N/A
+
+The number of methods is:         3
+The method values are:            1 2 3
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates stub is:            theta
+The se stub is:                   se
+The df stub is:                   N/A
+The ci stubs are:                 N/A
+The p stub is:                    N/A
+The true-value stub is:           N/A
+_____________________________________________________
+
+. siman_reshape, longlong
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         N/A
+The target values are:            N/A
+
+The number of methods is:         3
+The method values are:            1 2 3
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        theta
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       N/A
+_____________________________________________________
+
+. 
+. * no estimate data
+. use long_long_formats\simlongESTPM_longE_longM_noest.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are not contained in the dataset
+
+The estimates variable is:        N/A
+The se variable is:               N/A
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. 
+. 
+. * Format 2: Wide-wide
+. ***********************
+. use wide_wide_formats\simlongESTPM_wideE_wideM.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(1_ 2_) estimate(est) se(s
+> e) true(true) order(method)   
+
+. siman_reshape, longlong                              
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. 
+. use wide_wide_formats\simlongESTPM_wideE_wideM1.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(1 2) estimate(est) se(se)
+>  true(true) order(method)
+
+. siman_reshape, longlong
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. 
+. 
+. use wide_wide_formats\simlongESTPM_wideE_wideM2.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(beta_ gamma_) method(1 2) estimate(est) se(s
+> e) true(true) order(target) 
+
+. siman_reshape, longlong                
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. 
+. 
+. use wide_wide_formats\simlongESTPM_wideE_wideM3.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(1 2) estimate(est) se(se)
+>  true(true) order(target) 
+
+. siman_reshape, longlong  
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. 
+. 
+. use wide_wide_formats\simlongESTPM_wideE_wideM4.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(s
+> e) true(true) order(method) 
+
+. siman_reshape, longlong     
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            A B
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. 
+. 
+. use wide_wide_formats\simlongESTPM_wideE_wideM5.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(1_ 2_) estimate(est) se(s
+> e) p(p) df(df) true(true) order(method) 
+
+. siman_reshape, longlong    
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               df
+The ci variables are:             N/A
+The p variable is:                p
+The true-value variable is:       true
+_____________________________________________________
+
+. 
+. 
+. * Format 3: Long-wide
+. ***********************
+. use long_wide_formats\simlongESTPM_longE_wideM.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(estimand) method(1 2) estimate(est) se(se) t
+> rue(true) 
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 3: long-wide
+The import format for targets is: long
+The import format for methods is: wide
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates stub is:            est
+The se stub is:                   se
+The df stub is:                   N/A
+The ci stubs are:                 N/A
+The p stub is:                    N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. siman_reshape, longlong  
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. 
+. 
+. use long_wide_formats\simlongESTPM_longE_wideM1.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(estimand) method(1 2) estimate(est_) se(se_)
+>  true(true)  
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 3: long-wide
+The import format for targets is: long
+The import format for methods is: wide
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates stub is:            est_
+The se stub is:                   se_
+The df stub is:                   N/A
+The ci stubs are:                 N/A
+The p stub is:                    N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. siman_reshape, longlong    
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. siman_reshape, longwide                  
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 3: long-wide
+The import format for targets is: long
+The import format for methods is: wide
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates stub is:            est
+The se stub is:                   se
+The df stub is:                   N/A
+The ci stubs are:                 N/A
+The p stub is:                    N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. 
+. 
+. use long_wide_formats\simlongESTPM_longE_wideM2.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(estimand) method(A B) estimate(est) se(se) t
+> rue(true)  
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 3: long-wide
+The import format for targets is: long
+The import format for methods is: wide
+The number of targets is:         2
+The target values are:            1 2
+
+The number of methods is:         2
+The method values are:            A B
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates stub is:            est
+The se stub is:                   se
+The df stub is:                   N/A
+The ci stubs are:                 N/A
+The p stub is:                    N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. siman_reshape, longlong     
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            1 2
+
+The number of methods is:         2
+The method values are:            A B
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. 
+. 
+. * Format 4: Wide-long
+. ***********************
+. 
+. use wide_long_formats\simlongESTPM_longM_wideE.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(beta_ gamma_) method(method) estimate(est) s
+> e(se) true(true)  
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 3: long-wide
+The import format for targets is: long
+The import format for methods is: wide
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates stub is:            est
+The se stub is:                   se
+The df stub is:                   N/A
+The ci stubs are:                 N/A
+The p stub is:                    N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. siman_reshape, longlong
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. 
+. use wide_long_formats\simlongESTPM_longM_wideE1.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(method) estimate(est_) se
+> (se_) true(true)  
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 3: long-wide
+The import format for targets is: long
+The import format for methods is: wide
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates stub is:            est_
+The se stub is:                   se_
+The df stub is:                   N/A
+The ci stubs are:                 N/A
+The p stub is:                    N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. siman_reshape, longlong                      
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. siman_reshape, longwide
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 3: long-wide
+The import format for targets is: long
+The import format for methods is: wide
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates stub is:            est
+The se stub is:                   se
+The df stub is:                   N/A
+The ci stubs are:                 N/A
+The p stub is:                    N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. 
+. use wide_long_formats\simlongESTPM_longM_wideE2.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(1 2) method(method) estimate(est) se(se) tru
+> e(true)  
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 3: long-wide
+The import format for targets is: long
+The import format for methods is: wide
+The number of targets is:         2
+The target values are:            1 2
+
+The number of methods is:         2
+The method values are:            A B
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates stub is:            est
+The se stub is:                   se
+The df stub is:                   N/A
+The ci stubs are:                 N/A
+The p stub is:                    N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. siman_reshape, longlong                   
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The import format is:             format 1: long-long
+The import format for targets is: long
+The import format for methods is: long
+The number of targets is:         2
+The target values are:            1 2
+
+The number of methods is:         2
+The method values are:            A B
+
+Data generating mechanism (dgm):  dgm
+The number of dgms is:            1
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true-value variable is:       true
+_____________________________________________________
+
+. 
+. log close
+      name:  <unnamed>
+       log:  N:\My_files\siman\Ian_example\testing_simandescribe.log
+  log type:  text
+ closed on:  24 Jan 2022, 17:22:49
+------------------------------------------------------------------------------------

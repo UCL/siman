@@ -1,158 +1,138 @@
 {smcl}
-{* *! version 0.1  4May2018}{...}
-{vieweralsosee "simulate" "help simulate"}{...}
-{vieweralsosee "post" "help post"}{...}
-{viewerjumpto "Description" "sim##description"}{...}
-{viewerjumpto "Components" "sim##components"}{...}
-
+{* *! version 0.5 21nov2022}{...}
+{* version 0.3 13dec2021}{...}
+{* version 0.2 23June2020}{...}  
+{* version 0.1 04June2020}{...}
+{vieweralsosee "simsum (if installed)" "simsum"}{...}
+{viewerjumpto "Syntax" "siman##syntax"}{...}
+{viewerjumpto "Description" "siman##description"}{...}
+{viewerjumpto "Data and formats" "siman##formats"}{...}
+{viewerjumpto "Examples" "siman##examples"}{...}
+{viewerjumpto "Details" "siman##details"}{...}
+{viewerjumpto "References" "siman##refs"}{...}
+{viewerjumpto "Authors and updates" "siman##updates"}{...}
 {title:Title}
 
 {phang}
-{bf:siman} {hline 2} Commands for the analysis and visual exploration of simulation results
+{bf:siman} {hline 2} Suite of commands for analysing the results of simulation studies and producing graphs
+
+
+{title:Syntax}{marker syntax}
+{p2colset 5 25 25 0}{...}
+
+
+Get started
+
+{p2col:{bf:{help siman_setup:siman setup}}}set up data in the format required by siman, with the user’s raw simulation data (estimates data set)
+
+Utilities
+
+{p2col:{bf:{help siman_reshape:siman reshape}}}convert dataset held in memory from any format in to long-long or long-wide format (i.e. long target-wide method)
+
+Analyses
+
+{p2col:{bf:{help siman_analyse:siman analyse}}}creates performance measures data set from the estimates data set, and can hold both in memory
+
+Descriptive tables and figures
+
+{p2col:{bf:{help siman_describe:siman describe}}}tabulates imported estimates data
+
+{p2col:{bf:{help siman_table:siman table}}}tabulates computed performance measures data
+
+Graphs of results: Estimates data
+
+{p2col:{bf:{help siman_scatter:siman scatter}}}scatter plot
+
+{p2col:{bf:{help siman_comparemethodsscatter:siman comparemethodsscatter}}}scatter compare methods plot
+
+{p2col:{bf:{help siman_swarm:siman swarm}}}swarm plot
+
+{p2col:{bf:{help siman_blandaltman:siman blandaltman}}}bland altman plot
+
+{p2col:{bf:{help siman_zipplot:siman zipplot}}}zipplot plot
+
+Graphs of results: Performance measures data
+
+{p2col:{bf:{help siman_lollyplot:siman lollyplot}}}lollyplot plot
+
+{p2col:{bf:{help siman_nestloop:siman nestloop}}}nestloop plot
+
+{p2col:{bf:{help siman_trellis:siman trellis}}}trellis plot
 
 
 {marker description}{...}
 {title:Description}
 
 {pstd}
-The {cmd:siman} suite of commands handles the analysis of
-'estimates' data as output by simulation studies.
-
-{pstd}
-An 'estimates dataset' (see Morris, White and Crowther)
-refers to a dataset containing summaries of results
-from individual repetitions of a simulation experiment.
-Such data may consist of, for example, parameter
-estimates, standard errors, degrees of freedom, an
-indicator of rejection of a hypothesis, and more.
+{cmd:siman} is a suite of programs for importing estimates data, analysing the results of simulation studies and graphing the data. 
 
 
-{title:Components}{marker components}
+{marker formats}{...}
+{title:Data and formats}
 
-Setting up
+{pstd}There will be 2 data set types that siman will use: 
 
-{col 4}{bf:{help siman_set:siman set}}{...}
-{col 24}declare data as simulation results in preparation for analysis
+{pstd}{bf:Estimates data set.}
+Contains summaries of results from individual repetitions of a simulation experiment.  
+Such data may consist of, for example, parameter estimates, standard errors, degrees of freedom, 
+confidence intervals, an indicator of rejection of a hypothesis, and more.
 
-Graphics based on estimates data
+{pstd}{bf:Performance measures data set.}
+Produced by {bf:{help siman_analyse:siman analyse}}  which calculates performance measures including Monte Carlo error, 
+for use with {bf:{help siman_lollyplot:siman lollyplot}}, {bf:{help siman_nestloop:siman nestloop}} and {bf:{help siman_trellis:siman trellis}}.  Please note, this will usually be appended to the estimates data set.
 
-{col 4}{bf:{help siman_swarm:siman swarm}}{...}
-{col 24}swarm plot of individual estimates or of model standard errors
+{pstd}Data held in memory from {bf:{help siman_setup:siman setup}} can be reshaped in to either long-long format or long-wide format using {bf:{help siman_reshape:siman reshape}}.
 
-{col 4}{bf:{help siman_scatter:siman scatter {it:type}}}{...}
-{col 24}scatter plots of simulation results, where {it:type} is one of:
+{pstd}For troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
 
-{col 8}{bf:{help siman_scatter:modse est}}{...}
-{col 28}plot of the model standard error against estimate
-
-{col 8}{bf:{help siman_scatter:ests method}}{...}
-{col 28}matrix of estimates comparing methods within a repetition
-
-{col 8}{bf:{help siman_scatter:bland-altman}}{...}
-{col 28}
-
-{col 4}{bf:{help siman_zipplot:zipplot}}{...}
-{col 24}
-
-Analysis of simulation results to estimate performance measures including Monte Carlo error
-
-{col 4}{bf:{help siman_simsum:siman sum}}{...}
-{col 24}functions using simsum, but will be developed.
-
-Graphics based on simulation results
-
-{col 4}{bf:{help siman_lollyplot:lollyplot}}{...}
-{col 30}
-
-{col 4}{bf:{help siman_nestloop:nestloop}}{...}
-{col 30}
+{marker examples}{...}
+{title:Examples}
 
 
-{title:Data formats}
-{pstd}
+{pstd} Use res.rda converted into a Stata dataset from {help siman##ruckerschwarzer:Rücker and Schwarzer, 2014}.  The example Stata dataset
+is available {browse "https://github.com/UCL/simansuite/tree/main/Ella_testing/nestloop/res.dta":here}.
 
-Estimates data are expected to appear in one of the following formats:
-long, wide, or longsep (described below). Note that 'rep' indexes the 
-repetition number, 'dgm' denotes the data-generating mechanism to which 
-a method was applied, and 'method' denotes the method used to produce 
-the estimates.
+{phang}. {stata "siman setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)"}
 
-           Format {it:long}
-        {c TLC}{hline 38}{c TRC}
-        {c |} {it:rep  dgm  method  estimate    se  df} {c |}
-        {c |}{hline 38}{c |}
-        {c |}   1    1       a     .7067 .1465  98 {c |}
-        {c |}   1    1       b     .7124 .1411  99 {c |}
-        {c |}   1    2       a     .3485 .1599 798 {c |}
-        {c |}   1    2       b     .4287 .1358 799 {c |}
-        {c |}   2    1       a     .6495 .1522  98 {c |}
-        {c |}   2    1       b     .5604 .1169  99 {c |}
-        {c |}   2    2       a     .4321 .1263 798 {c |}
-        {c |}   2    2       b     .4922 .1179 799 {c |}
-        {c BLC}{hline 38}{c BRC}
+{phang}. {stata "siman scatter, by(k)"}
 
-           Format {it:wide}
-        {c TLC}{hline 63}{c TRC}
-        {c |} {it:rep  dgm  method  estimatea   sea  dfa  estimateb    seb  dfb} {c |}
-        {c |}{hline 63}{c |}
-        {c |}   1    1       a     .7067  .1465   98      .7124  .1411   99 {c |}
-        {c |}   1    2       a     .3485  .1599  798      .4287  .1358  799 {c |}
-        {c |}   2    1       a     .6495  .1522   98      .5604  .1169   99 {c |}
-        {c |}   2    2       a     .4321  .1263  798      .4922  .1179  799 {c |}
-        {c BLC}{hline 63}{c BRC}
+{phang}. {stata "siman analyse"}
 
-           Format {it:longsep}
-           File {it:dgm1}
-        {c TLC}{hline 33}{c TRC}
-        {c |} {it:rep  method  estimate    se  df} {c |}
-        {c |}{hline 33}{c |}
-        {c |}   1       a     .7067 .1465  98 {c |}
-        {c |}   1       b     .7124 .1411  99 {c |}
-        {c |}   2       a     .6495 .1522  98 {c |}
-        {c |}   2       b     .5604 .1169  99 {c |}
-        {c BLC}{hline 33}{c BRC}
-           File {it:dgm2}
-        {c TLC}{hline 33}{c TRC}
-        {c |} {it:rep  method  estimate    se  df} {c |}
-        {c |}{hline 33}{c |}
-        {c |}   1       a     .3485 .1599 798 {c |}
-        {c |}   1       b     .4287 .1358 799 {c |}
-        {c |}   2       a     .4321 .1263 798 {c |}
-        {c |}   2       b     .4922 .1179 799 {c |}
-        {c BLC}{hline 33}{c BRC}
+{phang}. {stata `"siman nestloop mean, dgmorder(-theta rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("Odds ratio")"'}
 
 
+{title:Details}{marker details}
 
-{title:References}
-
-{pstd}
-Morris TP, White IR, Crowther MJ. Using simulation studies to evaluate statistical methods. https://arxiv.org/abs/1712.03198
-
-{pstd}
-White IR. simsum: Analyses of simulation studies including monte carlo error. {it: The Stata Journal}, 10(3):369-385, 2010.
-
-{pstd}
-Rucker G, Schwarzer G. Presenting simulation results in a nested loop plot. {it:BMC Medical Research Methodology}, 14(1):129+, 2014.
+{pstd}{bf:{help siman_analyse:siman analyse}} requires the additional program {help simsum}.
 
 
-{title:Authors}
-
-{pstd}
-Tim Morris, MRC Clinical Trials Unit at UCL, London UK
-{break}
-Email: {browse "mailto:tim.morris@ucl.ac.uk":tim.morris@ucl.ac.uk}
-{break}
-Twitter: {browse "https://twitter.com/tmorris_mrc":@tmorris_mrc}
-
-{pstd}
-Ian White, MRC Clinical Trials Unit at UCL, London UK
-{break}
-Email: {browse "mailto:ian.white@ucl.ac.uk":ian.white@ucl.ac.uk}
+{title:References}{marker refs}
 
 
-{title:Also see}
+{phang}{marker Morris++19}Morris TP, White IR, Crowther MJ.
+Using simulation studies to evaluate statistical methods.
+Statistics in Medicine 2019; 38: 2074-2102.
+{browse "https://onlinelibrary.wiley.com/doi/10.1002/sim.8086"}
 
-    {helpb simulate}
-    {helpb post}
-    {helpb simsum} (if installed)
-{break}
+{phang}{marker ruckerschwarzer}Rücker G, Schwarzer G. 
+Presenting simulation results in a nested loop plot. BMC Med Res Methodol 14, 129 (2014). 
+{browse "https://doi.org/10.1186/1471-2288-14-129"}
+
+
+{title:Authors and updates}{marker updates}
+
+
+{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK. 
+Email {browse "mailto:e.marley-zagar@ucl.ac.uk":e.marley-zagar@ucl.ac.uk}.
+
+{pstd}Ian White, MRC Clinical  Trials Unit at UCL, London, UK. 
+Email {browse "mailto:ian.white@ucl.ac.uk":ian.white@ucl.ac.uk}.
+
+{pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK. 
+Email {browse "mailto:tim.morris@ucl.ac.uk":tim.morris@ucl.ac.uk}.
+
+
+{title:See Also}
+
+{pstd}{help simsum} (if installed)
+
