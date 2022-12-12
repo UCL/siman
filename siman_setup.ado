@@ -21,9 +21,14 @@ If method() contains more than one entry and target() contains one entry only th
 Please note that if method() contains one entry and target() contains more than one entry (wide-long) format then this will be auto-reshaped to long-wide (format 3).
 */
 
-if `simansetuprun' == 1 {
-	di as error "siman setup has already been run on the dataset held in memory; siman setup should be run on the 'raw' estimates dataset produced by your simulation study."
+* load simansetuprun indicator if present
+cap local simansetuprun : char _dta[siman_simansetuprun]
+
+if !mi("`simansetuprun'") {
+	if `simansetuprun' == 1 {
+		di as error "siman setup has already been run on the dataset held in memory; siman setup should be run on the 'raw' estimates dataset produced by your simulation study."
 	exit 498
+	}
 }
 
 local simansetuprun 0
@@ -532,12 +537,6 @@ foreach summary of varlist `estimate' `se' `df' `ci' `p' `true' {
 	}
 */
 
-
-
-* Set indicator so that user can determine if siman setup has been run already
-local simansetuprun 1 
-
-
 * Assigning characteristics
 ******************************
 * NB Have to do this before reshape otherwise there will be no macros to transfer over to siman reshape - so
@@ -714,6 +713,10 @@ if (`nmethod'==0 & `ntarget'>1 ) {
 * if have auto-reshaped above, program will print siman describe table twice so use the autoreshape macro to make sure only printed once
 *if `autoreshape' == 0 siman_describe
 siman_describe
+
+* Set indicator so that user can determine if siman setup has been run already
+local simansetuprun 1 
+char _dta[siman_simansetuprun] `simansetuprun'
 
 /*
 * Note can't do the following as it doesn't work for 1st example in wide-wide data.  Variables est1_ etc are not recognised by Stata as meeting the criteria variable *_
