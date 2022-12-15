@@ -69,13 +69,22 @@ foreach singlevar in "`rep'" "`estimate'" "`se'" "`df'" "`lci'" "`uci'" "`p'" "`
 	local 2
 }
 
-* check that dgm is a numerical value (with string labels if necc)
+* check that dgm takes numerical values; if not, encode and replace so that siman can do its things.
 if !mi("`dgm'") {
-	cap confirm numeric variable `dgm'
-	if _rc {
-		di as error "dgm needs to be numerical format for the siman suite."
-		exit 498
-	}
+    foreach var of varlist `dgm' {
+        cap confirm numeric variable `dgm'
+        if _rc {
+            tempvar t`var'
+            encode `var', gen(`t`var'')
+            drop `var'
+            rename `t`var'' `var'
+            compress `var'
+        local var name
+            display as error "Warning: variable `var', which appears in dgm(), was stored as a string. It has been" _newline ///
+            "encoded as numeric so that subsequent siman commands will work. If you require a" _newline ///
+            "different order, encode `var' as numeric before running -siman setup-."
+        }
+    }
 }
 
 * if there is no dgm variable listed in the dataset (i.e. there is only 1 dgm so it is not included in the data), then create a temporary variable for dgm * with values of 1.
