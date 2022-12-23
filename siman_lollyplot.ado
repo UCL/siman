@@ -244,7 +244,7 @@ foreach pm of local tograph {
 	local longpmname: label (`rep') -`pm'
 	tempvar row
 	gen `row' = _n
-	summ `row' if `rep' == -`pm'
+	qui summ `row' if `rep' == -`pm'
 	local shortpmname = _perfmeascode[`=r(min)']
 	assert _perfmeascode == "`shortpmname'" if `rep' == -`pm'
 
