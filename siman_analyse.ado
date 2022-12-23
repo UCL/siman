@@ -1,4 +1,4 @@
-*! version 0.5  11july2022
+*! version 0.5   11jul2022
 *  version 0.5  11july2022   EMZ changing created variable names to start with _, and adding error catching messages
 *  version 0.4  16may2022    EMZ minor bug fix with renaming of mcse's
 *  version 0.3  28feb2022    Changes from IW testing

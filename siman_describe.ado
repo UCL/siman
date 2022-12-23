@@ -1,4 +1,4 @@
-*! version 0.4   21july2022  
+*! version 0.4   21jul2022  
 *  version 0.4   21july2022    EMZ change how dgms are displayed in the table
 *  version 0.3   30 june2022   EMZ minor formatting changes from IW/TM testing
 *  version 0.2   06jan2022     EMZ changes
