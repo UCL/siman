@@ -1,4 +1,4 @@
-*! version 1.9   23dec2022   IW added labformat() option
+*! version 1.9   23dec2022   IW added labformat() option; changed to use standard twoway graph with standard legend
 *  version 1.8   05dec2022   TM added 'rows(1)' so that dgms all appear on 1 row.
 *  version 1.7   14nov2022   EMZ added bygraphoptions().
 *  version 1.6   05sep2022   EMZ bug fix to allow if target == "x".
@@ -102,18 +102,16 @@ else {
 		
 * generate ref variable
 qui gen ref=.
-qui replace ref=0 if (_perfmeascode=="bias" | _perfmeascode=="relerror" | _perfmeascode=="relprec")
+qui replace ref=0 if inlist(_perfmeascode, "bias", "relerror", "relprec")
 qui replace ref=95 if _perfmeascode=="cover"
 qui replace ref=80 if _perfmeascode=="power"
 
 * gen thelab variable
-qui gen thelab = `estimate'
 if mi("`labformat'") local labformat %12.4g
-`dicmd' qui format thelab `labformat'
-qui tostring thelab, replace
+qui gen thelab = string(`estimate',"`labformat'")
+qui replace thelab = string(`estimate',"%6.0g") if inlist( _perfmeascode,"bsims","sesims")
 
 * confidence intervals
-
 capture confirm variable `lci'
 if _rc {
 	qui gen float lci = `estimate' + (`se'*invnorm(.025))
@@ -125,22 +123,22 @@ if _rc {
 	local uci uci
 	}
 
-* For confidence interval markers on the graphs
+* confidence interval markers for the graphs
 qui gen l = "("
 qui gen r = ")"
 
 
 if "`method'"!="" {
 
-* for value labels of method
-qui tab `method'
-local nmethodlabels = `r(r)'
-	
-qui levels `method', local(levels)
-qui tokenize `"`levels'"'
-	forvalues i=1/`nmethodlabels' {
-			local m`i' = "``i''"
-	}
+	* for value labels of method
+	qui tab `method'
+	local nmethodlabels = `r(r)'
+		
+	qui levels `method', local(levels)
+	qui tokenize `"`levels'"'
+		forvalues i=1/`nmethodlabels' {
+				local m`i' = "``i''"
+		}
 
 }
 
@@ -193,7 +191,12 @@ if !mi("`if'") {
 }
 else local if "if"
 
-* create separate plots then graph combine.
+forvalues j = 1/`nmethodlabels' { 
+	local label : label (`method') `j' // assumes method is coded 1,2,3...
+	local order `order' `=`nmethodlabels'*3+`j'' "`label'"
+	}
+
+* create separate plots 
 foreach pm of local tograph {
 	if !inlist(`pm',`ifplot') {
 		local refline
@@ -237,105 +240,31 @@ foreach pm of local tograph {
 
 		}
 	
+	* find short and long names for this PM
+	local longpmname: label (`rep') -`pm'
+	tempvar row
+	gen `row' = _n
+	summ `row' if `rep' == -`pm'
+	local shortpmname = _perfmeascode[`=r(min)']
+	assert _perfmeascode == "`shortpmname'" if `rep' == -`pm'
 
-	qui levelsof `rep' if _pm == `pm'
-	qui assert `:word count `r(levels)''== 1 | `:word count `r(levels)''== 0
-	if `:word count `r(levels)''!= 0 {
-		local repname = "`r(levels)'" 
-		local label: label (`rep') `repname'
-		local len : length local label
-		if `len' > 15 {
-			local p1: piece 1 15 of "`label'", nobreak
-			local p2: piece 2 15 of "`label'", nobreak
-			local p3: piece 3 15 of "`label'", nobreak
-			local ytit `""`p1'" "`p2'" "`p3'""'
-			}
-		}
-
-	#delimit ;
+ 	#delimit ;
 	`dicmd' graph twoway
 		`refline' `spikes' `bounds' `scatters' 
 		,
-		by(`dgm', rows(1) `rescale' legend(off) note("") imargin(tiny)
-			l1tit(`ytit', orientation(horizontal) width(21) justification(right)) `bygraphoptions'
+		by(`dgm', `rescale' note("") imargin(tiny)
+			b1tit(`longpmname') `bygraphoptions'
 		)
-		subtitle("")
 		ytit("")
 		yla(0 4, val grid labc(white) labsize(*.1))
 		xla(, grid)
 		ysca(reverse)
-		name(g`pm', replace) nodraw `graphoptions'
+		legend(order(`order'))
+		name(simanlollyplot_`shortpmname', replace) 
+		`graphoptions'
 	;
 	#delimit cr
 }
-
-forvalues n = 1/`nmethodlabels' { 
-*	local c = `n' -1
-	local pci`n' = `"(pci `n' -1 `n' -.5, lcol("scheme p`n'"))"'
-	local scatteri`n' = `"(scatteri `n' -.5 (3) " Method: `m`n''", msym(o) mcol("scheme p`n'") mlabcol("scheme p`n'"))"' 
-	if `n'==1 {
-		local pcimethod `pci`n''
-		local scatterimethod `scatteri`n''
-		}
-	else if `n'>1 { 
-		local pcimethod `pcimethod' `pci`n''
-		local scatterimethod `scatterimethod' `scatteri`n''
-		}
-	}
-
-if "`dgm'"!="" {
-	
-	qui tab `dgm'
-	local numlevelsdgm = `r(r)'
-	qui levels `dgm', local(dlevels)
-	tokenize `"`dlevels'"'
-
-	forvalues m = 1/`numlevelsdgm' {
-		local mplace = 2*(`m' - 1)
-		if `numlevelsdgm' > 1 local scatterid`m' = `"(scatteri 5 `mplace' (0) `"DGM = `m'"', msym(i) mlabc(black))"' 
-*		else if `numlevelsdgm' == 1 local scatterid`m' = `"(scatteri 5 `mplace' (0) msym(i) mlabc(black))"'
-		if `m'==1 local scatteridgm `scatterid`m''
-		else if `m'>1 local scatteridgm `scatteridgm' `scatterid`m''
-		}
-	}
-
-#delimit ;
-
-`dicmd' graph twoway  `pcimethod' `scatterimethod' `scatteridgm',
-	xla(none) yla(none)
-	ysca(range(0 4) reverse)
-	xsca(range(-1 3))
-	l1tit(" ", orientation(horizontal) width(21))
-	legend(off)
-	scale(*1.2)
-	name(g0, replace) nodraw
-	;
-#delimit cr
-
-foreach pm of local tograph {
-	local graph g`pm'
-	local graphs `graphs' `graph' 
-	}
-
-local name = "name(simanlollyplot, replace)"
-* Can't tokenize/substr as many "" in the string
-if !mi(`"`options'"') {
-	tempvar _namestring
-	qui gen `_namestring' = `"`options'"'
-	qui split `_namestring',  parse(`"name"')
-	local options = `_namestring'1
-	cap confirm var `_namestring'2
-	if !_rc {
-		local namestring = `_namestring'2
-		local name = `"name`namestring'"'
-	}
-}
-
-`dicmd' graph combine g0 `graphs', cols(1) xsize(3) imargin(zero) `name' title("siman lollyplot") `options'
-
-
-restore
-
 
 end
 
