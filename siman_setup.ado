@@ -329,7 +329,7 @@ else if `nmethod'>1 & `ntarget'>1 & `nmethod'!=0 & `ntarget'!=0 {
 	local methodformat = "wide"
 }
 * please note that 'wide-long' formats are given nformat=3 as they are auto-reshaped to long-wide format later before siman setup exits
-else if (`nmethod'>1 & `ntarget'==1 & `nmethod'!=0) | (`ntarget'>1 & `nmethod'==1 & `ntarget'!=0) | (`nmethod'>1 & `ntarget'==0) | (`ntarget'>1 & `nmethod ==0) {
+else if (`nmethod'>1 & `ntarget'==1 & `nmethod'!=0) | (`ntarget'>1 & `nmethod'==1 & `ntarget'!=0) | (`nmethod'>1 & `ntarget'==0) | (`ntarget'>1 & `nmethod'==0) {
 	local nformat= 3
 	local format = "format 3: long-wide"
 	local targetformat = "long"
