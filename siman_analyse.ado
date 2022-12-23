@@ -273,7 +273,7 @@ qui order `allnames'
 
 * Set indicator so that user can determine if siman analyse has been run (e.g. for use in siman lollyplot)
 local simananalyserun = 1
-local allthings `allthings' simananalyserun allthings ifanalyse estchange sechange
+local allthings `allthings' simananalyserun ifanalyse estchange sechange
 
 foreach thing in `allthings' {
     char _dta[siman_`thing'] ``thing''
