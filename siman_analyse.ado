@@ -35,22 +35,11 @@ if "`simananalyserun'"=="1" & "`replace'" == "" {
 
 if mi("`estimate'") | mi("`se'") {
 	di as error "siman analyse requires est() and se() to be specified in set-up"
-	exit 498
+	* trying it out
+	* exit 498
 	}
 	
-local estimatesindi = 0
-cap confirm string variable `rep'
-	if !_rc {
-	qui destring `rep', gen(temprep)
-	if temprep>0 local estimatesindi = 1 
-	qui drop temprep
-	}
-	else if _rc { 
-	preserve
-	if `rep'[_N]>0 local estimatesindi = 1
-	restore
-	}
-
+local estimatesindi = (`rep'[_N]>0)
 	
 if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==1 {
 	qui drop if `rep'<0
@@ -58,7 +47,7 @@ if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==1 {
 	qui drop _dataset
 	}
 else if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==0 {
-	di as error "There are no estimates data in the data set.  Please re-load data and use siman_setup to import data."
+	di as error "There are no estimates data in the data set.  Please re-load data and use siman setup to import data."
 	exit 498
 	}
 	

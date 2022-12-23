@@ -1,4 +1,5 @@
-*! version 0.6   12dec2022    
+*! version 0.6.1   23dec2022    IW require rep() to be numeric
+* version 0.6   12dec2022    
 *   version 0.6    12dec2022    Changes from TPM testing
 *   version 0.5    11july2022   EMZ changes to error catching.
 *   version 0.4    05may2022    EMZ changes to wide-long format import, string target variables are not now auto encoded to numeric. Changed defn of ndgm.
@@ -11,7 +12,7 @@ capture program drop siman_setup
 program define siman_setup, rclass
 version 15
 
-syntax [if] [in], Rep(varname) [ DGM(varlist) TARget(string) METHod(string)/* define the structure variables
+syntax [if] [in], Rep(varname numeric) [ DGM(varlist) TARget(string) METHod(string)/* define the structure variables
 	*/ ESTimate(string) SE(string) DF(string) LCI(string) UCI(string) P(string) TRUE(string) ORDer(string) CLEAR] 
 
 /*
