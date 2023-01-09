@@ -2,8 +2,9 @@
 
 clear all
 prog drop _all
-cd N:\My_files\siman\Ian_example\
-use long_long_formats\simlongESTPM_longE_longM.dta, clear
+which siman_setup
+cd C:\git\siman\Ella_testing\data\
+use simlongESTPM_longE_longM.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
 * siman scatter
@@ -38,8 +39,8 @@ siman_zipplot
 * Check dgm labels when dgm numeric with string labels
 clear all
 prog drop _all
-cd N:\My_files\siman\Ian_example\
-use long_long_formats\simlongESTPM_longE_longM.dta, clear
+cd C:\git\siman\Ella_testing\data\
+use simlongESTPM_longE_longM.dta, clear
 label define dgmvar 1 "A" 2 "B"
 label values dgm dgmvar
 label define methodvar 1 "X" 2 "Y"
@@ -82,7 +83,7 @@ siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("te
 clear all
 prog drop _all
 * more than 3 methods for plots
-cd N:\My_files\siman\Ian_example\
+cd C:\git\siman\Ella_testing\data\
 use bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
@@ -113,7 +114,7 @@ siman_blandaltman, ytitle("test y-title") xtitle("test x-title")
 
 clear all
 prog drop _all
-cd N:\My_files\siman\Ian_example\
+cd C:\git\siman\Ella_testing\data\
 use bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
@@ -141,8 +142,8 @@ siman_comparemethodsscatter, methlist(1 3 8) by(target)
 siman_comparemethodsscatter se, methlist(1 3 8 9) by(target) 
 
 * String variable method
-cd N:\My_files\siman\Ian_example\
-use wide_wide_formats\simlongESTPM_wideE_wideM4.dta, clear
+cd C:\git\siman\Ella_testing\data\
+use simlongESTPM_wideE_wideM4.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) order(method)
 siman_comparemethodsscatter 
 siman_blandaltman
@@ -150,7 +151,7 @@ siman_blandaltman est se
 siman_blandaltman, by(dgm)                                                                                
 * To test methlist subset, create a dataset with more than 3 string method variables
 clear all
-cd N:\My_files\siman\Ian_example\
+cd C:\git\siman\Ella_testing\data\
 use bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
@@ -197,7 +198,7 @@ siman swarm
 
 * Numeric methods
 *******************
-cd N:\My_files\siman\Ian_example\
+cd C:\git\siman\Ella_testing\data\
 use bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
@@ -292,7 +293,7 @@ siman swarm
 * String methods
 *******************
 clear all
-cd N:\My_files\siman\Ian_example\
+cd C:\git\siman\Ella_testing\data\
 use bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
@@ -388,7 +389,7 @@ siman swarm
 
 * Numeric targets
 *******************
-cd N:\My_files\siman\Ian_example\
+cd C:\git\siman\Ella_testing\data\
 use bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
@@ -483,7 +484,7 @@ siman swarm
   
 * String targets
 *******************
-cd N:\My_files\siman\Ian_example\
+cd C:\git\siman\Ella_testing\data\
 use bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
@@ -638,8 +639,8 @@ siman zipplot
 * Testing siman scatter.  Check if have 2 dgms, A (0/1) and B(0/1).  Then siman scatter, by A B if A==0 should be same as siman scatter, by B.
 clear all
 prog drop _all
-cd N:\My_files\siman\Ian_example\
-use long_long_formats\simlongESTPM_longE_longM.dta, clear
+cd C:\git\siman\Ella_testing\data\
+use simlongESTPM_longE_longM.dta, clear
 replace dgm = 0 if dgm==2
 rename dgm dgmA
 egen dgmB = fill(1 1 0 0 1 1 0 0)
@@ -673,7 +674,7 @@ siman blandaltman, bygraphoptions(yrescale) // yrescale works
 *************************
 clear all
 prog drop _all
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
+cd C:\git\siman\Ella_testing\nestloop\
 use res.dta, clear
 siman_setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)
 siman_scatter
@@ -831,6 +832,29 @@ siman zipplot if (method == "peto" | method == "limf"), name("simanzip_new", rep
 siman zipplot, by(method k)
 siman zipplot if (method == "peto" | method == "limf"), by(method k) 
 siman zipplot if theta == 1  
+
+
+
+
+* Testing string dgm input (auto encoded to numeric with Tim's code)
+clear all
+prog drop _all
+cd C:\git\siman\
+which siman_setup
+cd C:\git\siman\Ella_testing\data\
+use simlongESTPM_longE_longM.dta, clear
+gen dgm_string = "1"
+replace dgm_string = "2" if dgm == 2
+drop dgm
+siman_setup, rep(rep) dgm(dgm_string) target(estimand) method(method) estimate(est) se(se) true(true)
+
+siman scatter
+siman comparemethodsscatter
+siman swarm
+siman zipplot
+siman blandaltman
+
+
 
 /*
 siman reshape, longlong

@@ -5,7 +5,7 @@
 
 clear all
 prog drop _all
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
+cd C:\git\siman\Ella_testing\nestloop\
 use res.dta, clear
 siman_setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)
 siman_analyse
@@ -30,7 +30,7 @@ siman_nestloop mse, dgmorder(-theta rho -pc tau2 k)
 *******************
 
 * 2 methods, true variable
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
+cd C:\git\siman\Ella_testing\nestloop\
 use res.dta, clear
 drop *fem *rem *mh *peters *trimfill *limf mse* cov* bias* expexpect var2expect
 local count = 1
@@ -46,7 +46,7 @@ siman_analyse
 siman_nestloop mean, dgmorder(-theta rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("Odds ratio")
 
 * 3 methods, true variable
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
+cd C:\git\siman\Ella_testing\nestloop\
 use res.dta, clear
 drop *fem *rem *mh *peters *trimfill mse* cov* bias* expexpect var2expect
 local count = 1
@@ -62,7 +62,7 @@ siman_analyse
 siman_nestloop mean, dgmorder(-theta rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("Odds ratio")
 
 * > 3 methods, true variable
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
+cd C:\git\siman\Ella_testing\nestloop\
 use res.dta, clear
 drop *fem *rem *mh mse* cov* bias* expexpect var2expect
 local count = 1
@@ -88,7 +88,7 @@ siman_analyse
 siman_nestloop mean, dgmorder(-theta rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("Odds ratio")
 
 * 3 methods, true variable
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
+cd C:\git\siman\Ella_testing\nestloop\
 use res.dta, clear
 drop *fem *rem *mh *peters *trimfill mse* cov* bias* expexpect var2expect
 siman_setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf) estimate(exp) se(var2) true(theta)
@@ -101,7 +101,7 @@ siman_nestloop mean, dgmorder(-theta rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("
 * 1 DGM
 clear all
 prog drop _all
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
+cd C:\git\siman\Ella_testing\nestloop\
 use res.dta, clear
 drop pc tau2 k
 siman_setup, rep(v1) dgm(theta rho) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)
@@ -111,7 +111,7 @@ siman_nestloop mean, dgmorder(-theta rho) ylabel(0.2 0.5 1) ytitle("Odds ratio")
 
 * missing target as per Gerta's main example
 * missing method
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
+cd C:\git\siman\Ella_testing\nestloop\
 use res.dta, clear
 rename exppeto expbeta
 rename expg2 expgamma
@@ -119,5 +119,24 @@ drop *limf *peters *trimfill
 siman_setup, rep(v1) dgm(theta rho pc tau2 k) target(beta gamma) estimate(exp) se(var2) true(theta)
 * siman_analyse
 * error message as required
+
+
+* Testing string dgm input (auto encoded to numeric with Tim's code)
+**********************************************************************
+
+clear all
+prog drop _all
+cd C:\git\siman\Ella_testing\nestloop\
+use res.dta, clear
+gen k_string = ""
+replace k_string = "5" if k == 5
+replace k_string = "10" if k == 10
+replace k_string = "20" if k == 20
+siman_setup, rep(v1) dgm(theta rho pc tau2 k_string) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)
+siman_analyse
+* Recreating Gerta's graph, Figure 2
+siman_nestloop mean, dgmorder(-theta rho -pc tau2 -k_string) lwidth(vthin ...) 
+siman_nestloop mean, dgmorder(-theta rho -pc tau2 -k_string) ylabel(0.2 0.5 1) ytitle("Odds ratio")
+siman_nestloop mean, dgmorder(-theta rho -pc tau2 -k_string) ylabel(0.2 0.5 1) ytitle("Odds ratio") name("test")
 
 
