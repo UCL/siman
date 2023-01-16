@@ -194,10 +194,9 @@ if `nformat'==1 {
 		}
 	else {
 		qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`valmethod'")
+		* restore number format to method
+		label value `method' `methodformat'
 		}
-	
-	* restore number format to method
-	label value `method' `methodformat'
 
 }
 

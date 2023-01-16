@@ -1,4 +1,5 @@
-*! version 1.8   10oct2022 
+*! version 1.9   16jan2023
+*  version 1.9   16jan2023    EMZ bug fixes from changes to setup programs 
 *  version 1.8   10oct2022    EMZ added to code so now allows graphs split out by every dgm variable and level if multiple dgm variables declared.
 *  version 1.7   05sep2022    EMZ added additional error message
 *  version 1.6   01sep2022    EMZ fixed bug to allow scheme to be specified
@@ -162,20 +163,21 @@ qui drop `tousemethod'
 * Need labelsof package installed to extract method labels
 qui capture which labelsof
 if _rc {
-	di as smcl  "labelsof package required, please kindly install by clicking: "  `"{stata ssc install labelsof}"'
+	di as smcl  "labelsof package required, please install by clicking: "  `"{stata ssc install labelsof}"'
 	exit
 } 
 
 qui labelsof `method'
 qui ret list
 
-
+local methodlabels 0
 if `"`r(labels)'"'!="" {
 	local 0 = `"`r(labels)'"'
 
 	forvalues i = 1/`nummethod' {  
 		gettoken mlabel`i' 0 : 0, parse(": ")
 		local methodvalues `methodvalues' `mlabel`i''
+		local methodlabels 1
 	}
 }
 else {
@@ -260,13 +262,19 @@ else if !mi("`by'") & "`by'"!="`target'" {
 local c = 1
  `ifcommand' {    
                                
-	if `methodstringindi'==0 {
+	if `methodstringindi'==0 & `methodlabels' == 0 {
 		
 		label var `estimate'`j' "`estimate', `mlabel`j''"
 		label var `se'`j' "`se', `mlabel`j''"
 		local mlabel`c' Method_`j'
 
 	}
+	else if `methodstringindi'==0 & `methodlabels' == 1 {
+		local k : word `j' of `methodvalues'
+		label var `estimate'`j' "`estimate', Method_`k'"
+		label var `se'`j' "`se', Method_`k'"
+		local mlabel`c' Method_`k'
+		}
 	else if `methodstringindi'==1 {
 		label var `estimate'``j'' "`estimate', Method_``j''"
 		label var `se'``j'' "`se', Method_``j''"
@@ -295,14 +303,24 @@ local c = 1
 * create ranges for theta and se graphs (min and max)
 qui tokenize `methodvalues'
 	forvalues m = 1/`numbermethod' {
-
-	    qui summarize `estimate'``m''
-		local minest`m' = `r(min)'
-		local maxest`m' = `r(max)'
-		
-		qui summarize `se'``m''
-		local minse`m' = `r(min)'
-		local maxse`m' = `r(max)'
+		if mi("`methlist'") {
+			qui summarize `estimate'`m'
+			local minest`m' = `r(min)'
+			local maxest`m' = `r(max)'
+			
+			qui summarize `se'`m'
+			local minse`m' = `r(min)'
+			local maxse`m' = `r(max)'
+		}
+		else {
+			qui summarize `estimate'``m''
+			local minest`m' = `r(min)'
+			local maxest`m' = `r(max)'
+			
+			qui summarize `se'``m''
+			local minse`m' = `r(min)'
+			local maxse`m' = `r(max)'
+		}
 			if `m'>1 {
 				local n = `m' - 1
 					if `minest`n'' < `minest`m'' local minest = `minest`n''
@@ -376,6 +394,7 @@ if `numberdgms'==1 {
 		local frse `minse' `maxse'
 		
 			if `methodstringindi'==0  {
+				if mi("`methlist'") local methodvalues `valmethod'				
 				local maxmethodvalues : word `numbermethod' of `methodvalues'
 				local maxmethodvaluesplus1 = substr("`methodvalues'", -`numbermethod', .)
 				*di "`maxmethodvaluesplus1'"

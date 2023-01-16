@@ -29,7 +29,7 @@ coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p
 siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("carrot")
 
- 
+use simlongESTPM_longE_longM.dta, clear
 drop true
 gen true = -0.5
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
@@ -49,11 +49,11 @@ siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(
 siman scatter                  
 siman zipplot                  
 siman swarm                   
-siman comparemethodsscatter    /****check here ****/
+siman comparemethodsscatter    
 
 
 * Different true values per target
-use long_long_formats\simlongESTPM_longE_longM.dta, clear
+use simlongESTPM_longE_longM.dta, clear
 replace true=0.5 if estimand=="beta"
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman_zipplot  
@@ -61,7 +61,7 @@ siman_zipplot, scheme(scheme(economist)) legend(order(4 "Covering" 3 "Not coveri
 noncoveroptions(pstyle(p3)) coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6))
 
 * siman scatter
-use long_long_formats\simlongESTPM_longE_longM.dta, clear
+use simlongESTPM_longE_longM.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman_scatter
 siman_scatter, by(dgm)
@@ -588,7 +588,7 @@ siman swarm
 
 * missing target
 * creating a data set that has long method and missing target
-use long_long_formats\simlongESTPM_longE_longM.dta, clear
+use simlongESTPM_longE_longM.dta, clear
 drop estimand
 bysort rep dgm method: gen repitionindi=_n
 drop if repitionindi==2
@@ -610,7 +610,7 @@ siman_comparemethodsscatter
 
 * missing method
 * creating a data set that has long target and missing method
-use long_long_formats\simlongESTPM_longE_longM.dta, clear
+use simlongESTPM_longE_longM.dta, clear
 drop method
 bysort rep dgm estimand: gen repitionindi=_n
 drop if repitionindi==2

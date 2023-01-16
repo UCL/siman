@@ -1,5 +1,5 @@
 *! version 0.8   23dec2022     IW major rewrite: never pools over dgms, targets or methods
-* version 0.7   05dec2022
+* version 0.7    05dec2022
 *  version 0.7   05dec2022     EMZ removed 'if' option, as already applied by siman analyse to the data (otherwise applying it twice).
 *  version 0.6   11july2022    EMZ changed generated variables to have _ infront
 *  version 0.5   04apr2022     EMZ changes to the default column/row and fixed bug in col() option.

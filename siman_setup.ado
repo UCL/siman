@@ -1,6 +1,6 @@
 *!   version 0.7    23dec2022
 *    version 0.7    23dec2022    IW require rep() to be numeric
-*    version 0.6.1  20jan2023    TPM changed code so that string dgm are allowed, and are encoded to numeric.
+*    version 0.6.1  20dec2023    TPM changed code so that string dgm are allowed, and are encoded to numeric.
 *    version 0.6    12dec2022    Changes from TPM testing
 *    version 0.5    11july2022   EMZ changes to error catching.
 *    version 0.4    05may2022    EMZ changes to wide-long format import, string target variables are not now auto encoded to numeric. Changed defn of ndgm.
