@@ -1,4 +1,4 @@
-*! version 0.1 28nov2022
+*! version 0.1   28nov2022
 prog def siman
 /*
 adapted from network.ado

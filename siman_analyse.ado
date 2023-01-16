@@ -1,4 +1,5 @@
-*! version 0.5  11july2022
+*! version 0.6   23dec2022   IW: preserves value label for method
+* version 0.5   11jul2022
 *  version 0.5  11july2022   EMZ changing created variable names to start with _, and adding error catching messages
 *  version 0.4  16may2022    EMZ minor bug fix with renaming of mcse's
 *  version 0.3  28feb2022    Changes from IW testing
@@ -35,22 +36,11 @@ if "`simananalyserun'"=="1" & "`replace'" == "" {
 
 if mi("`estimate'") | mi("`se'") {
 	di as error "siman analyse requires est() and se() to be specified in set-up"
-	exit 498
+	* trying it out
+	* exit 498
 	}
 	
-local estimatesindi = 0
-cap confirm string variable `rep'
-	if !_rc {
-	qui destring `rep', gen(temprep)
-	if temprep>0 local estimatesindi = 1 
-	qui drop temprep
-	}
-	else if _rc { 
-	preserve
-	if `rep'[_N]>0 local estimatesindi = 1
-	restore
-	}
-
+local estimatesindi = (`rep'[_N]>0)
 	
 if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==1 {
 	qui drop if `rep'<0
@@ -58,7 +48,7 @@ if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==1 {
 	qui drop _dataset
 	}
 else if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==0 {
-	di as error "There are no estimates data in the data set.  Please re-load data and use siman_setup to import data."
+	di as error "There are no estimates data in the data set.  Please re-load data and use siman setup to import data."
 	exit 498
 	}
 	
@@ -66,7 +56,7 @@ local simananalyserun = 0
 
 * check if siman setup has been run, if not produce an error message
 if "`simansetuprun'"=="0" | "`simansetuprun'"=="" {
-	di as error "siman setup has not been run.  Please use siman_setup first before siman_analyse."
+	di as error "siman setup has not been run.  Please use siman setup first before siman analyse."
 	exit 498
 	}
 	
@@ -92,16 +82,6 @@ if _rc == 9 {
 restore
 qui keep if `touse'
 
-
-* if rep is in string format, set to float
-capture confirm string variable `rep'
-if !_rc {
-	qui encode(`rep'), gen(rep_num)
-	qui drop `rep'
-	qui rename rep_num `rep'
-	qui format `rep' %43.0g
-	}
-	
 
 * put all variables in their original order in local allnames
 qui unab allnames : *
@@ -152,13 +132,15 @@ local optionlist `estimate' `se'
 
 if `nformat'==1 {
 
+	* save number format for method
+	local methodformat : value label `method'
 
-* final agreed order/sort
-qui order `rep' `dgm' `target' `method'
-qui sort `rep' `dgm' `target' `method'
+	* final agreed order/sort
+	qui order `rep' `dgm' `target' `method'
+	qui sort `rep' `dgm' `target' `method'
 
-	
-* for value labels of method
+		
+	* for value labels of method
 	qui tab `method'
 	local nmethodlabels = `r(r)'
 		
@@ -173,54 +155,53 @@ qui sort `rep' `dgm' `target' `method'
 	local valmethod = "`methodlist'"
 
 		
-* simsum doesn't like to parse "`estimate'" etc so define a macro for simsum for estimate and se
-local estsimsum = "`estimate'"
-local sesimsum = "`se'"
+	* simsum doesn't like to parse "`estimate'" etc so define a macro for simsum for estimate and se
+	local estsimsum = "`estimate'"
+	local sesimsum = "`se'"
 
 
-capture confirm variable _perfmeascode
-		if !_rc {
-			di as error "siman would like to name a variable '_perfmeascode', but that name already exists in your dataset.  Please rename your variable _perfmeascode as something else."
+	capture confirm variable _perfmeascode
+	if !_rc {
+		di as error "siman would like to name a variable '_perfmeascode', but that name already exists in your dataset.  Please rename your variable _perfmeascode as something else."
 		exit 498
 		}
 		
-capture confirm variable _dataset
-		if !_rc {
-			di as error "siman would like to name a variable '_dataset', but that name already exists in your data.  Please rename your variable _dataset as something else."
+	capture confirm variable _dataset
+	if !_rc {
+		di as error "siman would like to name a variable '_dataset', but that name already exists in your data.  Please rename your variable _dataset as something else."
 		exit 498
 		}
 
 
-qui simsumv2 `estsimsum' `if', true(`true') se(`sesimsum') method(`method') id(`rep') by(`dgm' `target') max(20) `anything' clear mcse
+	qui simsumv2 `estsimsum' `if', true(`true') se(`sesimsum') method(`method') id(`rep') by(`dgm' `target') max(20) `anything' clear mcse
 
 
-* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
+	* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
 	foreach v in `methodlist' {
-			if !mi("`se'") {
-				qui rename `estimate'`v'_mcse `se'`v'
-			}
-				else qui rename `estimate'`v'_mcse se`v'
-			}
-
-* take out true from option list if included for the reshape, otherwise will be included in the optionlist as well as i() and reshape won't work
-local optionlistreshape `optionlist'
-local exclude "`true'"
-local optionlistreshape: list optionlistreshape - exclude
-
-if `methodstringindi'==1 {
-	qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`valmethod'") string
+		if !mi("`se'") {
+			qui rename `estimate'`v'_mcse `se'`v'
+		}
+		else qui rename `estimate'`v'_mcse se`v'
 	}
+
+	* take out true from option list if included for the reshape, otherwise will be included in the optionlist as well as i() and reshape won't work
+	local optionlistreshape `optionlist'
+	local exclude "`true'"
+	local optionlistreshape: list optionlistreshape - exclude
+
+	if `methodstringindi'==1 {
+		qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`valmethod'") string
+		}
 	else {
-	qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`valmethod'")
-	}
+		qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`valmethod'")
+		}
+	
+	* restore number format to method
+	label value `method' `methodformat'
+
 }
 
-else
-
-
-if `nformat'==3 {
-
-
+else if `nformat'==3 {
 
 * final agreed order/sort
 qui order `rep' `dgm' `target'
@@ -292,7 +273,7 @@ qui order `allnames'
 
 * Set indicator so that user can determine if siman analyse has been run (e.g. for use in siman lollyplot)
 local simananalyserun = 1
-local allthings `allthings' simananalyserun allthings ifanalyse estchange sechange
+local allthings `allthings' simananalyserun ifanalyse estchange sechange
 
 foreach thing in `allthings' {
     char _dta[siman_`thing'] ``thing''

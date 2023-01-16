@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.6 28nov2022}{...}
+{* *! version 0.6.1 23dec2022}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Data formats" "siman_setup##data"}{...}
 {viewerjumpto "Syntax" "siman_setup##syntax"}{...}
@@ -128,7 +128,7 @@ clear
 {synopt:{opt uci(varname|stub_varname)}}the upper confidence interval variable name or the name of its stub if in wide format.{p_end}
 {synopt:{opt p(varname|stub_varname)}}the p-value variable name or the name of its stub if in wide format.{p_end}
 {synopt:{opt true(#|varname|stub_varname)}}the true value, or variable name or the name of its stub if in wide format.{p_end}
-{synopt:{opt ord:er(varname)}}if in wide-wide format, this will be either {it:target} or {it:method}, 
+{synopt:{opt ord:er(varname)}}if in wide-wide format, this must be either {it:target} or {it:method}, 
 denoting that either the target stub is first or the method stub is first in the variable names.{p_end}
 
 
@@ -137,27 +137,24 @@ denoting that either the target stub is first or the method stub is first in the
 
 {pstd}
 {cmd:siman setup} takes the user’s raw simulation data (estimates data set) and puts it in the format required by {bf:siman}. 
-The user’s raw data can be in either long or wide format similar to the input for {bf:{help simsum:simsum}}.  
 
 {pstd}
-The user will have an unmodified, raw simulation data set with the repetitions of a simulation experiment, {opt rep(varname)}, as the only compulsory variable in the syntax.  Other variables of interest such as 
-data generating mechanism ({opt dgm}), {opt target}, {opt method}, {opt estimate}, standard error ({opt se}) can be specified.
-
+The raw simulation data set must include a numeric variable, {opt rep(varname)}, which indexes the repetitions of the simulation experiment.  
+Other variables of interest such as 
+data generating mechanism ({opt dgm}), {opt target}, {opt method}, {opt estimate}, standard error ({opt se}) are typically specified.
+{cmd:siman setup} allows multiple data generating mechanisms, multiple targets and multiple analysis methods. 
+ 
 {pstd}
-For the input data, there will be 4 data set formats permitted by the siman suite as detailed {help siman_setup##data:above}.
-
-{pstd}
-The user will declare their variables for use in {cmd:siman setup}.  {cmd:siman setup} will check the data, reformat it
-and attach characteristics to the data set available for use across multiple sessions.  Every other {bf:siman} command 
-will then read the characteristics of the data created in {cmd:siman setup}.  {cmd:siman setup} will allow multiple data generating 
-mechanisms, multiple targets and multiple analysis methods.  The {bf:siman} estimates data set will be held in memory.
-There will also be a auto-summary output available for the user to confirm the data set up (using  {bf:{help siman_describe:siman describe}}).  
-
-{pstd}
-{cmd:siman setup} will automatically reshape wide-target data (i.e. wide targets, wide
+Four data set formats are permitted by the siman suite as detailed {help siman_setup##data:above}.
+{cmd:siman setup} automatically reshapes wide-wide data (i.e. wide targets, wide
 methods) or wide-long format data (i.e. wide targets, long methods) into long-wide
 format. Therefore the two output data formats of {cmd:siman setup} are long-long (option
 1) and long-wide (option 3).
+
+{pstd}
+{cmd:siman setup} checks the data, reformats it
+and attaches characteristics to the data set: these characteristics are read by every other {bf:siman} command.  The {bf:siman} estimates data set is held in memory.
+An auto-summary output available for the user to confirm the data set up (using  {bf:{help siman_describe:siman describe}}).  
 
 
 {marker limitations}{...}
