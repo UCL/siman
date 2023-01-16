@@ -2,8 +2,8 @@
 
 clear all
 prog drop _all
-cd N:\My_files\siman\Ian_example\
-use long_long_formats\simlongESTPM_longE_longM.dta, clear
+cd C:\git\siman\Ella_testing\data\
+use simlongESTPM_longE_longM.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman_analyse
 
@@ -17,7 +17,7 @@ siman_lollyplot, scheme(economist) title("New title") name("test")
 siman_lollyplot, name("newtest")
  
 * more than 3 methods for plots
-cd N:\My_files\siman\Ian_example\
+cd C:\git\siman\Ella_testing\data\
 use bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
@@ -37,7 +37,7 @@ siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
 siman_analyse
 siman_lollyplot
 
-cd N:\My_files\siman\Ian_example\
+cd C:\git\siman\Ella_testing\data\
 use bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
@@ -58,14 +58,14 @@ siman_analyse
 siman_lollyplot
 
 * String variable method
-cd N:\My_files\siman\Ian_example\
-use wide_wide_formats\simlongESTPM_wideE_wideM4.dta, clear
+cd C:\git\siman\Ella_testing\data\
+use simlongESTPM_wideE_wideM4.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) order(method)
 siman_analyse
 siman_lollyplot
 * create a dataset with more than 3 string method variables
 clear all
-cd N:\My_files\siman\Ian_example\
+cd C:\git\siman\Ella_testing\data\
 use bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
@@ -93,7 +93,7 @@ siman_lollyplot
 
 clear all
 prog drop _all
-use from_Tim_trellis\n500type1.dta, clear
+use n500type1.dta, clear
 *append using from_Tim_trellis\n500type2.dta   NEEDS TARGET
 * there are 12 methods so just keep a few for the example
 keep if method =="CC" | method=="LRD1" | method=="PMM1"
@@ -114,7 +114,7 @@ siman_trellis, scheme(economist) ytitle("test y-title") xtitle("test x-title") b
 
 
 * test error messages
-use from_Tim_trellis\n500type1.dta, clear
+use n500type1.dta, clear
 keep if method =="CC" | method=="LRD1" | method=="PMM1"
 qui gen se = sqrt(var)
 drop auroc
@@ -134,8 +134,8 @@ siman_trellis
 
 clear all
 prog drop _all
-cd N:\My_files\siman\Ian_example\
-use from_Tim_trellis\n500type1.dta, clear
+cd C:\git\siman\Ella_testing\data\
+use n500type1.dta, clear
 keep if method =="CC" | method=="LRD1" | method=="PMM1"
 qui gen se = sqrt(var)
 gen dgm = 0
@@ -152,4 +152,31 @@ siman_analyse
 replace beta = 3 if beta ==.
 siman_trellis 
 * error message as required (only 1 dgm)
+
+* Testing string dgm input (auto encoded to numeric with Tim's code)
+**********************************************************************
+clear all
+prog drop _all
+cd C:\git\siman\
+which siman_setup
+cd C:\git\siman\Ella_testing\data\
+use simlongESTPM_longE_longM.dta, clear
+gen dgm_string = "1"
+replace dgm_string = "2" if dgm == 2
+drop dgm
+siman_setup, rep(rep) dgm(dgm_string) target(estimand) method(method) estimate(est) se(se) true(true)
+siman_analyse
+siman lollyplot
+
+clear all
+prog drop _all
+cd C:\git\siman\Ella_testing\data\
+use n500type1.dta, clear
+*append using from_Tim_trellis\n500type2.dta   NEEDS TARGET
+* there are 12 methods so just keep a few for the example
+keep if method =="CC" | method=="LRD1" | method=="PMM1"
+qui gen se = sqrt(var)
+siman_setup, rep(repno) dgm(beta mechanism) method(method) estimate(b) se(se) df(df) true(beta)
+siman_analyse
+siman_trellis 
 

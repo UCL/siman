@@ -1,11 +1,13 @@
-*! version 0.6.1   23dec2022    IW require rep() to be numeric
-* version 0.6   12dec2022    
-*   version 0.6    12dec2022    Changes from TPM testing
-*   version 0.5    11july2022   EMZ changes to error catching.
-*   version 0.4    05may2022    EMZ changes to wide-long format import, string target variables are not now auto encoded to numeric. Changed defn of ndgm.
-*   version 0.3    06jan2022    EMZ changes from IW testing
-*   version 0.2    23June2020   IW changes
-*   version 0.1    04June2020   Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
+*!   version 0.7    23dec2022
+*    version 0.7    23dec2022    IW require rep() to be numeric
+*    version 0.6.1  20jan2023    TPM changed code so that string dgm are allowed, and are encoded to numeric.
+*    version 0.6    12dec2022    Changes from TPM testing
+*    version 0.5    11july2022   EMZ changes to error catching.
+*    version 0.4    05may2022    EMZ changes to wide-long format import, string target variables are not now auto encoded to numeric. Changed defn of ndgm.
+*    version 0.3    06jan2022    EMZ changes from IW testing
+*    version 0.2    23June2020   IW changes
+*    version 0.1    04June2020   Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
+
 * For history, see end of file
 
 capture program drop siman_setup
@@ -73,7 +75,7 @@ foreach singlevar in "`rep'" "`estimate'" "`se'" "`df'" "`lci'" "`uci'" "`p'" "`
 * check that dgm takes numerical values; if not, encode and replace so that siman can do its things.
 if !mi("`dgm'") {
     foreach var of varlist `dgm' {
-        cap confirm numeric variable `dgm'
+        cap confirm numeric variable `var'
         if _rc {
             tempvar t`var'
             encode `var', gen(`t`var'')
@@ -329,7 +331,9 @@ else if `nmethod'>1 & `ntarget'>1 & `nmethod'!=0 & `ntarget'!=0 {
 	local methodformat = "wide"
 }
 * please note that 'wide-long' formats are given nformat=3 as they are auto-reshaped to long-wide format later before siman setup exits
+
 else if (`nmethod'>1 & `ntarget'==1 & `nmethod'!=0) | (`ntarget'>1 & `nmethod'==1 & `ntarget'!=0) | (`nmethod'>1 & `ntarget'==0) | (`ntarget'>1 & `nmethod'==0) {
+
 	local nformat= 3
 	local format = "format 3: long-wide"
 	local targetformat = "long"
