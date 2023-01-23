@@ -1,4 +1,5 @@
-*! version 1.5   05dec2022
+*! version 1.6   23jan2023
+*  version 1.6   23jan2023   EMZ bug fixes from changes to setup programs 
 *  version 1.5   05dec2022   EMZ fixed bug so that dgm labels are used when 1 dgm variable, and scatter plots for each dgm when true not part of dgm *                            structure.
 *  version 1.4   12sep2022   EMZ added to code so now allows scatter graphs split out by every dgm variable and level if multiple dgm variables declared.
 *  version 1.3   05sep2022   EMZ added additional error message.
@@ -156,7 +157,22 @@ if !mi("`by'") {
 if !mi("`by'") {
 	local byvar = "`by'"
 }
-else local byvar `dgm' `target' `method'
+else if mi("`by'") {
+	if `numberdgms' == 1 local byvar `dgm' `target' `method'
+	else if `numberdgms'! = 1 local byvar `dgm'
+}
+
+* handle by if contains dgm: make dgmvar equal to the `by' option only
+if !mi("`by'") {
+	local keep `by'
+	local vars `dgm'
+	local tokeep : list vars & keep
+	if !mi("`tokeep'") {
+		local dgmvar = "`by'"
+		qui tab `by'
+		local ndgmlabels = `r(r)'
+	}
+}
 
 
 foreach var in `byvar' { 
@@ -197,10 +213,24 @@ foreach var in `byvar' {
 
 * if dgm is defined by multiple variables, default is to plot scatter graphs for each dgm variable, split out by each level
 
-if `numberdgms'!=1 & mi("`if'") {
+*if `numberdgms'!=1 & mi("`if'") {
+	if `numberdgms'!=1 {
+		
+	* Can't tokenize/substr as many "" in the string
+	if !mi(`"`options'"') {
+		tempvar _namestring
+		qui gen `_namestring' = `"`options'"'
+		qui split `_namestring',  parse(`"name"')
+		local options = `_namestring'1
+		cap confirm var `_namestring'2
+			if !_rc {
+				local namestring = `_namestring'2
+				local name = `"name`namestring'"'
+			}
+	}
 	
-	foreach dgmvar in `dgm' {
-		twoway scatter `varlist', msym(o) msize(small) mcol(%30) by(`dgmvar', note("") `bygraphoptions') name(simanscatter_dgm_`dgmvar') `options'
+	foreach dgmvar in `dgmvar' {
+		twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`byvar', note("") `bygraphoptions') name(simanscatter_dgm_`dgmvar', replace) `options' 
 	}
 }
 * if dgm is defined by 1 variable

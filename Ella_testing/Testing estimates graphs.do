@@ -687,10 +687,7 @@ siman scatter, by(theta)
 siman scatter, by(tau2)
 siman_reshape, longlong
 siman scatter, by(method)
-siman scatter if method == "peto"
-siman scatter if theta==1, name(simanscatter_theta1, replace)
-siman scatter if theta==0.5, name(simanscatter_theta05, replace)
-siman scatter if method == "peto" & theta == 1
+siman scatter if method == "peto", name(simanscatter_peto, replace)
 
 
 

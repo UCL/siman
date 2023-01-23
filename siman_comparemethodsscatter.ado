@@ -1,5 +1,5 @@
-*! version 1.9   16jan2023
-*  version 1.9   16jan2023    EMZ bug fixes from changes to setup programs 
+*! version 1.9   23jan2023
+*  version 1.9   23jan2023    EMZ bug fixes from changes to setup programs 
 *  version 1.8   10oct2022    EMZ added to code so now allows graphs split out by every dgm variable and level if multiple dgm variables declared.
 *  version 1.7   05sep2022    EMZ added additional error message
 *  version 1.6   01sep2022    EMZ fixed bug to allow scheme to be specified
@@ -248,8 +248,8 @@ if !mi("`methlist'") {
 }
 else local numbermethod = `nummethod'
 
-if mi("`methlist'") | (!mi("`methlist'") & `methodstringindi'==1) local ifcommand = "forvalues j = 1/`numbermethod'"
-else local ifcommand = "foreach j in `methodvalues'"
+if mi("`methlist'") | (!mi("`methlist'") & `methodstringindi'==1) local forcommand = "forvalues j = 1/`numbermethod'"
+else local forcommand = "foreach j in `methodvalues'"
 
 
 if "`by'"=="" local by ""
@@ -260,7 +260,7 @@ else if !mi("`by'") & "`by'"!="`target'" {
     }
 
 local c = 1
- `ifcommand' {    
+ `forcommand' {    
                                
 	if `methodstringindi'==0 & `methodlabels' == 0 {
 		
@@ -303,7 +303,7 @@ local c = 1
 * create ranges for theta and se graphs (min and max)
 qui tokenize `methodvalues'
 	forvalues m = 1/`numbermethod' {
-		if mi("`methlist'") {
+		if `methodstringindi'==0 & mi("`methlist'")  {
 			qui summarize `estimate'`m'
 			local minest`m' = `r(min)'
 			local maxest`m' = `r(max)'

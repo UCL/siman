@@ -129,8 +129,9 @@ drop mechanism
 siman_setup, rep(repno) dgm(dgm) method(method) estimate(b) se(se) df(df) true(beta)
 siman_analyse
 replace beta = 3 if beta ==.
-siman_trellis 
-* error message as required (true not included in dgm())
+cap siman_trellis 
+if _rc di "error message as required (true not included in dgm())"
+else stop
 
 clear all
 prog drop _all
@@ -150,8 +151,9 @@ keep if beta == 3
 siman_setup, rep(repno) dgm(dgm) method(method) estimate(b) se(se) df(df) true(beta)
 siman_analyse
 replace beta = 3 if beta ==.
-siman_trellis 
-* error message as required (only 1 dgm)
+cap siman_trellis 
+if _rc di " error message as required (only 1 dgm)"
+else stop
 
 * Testing string dgm input (auto encoded to numeric with Tim's code)
 **********************************************************************
