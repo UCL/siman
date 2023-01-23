@@ -131,7 +131,7 @@ siman_analyse
 replace beta = 3 if beta ==.
 cap siman_trellis 
 if _rc di "error message as required (true not included in dgm())"
-else stop
+else exit
 
 clear all
 prog drop _all
@@ -153,7 +153,7 @@ siman_analyse
 replace beta = 3 if beta ==.
 cap siman_trellis 
 if _rc di " error message as required (only 1 dgm)"
-else stop
+else exit
 
 * Testing string dgm input (auto encoded to numeric with Tim's code)
 **********************************************************************
