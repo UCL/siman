@@ -1,4 +1,5 @@
-*! version 1.8   07nov2022
+*! version 1.8.1 30jan2023
+*  version 1.8.1 30jan2023   IW removed rows() and xsize() so they can be user-specified (in bygr() and outside, respectively)
 *  version 1.8   07nov2022   EMZ added to code so now allows graphs split out by every dgm variable and level if multiple dgm variables declared.
 *  version 1.7   05sep2022   EMZ added additional error message
 *  version 1.6   14july2022  EMZ fixed bug so name() allowed in call
@@ -17,7 +18,6 @@ version 15
 syntax [if][in] [,* BY(varlist) ///
                     NONCOVeroptions(string) COVeroptions(string) SCAtteroptions(string) TRUEGRaphoptions(string) BYGRaphoptions(string) ///
 					SCHeme(string)]
-
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -538,8 +538,8 @@ if `numberdgms'==1 {
 			ytit("Centile of ranked p-values for null: θ=`truevalue'")  
 			ylab(5 50 95)
 			scale(.8)
-			legend(order(4 "Coverers" 3 "Non-coverers") rows(1))
-			xsize(4) `scheme'
+			legend(order(4 "Coverers" 3 "Non-coverers"))
+			`scheme'
 			`options'
 			;
 		#delimit cr
@@ -560,8 +560,8 @@ if `numberdgms'==1 {
 			ytit("Centile of ranked p-values for null: θ=`truevalue'")  
 			ylab(5 50 95)
 			by(`bygraphtitlelist', note("") noxrescale iscale(*.8) `bygraphoptions') scale(.8)
-			legend(order(4 "Coverers" 3 "Non-coverers") rows(1))
-			xsize(4) `scheme'
+			legend(order(4 "Coverers" 3 "Non-coverers"))
+			`scheme'
 			`options'
 			;
 		#delimit cr
@@ -583,8 +583,8 @@ if `numberdgms'==1 {
 				ytit("Centile of ranked p-values for null: θ=`truevalue`k''")  
 				ylab(5 50 95)
 				by(`bygraphtitlelist', note("") noxrescale iscale(*.8) `bygraphoptions') scale(.8)
-				legend(order(4 "Coverers" 3 "Non-coverers") rows(1))
-				xsize(4) `scheme'
+				legend(order(4 "Coverers" 3 "Non-coverers"))
+				`scheme'
 				`options'
 				;
 			#delimit cr
@@ -607,8 +607,8 @@ if `numberdgms'==1 {
 				ytit("Centile of ranked p-values for null: θ=``true'label`k''")  
 				ylab(5 50 95)
 				by(`bygraphtitlelist', note("") noxrescale iscale(*.8) `bygraphoptions') scale(.8)
-				legend(order(4 "Coverers" 3 "Non-coverers") rows(1))
-				xsize(4) `scheme'
+				legend(order(4 "Coverers" 3 "Non-coverers"))
+				`scheme'
 				`options'
 				;
 			#delimit cr
@@ -637,8 +637,8 @@ else {
 						ytit("Centile of ranked p-values for null: θ=`truevalue`j''")  
 						ylab(5 50 95)
 						by(`bygraphtitlelist`dgmvar'', note("") noxrescale iscale(*.8) `bygraphoptions') scale(.8)
-						legend(order(4 "Coverers" 3 "Non-coverers") rows(1))
-						xsize(4) `scheme'
+						legend(order(4 "Coverers" 3 "Non-coverers"))
+						`scheme'
 						`options'
 						;
 					#delimit cr
@@ -663,8 +663,8 @@ else {
 					ytit("Centile of ranked p-values for null: θ=``true'label`k''")  
 					ylab(5 50 95)
 					by(`bygraphtitlelist`dgmvar'', note("") noxrescale iscale(*.8) `bygraphoptions') scale(.8)
-					legend(order(4 "Coverers" 3 "Non-coverers") rows(1))
-					xsize(4) `scheme'
+					legend(order(4 "Coverers" 3 "Non-coverers"))
+					`scheme'
 					`options'
 					;
 				#delimit cr
