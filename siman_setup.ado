@@ -1,4 +1,5 @@
-*!   version 0.7.1  30jan2023
+*!   version 0.7.2  30jan2023
+*    version 0.7.2  30jan2023    IW handle abbreviated varnames; better error message for method(wrongvarame) or target(wrongvarname)
 *    version 0.7.1  30jan2023    EMZ added in additional error msgs
 *    version 0.7    23dec2022    IW require rep() to be numeric
 *    version 0.6.1  20dec2023    TPM changed code so that string dgm are allowed, and are encoded to numeric.
@@ -87,14 +88,18 @@ if mi("`estimate'") &  mi("`se'") {
 }
 
 * produce error message if any other variables contained in the dataset
+* THIS CODE IS TOO EARLY - IT STOPS CODE GIVING HELPFUL ERROR MESSAGE IF METHOD() ETC ARE WRONG
+* SO I'VE COMMENTED OUT THE EXIT COMMAND
 qui ds
 local datasetvars `r(varlist)'
-local simanvars `rep' `dgm' `target' `method' `estimate' `se' `df' `lci' `uci' `p' `true' 
+unab simanvars : `rep' `dgm' `target' `method' `estimate' `se' `df' `lci' `uci' `p' `true' 
 * test for equivalence
 local testothervars: list simanvars === datasetvars
 if `testothervars' == 0 {
-		 di as error "Additional variables found in dataset other than those specified in siman setup.  Please remove extra variables from data set and re-run siman."
-    exit 498
+	local wrongvars : list datasetvars - simanvars
+	di as error "Additional variables found in dataset other than those specified in siman setup.  Please remove extra variables from data set and re-run siman."
+	di as error "Unwanted variables are: `wrongvars'"
+    *exit 498
 }
 
 * check that dgm takes numerical values; if not, encode and replace so that siman can do its things.
@@ -107,10 +112,9 @@ if !mi("`dgm'") {
             drop `var'
             rename `t`var'' `var'
             compress `var'
-        local var name
-            display as error "{it: WARNING: variable `var', which appears in dgm(), was stored as a string. It has been" _newline ///
+            display as error "Warning: variable `var', which appears in dgm(), was stored as a string. It has been" _newline ///
             "encoded as numeric so that subsequent siman commands will work. If you require a" _newline ///
-            "different order, encode `var' as numeric before running -siman setup-.}"
+            "different order, encode `var' as numeric before running -siman setup-."
         }
     }
 }
@@ -173,21 +177,27 @@ cap confirm existence `method'
 else local nmethod 0
 
 
-* if the user has accidentaly put the value of target or method instead of the variable name in long format, issue an error message
+* if the user has accidentally put the value of target or method instead of the variable name in long format, issue an error message
 if `ntarget'==1 {
     cap confirm variable `target'
     if _rc {
-        di as error "Please either put the target variable name in siman_setup target() for long format, or the target values for wide format"
+		cap confirm new variable `target'
+        if _rc==0 di as error "target(`target'): variable `target' not found"
+        else di as error "Please either put the target variable name in siman_setup target() for long format, or the target values for wide format"
         exit 498
     }
+	unab target : `target'
 }
 
 if `nmethod'==1 {
     cap confirm variable `method'
     if _rc {
-        di as error "Please either put the  method variable name in siman_setup method() for long format, or the method values for wide format"
+		cap confirm new variable `method'
+		if _rc==0 di as error "method(`method'): variable `method' not found"
+        else di as error "Please either put the method variable name in siman_setup method() for long format, or the method values for wide format"
         exit 498
     }
+	unab method : `method'
 }
 		
 * need either a method or target otherwise siman setup will not be able to determine the data format (longlong/widewide/longwide are based on target/method combinations).
