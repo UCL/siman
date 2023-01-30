@@ -1,4 +1,5 @@
-*!   version 0.7    23dec2022
+*!   version 0.7.1  30jan2023
+*    version 0.7.1  30jan2023    EMZ added in additional error msgs
 *    version 0.7    23dec2022    IW require rep() to be numeric
 *    version 0.6.1  20dec2023    TPM changed code so that string dgm are allowed, and are encoded to numeric.
 *    version 0.6    12dec2022    Changes from TPM testing
@@ -72,6 +73,30 @@ foreach singlevar in "`rep'" "`estimate'" "`se'" "`df'" "`lci'" "`uci'" "`p'" "`
 	local 2
 }
 
+
+* produce error message if no est, se, p or ci contained in dataset
+if mi("`estimate'") &  mi("`se'") & mi("`lci'") & mi("`uci'") & mi("`p'") {
+	 di as error "no estimates, SEs, p-values or confidence intervals specified.  Need to specify at least one for siman to run."
+    exit 498
+}
+
+* produce a warning message if no est and no se contained in dataset
+if mi("`estimate'") &  mi("`se'") {
+	 di as error "{it: WARNING: no estimates or SEs, siman's output will be limited.}"
+    exit 498
+}
+
+* produce error message if any other variables contained in the dataset
+qui ds
+local datasetvars `r(varlist)'
+local simanvars `rep' `dgm' `target' `method' `estimate' `se' `df' `lci' `uci' `p' `true' 
+* test for equivalence
+local testothervars: list simanvars === datasetvars
+if `testothervars' == 0 {
+		 di as error "Additional variables found in dataset other than those specified in siman setup.  Please remove extra variables from data set and re-run siman."
+    exit 498
+}
+
 * check that dgm takes numerical values; if not, encode and replace so that siman can do its things.
 if !mi("`dgm'") {
     foreach var of varlist `dgm' {
@@ -83,11 +108,18 @@ if !mi("`dgm'") {
             rename `t`var'' `var'
             compress `var'
         local var name
-            display as error "Warning: variable `var', which appears in dgm(), was stored as a string. It has been" _newline ///
+            display as error "{it: WARNING: variable `var', which appears in dgm(), was stored as a string. It has been" _newline ///
             "encoded as numeric so that subsequent siman commands will work. If you require a" _newline ///
-            "different order, encode `var' as numeric before running -siman setup-."
+            "different order, encode `var' as numeric before running -siman setup-.}"
         }
     }
+}
+
+* check no non-integer values of dgm
+cap assert `dgm' == round(`dgm', 0.1)
+if _rc {
+		 di as error "Non-integer values of dgm are not permitted by siman."
+    exit 498
 }
 
 * if there is no dgm variable listed in the dataset (i.e. there is only 1 dgm so it is not included in the data), then create a temporary variable for dgm * with values of 1.
