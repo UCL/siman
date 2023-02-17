@@ -87,8 +87,8 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 
 {marker reference}{...}
 {title:Reference}
-{pstd}
 
+{pstd}
  Morris, TP, White, IR, Crowther, MJ. Using simulation studies to evaluate statistical methods. Statistics in Medicine. 2019; 38: 2074– 2102. 
  {browse "https://doi.org/10.1002/sim.8086"}
 
