@@ -1,4 +1,5 @@
-*!   version 0.7.2  30jan2023
+*!   version 0.7.3  02march2023
+*    version 0.7.3  02march2023  EMZ bug fixes
 *    version 0.7.2  30jan2023    IW handle abbreviated varnames; better error message for method(wrongvarame) or target(wrongvarname)
 *    version 0.7.1  30jan2023    EMZ added in additional error msgs
 *    version 0.7    23dec2022    IW require rep() to be numeric
@@ -87,12 +88,16 @@ if mi("`estimate'") &  mi("`se'") {
     exit 498
 }
 
+******** This will produce an error if data is in anything other than long-long format ****************************
+/*
 * produce error message if any other variables contained in the dataset
 * THIS CODE IS TOO EARLY - IT STOPS CODE GIVING HELPFUL ERROR MESSAGE IF METHOD() ETC ARE WRONG
 * SO I'VE COMMENTED OUT THE EXIT COMMAND
 qui ds
 local datasetvars `r(varlist)'
-unab simanvars : `rep' `dgm' `target' `method' `estimate' `se' `df' `lci' `uci' `p' `true' 
+* not including true, method or target in below varlist as they can be a number (value label) e.g. method(1 2), true(0)
+*unab simanvars : `rep' `dgm' `estimate' `se' `df' `lci' `uci' `p' 
+local simanvars `rep' `dgm' `method' `target' `estimate' `se' `df' `lci' `uci' `p' `true'
 * test for equivalence
 local testothervars: list simanvars === datasetvars
 if `testothervars' == 0 {
@@ -101,6 +106,8 @@ if `testothervars' == 0 {
 	di as error "Unwanted variables are: `wrongvars'"
     *exit 498
 }
+*/
+*************************************************************************************************************************
 
 * check that dgm takes numerical values; if not, encode and replace so that siman can do its things.
 if !mi("`dgm'") {
@@ -120,10 +127,14 @@ if !mi("`dgm'") {
 }
 
 * check no non-integer values of dgm
-cap assert `dgm' == round(`dgm', 0.1)
-if _rc {
-		 di as error "Non-integer values of dgm are not permitted by siman."
-    exit 498
+if !mi("`dgm'") {
+    foreach var of varlist `dgm' {
+		cap assert `var' == round(`var', 0.1)
+		if _rc {
+				 di as error "Non-integer values of dgm are not permitted by siman: variable `var'."
+			exit 498
+		}
+	}
 }
 
 * if there is no dgm variable listed in the dataset (i.e. there is only 1 dgm so it is not included in the data), then create a temporary variable for dgm * with values of 1.
@@ -432,8 +443,9 @@ local ci `lci' `uci'
 
 * If format is long-long or long-wide 
 * then 'number of targets' will be the number of variable labels for target 
+* long-wide: nformat = 3 and target in long format i.e. ntarget =1
 
-if `nformat'==1 | (`nformat'==3 & `ntarget'==1) { // TPM I think the second part of condition 2 should be: & `ntarget'>=1
+if `nformat'==1 | (`nformat'==3 & `ntarget'==1) { 
 	if `ntarget'!=0 {
 		qui tab `target', m
 		local ntargetlabels = `r(r)'
@@ -449,22 +461,40 @@ if `nformat'==1 | (`nformat'==3 & `ntarget'==1) { // TPM I think the second part
 
 * If format is long-long, or wide-long then 
 * 'number of methods' will be the number of variable labels for method
+* wide-long: nformat = 3 and method in long format i.e. nmethod =1
 
-if `nformat'==1 | (`nformat'==3 & `nmethod'==1)  { // TPM I think the second part of condition 2 should be: & `nmethod'>=1
+if `nformat'==1 | (`nformat'==3 & `nmethod'==1)  { 
 	if `nmethod'!=0 {
 		qui tab `method',m
 		local nmethodlabels = `r(r)'
-		qui levels `method', local(levels)
-		tokenize `"`levels'"'
-		forvalues e = 1/`nmethodlabels' {
-			local methlabel`e' = "``e''"
-			if `e'==1 local methlist `methlabel`e''
-			else if `e'>=2 local methlist `methlist' `methlabel`e''
-        }	
-    }
+		
+		local methodlabels = 0
+		
+		* Get method label values
+		cap qui labelsof `method'
+		cap qui ret list
+
+			if `"`r(labels)'"'!="" {
+			local 0 = `"`r(labels)'"'
+
+			forvalues i = 1/`nmethodlabels' {  
+				gettoken `method'label`i' 0 : 0, parse(": ")
+				local methlist `methlist' ``method'label`i''
+				local methodlabels = 1
+				}
+			}
+	else {
+	local methodlabels = 0
+	qui levels `method', local(levels)
+	tokenize `"`levels'"'
+			
+	forvalues i = 1/`nmethodlabels' {  
+		local `method'label`i' `i'
+		local methlist `methlist' ``method'label`i''
+		}
+	  }	
+	}
 }
-
-
 
 
 * for summary output 

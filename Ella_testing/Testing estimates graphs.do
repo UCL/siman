@@ -49,7 +49,8 @@ siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(
 siman scatter                  
 siman zipplot                  
 siman swarm                   
-siman comparemethodsscatter    
+siman comparemethodsscatter 
+siman blandaltman   
 
 
 * Different true values per target

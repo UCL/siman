@@ -39,11 +39,18 @@ if "`true'"=="" {
 	exit 498
 	}
 if "`true'"!="" {
-		if `true'==. & _dataset==0 {
+		if `true'==. & _dataset==1 {
 		di as error "The variable 'true' is a missing value in the dataset.  siman trellis can not be run."
 		exit 498
 	}
 }
+
+* siman trellis needs true to have multiple values of true to make meaningful graphs
+qui tab `true'
+if `r(r)' == 1 {
+	di as error "siman trellis is for performance data with multiple values of true. siman trellis can not be run with only 1 value of true."
+		exit 498
+} 
 
 * If only 1 dgm in the dataset, produce error message as nothing will be graphed
 if `ndgm'==1 {
@@ -122,7 +129,7 @@ sort `dgm' `target' `method' `touseif'
 * The 'if' option will only apply to dgm, target and method.  The 'if' option is not allowed to be used on rep and an error message will be issued if the user tries to do so
 capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
 if _rc == 9 {
-	di as error "The 'if' option can not be applied to 'rep' in siman_trellis."  
+	di as error "The 'if' option can not be applied to 'rep' in siman trellis. If you have not specified an 'if' in siman trellis, but you specified one in siman setup/analyse, then that 'if' will have been applied to siman trellis."  
 	exit 498
 	}
 *restore

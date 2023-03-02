@@ -30,7 +30,7 @@ foreach thing in `_dta[siman_allthings]' {
 
 * check if siman analyse has been run, if not produce an error message
 if "`simananalyserun'"=="0" | "`simananalyserun'"=="" {
-	di as error "siman analyse has not been run.  Please use siman_analyse first before siman_lollyplot."
+	di as error "siman analyse has not been run.  Please use siman_analyse first before siman lollyplot."
 	exit 498
 	}
 	
@@ -71,7 +71,7 @@ qui sort `dgm' `target' `method' `touseif'
 * The 'if' option will only apply to dgm, target and method.  The 'if' option is not allowed to be used on rep and an error message will be issued if the user tries to do so
 capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
 if _rc == 9 {
-	di as error "The 'if' option can not be applied to 'rep' in siman_lollyplot."  
+	di as error "The 'if' option can not be applied to 'rep' in siman lollyplot.  If you have not specified an 'if' in siman lollyplot, but you specified one in siman setup/analyse, then that 'if' will have been applied to siman lollyplot."
 	exit 498
 	}
 

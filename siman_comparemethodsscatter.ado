@@ -1,4 +1,5 @@
-*! version 1.9   23jan2023
+*! version 1.9.1 02mar2023
+*  version 1.9.1 02mar2023    EMZ bug fix when subgraphoptions used, all constituent graphs were drawn, now fixed
 *  version 1.9   23jan2023    EMZ bug fixes from changes to setup programs 
 *  version 1.8   10oct2022    EMZ added to code so now allows graphs split out by every dgm variable and level if multiple dgm variables declared.
 *  version 1.7   05sep2022    EMZ added additional error message
@@ -101,7 +102,7 @@ sort `dgm' `target' `method' `touseif'
 * The 'if' option will only apply to dgm, target and method.  The 'if' option is not allowed to be used on rep and an error message will be issued if the user tries to do so
 capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
 if _rc == 9 {
-	di as error "The 'if' option can not be applied to 'rep' in siman_comparemethodsscatter."  
+	di as error "The 'if' option can not be applied to 'rep' in siman comparemethodsscatter (cms).  If you have not specified an 'if' in siman cms, but you specified one in siman setup, then that 'if' will have been applied to siman cms."  
 	exit 498
 	}
 restore
@@ -227,10 +228,9 @@ if  substr("`se'",strlen("`se'"),1)=="_" local se = substr("`se'", 1, index("`se
 
 
 if "`subgraphoptions'" == "" {
-	local subgraphoptions aspect(1) graphregion(margin(zero)) plotregion(margin(zero)) xtit("") ytit("") legend(off) nodraw
-	local nodraw
+	local subgraphoptions aspect(1) graphregion(margin(zero)) plotregion(margin(zero)) xtit("") ytit("") legend(off) 
 	}
-else local nodraw "nodraw"
+
 
 	
 di as text "working......."
@@ -295,7 +295,7 @@ local c = 1
 				local pt2 = -0.5
 				}		
 
-	twoway scatteri 0 0 (0) "`mlabel`j''" .5 `pt1' (0) "`estimate' " -.5 `pt2' (0) "`se'", yscale(range(-1 1)) xscale(range(-1 1)) msym(i) mlabs(vlarge) xlab(none) ylab(none) xtit("") ytit("") legend(off) `nodraw' mlab(black) `subgraphoptions' name(`mlabel`j'', replace) 
+	twoway scatteri 0 0 (0) "`mlabel`j''" .5 `pt1' (0) "`estimate' " -.5 `pt2' (0) "`se'", yscale(range(-1 1)) xscale(range(-1 1)) msym(i) mlabs(vlarge) xlab(none) ylab(none) xtit("") ytit("") legend(off) `nodraw' mlab(black) `subgraphoptions' nodraw name(`mlabel`j'', replace) 
 	local c = `c' + 1
 	}
 
@@ -388,6 +388,21 @@ else if `numberdgms'!=1 {
 local `for' {
 */
 
+/*
+* for numeric method variables with string labels, need to re-assign valmethod to be numerical values
+if `nmethod'!=0 {
+	qui tab `method',m
+	local nmethodlabels = `r(r)'
+	qui levels `method', local(levels)
+		tokenize `"`levels'"'
+		forvalues e = 1/`nmethodlabels' {
+			local methlabel`e' = "``e''"
+			if `e'==1 local valmethod `methlabel`e''
+			else if `e'>=2 local valmethod `valmethod' `methlabel`e''
+        }	
+}
+*/
+
 if `numberdgms'==1 {
 	foreach m in `dgmvalues' {
 		local frtheta `minest' `maxest'
@@ -408,9 +423,9 @@ if `numberdgms'==1 {
 					foreach k in `maxmethodvaluesplus1' {
 					 if "`j'" != "`k'" {
 						  twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'`j' `estimate'`k' if `dgm'==`m', ms(o) ///
-						  mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions'), `nodraw' `by' name(`estimate'`j'`k'dgm`m', replace) 
+						  mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions' nodraw), `by' name(`estimate'`j'`k'dgm`m', replace) 
 						  twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'`j' `se'`k' if `dgm'==`m', ms(o) mlc(white%1) ///
-						  msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions'), `nodraw' `by' name(`se'`j'`k'dgm`m', replace) 
+						  msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions' nodraw), `by' name(`se'`j'`k'dgm`m', replace) 
 						  local graphtheta`counter'`counterplus1'`m' `estimate'`j'`k'dgm`m'
 						  local graphse`counter'`counterplus1'`m' `se'`j'`k'dgm`m'
 						  local counterplus1 = `counterplus1' + 1
@@ -431,9 +446,9 @@ if `numberdgms'==1 {
 									if "`j'" != "`k'" {
 										
 						  twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'``j'' `estimate'``k'' if `dgm'==`m', ms(o) ///
-						  mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions'), `by' name(`estimate'``j''``k''dgm`m', replace)
+						  mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions' nodraw), `by' name(`estimate'``j''``k''dgm`m', replace)
 						  twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'``j'' `se'``k'' if `dgm'==`m', ms(o) ///
-						  mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions'), `by' name(`se'``j''``k''dgm`m', replace)
+						  mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions' nodraw), `by' name(`se'``j''``k''dgm`m', replace)
 						  local graphtheta`counter'`counterplus1'`m' `estimate'``j''``k''dgm`m'
 						  local graphse`counter'`counterplus1'`m' `se'``j''``k''dgm`m'
 						  local counterplus1 = `counterplus1' + 1
@@ -525,11 +540,11 @@ else if `numberdgms'!=1 {
 							foreach k in `maxmethodvaluesplus1' {
 							 if "`j'" != "`k'" {
 								  twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'`j' `estimate'`k' if /// 
-								  `dgmfilter', ms(o) mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions'), /// 
-								  `nodraw' `by' name(`estimate'`j'`k'`dgmvar'`d', replace) 
+								  `dgmfilter', ms(o) mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions' nodraw), /// 
+								  `by' name(`estimate'`j'`k'`dgmvar'`d', replace) 
 								  twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'`j' `se'`k' if ///
-								  `dgmfilter', ms(o) mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions'), ///
-								  `nodraw' `by' name(`se'`j'`k'`dgmvar'`d', replace) 
+								  `dgmfilter', ms(o) mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions' nodraw), ///
+								  `by' name(`se'`j'`k'`dgmvar'`d', replace) 
 								  local graphtheta`counter'`counterplus1'`dgmvar'`d' `estimate'`j'`k'`dgmvar'`d'
 								  local graphse`counter'`counterplus1'`dgmvar'`d'  `se'`j'`k'`dgmvar'`d'
 								  local counterplus1 = `counterplus1' + 1
@@ -550,10 +565,10 @@ else if `numberdgms'!=1 {
 											if "`j'" != "`k'" {				
 												twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'``j'' `estimate'``k'' ///
 												if `dgmfilter', ms(o) mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) /// 
-												`subgraphoptions'), `by' name(`estimate'``j''``k''`dgmvar'`d', replace)
+												`subgraphoptions' nodraw), `by' name(`estimate'``j''``k''`dgmvar'`d', replace)
 												twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'``j'' `se'``k'' if /// 
 												`dgmfilter', ms(o) mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) /// 
-												`subgraphoptions'), `by' name(`se'``j''``k''`dgmvar'`d', replace)
+												`subgraphoptions' nodraw), `by' name(`se'``j''``k''`dgmvar'`d', replace)
 												local graphtheta`counter'`counterplus1'`dgmvar'`d' `estimate'``j''``k''`dgmvar'`d'
 												local graphse`counter'`counterplus1'`dgmvar'`d' `se'``j''``k''`dgmvar'`d'
 												local counterplus1 = `counterplus1' + 1		

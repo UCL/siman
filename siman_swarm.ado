@@ -67,7 +67,7 @@ sort `dgm' `target' `method' `touseif'
 * The 'if' option will only apply to dgm, target and method.  The 'if' option is not allowed to be used on rep and an error message will be issued if the user tries to do so
 capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
 if _rc == 9 {
-	di as error "The 'if' option can not be applied to 'rep' in siman_swarm."  
+	di as error "The 'if' option can not be applied to 'rep' in siman swarm.  If you have not specified an 'if' in siman swarm, but you specified one in siman setup, then that 'if' will have been applied to siman swarm."  
 	exit 498
 	}
 restore
@@ -286,7 +286,7 @@ if `ndgm' != 1 {
 					(scatter newidrep`dgmvar' mean`el'`dgmvar', msym(|) msize(huge) mcol(orange) `meangraphoptions')	///
 					, ///
 					by(`by', title("") cols(1) note("") xrescale legend(off) `bygraphoptions')	///
-					ytitle("") ylabel(`labelvalues`dgmvar'', nogrid labsize(medium) angle(horizontal)) `graphoptions'	///
+					ytitle("") ylabel(`labelvalues`dgmvar'', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `graphoptions'	///
 					name(`el'i`dgmvar', replace) nodraw	
 				}
 				else {
@@ -295,7 +295,7 @@ if `ndgm' != 1 {
 					msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `options')	///
 					, ///
 					by(`by', title("") cols(1) note("") xrescale legend(off) `bygraphoptions')	///
-					ytitle("") ylabel(`labelvalues`dgmvar'', nogrid labsize(medium) angle(horizontal)) `graphoptions'	///
+					ytitle("") ylabel(`labelvalues`dgmvar'', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `graphoptions'	///
 					name(`el'i`dgmvar', replace) nodraw
 					}
 				}
@@ -338,7 +338,7 @@ else {
 		msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) legend(off) `options')	///
 		(scatter newidrep mean`el', msym(|) msize(huge) mcol(orange) legend(off) `meangraphoptions')	///
 		, ///
-		ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) `graphoptions'	///
+		ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `graphoptions'	///
 		name(`el'i, replace) nodraw	
 	}
 	else {
@@ -346,7 +346,7 @@ else {
 		local cmd twoway (scatter newidrep `el', ///
 		msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) legend(off) `options')	///
 		, ///
-		ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) `graphoptions'	///
+		ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `graphoptions'	///
 		name(`el'i, replace) nodraw
 		}
 	local name "name(simanswarm, replace)"

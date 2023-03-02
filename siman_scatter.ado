@@ -54,7 +54,7 @@ sort `dgm' `target' `method' `touseif'
 * The 'if' option will only apply to dgm, target and method.  The 'if' option is not allowed to be used on rep and an error message will be issued if the user tries to do so
 capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
 if _rc == 9 {
-	di as error "The 'if' option can not be applied to 'rep' in siman_scatter."  
+	di as error "The 'if' option can not be applied to 'rep' in siman scatter. If you have not specified an 'if' in siman scatter, but you specified one in siman setup, then that 'if' will have been applied to siman scatter."  
 	exit 498
 	}
 restore
@@ -229,8 +229,8 @@ foreach var in `byvar' {
 			}
 	}
 	
-	foreach dgmvar in `dgmvar' {
-		twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`byvar', note("") `bygraphoptions') name(simanscatter_dgm_`dgmvar', replace) `options' 
+	foreach dgmvar in `dgm' {
+		twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`dgmvar', note("") `bygraphoptions') name(simanscatter_dgm_`dgmvar', replace) `options' 
 	}
 }
 * if dgm is defined by 1 variable

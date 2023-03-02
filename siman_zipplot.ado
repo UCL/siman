@@ -1,4 +1,5 @@
-*! version 1.8.1 30jan2023
+*! version 1.8.2 02mar2023
+*  version 1.8.2 02mar2023   EMZ fixed bug, now if dgm and method are numeric labelled string, the label values will be used in the graphs
 *  version 1.8.1 30jan2023   IW removed rows() and xsize() so they can be user-specified (in bygr() and outside, respectively)
 *  version 1.8   07nov2022   EMZ added to code so now allows graphs split out by every dgm variable and level if multiple dgm variables declared.
 *  version 1.7   05sep2022   EMZ added additional error message
@@ -36,7 +37,7 @@ if mi("`estimate'") | mi("`se'") {
 
 * if true is missing, produce an error message
 if "`true'"=="" {
-	di as error "The variable 'true' is missing so siman zipplot can not be created.  Please create a variable in your dataset called true containing the true value(s)."
+	di as error "The variable 'true' is missing so siman zipplot can not be created.  Please create a variable in your dataset called true containing the true value(s) re-run siman setup with true() option specified."
 	exit 498
 	}
 	
@@ -63,7 +64,7 @@ qui sort `dgm' `target' `method' `touseif'
 * The 'if' option will only apply to dgm, target and method.  The 'if' option is not allowed to be used on rep and an error message will be issued if the user tries to do so
 capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
 if _rc == 9 {
-	di as error "The 'if' option can not be applied to 'rep' in siman_zipplot."  
+	di as error "The 'if' option can not be applied to 'rep' in siman zipplot. If you have not specified an 'if' in siman zipplot, but you specified one in siman setup, then that 'if' will have been applied to siman zipplot."  
 	exit 498
 	}
 restore
@@ -451,12 +452,24 @@ if "`dgm'"!="" & `ndgmlabels'>1 & (substr("`dgm'",1,strlen("`dgm'"))!="dgm" | su
 		else qui gen `dgmvar'graph = "`dgmvar'= "
 		capture confirm string variable `dgmvar'
 			if _rc {
-				qui tostring(`dgmvar'), gen(`dgmvar'string)
-				qui gen `dgmvar'graphtitle = `dgmvar'graph + `dgmvar'string
-				qui drop `dgmvar'string
-				}
-			else gen `dgmvar'graphtitle = `dgmvar'graph + `dgmvar'
-		qui drop `dgmvar'graph
+				local `dgmvar'labelindi=0
+				cap qui labelsof `dgmvar'
+				cap qui ret list
+				if !mi("`r(labels)'") local `dgmvar'labelindi=1	
+				
+				tempvar label`dgmvar'
+					if ``dgmvar'labelindi'== 1 {
+					qui decode `dgmvar', gen(label`dgmvar')
+					qui gen `dgmvar'graphtitle = `dgmvar'graph + label`dgmvar'
+						}
+					else {
+					qui tostring(`dgmvar'), gen(`dgmvar'string)
+					qui gen `dgmvar'graphtitle = `dgmvar'graph + `dgmvar'string
+					qui drop `dgmvar'string
+					}
+					
+					qui drop `dgmvar'graph
+			}
 	}
 }
 
@@ -474,13 +487,28 @@ if "`dgm'"!="" & `ndgmlabels'>1 & (substr("`dgm'",1,strlen("`dgm'"))!="dgm" | su
  
  if "`method'"!="" & (substr("`method'",1,strlen("`method'"))!="method" | substr("`method'",1,strlen("`method'"))!="METHOD") {
 	qui gen `method'graph = "Method= "
-	if `methodstringindi'==0 {
-			qui tostring(`method'), gen(`method'string)
-			qui gen `method'graphtitle = `method'graph + `method'string
-			qui drop `method'string
+	
+	
+			if `methodstringindi'==0 {
+				local `method'labelindi=0
+				cap qui labelsof `method'
+				cap qui ret list
+				if !mi("`r(labels)'") local `method'labelindi=1	
+				
+				tempvar label`method'
+					if ``method'labelindi'== 1 {
+					qui decode `method', gen(label`method')
+					qui gen `method'graphtitle = `method'graph + label`method'
+						}
+					else {
+					qui tostring(`method'), gen(`method'string)
+					qui gen `method'graphtitle = `method'graph + `method'string
+					qui drop `method'string
+					}
+					
+					qui drop `method'graph
 			}
-		else gen `method'graphtitle = `method'graph + `method'
-	qui drop `method'graph
+	
  }
 
  

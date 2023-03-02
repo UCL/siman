@@ -68,7 +68,7 @@ sort `dgm' `target' `method' `touseif'
 * The 'if' option will only apply to dgm, target and method.  The 'if' option is not allowed to be used on rep and an error message will be issued if the user tries to do so
 capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
 if _rc == 9 {
-	di as error "The 'if' option can not be applied to 'rep' in siman_blandaltman."  
+	di as error "The 'if' option can not be applied to 'rep' in siman blandaltman.  If you have not specified an 'if' in siman blandaltman, but you specified one in siman setup, then that 'if' will have been applied to siman blandaltman."  
 	exit 498
 	}
 restore
