@@ -2,8 +2,8 @@
 
 clear all
 prog drop _all
-cd C:\git\siman\Ella_testing\data\
-use simlongESTPM_longE_longM.dta, clear
+
+use data/simlongESTPM_longE_longM.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman_analyse
 
@@ -17,8 +17,8 @@ siman_lollyplot, scheme(economist) title("New title") name("test")
 siman_lollyplot, name("newtest")
  
 * more than 3 methods for plots
-cd C:\git\siman\Ella_testing\data\
-use bvsim_all_out.dta, clear
+
+use data/bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -37,8 +37,8 @@ siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
 siman_analyse
 siman_lollyplot
 
-cd C:\git\siman\Ella_testing\data\
-use bvsim_all_out.dta, clear
+
+use data/bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -58,15 +58,15 @@ siman_analyse
 siman_lollyplot
 
 * String variable method
-cd C:\git\siman\Ella_testing\data\
-use simlongESTPM_wideE_wideM4.dta, clear
+
+use data/simlongESTPM_wideE_wideM4.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) order(method)
 siman_analyse
 siman_lollyplot
 * create a dataset with more than 3 string method variables
 clear all
-cd C:\git\siman\Ella_testing\data\
-use bvsim_all_out.dta, clear
+
+use data/bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -93,7 +93,7 @@ siman_lollyplot
 
 clear all
 prog drop _all
-use n500type1.dta, clear
+use data/n500type1.dta, clear
 *append using from_Tim_trellis\n500type2.dta   NEEDS TARGET
 * there are 12 methods so just keep a few for the example
 keep if method =="CC" | method=="LRD1" | method=="PMM1"
@@ -114,7 +114,7 @@ siman_trellis, scheme(economist) ytitle("test y-title") xtitle("test x-title") b
 
 
 * test error messages
-use n500type1.dta, clear
+use data/n500type1.dta, clear
 keep if method =="CC" | method=="LRD1" | method=="PMM1"
 qui gen se = sqrt(var)
 drop auroc
@@ -135,8 +135,8 @@ else exit
 
 clear all
 prog drop _all
-cd C:\git\siman\Ella_testing\data\
-use n500type1.dta, clear
+
+use data/n500type1.dta, clear
 keep if method =="CC" | method=="LRD1" | method=="PMM1"
 qui gen se = sqrt(var)
 gen dgm = 0
@@ -159,10 +159,9 @@ else exit
 **********************************************************************
 clear all
 prog drop _all
-cd C:\git\siman\
 which siman_setup
-cd C:\git\siman\Ella_testing\data\
-use simlongESTPM_longE_longM.dta, clear
+
+use data/simlongESTPM_longE_longM.dta, clear
 gen dgm_string = "1"
 replace dgm_string = "2" if dgm == 2
 drop dgm
@@ -172,8 +171,8 @@ siman lollyplot
 
 clear all
 prog drop _all
-cd C:\git\siman\Ella_testing\data\
-use n500type1.dta, clear
+
+use data/n500type1.dta, clear
 *append using from_Tim_trellis\n500type2.dta   NEEDS TARGET
 * there are 12 methods so just keep a few for the example
 keep if method =="CC" | method=="LRD1" | method=="PMM1"
