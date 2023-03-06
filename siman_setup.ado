@@ -1,4 +1,5 @@
-*!   version 0.7.3  02march2023
+*!   version 0.7.4  06march2023
+*    version 0.7.4  06march2023  EMZ added conditions to check dataset for additional variables not included in siman setup syntax
 *    version 0.7.3  02march2023  EMZ bug fixes
 *    version 0.7.2  30jan2023    IW handle abbreviated varnames; better error message for method(wrongvarame) or target(wrongvarname)
 *    version 0.7.1  30jan2023    EMZ added in additional error msgs
@@ -88,26 +89,6 @@ if mi("`estimate'") &  mi("`se'") {
     exit 498
 }
 
-******** This will produce an error if data is in anything other than long-long format ****************************
-/*
-* produce error message if any other variables contained in the dataset
-* THIS CODE IS TOO EARLY - IT STOPS CODE GIVING HELPFUL ERROR MESSAGE IF METHOD() ETC ARE WRONG
-* SO I'VE COMMENTED OUT THE EXIT COMMAND
-qui ds
-local datasetvars `r(varlist)'
-* not including true, method or target in below varlist as they can be a number (value label) e.g. method(1 2), true(0)
-*unab simanvars : `rep' `dgm' `estimate' `se' `df' `lci' `uci' `p' 
-local simanvars `rep' `dgm' `method' `target' `estimate' `se' `df' `lci' `uci' `p' `true'
-* test for equivalence
-local testothervars: list simanvars === datasetvars
-if `testothervars' == 0 {
-	local wrongvars : list datasetvars - simanvars
-	di as error "Additional variables found in dataset other than those specified in siman setup.  Please remove extra variables from data set and re-run siman."
-	di as error "Unwanted variables are: `wrongvars'"
-    *exit 498
-}
-*/
-*************************************************************************************************************************
 
 * check that dgm takes numerical values; if not, encode and replace so that siman can do its things.
 if !mi("`dgm'") {
@@ -170,7 +151,8 @@ cap confirm existence `target'
 		local ntarget: word count `target'
 		tokenize `target'
         forvalues j=1/`ntarget' {
-			local t`j' = "``j''"
+			local t`j' "``j''"
+			local tlist `tlist' `t`j''
         }
 	}
 else local ntarget = 0
@@ -182,7 +164,8 @@ cap confirm existence `method'
 		local nmethod: word count `method'
 		tokenize `method'
         forvalues i = 1/`nmethod' {
-			local m`i' = "``i''"
+			local m`i' "``i''"
+			local mlist `mlist' `m`i''
         }
 	}
 else local nmethod 0
@@ -226,7 +209,9 @@ forvalues i=1/`nmethod' {
 			cap confirm variable `estimate'`m`i''
 			if !_rc {
                 di as error "Both variables `m`i'' and `estimate'`m`i'' are contained in the dataset. Please take care when specifying the method and estimate variables in the siman setup syntax"
+				exit 498
                 /// TPM Is this really an `I'll proceed but think there might be a problem' warning, or should it error out?
+				/// EMZ needs to error out to to unab later
 			}
 		}
 	}
@@ -437,6 +422,104 @@ if `nformat'==2 & "`order'"=="" {
 * Specify confidence limits
 local ci `lci' `uci'
 
+* produce error message if any other variables contained in the dataset, excluding tempvars
+qui ds __*, not
+* true can be missing, it can be a long variable in the dataset with either single or multiple values, it can be a stub in a wide dataset or it can have a value entered directly in to the siman syntax
+* true might not be a variable in the dataset, it might have just been entered in to the syntax as true(0.5) for example, so add true macro just incase
+* if true is in long format (can not do this if true is in wide format e.g. true1beta)
+cap confirm variable `true'
+if !_rc local truelong = 1
+else local truelong = 0
+if "`ntruevalue'"=="single" local datasetvarswithtrue `r(varlist)' `true'
+else local datasetvarswithtrue `r(varlist)'
+* if true was already in the dataset, only include `true' once
+local datasetvars: list uniq datasetvarswithtrue
+* for long-long format
+	if `nformat' == 1 {
+		* not including true as it can be a number e.g. true(0)
+		* also do not include dgm if it has been created
+		if `dgmcreated' == 0 unab simanvars : `rep' `dgm' `method' `target' `estimate' `se' `df' `lci' `uci' `p' 
+		else unab simanvars : `rep' `method' `target' `estimate' `se' `df' `lci' `uci' `p' 
+		local simanvarswithtrue0 `simanvars' `true'
+		* for cases where true is in dgm() and true(), only include once
+		local simanvarswithtrue: list uniq simanvarswithtrue0
+	}
+	* wide-wide format, order = method
+	else if `nformat' == 2 & "`order'" == "method"{
+		foreach i in `mlist' {
+			foreach j in `tlist' {
+				if !mi("`estimate'") local estimatevariables `estimatevariables' `estimate'`i'`j'
+				if !mi("`se'") local sevariables `sevariables' `se'`i'`j'
+				if !mi("`df'") local dfvariables `dfvariables' `df'`i'`j'
+				if !mi("`lci'") local lcivariables `lcivariables' `lci'`i'`j'
+				if !mi("`uci'") local ucivariables `ucivariables' `uci'`i'`j'
+				if !mi("`p'") local pvariables `pvariables' `p'`i'`j'
+				if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
+				else local truevariables `truevariables' `true'`i'`j'
+			}
+		}
+	local simanvarswithtrue `rep' `dgm' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+	}
+	* wide-wide format, order = target
+	else if `nformat' == 2 & "`order'" == "target"{
+		foreach j in `tlist'  {
+			 foreach i in `mlist' {
+				if !mi("`estimate'") local estimatevariables `estimatevariables' `estimate'`j'`i'
+				if !mi("`se'") local sevariables `sevariables' `se'`j'`i'
+				if !mi("`df'") local dfvariables `dfvariables' `df'`j'`i'
+				if !mi("`lci'") local lcivariables `lcivariables' `lci'`j'`i'
+				if !mi("`uci'") local ucivariables `ucivariables' `uci'`j'`i'
+				if !mi("`p'") local pvariables `pvariables' `p'`j'`i'
+				if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
+				else local truevariables `truevariables' `true'`j'`i'
+			}
+		}
+	local simanvarswithtrue `rep' `dgm' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+	}
+	* long-wide format
+	else if `nformat' == 3 & `nmethod'!=1 & `nmethod'!=0 {
+		foreach i in `mlist' {
+				if !mi("`estimate'") local estimatevariables `estimatevariables' `estimate'`i'
+				if !mi("`se'") local sevariables `sevariables' `se'`i'
+				if !mi("`df'") local dfvariables `dfvariables' `df'`i'
+				if !mi("`lci'") local lcivariables `lcivariables' `lci'`i'
+				if !mi("`uci'") local ucivariables `ucivariables' `uci'`i'
+				if !mi("`p'") local pvariables `pvariables' `p'`i'
+				if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
+				else local truevariables `truevariables' `true'`i'
+		}
+	local simanvarswithtrue `rep' `dgm' `target' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+	}
+	* long method, wide target
+	else if (`nmethod'==1 | `nmethod' == 0) & `ntarget'> 1 {
+			foreach j in `tlist' {
+				if !mi("`estimate'") local estimatevariables `estimatevariables' `estimate'`j'
+				if !mi("`se'") local sevariables `sevariables' `se'`j'
+				if !mi("`df'") local dfvariables `dfvariables' `df'`j'
+				if !mi("`lci'") local lcivariables `lcivariables' `lci'`j'
+				if !mi("`uci'") local ucivariables `ucivariables' `uci'`j'
+				if !mi("`p'") local pvariables `pvariables' `p'`j'
+				if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
+				else local truevariables `truevariables' `true'`j'
+				
+	local simanvarswithtrue `rep' `dgm' `method' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+			}	
+	}
+	* test for equivalence
+	
+	di "`simanvarswithtrue'"
+	di"`datasetvars'"
+	
+	
+	local testothervars: list simanvarswithtrue === datasetvars
+	if `testothervars' == 0 {
+		local wrongvars : list datasetvars - simanvarswithtrue
+		di as error "Additional variables found in dataset other than those specified in siman setup.  Please remove extra variables from data set and re-run siman."
+		di as error "Unwanted variables are: `wrongvars'"
+		exit 498
+	}
+
+
 
 * Identifying elements for summary output table   
 ************************************************
@@ -462,6 +545,9 @@ if `nformat'==1 | (`nformat'==3 & `ntarget'==1) {
 * If format is long-long, or wide-long then 
 * 'number of methods' will be the number of variable labels for method
 * wide-long: nformat = 3 and method in long format i.e. nmethod =1
+cap confirm numeric variable method
+if _rc local methodstringindi = 1
+else local methodstringindi = 0 
 
 if `nformat'==1 | (`nformat'==3 & `nmethod'==1)  { 
 	if `nmethod'!=0 {
@@ -487,13 +573,18 @@ if `nformat'==1 | (`nformat'==3 & `nmethod'==1)  {
 	local methodlabels = 0
 	qui levels `method', local(levels)
 	tokenize `"`levels'"'
-			
-	forvalues i = 1/`nmethodlabels' {  
-		local `method'label`i' `i'
-		local methlist `methlist' ``method'label`i''
+		if `methodstringindi' == 0 {		
+			forvalues i = 1/`nmethodlabels' {  
+				local `method'label`i' `i'
+				local methlist `methlist' ``method'label`i''
+				}
 		}
-	  }	
-	}
+		else forvalues i = 1/`nmethodlabels' {  
+				local `method'label`i' ``i''
+				local methlist `methlist' ``method'label`i''
+				}
+	 }	
+  }
 }
 
 
@@ -669,7 +760,7 @@ if `nformat'==2 {
 else
 * if have long method and wide targets (i.e. 'wide-long' format), then reshape in to long-wide format
 if `nformat'==3 & `nmethod'==1 {
-
+	
     * need the est stub to be est`target1' est`target2' etc so create a macro list.  
     if "`ntruevalue'"=="single" local optionlist `estimate' `se' `df' `ci' `p'  
     else if "`ntruevalue'"=="multiple" local optionlist `estimate' `se' `df' `ci' `p' `true' 
@@ -684,11 +775,13 @@ if `nformat'==3 & `nmethod'==1 {
 
     if "`ntruevalue'"=="single" {
         qui reshape long "`optionlist'", i(`rep' `dgm' `method' `true') j(target "`valtarget'") 
-        qui reshape wide "`optionlist'", i(`rep' `dgm' target `true') j(`method' "`methlist'") 	
+        if `methodstringindi' == 0 qui reshape wide "`optionlist'", i(`rep' `dgm' target `true') j(`method' "`methlist'") 
+		else qui reshape wide "`optionlist'", i(`rep' `dgm' target `true') j(`method' "`methlist'") string
     }
     else if "`ntruevalue'"=="multiple" {
         qui reshape long "`optionlist'", i(`rep' `dgm' `method') j(target "`valtarget'") 
-        qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`methlist'") 	
+        if `methodstringindi' == 0 qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`methlist'") 	
+		else qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`methlist'") string
     }
 
 

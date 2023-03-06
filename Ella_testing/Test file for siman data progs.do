@@ -15,6 +15,7 @@ log using test_file_for_siman_data_progs.log, replace
 use simlongESTPM_longE_longM.dta, clear
 gen dgm_new = "1"
 replace dgm_new = "2" if dgm == 2
+drop dgm
 siman_setup, rep(rep) dgm(dgm_new) target(estimand) method(method) estimate(est) se(se) true(true)
 * warning message as required
 siman_reshape, longwide
@@ -110,12 +111,14 @@ siman_setup, rep(repit) dgm(d) target(estim) method(meth) estimate(est_data) se(
 siman_analyse, perfonly
 
 use estimates.dta, clear
+drop conv error
 siman_setup, rep(idrep) dgm(dgm) method(method) estimate(theta) se(se)
 siman_reshape, longwide
 siman_reshape, longlong 
 siman_analyse  
 siman_reshape, longwide                     
 use estimates.dta, clear
+drop conv error
 siman_setup, rep(idrep) dgm(dgm) method(method) estimate(theta) se(se)
 siman_analyse, perfonly
 
@@ -136,10 +139,14 @@ siman_reshape, longlong
 
 * no estimate data
 use simlongESTPM_longE_longM_noest.dta, clear
-siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) true(true)
+cap siman_setup, rep(rep) dgm(dgm) se(se) target(estimand) method(method) true(true)
+assert _rc!=0
+* error message as required
+
 
 * testing CIs
 use estimates.dta, clear
+drop conv error
 gen float lci = theta + (se*invnorm(.025))
 gen float uci = theta + (se*invnorm(.975))
 siman setup, rep(idrep) dgm(dgm) method(method) est(theta) se(se) lci(lci) uci(uci)
@@ -149,6 +156,8 @@ siman_reshape, longlong
 
 * Format 2: Wide-wide
 ***********************
+clear all
+prog drop _all
 use simlongESTPM_wideE_wideM.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(1_ 2_) estimate(est) se(se) true(true) order(method)   
 siman_reshape, longlong
@@ -577,19 +586,21 @@ siman_analyse
 siman_analyse, replace
 
 * check error message if both 'method' and 'estimatemethod' are in the dataset
+local _rc = 0
 use simlongESTPM_longE_longM.dta, clear
 * just for testing
 rename se estmethod
-siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) 
+cap siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) 
+assert _rc!=0
 * warning message as required: Both variables method and estmethod are contained in the dataset.  Please take care when specifying the method and estimate variables in the siman setup syntax"
 
-* check what happens if data goes from longwide to longlong and back again if have est_1 and est1 in dataset
+* check what happens if have exyta est1 in dataset
+local _rc = 0
 use simlongESTPM_longE_wideM1.dta, clear
 gen est1 = est_1 + 0.05
-siman_setup, rep(rep) dgm(dgm) target(estimand) method(1 2) estimate(est_) se(se_) true(true)  
-siman_reshape, longlong 
-siman_reshape, longwide
-* siman reshape overwrites the existing est1 variable.  Is this what we want?  
+cap siman_setup, rep(rep) dgm(dgm) target(estimand) method(1 2) estimate(est_) se(se_) true(true)  
+assert _rc!=0
+* get error that est1 is additional unwanted variable, correct
 
 
 * Other data formats to test performance meausres graphs provided by Ian/Tim
@@ -607,7 +618,7 @@ replace dgm = 1 if mechanism == "marw"
 replace dgm = 2 if mechanism == "mcar"
 label define dgmlabelvalues 0 "mars" 1 "marw" 2 "mcar"
 label values dgm dgmlabelvalues
-drop mechanism
+drop mechanism auroc var
 siman_setup, rep(repno) dgm(beta dgm) method(method) estimate(b) se(se) df(df) true(beta)
 siman_analyse
 
@@ -621,6 +632,7 @@ siman_setup, rep(rep) dgm(dgm severity CTE switchproportion treateffect switcher
 
 
 use estimates.dta, clear
+drop conv error
 siman_setup, rep(idrep) dgm(dgm) method(method) estimate(theta) se(se)
 siman_reshape, longwide
 siman_reshape, longlong
