@@ -1,4 +1,5 @@
-*! version 1.9.1 02mar2023
+*! version 1.9.2 06mar2023
+*! version 1.9.2 06mar2023    EMZ fixed when method label numerical with string labels, issue introduced from of siman describe change
 *  version 1.9.1 02mar2023    EMZ bug fix when subgraphoptions used, all constituent graphs were drawn, now fixed
 *  version 1.9   23jan2023    EMZ bug fixes from changes to setup programs 
 *  version 1.8   10oct2022    EMZ added to code so now allows graphs split out by every dgm variable and level if multiple dgm variables declared.
@@ -206,6 +207,21 @@ if `methodstringindi'==0 numlist "`levels'"
 }
 
 
+
+* for numeric method variables with string labels, need to re-assign valmethod later on to be numerical values
+if `nmethod'!=0 {
+	qui tab `method',m
+	local nmethodlabels = `r(r)'
+	qui levels `method', local(levels)
+		tokenize `"`levels'"'
+		forvalues e = 1/`nmethodlabels' {
+			local methlabel`e' = "``e''"
+			if `e'==1 local valmethodnumwithlabel `methlabel`e''
+			else if `e'>=2 local valmethodnumwithlabel `valmethodnumwithlabel' `methlabel`e''
+        }	
+}
+
+
 * If data is not in long-wide format, then reshape for graphs
 qui siman reshape, longwide
 	foreach thing in `_dta[siman_allthings]' {
@@ -388,20 +404,6 @@ else if `numberdgms'!=1 {
 local `for' {
 */
 
-/*
-* for numeric method variables with string labels, need to re-assign valmethod to be numerical values
-if `nmethod'!=0 {
-	qui tab `method',m
-	local nmethodlabels = `r(r)'
-	qui levels `method', local(levels)
-		tokenize `"`levels'"'
-		forvalues e = 1/`nmethodlabels' {
-			local methlabel`e' = "``e''"
-			if `e'==1 local valmethod `methlabel`e''
-			else if `e'>=2 local valmethod `valmethod' `methlabel`e''
-        }	
-}
-*/
 
 if `numberdgms'==1 {
 	foreach m in `dgmvalues' {
@@ -409,7 +411,12 @@ if `numberdgms'==1 {
 		local frse `minse' `maxse'
 		
 			if `methodstringindi'==0  {
-				if mi("`methlist'") local methodvalues `valmethod'				
+				if mi("`methlist'") {
+				    * if numerical method without labels
+				    if `methodlabels'!= 1 local methodvalues `valmethod'	
+					* if numerical method with labels
+					else local methodvalues `valmethodnumwithlabel'
+				}
 				local maxmethodvalues : word `numbermethod' of `methodvalues'
 				local maxmethodvaluesplus1 = substr("`methodvalues'", -`numbermethod', .)
 				*di "`maxmethodvaluesplus1'"
