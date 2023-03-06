@@ -1,4 +1,5 @@
-*! version 1.8.2 02mar2023
+*! version 1.8.2 06mar2023
+*  version 1.8.2 06mar2023   EMZ minor bug fix for when method is string
 *  version 1.8.2 02mar2023   EMZ fixed bug, now if dgm and method are numeric labelled string, the label values will be used in the graphs
 *  version 1.8.1 30jan2023   IW removed rows() and xsize() so they can be user-specified (in bygr() and outside, respectively)
 *  version 1.8   07nov2022   EMZ added to code so now allows graphs split out by every dgm variable and level if multiple dgm variables declared.
@@ -40,7 +41,7 @@ if "`true'"=="" {
 	di as error "The variable 'true' is missing so siman zipplot can not be created.  Please create a variable in your dataset called true containing the true value(s) re-run siman setup with true() option specified."
 	exit 498
 	}
-	
+
 tempfile origdata
 qui save `origdata'
 
@@ -508,6 +509,7 @@ if "`dgm'"!="" & `ndgmlabels'>1 & (substr("`dgm'",1,strlen("`dgm'"))!="dgm" | su
 					
 					qui drop `method'graph
 			}
+		 else if `methodstringindi'==1 qui gen `method'graphtitle = `method'graph + `method'
 	
  }
 

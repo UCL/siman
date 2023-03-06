@@ -327,7 +327,7 @@ siman scatter se est
 siman comparemethodsscatter
 siman blandaltman
 siman blandaltman est se
-siman zipplot
+siman zipplot                                                   
 siman swarm
 * 3 methods, true variable
 use `origdata', clear
