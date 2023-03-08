@@ -1,4 +1,11 @@
-*! version 1.9   23dec2022   IW added labformat() option; changed to use standard twoway graph with standard legend
+*! version 1.10   8mar2023    
+*							added warning if multiple targets overlaid
+*							new moptions() changes the main plotting symbol
+*							removed hard-coded imargin() -> can now be included in bygr()
+*							added final graph combine, if multiple PMs
+*							spare options go into final graph
+*							labformat() allows three formats as in simsum
+* version 1.9   23dec2022    IW added labformat() option; changed to use standard twoway graph with standard legend
 *  version 1.8   05dec2022   TM added 'rows(1)' so that dgms all appear on 1 row.
 *  version 1.7   14nov2022   EMZ added bygraphoptions().
 *  version 1.6   05sep2022   EMZ bug fix to allow if target == "x".
@@ -22,7 +29,10 @@ capture program drop siman_lollyplot
 program define siman_lollyplot, rclass
 version 15
 
-syntax [anything] [if] [,* GRaphoptions(string) BYGRaphoptions(string) LABFormat(string) debug]
+syntax [anything] [if] [,GRaphoptions(string) BYGRaphoptions(string) LABFormat(string) debug Moptions(string) ///
+	col(passthru) noCOMBine /// combined-graph options
+	name(passthru) * /// final-graph options
+	]
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -77,6 +87,10 @@ if _rc == 9 {
 
 qui keep if `touseif'
 
+* issue warning if multiple targets are in data
+cap assert `target'==`target'[1]
+if _rc di as error "Your data have multiple targets. They will be overlaid in the lollyplot." _n "You may want to run the command with an if statement."
+
 * take out underscores at the end of variable names if there are any
 foreach u of var * {
 	if substr("`u'",strlen("`u'"),1)=="_" {
@@ -107,9 +121,16 @@ qui replace ref=95 if _perfmeascode=="cover"
 qui replace ref=80 if _perfmeascode=="power"
 
 * gen thelab variable
-if mi("`labformat'") local labformat %12.4g
-qui gen thelab = string(`estimate',"`labformat'")
-qui replace thelab = string(`estimate',"%6.0g") if inlist( _perfmeascode,"bsims","sesims")
+local labformat1 : word 1 of `labformat'
+if mi("`labformat1'") local labformat1 %12.4g
+local labformat2 : word 2 of `labformat'
+if mi("`labformat2'") local labformat2 %6.1f 
+local labformat3 : word 3 of `labformat'
+if mi("`labformat3'") local labformat3 %6.0f
+
+qui gen thelab = string(`estimate',"`labformat1'")
+qui replace thelab = string(`estimate',"`labformat2'") if inlist( _perfmeascode,"relprec","relerr","power","cover")
+qui replace thelab = string(`estimate',"`labformat3'") if inlist( _perfmeascode,"bsims","sesims")
 
 * confidence intervals
 capture confirm variable `lci'
@@ -197,6 +218,7 @@ forvalues j = 1/`nmethodlabels' {
 	}
 
 * create separate plots 
+if `npm'==1 local graphoptions `graphoptions' `options' // options apply to PM-specific graph if there's only one PM
 foreach pm of local tograph {
 	if !inlist(`pm',`ifplot') {
 		local refline
@@ -210,7 +232,7 @@ foreach pm of local tograph {
 
 	forvalues j = 1/`nmethodlabels' { 
 		if `methodstringindi'==0 {
-			local scatter`j' = `"(scatter `method' `estimate' `if' `method'==`j' & _pm==`pm', mlab(thelab) mlabpos(1) mcol("scheme p`j'") mlabcol("scheme p`j'") msym(o))"'
+			local scatter`j' = `"(scatter `method' `estimate' `if' `method'==`j' & _pm==`pm', mlab(thelab) mlabpos(1) mcol("scheme p`j'") mlabcol("scheme p`j'") msym(o) `moptions')"'
 			if `j'==1 local scatters `scatter`j''
 			else if `j'>=2 local scatters `scatters' `scatter`j''
 	
@@ -225,7 +247,7 @@ foreach pm of local tograph {
 
 		else if `methodstringindi'==1 {
 						
-			local scatter`j' = `"(scatter numericmethod `estimate' `if' numericmethod==`j' & _pm==`pm', mlab(thelab) mlabpos(1) mcol("scheme p`j'") mlabcol("scheme p`j'") msym(o))"'
+			local scatter`j' = `"(scatter numericmethod `estimate' `if' numericmethod==`j' & _pm==`pm', mlab(thelab) mlabpos(1) mcol("scheme p`j'") mlabcol("scheme p`j'") msym(o) `moptions')"'
 			if `j'==1 local scatters `scatter`j''
 			else if `j'>=2 local scatters `scatters' `scatter`j''
 	
@@ -248,22 +270,37 @@ foreach pm of local tograph {
 	local shortpmname = _perfmeascode[`=r(min)']
 	assert _perfmeascode == "`shortpmname'" if `rep' == -`pm'
 
+	* draw the graph
+	if `npm'==1 local nameopt `name'
+	else local nameopt name(simanlollyplot_`shortpmname', replace) 
  	#delimit ;
 	`dicmd' graph twoway
 		`refline' `spikes' `bounds' `scatters' 
 		,
-		by(`dgm', `rescale' note("") imargin(tiny)
-			b1tit(`longpmname') `bygraphoptions'
-		)
+		by(`dgm', `rescale' note("") b1tit(`longpmname') `bygraphoptions')
 		ytit("")
 		yla(0 4, val grid labc(white) labsize(*.1))
 		xla(, grid)
 		ysca(reverse)
 		legend(order(`order'))
-		name(simanlollyplot_`shortpmname', replace) 
+		`nameopt'
 		`graphoptions'
 	;
 	#delimit cr
+	local graphstocombine `graphstocombine' simanlollyplot_`shortpmname'
+}
+
+if `npm'>1 { // multiple PMs 
+	if mi("`combine'") { // combine multiple PMs into a single graph
+		if mi("`col'") local col col(1)
+		`dicmd' grc1leg2 `graphstocombine', `col' `options' `name'
+	}
+	else { 
+		di as error `"Warning: options ignored: `col' `options' `name'"'
+	}
+}
+else if !mi("`col'") { 
+	di as error `"Warning: options ignored: `col'"'
 }
 
 end
