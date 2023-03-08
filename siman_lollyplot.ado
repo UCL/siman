@@ -5,6 +5,7 @@
 *							added final graph combine, if multiple PMs
 *							spare options go into final graph
 *							labformat() allows three formats as in simsum
+*							yscale adapts to range of methods; yaxis suppressed
 * version 1.9   23dec2022    IW added labformat() option; changed to use standard twoway graph with standard legend
 *  version 1.8   05dec2022   TM added 'rows(1)' so that dgms all appear on 1 row.
 *  version 1.7   14nov2022   EMZ added bygraphoptions().
@@ -219,6 +220,9 @@ forvalues j = 1/`nmethodlabels' {
 
 * create separate plots 
 if `npm'==1 local graphoptions `graphoptions' `options' // options apply to PM-specific graph if there's only one PM
+summ `method', meanonly
+local methodlabmin = r(min)-0.5
+local methodlabmax = r(max)+0.5
 foreach pm of local tograph {
 	if !inlist(`pm',`ifplot') {
 		local refline
@@ -279,9 +283,9 @@ foreach pm of local tograph {
 		,
 		by(`dgm', `rescale' note("") b1tit(`longpmname') `bygraphoptions')
 		ytit("")
-		yla(0 4, val grid labc(white) labsize(*.1))
+		yla(none) 
+		yscale(off range(`methodlabmin', `methodlabmax') reverse)
 		xla(, grid)
-		ysca(reverse)
 		legend(order(`order'))
 		`nameopt'
 		`graphoptions'
