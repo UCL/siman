@@ -2,10 +2,12 @@
 *							added warning if multiple targets overlaid
 *							new moptions() changes the main plotting symbol
 *							removed hard-coded imargin() -> can now be included in bygr()
-*							added final graph combine, if multiple PMs
+*							added final graph combine using grc1leg2, if multiple PMs
 *							spare options go into final graph
 *							labformat() allows three formats as in simsum
 *							yscale adapts to range of methods; yaxis suppressed
+*							bug fix: local order renamed graphorder to avoid name clash after call to siman reshape
+*							streamlined parsing of PMs and added check for invalid PMs (previously silently ignored)
 * version 1.9   23dec2022    IW added labformat() option; changed to use standard twoway graph with standard legend
 *  version 1.8   05dec2022   TM added 'rows(1)' so that dgms all appear on 1 row.
 *  version 1.7   14nov2022   EMZ added bygraphoptions().
@@ -46,16 +48,23 @@ if "`simananalyserun'"=="0" | "`simananalyserun'"=="" {
 	}
 	
 * if performance measures are not specified, run graphs for all of them
-if "`anything'"=="" {
-	qui levelsof _perfmeascode, local(lablevelscode)
-		foreach lablevelc of local lablevelscode {
-			local varlist `varlist' `lablevelc'
-		}
+qui levelsof _perfmeascode, local(allpms) clean 
+local wrongpms : list anything - allpms
+if !mi("`wrongpms'") {
+	di as error "Performance measures wrongly specified: `wrongpms'"
+	exit 498
 }
-else foreach thing of local anything {
-	local varelement = "`thing'"
-	local varlist `varlist' `varelement'
-	}
+if "`anything'"=="" local pmlist `allpms'
+else local pmlist `anything'
+local npm : word count `pmlist'
+
+* check grc1leg2 is loaded if needed
+cap unabcmd grc1leg2
+if _rc & `npm'>1 {
+	di as error "siman lollyplot with multiple performance measures requires program grc1leg2 to be installed."
+	di as error `"Please use {stata "search grc1leg2"} and install the program."'
+	exit 498
+}		
 
 if !mi("`debug'") local dicmd dicmd
 
@@ -63,7 +72,7 @@ preserve
 	
 * If data is not in long-long format, then reshape
 if `nformat'!=1 {
-	siman reshape, longlong
+	siman reshape, longlong nodescribe
 	foreach thing in `_dta[siman_allthings]' {
 		local `thing' : char _dta[siman_`thing']
 		}
@@ -164,11 +173,6 @@ if "`method'"!="" {
 
 }
 
-* Need to know what format method is in (string or numeric) for the below code
-local methodstringindi = 0
-capture confirm string variable `method'
-if !_rc local methodstringindi = 1
-
 * For the purposes of the graphs below, if dgm is missing in the dataset then set
 * the number of dgms to be 1.
 if `dgmcreated' == 1 {
@@ -178,7 +182,12 @@ if `dgmcreated' == 1 {
 }
 
 * If method is a string variable, need to encode it to numeric format for graphs 
-if `methodstringindi'==1 encode `method', generate(numericmethod)
+capture confirm string variable `method'
+if !_rc {
+	encode `method', generate(numericmethod)
+	local method numericmethod // new 8mar2023: means all remaining code handles both cases
+}
+
 * for graphs
 qui levelsof _pm if _perfmeascode=="empse"
 qui assert `:word count `r(levels)''==1
@@ -190,15 +199,12 @@ local listeight = "`r(levels)'"
 
 * only keep the performance measures that the user has specified (or keep all if the user has not specified any) and only create lollyplot graphs for these.
 qui gen tokeep = 0
-foreach var of local varlist {
-	qui replace tokeep = 1 if _perfmeascode == "`var'"
+foreach pm of local pmlist {
+	qui replace tokeep = 1 if _perfmeascode == "`pm'"
 	}
 
 qui drop if tokeep == 0
 qui drop tokeep
-
-qui tab _pm
-local npm = `r(r)'
 
 qui levelsof _pm, local(tograph)
 
@@ -213,9 +219,10 @@ if !mi("`if'") {
 }
 else local if "if"
 
+* handle method
 forvalues j = 1/`nmethodlabels' { 
 	local label : label (`method') `j' // assumes method is coded 1,2,3...
-	local order `order' `=`nmethodlabels'*3+`j'' "`label'"
+	local graphorder `graphorder' `=`nmethodlabels'*3+`j'' "`label'" // don't use order, it's a siman setting after reshape
 	}
 
 * create separate plots 
@@ -230,41 +237,22 @@ foreach pm of local tograph {
 		}
 	else {
 		local rescale xrescale
-		if `methodstringindi'==0 local refline (line `method' ref if _pm==`pm', lc(gs8))
-		if `methodstringindi'==1 local refline (line numericmethod ref if _pm==`pm', lc(gs8))
+		local refline (line `method' ref if _pm==`pm', lc(gs8))
 		}
 
 	forvalues j = 1/`nmethodlabels' { 
-		if `methodstringindi'==0 {
-			local scatter`j' = `"(scatter `method' `estimate' `if' `method'==`j' & _pm==`pm', mlab(thelab) mlabpos(1) mcol("scheme p`j'") mlabcol("scheme p`j'") msym(o) `moptions')"'
-			if `j'==1 local scatters `scatter`j''
-			else if `j'>=2 local scatters `scatters' `scatter`j''
-	
-			local spike`j' = `"(rspike `estimate' ref `method' `if' `method'==`j' & _pm==`pm', lcol("scheme p`j'") hor)"'
-			if `j'==1 local spikes `spike`j''
-			else if `j'>=2 local spikes `spikes' `spike`j''	
+		local scatter`j' = `"(scatter `method' `estimate' `if' `method'==`j' & _pm==`pm', mlab(thelab) mlabpos(1) mcol("scheme p`j'") mlabcol("scheme p`j'") msym(o) `moptions')"'
+		if `j'==1 local scatters `scatter`j''
+		else if `j'>=2 local scatters `scatters' `scatter`j''
 
-			local bound`j' = `"(scatter `method' `lci' `if' `method'==`j' & _pm==`pm', msym(i) mlab(l) mlabpos(0) mcol("scheme p`j'") mlabcol("scheme p`j'")) (scatter `method' `uci' `if' `method'==`j' & _pm==`pm', msym(i) mlab(r) mlabpos(0) mcol("scheme p`j'") mlabcol("scheme p`j'"))"'
-			if `j'==1 local bounds `bound`j''
-			else if `j'>=2 local bounds `bounds' `bound`j''	
-			} 
+		local spike`j' = `"(rspike `estimate' ref `method' `if' `method'==`j' & _pm==`pm', lcol("scheme p`j'") hor)"'
+		if `j'==1 local spikes `spike`j''
+		else if `j'>=2 local spikes `spikes' `spike`j''	
 
-		else if `methodstringindi'==1 {
-						
-			local scatter`j' = `"(scatter numericmethod `estimate' `if' numericmethod==`j' & _pm==`pm', mlab(thelab) mlabpos(1) mcol("scheme p`j'") mlabcol("scheme p`j'") msym(o) `moptions')"'
-			if `j'==1 local scatters `scatter`j''
-			else if `j'>=2 local scatters `scatters' `scatter`j''
-	
-			local spike`j' = `"(rspike `estimate' ref numericmethod `if' numericmethod==`j' & _pm==`pm', lcol("scheme p`j'") hor)"'
-			if `j'==1 local spikes `spike`j''
-			else if `j'>=2 local spikes `spikes' `spike`j''	
-			
-			local bound`j' = `"(scatter numericmethod `lci' `if' numericmethod==`j' & _pm==`pm', msym(i) mlab(l) mlabpos(0) mcol("scheme p`j'") mlabcol("scheme p`j'")) (scatter numericmethod `uci' `if' numericmethod==`j' & _pm==`pm', msym(i) mlab(r) mlabpos(0) mcol("scheme p`j'") mlabcol("scheme p`j'"))"' 
-			if `j'==1 local bounds `bound`j''
-			else if `j'>=2 local bounds `bounds' `bound`j''	
-			} 
-
-		}
+		local bound`j' = `"(scatter `method' `lci' `if' `method'==`j' & _pm==`pm', msym(i) mlab(l) mlabpos(0) mcol("scheme p`j'") mlabcol("scheme p`j'")) (scatter `method' `uci' `if' `method'==`j' & _pm==`pm', msym(i) mlab(r) mlabpos(0) mcol("scheme p`j'") mlabcol("scheme p`j'"))"'
+		if `j'==1 local bounds `bound`j''
+		else if `j'>=2 local bounds `bounds' `bound`j''	
+		} 
 	
 	* find short and long names for this PM
 	local longpmname: label (`rep') -`pm'
@@ -286,7 +274,7 @@ foreach pm of local tograph {
 		yla(none) 
 		yscale(off range(`methodlabmin', `methodlabmax') reverse)
 		xla(, grid)
-		legend(order(`order'))
+		legend(order(`graphorder'))
 		`nameopt'
 		`graphoptions'
 	;
