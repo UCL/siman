@@ -8,6 +8,7 @@
 *							yscale adapts to range of methods; yaxis suppressed
 *							bug fix: local order renamed graphorder to avoid name clash after call to siman reshape
 *							streamlined parsing of PMs and added check for invalid PMs (previously silently ignored)
+*							bug fix: now doesn't assume method = 1,2,3,...
 * version 1.9   23dec2022    IW added labformat() option; changed to use standard twoway graph with standard legend
 *  version 1.8   05dec2022   TM added 'rows(1)' so that dgms all appear on 1 row.
 *  version 1.7   14nov2022   EMZ added bygraphoptions().
@@ -159,19 +160,16 @@ qui gen l = "("
 qui gen r = ")"
 
 
-if "`method'"!="" {
-
-	* for value labels of method
-	qui tab `method'
-	local nmethodlabels = `r(r)'
-		
-	qui levels `method', local(levels)
-	qui tokenize `"`levels'"'
-		forvalues i=1/`nmethodlabels' {
-				local m`i' = "``i''"
-		}
-
+* If method is a string variable, need to encode it to numeric format for graphs 
+capture confirm string variable `method'
+if !_rc {
+	encode `method', generate(numericmethod)
+	local method numericmethod // so that all remaining code handles both cases
 }
+
+* find levels of method
+qui levelsof `method', local(methodlevels)
+local nmethods = r(r)
 
 * For the purposes of the graphs below, if dgm is missing in the dataset then set
 * the number of dgms to be 1.
@@ -179,13 +177,6 @@ if `dgmcreated' == 1 {
     qui gen dgm = 1
 	local dgm "dgm"
 	local ndgm=1
-}
-
-* If method is a string variable, need to encode it to numeric format for graphs 
-capture confirm string variable `method'
-if !_rc {
-	encode `method', generate(numericmethod)
-	local method numericmethod // new 8mar2023: means all remaining code handles both cases
 }
 
 * for graphs
@@ -220,9 +211,12 @@ if !mi("`if'") {
 else local if "if"
 
 * handle method
-forvalues j = 1/`nmethodlabels' { 
+local graphpos = `nmethods'*3 // number of graphs that don't appear in legend
+foreach j of local methodlevels { 
 	local label : label (`method') `j' // assumes method is coded 1,2,3...
-	local graphorder `graphorder' `=`nmethodlabels'*3+`j'' "`label'" // don't use order, it's a siman setting after reshape
+	local ++graphpos
+	local graphorder `graphorder' `graphpos' "`label'" // for legend
+		// don't use local order, which is a siman setting after reshape
 	}
 
 * create separate plots 
@@ -240,18 +234,18 @@ foreach pm of local tograph {
 		local refline (line `method' ref if _pm==`pm', lc(gs8))
 		}
 
-	forvalues j = 1/`nmethodlabels' { 
+	local scatters
+	local spikes
+	local bounds
+	foreach j of local methodlevels { 
 		local scatter`j' = `"(scatter `method' `estimate' `if' `method'==`j' & _pm==`pm', mlab(thelab) mlabpos(1) mcol("scheme p`j'") mlabcol("scheme p`j'") msym(o) `moptions')"'
-		if `j'==1 local scatters `scatter`j''
-		else if `j'>=2 local scatters `scatters' `scatter`j''
+		local scatters `scatters' `scatter`j''
 
 		local spike`j' = `"(rspike `estimate' ref `method' `if' `method'==`j' & _pm==`pm', lcol("scheme p`j'") hor)"'
-		if `j'==1 local spikes `spike`j''
-		else if `j'>=2 local spikes `spikes' `spike`j''	
+		local spikes `spikes' `spike`j''	
 
 		local bound`j' = `"(scatter `method' `lci' `if' `method'==`j' & _pm==`pm', msym(i) mlab(l) mlabpos(0) mcol("scheme p`j'") mlabcol("scheme p`j'")) (scatter `method' `uci' `if' `method'==`j' & _pm==`pm', msym(i) mlab(r) mlabpos(0) mcol("scheme p`j'") mlabcol("scheme p`j'"))"'
-		if `j'==1 local bounds `bound`j''
-		else if `j'>=2 local bounds `bounds' `bound`j''	
+		local bounds `bounds' `bound`j''	
 		} 
 	
 	* find short and long names for this PM
