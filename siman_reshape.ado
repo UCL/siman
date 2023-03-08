@@ -1,3 +1,4 @@
+*! version 0.3.1  8mar2023     nodescribe option
 *! version 0.3   26sep2022
 *   version 0.3   26sep2022     EMZ fixed bug when transforming to longwide with dgm defined by multiple variables and true in both dgm() and true()
 *   version 0.2   05sep2022     EMZ added additional error messages
@@ -7,7 +8,7 @@ capture program drop siman_reshape
 program define siman_reshape, rclass
 version 15
 
-syntax, [LONGWIDE LONGLONG]
+syntax, [LONGWIDE LONGLONG noDEscribe]
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -123,7 +124,7 @@ if `nformat'==2 {
 		if "`ntruevalue'"=="multiple" char _dta[siman_truedescriptiontype] "stub"
 		char _dta[siman_cidescriptiontype] "stubs"
 		
-		siman_describe
+		if mi("`describe") siman_describe
 		
 		}
 	if `nformat'==2 & "`order'" == "target" {
@@ -163,7 +164,7 @@ if `nformat'==2 {
 			char _dta[siman_[siman_truevars] "`trueuser'"
 		}
 		
-		siman_describe
+		if mi("`describe") siman_describe
 
 		}
 
@@ -283,7 +284,7 @@ else if `nformat'==1 & `nmethod'!=0 {
 		char _dta[siman_cidescriptiontype] "stubs"
 		
 		
-		siman_describe
+		if mi("`describe") siman_describe
 }
 
 else if `nformat'==1 & `nmethod'==0 {
@@ -434,7 +435,7 @@ if "`longlong'"!="" {
 
 
 
-	siman_describe
+	if mi("`describe") siman_describe
 	
 	}
 	
