@@ -133,12 +133,13 @@ tempvar touse
 generate `touse' = 0
 qui replace `touse' = 1 `if' `in'
 if ("`if'" != "" | "`in'" != "") & "`clear'"== "clear" {
-	keep if `touse' // TPM it looks like this deals only with the `if' condition/s and not the `in' conditions. Maybe it's cleverer than I understand. (In any case I don't imagine `in' conditions will be very common.)
+	keep if `touse' 
 }
 else if ("`if'" != "" | "`in'" != "") & "`clear'" != "clear" {
 	di as error "You have specified an if/in condition, meaning that data will be deleted by siman setup," _n "please use the 'clear' option to confirm."
 	exit 498
 }
+* e.g. siman_setup in 1/100, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) clear
 
 * store setup if and in for use in other siman progs
 local ifsetup = `"`if'"'
@@ -211,7 +212,7 @@ forvalues i=1/`nmethod' {
                 di as error "Both variables `m`i'' and `estimate'`m`i'' are contained in the dataset. Please take care when specifying the method and estimate variables in the siman setup syntax"
 				exit 498
                 /// TPM Is this really an `I'll proceed but think there might be a problem' warning, or should it error out?
-				/// EMZ needs to error out to to unab later
+				/// EMZ: needs to error out to use unab later
 			}
 		}
 	}
@@ -377,10 +378,9 @@ else if (`nmethod'>1 & `ntarget'==1 & `nmethod'!=0) | (`ntarget'>1 & `nmethod'==
 	local targetformat = "long"
 	local methodformat = "wide"
 }
-else
 * Note can only do the below for format 1 as if method was missing from format 3 then data would just in effect be long-long format.  If method
 * and target were missing from format 2 than the data would just in effect be long-long format.
-if `nmethod'==0 & `ntarget'<=1 | `ntarget'==0  & `nmethod'<=1 {
+else if `nmethod'==0 & `ntarget'<=1 | `ntarget'==0  & `nmethod'<=1 {
     * get number of rows of the data 
 	local maxnumdata _N 
 	
@@ -396,12 +396,10 @@ if `nmethod'==0 & `ntarget'<=1 | `ntarget'==0  & `nmethod'<=1 {
     if `nmethod'==0 & `ntarget'!=0 {
         local compare = `maxrep' * `ndgm' * `count`target''  /* previously used countdgm but didn't work for multiple dgms with descriptors.  Same for other 2 lines below */
     }
-    else
-    if `ntarget'==0 & `nmethod'!=0 {
+    else if `ntarget'==0 & `nmethod'!=0 {
         local compare = `maxrep' * `ndgm' * `count`method'' 
     }
-    else
-    if `nmethod'==0 & `ntarget'==0 {
+    else if `nmethod'==0 & `ntarget'==0 {
         local compare = `maxrep' * `ndgm' 
     }
 	if `compare' == `maxnumdata' {
@@ -751,10 +749,8 @@ if `nformat'==2 {
         }
     }
 }
-
-else
 * if have long method and wide targets (i.e. 'wide-long' format), then reshape in to long-wide format
-if `nformat'==3 & `nmethod'==1 {
+else if `nformat'==3 & `nmethod'==1 {
 	
     * need the est stub to be est`target1' est`target2' etc so create a macro list.  
     if "`ntruevalue'"=="single" local optionlist `estimate' `se' `df' `ci' `p'  
