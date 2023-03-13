@@ -103,7 +103,7 @@ replace dgm = 1 if mechanism == "marw"
 replace dgm = 2 if mechanism == "mcar"
 label define dgmlabelvalues 0 "mars" 1 "marw" 2 "mcar"
 label values dgm dgmlabelvalues
-drop mechanism
+drop mechanism auroc var
 siman_setup, rep(repno) dgm(beta dgm) method(method) estimate(b) se(se) df(df) true(beta)
 siman_analyse
 siman_trellis bias
@@ -125,7 +125,7 @@ replace dgm = 1 if mechanism == "marw"
 replace dgm = 2 if mechanism == "mcar"
 label define dgmlabelvalues 0 "mars" 1 "marw" 2 "mcar"
 label values dgm dgmlabelvalues
-drop mechanism
+drop mechanism var
 siman_setup, rep(repno) dgm(dgm) method(method) estimate(b) se(se) df(df) true(beta)
 siman_analyse
 replace beta = 3 if beta ==.
@@ -145,7 +145,7 @@ replace dgm = 2 if mechanism == "mcar"
 label define dgmlabelvalues 0 "mars" 1 "marw" 2 "mcar"
 label values dgm dgmlabelvalues
 drop mechanism
-drop auroc
+drop auroc var
 keep if dgm == 2
 keep if beta == 3
 siman_setup, rep(repno) dgm(dgm) method(method) estimate(b) se(se) df(df) true(beta)
@@ -177,6 +177,7 @@ use data/n500type1.dta, clear
 * there are 12 methods so just keep a few for the example
 keep if method =="CC" | method=="LRD1" | method=="PMM1"
 qui gen se = sqrt(var)
+drop auroc var
 siman_setup, rep(repno) dgm(beta mechanism) method(method) estimate(b) se(se) df(df) true(beta)
 siman_analyse
 siman_trellis 

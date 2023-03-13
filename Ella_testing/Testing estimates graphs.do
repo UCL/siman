@@ -189,7 +189,7 @@ gen dgmnew = 0
 replace dgmnew = 1 if dgm==2
 label define dgmlabelvalues 0 "y = 1" 1 "y = 1.5"
 label values dgmnew dgmlabelvalues
-drop dgm
+drop dgm conv error
 rename dgmnew dgm
 siman setup, rep(idrep) dgm(dgm) method(method) est(theta) se(se)
 siman swarm                                                         
@@ -648,7 +648,7 @@ egen dgmB = fill(1 1 0 0 1 1 0 0)
 egen dgmC = fill(1 0 1 0 1 0 1 0)
 order rep dgmA dgmB dgmC
 *append using long_long_formats\simlongESTPM_longE_longM.dta
-siman setup, rep(rep) dgm(dgmA dgmB dgmC) target(estimand) method(method) est(est) se(se)
+siman setup, rep(rep) dgm(dgmA dgmB dgmC) target(estimand) method(method) est(est) se(se) true(true)
 siman scatter if dgmA==0, by(dgmA dgmB)
 *should be same as 
 siman scatter, by(dgmB)

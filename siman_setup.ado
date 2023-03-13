@@ -506,11 +506,6 @@ local datasetvars: list uniq datasetvarswithtrue
 			}	
 	}
 	* test for equivalence
-	
-	di "`simanvarswithtrue'"
-	di"`datasetvars'"
-	
-	
 	local testothervars: list simanvarswithtrue === datasetvars
 	if `testothervars' == 0 {
 		local wrongvars : list datasetvars - simanvarswithtrue
