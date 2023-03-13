@@ -1,4 +1,5 @@
-*! version 1.7   11aug2022
+*! version 1.7.1  13mar2023
+*  version 1.7.1  13mar2023    EMZ added error message
 *  version 1.7    11aug2022    EMZ fixed bug to allow name() in call  
 *  version 1.6    11july2022   EMZ changed created variable names to start with _
 *  version 1.5    19may2022    EMZ added error messages
@@ -84,6 +85,14 @@ else if `numberdgm'!=1 {
 		di as error "for siman trellis to run, 'true' needs to be a variable and also needs to be included within dgm()."
 		exit 498
 	}
+}
+
+* check pf meas specified as required
+qui levelsof _perfmeascode, local(allpms) clean 
+local wrongpms : list anything - allpms
+if !mi("`wrongpms'") {
+	di as error "Performance measures wrongly specified: `wrongpms'"
+	exit 498
 }
 	
 * if performance measures are not specified, run graphs for all of them

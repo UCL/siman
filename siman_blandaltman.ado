@@ -1,4 +1,5 @@
-*! version 1.6   26sep2022 
+*! version 1.6.1 13mar2022 
+*  version 1.6.1 13mar2022   EMZ minor update to error message
 *  version 1.6   26sep2022   EMZ added to code so now allows graphs split out by every dgm variable and level if multiple dgm variables declared.
 *  version 1.5   05sep2022   EMZ bug fix allow norescale, added extra error message
 *  version 1.4   14july2022  EMZ fixed bug so name() allowed in call.
@@ -32,9 +33,9 @@ if "`method'"=="" {
 	exit 498
 	}
 
-* if both estimate and se are missing, give error message as program requires them for the graph(s)
-if mi("`estimate'") & mi("`se'") {
-    di as error "siman blandaltman requires either estimate or se to plot"
+* if estimate and se are missing, give error message as program requires them for the graph(s)
+if mi("`estimate'") | mi("`se'") {
+    di as error "siman blandaltman requires estimate and se to plot"
 	exit 498
 }
 

@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.7 21nov2022}{...}
+{* *! version 0.8 13mar20232}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "simsum (if installed)" "simsum"}{...}
 {viewerjumpto "Syntax" "siman_analyse##syntax"}{...}
@@ -91,6 +91,7 @@ to replace the existing performance measures in the data set.
 {pstd}
 {cmd:siman analyse} takes the imported estimates data from {bf:{help siman_setup:siman setup}} and creates performance measures data using the program {help simsum:simsum}.  By default {cmd:siman analyse}
 will append the performance measures to the estimates data set, with the performance measure names listed in the {bf:repetition} column.
+{cmd:siman analyse} requires that both {opt est} and {opt se} have been specified in {cmd:siman setup}.
 
 {pstd}
 Additionally the performance measure code (as listed above) and the dataset (estimates or performance) will be listed for each dataset row.

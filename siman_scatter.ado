@@ -1,4 +1,5 @@
-*! version 1.6   23jan2023
+*! version 1.6.1 13mar2023
+*  version 1.6.1 13mar2023   EMZ minor update to error message
 *  version 1.6   23jan2023   EMZ bug fixes from changes to setup programs 
 *  version 1.5   05dec2022   EMZ fixed bug so that dgm labels are used when 1 dgm variable, and scatter plots for each dgm when true not part of dgm *                            structure.
 *  version 1.4   12sep2022   EMZ added to code so now allows scatter graphs split out by every dgm variable and level if multiple dgm variables declared.
@@ -24,9 +25,9 @@ if "`simansetuprun'"!="1" {
 	exit 498
 	}
 	
-* if both estimate and se are missing, give error message as program requires them for the graph(s)
-if mi("`estimate'") & mi("`se'") {
-    di as error "siman scatter requires either estimate or se to plot"
+* if estimate or se are missing, give error message as program requires them for the graph(s)
+if mi("`estimate'") | mi("`se'") {
+    di as error "siman scatter requires estimate and se to plot"
 	exit 498
 }
 

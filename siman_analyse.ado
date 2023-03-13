@@ -36,8 +36,8 @@ if "`simananalyserun'"=="1" & "`replace'" == "" {
 
 if mi("`estimate'") | mi("`se'") {
 	di as error "siman analyse requires est() and se() to be specified in set-up"
-	* trying it out
-	* exit 498
+	* otherwise pf graphs won't run later
+	exit 498
 	}
 	
 local estimatesindi = (`rep'[_N]>0)

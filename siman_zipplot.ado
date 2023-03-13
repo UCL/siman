@@ -30,7 +30,7 @@ if "`simansetuprun'"!="1" {
 	exit 498
 	}
 	
-* if both estimate and se are missing, give error message as program requires them for the graph(s)
+* if estimate or se are missing, give error message as program requires them for the graph(s)
 if mi("`estimate'") | mi("`se'") {
     di as error "siman zipplot requires estimate and se to plot"
 	exit 498

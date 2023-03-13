@@ -1,5 +1,6 @@
-*! version 1.9.2 06mar2023
-*! version 1.9.2 06mar2023    EMZ fixed when method label numerical with string labels, issue introduced from of siman describe change
+*! version 1.9.3 13mar2023
+*  version 1.9.3 13mar2023    EMZ minor update to error message
+*  version 1.9.2 06mar2023    EMZ fixed when method label numerical with string labels, issue introduced from of siman describe change
 *  version 1.9.1 02mar2023    EMZ bug fix when subgraphoptions used, all constituent graphs were drawn, now fixed
 *  version 1.9   23jan2023    EMZ bug fixes from changes to setup programs 
 *  version 1.8   10oct2022    EMZ added to code so now allows graphs split out by every dgm variable and level if multiple dgm variables declared.
@@ -7,7 +8,7 @@
 *  version 1.6   01sep2022    EMZ fixed bug to allow scheme to be specified
 *  version 1.5   14july2022   EMZ fixed bug to allow name() in call
 *  version 1.4   30june2022   EMZ minor formatting of axes from IW/TM testing
-*  version 1.3   28apr2022    EMZ bug fix for graphing options
+* version 1.3   28apr2022    EMZ bug fix for graphing options
 *  version 1.2   24mar2022    EMZ changes from IW testing
 *  version 1.1   06dec2021    EMZ changes (bug fix)
 *  version 1.0   25Nov2019    Ella Marley-Zagar, MRC Clinical Trials Unit at UCL. Based on Tim Morris' simulation tutorial do file.
@@ -33,9 +34,9 @@ if "`simansetuprun'"!="1" {
 	exit 498
 	}
 	
-* if both estimate and se are missing, give error message as program requires them for the graph(s)
-if mi("`estimate'") & mi("`se'") {
-    di as error "siman scattercomparemethods requires either estimate or se to plot"
+* if estimate or se are missing, give error message as program requires them for the graph(s)
+if mi("`estimate'") | mi("`se'") {
+    di as error "siman scattercomparemethods requires estimate and se to plot"
 	exit 498
 }	
 
