@@ -1,4 +1,5 @@
-*!   version 0.7.4  06march2023
+*!   version 0.7.5  21march2023
+*    version 0.7.5  21march2023  EMZ bug fix: dataset variables not in siman setup
 *    version 0.7.4  06march2023  EMZ added conditions to check dataset for additional variables not included in siman setup syntax
 *    version 0.7.3  02march2023  EMZ bug fixes
 *    version 0.7.2  30jan2023    IW handle abbreviated varnames; better error message for method(wrongvarame) or target(wrongvarname)
@@ -486,7 +487,8 @@ local datasetvars: list uniq datasetvarswithtrue
 				if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
 				else local truevariables `truevariables' `true'`i'
 		}
-	local simanvarswithtrue `rep' `dgm' `target' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+	local simanvarswithtruenotuniq `rep' `dgm' `target' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+	local simanvarswithtrue: list uniq simanvarswithtruenotuniq
 	}
 	* long method, wide target
 	else if (`nmethod'==1 | `nmethod' == 0) & `ntarget'> 1 {
