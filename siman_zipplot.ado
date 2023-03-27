@@ -1,4 +1,5 @@
-*! version 1.8.2 06mar2023
+*! version 1.8.3 27mar2023   EMZ
+*  version 1.8.3 27mar2023   EMZ minor bug fix for when missing method
 *  version 1.8.2 06mar2023   EMZ minor bug fix for when method is string
 *  version 1.8.2 02mar2023   EMZ fixed bug, now if dgm and method are numeric labelled string, the label values will be used in the graphs
 *  version 1.8.1 30jan2023   IW removed rows() and xsize() so they can be user-specified (in bygr() and outside, respectively)
@@ -598,7 +599,9 @@ if `numberdgms'==1 {
 	}
 	else if `ntrue'>1 & !mi("`target'") {                            
 		local except "`target'graphtitle"
-		local bygraphtitlelist: list bygraphtitlelist - except
+
+		if !mi("`method'") local bygraphtitlelist: list bygraphtitlelist - except
+
 		forvalues k = 1/`ntargetlabels' { 
 			#delimit ;
 			twoway (rspike lpoint rpoint covlb, hor lw(thin) pstyle(p5)) // MC 

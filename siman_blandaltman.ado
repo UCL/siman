@@ -1,4 +1,5 @@
-*! version 1.6.1 13mar2022 
+*! version 1.6.2 27mar2022 
+*  version 1.6.2 27mar2022   EMZ minor bug fix when target has string labels in graph
 *  version 1.6.1 13mar2022   EMZ minor update to error message
 *  version 1.6   26sep2022   EMZ added to code so now allows graphs split out by every dgm variable and level if multiple dgm variables declared.
 *  version 1.5   05sep2022   EMZ bug fix allow norescale, added extra error message
@@ -386,7 +387,7 @@ foreach dgmvar in `dgmbyvar' {
 				
 				if `dgmlabels' == 1 {						
 					if `targetstringindi' == 1 local byvarlist = `"`dgmvar'==`d' & `target'=="`t'""'
-					else local byvarlist = `"`dgmvar'==`d' & `target'==`t'"'
+					else local byvarlist = `"`dgmvar'==`d' & `target'=="`t'""'
 				}				
 				else if `dgmlabels' == 0 {						
 					if `targetstringindi' == 1 local byvarlist = `"`dgmvar'== ``dgmvar'dlabel`d'' & `target'=="`t'""'

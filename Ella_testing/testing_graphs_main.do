@@ -93,7 +93,6 @@ coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p
 siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test2") 
 
 siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test2")        
-/////////////////////////////// NOT WORKING //////////////
 
 siman analyse
 
@@ -162,7 +161,6 @@ assert _rc == 498
 
 siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test4")    
-/////////////////////////////// NOT WORKING //////////////
 
 cap siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test4") 
 assert _rc == 498
