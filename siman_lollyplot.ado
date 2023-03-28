@@ -99,8 +99,10 @@ if _rc == 9 {
 qui keep if `touseif'
 
 * issue warning if multiple targets are in data
-cap assert `target'==`target'[1]
-if _rc di as error "Your data have multiple targets. They will be overlaid in the lollyplot." _n "You may want to run the command with an if statement."
+if !mi("`target'") {
+	cap assert `target'==`target'[1]
+	if _rc di as error "Your data have multiple targets. They will be overlaid in the lollyplot." _n "You may want to run the command with an if statement."
+}
 
 * take out underscores at the end of variable names if there are any
 foreach u of var * {
