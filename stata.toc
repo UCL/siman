@@ -1,0 +1,5 @@
+v 3
+
+d MRC CTU's software for simulation studies
+
+p siman: Suite of commands for analysing the results of simulation studies and producing graphs.

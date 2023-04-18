@@ -1,0 +1,36 @@
+v 3
+d siman: Suite of commands for analysing the results of simulation studies and producing graphs
+d Program by Ella Marley-Zagar
+d Version 0.2
+d Distribution-Date: 27mar2023
+
+f siman.ado
+f siman_analyse.ado
+f siman_blandaltman.ado
+f siman_comparemethodsscatter.ado
+f siman_describe.ado
+f siman_lollyplot.ado
+f siman_nestloop.ado
+f siman_reshape.ado
+f siman_scatter.ado
+f siman_setup.ado
+f siman_swarm.ado
+f siman_table.ado
+f siman_trellis.ado
+f siman_zipplot.ado
+* simsumv2.ado
+
+f siman.sthlp
+f siman_analyse.sthlp
+f siman_blandaltman.sthlp
+f siman_comparemethodsscatter.sthlp
+f siman_describe.sthlp
+f siman_lollyplot.sthlp
+f siman_nestloop.sthlp
+f siman_reshape.sthlp
+f siman_scatter.sthlp
+f siman_setup.sthlp
+f siman_swarm.sthlp
+f siman_table.sthlp
+f siman_trellis.sthlp
+f siman_zipplot.sthlp
