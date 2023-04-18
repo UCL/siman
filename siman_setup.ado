@@ -1,4 +1,4 @@
-*!   version 0.7.5  21march2023
+*! version 0.7.5   21march2023
 *    version 0.7.5  21march2023  EMZ bug fix: dataset variables not in siman setup
 *    version 0.7.4  06march2023  EMZ added conditions to check dataset for additional variables not included in siman setup syntax
 *    version 0.7.3  02march2023  EMZ bug fixes

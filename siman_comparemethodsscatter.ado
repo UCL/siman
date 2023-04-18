@@ -1,4 +1,4 @@
-*! version 1.9.3 13mar2023
+*! version 1.9.3   13mar2023
 *  version 1.9.3 13mar2023    EMZ minor update to error message
 *  version 1.9.2 06mar2023    EMZ fixed when method label numerical with string labels, issue introduced from of siman describe change
 *  version 1.9.1 02mar2023    EMZ bug fix when subgraphoptions used, all constituent graphs were drawn, now fixed

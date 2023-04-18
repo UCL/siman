@@ -1,5 +1,5 @@
-*! version 0.3.1  8mar2023     nodescribe option
-*! version 0.3   26sep2022
+*! version 0.3.1   08mar2023   nodescribe option
+* version 0.3   26sep2022
 *   version 0.3   26sep2022     EMZ fixed bug when transforming to longwide with dgm defined by multiple variables and true in both dgm() and true()
 *   version 0.2   05sep2022     EMZ added additional error messages
 *   version 0.1   08june2020    Ella Marley-Zagar, MRC Clinical Trials Unit at UCL

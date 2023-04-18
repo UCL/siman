@@ -1,4 +1,4 @@
-*! version 1.10   8mar2023    
+*! version 1.10    08mar2023    
 *							added warning if multiple targets overlaid
 *							new moptions() changes the main plotting symbol
 *							removed hard-coded imargin() -> can now be included in bygr()

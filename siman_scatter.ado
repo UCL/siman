@@ -1,4 +1,4 @@
-*! version 1.6.1 13mar2023
+*! version 1.6.1   13mar2023
 *  version 1.6.1 13mar2023   EMZ minor update to error message
 *  version 1.6   23jan2023   EMZ bug fixes from changes to setup programs 
 *  version 1.5   05dec2022   EMZ fixed bug so that dgm labels are used when 1 dgm variable, and scatter plots for each dgm when true not part of dgm *                            structure.

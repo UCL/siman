@@ -1,4 +1,4 @@
-*! version 1.7   07nov2022
+*! version 1.7     07nov2022
 *  version 1.7   07nov2022    EMZ small bug fix
 *  version 1.6   26sep2022    EMZ added to code so now allows scatter graphs split out by every dgm variable and level if multiple dgm variables declared.
 *  version 1.5   05sep2022    EMZ added additional error message.

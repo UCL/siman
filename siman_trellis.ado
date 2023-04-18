@@ -1,4 +1,4 @@
-*! version 1.7.1  13mar2023
+*! version 1.7.1   13mar2023
 *  version 1.7.1  13mar2023    EMZ added error message
 *  version 1.7    11aug2022    EMZ fixed bug to allow name() in call  
 *  version 1.6    11july2022   EMZ changed created variable names to start with _

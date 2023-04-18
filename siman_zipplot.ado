@@ -1,4 +1,4 @@
-*! version 1.8.3 27mar2023   EMZ
+*! version 1.8.3   27mar2023   EMZ
 *  version 1.8.3 27mar2023   EMZ minor bug fix for when missing method
 *  version 1.8.2 06mar2023   EMZ minor bug fix for when method is string
 *  version 1.8.2 02mar2023   EMZ fixed bug, now if dgm and method are numeric labelled string, the label values will be used in the graphs

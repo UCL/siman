@@ -1,4 +1,4 @@
-*! version 1.6.2 27mar2022 
+*! version 1.6.2   27mar2022 
 *  version 1.6.2 27mar2022   EMZ minor bug fix when target has string labels in graph
 *  version 1.6.1 13mar2022   EMZ minor update to error message
 *  version 1.6   26sep2022   EMZ added to code so now allows graphs split out by every dgm variable and level if multiple dgm variables declared.
