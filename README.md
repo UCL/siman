@@ -7,4 +7,4 @@
 In due course, you will be able to install this package from SSC.
 
 To install it from github, use
-- `net from https://raw.githubusercontent.com/UCL/siman/master/package/`
+- `net from https://raw.githubusercontent.com/UCL/siman/master/`

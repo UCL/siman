@@ -18,7 +18,7 @@ f siman_swarm.ado
 f siman_table.ado
 f siman_trellis.ado
 f siman_zipplot.ado
-* simsumv2.ado
+f simsumv2.ado
 
 f siman.sthlp
 f siman_analyse.sthlp
