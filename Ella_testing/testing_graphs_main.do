@@ -1,10 +1,10 @@
 * Testing all siman programs and graphs with different data formats
 * NOTE: need to add testing for trellis an nestloop at the end as different data formats
+* NOTE: to be run in "Ella_testing" folder
 
 clear all
 prog drop _all
 which siman_setup
-cd C:\git\siman\Ella_testing\data\
 
 
 ********************************
@@ -42,7 +42,7 @@ cd C:\git\siman\Ella_testing\data\
 *********************
 * target long and string, method long and numeric, true variable 1 level
 
-use simlongESTPM_longE_longM.dta, clear
+use data/simlongESTPM_longE_longM.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 * graphs
 siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test1") 
@@ -64,8 +64,7 @@ siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollypl
 * DGM numeric with string labels, 1 var
 *****************************************
 * target wide and numeric with string labels, method wide and string, true value
-clear all
-use simlongESTPM_longE_longM.dta, clear
+use data/simlongESTPM_longE_longM.dta, clear
 encode estimand, gen(estimand_num)
 drop estimand
 rename estimand_num estimand
@@ -102,8 +101,7 @@ siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollypl
 * DGM string, 1 var
 ********************
 * target and method long numeric string labels, true missing
-clear all
-use simlongESTPM_longE_longM.dta, clear
+use data/simlongESTPM_longE_longM.dta, clear
 encode estimand, gen(estimand_num)
 drop estimand
 rename estimand_num estimand
@@ -138,8 +136,7 @@ siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollypl
 * DGM missing
 ************** 
 * Target numeric, method missing, true > 1 level (different true values per target)
-clear all
-use simlongESTPM_longE_longM.dta, clear
+use data/simlongESTPM_longE_longM.dta, clear
 replace true=0.5 if estimand=="beta"
 drop method dgm
 gen estimand_num = .
@@ -176,8 +173,7 @@ assert _rc == 498
 
 
 * now try with missing target
-clear all
-use simlongESTPM_longE_longM.dta, clear
+use data/simlongESTPM_longE_longM.dta, clear
 drop estimand
 bysort rep dgm method: gen repitionindi=_n
 drop if repitionindi == 2
@@ -204,8 +200,7 @@ siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollypl
 
 * more than 3 methods for plots, methlist option
 ****************************************************
-cd C:\git\siman\Ella_testing\data\
-use bvsim_all_out.dta, clear
+use data/bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -228,11 +223,7 @@ siman_blandaltman, methlist(3 7) name("ba_test6")
 **********************************************************
 * DGM defined by multiple variables with multiple levels
 **********************************************************
-
-clear all
-prog drop _all
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
-use res.dta, clear
+use nestloop/res.dta, clear
 keep v1 theta rho pc k exppeto expg2 var2peto var2g2
 * theta needs to be in integer format for levelsof command to work (doesn't accept non-integer values), so make integer values with non-integer labels
 gen theta_new=2
