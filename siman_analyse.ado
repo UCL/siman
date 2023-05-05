@@ -1,4 +1,5 @@
-*! version 0.6.1   05may2023   IW remove unused performancemeasures option
+*! version 0.6.1   05may2023
+* version 0.6.1   05may2023   IW remove unused performancemeasures option
 * version 0.6     23dec2022   IW: preserves value label for method
 * version 0.5   11jul2022
 *  version 0.5  11july2022   EMZ changing created variable names to start with _, and adding error catching messages

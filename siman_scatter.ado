@@ -1,4 +1,5 @@
-*! version 1.6.2   05may2023  	IW bug fix when method, dgm not "method", "dgm"
+*! version 1.6.2   05may2023
+* version 1.6.2   05may2023   IW bug fix when method, dgm not "method", "dgm"
 * changed 3 instances of method and dgm to `method' and `dgm' in local names methodtitle and dgmtitle 
 
 *  version 1.6.1 13mar2023   EMZ minor update to error message
