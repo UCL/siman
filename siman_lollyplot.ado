@@ -224,7 +224,7 @@ foreach j of local methodlevels {
 	}
 
 * create DGM graph title
-maketitlevar `dgm'
+qui maketitlevar `dgm'
 local dgmtitlevars = r(newvars)
 
 * create separate plots 
