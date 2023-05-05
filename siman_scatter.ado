@@ -1,4 +1,6 @@
-*! version 1.6.1   13mar2023
+*! version 1.6.2   05may2023  	IW bug fix when method, dgm not "method", "dgm"
+* changed 3 instances of method and dgm to `method' and `dgm' in local names methodtitle and dgmtitle 
+
 *  version 1.6.1 13mar2023   EMZ minor update to error message
 *  version 1.6   23jan2023   EMZ bug fixes from changes to setup programs 
 *  version 1.5   05dec2022   EMZ fixed bug so that dgm labels are used when 1 dgm variable, and scatter plots for each dgm when true not part of dgm *                            structure.
@@ -237,8 +239,8 @@ foreach var in `byvar' {
 * if dgm is defined by 1 variable
 else {
 	
-	if "`by'"=="" & `ndgmlabels' == 1 local byvar `target' `methodtitle' 
-	else if "`by'"=="" & `ndgmlabels' != 1 local byvar `dgmtitle' `target' `methodtitle'
+	if "`by'"=="" & `ndgmlabels' == 1 local byvar `target' ``method'title' 
+	else if "`by'"=="" & `ndgmlabels' != 1 local byvar ``dgm'title' `target' ``method'title'
 	local name = "name(simanscatter, replace)"
 
 	* Can't tokenize/substr as many "" in the string
