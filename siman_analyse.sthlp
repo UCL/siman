@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.8 13mar20232}{...}
+{* *! version 0.8 13mar2023}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "simsum (if installed)" "simsum"}{...}
 {viewerjumpto "Syntax" "siman_analyse##syntax"}{...}
@@ -17,7 +17,7 @@
 {title:Syntax}
 
 {phang}
-{cmdab:siman analyse} [if], [{it:performancemeasures perfonly replace}]
+{cmdab:siman analyse} [{it:performancemeasures}] [if], [{it:perfonly replace}]
 
 
 {synoptset 20 tabbed}{...}

@@ -1,4 +1,5 @@
-*! version 0.6     23dec2022   IW: preserves value label for method
+*! version 0.6.1   05may2023   IW remove unused performancemeasures option
+* version 0.6     23dec2022   IW: preserves value label for method
 * version 0.5   11jul2022
 *  version 0.5  11july2022   EMZ changing created variable names to start with _, and adding error catching messages
 *  version 0.4  16may2022    EMZ minor bug fix with renaming of mcse's
@@ -11,7 +12,7 @@ capture program drop siman_analyse
 program define siman_analyse, rclass
 version 15
 
-syntax [anything] [if], [performancemeasures PERFONLY replace noTABle]
+syntax [anything] [if], [PERFONLY replace noTABle]
 
 capture which simsumv2.ado
 if _rc == 111 {
