@@ -1,4 +1,6 @@
-*! version 1.10    08mar2023    
+*! version 1.11    05may2023
+* version 1.11    05may2023   IW add "DGM=" to subtitles and "method" as legend title
+* version 1.10    08mar2023    
 *							added warning if multiple targets overlaid
 *							new moptions() changes the main plotting symbol
 *							removed hard-coded imargin() -> can now be included in bygr()
@@ -221,6 +223,10 @@ foreach j of local methodlevels {
 		// don't use local order, which is a siman setting after reshape
 	}
 
+* create DGM graph title
+maketitlevar `dgm'
+local dgmtitlevars = r(newvars)
+
 * create separate plots 
 if `npm'==1 local graphoptions `graphoptions' `options' // options apply to PM-specific graph if there's only one PM
 summ `method', meanonly
@@ -265,12 +271,12 @@ foreach pm of local tograph {
 	`dicmd' graph twoway
 		`refline' `spikes' `bounds' `scatters' 
 		,
-		by(`dgm', `rescale' note("") b1tit(`longpmname') `bygraphoptions')
+		by(`dgmtitlevars', `rescale' note("") b1tit(`longpmname') `bygraphoptions')
 		ytit("")
 		yla(none) 
 		yscale(off range(`methodlabmin', `methodlabmax') reverse)
 		xla(, grid)
-		legend(order(`graphorder'))
+		legend(order(`graphorder') title("`method'"))
 		`nameopt'
 		`graphoptions'
 	;
@@ -296,3 +302,35 @@ end
 
 
 	
+/* 
+Create a string variable with values "varname=value", for graphs
+IW 5may2023
+*/
+prog def maketitlevar, rclass
+syntax varlist, [suffix(string)]
+if mi("`suffix'") local suffix title
+foreach var of local varlist {
+	qui {
+		cap confirm string variable `var'
+		if !_rc {
+			local source "string"
+			gen `var'`suffix' = `var'
+		}
+		else {
+			cap decode `var', gen(`var'`suffix')
+			if !_rc {
+				local source "labelled numeric"
+			}
+			else if _rc {
+				local source "unlabelled numeric"
+				cap gen `var'`suffix' = strofreal(`var')
+			}
+		}
+		if _rc di as error "maketitlevar: something went wrong"
+		replace `var'`suffix' = "`var'="+`var'`suffix' if !mi(`var')
+	}
+	di as text "Created " as result "`var'`suffix'" as text " from " as result "`source'" as text " variable " as result "`var'"
+	local newvars `newvars' `var'`suffix'
+}
+return local newvars `newvars'
+end
