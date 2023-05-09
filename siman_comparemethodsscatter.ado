@@ -1,4 +1,5 @@
-*! version 1.9.3   13mar2023
+*! version 1.9.4 09may2023
+*  version 1.9.4 09may2023    EMZ minor bug fix: now working when method numeric with string labels and dgm defined by >1 variable
 *  version 1.9.3 13mar2023    EMZ minor update to error message
 *  version 1.9.2 06mar2023    EMZ fixed when method label numerical with string labels, issue introduced from of siman describe change
 *  version 1.9.1 02mar2023    EMZ bug fix when subgraphoptions used, all constituent graphs were drawn, now fixed
@@ -533,15 +534,20 @@ else if `numberdgms'!=1 {
 				local frse `minse' `maxse'
 				
 					if `methodstringindi'==0   {		
-					
-					* numlist "`methodvalues'", sort
-					local maxmethodvalues : word `numbermethod' of `r(numlist)'
-					local maxmethodvaluesplus1 = substr("`methodvalues'", -`nummethod', .)
-					*di "`maxmethodvaluesplus1'"
-					local maxmethodvaluesminus1 = substr("`methodvalues'", 1 ,`numbermethod')
-					*di "`maxmethodvaluesminus1'"
-					local counter = 1
-					local counterplus1 = 2
+					    if mi("`methlist'") {
+						* if numerical method without labels
+						if `methodlabels'!= 1 local methodvalues `valmethod'	
+						* if numerical method with labels
+						else local methodvalues `valmethodnumwithlabel'
+						}
+						local maxmethodvalues : word `numbermethod' of `methodvalues'
+						local maxmethodvaluesplus1 = substr("`methodvalues'", -`numbermethod', .)
+						*di "`maxmethodvaluesplus1'"
+						local maxmethodvaluesminus1 = substr("`methodvalues'", 1 ,`numbermethod')
+						*di "`maxmethodvaluesminus1'"
+						local counter = 1
+						local counterplus1 = 2
+						
 						foreach j in `maxmethodvaluesminus1' {
 						*di "`j'"
 
