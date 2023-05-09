@@ -182,3 +182,25 @@ siman_setup, rep(repno) dgm(beta mechanism) method(method) estimate(b) se(se) df
 siman_analyse
 siman_trellis 
 
+
+* testing using Ian's new data for trellis and nestloop
+
+use data/extendedtestdata_postfile.dta, clear
+
+* remove non-integer values
+foreach var in beta pmiss {
+	gen `var'char = strofreal(`var')
+	drop `var'
+	sencode `var'char, gen(`var')
+	drop `var'char
+}
+order beta pmiss
+
+siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(beta)
+
+siman_analyse
+
+siman_trellis bias
+
+siman_nestloop mean
+

@@ -1,4 +1,5 @@
-*! version 1.7.1   13mar2023
+*! version 1.7.2  09may2023
+*  version 1.7.2  09may2023    EMZ minor bug fix in creating graphs when dgm defined by >1 variable
 *  version 1.7.1  13mar2023    EMZ added error message
 *  version 1.7    11aug2022    EMZ fixed bug to allow name() in call  
 *  version 1.6    11july2022   EMZ changed created variable names to start with _
@@ -77,7 +78,7 @@ else if `numberdgm'!=1 {
 
 	* Need to get dgm vars/levels in to -inlist- format 
 	forvalues l = 1/`ndgm' {
-		if `l'! = `ndgm' local dgmlist `dgmlist' `""``l''","'
+		if `l'! = `ndgm' local dgmlist `dgmlist' "``l''" ","
 		else local dgmlist `dgmlist' "``l''"
 	}
 
