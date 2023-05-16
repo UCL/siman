@@ -3,6 +3,8 @@
 clear all
 prog drop _all
 
+cd "C:\git\siman\Ella_testing\"
+
 use data/simlongESTPM_longE_longM.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman_analyse

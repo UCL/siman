@@ -1,4 +1,5 @@
-*! version 1.8.3   27mar2023   EMZ
+*! version 1.8.4 16may2023   EMZ
+*  version 1.8.4 16may2023   EMZ bug fix for multiple estimands with multiple targets
 *  version 1.8.3 27mar2023   EMZ minor bug fix for when missing method
 *  version 1.8.2 06mar2023   EMZ minor bug fix for when method is string
 *  version 1.8.2 02mar2023   EMZ fixed bug, now if dgm and method are numeric labelled string, the label values will be used in the graphs
@@ -164,7 +165,8 @@ if _rc {
 
 					forvalues t = 1/`ntrue' {  
 					gettoken `true'label`t' 0 : 0, parse(" ")
-					local `true'number`t' `t' 
+	*				local `true'number`t' `t' 
+					local `true'value`t' `t'
 					qui replace `true'calc = ``true'label`t'' if `true' == `t'
 					local truelabels = 1
 					}
@@ -475,8 +477,8 @@ if "`dgm'"!="" & `ndgmlabels'>1 & (substr("`dgm'",1,strlen("`dgm'"))!="dgm" | su
 	}
 }
 
- if "`target'"!="" & (substr("`target'",1,strlen("`target'"))!="target" | substr("`target'",1,strlen("`target'"))!="TARGET") {
-	qui gen `target'graph = "TARGET= "
+ if "`target'"!="" & (substr("`target'",1,strlen("`target'"))!="target" | substr("`target'",1,strlen("`target'"))!="Target") {
+	qui gen `target'graph = "Target= "
 	capture confirm string variable `target'
 		if _rc {
 			qui tostring(`target'), gen(`target'string)
@@ -484,6 +486,7 @@ if "`dgm'"!="" & `ndgmlabels'>1 & (substr("`dgm'",1,strlen("`dgm'"))!="dgm" | su
 			qui drop `target'string
 			}
 		else gen `target'graphtitle = `target'graph + `target'
+		local targetgraphtitle "`target'graphtitle"
 	qui drop `target'graph
  }
  
@@ -513,6 +516,7 @@ if "`dgm'"!="" & `ndgmlabels'>1 & (substr("`dgm'",1,strlen("`dgm'"))!="dgm" | su
 		 else if `methodstringindi'==1 qui gen `method'graphtitle = `method'graph + `method'
 	
  }
+ local methodgraphtitle "`method'graphtitle"
 
  
 if `numberdgms'==1 {
@@ -635,7 +639,8 @@ if `numberdgms'==1 {
 				(scatter p`estimate'rank `estimate', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
 				(pci 0 ``true'label`k'' 100 ``true'label`k'', pstyle(p5) lw(thin) `truegraphoptions')
 				,
-				name(`name'_true_``true'number`k'', replace)
+*				name(`name'_true_``true'number`k'', replace)
+				name(`name'_true_``true'value`k'', replace)
 				xtit("95% confidence intervals")
 				ytit("Centile of ranked p-values for null: θ=``true'label`k''")  
 				ylab(5 50 95)
@@ -649,13 +654,15 @@ if `numberdgms'==1 {
 	}
 }
 else {
+	local ntrue = `ntrue' - 1
 	if !mi("`target'") {                            
 		local except "`target'graphtitle"
 		local bygraphtitlelist: list bygraphtitlelist - except
-		local bydgm: list by - method - target
+		local except2 "`method' `target'"
+		local bydgm: list by - except2
 		foreach dgmvar in `bydgm' {
 			forvalues j = 1/`ntargetlabels' { 
-				forvalues k = 1/`ntrue' {
+				forvalues k = 2/`ntrue' {
 					#delimit ;
 					twoway (rspike lpoint`dgmvar' rpoint`dgmvar' covlb`dgmvar', hor lw(thin) pstyle(p5)) // MC 
 						(rspike lpoint`dgmvar' rpoint`dgmvar' covub`dgmvar', hor lw(thin) pstyle(p5))
@@ -663,11 +670,11 @@ else {
 						lcol(%30) `noncoveroptions')
 						(rspike `lci' `uci' p`estimate'rank`dgmvar' if covers`dgmvar' & `true' == `k', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions')
 						(scatter p`estimate'rank`dgmvar' `estimate' if `true' == `k', msym(p) mcol(white%30) `scatteroptions') // plots pt estimates in white
-						(pci 0 `truevalue`j'' 100 `truevalue`j'', pstyle(p5) lw(thin) `truegraphoptions')
+						(pci 0 ``true'label`j'' 100 ``true'label`j'', pstyle(p5) lw(thin) `truegraphoptions')
 						,
-						name(`name'_`dgmvar'_`targetlabel`j'', replace)
+						name(`name'_`dgmvar'_``true'value`j'', replace)
 						xtit("95% confidence intervals")
-						ytit("Centile of ranked p-values for null: θ=`truevalue`j''")  
+						ytit("Centile of ranked p-values for null: θ=``true'label`j''")  
 						ylab(5 50 95)
 						by(`bygraphtitlelist`dgmvar'', note("") noxrescale iscale(*.8) `bygraphoptions') scale(.8)
 						legend(order(4 "Coverers" 3 "Non-coverers"))
@@ -679,10 +686,11 @@ else {
 			}
 		}
 	}
-	else if mi("`target'") {    
-		local bydgm: list by - method
+	else if mi("`target'") {   
+		local except "`method'"
+		local bydgm: list by - except
 		foreach dgmvar in `bydgm' {
-			forvalues k = 1/`ntrue' { 
+			forvalues k = 2/`ntrue' { 
 				#delimit ;
 				twoway (rspike lpoint`dgmvar' rpoint`dgmvar' covlb`dgmvar', hor lw(thin) pstyle(p5)) // MC 
 					(rspike lpoint`dgmvar' rpoint`dgmvar' covub`dgmvar', hor lw(thin) pstyle(p5))
@@ -691,7 +699,8 @@ else {
 					(scatter p`estimate'rank`dgmvar' `estimate' if `true' == `k', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
 					(pci 0 ``true'label`k'' 100 ``true'label`k'', pstyle(p5) lw(thin) `truegraphoptions')
 					,
-					name(`name'_`dgmvar'_``true'number`k'', replace)
+*					name(`name'_`dgmvar'_``true'number`k'', replace)
+					name(`name'_`dgmvar'_``true'value`k'', replace)
 					xtit("95% confidence intervals")
 					ytit("Centile of ranked p-values for null: θ=``true'label`k''")  
 					ylab(5 50 95)
