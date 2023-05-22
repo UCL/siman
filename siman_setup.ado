@@ -1,4 +1,5 @@
-*! version 0.7.5   21mar2023
+*! version 0.7.6   22may2023
+* version 0.7.6   22may2023	IW bug fix: label of encoded string dgmvar was lost
 *    version 0.7.5  21march2023  EMZ bug fix: dataset variables not in siman setup
 *    version 0.7.4  06march2023  EMZ added conditions to check dataset for additional variables not included in siman setup syntax
 *    version 0.7.3  02march2023  EMZ bug fixes
@@ -97,7 +98,7 @@ if !mi("`dgm'") {
         cap confirm numeric variable `var'
         if _rc {
             tempvar t`var'
-            encode `var', gen(`t`var'')
+            encode `var', gen(`t`var'') label(`var')
             drop `var'
             rename `t`var'' `var'
             compress `var'
