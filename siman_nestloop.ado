@@ -1,4 +1,5 @@
-*! version 1.7.1   13mar2023
+*! version 1.7.2   22may2023
+*  version 1.7.2   22may2023  IW fixes
 *  version 1.7.1 13mar2023    EMZ added error message
 *  version 1.7   11aug2022    EMZ fixed bug to allow name() in call  
 *  version 1.6   11july2022   EMZ renamed created variables to have _ infront
@@ -147,9 +148,10 @@ if !mi("`dgmorder'") {
     qui gsort `dgmorder', gen(_scenario)
 }
 else qui gsort `theta' `dgm', gen(_scenario)
+replace _scenario = _scenario-0.5 // TRY THIS
 
 * add in to existing macros
-local scenario "_scenario"
+local scenario _scenario
 local dgm `scenario' `dgm'
 local varlist `varlist' `scenario'
 
@@ -294,7 +296,7 @@ foreach yvar of local yvars {
 tempfile dataforgraph
 qui save `dataforgraph'
 	
-qui keep `yvar' `xvar' `dgm' `true'
+qui keep `yvar' `xvar' `dgm' `true' `target' // IW 22may2023
 
 
 * range of upper part
@@ -392,19 +394,6 @@ if `stagger'>0 qui {
 	}
 }
 
-* add in to existing macros
-local scenario "_scenario"
-// prepare to show scenarios in 16s	
-set more off
-forvalues j=1/6 {
-	local upp = 16*`j'
-	local low = `upp'-15
-	local mid = `upp'-7
-	label def scen2 `mid' "`low'-`upp'", add
-	local xlabs `xlabs' `mid'
-}
-label val _scenario scen2
-
 *sort data ready for graphs
 qui sort _scenario
 
@@ -448,10 +437,10 @@ if !mi(`"`options'"') {
 * graph
 #delimit ;
 local cmd graph twoway 
-(line `yvar' `xvar' `if', 
+(line `yvar' `xvar' `if', c(J ...)
 	`lcolor' `lpattern'	`lstyle' `lwidth'
 	)
-(line `factorlist' `xvar' `if', 
+(line `factorlist' `xvar' `if', c(J ...)
 	lcol(`legendcolor' ...)
 	lpattern(`legendpattern' ...)
 	lwidth(`legendwidth' ...)

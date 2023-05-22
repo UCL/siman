@@ -190,6 +190,7 @@ siman_trellis
 use data/extendedtestdata_postfile.dta, clear
 
 * remove non-integer values
+gen betatrue=beta
 foreach var in beta pmiss {
 	gen `var'char = strofreal(`var')
 	drop `var'
@@ -198,11 +199,11 @@ foreach var in beta pmiss {
 }
 order beta pmiss
 
-siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(beta)
+siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(betatrue)
 
-siman_analyse
+siman analyse, notable
+siman table if beta==1 & pmiss==1 & mech==1, col(method estimand)
 
 siman_trellis bias
 
-siman_nestloop mean
-
+siman nestloop bias if estimand=="effect", fracgap(.2) lcol(red blue green) xla(1/12)
