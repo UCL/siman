@@ -1,5 +1,6 @@
-*! version 0.7.6   22may2023
-* version 0.7.6   22may2023	IW bug fix: label of encoded string dgmvar was lost
+*!   version 0.7.7  29may2023
+*    version 0.7.7  29may2023	 EMZ added option if missing method
+*    version 0.7.6  22may2023	 IW bug fix: label of encoded string dgmvar was lost
 *    version 0.7.5  21march2023  EMZ bug fix: dataset variables not in siman setup
 *    version 0.7.4  06march2023  EMZ added conditions to check dataset for additional variables not included in siman setup syntax
 *    version 0.7.3  02march2023  EMZ bug fixes
@@ -89,6 +90,13 @@ if mi("`estimate'") &  mi("`se'") & mi("`lci'") & mi("`uci'") & mi("`p'") {
 if mi("`estimate'") &  mi("`se'") {
 	 di as error "{it: WARNING: no estimates or SEs, siman's output will be limited.}"
     exit 498
+}
+
+* produce a warning message if no method contained in dataset, and create a constant
+if mi("`method'") {
+	 di as error "{it: WARNING: no method specified, siman will procedd assuming there is only one method.  If this is a mistake, enter method() option in -siman setup-}"
+	 gen _methodvar = 1
+	 local method "_methodvar"
 }
 
 

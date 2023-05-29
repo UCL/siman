@@ -1,4 +1,5 @@
-*! version 1.9.4 09may2023
+*! version 1.9.5 29may2023
+*  version 1.9.5 29may2023    EMZ minor formatting as per IRW/TPM request
 *  version 1.9.4 09may2023    EMZ minor bug fix: now working when method numeric with string labels and dgm defined by >1 variable
 *  version 1.9.3 13mar2023    EMZ minor update to error message
 *  version 1.9.2 06mar2023    EMZ fixed when method label numerical with string labels, issue introduced from of siman describe change
@@ -471,7 +472,7 @@ if `numberdgms'==1 {
 			if `numbermethod'==2 {
 				graph combine `mlabel1' `graphtheta12`m'' ///
 				`graphse12`m'' `mlabel2' ///
-				, title("siman compare methods scatter") cols(2)	///
+				, title("") note("") cols(2)	///
 				xsize(4)	///
 				name(`name'_dgm`m', replace) `options'
 				}
@@ -479,13 +480,13 @@ if `numberdgms'==1 {
 				graph combine `mlabel1' `graphtheta12`m'' `graphtheta13`m''	///
 				`graphse12`m'' `mlabel2' `graphtheta23`m''	///
 				`graphse13`m'' `graphse23`m'' `mlabel3'	///
-				, title("siman compare methods scatter") cols(3)	///
+				, title("") note("") cols(3)	///
 				xsize(4)	///
 				name(`name'_dgm`m', replace) `options'
 				}
 			else if `numbermethod'>3 {
 				if mi("`anything'") local anything = "est"
-				graph matrix `varlist' if `dgm'==`m', `half' `by' title("siman compare methods scatter") ///
+				graph matrix `varlist' if `dgm'==`m', `half' `by' title("") note("") ///
 				name(`name'_`anything'`j'`k'dgm`m', replace) `options'
 			}
 	}
@@ -596,7 +597,7 @@ else if `numberdgms'!=1 {
 					if `numbermethod'==2 {
 						graph combine `mlabel1' `graphtheta12`dgmvar'`d'' ///
 						`graphse12`dgmvar'`d'' `mlabel2' ///
-						, title("siman compare methods scatter") cols(2)	///
+						, title("") note("") cols(2)	///
 						xsize(4)	///
 						name(`name'_`dgmvar'`d', replace) `options'
 						}
@@ -604,13 +605,13 @@ else if `numberdgms'!=1 {
 						graph combine `mlabel1' `graphtheta12`dgmvar'`d'' `graphtheta13`dgmvar'`d''	///
 						`graphse12`dgmvar'`d'' `mlabel2' `graphtheta23`dgmvar'`d''	///
 						`graphse13`dgmvar'`d'' `graphse23`dgmvar'`d'' `mlabel3'	///
-						, title("siman compare methods scatter") cols(3)	///
+						, title("") note("") cols(3)	///
 						xsize(4)	///
 						name(`name'_`dgmvar'`d', replace) `options'
 						}
 					else if `numbermethod'>3 {
 						if mi("`anything'") local anything = "est"
-						graph matrix `varlist' if `dgmvar'==`d', `half' `by' title("siman compare methods scatter") name(`name'_`anything'`j'`k'`dgmvar'`d', replace) `options'
+						graph matrix `varlist' if `dgmvar'==`d', `half' `by' title("") note("") name(`name'_`anything'`j'`k'`dgmvar'`d', replace) `options'
 					}
 			}
      }

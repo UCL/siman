@@ -63,6 +63,7 @@ siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollypl
 
 * DGM numeric with string labels, 1 var
 *****************************************
+
 * target wide and numeric with string labels, method wide and string, true value
 use data/simlongESTPM_longE_longM.dta, clear
 encode estimand, gen(estimand_num)
@@ -166,10 +167,6 @@ assert _rc == 498
 cap siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test4") 
 assert _rc == 498
 * siman bland altman can not be run without method as required
-
-cap siman analyse
-assert _rc == 498
-* siman analyse can not be run without method as required
 
 
 * now try with missing target

@@ -1,5 +1,5 @@
 *! version 1.8.4 16may2023   EMZ
-*  version 1.8.4 16may2023   EMZ bug fix for multiple estimands with multiple targets
+*  version 1.8.4 16may2023   EMZ bug fix for multiple estimands with multiple targets, formatting to title
 *  version 1.8.3 27mar2023   EMZ minor bug fix for when missing method
 *  version 1.8.2 06mar2023   EMZ minor bug fix for when method is string
 *  version 1.8.2 02mar2023   EMZ fixed bug, now if dgm and method are numeric labelled string, the label values will be used in the graphs
@@ -448,11 +448,11 @@ else foreach dgmvar in `dgm' {
 				}	
 }	
 
-* Create column data that has "DGM=..." and "Method=..." to use in the graphs 
+* Create column data that has "DGM:..." and "Method:..." to use in the graphs 
 * so that graph titles look tidy.
 if "`dgm'"!="" & `ndgmlabels'>1 & (substr("`dgm'",1,strlen("`dgm'"))!="dgm" | substr("`dgm'",1,strlen("`dgm'"))!="DGM") {
     foreach dgmvar in `dgm' {
-		if `numberdgms'==1 qui gen `dgmvar'graph = "DGM= "
+		if `numberdgms'==1 qui gen `dgmvar'graph = "DGM: "
 		else qui gen `dgmvar'graph = "`dgmvar'= "
 		capture confirm string variable `dgmvar'
 			if _rc {
@@ -478,7 +478,7 @@ if "`dgm'"!="" & `ndgmlabels'>1 & (substr("`dgm'",1,strlen("`dgm'"))!="dgm" | su
 }
 
  if "`target'"!="" & (substr("`target'",1,strlen("`target'"))!="target" | substr("`target'",1,strlen("`target'"))!="Target") {
-	qui gen `target'graph = "Target= "
+	qui gen `target'graph = "Target: "
 	capture confirm string variable `target'
 		if _rc {
 			qui tostring(`target'), gen(`target'string)
@@ -491,7 +491,7 @@ if "`dgm'"!="" & `ndgmlabels'>1 & (substr("`dgm'",1,strlen("`dgm'"))!="dgm" | su
  }
  
  if "`method'"!="" & (substr("`method'",1,strlen("`method'"))!="method" | substr("`method'",1,strlen("`method'"))!="METHOD") {
-	qui gen `method'graph = "Method= "
+	qui gen `method'graph = "Method: "
 	
 	
 			if `methodstringindi'==0 {
@@ -699,7 +699,6 @@ else {
 					(scatter p`estimate'rank`dgmvar' `estimate' if `true' == `k', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
 					(pci 0 ``true'label`k'' 100 ``true'label`k'', pstyle(p5) lw(thin) `truegraphoptions')
 					,
-*					name(`name'_`dgmvar'_``true'number`k'', replace)
 					name(`name'_`dgmvar'_``true'value`k'', replace)
 					xtit("95% confidence intervals")
 					ytit("Centile of ranked p-values for null: θ=``true'label`k''")  

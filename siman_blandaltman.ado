@@ -1,4 +1,5 @@
-*! version 1.6.2   27mar2022 
+*! version 1.6.3 29may2022 
+*  version 1.6.3 29may2022   EMZ minor bug fix when target is numeric, IRW/TPM formatting requests
 *  version 1.6.2 27mar2022   EMZ minor bug fix when target has string labels in graph
 *  version 1.6.1 13mar2022   EMZ minor update to error message
 *  version 1.6   26sep2022   EMZ added to code so now allows graphs split out by every dgm variable and level if multiple dgm variables declared.
@@ -348,7 +349,10 @@ foreach dgmvar in `dgmbyvar' {
 		}
 	}
 	
-	local targetstringindi = 0	
+	local targetstringindi = 0
+	capture confirm string variable `target'
+	if !_rc local targetstringindi = 1
+	
 	* If target is not missing	
 	if "`valtarget'" != "N/A" {
 		
@@ -379,7 +383,7 @@ foreach dgmvar in `dgmbyvar' {
 			if !_rc local targetstringindi = 0 */
 			
 			* graph titles
-			if "`el'"=="`estimate'" local eltitle = "`estimate' "
+			if "`el'"=="`estimate'" local eltitle = "`estimate'"
 			else if "`el'"=="`se'" local eltitle = "`se' " 
 
 			if `n`dgmvar'labels' > 1 & ("`by'"=="" | "`by'"=="`dgmvar' `target'") {
@@ -387,7 +391,7 @@ foreach dgmvar in `dgmbyvar' {
 				
 				if `dgmlabels' == 1 {						
 					if `targetstringindi' == 1 local byvarlist = `"`dgmvar'==`d' & `target'=="`t'""'
-					else local byvarlist = `"`dgmvar'==`d' & `target'=="`t'""'
+					else local byvarlist = `"`dgmvar'==`d' & `target'==`t'"'
 				}				
 				else if `dgmlabels' == 0 {						
 					if `targetstringindi' == 1 local byvarlist = `"`dgmvar'== ``dgmvar'dlabel`d'' & `target'=="`t'""'
@@ -424,7 +428,7 @@ foreach dgmvar in `dgmbyvar' {
 				twoway (scatter diff mean if strthing == "`el'" & `byvarlist', `options')
 				,
 				xsize(5)
-				by(method, note("") iscale(1.1) title("Bland Altman, `eltitle', `bytitle'") `bygraphoptions') ///
+				by(method, note("Bland Altman, `eltitle', `bytitle'") iscale(1.1) title("") `bygraphoptions') ///
 				name( `name'_`byname'`el', replace)
 				;
 			#delimit cr
@@ -437,7 +441,7 @@ foreach dgmvar in `dgmbyvar' {
 					foreach el in `varlist' {
 
 						* graph titles
-						if "`el'"=="`estimate'" local eltitle = "`estimate' "
+						if "`el'"=="`estimate'" local eltitle = "`estimate'"
 						else if "`el'"=="`se'" local eltitle = "`se' " 
 
 						if `n`dgmvar'labels' > 1 & ("`by'"=="" | "`by'"=="`dgmvar'") {
@@ -452,7 +456,7 @@ foreach dgmvar in `dgmbyvar' {
 							twoway (scatter diff mean if strthing == "`el'" & `byvarlist', `options')
 							,
 							xsize(5)
-							by(method, note("") iscale(1.1) title("Bland Altman, `eltitle', `bytitle'") `bygraphoptions') ///
+							by(method, note("Bland Altman, `eltitle', `bytitle'") iscale(1.1) title("") `bygraphoptions') ///
 							name( `name'_`byname'`el', replace)
 							;
 							#delimit cr
@@ -462,7 +466,7 @@ foreach dgmvar in `dgmbyvar' {
 							twoway (scatter diff mean if strthing == "`el'", `options')
 							,
 							xsize(5)
-							by(method, note("") iscale(1.1) title("Bland Altman, `eltitle'") `bygraphoptions') ///
+							by(method, note("Bland Altman, `eltitle'") iscale(1.1) title("") `bygraphoptions') ///
 							name( `name'_`el', replace)
 							;
 							#delimit cr
