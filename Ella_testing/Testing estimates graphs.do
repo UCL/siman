@@ -677,47 +677,6 @@ clear all
 prog drop _all
 cd C:\git\siman\Ella_testing\nestloop\
 use res.dta, clear
-siman_setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)
-siman_scatter
-clear all
-prog drop _all
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
-use res.dta, clear
-siman_setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)
-siman scatter, by(theta)
-siman scatter, by(tau2)
-siman_reshape, longlong
-siman scatter, by(method)
-siman scatter if method == "peto", name(simanscatter_peto, replace)
-
-
-
-* Testing siman swarm
-*************************
-clear all
-prog drop _all
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
-use res.dta, clear
-siman_setup, rep(v1) dgm(theta rho pc k) method(peto g2) estimate(exp) se(var2) true(theta)
-siman_swarm                                                          
-clear all
-prog drop _all
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
-use res.dta, clear
-siman_setup, rep(v1) dgm(theta rho pc k) method(peto g2 limf) estimate(exp) se(var2) true(theta)
-siman swarm, by(theta)              
-siman swarm, by(k)
-siman_reshape, longlong
-siman swarm if method == "peto" | method == "limf"   
-siman swarm if (method == "peto" | method == "limf"), by(theta) combinegraphoptions(name(simanswarm_theta1, replace))                  
-siman swarm if (method == "peto" | method == "limf"), by(k)
-
-* Testing siman blandaltman
-****************************
-clear all
-prog drop _all
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
-use res.dta, clear
 keep v1 theta rho pc k exppeto expg2 var2peto var2g2
 * theta needs to be in integer format for levelsof command to work (doesn't accept non-integer values), so make integer values with non-integer labels
 gen theta_new=2
@@ -730,10 +689,35 @@ label var theta_new "theta categories"
 *br theta theta_new
 drop theta
 rename theta_new theta
+gen pc_str = ""
+replace pc_str = "5%" if pc == 1
+replace pc_str = "10%" if pc == 2
+replace pc_str = "20%" if pc == 3
+replace pc_str = "30%" if pc == 4
+drop pc
+rename pc_str pc
 siman_setup, rep(v1) dgm(theta rho pc k) method(peto g2) estimate(exp) se(var2) true(theta)
-*siman reshape, longlong
-*siman reshape, longwide
-siman_blandaltman
+siman_scatter
+siman scatter, by(theta)
+siman_reshape, longlong
+siman scatter, by(method)
+siman scatter if method == "peto", name(simanscatter_peto, replace)
+
+
+
+* Testing siman swarm
+*************************
+
+siman_swarm                                                          
+siman swarm, by(theta)              
+siman swarm, by(k)
+siman_reshape, longlong
+siman swarm if method == "peto" | method == "limf"   
+siman swarm if (method == "peto" | method == "limf"), by(theta) combinegraphoptions(name(simanswarm_theta1, replace))                  
+siman swarm if (method == "peto" | method == "limf"), by(k)
+
+* Testing siman blandaltman
+****************************
 
 clear all
 prog drop _all
@@ -760,43 +744,8 @@ siman blandaltman if (method == "peto" | method == "limf"), by(theta) name("sima
 
 * Testing siman comparemethodsscatter
 **************************************
-clear all
-prog drop _all
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
-use res.dta, clear
-keep v1 theta rho pc k exppeto expg2 var2peto var2g2
-* theta needs to be in integer format for levelsof command to work (doesn't accept non-integer values), so make integer values with non-integer labels
-gen theta_new=2
-replace theta_new=1 if theta == 0.5
-replace theta_new=3 if theta == 0.75
-replace theta_new=4 if theta == 1 
-label define theta_new 1 "0.5" 2 "0.67" 3 "0.75" 4 "1"
-label values theta_new theta_new
-label var theta_new "theta categories"
-*br theta theta_new
-drop theta
-rename theta_new theta
-siman_setup, rep(v1) dgm(theta rho pc k) method(peto g2) estimate(exp) se(var2) true(theta)
-siman comparemethodsscatter
 
-clear all
-prog drop _all
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
-use res.dta, clear
-gen theta_new=2
-replace theta_new=1 if theta == 0.5
-replace theta_new=3 if theta == 0.75
-replace theta_new=4 if theta == 1 
-label define theta_new 1 "0.5" 2 "0.67" 3 "0.75" 4 "1"
-label values theta_new theta_new
-label var theta_new "theta categories"
-drop theta
-rename theta_new theta
-keep v1 theta rho pc k exppeto expg2 var2peto var2g2 explimf var2limf
-siman_setup, rep(v1) dgm(theta rho pc k) method(peto g2 limf) estimate(exp) se(var2) true(theta)
 siman comparemethodsscatter
-siman reshape, longlong 
-
 siman comparemethodsscatter, methlist("peto" "limf") 
 siman comparemethodsscatter, methlist("peto" "limf") name("simancms_new", replace) 
 siman comparemethodsscatter if theta == 1  
@@ -806,23 +755,7 @@ siman comparemethodsscatter if pc == 2, name("simancmspc", replace)
 
 * Testing siman zipplot
 ************************
-clear all
-prog drop _all
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
-use res.dta, clear
-keep v1 theta rho pc k exppeto expg2 var2peto var2g2
-* theta needs to be in integer format for levelsof command to work (doesn't accept non-integer values), so make integer values with non-integer labels
-gen theta_new=2
-replace theta_new=1 if theta == 0.5
-replace theta_new=3 if theta == 0.75
-replace theta_new=4 if theta == 1 
-label define theta_new 1 "0.5" 2 "0.67" 3 "0.75" 4 "1"
-label values theta_new theta_new
-label var theta_new "theta categories"
-*br theta theta_new
-drop theta
-rename theta_new theta
-siman_setup, rep(v1) dgm(theta rho pc k) method(peto g2 limf) estimate(exp) se(var2) true(theta)
+
 siman_zipplot  
 siman zipplot, by(k)       
 siman reshape, longlong 

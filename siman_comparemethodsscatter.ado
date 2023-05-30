@@ -249,7 +249,7 @@ if  substr("`se'",strlen("`se'"),1)=="_" local se = substr("`se'", 1, index("`se
 
 
 if "`subgraphoptions'" == "" {
-	local subgraphoptions aspect(1) graphregion(margin(zero)) plotregion(margin(zero)) xtit("") ytit("") legend(off) 
+	local subgraphoptions aspect(1) graphregion(margin(zero)) plotregion(margin(zero)) xtit("") legend(off) 
 	}
 
 
