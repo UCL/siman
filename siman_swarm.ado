@@ -1,4 +1,5 @@
-*! version 1.7     07nov2022
+*! version 1.8   30/05/2023
+*! version 1.8   30/05/2023   EMZ minor formatting changes requested by IRW/TPM
 *  version 1.7   07nov2022    EMZ small bug fix
 *  version 1.6   26sep2022    EMZ added to code so now allows scatter graphs split out by every dgm variable and level if multiple dgm variables declared.
 *  version 1.5   05sep2022    EMZ added additional error message.
@@ -132,7 +133,7 @@ tokenize `"`levels'"'
 	if `methodstringindi'==0 {
 	
 		forvalues i = 1/`nummethodnew' {  
-			local mlabel`i' "Method `i'"
+			local mlabel`i' "Method: `i'"
 			if `i'==1 local mgraphlabels `mlabel`i''
 			else if `i'>1 local mgraphlabels `mgraphlabels' `mlabel`i''
 		}
@@ -140,7 +141,7 @@ tokenize `"`levels'"'
 	else if `methodstringindi'==1 {
 	
 		forvalues i = 1/`nummethodnew' {  
-			local mlabel`i' "Method ``i''"
+			local mlabel`i' "Method: ``i''"
 			if `i'==1 local mgraphlabels `"`mlabel`i''"'
 			else if `i'>1 local mgraphlabels `mgraphlabels' `"`mlabel`i''"'
 		}

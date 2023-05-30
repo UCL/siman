@@ -1,5 +1,5 @@
-*! version 1.9.5 29may2023
-*  version 1.9.5 29may2023    EMZ minor formatting as per IRW/TPM request
+*! version 1.9.5 30may2023
+*  version 1.9.5 30may2023    EMZ minor formatting as per IRW/TPM request i.e. dgm_var note, title and axis changes
 *  version 1.9.4 09may2023    EMZ minor bug fix: now working when method numeric with string labels and dgm defined by >1 variable
 *  version 1.9.3 13mar2023    EMZ minor update to error message
 *  version 1.9.2 06mar2023    EMZ fixed when method label numerical with string labels, issue introduced from of siman describe change
@@ -193,7 +193,8 @@ if `methodstringindi'==0 numlist "`levels'"
 	if `methodstringindi'==0 {
 	
 		forvalues i = 1/`nummethod' {  
-			local mlabel`i' Method_`i'
+			local mlabel`i' Method: `i'
+			local mlabelname`i' Method_`i'
 			local methodlabel`i' `i'
 			local methodvalues `methodvalues' `methodlabel`i''
 		}
@@ -201,7 +202,8 @@ if `methodstringindi'==0 numlist "`levels'"
 	else if `methodstringindi'==1 {
 	
 		forvalues i = 1/`nummethod' {  
-			local mlabel`i' Method_``i''
+			local mlabel`i' Method: ``i''
+			local mlabelname`i' Method_``i''
 			local methodlabel`i' ``i''
 			local methodvalues `methodvalues' `methodlabel`i''
 		}
@@ -285,19 +287,19 @@ local c = 1
 		
 		label var `estimate'`j' "`estimate', `mlabel`j''"
 		label var `se'`j' "`se', `mlabel`j''"
-		local mlabel`c' Method_`j'
+		local mlabel`c' Method: `j'
 
 	}
 	else if `methodstringindi'==0 & `methodlabels' == 1 {
 		local k : word `j' of `methodvalues'
 		label var `estimate'`j' "`estimate', Method_`k'"
 		label var `se'`j' "`se', Method_`k'"
-		local mlabel`c' Method_`k'
+		local mlabel`c' Method: `k'
 		}
 	else if `methodstringindi'==1 {
-		label var `estimate'``j'' "`estimate', Method_``j''"
-		label var `se'``j'' "`se', Method_``j''"
-		local mlabel`c' Method_``j''
+		label var `estimate'``j'' "`estimate', Method: ``j''"
+		label var `se'``j'' "`se', Method: ``j''"
+		local mlabel`c' Method: ``j''
 		}
 		
 			* plot markers
@@ -314,7 +316,7 @@ local c = 1
 				local pt2 = -0.5
 				}		
 
-	twoway scatteri 0 0 (0) "`mlabel`j''" .5 `pt1' (0) "`estimate' " -.5 `pt2' (0) "`se'", yscale(range(-1 1)) xscale(range(-1 1)) msym(i) mlabs(vlarge) xlab(none) ylab(none) xtit("") ytit("") legend(off) `nodraw' mlab(black) `subgraphoptions' nodraw name(`mlabel`j'', replace) 
+	twoway scatteri 0 0 (0) "`mlabel`j''" .5 `pt1' (0) "" -.5 `pt2' (0) "", yscale(range(-1 1)) xscale(range(-1 1)) msym(i) mlabs(vlarge) xlab(none) ylab(none) xtit("") ytit("") legend(off) `nodraw' mlab(black) `subgraphoptions' nodraw name(`mlabelname`j'', replace) 
 	local c = `c' + 1
 	}
 
@@ -406,10 +408,43 @@ else if `numberdgms'!=1 {
 	
 local `for' {
 */
-
+/*
+local s1: "Standard"
+local s2: "Error"
+local seytit `""`s1'" "`s2'" "'
+*/
 
 if `numberdgms'==1 {
-	foreach m in `dgmvalues' {
+	
+		local dgmlabels = 0
+				
+		qui tab `dgm'
+		local ndgmvar = `r(r)'
+		* Get dgm label values
+		cap qui labelsof `dgm'
+		cap qui ret list
+				
+		if `"`r(labels)'"'!="" {
+			local 0 = `"`r(labels)'"'
+
+			forvalues i = 1/`ndgmvar' {  
+			gettoken `dgm'dlabel`i' 0 : 0, parse(": ")
+			local dgmlabels = 1
+			}
+		}
+		else {
+					
+			local dgmlabels = 0
+			qui levels `dgm', local(levels)
+				
+			local loop = 1
+			foreach l of local levels {
+			local `dgm'dlabel`loop' `l'
+			local loop = `loop' + 1
+				}
+		}
+	
+		foreach m in `dgmvalues' {
 		local frtheta `minest' `maxest'
 		local frse `minse' `maxse'
 		
@@ -433,9 +468,9 @@ if `numberdgms'==1 {
 					foreach k in `maxmethodvaluesplus1' {
 					 if "`j'" != "`k'" {
 						  twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'`j' `estimate'`k' if `dgm'==`m', ms(o) ///
-						  mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions' nodraw), `by' name(`estimate'`j'`k'dgm`m', replace) 
+						  mlc(white%1) msize(tiny) xtit("") ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw), `by' name(`estimate'`j'`k'dgm`m', replace) 
 						  twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'`j' `se'`k' if `dgm'==`m', ms(o) mlc(white%1) ///
-						  msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions' nodraw), `by' name(`se'`j'`k'dgm`m', replace) 
+						  msize(tiny) xtit("") ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw), `by' name(`se'`j'`k'dgm`m', replace) 
 						  local graphtheta`counter'`counterplus1'`m' `estimate'`j'`k'dgm`m'
 						  local graphse`counter'`counterplus1'`m' `se'`j'`k'dgm`m'
 						  local counterplus1 = `counterplus1' + 1
@@ -456,9 +491,9 @@ if `numberdgms'==1 {
 									if "`j'" != "`k'" {
 										
 						  twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'``j'' `estimate'``k'' if `dgm'==`m', ms(o) ///
-						  mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions' nodraw), `by' name(`estimate'``j''``k''dgm`m', replace)
+						  mlc(white%1) msize(tiny) xtit("") ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw), `by' name(`estimate'``j''``k''dgm`m', replace)
 						  twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'``j'' `se'``k'' if `dgm'==`m', ms(o) ///
-						  mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions' nodraw), `by' name(`se'``j''``k''dgm`m', replace)
+						  mlc(white%1) msize(tiny) xtit("") ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw), `by' name(`se'``j''``k''dgm`m', replace)
 						  local graphtheta`counter'`counterplus1'`m' `estimate'``j''``k''dgm`m'
 						  local graphse`counter'`counterplus1'`m' `se'``j''``k''dgm`m'
 						  local counterplus1 = `counterplus1' + 1
@@ -470,17 +505,17 @@ if `numberdgms'==1 {
 					}
 
 			if `numbermethod'==2 {
-				graph combine `mlabel1' `graphtheta12`m'' ///
-				`graphse12`m'' `mlabel2' ///
-				, title("") note("") cols(2)	///
+				graph combine `mlabelname1' `graphtheta12`m'' ///
+				`graphse12`m'' `mlabelname2' ///
+				, title("") note("dgm_var: ``dgm'dlabel`m''") cols(2)	///
 				xsize(4)	///
 				name(`name'_dgm`m', replace) `options'
 				}
 			else if `numbermethod'==3 {
-				graph combine `mlabel1' `graphtheta12`m'' `graphtheta13`m''	///
-				`graphse12`m'' `mlabel2' `graphtheta23`m''	///
-				`graphse13`m'' `graphse23`m'' `mlabel3'	///
-				, title("") note("") cols(3)	///
+				graph combine `mlabelname1' `graphtheta12`m'' `graphtheta13`m''	///
+				`graphse12`m'' `mlabelname2' `graphtheta23`m''	///
+				`graphse13`m'' `graphse23`m'' `mlabelname3'	///
+				, title("") note("dgm_var: ``dgm'dlabel`m''") cols(3)	///
 				xsize(4)	///
 				name(`name'_dgm`m', replace) `options'
 				}
@@ -531,6 +566,7 @@ else if `numberdgms'!=1 {
 				if `dgmlabels' == 0 local dgmfilter = "`dgmvar' == ``dgmvar'dlabel`d''"
 				else if `dgmlabels' == 1 local dgmfilter = "`dgmvar'==`d'"
 				
+							
 				local frtheta `minest' `maxest'
 				local frse `minse' `maxse'
 				
@@ -555,10 +591,10 @@ else if `numberdgms'!=1 {
 							foreach k in `maxmethodvaluesplus1' {
 							 if "`j'" != "`k'" {
 								  twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'`j' `estimate'`k' if /// 
-								  `dgmfilter', ms(o) mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions' nodraw), /// 
+								  `dgmfilter', ms(o) mlc(white%1) msize(tiny) xtit("") ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw), /// 
 								  `by' name(`estimate'`j'`k'`dgmvar'`d', replace) 
 								  twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'`j' `se'`k' if ///
-								  `dgmfilter', ms(o) mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) `subgraphoptions' nodraw), ///
+								  `dgmfilter', ms(o) mlc(white%1) msize(tiny) xtit("") ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw), ///
 								  `by' name(`se'`j'`k'`dgmvar'`d', replace) 
 								  local graphtheta`counter'`counterplus1'`dgmvar'`d' `estimate'`j'`k'`dgmvar'`d'
 								  local graphse`counter'`counterplus1'`dgmvar'`d'  `se'`j'`k'`dgmvar'`d'
@@ -579,10 +615,10 @@ else if `numberdgms'!=1 {
 										forvalues k = 2/`numbermethod' {											
 											if "`j'" != "`k'" {				
 												twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'``j'' `estimate'``k'' ///
-												if `dgmfilter', ms(o) mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) /// 
+												if `dgmfilter', ms(o) mlc(white%1) msize(tiny) xtit("") ytit("Estimate", size(medium)) legend(off) /// 
 												`subgraphoptions' nodraw), `by' name(`estimate'``j''``k''`dgmvar'`d', replace)
 												twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'``j'' `se'``k'' if /// 
-												`dgmfilter', ms(o) mlc(white%1) msize(tiny) xtit("") ytit("") legend(off) /// 
+												`dgmfilter', ms(o) mlc(white%1) msize(tiny) xtit("") ytit("Standard Error", size(medium)) legend(off) /// 
 												`subgraphoptions' nodraw), `by' name(`se'``j''``k''`dgmvar'`d', replace)
 												local graphtheta`counter'`counterplus1'`dgmvar'`d' `estimate'``j''``k''`dgmvar'`d'
 												local graphse`counter'`counterplus1'`dgmvar'`d' `se'``j''``k''`dgmvar'`d'
@@ -595,17 +631,17 @@ else if `numberdgms'!=1 {
 							}
 
 					if `numbermethod'==2 {
-						graph combine `mlabel1' `graphtheta12`dgmvar'`d'' ///
-						`graphse12`dgmvar'`d'' `mlabel2' ///
-						, title("") note("") cols(2)	///
+						graph combine `mlabelname1' `graphtheta12`dgmvar'`d'' ///
+						`graphse12`dgmvar'`d'' `mlabelname2' ///
+						, title("") note("dgm_var: `dgmvar' level ``dgmvar'dlabel`d''") cols(2)	///
 						xsize(4)	///
 						name(`name'_`dgmvar'`d', replace) `options'
 						}
 					else if `numbermethod'==3 {
-						graph combine `mlabel1' `graphtheta12`dgmvar'`d'' `graphtheta13`dgmvar'`d''	///
-						`graphse12`dgmvar'`d'' `mlabel2' `graphtheta23`dgmvar'`d''	///
-						`graphse13`dgmvar'`d'' `graphse23`dgmvar'`d'' `mlabel3'	///
-						, title("") note("") cols(3)	///
+						graph combine `mlabelname1' `graphtheta12`dgmvar'`d'' `graphtheta13`dgmvar'`d''	///
+						`graphse12`dgmvar'`d'' `mlabelname2' `graphtheta23`dgmvar'`d''	///
+						`graphse13`dgmvar'`d'' `graphse23`dgmvar'`d'' `mlabelname3'	///
+						, title("") note("dgm_var: `dgmvar' level ``dgmvar'dlabel`d''") cols(3)	///
 						xsize(4)	///
 						name(`name'_`dgmvar'`d', replace) `options'
 						}
@@ -617,7 +653,9 @@ else if `numberdgms'!=1 {
      }
 }
 
+
 restore
+
 
 local dgm = "`dgmorig'"
 
