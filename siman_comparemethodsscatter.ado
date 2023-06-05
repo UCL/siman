@@ -1,5 +1,6 @@
 *! version 1.9.5 30may2023
-*  version 1.9.5 30may2023    EMZ minor formatting as per IRW/TPM request i.e. dgm_var note, title and axis changes
+*  version 1.9.5 30may2023    EMZ minor formatting as per IRW/TPM request i.e. dgm_var note, title and axis changes, fixed bug with 'if' statement when 
+*                             string method
 *  version 1.9.4 09may2023    EMZ minor bug fix: now working when method numeric with string labels and dgm defined by >1 variable
 *  version 1.9.3 13mar2023    EMZ minor update to error message
 *  version 1.9.2 06mar2023    EMZ fixed when method label numerical with string labels, issue introduced from of siman describe change
@@ -182,6 +183,7 @@ if `"`r(labels)'"'!="" {
 	forvalues i = 1/`nummethod' {  
 		gettoken mlabel`i' 0 : 0, parse(": ")
 		local methodvalues `methodvalues' `mlabel`i''
+		local mlabelname`i' Method_`i'
 		local methodlabels 1
 	}
 }
@@ -419,7 +421,7 @@ if `numberdgms'==1 {
 		local dgmlabels = 0
 				
 		qui tab `dgm'
-		local ndgmvar = `r(r)'
+*		local ndgmvar = `r(r)'
 		* Get dgm label values
 		cap qui labelsof `dgm'
 		cap qui ret list
@@ -427,7 +429,8 @@ if `numberdgms'==1 {
 		if `"`r(labels)'"'!="" {
 			local 0 = `"`r(labels)'"'
 
-			forvalues i = 1/`ndgmvar' {  
+*			forvalues i = 1/`ndgmvar' {
+			forvalues i = 1/`ndgm' {
 			gettoken `dgm'dlabel`i' 0 : 0, parse(": ")
 			local dgmlabels = 1
 			}
@@ -503,11 +506,12 @@ if `numberdgms'==1 {
 						local counter = `counter' + 1
 					  }
 					}
+					
 
 			if `numbermethod'==2 {
 				graph combine `mlabelname1' `graphtheta12`m'' ///
 				`graphse12`m'' `mlabelname2' ///
-				, title("") note("dgm_var: ``dgm'dlabel`m''") cols(2)	///
+				, title("") note("dgm_var: `dgm' level ``dgm'dlabel`m''") cols(2)	///
 				xsize(4)	///
 				name(`name'_dgm`m', replace) `options'
 				}
@@ -515,7 +519,7 @@ if `numberdgms'==1 {
 				graph combine `mlabelname1' `graphtheta12`m'' `graphtheta13`m''	///
 				`graphse12`m'' `mlabelname2' `graphtheta23`m''	///
 				`graphse13`m'' `graphse23`m'' `mlabelname3'	///
-				, title("") note("dgm_var: ``dgm'dlabel`m''") cols(3)	///
+				, title("") note("dgm_var: `dgm' level ``dgm'dlabel`m''") cols(3)	///
 				xsize(4)	///
 				name(`name'_dgm`m', replace) `options'
 				}
