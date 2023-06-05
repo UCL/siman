@@ -712,9 +712,9 @@ siman_swarm
 siman swarm, by(theta)              
 siman swarm, by(k)
 siman_reshape, longlong
-siman swarm if method == "peto" | method == "limf"   
-siman swarm if (method == "peto" | method == "limf"), by(theta) combinegraphoptions(name(simanswarm_theta1, replace))                  
-siman swarm if (method == "peto" | method == "limf"), by(k)
+siman swarm if method == "peto" | method == "g2"   
+siman swarm if (method == "peto" | method == "g2"), by(theta) combinegraphoptions(name(simanswarm_theta1, replace))                  
+siman swarm if (method == "peto" | method == "g2"), by(k)
 
 * Testing siman blandaltman
 ****************************
