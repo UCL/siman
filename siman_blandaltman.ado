@@ -1,4 +1,5 @@
-*! version 1.6.3 29may2022 
+*! version 1.6.4 05june2022 
+*  version 1.6.4 05june2022  EMZ expanded note to include dgm name and level when dgm defined by more than 1 variable
 *  version 1.6.3 29may2022   EMZ minor bug fix when target is numeric, IRW/TPM formatting requests
 *  version 1.6.2 27mar2022   EMZ minor bug fix when target has string labels in graph
 *  version 1.6.1 13mar2022   EMZ minor update to error message
@@ -387,7 +388,7 @@ foreach dgmvar in `dgmbyvar' {
 			else if "`el'"=="`se'" local eltitle = "`se' " 
 
 			if `n`dgmvar'labels' > 1 & ("`by'"=="" | "`by'"=="`dgmvar' `target'") {
-				local bytitle = "DGM = ``dgmvar'dlabel`d'', Target = `t'"
+				local bytitle = "DGM: `dgmvar' level ``dgmvar'dlabel`d'', Target: `t'"
 				
 				if `dgmlabels' == 1 {						
 					if `targetstringindi' == 1 local byvarlist = `"`dgmvar'==`d' & `target'=="`t'""'
@@ -401,20 +402,20 @@ foreach dgmvar in `dgmbyvar' {
 				else local byname = "`d'`t'"
 			}
 			else if `n`dgmvar'labels' == 1 & ("`by'"=="" | "`by'"=="`dgmvar' `target'")  {
-				local bytitle = "Target = `t'"
+				local bytitle = "Target: `t'"
 				if `targetstringindi' == 1 local byvarlist = `"`target'=="`t'""'
 				else local byvarlist = `"`target'==`t'"'
 				local byname = "`t'"
 			}
 			else if "`by'"=="`dgmvar'" {
-				local bytitle = "DGM = ``dgmvar'dlabel`d''"
+				local bytitle = "DGM: `dgmvar' level ``dgmvar'dlabel`d''"
 				if `dgmlabels' == 1 local byvarlist = `"`dgmvar'==`d'"'
 				else if `dgmlabels' == 0 local byvarlist = `"`dgmvar'==``dgmvar'dlabel`d''"'
 				if `numberdgms' > 1 local byname = `dgmvar'`d'
 				else local byname = `d'
 			}
 			else if "`by'"=="`target'" {
-				local bytitle = "Target = `t'"
+				local bytitle = "Target: `t'"
 				if `targetstringindi' == 1 local byvarlist = `"`target'=="`t'""'
 				else local byvarlist = `"`target'==`t'"'
 				local byname = "`t'"
@@ -445,7 +446,7 @@ foreach dgmvar in `dgmbyvar' {
 						else if "`el'"=="`se'" local eltitle = "`se' " 
 
 						if `n`dgmvar'labels' > 1 & ("`by'"=="" | "`by'"=="`dgmvar'") {
-							local bytitle = "DGM = ``dgmvar'dlabel`d''"
+							local bytitle = "DGM: `dgmvar' level ``dgmvar'dlabel`d''"
 							if `dgmlabels' == 1 local byvarlist = `"`dgmvar'==`d'"'
 							else if `dgmlabels' == 0 local byvarlist = `"`dgmvar'==``dgmvar'dlabel`d''"'
 							if `numberdgms' > 1 local byname = "`dgmvar'`d'"
