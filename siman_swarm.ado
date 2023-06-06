@@ -1,5 +1,6 @@
-*! version 1.8   30/05/2023
-*! version 1.8   30/05/2023   EMZ minor formatting changes requested by IRW/TPM
+*! version 1.9   06june2023
+*  version 1.9   06june2023   EMZ updates from IRW/TPM/EMZ joint testing
+*  version 1.8   03may2023    EMZ minor formatting changes requested by IRW/TPM
 *  version 1.7   07nov2022    EMZ small bug fix
 *  version 1.6   26sep2022    EMZ added to code so now allows scatter graphs split out by every dgm variable and level if multiple dgm variables declared.
 *  version 1.5   05sep2022    EMZ added additional error message.
@@ -251,7 +252,8 @@ if `ndgm' != 1 {
 			qui gen `dgmequals' = "DGM: "
 			tempvar dgmtitle`dgmvar'
 			qui egen `dgmtitle`dgmvar'' = concat(`dgmequals' `dgmlabel`dgmvar'')
-			if "`by'"=="" local by = "`dgmtitle`dgmvar''"
+*			if "`by'"=="" local by = "`dgmtitle`dgmvar''"
+			if "`by'"=="" local by = "`dgmvar' `target'"
 		} 
 		else {			
 			
@@ -262,7 +264,8 @@ if `ndgm' != 1 {
 			qui gen `dgmequals' = "`dgmvar': "
 			tempvar dgmtitle`dgmvar'
 			qui egen `dgmtitle`dgmvar'' = concat(`dgmequals' `dgmlabel`dgmvar'')
-			local by = "`dgmtitle`dgmvar''"
+*			local by = "`dgmtitle`dgmvar''"
+			if "`by'"=="" local by = "`dgmvar' `target'"
 		}
 			
 			qui tab `dgmvar'
@@ -286,7 +289,7 @@ if `ndgm' != 1 {
 					msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `options')	///
 					(scatter newidrep`dgmvar' mean`el'`dgmvar', msym(|) msize(huge) mcol(orange) `meangraphoptions')	///
 					, ///
-					by(`by', title("") cols(1) note("") xrescale legend(off) `bygraphoptions')	///
+					by(`by', title("") cols(1) noxrescale legend(off) `bygraphoptions')	///
 					ytitle("") ylabel(`labelvalues`dgmvar'', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `graphoptions'	///
 					name(`el'i`dgmvar', replace) nodraw	
 				}
@@ -295,7 +298,7 @@ if `ndgm' != 1 {
 					local cmd twoway (scatter newidrep`dgmvar' `el', ///
 					msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `options')	///
 					, ///
-					by(`by', title("") cols(1) note("") xrescale legend(off) `bygraphoptions')	///
+					by(`by', title("") cols(1) noxrescale legend(off) `bygraphoptions')	///
 					ytitle("") ylabel(`labelvalues`dgmvar'', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `graphoptions'	///
 					name(`el'i`dgmvar', replace) nodraw
 					}
@@ -324,7 +327,7 @@ if `ndgm' != 1 {
 	
 	local name "name(simanswarm_`dgmvar', replace)"
 }
-* else create graphs without 'by' option as 'by' is for dgm only
+* else create graphs without 'by' option as 'by' is for dgm and target only
 else {
 	foreach el in `varlist' {
 		qui gen float mean`el' = .
