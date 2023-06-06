@@ -1,7 +1,5 @@
-*! version 1.6.2   05may2023
-* version 1.6.2   05may2023   IW bug fix when method, dgm not "method", "dgm"
-* changed 3 instances of method and dgm to `method' and `dgm' in local names methodtitle and dgmtitle 
-
+*! version 1.6.2 06may2023
+*  version 1.6.2 06may2023   EMZ agreed updates from IRW/TPM/EMZ joint testing 
 *  version 1.6.1 13mar2023   EMZ minor update to error message
 *  version 1.6   23jan2023   EMZ bug fixes from changes to setup programs 
 *  version 1.5   05dec2022   EMZ fixed bug so that dgm labels are used when 1 dgm variable, and scatter plots for each dgm when true not part of dgm *                            structure.
@@ -234,14 +232,14 @@ foreach var in `byvar' {
 	}
 	
 	foreach dgmvar in `dgm' {
-		twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`dgmvar', note("") `bygraphoptions') name(simanscatter_dgm_`dgmvar', replace) `options' 
+		twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`dgmvar' `target' `method', `bygraphoptions') name(simanscatter_dgm_`dgmvar', replace) `options' 
 	}
 }
 * if dgm is defined by 1 variable
 else {
 	
-	if "`by'"=="" & `ndgmlabels' == 1 local byvar `target' ``method'title' 
-	else if "`by'"=="" & `ndgmlabels' != 1 local byvar ``dgm'title' `target' ``method'title'
+	if "`by'"=="" & `ndgmlabels' == 1 local byvar `target' `method' 
+	else if "`by'"=="" & `ndgmlabels' != 1 local byvar `dgm' `target' `method'
 	local name = "name(simanscatter, replace)"
 
 	* Can't tokenize/substr as many "" in the string
@@ -258,7 +256,7 @@ else {
 	}
 	
 	
-	twoway scatter `varlist', msym(o) msize(small) mcol(%30) by(`byvar', note("") `bygraphoptions') `name' `options' 
+	twoway scatter `varlist', msym(o) msize(small) mcol(%30) by(`byvar', `bygraphoptions') `name' `options' 
 }
 
 restore

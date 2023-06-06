@@ -1,4 +1,5 @@
-*!   version 0.7.7  29may2023
+*!   version 0.7.8  06june2023
+*    version 0.7.8  06june2023	 EMZ bug fix: numeric target with string labels not displayed in siman describe table (displayed numbers not values)
 *    version 0.7.7  29may2023	 EMZ added option if missing method
 *    version 0.7.6  22may2023	 IW bug fix: label of encoded string dgmvar was lost
 *    version 0.7.5  21march2023  EMZ bug fix: dataset variables not in siman setup
@@ -531,25 +532,52 @@ local datasetvars: list uniq datasetvarswithtrue
 * If format is long-long or long-wide 
 * then 'number of targets' will be the number of variable labels for target 
 * long-wide: nformat = 3 and target in long format i.e. ntarget =1
+cap confirm numeric variable `target'
+if _rc local targetstringindi = 1
+else local targetstringindi = 0 
 
 if `nformat'==1 | (`nformat'==3 & `ntarget'==1) { 
 	if `ntarget'!=0 {
 		qui tab `target', m
 		local ntargetlabels = `r(r)'
-		qui levels `target', local(levels)
-		tokenize `"`levels'"'
-		forvalues e = 1/`ntargetlabels' {
-			local tarlabel`e' = "``e''"
-			if `e'==1 local tarlist `tarlabel`e''
-			else if `e'>=2 local tarlist `tarlist' `tarlabel`e''
-        }
-	}
+		
+		local targetlabels = 0
+		
+		* Get target label values
+		cap qui labelsof `target'
+		cap qui ret list
+
+			if `"`r(labels)'"'!="" {
+			local 0 = `"`r(labels)'"'
+
+			forvalues i = 1/`ntargetlabels' {  
+				gettoken `target'label`i' 0 : 0, parse(": ")
+				local tarlist `tarlist' ``target'label`i''
+				local targetlabels = 1
+				}
+			}
+	else {
+	local targetlabels = 0
+	qui levels `target', local(levels)
+	tokenize `"`levels'"'
+		if `targetstringindi' == 0 {		
+			forvalues i = 1/`ntargetlabels' {  
+				local `target'label`i' `i'
+				local tarlist `tarlist' ``target'label`i''
+				}
+		}
+		else forvalues i = 1/`ntargetlabels' {  
+				local `target'label`i' ``i''
+				local tarlist `tarlist' ``target'label`i''
+				}
+	 }	
+  }
 }
 
 * If format is long-long, or wide-long then 
 * 'number of methods' will be the number of variable labels for method
 * wide-long: nformat = 3 and method in long format i.e. nmethod =1
-cap confirm numeric variable method
+cap confirm numeric variable `method'
 if _rc local methodstringindi = 1
 else local methodstringindi = 0 
 
