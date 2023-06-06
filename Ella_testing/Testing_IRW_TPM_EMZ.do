@@ -1,3 +1,5 @@
+clear all
+prog drop _all
 cd "C:\git\siman\Ella_testing\"
 
 * dgm defined by 1 variable
