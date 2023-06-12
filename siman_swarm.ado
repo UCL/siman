@@ -1,4 +1,5 @@
-*! version 1.9   06june2023
+*! version 1.9.1 12june2023
+*  version 1.9.1 12june2023   EMZ minor bug fix to note()
 *  version 1.9   06june2023   EMZ updates from IRW/TPM/EMZ joint testing
 *  version 1.8   03may2023    EMZ minor formatting changes requested by IRW/TPM
 *  version 1.7   07nov2022    EMZ small bug fix
@@ -233,6 +234,7 @@ if !mi("`by'") {
 }
 else local dgmbyvar = "`dgm'"
 
+
 if `ndgm' != 1 { 
 
 	foreach dgmvar in `dgmbyvar' { 
@@ -253,7 +255,7 @@ if `ndgm' != 1 {
 			tempvar dgmtitle`dgmvar'
 			qui egen `dgmtitle`dgmvar'' = concat(`dgmequals' `dgmlabel`dgmvar'')
 *			if "`by'"=="" local by = "`dgmtitle`dgmvar''"
-			if "`by'"=="" local by = "`dgmvar' `target'"
+			if "`byorig'"=="" local by = "`dgmvar' `target'"
 		} 
 		else {			
 			
@@ -265,7 +267,7 @@ if `ndgm' != 1 {
 			tempvar dgmtitle`dgmvar'
 			qui egen `dgmtitle`dgmvar'' = concat(`dgmequals' `dgmlabel`dgmvar'')
 *			local by = "`dgmtitle`dgmvar''"
-			if "`by'"=="" local by = "`dgmvar' `target'"
+			if "`byorig'"=="" local by = "`dgmvar' `target'"
 		}
 			
 			qui tab `dgmvar'
