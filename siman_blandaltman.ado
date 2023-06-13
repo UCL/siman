@@ -1,4 +1,5 @@
-*! version 1.6.4 05june2022 
+*! version 1.6.5 13june2023
+*  version 1.6.5 13june2023  EMZ methlist fix: can now have flexible reference method e.g. methlist(C A B) for method C as the reference (before only 2 *                            methods in methlist allowed), minor formatting to title and note, setting default norescale.
 *  version 1.6.4 05june2022  EMZ expanded note to include dgm name and level when dgm defined by more than 1 variable
 *  version 1.6.3 29may2022   EMZ minor bug fix when target is numeric, IRW/TPM formatting requests
 *  version 1.6.2 27mar2022   EMZ minor bug fix when target has string labels in graph
@@ -154,7 +155,6 @@ qui drop if `rep'<0
 if  substr("`estimate'",strlen("`estimate'"),1)=="_" local estimate = substr("`estimate'", 1, index("`estimate'","_") - 1)
 if  substr("`se'",strlen("`se'"),1)=="_" local se = substr("`se'", 1, index("`se'","_") - 1)
 
-
 * only analyse the methods that the user has requested
 if !mi("`methlist'") {
 	local methodvalues = "`methlist'"
@@ -199,7 +199,6 @@ foreach thing in `_dta[siman_allthings]' {
 	local `thing' : char _dta[siman_`thing']
 	}
 	
-	
 if mi("`methlist'") {		
 		forvalues j = 2/`nummethodloop' {
 			foreach s in `estimate' `se' {
@@ -210,44 +209,49 @@ if mi("`methlist'") {
 		}	
 }
 else {
-	tokenize `methlist'
+		local base: word 1 of `methlist'
+	    local methlisttoloop: list methlist - base
+		local c = 2
+		foreach j in `methlisttoloop' {
 			foreach s in `estimate' `se' {
-				    local methlabel = "`2'"
-					qui gen float diff`s'`methlabel' = `s'`2' - `s'`1'									
-					qui gen float mean`s'`methlabel' = (`s'`2'+`s'`1')/2
-					local mlabel1 `1'
-					local mlabel2 `2'
+					qui gen float diff`s'`j' = `s'`j' - `s'`base'									
+					qui gen float mean`s'`j' = (`s'`j'+`s'`base')/2
+					local mlabel1 `base'
+					local mlabel`c' `j'
 							}
-}
+					local c = `c' + 1
+		}
+	}
 
 forvalues f = 1/`nummethod' {
 	cap qui drop `estimate'`f'
 	cap qui drop `se'`f'
 }
 
-
 di as text "working...."
-
 qui reshape long diff`estimate' mean`estimate' diff`se' mean`se', i(`rep' `dgm' `target') j(strmeth) string	
 qui reshape long diff mean, i(`rep' `dgm' `target' strmeth) j(strthing) string
 
-if mi("`methlist'") {
+*if mi("`methlist'") {
 	qui tab strmeth
 	local numstrmeth = `r(r)'
 	qui gen byte method = 1 if strmeth=="`mlabel1'"
-	forvalues n = 2/`nummethod' {
+	if mi("`methlist'") local nforvalues = `nummethod'
+	else local nforvalues = `nummethodloop'
+	 forvalues n = 2/`nforvalues' {
 		cap qui replace method = `n' if strmeth=="`mlabel`n''"
-		local labelvalues `n' "Method: `mlabel`n'' vs. `mlabel1'" `labelvalues'
-		if `n'==`nummethod' label define method `labelvalues'
+		local labelvalues `n' "`mlabel`n'' vs. `mlabel1'" `labelvalues'
+		if `n'==`nforvalues' label define method `labelvalues'
 	}
 	lab val method method
-}
+
+/*}
 else {
 	qui gen byte method = 1
 	label define method 1 "Method: `mlabel2' vs. `mlabel1'"
 	lab val method method
 }
-
+*/
 
 qui gen byte thing = 1 if strthing=="`estimate'"
 qui replace thing = 2 if strthing=="`se'"
@@ -388,7 +392,7 @@ foreach dgmvar in `dgmbyvar' {
 			else if "`el'"=="`se'" local eltitle = "`se' " 
 
 			if `n`dgmvar'labels' > 1 & ("`by'"=="" | "`by'"=="`dgmvar' `target'") {
-				local bytitle = "DGM: `dgmvar' level ``dgmvar'dlabel`d'', Target: `t'"
+				local bytitle = "`dgmvar' level ``dgmvar'dlabel`d'', target: `t'"
 				
 				if `dgmlabels' == 1 {						
 					if `targetstringindi' == 1 local byvarlist = `"`dgmvar'==`d' & `target'=="`t'""'
@@ -402,20 +406,20 @@ foreach dgmvar in `dgmbyvar' {
 				else local byname = "`d'`t'"
 			}
 			else if `n`dgmvar'labels' == 1 & ("`by'"=="" | "`by'"=="`dgmvar' `target'")  {
-				local bytitle = "Target: `t'"
+				local bytitle = "target: `t'"
 				if `targetstringindi' == 1 local byvarlist = `"`target'=="`t'""'
 				else local byvarlist = `"`target'==`t'"'
 				local byname = "`t'"
 			}
 			else if "`by'"=="`dgmvar'" {
-				local bytitle = "DGM: `dgmvar' level ``dgmvar'dlabel`d''"
+				local bytitle = "`dgmvar' level ``dgmvar'dlabel`d''"
 				if `dgmlabels' == 1 local byvarlist = `"`dgmvar'==`d'"'
 				else if `dgmlabels' == 0 local byvarlist = `"`dgmvar'==``dgmvar'dlabel`d''"'
 				if `numberdgms' > 1 local byname = `dgmvar'`d'
 				else local byname = `d'
 			}
 			else if "`by'"=="`target'" {
-				local bytitle = "Target: `t'"
+				local bytitle = "target: `t'"
 				if `targetstringindi' == 1 local byvarlist = `"`target'=="`t'""'
 				else local byvarlist = `"`target'==`t'"'
 				local byname = "`t'"
@@ -429,7 +433,7 @@ foreach dgmvar in `dgmbyvar' {
 				twoway (scatter diff mean if strthing == "`el'" & `byvarlist', `options')
 				,
 				xsize(5)
-				by(method, note("Bland Altman, `eltitle', `bytitle'") iscale(1.1) title("") `bygraphoptions') ///
+				by(method, note("Graphs for `eltitle', `bytitle'") iscale(1.1) title("") norescale `bygraphoptions') ///
 				name( `name'_`byname'`el', replace)
 				;
 			#delimit cr
@@ -446,7 +450,7 @@ foreach dgmvar in `dgmbyvar' {
 						else if "`el'"=="`se'" local eltitle = "`se' " 
 
 						if `n`dgmvar'labels' > 1 & ("`by'"=="" | "`by'"=="`dgmvar'") {
-							local bytitle = "DGM: `dgmvar' level ``dgmvar'dlabel`d''"
+							local bytitle = "`dgmvar' level ``dgmvar'dlabel`d''"
 							if `dgmlabels' == 1 local byvarlist = `"`dgmvar'==`d'"'
 							else if `dgmlabels' == 0 local byvarlist = `"`dgmvar'==``dgmvar'dlabel`d''"'
 							if `numberdgms' > 1 local byname = "`dgmvar'`d'"
@@ -457,7 +461,7 @@ foreach dgmvar in `dgmbyvar' {
 							twoway (scatter diff mean if strthing == "`el'" & `byvarlist', `options')
 							,
 							xsize(5)
-							by(method, note("Bland Altman, `eltitle', `bytitle'") iscale(1.1) title("") `bygraphoptions') ///
+							by(method, note("Graphs for `eltitle', `bytitle'") iscale(1.1) title("") norescale `bygraphoptions') ///
 							name( `name'_`byname'`el', replace)
 							;
 							#delimit cr
@@ -467,7 +471,7 @@ foreach dgmvar in `dgmbyvar' {
 							twoway (scatter diff mean if strthing == "`el'", `options')
 							,
 							xsize(5)
-							by(method, note("Bland Altman, `eltitle'") iscale(1.1) title("") `bygraphoptions') ///
+							by(method, note("Graphs for `eltitle'") iscale(1.1) title("") norescale `bygraphoptions') ///
 							name( `name'_`el', replace)
 							;
 							#delimit cr

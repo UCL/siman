@@ -108,7 +108,9 @@ siman_blandaltman, by(dgm)
 siman blandaltman if target == "gamma"                     
 siman_blandaltman, bygraphoptions(norescale)
 siman_blandaltman, methlist(2 8)
-siman_blandaltman, methlist(3 7) by(dgm)                  
+siman_blandaltman, methlist(3 7) by(dgm)  
+siman_blandaltman, methlist(10 4 8)
+siman_blandaltman, methlist(2 9 3)                
 siman_blandaltman
 siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("yabberdabberdoo") 
 siman_blandaltman, ytitle("test y-title") xtitle("test x-title")
@@ -141,6 +143,30 @@ siman_comparemethodsscatter se, methlist(1 3 8 9)
 siman_comparemethodsscatter, by(target)  
 siman_comparemethodsscatter, methlist(1 3 8) by(target)                      
 siman_comparemethodsscatter se, methlist(1 3 8 9) by(target) 
+
+* method numeric labelled string variable
+clear all
+prog drop _all
+cd C:\git\siman\Ella_testing\data\
+use bvsim_all_out.dta, clear
+rename _dnum dnum
+drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
+drop if _n>100
+reshape long beta_ sebeta_ gamma_ segamma_, i(dnum) j(method)
+rename beta_ estbeta
+rename sebeta_ sebeta
+rename gamma_ estgamma
+rename segamma_ segamma
+reshape long est se, i(dnum method) j(target "beta" "gamma")
+gen dgm = 1
+expand 2, gen(dupindicator)
+replace dgm=2 if dupindicator==1
+drop dupindicator
+label define methodl 1 "A" 2 "B" 3 "C" 4 "D" 5 "E" 6 "F" 7 "G" 8 "H" 9 "I" 10 "J"
+label values method methodl
+siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
+siman_blandaltman, methlist(10 4 8)
+siman_blandaltman, methlist(2 9 3)
 
 * String variable method
 cd C:\git\siman\Ella_testing\data\
@@ -180,7 +206,7 @@ siman_comparemethodsscatter, methlist(A C)
 siman_comparemethodsscatter, methlist(B C D) 
 siman_comparemethodsscatter, methlist(B C D)  by(target)                       
 siman_blandaltman	
-siman_blandaltman, methlist(A C)  
+siman_blandaltman, methlist(B A C)  
 
 clear all
 prog drop _all
