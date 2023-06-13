@@ -1,4 +1,5 @@
-*! version 1.6.2 06may2023
+*! version 1.6.3 13june2023
+*  version 1.6.3 13june2023  EMZ: changed if dgm is defined by > 1 variable, that a pannel for each dgm var/level, target and method is displayed on 1 *							graph, with a warning to the user as per IRW/TPM request
 *  version 1.6.2 06may2023   EMZ agreed updates from IRW/TPM/EMZ joint testing 
 *  version 1.6.1 13mar2023   EMZ minor update to error message
 *  version 1.6   23jan2023   EMZ bug fixes from changes to setup programs 
@@ -210,8 +211,24 @@ foreach var in `byvar' {
 	}
 }
 
-
 * scatter plot
+* check if many graphs will be printed out - if so warn the user
+local dgmcount: word count `dgm'
+qui tokenize `dgm'
+if `dgmcreated' == 0 {
+	forvalues j = 1/`dgmcount' {
+		qui tab ``j''
+		local nlevels = r(r)
+		local dgmvarsandlevels `"`dgmvarsandlevels'"' `"``j''"' `" (`nlevels') "'
+		if `j' == 1 local totaldgmnum = `nlevels'
+		else local totaldgmnum = `totaldgmnum'*`nlevels'
+	}
+}
+		
+local graphnumcheck = `totaldgmnum' * `nummethod' * `numtarget'
+if `graphnumcheck' > 15 {
+	di as error "{it: WARNING: `graphnumcheck' graphs will be printed out, consider using 'if' or 'by' options as detailed in {help siman_scatter:siman scatter}}"
+}
 
 * if dgm is defined by multiple variables, default is to plot scatter graphs for each dgm variable, split out by each level
 
@@ -231,9 +248,11 @@ foreach var in `byvar' {
 			}
 	}
 	
-	foreach dgmvar in `dgm' {
-		twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`dgmvar' `target' `method', `bygraphoptions') name(simanscatter_dgm_`dgmvar', replace) `options' 
-	}
+*	foreach dgmvar in `dgm' {
+*		twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`dgmvar' `target' `method', `bygraphoptions') name(simanscatter_dgm_`dgmvar', *replace) `options' 
+twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`dgmvar' `target' `method', `bygraphoptions') name(simanscatter, replace) `options'
+
+*	}
 }
 * if dgm is defined by 1 variable
 else {
