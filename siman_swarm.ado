@@ -291,7 +291,7 @@ if `ndgm' != 1 {
 					msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `options')	///
 					(scatter newidrep`dgmvar' mean`el'`dgmvar', msym(|) msize(huge) mcol(orange) `meangraphoptions')	///
 					, ///
-					by(`by', title("") cols(1) noxrescale legend(off) `bygraphoptions')	///
+					by(`by', title("") noxrescale legend(off) `bygraphoptions')	///
 					ytitle("") ylabel(`labelvalues`dgmvar'', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `graphoptions'	///
 					name(`el'i`dgmvar', replace) nodraw	
 				}
@@ -300,7 +300,7 @@ if `ndgm' != 1 {
 					local cmd twoway (scatter newidrep`dgmvar' `el', ///
 					msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `options')	///
 					, ///
-					by(`by', title("") cols(1) noxrescale legend(off) `bygraphoptions')	///
+					by(`by', title("") noxrescale legend(off) `bygraphoptions')	///
 					ytitle("") ylabel(`labelvalues`dgmvar'', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `graphoptions'	///
 					name(`el'i`dgmvar', replace) nodraw
 					}
