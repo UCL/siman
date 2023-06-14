@@ -27,12 +27,12 @@ siman scatter, by(estimand)
 * by estimand only
 
 siman swarm
-* 1 pannel per dgm, graphs by method
+* 1 pannel per dgm and target combination, method on y-axis
 siman swarm if estimand == 1
 siman swarm if estimand == 2
 
 siman comparemethodsscatter 
-* 1 graph per dgm, comparing methods
+* 1 graph per dgm and target, comparing methods
 siman comparemethodsscatter if estimand == 1
 * metlist option too
 
@@ -69,14 +69,16 @@ order beta pmiss
 siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(betatrue)
 
 siman scatter
-* 1 graph per dgm variable, 1 pannel per dgm level
+* 1 graph per dgm variable, 1 pannel per dgm level, method and target
 siman scatter if method == "CCA"
 
 siman swarm
+* 1 graph per dgm variable, 1 pannel per dgm level and target, method on y-axis
 
 siman comparemethodsscatter 
 
 siman blandaltman 
+* 1 graph per dgm variable LEVEL, dgm level and target, by method difference
 
 siman zipplot
 
