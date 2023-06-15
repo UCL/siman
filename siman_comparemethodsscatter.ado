@@ -436,11 +436,11 @@ if `numberdgms'==1 {
 		* check if target is numeric with string labels for the looping over target values
 		if `targetlabels' == 1 {
 			qui levelsof `target', local(targetlevels)
-			local foreachtarget "foreach t in `targetlevels'"
+			local foreachtarget "`targetlevels'"
 		}
-		else local foreachtarget "foreach t in `valtarget'"
+		else local foreachtarget "`valtarget'"
 		
-		`foreachtarget' {
+		foreach t in `foreachtarget' {
 			* for target, determine if string/string labels or not
 			cap confirm numeric variable `target'
 			if _rc local iftarget `"`target' == "`t'""'
@@ -570,11 +570,11 @@ else if `numberdgms' != 1 {
 			* check if target is numeric with string labels for the looping over target values
 			if `targetlabels' == 1 {
 				qui levelsof `target', local(targetlevels)
-				local foreachtarget "foreach t in `targetlevels'"
+				local foreachtarget "`targetlevels'"
 			}
-			else local foreachtarget "foreach t in `valtarget'"
+			else local foreachtarget "`valtarget'"
 
-			`foreachtarget' {
+			foreach t in `foreachtarget' {
 
 				* for target, determine if string/string labels or not
 				cap confirm numeric variable `target'
