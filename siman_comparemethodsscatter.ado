@@ -1,4 +1,5 @@
-*! version 1.9.7 14june2023
+*! version 1.9.8 19june2023
+*  version 1.9.8 19june2023   EMZ minor bug fix for numeric targets with string labels and long dgm names.  Small format to note.
 *  version 1.9.7 14june2023   TPM systematically went through indenting; moved some twoway options from layer-specific to general
 *  version 1.9.6 12june2023   EMZ change to split out graphs by target as well as dgm by default. 
 *  version 1.9.5 30may2023    EMZ minor formatting as per IRW/TPM request i.e. dgm_var note, title and axis changes, fixed bug with 'if' statement when 
@@ -369,7 +370,7 @@ else if ("`anything'"=="`se'") local varlist ``se'list'
 local countanything: word count `anything'
 if (`countanything'==1 | `countanything'==0) local half half
 
-local name = "simancomparemscatter"
+local name = "simancms"
 
 * Can't tokenize/substr as many "" in the string
 if !mi(`"`options'"') {
@@ -401,7 +402,6 @@ if "`dgm'"=="" local dgmvalues=1
 *local s1: "Standard"
 *local s2: "Error"
 *local seytit `""`s1'" "`s2'" "'
-
 
 if `numberdgms'==1 {
 	
@@ -510,7 +510,7 @@ if `numberdgms'==1 {
 			if `numbermethod'==2 {
 				graph combine `mlabelname1' `graphtheta12`m'`t'' ///
 					`graphse12`m'`t'' `mlabelname2' ///
-					, title("") note("Graphs by `dgm' level ``dgm'dlabel`m''" `target' `tlab') cols(2)	///
+					, title("") note("Graphs for `dgm': ``dgm'dlabel`m'', `target': `tlab'") cols(2)	///
 					xsize(4)	///
 					name(`name'_dgm`m'`tlab', replace) `options'
 			}
@@ -518,7 +518,7 @@ if `numberdgms'==1 {
 				graph combine `mlabelname1' `graphtheta12`m'`t'' `graphtheta13`m'`t''	///
 					`graphse12`m'`t'' `mlabelname2' `graphtheta23`m'`t''	///
 					`graphse13`m'`t'' `graphse23`m'`t'' `mlabelname3'	///
-					, title("") note("Graphs by `dgm' level ``dgm'dlabel`m''" `target' `tlab') cols(3)	///
+					, title("") note("Graphs for `dgm': ``dgm'dlabel`m'', `target': `tlab'") cols(3)	///
 					xsize(4)	///
 					name(`name'_dgm`m'`tlab', replace) `options'
 			}
@@ -530,7 +530,6 @@ if `numberdgms'==1 {
 		}
 	}
 }
-* TIM - Stata complains about unopened close brace at the above line, though I think it should not! If you comment it out, you can progress.
 
 else if `numberdgms' != 1 {
 		
@@ -606,12 +605,12 @@ else if `numberdgms' != 1 {
 							if "`j'" != "`k'" {
 								twoway (function x, range(`frtheta') lcolor(gs10)) ///
 									(scatter `estimate'`j' `estimate'`k' ///
-									if `dgmfilter' & `target' == `iftarget', ms(o) mlc(white%1) msize(tiny)), ///
+									if `dgmfilter' & `iftarget', ms(o) mlc(white%1) msize(tiny)), ///
 									xtit("") ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw ///
 									`by' name(`estimate'`j'`k'`dgmvar'`d'tar`t', replace)
 								twoway (function x, range(`frse') lcolor(gs10)) ///
 									(scatter `se'`j' `se'`k' if ///
-									`dgmfilter' & `target' == `iftarget', ms(o) mlc(white%1) msize(tiny)), ///
+									`dgmfilter' & `iftarget', ms(o) mlc(white%1) msize(tiny)), ///
 									xtit("") ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw ///
 									`by' name(`se'`j'`k'`dgmvar'`d'tar`t', replace) 
 								local graphtheta`counter'`counterplus1'`dgmvar'`d'`t' `estimate'`j'`k'`dgmvar'`d'tar`t'
@@ -633,11 +632,11 @@ else if `numberdgms' != 1 {
 						forvalues k = 2/`numbermethod' {
 							if "`j'" != "`k'" {
 								twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'``j'' `estimate'``k'' ///
-									if `dgmfilter' & `target' == `iftarget', ms(o) mlc(white%1) msize(tiny) xtit("") ///
+									if `dgmfilter' & `iftarget', ms(o) mlc(white%1) msize(tiny) xtit("") ///
 									ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw), ///
 									`by' name(`estimate'``j''``k''`dgmvar'`d'tar`t', replace)
 								twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'``j'' `se'``k'' if ///
-									`dgmfilter' & `target' == `iftarget', ms(o) mlc(white%1) msize(tiny) xtit("") ///
+									`dgmfilter' & `iftarget', ms(o) mlc(white%1) msize(tiny) xtit("") ///
 									ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw), ///
 									`by' name(`se'``j''``k''`dgmvar'`d'tar`t', replace)
 								local graphtheta`counter'`counterplus1'`dgmvar'`d'`t' `estimate'``j''``k''`dgmvar'`d'tar`t'
@@ -656,19 +655,19 @@ else if `numberdgms' != 1 {
 
 				if `numbermethod'==2 {
 					graph combine `mlabelname1' `graphtheta12`dgmvar'`d'`t'' `graphse12`dgmvar'`d''`t' `mlabelname2', ///
-						title("") note("Graphs by `dgmvar' level ``dgmvar'dlabel`d'' `target' `tlab'") cols(2)	xsize(4) ///
+						title("") note("Graphs for `dgmvar': ``dgmvar'dlabel`d'', `target': `tlab'") cols(2)	xsize(4) ///
 						name(`name'_`dgmvar'`d'`tlab', replace) `options'
 				}
 				else if `numbermethod'==3 {
 					graph combine `mlabelname1' `graphtheta12`dgmvar'`d'`t'' `graphtheta13`dgmvar'`d'`t'' ///
 						`graphse12`dgmvar'`d'`t'' `mlabelname2' `graphtheta23`dgmvar'`d'`t'' ///
 						`graphse13`dgmvar'`d'`t'' `graphse23`dgmvar'`d'`t'' `mlabelname3', ///
-						title("") note("Graphs by `dgmvar' level ``dgmvar'dlabel`d'' `target' `tlab'") cols(3)	xsize(4) ///
+						title("") note("Graphs for `dgmvar': ``dgmvar'dlabel`d'', `target': `tlab'") cols(3)	xsize(4) ///
 						name(`name'_`dgmvar'`d'`tlab', replace) `options'
 				}
 				else if `numbermethod'>3 {
 					if mi("`anything'") local anything = "est"
-					graph matrix `varlist' if `dgmvar'==`d' & `target' == `iftarget', `half' `by' title("") note("") ///
+					graph matrix `varlist' if `dgmvar'==`d' & `iftarget', `half' `by' title("") note("") ///
 						name(`name'_`anything'`j'`k'`dgmvar'`d'`tlab', replace) `options'
 				}
 			}
