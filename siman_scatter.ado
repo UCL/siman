@@ -44,6 +44,9 @@ if `nformat'!=1 {
 	}
 }
 
+set trace on
+set tracedepth 1
+
 di as text "working....."
 
 * if the user has not specified 'if' in the siman scatter syntax, but there is one from siman setup then use that 'if'
@@ -224,8 +227,13 @@ if `dgmcreated' == 0 {
 		else local totaldgmnum = `totaldgmnum'*`nlevels'
 	}
 }
-		
-local graphnumcheck = `totaldgmnum' * `nummethod' * `numtarget'
+
+if "`numtarget'" == "N/A" local numtargetcheck = 1
+else local numtargetcheck = `numtarget'
+if "`nummethod'" == "N/A" local nummethodcheck = 1
+else local nummethodcheck = `nummethod'
+
+local graphnumcheck = `totaldgmnum' * `nummethodcheck' * `numtargetcheck'
 if `graphnumcheck' > 15 {
 	di as error "{it: WARNING: `graphnumcheck' graphs will be printed out, consider using 'if' or 'by' options as detailed in {help siman_scatter:siman scatter}}"
 }
