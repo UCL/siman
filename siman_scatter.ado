@@ -44,8 +44,6 @@ if `nformat'!=1 {
 	}
 }
 
-set trace on
-set tracedepth 1
 
 di as text "working....."
 
