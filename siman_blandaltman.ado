@@ -1,4 +1,5 @@
-*! version 1.6.5 13june2023
+*! version 1.6.6 19june2023
+*  version 1.6.6 19june2023  EMZ small changes to note.
 *  version 1.6.5 13june2023  EMZ methlist fix: can now have flexible reference method e.g. methlist(C A B) for method C as the reference (before only 2 *                            methods in methlist allowed), minor formatting to title and note, setting default norescale.
 *  version 1.6.4 05june2022  EMZ expanded note to include dgm name and level when dgm defined by more than 1 variable
 *  version 1.6.3 29may2022   EMZ minor bug fix when target is numeric, IRW/TPM formatting requests
@@ -339,7 +340,7 @@ foreach dgmvar in `dgmbyvar' {
 		local options mlc(white%1) msym(O) msize(tiny)
 		}
 		
-	local name = "simanblandaltman"
+	local name = "simanba"
 
 	* Can't tokenize/substr as many "" in the string
 	if !mi(`"`options'"') {
@@ -389,10 +390,14 @@ foreach dgmvar in `dgmbyvar' {
 			
 			* graph titles
 			if "`el'"=="`estimate'" local eltitle = "`estimate'"
-			else if "`el'"=="`se'" local eltitle = "`se' " 
+			else if "`el'"=="`se'" local eltitle = "`se'" 
+			
+			* use target labels if target numeric with string labels
+			if `targetlabels' == 1 local tlab: word `t' of `valtarget'
+			else local tlab `t'
 
 			if `n`dgmvar'labels' > 1 & ("`by'"=="" | "`by'"=="`dgmvar' `target'") {
-				local bytitle = "`dgmvar' level ``dgmvar'dlabel`d'', target: `t'"
+				local bytitle = "`dgmvar': ``dgmvar'dlabel`d'', target: `tlab'"
 				
 				if `dgmlabels' == 1 {						
 					if `targetstringindi' == 1 local byvarlist = `"`dgmvar'==`d' & `target'=="`t'""'
@@ -402,27 +407,27 @@ foreach dgmvar in `dgmbyvar' {
 					if `targetstringindi' == 1 local byvarlist = `"`dgmvar'== ``dgmvar'dlabel`d'' & `target'=="`t'""'
 					else local byvarlist = `"`dgmvar'== ``dgmvar'dlabel`d'' & `target'==`t'"'
 				}				
-				if `numberdgms' > 1 local byname = "`dgmvar'`d'`t'"
-				else local byname = "`d'`t'"
+				if `numberdgms' > 1 local byname = "`dgmvar'`d'`tlab'"
+				else local byname = "`d'`tlab'"
 			}
 			else if `n`dgmvar'labels' == 1 & ("`by'"=="" | "`by'"=="`dgmvar' `target'")  {
-				local bytitle = "target: `t'"
+				local bytitle = "target: `tlab'"
 				if `targetstringindi' == 1 local byvarlist = `"`target'=="`t'""'
 				else local byvarlist = `"`target'==`t'"'
-				local byname = "`t'"
+				local byname = "`tlab'"
 			}
 			else if "`by'"=="`dgmvar'" {
-				local bytitle = "`dgmvar' level ``dgmvar'dlabel`d''"
+				local bytitle = "`dgmvar': ``dgmvar'dlabel`d''"
 				if `dgmlabels' == 1 local byvarlist = `"`dgmvar'==`d'"'
 				else if `dgmlabels' == 0 local byvarlist = `"`dgmvar'==``dgmvar'dlabel`d''"'
 				if `numberdgms' > 1 local byname = `dgmvar'`d'
 				else local byname = `d'
 			}
 			else if "`by'"=="`target'" {
-				local bytitle = "target: `t'"
+				local bytitle = "target: `tlab'"
 				if `targetstringindi' == 1 local byvarlist = `"`target'=="`t'""'
 				else local byvarlist = `"`target'==`t'"'
-				local byname = "`t'"
+				local byname = "`tlab'"
 			}
 			else if "`by'"=="`target' `dgmvar'" {
 				di as err "'by' nesting order should be by(dgm target)"
@@ -447,10 +452,10 @@ foreach dgmvar in `dgmbyvar' {
 
 						* graph titles
 						if "`el'"=="`estimate'" local eltitle = "`estimate'"
-						else if "`el'"=="`se'" local eltitle = "`se' " 
+						else if "`el'"=="`se'" local eltitle = "`se'" 
 
 						if `n`dgmvar'labels' > 1 & ("`by'"=="" | "`by'"=="`dgmvar'") {
-							local bytitle = "`dgmvar' level ``dgmvar'dlabel`d''"
+							local bytitle = "`dgmvar': ``dgmvar'dlabel`d''"
 							if `dgmlabels' == 1 local byvarlist = `"`dgmvar'==`d'"'
 							else if `dgmlabels' == 0 local byvarlist = `"`dgmvar'==``dgmvar'dlabel`d''"'
 							if `numberdgms' > 1 local byname = "`dgmvar'`d'"
