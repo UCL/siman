@@ -1,4 +1,5 @@
-*! version 1.9.8 19june2023
+*! version 1.9.9 20june2023
+*  version 1.9.9 20june2023   EMZ fix for when target is missing, update to note.
 *  version 1.9.8 19june2023   EMZ minor bug fix for numeric targets with string labels and long dgm names.  Small format to note.
 *  version 1.9.7 14june2023   TPM systematically went through indenting; moved some twoway options from layer-specific to general
 *  version 1.9.6 12june2023   EMZ change to split out graphs by target as well as dgm by default. 
@@ -438,13 +439,15 @@ if `numberdgms'==1 {
 			qui levelsof `target', local(targetlevels)
 			local foreachtarget "`targetlevels'"
 		}
-		else local foreachtarget "`valtarget'"
+		else if "`valtarget'"!= "N/A" local foreachtarget "`valtarget'"
+		else local foreachtarget 1
 		
 		foreach t in `foreachtarget' {
 			* for target, determine if string/string labels or not
 			cap confirm numeric variable `target'
-			if _rc local iftarget `"`target' == "`t'""'
-			else local iftarget `"`target' == `t'"'	
+			if _rc local iftarget `"& `target' == "`t'""'
+			else local iftarget `"& `target' == `t'"'
+			if "`valtarget'"== "N/A" local iftarget
 			
 			local frtheta `minest' `maxest'
 			local frse `minse' `maxse'
@@ -467,9 +470,9 @@ if `numberdgms'==1 {
 					*di "`j'"
 					foreach k in `maxmethodvaluesplus1' {
 						if "`j'" != "`k'" {
-							twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'`j' `estimate'`k' if `dgm'==`m' & `iftarget', ms(o) ///
+							twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'`j' `estimate'`k' if `dgm'==`m' `iftarget', ms(o) ///
 								mlc(white%1) msize(tiny) xtit("") ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw), `by' name(`estimate'`j'`k'dgm`m'tar`t', replace) 
-							twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'`j' `se'`k' if `dgm'==`m' & `iftarget', ms(o) mlc(white%1) ///
+							twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'`j' `se'`k' if `dgm'==`m' `iftarget', ms(o) mlc(white%1) ///
 								msize(tiny) xtit("") ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw), `by' name(`se'`j'`k'dgm`m'tar`t', replace) 
 							local graphtheta`counter'`counterplus1'`m'`t' `estimate'`j'`k'dgm`m'tar`t'
 							local graphse`counter'`counterplus1'`m'`t' `se'`j'`k'dgm`m'tar`t'
@@ -489,9 +492,9 @@ if `numberdgms'==1 {
 				forvalues j = 1/`maxmethodvaluesminus1' {
 					forvalues k = 2/`numbermethod' {
 						if "`j'" != "`k'" {
-							twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'``j'' `estimate'``k'' if `dgm'==`m' & `iftarget', ms(o) ///
+							twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'``j'' `estimate'``k'' if `dgm'==`m' `iftarget', ms(o) ///
 								mlc(white%1) msize(tiny) xtit("") ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw), `by' name(`estimate'``j''``k''dgm`m'tar`t', replace)
-							twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'``j'' `se'``k'' if `dgm'==`m' & `iftarget', ms(o) ///
+							twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'``j'' `se'``k'' if `dgm'==`m'`iftarget', ms(o) ///
 								mlc(white%1) msize(tiny) xtit("") ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw), `by' name(`se'``j''``k''dgm`m'tar`t', replace)
 							local graphtheta`counter'`counterplus1'`m'`t' `estimate'``j''``k''dgm`m'tar`t'
 							local graphse`counter'`counterplus1'`m'`t' `se'``j''``k''dgm`m'tar`t'
@@ -504,13 +507,20 @@ if `numberdgms'==1 {
 			}
 			
 			* use target labels if target numeric with string labels
-			if `targetlabels' == 1 local tlab: word `t' of `valtarget'
-			else local tlab `t'
+			if `targetlabels' == 1 {
+				local tlab: word `t' of `valtarget'
+				local targetlab ", `target': `tlab'"
+			}
+			else {
+				local tlab `t'
+				local targetlab ", `target': `tlab'"
+			}
+			if "`valtarget'"== "N/A" local targetlab
 			
 			if `numbermethod'==2 {
 				graph combine `mlabelname1' `graphtheta12`m'`t'' ///
 					`graphse12`m'`t'' `mlabelname2' ///
-					, title("") note("Graphs for `dgm': ``dgm'dlabel`m'', `target': `tlab'") cols(2)	///
+					, title("") note("Graphs for `dgm': ``dgm'dlabel`m'' `targetlab'") cols(2)	///
 					xsize(4)	///
 					name(`name'_dgm`m'`tlab', replace) `options'
 			}
@@ -518,13 +528,13 @@ if `numberdgms'==1 {
 				graph combine `mlabelname1' `graphtheta12`m'`t'' `graphtheta13`m'`t''	///
 					`graphse12`m'`t'' `mlabelname2' `graphtheta23`m'`t''	///
 					`graphse13`m'`t'' `graphse23`m'`t'' `mlabelname3'	///
-					, title("") note("Graphs for `dgm': ``dgm'dlabel`m'', `target': `tlab'") cols(3)	///
+					, title("") note("Graphs for `dgm': ``dgm'dlabel`m'' `targetlab'") cols(3)	///
 					xsize(4)	///
 					name(`name'_dgm`m'`tlab', replace) `options'
 			}
 			else if `numbermethod'>3 {
 				if mi("`anything'") local anything = "est"
-				graph matrix `varlist' if `dgm'==`m' & `iftarget', `half' `by' title("") note("") ///
+				graph matrix `varlist' if `dgm'==`m' `iftarget', `half' `by' title("") note("") ///
 					name(`name'_`anything'`j'`k'dgm`m'`tlab', replace) `options'
 			}
 		}
@@ -572,13 +582,16 @@ else if `numberdgms' != 1 {
 				local foreachtarget "`targetlevels'"
 			}
 			else local foreachtarget "`valtarget'"
+			else if "`valtarget'"!= "N/A" local foreachtarget "`valtarget'"
+			else local foreachtarget 1
 
 			foreach t in `foreachtarget' {
 
 				* for target, determine if string/string labels or not
 				cap confirm numeric variable `target'
-				if _rc local iftarget `"`target' == "`t'""'
-				else local iftarget `"`target' == `t'"'	
+				if _rc local iftarget `"& `target' == "`t'""'
+				else local iftarget `"& `target' == `t'"'	
+				if "`valtarget'"== "N/A" local iftarget
 				
 				local frtheta `minest' `maxest'
 				local frse `minse' `maxse'
@@ -605,12 +618,12 @@ else if `numberdgms' != 1 {
 							if "`j'" != "`k'" {
 								twoway (function x, range(`frtheta') lcolor(gs10)) ///
 									(scatter `estimate'`j' `estimate'`k' ///
-									if `dgmfilter' & `iftarget', ms(o) mlc(white%1) msize(tiny)), ///
+									if `dgmfilter' `iftarget', ms(o) mlc(white%1) msize(tiny)), ///
 									xtit("") ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw ///
 									`by' name(`estimate'`j'`k'`dgmvar'`d'tar`t', replace)
 								twoway (function x, range(`frse') lcolor(gs10)) ///
 									(scatter `se'`j' `se'`k' if ///
-									`dgmfilter' & `iftarget', ms(o) mlc(white%1) msize(tiny)), ///
+									`dgmfilter' `iftarget', ms(o) mlc(white%1) msize(tiny)), ///
 									xtit("") ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw ///
 									`by' name(`se'`j'`k'`dgmvar'`d'tar`t', replace) 
 								local graphtheta`counter'`counterplus1'`dgmvar'`d'`t' `estimate'`j'`k'`dgmvar'`d'tar`t'
@@ -632,11 +645,11 @@ else if `numberdgms' != 1 {
 						forvalues k = 2/`numbermethod' {
 							if "`j'" != "`k'" {
 								twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'``j'' `estimate'``k'' ///
-									if `dgmfilter' & `iftarget', ms(o) mlc(white%1) msize(tiny) xtit("") ///
+									if `dgmfilter' `iftarget', ms(o) mlc(white%1) msize(tiny) xtit("") ///
 									ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw), ///
 									`by' name(`estimate'``j''``k''`dgmvar'`d'tar`t', replace)
 								twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'``j'' `se'``k'' if ///
-									`dgmfilter' & `iftarget', ms(o) mlc(white%1) msize(tiny) xtit("") ///
+									`dgmfilter' `iftarget', ms(o) mlc(white%1) msize(tiny) xtit("") ///
 									ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw), ///
 									`by' name(`se'``j''``k''`dgmvar'`d'tar`t', replace)
 								local graphtheta`counter'`counterplus1'`dgmvar'`d'`t' `estimate'``j''``k''`dgmvar'`d'tar`t'
@@ -650,24 +663,31 @@ else if `numberdgms' != 1 {
 				}
 						
 				* use target labels if target numeric with string labels
-				if `targetlabels' == 1 local tlab: word `t' of `valtarget'
-				else local tlab `t'
+				if `targetlabels' == 1 { 
+					local tlab: word `t' of `valtarget'
+					local targetlab ", `target': `tlab'"
+				}
+				else {
+					local tlab `t'
+					local targetlab ", `target': `tlab'"
+				}
+				if "`valtarget'"== "N/A" local targetlab
 
 				if `numbermethod'==2 {
 					graph combine `mlabelname1' `graphtheta12`dgmvar'`d'`t'' `graphse12`dgmvar'`d''`t' `mlabelname2', ///
-						title("") note("Graphs for `dgmvar': ``dgmvar'dlabel`d'', `target': `tlab'") cols(2)	xsize(4) ///
+						title("") note("Graphs for `dgmvar': ``dgmvar'dlabel`d'' `targetlab'") cols(2)	xsize(4) ///
 						name(`name'_`dgmvar'`d'`tlab', replace) `options'
 				}
 				else if `numbermethod'==3 {
 					graph combine `mlabelname1' `graphtheta12`dgmvar'`d'`t'' `graphtheta13`dgmvar'`d'`t'' ///
 						`graphse12`dgmvar'`d'`t'' `mlabelname2' `graphtheta23`dgmvar'`d'`t'' ///
 						`graphse13`dgmvar'`d'`t'' `graphse23`dgmvar'`d'`t'' `mlabelname3', ///
-						title("") note("Graphs for `dgmvar': ``dgmvar'dlabel`d'', `target': `tlab'") cols(3)	xsize(4) ///
+						title("") note("Graphs for `dgmvar': ``dgmvar'dlabel`d'' `targetlab'") cols(3)	xsize(4) ///
 						name(`name'_`dgmvar'`d'`tlab', replace) `options'
 				}
 				else if `numbermethod'>3 {
 					if mi("`anything'") local anything = "est"
-					graph matrix `varlist' if `dgmvar'==`d' & `iftarget', `half' `by' title("") note("") ///
+					graph matrix `varlist' if `dgmvar'==`d' `iftarget', `half' `by' title("") note("") ///
 						name(`name'_`anything'`j'`k'`dgmvar'`d'`tlab', replace) `options'
 				}
 			}

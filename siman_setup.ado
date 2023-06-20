@@ -536,13 +536,13 @@ cap confirm numeric variable `target'
 if _rc local targetstringindi = 1
 else local targetstringindi = 0 
 
+local targetlabels = 0
+
 if `nformat'==1 | (`nformat'==3 & `ntarget'==1) { 
 	if `ntarget'!=0 {
 		qui tab `target', m
 		local ntargetlabels = `r(r)'
-		
-		local targetlabels = 0
-		
+						
 		* Get target label values
 		cap qui labelsof `target'
 		cap qui ret list
@@ -557,7 +557,7 @@ if `nformat'==1 | (`nformat'==3 & `ntarget'==1) {
 				}
 			}
 	else {
-	local targetlabels = 0
+
 	qui levels `target', local(levels)
 	tokenize `"`levels'"'
 		if `targetstringindi' == 0 {		
@@ -581,13 +581,14 @@ cap confirm numeric variable `method'
 if _rc local methodstringindi = 1
 else local methodstringindi = 0 
 
+local methodlabels = 0
+
 if `nformat'==1 | (`nformat'==3 & `nmethod'==1)  { 
 	if `nmethod'!=0 {
 		qui tab `method',m
 		local nmethodlabels = `r(r)'
 		
-		local methodlabels = 0
-		
+				
 		* Get method label values
 		cap qui labelsof `method'
 		cap qui ret list
@@ -602,7 +603,7 @@ if `nformat'==1 | (`nformat'==3 & `nmethod'==1)  {
 				}
 			}
 	else {
-	local methodlabels = 0
+
 	qui levels `method', local(levels)
 	tokenize `"`levels'"'
 		if `methodstringindi' == 0 {		

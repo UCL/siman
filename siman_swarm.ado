@@ -1,4 +1,5 @@
-*! version 1.9.1 12june2023
+*! version 1.9.2 19june2023
+*  version 1.9.2 19june2023   EMZ change so that all dgm/target combinations appear on 1 graph when dgm defined by >1 variable with a warning.
 *  version 1.9.1 12june2023   EMZ minor bug fix to note()
 *  version 1.9   06june2023   EMZ updates from IRW/TPM/EMZ joint testing
 *  version 1.8   03may2023    EMZ minor formatting changes requested by IRW/TPM
@@ -185,22 +186,24 @@ di as text "working....."
 local nummethodminus1 = `nummethodnew'-1
 local nummethodplus1 = `nummethodnew'+1
 
-if `numberdgms'==1 {
+
+*if `numberdgms'==1 {
 
 		local maxrep = _N
 		forvalues g = 1/`nummethodnew' {
 		local step = `maxrep'/`nummethodplus1'
-		if `g'==1 qui gen newidrep`dgm' = `rep' if `method' == `g'
-		else qui replace newidrep`dgm' = (`rep'-1)+ ceil((`g'-1)*`step') + 1 if `method' == `g'
-		qui tabstat newidrep`dgm' if `method' == `g', s(p50) save
+		if `g'==1 qui gen newidrep = `rep' if `method' == `g'
+		else qui replace newidrep = (`rep'-1)+ ceil((`g'-1)*`step') + 1 if `method' == `g'
+		qui tabstat newidrep if `method' == `g', s(p50) save
 		qui matrix list r(StatTotal) 
 		local median`g' = r(StatTotal)[1,1]
 		local ygraphvalue`g' = ceil(`median`g'')
-		local labelvalues`dgm' `labelvalues`dgm'' `ygraphvalue`g'' "`mlabel`g''"
-		if `g'==`nummethodnew' label define newidreplab`dgm' `labelvalues`dgm''
+		local labelvalues `labelvalues' `ygraphvalue`g'' "`mlabel`g''"
+		if `g'==`nummethodnew' label define newidreplab `labelvalues'
 	}
-}
-else {
+*}
+
+/*else {
 	foreach dgmvar in `dgm' {
 		bysort `dgmvar' `method' `target': gen `dgmvar'rep = _n
 		local `dgmvar'rep = `dgmvar'rep
@@ -218,7 +221,8 @@ else {
 		if `g'==`nummethodnew' label define newidreplab`dgmvar' `labelvalues`dgmvar''
 	}
  }
-}
+}*/
+
 
 * For the purposes of the graphs below, if dgm is missing in the dataset then set
 * the number of dgms to be 1.
@@ -233,6 +237,26 @@ if !mi("`by'") {
 	local dgmbyvar = "`by'"
 }
 else local dgmbyvar = "`dgm'"
+
+* check if many graphs will be printed out - if so warn the user
+local dgmcount: word count `dgm'
+qui tokenize `dgm'
+if `dgmcreated' == 0 {
+	forvalues j = 1/`dgmcount' {
+		qui tab ``j''
+		local nlevels = r(r)
+		local dgmvarsandlevels `"`dgmvarsandlevels'"' `"``j''"' `" (`nlevels') "'
+		if `j' == 1 local totaldgmnum = `nlevels'
+		else local totaldgmnum = `totaldgmnum'*`nlevels'
+	}
+}
+if "`numtarget'" == "N/A" local numtargetcheck = 1
+else local numtargetcheck = `numtarget'
+
+local graphnumcheck = `totaldgmnum' * `numtargetcheck'
+if `graphnumcheck' > 15 {
+	di as error "{it: WARNING: `graphnumcheck' graphs will be printed out, consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}}"
+}
 
 
 if `ndgm' != 1 { 
@@ -267,7 +291,7 @@ if `ndgm' != 1 {
 			tempvar dgmtitle`dgmvar'
 			qui egen `dgmtitle`dgmvar'' = concat(`dgmequals' `dgmlabel`dgmvar'')
 *			local by = "`dgmtitle`dgmvar''"
-			if "`byorig'"=="" local by = "`dgmvar' `target'"
+			if "`byorig'"=="" local by = "`dgmbyvar' `target'"
 		}
 			
 			qui tab `dgmvar'
@@ -277,39 +301,46 @@ if `ndgm' != 1 {
 
 				foreach el in `varlist' {
 					cap qui gen float mean`el'`dgmvar' = .
+*					cap qui gen float mean`el' = .
 						forvalues d = 1/`ndgmvar' {
 							forval i = 1/`nummethodnew' {
 							qui summ `el' if `method'==`i' & `dgmvar'==``d'', meanonly
-								if `numberdgms'!=1 qui replace mean`el'`dgmvar' = r(mean) if `dgmvar'==``d'' & newidrep`dgmvar'== `ygraphvalue`i'`dgmvar''
-								else qui replace mean`el'`dgmvar' = r(mean) if `dgmvar'==``d'' & newidrep`dgmvar'== `ygraphvalue`i''
+						*	qui summ `el' if `method'==`i', meanonly
+								if `numberdgms'!=1 qui replace mean`el'`dgmvar' = r(mean) if `dgmvar'==``d'' & newidrep == `ygraphvalue`i''
+								else qui replace mean`el'`dgmvar' = r(mean) if `dgmvar'==``d'' & newidrep == `ygraphvalue`i''
 								}
 							}
+				
+	
+	
 							
 				if "`meanoff'"=="" {
-					local graphname `graphname' `el'i`dgmvar'
-					local cmd twoway (scatter newidrep`dgmvar' `el', ///
+					*local graphname `graphname' `el'i`dgmvar'
+					local graphname `graphname' `el'`i'
+					local cmd twoway (scatter newidrep `el', ///
 					msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `options')	///
-					(scatter newidrep`dgmvar' mean`el'`dgmvar', msym(|) msize(huge) mcol(orange) `meangraphoptions')	///
+					(scatter newidrep mean`el'`dgmvar', msym(|) msize(huge) mcol(orange) `meangraphoptions')	///
 					, ///
 					by(`by', title("") noxrescale legend(off) `bygraphoptions')	///
-					ytitle("") ylabel(`labelvalues`dgmvar'', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `graphoptions'	///
-					name(`el'i`dgmvar', replace) nodraw	
+					ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `graphoptions'	///
+					name(`el'i, replace) 
 				}
 				else {
-				local graphname `graphname' `el'i`dgmvar'
-					local cmd twoway (scatter newidrep`dgmvar' `el', ///
+				*local graphname `graphname' `el'i`dgmvar'
+				local graphname `graphname' `el'`i'
+					local cmd twoway (scatter newidrep`el', ///
 					msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `options')	///
 					, ///
 					by(`by', title("") noxrescale legend(off) `bygraphoptions')	///
-					ytitle("") ylabel(`labelvalues`dgmvar'', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `graphoptions'	///
-					name(`el'i`dgmvar', replace) nodraw
+					ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `graphoptions'	///
+					name(`el'i, replace) 
 					}
 				}
 
-				qui `cmd'
+/*				qui `cmd'
 				* global F9 `cmd'
 				
-				local name "name(simanswarm_`dgmvar', replace)"
+*				local name "name(simanswarm_`dgmvar', replace)"
 
 				if !mi(`"`combinegraphoptions'"') {
 					* Can't tokenize/substr as many "" in the string
@@ -324,11 +355,16 @@ if `ndgm' != 1 {
 
 				graph combine `graphname', xsize(7) iscale(*1.5) `options' `name'
 				local graphname
+			*/
 
+		}
 	}
+
 	
-	local name "name(simanswarm_`dgmvar', replace)"
-}
+*	local name "name(simanswarm_`dgmvar', replace)"
+	local name "name(simanswarm, replace)"
+	
+
 * else create graphs without 'by' option as 'by' is for dgm and target only
 else {
 	foreach el in `varlist' {
