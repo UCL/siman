@@ -41,24 +41,23 @@ which siman_setup
 * DGM numeric, 1 var
 *********************
 * target long and string, method long and numeric, true variable 1 level
-
 use data/simlongESTPM_longE_longM.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 * graphs
-siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test1") 
+siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test1", replace) 
 
 siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test1", replace)) 
 
 siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
-coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test1")
+coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test1", replace)
 
-siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test1") 
+siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test1", replace) 
 
-siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test1") 
+siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test1", replace) 
 
 siman analyse
 
-siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollyplot_test1")
+siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollyplot_test1", replace)
 
 
 * DGM numeric with string labels, 1 var
@@ -83,20 +82,20 @@ siman_setup, rep(rep) dgm(dgm) target(1 2) method(A B) estimate(est) se(se) true
 * has made target string
  
 * graphs
-siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test2") 
+siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test2", replace) 
 
 siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test2", replace)) 
 
 siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
-coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test2")
+coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test2", replace)
 
-siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test2") 
+siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test2", replace) 
 
-siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test2")        
+siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test2", replace)        
 
 siman analyse
 
-siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollyplot_test2")
+siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollyplot_test2", replace)
 
  
 * DGM string, 1 var
@@ -116,22 +115,22 @@ rename dgm_str dgm
 
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) 
 * graphs
-siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test3") 
+siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test3", replace) 
 
 siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test3", replace)) 
 
 cap siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
-coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test3")
+coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test3", replace)
 assert _rc == 498
 * siman zipplot can not be run w/o true value as required
 
-siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test3") 
+siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test3", replace) 
 
-siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test3") 
+siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test3", replace) 
 
 siman analyse
 
-siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollyplot_test3")
+siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollyplot_test3", replace)
  
  
 * DGM missing
@@ -151,20 +150,20 @@ drop repitionindi
 siman_setup, rep(rep) target(estimand) estimate(est) se(se) true(true)
 
 * graphs
-siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test4") 
+siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test4", replace) 
 
 cap siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test4", replace)) 
 assert _rc == 498
 * siman swarm can not be run without method as required
 
 siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
-coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test4")    
+coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test4", replace)    
 
-cap siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test4") 
+cap siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test4", replace) 
 assert _rc == 498
 * siman cms can not be run without method as required
 
-cap siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test4") 
+cap siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test4", replace) 
 assert _rc == 498
 * siman bland altman can not be run without method as required
 
@@ -200,16 +199,16 @@ drop repitionindi
 siman_setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
  
 * graphs
-siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test5") 
+siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test5", replace) 
 
 siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test5", replace)) 
 
 siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
-coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test5")
+coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test5", replace)
 
-siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test5") 
+siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test5", replace) 
 
-siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test5") 
+siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test5", replace) 
 
 siman analyse
 
@@ -234,8 +233,8 @@ expand 2, gen(dupindicator)
 replace dgm=2 if dupindicator==1
 drop dupindicator
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
-siman_comparemethodsscatter, methlist(3 7) name("cms_test6") 
-siman_blandaltman, methlist(3 7) name("ba_test6")
+siman_comparemethodsscatter, methlist(3 7) name("cms_test6", replace) 
+siman_blandaltman, methlist(3 7) name("ba_test6", replace)
 
  
   
@@ -265,22 +264,22 @@ rename pc_str pc
 siman_setup, rep(v1) dgm(theta rho pc k) method(peto g2) estimate(exp) se(var2) true(theta)
 
 * graphs
-siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test7") 
+siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test7", replace) 
 
 siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test7", replace)) 
 
 siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
-coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test7")
+coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test7", replace)
 
-siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test7") 
+siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test7", replace) 
 
-siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test7") 
+siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test7", replace) 
 
 siman analyse
 
-siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollyplot_test7")
+siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollyplot_test7", replace)
 
-siman_nestloop mean, dgmorder(-theta rho -pc -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") name("nestloop_test7")
+siman_nestloop mean, dgmorder(-theta rho -pc -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") name("nestloop_test7", replace)
 
 
 

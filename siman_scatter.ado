@@ -1,4 +1,5 @@
-*! version 1.6.3 13june2023
+*! version 1.6.4 26june2023
+*  version 1.6.4 26june2023  EMZ minor bug fix for when dgm/method is missing, and tidy up of code.
 *  version 1.6.3 13june2023  EMZ: changed if dgm is defined by > 1 variable, that a pannel for each dgm var/level, target and method is displayed on 1 *							graph, with a warning to the user as per IRW/TPM request
 *  version 1.6.2 06may2023   EMZ agreed updates from IRW/TPM/EMZ joint testing 
 *  version 1.6.1 13mar2023   EMZ minor update to error message
@@ -43,7 +44,6 @@ if `nformat'!=1 {
 		local `thing' : char _dta[siman_`thing']
 	}
 }
-
 
 di as text "working....."
 
@@ -114,58 +114,17 @@ if `numberdgms'==1 {
 if `numberdgms'!=1 local ndgmlabels = `numberdgms'
 
 
-/*
-*create a variable with DGM = `dgm', Target = `target' and Method = `method' for use in the graphs
-foreach var of varlist `dgm' `target'  `method' {
-/*	
-	if `numberdgms'==1 {
-		local `var'labelindi=0
-		cap qui labelsof `var'
-		cap qui ret list
-		if !mi("`r(labels)'") local `var'labelindi=1	
-					
-				
-		tempvar `var'label`var'
-		if ``var'labelindi'== 1 qui decode `var', gen(``var'label`var'')
-		else qui gen ``var'label`var'' = `var'
-		
-		
-		tempvar `var'equals
-		qui gen ``var'equals' = "`var' = "
-		tempvar `var'title
-		qui egen ``var'title' = concat(``var'equals' ``var'label`var'')
-		if "`by'"=="" local by = "``var'title`var''"
-	} 
-	else {*/
-		tempvar `var'equals
-		qui gen ``var'equals' = "`var' = "
-		tempvar `var'title
-		qui egen ``var'title' = concat(``var'equals' `var')
-		local `var'title ``var'title'
-		*if "`by'"=="`var'" local by ``var'title'
-*	}
-}
-
-
-if !mi("`by'") {
-    local bycount: word count `by'
-    tokenize `by'
-		forvalues i = 1/`bycount' {
-			local bylabel`i' = "``i''"
-			local bylist `bylist' ``bylabel`i''title'
-		}
-		local by `bylist'
-}
-*/
-
 if !mi("`by'") {
 	local byvar = "`by'"
 }
 else if mi("`by'") {
-	if `numberdgms' == 1 local byvar `dgm' `target' `method'
-	else if `numberdgms'! = 1 local byvar `dgm'
+	if "`dgmcreated'" == "1" & "`methodcreated'" == "1" local byvar "`target'"
+	else if "`dgmcreated'" == "1" & "`methodcreated'" == "0" local byvar "`target' `method'"
+	else if "`dgmcreated'" == "0" & "`methodcreated'" == "1" local byvar "`dgm' `target'"
+	else local byvar = "`dgm' `target' `method'"
 }
 
+/*
 * handle by if contains dgm: make dgmvar equal to the `by' option only
 if !mi("`by'") {
 	local keep `by'
@@ -177,40 +136,7 @@ if !mi("`by'") {
 		local ndgmlabels = `r(r)'
 	}
 }
-
-
-foreach var in `byvar' { 
-		
-	if `numberdgms'==1 {
-		
-			local `var'labelindi=0
-			cap qui labelsof `var'
-			cap qui ret list
-			if !mi("`r(labels)'") local `var'labelindi=1	
-			
-		
-			tempvar label`var'
-			if ``var'labelindi'== 1 qui decode `var', gen(label`var')
-			else qui gen label`var' = `var'
-			tempvar `var'equals
-			qui gen ``var'equals' = "`var': "
-			tempvar `var'title
-					
-			qui egen ``var'title' = concat(``var'equals' label`var')
-			
-	} 
-	else {			
-			
-			tempvar label`var'
-			qui gen `label`var'' = `var'
-			
-			tempvar `var'equals
-			qui gen ``var'equals' = "`var': "
-			tempvar title`var'
-			qui egen `title`var'' = concat(``var'equals' `label`var'')
-			local byvar = "`title`var''"
-	}
-}
+*/
 
 * scatter plot
 * check if many graphs will be printed out - if so warn the user
@@ -230,6 +156,7 @@ if "`numtarget'" == "N/A" local numtargetcheck = 1
 else local numtargetcheck = `numtarget'
 if "`nummethod'" == "N/A" local nummethodcheck = 1
 else local nummethodcheck = `nummethod'
+if "`totaldgmnum'" == "" local totaldgmnum = 1
 
 local graphnumcheck = `totaldgmnum' * `nummethodcheck' * `numtargetcheck'
 if `graphnumcheck' > 15 {
@@ -238,51 +165,21 @@ if `graphnumcheck' > 15 {
 
 * if dgm is defined by multiple variables, default is to plot scatter graphs for each dgm variable, split out by each level
 
-*if `numberdgms'!=1 & mi("`if'") {
-	if `numberdgms'!=1 {
-		
-	* Can't tokenize/substr as many "" in the string
-	if !mi(`"`options'"') {
-		tempvar _namestring
-		qui gen `_namestring' = `"`options'"'
-		qui split `_namestring',  parse(`"name"')
-		local options = `_namestring'1
-		cap confirm var `_namestring'2
-			if !_rc {
-				local namestring = `_namestring'2
-				local name = `"name`namestring'"'
-			}
-	}
-	
-*	foreach dgmvar in `dgm' {
-*		twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`dgmvar' `target' `method', `bygraphoptions') name(simanscatter_dgm_`dgmvar', *replace) `options' 
-twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`dgmvar' `target' `method', `bygraphoptions') name(simanscatter, replace) `options'
-
-*	}
+* Can't tokenize/substr as many "" in the string
+if !mi(`"`options'"') {
+	tempvar _namestring
+	qui gen `_namestring' = `"`options'"'
+	qui split `_namestring',  parse(`"name"')
+	local options = `_namestring'1
+	cap confirm var `_namestring'2
+		if !_rc {
+			local namestring = `_namestring'2
+			local name2 = `"name`namestring'"'
+		}
 }
-* if dgm is defined by 1 variable
-else {
+else local name2 "name(simanscatter, replace)"
 	
-	if "`by'"=="" & `ndgmlabels' == 1 local byvar `target' `method' 
-	else if "`by'"=="" & `ndgmlabels' != 1 local byvar `dgm' `target' `method'
-	local name = "name(simanscatter, replace)"
-
-	* Can't tokenize/substr as many "" in the string
-	if !mi(`"`options'"') {
-		tempvar _namestring
-		qui gen `_namestring' = `"`options'"'
-		qui split `_namestring',  parse(`"name"')
-		local options = `_namestring'1
-		cap confirm var `_namestring'2
-			if !_rc {
-				local namestring = `_namestring'2
-				local name = `"name`namestring'"'
-			}
-	}
-	
-	
-	twoway scatter `varlist', msym(o) msize(small) mcol(%30) by(`byvar', `bygraphoptions') `name' `options' 
-}
+twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`byvar', `bygraphoptions') `name2' `options'
 
 restore
 

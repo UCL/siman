@@ -1,4 +1,5 @@
-*!   version 0.7.8  06june2023
+*!   version 0.7.9  26june2023
+*    version 0.7.9  26june2023   EMZ added methodcreated characteristic
 *    version 0.7.8  06june2023	 EMZ bug fix: numeric target with string labels not displayed in siman describe table (displayed numbers not values)
 *    version 0.7.7  29may2023	 EMZ added option if missing method
 *    version 0.7.6  22may2023	 IW bug fix: label of encoded string dgmvar was lost
@@ -94,10 +95,12 @@ if mi("`estimate'") &  mi("`se'") {
 }
 
 * produce a warning message if no method contained in dataset, and create a constant
+local methodcreated = 0
 if mi("`method'") {
 	 di as error "{it: WARNING: no method specified, siman will procedd assuming there is only one method.  If this is a mistake, enter method() option in -siman setup-}"
-	 gen _methodvar = 1
+	 qui gen _methodvar = 1
 	 local method "_methodvar"
+	 local methodcreated = 1
 }
 
 
@@ -754,7 +757,7 @@ foreach summary of varlist `estimate' `se' `df' `ci' `p' `true' {
 
 
 local allthings allthings rep dgm target method estimate se df ci p true order lci uci ifsetup insetup
-local allthings `allthings' format targetformat methodformat nformat ntarget ndgm nmethod numtarget valtarget nummethod valmethod ntrue ntruevalue dgmvar numdgm dgmcreated targetlabels
+local allthings `allthings' format targetformat methodformat nformat ntarget ndgm nmethod numtarget valtarget nummethod valmethod ntrue ntruevalue dgmvar numdgm dgmcreated targetlabels methodcreated
 local allthings `allthings' descriptiontype cidescriptiontype truedescriptiontype estvars sevars dfvars civars pvars truevars simansetuprun
 * need m1, m2 etc t1, t2 etc for siman_reshape
 forvalues me = 1/`nmethod' {
