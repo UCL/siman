@@ -47,7 +47,7 @@ siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(
 * graphs
 siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test1") 
 
-siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) combinegraphoptions(name("swarm_test1", replace)) 
+siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test1", replace)) 
 
 siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test1")
@@ -85,7 +85,7 @@ siman_setup, rep(rep) dgm(dgm) target(1 2) method(A B) estimate(est) se(se) true
 * graphs
 siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test2") 
 
-siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) combinegraphoptions(name("swarm_test2", replace)) 
+siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test2", replace)) 
 
 siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test2")
@@ -118,7 +118,7 @@ siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(
 * graphs
 siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test3") 
 
-siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) combinegraphoptions(name("swarm_test3", replace)) 
+siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test3", replace)) 
 
 cap siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test3")
@@ -139,7 +139,7 @@ siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollypl
 * Target numeric, method missing, true > 1 level (different true values per target)
 use data/simlongESTPM_longE_longM.dta, clear
 replace true=0.5 if estimand=="beta"
-drop method dgm
+drop dgm method
 gen estimand_num = .
 replace estimand_num = 1 if estimand == "beta"
 replace estimand_num = 2 if estimand == "gamma"
@@ -153,7 +153,7 @@ siman_setup, rep(rep) target(estimand) estimate(est) se(se) true(true)
 * graphs
 siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test4") 
 
-cap siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) combinegraphoptions(name("swarm_test4", replace)) 
+cap siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test4", replace)) 
 assert _rc == 498
 * siman swarm can not be run without method as required
 
@@ -168,6 +168,28 @@ cap siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_te
 assert _rc == 498
 * siman bland altman can not be run without method as required
 
+* Target numeric, method numeric, true > 1 level (different true values per target)
+clear all
+prog drop _all
+use data/simlongESTPM_longE_longM.dta, clear
+replace true=0.5 if estimand=="beta"
+drop dgm
+gen estimand_num = .
+replace estimand_num = 1 if estimand == "beta"
+replace estimand_num = 2 if estimand == "gamma"
+drop estimand
+rename estimand_num estimand
+bysort rep estimand: gen repitionindi=_n
+drop if repitionindi>1
+drop repitionindi
+siman_setup, rep(rep) target(estimand) method(method) estimate(est) se(se) true(true)
+
+siman scatter
+siman swarm
+siman zipplot
+siman comparemethodsscatter
+siman blandaltman
+
 
 * now try with missing target
 use data/simlongESTPM_longE_longM.dta, clear
@@ -180,7 +202,7 @@ siman_setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
 * graphs
 siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test5") 
 
-siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) combinegraphoptions(name("swarm_test5", replace)) 
+siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test5", replace)) 
 
 siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test5")
@@ -245,7 +267,7 @@ siman_setup, rep(v1) dgm(theta rho pc k) method(peto g2) estimate(exp) se(var2) 
 * graphs
 siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test7") 
 
-siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) combinegraphoptions(name("swarm_test7", replace)) 
+siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test7", replace)) 
 
 siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("zipplot_test7")

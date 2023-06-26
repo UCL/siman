@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.3 21nov2022}{...}
+{* *! version 1.4 26june2023}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Syntax" "siman_swarm##syntax"}{...}
@@ -60,10 +60,6 @@ example when dgm is defined by more than one variable.  The user is able to use 
 {pstd}
 {p_end}
 {synopt:{opt graphop:tions(string)}}  graph options for the overall graphical display
-
-{pstd}
-{p_end}
-{synopt:{opt combine:graphoptions(string)}}  graph options for combining the constituent graphs, see {help graph combine:graph combine}.
 
 
 {marker description}{...}

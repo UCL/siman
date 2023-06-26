@@ -53,7 +53,9 @@ siman lollyplot
 
 
 * dgm defined by >1 variable
-
+clear all
+prog drop _all
+cd "C:\git\siman\Ella_testing\"
 use data/extendedtestdata_postfile.dta, clear
 
 * remove non-integer values
@@ -73,7 +75,14 @@ siman scatter
 siman scatter if method == "CCA"
 
 siman swarm
-* 1 graph per dgm variable, 1 pannel per dgm level and target, method on y-axis
+* 1 pannel per dgm level(s) and target, method on y-axis
+* for the first pannel in the all-graph display (beta level 1, pmiss level 1, mech level 1, estimand == "effect"), the means per
+* method have a very small difference, visable as follows:
+siman swarm if beta == 1 & pmiss == 1 & mech == 1 & estimand == "effect"
+* FYI:
+* mean method CCA: 0.0025341
+* mean method meanlmp: 0.0021761
+* mean noadj: -0.0034964
 
 siman comparemethodsscatter 
 
