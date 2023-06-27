@@ -205,8 +205,6 @@ forvalues g = 1/`nummethodnew' {
 * the number of dgms to be 1.
 if "`dgm'"=="" local ndgm=1
 
-local byorig = "`by'"
-
 * check if many graphs will be printed out - if so warn the user
 local dgmcount: word count `dgm'
 qui tokenize `dgm'
@@ -228,6 +226,8 @@ if `graphnumcheck' > 15 {
 	di as error "{it: WARNING: `graphnumcheck' graphs will be printed out, consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}}"
 }
 
+* defining 'by'
+local byorig = "`by'"
 if "`byorig'"=="" {
 	if "`dgmcreated'" == "1" local by = "`target'"
 	else local by = "`dgm' `target'"
@@ -243,13 +243,14 @@ if !mi(`"`graphoptions'"') {
 		if !_rc {
 			local namestring = `_namestring'2
 			local name = `"name`namestring'"'
+			local graphoptions: list graphoptions - name
 		}
 }
 
 foreach el in `varlist' {
-	if mi(`"`graphoptions'"') local name2 "name(simanswarm_`el', replace)"
-	qui egen mean`el' = mean(`el'), by (`dgm' `method' `target')
-				
+*	qui egen mean`el' = mean(`el'), by (`dgm' `method' `target')
+	qui egen mean`el' = mean(`el'), by (`by')
+	if mi(`"`name'"') local name "name(simanswarm_`el', replace)"		
 		if "`meanoff'"=="" {
 			local graphname `graphname' `el'
 			local cmd twoway (scatter newidrep `el', ///
@@ -257,7 +258,7 @@ foreach el in `varlist' {
 			(scatter newidrep mean`el', msym(|) msize(huge) mcol(orange) `meangraphoptions')	///
 			, ///
 			by(`by', title("") noxrescale legend(off) `bygraphoptions')	///
-			ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `name2' `graphoptions'
+			ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `name' `graphoptions'
 			}
 			else {
 			local graphname `graphname' `el'
@@ -265,7 +266,7 @@ foreach el in `varlist' {
 			msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `options')	///
 			, ///
 			by(`by', title("") noxrescale legend(off) `bygraphoptions')	///
-			ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `name2' `graphoptions'
+			ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `name' `graphoptions'
 		}
 }
 

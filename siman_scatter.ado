@@ -174,12 +174,13 @@ if !mi(`"`options'"') {
 	cap confirm var `_namestring'2
 		if !_rc {
 			local namestring = `_namestring'2
-			local name2 = `"name`namestring'"'
+			local name = `"name`namestring'"'
+			local options: list options - name
 		}
 }
-else local name2 "name(simanscatter, replace)"
+if mi("`name'") local name "name(simanscatter, replace)"
 	
-twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`byvar', `bygraphoptions') `name2' `options'
+twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`byvar', ixaxes `bygraphoptions') `name' `options'
 
 restore
 
