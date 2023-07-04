@@ -2,3 +2,5 @@
 ~$*.docx
 ~$*.xlsx
 ~$*.pptx
+# Stata temporary backups
+~$*.stswp
