@@ -42,7 +42,7 @@ siman blandaltman if dgm ==1
 siman blandaltman if estimand == 2
 
 siman zipplot
-* 1 pannel per dgm, method and target combination
+* 1 pannel per dgm and method combination
 siman zipplot, by(estimand) 
 siman zipplot, by(method) 
 
