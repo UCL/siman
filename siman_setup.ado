@@ -1,4 +1,5 @@
-*!   version 0.7.9  26june2023
+*!   version 0.8.0  04july2023
+*    version 0.8.0  04july2023   EMZ: true has to be numeric only
 *    version 0.7.9  26june2023   EMZ added methodcreated characteristic
 *    version 0.7.8  06june2023	 EMZ bug fix: numeric target with string labels not displayed in siman describe table (displayed numbers not values)
 *    version 0.7.7  29may2023	 EMZ added option if missing method
@@ -67,6 +68,19 @@ capture confirm variable _scenario
 if !_rc {
     di as error "siman would like to name a variable '_scenario', but that name already exists in your data." _n "Please rename your variable _scenario as something else."
     exit 498
+}
+
+* check that true is a numeric variable/value
+if !mi("`true'") {
+	capture confirm number `true' 
+		if _rc {
+			capture confirm numeric variable `true' 
+				if _rc {
+					di as error "true must be a numeric variable/value in siman."
+					exit 498
+				}
+	
+		}
 }
 		
 * check that the following only have one entry: rep, est, se, df, lci, uci, p, order, true

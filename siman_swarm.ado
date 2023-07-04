@@ -238,7 +238,7 @@ if !mi(`"`graphoptions'"') {
 	tempvar _namestring
 	qui gen `_namestring' = `"`graphoptions'"'
 	qui split `_namestring',  parse(`"name"')
-	local options = `_namestring'1
+	local graphoptions = `_namestring'1
 	cap confirm var `_namestring'2
 		if !_rc {
 			local namestring = `_namestring'2
