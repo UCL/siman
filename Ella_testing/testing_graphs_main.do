@@ -171,17 +171,16 @@ assert _rc == 498
 clear all
 prog drop _all
 use data/simlongESTPM_longE_longM.dta, clear
+* need to alter data set so have 2 values of true corresponding to 2 estimands,
+* and a complete method set for each of these. 
 replace true=0.5 if estimand=="beta"
-drop dgm
 gen estimand_num = .
 replace estimand_num = 1 if estimand == "beta"
 replace estimand_num = 2 if estimand == "gamma"
 drop estimand
+*drop if dgm == 2
 rename estimand_num estimand
-bysort rep estimand: gen repitionindi=_n
-drop if repitionindi>1
-drop repitionindi
-siman_setup, rep(rep) target(estimand) method(method) estimate(est) se(se) true(true)
+siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
 siman scatter
 siman swarm

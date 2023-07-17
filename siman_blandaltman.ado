@@ -1,4 +1,5 @@
-*! version 1.6.6 19june2023
+*! version 1.6.7 11july2023
+*  version 1.6.7 11july2023  EMZ change so that one graph is created for each target level and dgm level combination.
 *  version 1.6.6 19june2023  EMZ small changes to note.
 *  version 1.6.5 13june2023  EMZ methlist fix: can now have flexible reference method e.g. methlist(C A B) for method C as the reference (before only 2 *                            methods in methlist allowed), minor formatting to title and note, setting default norescale.
 *  version 1.6.4 05june2022  EMZ expanded note to include dgm name and level when dgm defined by more than 1 variable
@@ -27,16 +28,17 @@ foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
 
+
 if "`simansetuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
-	}
+}
 
 
 if "`method'"=="" {
 	di as error "The variable 'method' is missing so siman blandaltman can not be created.  Please create a variable in your dataset called method containing the method value(s)."
 	exit 498
-	}
+}
 
 * if estimate and se are missing, give error message as program requires them for the graph(s)
 if mi("`estimate'") | mi("`se'") {
@@ -52,7 +54,7 @@ if `nformat'!=1 {
 	qui siman reshape, longlong
 		foreach thing in `_dta[siman_allthings]' {
 		local `thing' : char _dta[siman_`thing']
-	}
+		}
 }
 
 * if statistics are not specified, run graphs for estimate only, otherwise run for all that are specified
@@ -60,7 +62,7 @@ if "`anything'"=="" local varlist `estimate'
 else foreach thing of local anything {
 	local varelement = "`thing'"
 	local varlist `varlist' `varelement'
-	}
+}
 	
 	
 * if the user has not specified 'if' in the siman blandaltman syntax, but there is one from siman setup then use that 'if'
@@ -76,7 +78,7 @@ capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
 if _rc == 9 {
 	di as error "The 'if' option can not be applied to 'rep' in siman blandaltman.  If you have not specified an 'if' in siman blandaltman, but you specified one in siman setup, then that 'if' will have been applied to siman blandaltman."  
 	exit 498
-	}
+}
 restore
 qui keep if `touseif'
 
@@ -92,7 +94,10 @@ qui keep if `tousein'
 if `nummethod' < 2 {
 	di as error "There are not enough methods to compare, siman blandaltman requires at least 2 methods."
 	exit 498
-	}
+}
+
+* Due to the way that siman ba splits out the methods (e.g. m1 and m2) and then calculates e.g. est_m2 - est_m1
+* the program does not work if there are different true values
 
 
 * Need to know what format method is in (string or numeric) for the below code
@@ -137,7 +142,6 @@ tokenize `"`levels'"'
 	}
 }
 
-
 preserve     
 * keeps estimates data only
 qui drop if `rep'<0
@@ -149,7 +153,7 @@ qui drop if `rep'<0
 					if "`U'" != "" {
 					capture rename `u' `U' 
 					if _rc di as txt "problem with `u'"
-				} 
+					} 
 			}
 		}
 		
@@ -183,7 +187,7 @@ if `methodstringindi'==1 & mi("`methlist'") {
 	qui drop `method'
 	qui rename numericmethod method
 	local method = "method"
-	}
+}
 
 * Comparing each method vs. each other method
 if !mi("`methlist'") local nummethod = `count'
@@ -195,18 +199,19 @@ local nummethodloop = `r(r)'
 
 * If data is not in long-wide format, then reshape for graphs
 qui siman reshape, longwide
+
 * have to do this first to get new number of methods etc
 foreach thing in `_dta[siman_allthings]' {
 	local `thing' : char _dta[siman_`thing']
-	}
+}
 	
 if mi("`methlist'") {		
 		forvalues j = 2/`nummethodloop' {
 			foreach s in `estimate' `se' {
-					qui gen float diff`s'`mlabel`j'' = `s'`j' - `s'1									
-					qui gen float mean`s'`mlabel`j'' = (`s'`j'+`s'1)/2
-							}
-							local j = `j' + 1
+				qui gen float diff`s'`mlabel`j'' = `s'`j' - `s'1									
+				qui gen float mean`s'`mlabel`j'' = (`s'`j'+`s'1)/2
+			}
+			local j = `j' + 1
 		}	
 }
 else {
@@ -215,19 +220,20 @@ else {
 		local c = 2
 		foreach j in `methlisttoloop' {
 			foreach s in `estimate' `se' {
-					qui gen float diff`s'`j' = `s'`j' - `s'`base'									
-					qui gen float mean`s'`j' = (`s'`j'+`s'`base')/2
-					local mlabel1 `base'
-					local mlabel`c' `j'
-							}
-					local c = `c' + 1
+				qui gen float diff`s'`j' = `s'`j' - `s'`base'									
+				qui gen float mean`s'`j' = (`s'`j'+`s'`base')/2
+				local mlabel1 `base'
+				local mlabel`c' `j'
+			}
+			local c = `c' + 1
 		}
-	}
+}
 
 forvalues f = 1/`nummethod' {
 	cap qui drop `estimate'`f'
 	cap qui drop `se'`f'
 }
+
 
 di as text "working...."
 qui reshape long diff`estimate' mean`estimate' diff`se' mean`se', i(`rep' `dgm' `target') j(strmeth) string	
@@ -333,106 +339,120 @@ foreach dgmvar in `dgmbyvar' {
 		}
 	}
 
+
 	qui tab `dgmvar'
 	local n`dgmvar'labels = `r(r)'
+}
 
-	if mi(`"`options'"') {
-		local options mlc(white%1) msym(O) msize(tiny)
-		}
+if mi(`"`options'"') {
+	local options mlc(white%1) msym(O) msize(tiny)
+}
 		
-	local name = "simanba"
+local name = "simanba"
 
-	* Can't tokenize/substr as many "" in the string
-	if !mi(`"`options'"') {
-		tempvar _namestring
-		qui gen `_namestring' = `"`options'"'
-		qui split `_namestring',  parse(`"name"')
-		local options = `_namestring'1
-		cap confirm var `_namestring'2
-		if !_rc {
-			local namestring = `_namestring'2
-			local name = `namestring'
-		}
+* Can't tokenize/substr as many "" in the string
+if !mi(`"`options'"') {
+	tempvar _namestring
+	qui gen `_namestring' = `"`options'"'
+	qui split `_namestring',  parse(`"name"')
+	local options = `_namestring'1
+	cap confirm var `_namestring'2
+	if !_rc {
+		local namestring = `_namestring'2
+		local name = `namestring'
 	}
+}
 	
-	local targetstringindi = 0
-	capture confirm string variable `target'
-	if !_rc local targetstringindi = 1
+local targetstringindi = 0
+capture confirm string variable `target'
+if !_rc local targetstringindi = 1
 	
-	* If target is not missing	
-	if "`valtarget'" != "N/A" {
+
+* make a group for when dgm is defined by >1 variable
+tempvar _group
+qui egen `_group' = group(`dgm'), label lname(grouplevels)
+local group "`_group'"
+qui tab `group'
+local groupnum = `r(r)'
+	
+* give user a warning if lots of graphs will be created
+if "`numtarget'" == "N/A" local numtargetcheck = 1
+else local numtargetcheck = `numtarget'
+if "`groupnum'" == "" local totalgroupnum = 1
+else local totalgroupnum = `groupnum'
+
+local graphnumcheck = `totalgroupnum' * `numtargetcheck'
+if `graphnumcheck' > 15 {
+di as error "{it: WARNING: `graphnumcheck' graphs will be printed out, consider using 'if' option as detailed in {help siman_blandaltman:siman blandaltman}}"
+}
+
+	
+* If target is not missing	
+if "`valtarget'" != "N/A" {
 		
-		* check number of targets in case 'if' syntax has been applied
-		qui tab `target',m
-		local ntargetlabels = `r(r)'
+	* check number of targets in case 'if' syntax has been applied
+	qui tab `target',m
+	local ntargetlabels = `r(r)'
 
-		qui levels `target', local(levels)
-		tokenize `"`levels'"'
-		forvalues e = 1/`ntargetlabels' {
-			local tarlabel`e' = "``e''"
-			if `e'==1 local valtargetloop `tarlabel`e''
-			else if `e'>=2 local valtargetloop `valtargetloop' `tarlabel`e''
-			}
+	qui levels `target', local(levels)
+	tokenize `"`levels'"'
+	forvalues e = 1/`ntargetlabels' {
+		local tarlabel`e' = "``e''"
+		if `e'==1 local valtargetloop `tarlabel`e''
+		else if `e'>=2 local valtargetloop `valtargetloop' `tarlabel`e''
+	}
 		
-		forvalues d = 1/`ndgmvar' {
-			foreach t in `valtargetloop' {
-					foreach el in `varlist' {
+	forvalues d = 1/`groupnum' {
+		foreach t in `valtargetloop' {
+			foreach el in `varlist' {
 
-			* determine if target is numeric or not
-			cap confirm number `t'
-			if _rc local targetstringindi = 1
-	/*		* also check labels as could be numerical data with string labels
-			qui labelsof `target'
-			tokenize `"`r(values)'"'
-			cap confirm number `1'
-			if _rc local targetstringindi = 1
-			if !_rc local targetstringindi = 0 */
+				* determine if target is numeric or not
+				cap confirm number `t'
+				if _rc local targetstringindi = 1
+	/*			* also check labels as could be numerical data with string labels
+				qui labelsof `target'
+				tokenize `"`r(values)'"'
+				cap confirm number `1'
+				if _rc local targetstringindi = 1
+				if !_rc local targetstringindi = 0 */
 			
-			* graph titles
-			if "`el'"=="`estimate'" local eltitle = "`estimate'"
-			else if "`el'"=="`se'" local eltitle = "`se'" 
+				* graph titles
+				if "`el'"=="`estimate'" local eltitle = "`estimate'"
+				else if "`el'"=="`se'" local eltitle = "`se'" 
 			
-			* use target labels if target numeric with string labels
-			if `targetlabels' == 1 local tlab: word `t' of `valtarget'
-			else local tlab `t'
+				* use target labels if target numeric with string labels
+				if `targetlabels' == 1 local tlab: word `t' of `valtarget'
+				else local tlab `t'
+			
+				local dgmlevels`d' : label grouplevels `d'
 
-			if `n`dgmvar'labels' > 1 & ("`by'"=="" | "`by'"=="`dgmvar' `target'") {
-				local bytitle = "`dgmvar': ``dgmvar'dlabel`d'', target: `tlab'"
-				
-				if `dgmlabels' == 1 {						
-					if `targetstringindi' == 1 local byvarlist = `"`dgmvar'==`d' & `target'=="`t'""'
-					else local byvarlist = `"`dgmvar'==`d' & `target'==`t'"'
-				}				
-				else if `dgmlabels' == 0 {						
-					if `targetstringindi' == 1 local byvarlist = `"`dgmvar'== ``dgmvar'dlabel`d'' & `target'=="`t'""'
-					else local byvarlist = `"`dgmvar'== ``dgmvar'dlabel`d'' & `target'==`t'"'
-				}				
-				if `numberdgms' > 1 local byname = "`dgmvar'`d'`tlab'"
-				else local byname = "`d'`tlab'"
-			}
-			else if `n`dgmvar'labels' == 1 & ("`by'"=="" | "`by'"=="`dgmvar' `target'")  {
+				if ("`by'"=="" | "`by'"=="`dgm' `target'") {
+			
+					local bytitle = "`dgm': `dgmlevels`d'', target: `tlab'"
+					
+					if `targetstringindi' == 1 local byvarlist = `"`group'==`d' & `target'=="`t'""'
+					else local byvarlist = `"`group'==`d' & `target'==`t'"'
+			
+					local byname = "`d'`tlab'"
+
+				}
+
+				else if "`by'"=="`dgm'" {
+				local bytitle = "`dgm': `dgmlevels`d''"
+			    local byvarlist = `"`group'==`d'"'
+				local byname = `d'
+				}
+				else if "`by'"=="`target'" {
 				local bytitle = "target: `tlab'"
 				if `targetstringindi' == 1 local byvarlist = `"`target'=="`t'""'
 				else local byvarlist = `"`target'==`t'"'
 				local byname = "`tlab'"
-			}
-			else if "`by'"=="`dgmvar'" {
-				local bytitle = "`dgmvar': ``dgmvar'dlabel`d''"
-				if `dgmlabels' == 1 local byvarlist = `"`dgmvar'==`d'"'
-				else if `dgmlabels' == 0 local byvarlist = `"`dgmvar'==``dgmvar'dlabel`d''"'
-				if `numberdgms' > 1 local byname = `dgmvar'`d'
-				else local byname = `d'
-			}
-			else if "`by'"=="`target'" {
-				local bytitle = "target: `tlab'"
-				if `targetstringindi' == 1 local byvarlist = `"`target'=="`t'""'
-				else local byvarlist = `"`target'==`t'"'
-				local byname = "`tlab'"
-			}
-			else if "`by'"=="`target' `dgmvar'" {
-				di as err "'by' nesting order should be by(dgm target)"
-				exit 198
-			}
+				}
+				else if "`by'"=="`target' `dgm'" {
+					di as err "'by' nesting order should be by(dgm target)"
+					exit 198
+				}
+
 
 			#delimit ;
 				twoway (scatter diff mean if strthing == "`el'" & `byvarlist', `options')
@@ -442,50 +462,51 @@ foreach dgmvar in `dgmbyvar' {
 				name( `name'_`byname'`el', replace)
 				;
 			#delimit cr
-				}
-			}    
-		}   
-	}
-	else {
-			forvalues d = 1/`ndgmvar' {
-					foreach el in `varlist' {
-
-						* graph titles
-						if "`el'"=="`estimate'" local eltitle = "`estimate'"
-						else if "`el'"=="`se'" local eltitle = "`se'" 
-
-						if `n`dgmvar'labels' > 1 & ("`by'"=="" | "`by'"=="`dgmvar'") {
-							local bytitle = "`dgmvar': ``dgmvar'dlabel`d''"
-							if `dgmlabels' == 1 local byvarlist = `"`dgmvar'==`d'"'
-							else if `dgmlabels' == 0 local byvarlist = `"`dgmvar'==``dgmvar'dlabel`d''"'
-							if `numberdgms' > 1 local byname = "`dgmvar'`d'"
-							else local byname = "`d'"
-						}	
-						if `n`dgmvar'labels' > 1 {
-						   #delimit ;
-							twoway (scatter diff mean if strthing == "`el'" & `byvarlist', `options')
-							,
-							xsize(5)
-							by(method, note("Graphs for `eltitle', `bytitle'") iscale(1.1) title("") norescale `bygraphoptions') ///
-							name( `name'_`byname'`el', replace)
-							;
-							#delimit cr
-						}
-						else {
-							#delimit ;
-							twoway (scatter diff mean if strthing == "`el'", `options')
-							,
-							xsize(5)
-							by(method, note("Graphs for `eltitle'") iscale(1.1) title("") norescale `bygraphoptions') ///
-							name( `name'_`el', replace)
-							;
-							#delimit cr
-						}
-			
-				} 
-		}   
-	}
+			}
+		}    
+	}   
 }
+else {
+		forvalues d = 1/`groupnum' {
+			foreach el in `varlist' {
+
+				* graph titles
+				if "`el'"=="`estimate'" local eltitle = "`estimate'"
+				else if "`el'"=="`se'" local eltitle = "`se'" 
+				
+				local dgmlevels`d' : label grouplevels `d'
+
+				if ("`by'"=="" | "`by'"=="`dgmvar'") {
+					local bytitle = "`dgm': `dgmlevels`d''"
+					local byvarlist = `"`group'==`d'"'
+					local byname = `d'
+				}	
+				if `ndgm' > 1 {
+					#delimit ;
+					twoway (scatter diff mean if strthing == "`el'" & `byvarlist', `options')
+					,
+					xsize(5)
+					by(method, note("Graphs for `eltitle', `bytitle'") iscale(1.1) title("") norescale `bygraphoptions') ///
+					name( `name'_`byname'`el', replace)
+					;
+					#delimit cr
+				}
+				else {
+					#delimit ;
+					twoway (scatter diff mean if strthing == "`el'", `options')
+					,
+					xsize(5)
+					by(method, note("Graphs for `eltitle'") iscale(1.1) title("") norescale `bygraphoptions') ///
+					name( `name'_`el', replace)
+					;
+					#delimit cr
+				}
+			
+			} 
+		}   
+}
+
+
 restore 
 
 use `origdata', clear  

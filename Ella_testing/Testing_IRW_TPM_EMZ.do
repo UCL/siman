@@ -68,6 +68,13 @@ foreach var in beta pmiss {
 }
 order beta pmiss
 
+* create a string dgm var as well for testing
+gen betastring = "0"
+replace betastring = "0.25" if beta == 2
+replace betastring = "0.5" if beta == 3
+drop beta
+rename betastring beta
+
 siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(betatrue)
 
 siman scatter
@@ -87,7 +94,7 @@ siman swarm if beta == 1 & pmiss == 1 & mech == 1 & estimand == "effect"
 siman comparemethodsscatter 
 
 siman blandaltman 
-* 1 graph per dgm variable LEVEL, dgm level and target, by method difference
+* 1 graph per combination of dgm levels and target, by method difference
 
 siman zipplot
 
