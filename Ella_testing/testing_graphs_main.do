@@ -43,6 +43,7 @@ which siman_setup
 * target long and string, method long and numeric, true variable 1 level
 use data/simlongESTPM_longE_longM.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+siman comparemethodsscatter if estimand=="beta" & dgm==2
 * graphs
 siman_scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test1", replace) 
 
@@ -217,6 +218,8 @@ siman_lollyplot, gr(xtitle("test x-title") ytitle("test y-title")) name("lollypl
 
 * more than 3 methods for plots, methlist option
 ****************************************************
+clear all
+prog drop _all
 use data/bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
@@ -233,6 +236,8 @@ replace dgm=2 if dupindicator==1
 drop dupindicator
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
 siman_comparemethodsscatter, methlist(3 7) name("cms_test6", replace) 
+siman comparemethodsscatter if target=="beta" & dgm==1
+siman comparemethodsscatter if target=="beta" & dgm==1 & method<=3
 siman_blandaltman, methlist(3 7) name("ba_test6", replace)
 
  

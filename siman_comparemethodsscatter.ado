@@ -1,4 +1,7 @@
-*! version 1.9.9 20june2023
+*! version 1.9.11 18july2023
+*  version 1.9.11 18july2023  EMZ minor formatting bug fixes from IW testing
+*  version 1.9.10 10july2023  EMZ change so that one graph is created for each target level and dgm level combination, with a warning if high number of 
+*                             graphs.
 *  version 1.9.9 20june2023   EMZ fix for when target is missing, update to note.
 *  version 1.9.8 19june2023   EMZ minor bug fix for numeric targets with string labels and long dgm names.  Small format to note.
 *  version 1.9.7 14june2023   TPM systematically went through indenting; moved some twoway options from layer-specific to general
@@ -77,6 +80,40 @@ if mi("`methlist'") & `nummethod' > 5 {
     di as text "Warning: With `nummethod' methods compared, this plot may be too dense to read.  If you find it unreadable, you can choose the methods to compare using -siman comparemethodsscatter-, methlist(a b) where a and b are the methods you are particularly interested to compare."
 }
 
+cap confirm variable `dgm'
+	if !_rc {
+		local numberdgms: word count `dgm'
+		if `numberdgms'==1 {
+	
+			local dgmlabels 0
+	
+			qui tab `dgm'
+			*	local ndgmvar = `r(r)'
+			* Get dgm label values
+			cap qui labelsof `dgm'
+			cap qui ret list
+	
+			if `"`r(labels)'"' != "" {
+			local 0 = `"`r(labels)'"'
+
+				forvalues i = 1/`ndgm' {
+					gettoken `dgm'dlabel`i' 0 : 0, parse(": ")
+					local dgmlabels = 1
+				}
+			}
+			else {
+				local dgmlabels 0
+				qui levels `dgm', local(levels)
+		
+				local loop 1
+					foreach l of local levels {
+						local `dgm'dlabel`loop' `l'
+						local loop = `loop' + 1
+					}
+			}
+		}
+	}
+
 * if the user has not specified 'if' in the siman comparemethods scatter syntax, but there is one from siman setup then use that 'if'
 if ("`if'"=="" & "`ifsetup'"!="") local ifscatterc = `"`ifsetup'"'
 else local ifscatterc = `"`if'"'
@@ -115,6 +152,7 @@ if _rc == 9 {
 }
 restore
 qui keep if `touseif'
+
 
 * if the user has not specified 'in' in the siman comparemethods scatter syntax, but there is one from siman setup then use that 'in'
 if ("`in'"=="" & "`insetup'"!="") local inscatterc = `"`insetup'"'
@@ -406,40 +444,15 @@ if "`dgm'"=="" local dgmvalues=1
 
 if `numberdgms'==1 {
 	
-	local dgmlabels 0
-	
-	qui tab `dgm'
-*	local ndgmvar = `r(r)'
-    * Get dgm label values
-	cap qui labelsof `dgm'
-	cap qui ret list
-	
-	if `"`r(labels)'"' != "" {
-		local 0 = `"`r(labels)'"'
-
-		forvalues i = 1/`ndgm' {
-			gettoken `dgm'dlabel`i' 0 : 0, parse(": ")
-			local dgmlabels = 1
-		}
-	}
-	else {
-		local dgmlabels 0
-		qui levels `dgm', local(levels)
-		
-		local loop 1
-		foreach l of local levels {
-			local `dgm'dlabel`loop' `l'
-			local loop = `loop' + 1
-		}
-	}
-	
 	foreach m in `dgmvalues' {
 		* check if target is numeric with string labels for the looping over target values
-		if `targetlabels' == 1 {
+		*if `targetlabels' == 1 {
+		if "`valtarget'"!= "N/A" {
 			qui levelsof `target', local(targetlevels)
 			local foreachtarget "`targetlevels'"
 		}
-		else if "`valtarget'"!= "N/A" local foreachtarget "`valtarget'"
+		*}
+		*else if "`valtarget'"!= "N/A" local foreachtarget "`valtarget'"
 		else local foreachtarget 1
 		
 		foreach t in `foreachtarget' {
@@ -571,18 +584,41 @@ else if `numberdgms' != 1 {
 			}
 		}
 
-		forvalues d = 1/`ndgmvar' {
 		
-			if `dgmlabels' == 0 local dgmfilter = "`dgmvar' == ``dgmvar'dlabel`d''"
-			else if `dgmlabels' == 1 local dgmfilter = "`dgmvar'==`d'"
+*			if `dgmlabels' == 0 local dgmfilter = "`dgmvar' == ``dgmvar'dlabel`d''"
+*			else if `dgmlabels' == 1 local dgmfilter = "`dgmvar'==`d'"
+			
+			tempvar _group
+			qui egen `_group' = group(`dgmvalues'), label lname(grouplevels)
+			local group "`_group'"
+			qui tab `group'
+			local groupnum = `r(r)'
+			
+			* give user a warning if lots of graphs will be created
+			if "`numtarget'" == "N/A" local numtargetcheck = 1
+			else local numtargetcheck = `numtarget'
+			if "`groupnum'" == "" local totalgroupnum = 1
+			else local totalgroupnum = `groupnum'
+
+			local graphnumcheck = `totalgroupnum' * `numtargetcheck'
+			if `graphnumcheck' > 15 {
+				di as error "{it: WARNING: `graphnumcheck' graphs will be printed out, consider using 'if' option as detailed in {help 		siman_comparemethodsscatter:siman comparemethodsscatter}}"
+			}
 		
+		forvalues d = 1/`groupnum' {
+			    
+			local dgmfilter = "`group'==`d'"
+			local dgmlevels`d' : label grouplevels `d'
+	
 			* check if target is numeric with string labels for the looping over target values
-			if `targetlabels' == 1 {
+			*if `targetlabels' == 1 {
+			if "`valtarget'"!= "N/A" {
 				qui levelsof `target', local(targetlevels)
 				local foreachtarget "`targetlevels'"
 			}
-			else local foreachtarget "`valtarget'"
-			else if "`valtarget'"!= "N/A" local foreachtarget "`valtarget'"
+			*}
+			*else local foreachtarget "`valtarget'"
+			*else if "`valtarget'"!= "N/A" local foreachtarget "`valtarget'"
 			else local foreachtarget 1
 
 			foreach t in `foreachtarget' {
@@ -620,14 +656,14 @@ else if `numberdgms' != 1 {
 									(scatter `estimate'`j' `estimate'`k' ///
 									if `dgmfilter' `iftarget', ms(o) mlc(white%1) msize(tiny)), ///
 									xtit("") ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw ///
-									`by' name(`estimate'`j'`k'`dgmvar'`d'tar`t', replace)
+									`by' name(`estimate'`j'`k'`d'tar`t', replace)
 								twoway (function x, range(`frse') lcolor(gs10)) ///
 									(scatter `se'`j' `se'`k' if ///
 									`dgmfilter' `iftarget', ms(o) mlc(white%1) msize(tiny)), ///
 									xtit("") ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw ///
-									`by' name(`se'`j'`k'`dgmvar'`d'tar`t', replace) 
-								local graphtheta`counter'`counterplus1'`dgmvar'`d'`t' `estimate'`j'`k'`dgmvar'`d'tar`t'
-								local graphse`counter'`counterplus1'`dgmvar'`d'`t'  `se'`j'`k'`dgmvar'`d'tar`t'
+									`by' name(`se'`j'`k'`d'tar`t', replace) 
+								local graphtheta`counter'`counterplus1'`d'`t' `estimate'`j'`k'`d'tar`t'
+								local graphse`counter'`counterplus1'`d'`t'  `se'`j'`k'`d'tar`t'
 								local counterplus1 = `counterplus1' + 1
 								if `counterplus1' > `numbermethod' local counterplus1 = `numbermethod'
 						    }
@@ -647,13 +683,13 @@ else if `numberdgms' != 1 {
 								twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'``j'' `estimate'``k'' ///
 									if `dgmfilter' `iftarget', ms(o) mlc(white%1) msize(tiny) xtit("") ///
 									ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw), ///
-									`by' name(`estimate'``j''``k''`dgmvar'`d'tar`t', replace)
+									`by' name(`estimate'``j''``k''`d'tar`t', replace)
 								twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'``j'' `se'``k'' if ///
 									`dgmfilter' `iftarget', ms(o) mlc(white%1) msize(tiny) xtit("") ///
 									ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw), ///
-									`by' name(`se'``j''``k''`dgmvar'`d'tar`t', replace)
-								local graphtheta`counter'`counterplus1'`dgmvar'`d'`t' `estimate'``j''``k''`dgmvar'`d'tar`t'
-								local graphse`counter'`counterplus1'`dgmvar'`d'`t' `se'``j''``k''`dgmvar'`d'tar`t'
+									`by' name(`se'``j''``k''`d'tar`t', replace)
+								local graphtheta`counter'`counterplus1'`d'`t' `estimate'``j''``k''`d'tar`t'
+								local graphse`counter'`counterplus1'`d'`t' `se'``j''``k''`d'tar`t'
 								local counterplus1 = `counterplus1' + 1		
 								if `counterplus1' > `numbermethod' local counterplus1 = `numbermethod'
 							}
@@ -674,21 +710,21 @@ else if `numberdgms' != 1 {
 				if "`valtarget'"== "N/A" local targetlab
 
 				if `numbermethod'==2 {
-					graph combine `mlabelname1' `graphtheta12`dgmvar'`d'`t'' `graphse12`dgmvar'`d''`t' `mlabelname2', ///
-						title("") note("Graphs for `dgmvar': ``dgmvar'dlabel`d'' `targetlab'") cols(2)	xsize(4) ///
-						name(`name'_`dgmvar'`d'`tlab', replace) `options'
+					graph combine `mlabelname1' `graphtheta12`d'`t'' `graphse12`d''`t' `mlabelname2', ///
+						title("") note("Graphs for `dgmvalues': `dgmlevels`d'' `targetlab'") cols(2)	xsize(4) ///
+						name(`name'_`d'`tlab', replace) `options'
 				}
 				else if `numbermethod'==3 {
-					graph combine `mlabelname1' `graphtheta12`dgmvar'`d'`t'' `graphtheta13`dgmvar'`d'`t'' ///
-						`graphse12`dgmvar'`d'`t'' `mlabelname2' `graphtheta23`dgmvar'`d'`t'' ///
-						`graphse13`dgmvar'`d'`t'' `graphse23`dgmvar'`d'`t'' `mlabelname3', ///
-						title("") note("Graphs for `dgmvar': ``dgmvar'dlabel`d'' `targetlab'") cols(3)	xsize(4) ///
-						name(`name'_`dgmvar'`d'`tlab', replace) `options'
+					graph combine `mlabelname1' `graphtheta12`d'`t'' `graphtheta13`d'`t'' ///
+						`graphse12`d'`t'' `mlabelname2' `graphtheta23`d'`t'' ///
+						`graphse13`d'`t'' `graphse23`d'`t'' `mlabelname3', ///
+						title("") note("Graphs for `dgmvalues': `dgmlevels`d'' `targetlab'") cols(3)	xsize(4) ///
+						name(`name'_`d'`tlab', replace) `options'
 				}
 				else if `numbermethod'>3 {
 					if mi("`anything'") local anything = "est"
-					graph matrix `varlist' if `dgmvar'==`d' `iftarget', `half' `by' title("") note("") ///
-						name(`name'_`anything'`j'`k'`dgmvar'`d'`tlab', replace) `options'
+					graph matrix `varlist' if `group'==`d' `iftarget', `half' `by' title("") note("") ///
+						name(`name'_`anything'`j'`k'`d'`tlab', replace) `options'
 				}
 			}
 		}
