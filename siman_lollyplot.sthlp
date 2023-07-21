@@ -10,7 +10,7 @@
 {title:Title}
 
 {phang}
-{bf:siman lollyplot} {hline 2} Lollipop plot of performance measures data.
+{bf:siman lollyplot} {hline 2} lollipop plot of performance measures data.
 
 
 {marker syntax}{...}
@@ -21,7 +21,8 @@
 [{cmd:,}
 {it:options}]
 
-{pstd}If no performance measures are specified, then the lolliplot graph will be drawn for {it:all} performance measures in the data set.  Alternatively the user can select a subset of performance measures to be graphed using the 
+{pstd}If no performance measures are specified, then the lollipop plot will be drawn for bias, empirical standard error and coverage. 
+Alternatively the user can select a subset of performance measures to be graphed using the 
 performance measures listed {help siman_lollyplot##perfmeas:below}.
 
 {synoptset 20 tabbed}{...}

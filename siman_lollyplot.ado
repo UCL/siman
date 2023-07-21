@@ -57,7 +57,11 @@ if !mi("`wrongpms'") {
 	di as error "Performance measures wrongly specified: `wrongpms'"
 	exit 498
 }
-if "`anything'"=="" local pmlist `allpms'
+if "`anything'"=="" {
+	di as text "Performance measures not specified: defaulting to bias empse cover"
+	local pmlist bias empse cover
+}
+else if "`anything'"=="all" local pmlist `allpms'
 else local pmlist `anything'
 local npm : word count `pmlist'
 
