@@ -1,6 +1,10 @@
+/*
+Testing_IRW_TPM_EMZ.do
+Short testing file for discussion
+*/
 clear all
 prog drop _all
-cd "C:\git\siman\Ella_testing\"
+* cd "C:\git\siman\Ella_testing\" // change to correct directory here
 
 * dgm defined by 1 variable
 use data/simlongESTPM_longE_longM.dta, clear
@@ -18,7 +22,7 @@ rename dgm_str dgm
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(0)
 
 siman scatter
-* 1 pannel per dgm, method and target combination
+* 1 panel per dgm, method and target combination
 siman scatter, by(dgm)
 * by dgm only
 siman scatter if dgm == 1, by(method)
@@ -27,7 +31,7 @@ siman scatter, by(estimand)
 * by estimand only
 
 siman swarm
-* 1 pannel per dgm and target combination, method on y-axis
+* 1 panel per dgm and target combination, method on y-axis
 siman swarm if estimand == 1
 siman swarm if estimand == 2
 
@@ -42,7 +46,7 @@ siman blandaltman if dgm ==1
 siman blandaltman if estimand == 2
 
 siman zipplot
-* 1 pannel per dgm, method and target combination
+* 1 panel per dgm, method and target combination
 siman zipplot, by(estimand) 
 siman zipplot, by(method) 
 
@@ -55,7 +59,6 @@ siman lollyplot
 * dgm defined by >1 variable
 clear all
 prog drop _all
-cd "C:\git\siman\Ella_testing\"
 use data/extendedtestdata_postfile.dta, clear
 
 * remove non-integer values
@@ -78,13 +81,13 @@ rename betastring beta
 siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(betatrue)
 
 siman scatter
-* 1 graph per dgm variable, 1 pannel per dgm level, method and target
+* 1 graph per dgm variable, 1 panel per dgm level, method and target
 siman scatter if method == "CCA"
 
 siman swarm
-* 1 pannel per dgm level(s) and target, method on y-axis
-* for the first pannel in the all-graph display (beta level 1, pmiss level 1, mech level 1, estimand == "effect"), the means per
-* method have a very small difference, visable as follows:
+* 1 panel per dgm level(s) and target, method on y-axis
+* for the first panel in the all-graph display (beta level 1, pmiss level 1, mech level 1, estimand == "effect"), the means per
+* method have a very small difference, visible as follows:
 siman swarm if beta == 1 & pmiss == 1 & mech == 1 & estimand == "effect"
 * FYI:
 * mean method CCA: 0.0025341
@@ -139,7 +142,6 @@ siman trellis bias
 
 * nestloop
 
-cd C:\git\siman\Ella_testing\nestloop\
 use res.dta, clear
 gen theta_new = 1
 replace theta_new = 0 if theta == 0.5

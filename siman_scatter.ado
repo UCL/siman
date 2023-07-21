@@ -184,7 +184,7 @@ twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`byvar', ixaxes
 
 restore
 
-use `origdata', clear
+qui use `origdata', clear
 
 end
 

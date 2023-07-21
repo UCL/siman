@@ -275,7 +275,7 @@ qui `cmd'
 	
 restore
 
-use `origdata', clear
+qui use `origdata', clear
 
 end
 

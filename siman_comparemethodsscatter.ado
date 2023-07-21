@@ -290,7 +290,7 @@ if "`subgraphoptions'" == "" {
 	local subgraphoptions aspect(1) graphregion(margin(zero)) plotregion(margin(zero)) xtit("") legend(off) 
 }
 	
-di as text "Working..."
+di as text "Working....."
 
 if `ifdgm' == 1 {
 	qui drop `dgmtodrop'
@@ -736,6 +736,6 @@ restore
 
 local dgm = "`dgmorig'"
 
-use `origdata', clear
+qui use `origdata', clear
 
 end
