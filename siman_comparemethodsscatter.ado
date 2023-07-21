@@ -602,7 +602,7 @@ else if `numberdgms' != 1 {
 
 			local graphnumcheck = `totalgroupnum' * `numtargetcheck'
 			if `graphnumcheck' > 15 {
-				di as error "{it: WARNING: `graphnumcheck' graphs will be printed out, consider using 'if' option as detailed in {help 		siman_comparemethodsscatter:siman comparemethodsscatter}}"
+				di as error "{it: WARNING: `graphnumcheck' graphs will be created, consider using 'if' option as detailed in {help 		siman_comparemethodsscatter:siman comparemethodsscatter}}"
 			}
 		
 		forvalues d = 1/`groupnum' {

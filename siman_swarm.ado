@@ -205,7 +205,7 @@ forvalues g = 1/`nummethodnew' {
 * the number of dgms to be 1.
 if "`dgm'"=="" local ndgm=1
 
-* check if many graphs will be printed out - if so warn the user
+* check if many graphs will be created - if so warn the user
 local dgmcount: word count `dgm'
 qui tokenize `dgm'
 if `dgmcreated' == 0 {
@@ -223,7 +223,7 @@ if "`totaldgmnum'" == "" local totaldgmnum = 1
 
 local graphnumcheck = `totaldgmnum' * `numtargetcheck'
 if `graphnumcheck' > 15 {
-	di as error "{it: WARNING: `graphnumcheck' graphs will be printed out, consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}}"
+	di as error "{it: WARNING: `graphnumcheck' graphs will be created, consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}}"
 }
 
 * defining 'by'
