@@ -1,5 +1,6 @@
-*! version 0.6.1   05may2023
-* version 0.6.1   05may2023   IW remove unused performancemeasures option
+*! version 0.6.2   21jul2023
+* version 0.6.2   21jul2023   IW: use simsum not simsumv2
+* version 0.6.1   05may2023   IW: remove unused performancemeasures option
 * version 0.6     23dec2022   IW: preserves value label for method
 * version 0.5   11jul2022
 *  version 0.5  11july2022   EMZ changing created variable names to start with _, and adding error catching messages
@@ -15,9 +16,9 @@ version 15
 
 syntax [anything] [if], [PERFONLY replace noTABle]
 
-capture which simsumv2.ado
+capture which simsum.ado
 if _rc == 111 {
-	di as error "simsumv2.ado needs to be installed to run siman_analyse."  
+	di as error "simsum needs to be installed to run siman_analyse. Please use {stata: ssc install simsum}"  
 	exit 498
 	}
 
@@ -175,7 +176,7 @@ if `nformat'==1 {
 		}
 
 
-	qui simsumv2 `estsimsum' `if', true(`true') se(`sesimsum') method(`method') id(`rep') by(`dgm' `target') max(20) `anything' clear mcse
+	qui simsum `estsimsum' `if', true(`true') se(`sesimsum') method(`method') id(`rep') by(`dgm' `target') max(20) `anything' clear mcse gen(_perfmeas)
 
 
 	* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
@@ -220,7 +221,7 @@ foreach v in `valmethod' {
 *if "`ntruevalue'"=="multiple" local estlist `estlist' `true' 
 
 
-qui simsumv2 `estlist' `if', true(`true') se(`selist') id(`rep') by(`dgm' `target') max(20) `anything' clear mcse
+qui simsum `estlist' `if', true(`true') se(`selist') id(`rep') by(`dgm' `target') max(20) `anything' clear mcse gen(_perfmeas)
 
 
 
