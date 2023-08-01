@@ -1,4 +1,5 @@
-*! version 1.7.2   22may2023
+*! version 1.7.3   01aug2023
+*! version 1.7.3   01aug2023  IW added legendoff option; made name work
 *  version 1.7.2   22may2023  IW fixes
 *  version 1.7.1 13mar2023    EMZ added error message
 *  version 1.7   11aug2022    EMZ fixed bug to allow name() in call  
