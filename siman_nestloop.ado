@@ -29,8 +29,8 @@ syntax [anything] [if], ///
 	FRACLegend(real 0.3) FRACGap(real 0) /// control sizing
 	LEGENDGap(real 3) LEGENDColor(string) /// control descriptor graph
 	LEGENDPattern(string) LEGENDSize(string) LEGENDSTYle(string) LEGENDWidth(string) /// control descriptor graph
-	debug /// undocumented
-	LColor(passthru) LPattern(passthru) LSTYle(passthru) LWidth(passthru) * /// ordinary twoway options
+	debug legendoff /// undocumented
+	LColor(passthru) LPattern(passthru) LSTYle(passthru) LWidth(passthru) name(string) * /// ordinary twoway options
 	] 
 
 
@@ -76,6 +76,15 @@ else foreach thing of local anything {
 	local varelement = "*`thing'"
 	local varlist `varlist' `varelement'
 	}
+
+* parse name
+if !mi(`"`name'"') {
+	gettoken name nameopts : name, parse(",")
+}
+else {
+	local name simannestloop
+	local nameopts , replace
+}
 
 preserve
 
@@ -148,7 +157,7 @@ if !mi("`dgmorder'") {
     qui gsort `dgmorder', gen(_scenario)
 }
 else qui gsort `theta' `dgm', gen(_scenario)
-replace _scenario = _scenario-0.5 // TRY THIS
+qui replace _scenario = _scenario-0.5 // TRY THIS
 
 * add in to existing macros
 local scenario _scenario
@@ -413,53 +422,40 @@ if "`yvar'" =="*mean" {
 }
 else local yvar `yvar'
 
-local name = "simannestloop"
-
-* Can't tokenize/substr as many "" in the string
-if !mi(`"`options'"') {
-	tempvar _namestring
-	qui gen `_namestring' = `"`options'"'
-	qui split `_namestring',  parse(`"name"')
-	local options = `_namestring'1
-	cap confirm var `_namestring'2
-	if !_rc {
-		local namestring = `_namestring'2
-		local name = `namestring'
-	}
-}
-
-
 * Took out	c(`connect' ...) from line `yvar' `xvar' `if' options and line `factorlist' `xvar' `if' options
 * as connector making the lines too thick, can not see detail
 
 *di "`yvar'"
 
 * graph
+if "`legendoff'"!="" local addplots // crude way to suppress descriptor graph labels
 #delimit ;
-local cmd graph twoway 
-(line `yvar' `xvar' `if', c(J ...)
-	`lcolor' `lpattern'	`lstyle' `lwidth'
-	)
-(line `factorlist' `xvar' `if', c(J ...)
+if "`legendoff'"=="" local legendcmd 
+	(line `factorlist' `xvar' `if', c(J ...)
 	lcol(`legendcolor' ...)
 	lpattern(`legendpattern' ...)
 	lwidth(`legendwidth' ...)
 	lstyle(`legendstyle' ...)
 	)
+;
+local cmd graph twoway 
+	(line `yvar' `xvar' `if', c(J ...)
+		`lcolor' `lpattern'	`lstyle' `lwidth'
+		)
+	`legendcmd'
 	,
 	legend(order(`legend'))
 	xtitle(`"`xvar'"')
 	ytitle("`yname'") 
 	yla(,nogrid) 
-	`addplots' 
+	`addplots'
 	`options'
-	name(`name'_`yname', replace)
+	name(`name'_`yname' `nameopts')
 ;
 if !mi("`debug'") di as text `"Command is: "' as input `"`cmd'"';
 `cmd';
 global F9 `cmd';
 #delimit cr
-
 
 * don't want to add to existing factorlist etc, so clear macro contents ready for the next performance measure
 
