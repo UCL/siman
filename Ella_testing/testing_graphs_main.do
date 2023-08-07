@@ -237,7 +237,7 @@ drop dupindicator
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
 siman_comparemethodsscatter, methlist(3 7) name("cms_test6", replace) 
 siman comparemethodsscatter if target=="beta" & dgm==1
-siman comparemethodsscatter if target=="beta" & dgm==1 & method<=3
+siman comparemethodsscatter if target=="beta" & dgm==1, methlist(3 7) 
 siman_blandaltman, methlist(3 7) name("ba_test6", replace)
 
  
@@ -245,6 +245,8 @@ siman_blandaltman, methlist(3 7) name("ba_test6", replace)
 **********************************************************
 * DGM defined by multiple variables with multiple levels
 **********************************************************
+clear all
+prog drop _all
 use nestloop/res.dta, clear
 keep v1 theta rho pc k exppeto expg2 var2peto var2g2
 * theta needs to be in integer format for levelsof command to work (doesn't accept non-integer values), so make integer values with non-integer labels

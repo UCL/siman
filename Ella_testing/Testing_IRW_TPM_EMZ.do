@@ -92,6 +92,7 @@ siman swarm if beta == 1 & pmiss == 1 & mech == 1 & estimand == "effect"
 * mean noadj: -0.0034964
 
 siman comparemethodsscatter 
+* one graph per dgm and target combination
 
 siman blandaltman 
 * 1 graph per combination of dgm levels and target, by method difference

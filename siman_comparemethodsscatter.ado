@@ -1,4 +1,5 @@
-*! version 1.9.11 18july2023
+*! version 1.9.12 07aug2023
+*  version 1.9.12 07aug2023   EMZ further minor formatting bug fixes: metlist
 *  version 1.9.11 18july2023  EMZ minor formatting bug fixes from IW testing
 *  version 1.9.10 10july2023  EMZ change so that one graph is created for each target level and dgm level combination, with a warning if high number of 
 *                             graphs.
@@ -18,7 +19,7 @@
 *  version 1.6   01sep2022    EMZ fixed bug to allow scheme to be specified
 *  version 1.5   14july2022   EMZ fixed bug to allow name() in call
 *  version 1.4   30june2022   EMZ minor formatting of axes from IW/TM testing
-* version 1.3   28apr2022    EMZ bug fix for graphing options
+*  version 1.3   28apr2022    EMZ bug fix for graphing options
 *  version 1.2   24mar2022    EMZ changes from IW testing
 *  version 1.1   06dec2021    EMZ changes (bug fix)
 *  version 1.0   25Nov2019    Ella Marley-Zagar, MRC Clinical Trials Unit at UCL. Based on Tim Morris' simulation tutorial do file.
@@ -224,7 +225,8 @@ if `"`r(labels)'"'!="" {
 	forvalues i = 1/`nummethod' {  
 		gettoken mlabel`i' 0 : 0, parse(": ")
 		local methodvalues `methodvalues' `mlabel`i''
-		local mlabelname`i' Method_`i'
+		local methodlabel`i': word `i' of `methodvalues'
+		local mlabelname`i' Method_`methodlabel`i''
 		local methodlabels 1
 	}
 }
@@ -234,16 +236,18 @@ else {
 	if `methodstringindi'==0 {
 		numlist "`levels'"
 		forvalues i = 1/`nummethod' {  
+			local methodlabel`i': word `i' of `levels'
 			local mlabel`i' Method: `i'
-			local mlabelname`i' Method_`i'
+			local mlabelname`i' Method_`methodlabel`i''
 			local methodlabel`i' `i'
 			local methodvalues `methodvalues' `methodlabel`i''
 		}
 	}
 	else if `methodstringindi'==1 {
-		forvalues i = 1/`nummethod' {  
+		forvalues i = 1/`nummethod' { 
+			local methodlabel`i': word `i' of `levels'
 			local mlabel`i' Method: ``i''
-			local mlabelname`i' Method_``i''
+			local mlabelname`i' Method_`methodlabel`i''
 			local methodlabel`i' ``i''
 			local methodvalues `methodvalues' `methodlabel`i''
 		}
@@ -279,7 +283,7 @@ foreach u of var * {
 			if "`U'" != "" {
 			capture rename `u' `U' 
 			if _rc di as txt "problem with `u'"
-		} 
+			} 
 	}
 }
 		
@@ -348,10 +352,11 @@ local c 1
 		local pt1 = 0
 		local pt2 = -0.5
 	}		
-
+	
+	
 	twoway scatteri 0 0 (0) "`mlabel`j''" .5 `pt1' (0) "" -.5 `pt2' (0) "", yscale(range(-1 1)) xscale(range(-1 1)) plotregion(style(none)) ///
 		yscale(lstyle(none)) xscale(lstyle(none)) msym(i) mlabs(vlarge) xlab(none) ylab(none) xtit("") ytit("") legend(off) `nodraw' mlab(black) ///
-		`subgraphoptions' nodraw name(`mlabelname`j'', replace) 
+		`subgraphoptions' nodraw name(`mlabelname`c'', replace) 
 		local c = `c' + 1
 }
 
@@ -585,25 +590,25 @@ else if `numberdgms' != 1 {
 		}
 
 		
-*			if `dgmlabels' == 0 local dgmfilter = "`dgmvar' == ``dgmvar'dlabel`d''"
-*			else if `dgmlabels' == 1 local dgmfilter = "`dgmvar'==`d'"
+*		if `dgmlabels' == 0 local dgmfilter = "`dgmvar' == ``dgmvar'dlabel`d''"
+*		else if `dgmlabels' == 1 local dgmfilter = "`dgmvar'==`d'"
 			
-			tempvar _group
-			qui egen `_group' = group(`dgmvalues'), label lname(grouplevels)
-			local group "`_group'"
-			qui tab `group'
-			local groupnum = `r(r)'
+		tempvar _group
+		qui egen `_group' = group(`dgmvalues'), label lname(grouplevels)
+		local group "`_group'"
+		qui tab `group'
+		local groupnum = `r(r)'
 			
-			* give user a warning if lots of graphs will be created
-			if "`numtarget'" == "N/A" local numtargetcheck = 1
-			else local numtargetcheck = `numtarget'
-			if "`groupnum'" == "" local totalgroupnum = 1
-			else local totalgroupnum = `groupnum'
+		* give user a warning if lots of graphs will be created
+		if "`numtarget'" == "N/A" local numtargetcheck = 1
+		else local numtargetcheck = `numtarget'
+		if "`groupnum'" == "" local totalgroupnum = 1
+		else local totalgroupnum = `groupnum'
 
-			local graphnumcheck = `totalgroupnum' * `numtargetcheck'
-			if `graphnumcheck' > 15 {
-				di as error "{it: WARNING: `graphnumcheck' graphs will be printed out, consider using 'if' option as detailed in {help 		siman_comparemethodsscatter:siman comparemethodsscatter}}"
-			}
+		local graphnumcheck = `totalgroupnum' * `numtargetcheck'
+		if `graphnumcheck' > 15 {
+				di as error "{it: WARNING: `graphnumcheck' graphs will be printed out, consider using the 'if' and/or 'methlist()' option as detailed in {help 		siman_comparemethodsscatter:siman comparemethodsscatter}}"
+		}
 		
 		forvalues d = 1/`groupnum' {
 			    
@@ -710,7 +715,7 @@ else if `numberdgms' != 1 {
 				if "`valtarget'"== "N/A" local targetlab
 
 				if `numbermethod'==2 {
-					graph combine `mlabelname1' `graphtheta12`d'`t'' `graphse12`d''`t' `mlabelname2', ///
+					graph combine `mlabelname1' `graphtheta12`d'`t'' `graphse12`d'`t'' `mlabelname2', ///
 						title("") note("Graphs for `dgmvalues': `dgmlevels`d'' `targetlab'") cols(2)	xsize(4) ///
 						name(`name'_`d'`tlab', replace) `options'
 				}
