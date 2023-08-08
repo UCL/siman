@@ -3,6 +3,8 @@
 * https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/1471-2288-14-129#Sec23
 * 24/01/2022
 
+/*
+* USES SIMSUMV2.ADO (version 0.19 Ian White 8jan2020) to create a data set that nestloop can be run on
 clear all
 prog drop _all
 cd C:\git\siman\Ella_testing\nestloop\
@@ -31,6 +33,11 @@ drop expfem exprem expmh msefem mserem msemh msepeto mseg2 mselimf covfem covrem
 
 siman_setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)
 siman_analyse
+save res2.dta, replace
+*/
+
+use res2.dta, clear
+
 * Recreating Gerta's graph, Figure 2
 siman_nestloop mean, dgmorder(-theta rho -pc tau2 -k) lwidth(vthin ...) 
 siman_nestloop mean, dgmorder(-theta rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("Odds ratio")

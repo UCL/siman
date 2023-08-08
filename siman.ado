@@ -1,5 +1,6 @@
-*! version 0.2     27mar2023
-* version 0.1   28nov2022
+*!version 0.3  08aug2023  EMZ allow analyze spelling
+* version 0.2  27mar2023
+* version 0.1  28nov2022
 prog def siman
 /*
 adapted from network.ado
@@ -17,7 +18,7 @@ foreach thing in `_dta[siman_allthings]' {
 * subcmds requiring data not to be set
 local subcmds0 setup 
 * subcmds requiring data to be set
-local subcmds1 describe analyse table reshape lollyplot zipplot comparemethodsscatter blandaltman swarm scatter nestloop trellis
+local subcmds1 describe analyse analyze table reshape lollyplot zipplot comparemethodsscatter blandaltman swarm scatter nestloop
 * subcmds not minding whether data are set
 local subcmds2 
 * all known subcommands
@@ -50,6 +51,9 @@ if length("`subcmd'")>=3 {
 		}
 	}
 }
+
+* Allow analyze spelling
+if "`subcmd'" == "analyze" local subcmd "analyse"
 
 // Check it's a valid subcommand
 cap which siman_`subcmd'

@@ -30,12 +30,12 @@ foreach thing in `_dta[siman_allthings]' {
 if "`simansetuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
-	}
+}
 
 if "`method'"=="" & "`simansetuprun'"=="1" {
 	di as error "The variable 'method' is missing so siman swarm can not be created.  Please create a variable in your dataset called method containing the method value(s)."
 	exit 498
-	}
+}
 	
 * if both estimate and se are missing, give error message as program requires them for the graph(s)
 if mi("`estimate'") & mi("`se'") {
@@ -51,7 +51,7 @@ if `nformat'!=1 {
 	qui siman reshape, longlong
 		foreach thing in `_dta[siman_allthings]' {
 		local `thing' : char _dta[siman_`thing']
-	}
+		}
 }
 
 * if statistics are not specified, run graphs for estimate only, otherwise run for all that are specified
@@ -104,7 +104,7 @@ local nummethodnew = `r(r)'
 if `nummethodnew' < 2 {
 	di as error "There are not enough methods to compare, siman swarm requires at least 2 methods."
 	exit 498
-	}
+}
 	
 
 * Need to know what format method is in (string or numeric) for the below code
@@ -179,7 +179,7 @@ if `methodstringindi'==1 {
 	drop `method'
 	rename numericmethod method
 	local method = "method"
-	}
+}
 
 di as text "working....."
 
@@ -198,7 +198,7 @@ forvalues g = 1/`nummethodnew' {
 	local ygraphvalue`g' = ceil(`median`g'')
 	local labelvalues `labelvalues' `ygraphvalue`g'' "`mlabel`g''"
 	if `g'==`nummethodnew' label define newidreplab `labelvalues'
-	}
+}
 
 
 * For the purposes of the graphs below, if dgm is missing in the dataset then set
@@ -267,7 +267,7 @@ foreach el in `varlist' {
 			, ///
 			by(`by', title("") noxrescale legend(off) `bygraphoptions')	///
 			ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `name' `graphoptions'
-		}
+			}
 }
 
 

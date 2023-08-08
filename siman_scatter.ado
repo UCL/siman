@@ -1,4 +1,5 @@
-*! version 1.6.4 26june2023
+*! version 1.6.5 08Aug2023
+*  version 1.6.5 08Aug2023   EMZ restricted siman scatter options to be -estimate se- or -se estimate- only
 *  version 1.6.4 26june2023  EMZ minor bug fix for when dgm/method is missing, and tidy up of code.
 *  version 1.6.3 13june2023  EMZ: changed if dgm is defined by > 1 variable, that a pannel for each dgm var/level, target and method is displayed on 1 *							graph, with a warning to the user as per IRW/TPM request
 *  version 1.6.2 06may2023   EMZ agreed updates from IRW/TPM/EMZ joint testing 
@@ -26,7 +27,7 @@ foreach thing in `_dta[siman_allthings]' {
 if "`simansetuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
-	}
+}
 	
 * if estimate or se are missing, give error message as program requires them for the graph(s)
 if mi("`estimate'") | mi("`se'") {
@@ -42,7 +43,7 @@ if `nformat'!=1 {
 	qui siman reshape, longlong
 		foreach thing in `_dta[siman_allthings]' {
 		local `thing' : char _dta[siman_`thing']
-	}
+		}
 }
 
 di as text "working....."
@@ -60,7 +61,7 @@ capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
 if _rc == 9 {
 	di as error "The 'if' option can not be applied to 'rep' in siman scatter. If you have not specified an 'if' in siman scatter, but you specified one in siman setup, then that 'if' will have been applied to siman scatter."  
 	exit 498
-	}
+}
 restore
 qui keep if `touseif'
 
@@ -83,20 +84,24 @@ qui drop if `rep'<0
 					if "`U'" != "" {
 					capture rename `u' `U' 
 					if _rc di as txt "problem with `u'"
-				} 
+					} 
 			}
 		}
 		
 if  substr("`estimate'",strlen("`estimate'"),1)=="_" local estimate = substr("`estimate'", 1, index("`estimate'","_") - 1)
 if  substr("`se'",strlen("`se'"),1)=="_" local se = substr("`se'", 1, index("`se'","_") - 1)
 
-
 * if statistics are not specified, run graphs for estimate and se, otherwise run for alternative order
+local anythingcount: word count `anything'
 if "`anything'"=="" local varlist `estimate' `se'
 else foreach thing of local anything {
 	local varelement = "`thing'"
+		if ("`varelement'"!="`estimate'" & "`varelement'"!="`se'") | "`anythingcount'"!="2" {
+			di as error "only -estimate se- or -se estimate- allowed"
+			exit 498
+		}
 	local varlist `varlist' `varelement'
-	}
+}
 
 * For the purposes of the graphs below, if dgm is missing in the dataset then set
 * the number of dgms to be 1.

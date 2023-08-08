@@ -32,7 +32,7 @@ foreach thing in `_dta[siman_allthings]' {
 if "`simansetuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
-	}
+}
 	
 * if estimate or se are missing, give error message as program requires them for the graph(s)
 if mi("`estimate'") | mi("`se'") {
@@ -44,7 +44,7 @@ if mi("`estimate'") | mi("`se'") {
 if "`true'"=="" {
 	di as error "The variable 'true' is missing so siman zipplot can not be created.  Please create a variable in your dataset called true containing the true value(s) re-run siman setup with true() option specified."
 	exit 498
-	}
+}
 
 tempfile origdata
 qui save `origdata'
@@ -54,7 +54,7 @@ if `nformat'!=1 {
 	qui siman reshape, longlong
 		foreach thing in `_dta[siman_allthings]' {
 		local `thing' : char _dta[siman_`thing']
-	}
+		}
 }
 
 * if the user has not specified 'if' in the siman zipplot syntax, but there is one from siman setup then use that 'if'
@@ -70,7 +70,7 @@ capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
 if _rc == 9 {
 	di as error "The 'if' option can not be applied to 'rep' in siman zipplot. If you have not specified an 'if' in siman zipplot, but you specified one in siman setup, then that 'if' will have been applied to siman zipplot."  
 	exit 498
-	}
+}
 restore
 qui keep if `touseif'
 
@@ -118,12 +118,12 @@ capture confirm variable _lci
 if _rc {
 		qui gen float _lci = `estimate' + (`se'*invnorm(.025))
 		local lci _lci
-		}
+}
 capture confirm variable _uci
 if _rc {
 		qui gen float _uci = `estimate' + (`se'*invnorm(.975))
 		local uci _uci
-	}
+}
 
 if "`method'"!="" {
 
@@ -194,7 +194,6 @@ if _rc {
 					local `true'label`t' ``t''
 					local `true'value`t' `t'
 					qui replace `true'calc = ``true'value`t'' if `true' == ``t''
-					
 					}
 				}
 				
@@ -257,10 +256,10 @@ foreach dgmvar in `dgm' {
 	qui levels `dgmvar', local(levels)
 	tokenize `"`levels'"'
 			
-	forvalues i = 1/`ndgmvar' {  
-		local `dgmvar'dlabel`i' `i'
+		forvalues i = 1/`ndgmvar' {  
+			local `dgmvar'dlabel`i' `i'
 		}
-	  }
+	}
 
 	qui tab `dgmvar'
 	local n`dgmvar'labels = `r(r)'

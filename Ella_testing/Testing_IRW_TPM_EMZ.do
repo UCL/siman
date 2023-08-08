@@ -100,7 +100,8 @@ siman blandaltman
 
 siman zipplot
 
-siman analyse
+* different spelling
+siman analyze
 
 siman lollyplot
 
