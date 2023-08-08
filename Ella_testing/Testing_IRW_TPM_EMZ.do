@@ -17,7 +17,8 @@ rename dgm_str dgm
 
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(0)
 
-siman scatter
+siman scatter est se, name(est_onyaxis)
+siman scatter se est, name(se_onyaxis)
 * 1 pannel per dgm, method and target combination
 siman scatter, by(dgm)
 * by dgm only
