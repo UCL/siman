@@ -18,7 +18,7 @@ syntax [anything] [if], [PERFONLY replace noTABle]
 
 capture which simsum.ado
 if _rc == 111 {
-	di as error "simsum needs to be installed to run siman_analyse. Please use {stata: ssc install simsum}"  
+	di as error "simsum needs to be installed to run siman analyse. Please use {stata: ssc install simsum}"  
 	exit 498
 	}
 vercheck simsum, vermin(2.0.3) quietly
@@ -80,7 +80,7 @@ qui sort `dgm' `target' `method' `touse'
 * The 'if' option will only apply to dgm, target and method.  The 'if' option is not allowed to be used on rep and an error message will be issued if the user tries to do so
 capture by `dgm' `target' `method': assert `touse'==`touse'[_n-1] if _n>1
 if _rc == 9 {
-	di as error "The 'if' option can not be applied to 'rep' in siman_analyse."  
+	di as error "The 'if' option can not be applied to 'rep' in siman analyse."  
 	exit 498
 	}
 restore

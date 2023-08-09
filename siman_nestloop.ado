@@ -54,7 +54,7 @@ if `ndgm'==1 {
 
 * check if siman analyse has been run, if not produce an error message
 if "`simananalyserun'"=="0" | "`simananalyserun'"=="" {
-	di as error "siman analyse has not been run.  Please use siman_analyse first before siman_nestloop."
+	di as error "siman analyse has not been run.  Please use siman analyse first before siman nestloop."
 	exit 498
 	}
 
