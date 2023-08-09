@@ -21,6 +21,7 @@ if _rc == 111 {
 	di as error "simsum needs to be installed to run siman_analyse. Please use {stata: ssc install simsum}"  
 	exit 498
 	}
+vercheck simsum, vermin(2.0.3) quietly
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -291,6 +292,132 @@ end
 
 
 	
-	
+************************** START OF PROGRAM VERCHECK ******************************************	
+
+program define vercheck, sclass
+/* 
+9aug2023 new syntax
+	new options ereturn and return search e/r(progname_version) instead of/as well as file comments
+	example: vercheck simsum, vermin(2.0.4) return
+26jul2023 improved output if ok
+17sep2020
+	better error if called with no args
+	now finds version stated like v2.6.1 - specifically, any word starting v|ver|version then a number
+4sep2019 - ignores comma after version number, better error handling
+8may2015 - bug fix - handles missing values
+11mar2015 - bug fix - didn't search beyond first line
+*/
+version 9.2
+syntax name, [vermin(string) nofatal file ereturn return quietly]
+// Parsing
+local progname `namelist'
+if mi("`progname'") {
+	di as error "Syntax: vercheck progname [vermin [opt]]
+	exit 498
+}
+* default to checking file
+if mi("`file'`ereturn'`return'") local file file
+* If nofatal is set & an error is found, program exits without an error code.
+if missing("`fatal'") local exitcode 498
+if !mi("`quietly'") local ifnoi *
 
 
+// read version (3 ways) and store in local vernum
+// read version from r()
+if !mi("`return'") {
+	cap `progname'
+	if "`r(`progname'_version)'"!="" local vernum = r(`progname'_version)
+	local filename Program `progname'
+}
+// read version from e()
+if !mi("`ereturn'") & mi("`vernum'") {
+	cap `progname'
+	if "`e(`progname'_version)'"!="" local vernum = e(`progname'_version)
+	local filename Program `progname'
+}
+// read version from top of file 
+if !mi("`file'") & mi("`vernum'") {
+	tempname fh
+	qui findfile `progname'.ado // exits with error 601 if not found
+	local filename `r(fn)'
+	file open `fh' using `"`filename'"', read
+	local stop 0
+	while `stop'==0 {
+		file read `fh' line
+		if r(eof) continue, break
+		cap { 
+			// suppress error message if line contains expression like `=`a'' when a is empty
+			// cap { tokenize } achieves this, cap tokenize doesn't!
+			tokenize `"`line'"', parse(", ")
+		}
+		if `"`1'"' != `"*!"' continue
+		while "`1'" != "" {
+			mac shift
+			if inlist("`1'","version","ver","v") {
+				local vernum `2'
+				local stop 1
+				continue, break
+			}
+			if regexm("`1'","^v[0-9]") {
+				local vernum = substr("`1'",2,.)
+				local stop 1
+				continue, break
+			}
+			if regexm("`1'","^ver[0-9]") {
+				local vernum = substr("`1'",4,.)
+				local stop 1
+				continue, break
+			}
+			if regexm("`1'","^version[0-9]") {
+				local vernum = substr("`1'",8,.)
+				local stop 1
+				continue, break
+			}
+		}
+		if "`vernum'"!="" continue, break
+	}
+}
+
+sreturn local version `vernum'
+
+if "`vermin'" != "" {
+	if "`vernum'"=="" local match nover
+	else {
+		local vermin2 = subinstr("`vermin'","."," ",.)
+		local vernum2 = subinstr("`vernum'","."," ",.)
+		local words = max(wordcount("`vermin2'"),wordcount("`vernum2'"))
+		local match equal
+		forvalues i=1/`words' {
+			local wordmin = real(word("`vermin2'",`i'))
+			local wordnum = real(word("`vernum2'",`i'))
+			if `wordmin' == `wordnum' continue
+			if `wordmin' > `wordnum' local match old
+			if `wordmin' < `wordnum' local match new
+			if mi(`wordmin') local match new
+			else if mi(`wordnum') local match old
+			continue, break
+		}
+	}
+	if "`match'"=="old" {
+		di as error `"`filename' is version `vernum' which is older than target `vermin'"'
+		exit `exitcode'
+	}
+	if "`match'"=="nover" {
+		di as error `"`filename' has no version number found"'
+		exit `exitcode'
+	}
+	if "`match'"=="new" {
+		`ifnoi' di as text `"`filename' is version "' as result `"`vernum'"' as text `" which is newer than target"'
+	}
+	if "`match'"=="equal" {
+		`ifnoi' di as text `"`filename' is version "' as result `"`vernum'"' as text `" which is same as target"'
+	}
+}
+else {
+	`ifnoi' if "`vernum'"!="" di as text `"`filename' is version `vernum'"'
+	`ifnoi' else di as text `"`filename' has no version number found"'
+}
+
+end
+
+************************** END OF PROGRAM VERCHECK ******************************************	
