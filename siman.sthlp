@@ -1,5 +1,6 @@
 {smcl}
-{* *! version 0.5 21nov2022}{...}
+{* *! version 0.5 14aug2023}{...}
+{* version 0.4 21nov2022}{...}
 {* version 0.3 13dec2021}{...}
 {* version 0.2 23June2020}{...}  
 {* version 0.1 04June2020}{...}
@@ -41,23 +42,21 @@ Descriptive tables and figures
 
 Graphs of results: Estimates data
 
-{p2col:{bf:{help siman_scatter:siman scatter}}}scatter plot
+{p2col:{bf:{help siman_scatter:siman scatter}}}scatter plot: plots the estimate versus the standard error
 
-{p2col:{bf:{help siman_comparemethodsscatter:siman comparemethodsscatter}}}scatter compare methods plot
+{p2col:{bf:{help siman_comparemethodsscatter:siman comparemethodsscatter}}}scatter compare methods plot: comparison of estimates and standard errors between methods for each repetition
 
-{p2col:{bf:{help siman_swarm:siman swarm}}}swarm plot
+{p2col:{bf:{help siman_swarm:siman swarm}}}swarm plot: either the estimates or the standard error data by method
 
-{p2col:{bf:{help siman_blandaltman:siman blandaltman}}}bland altman plot
+{p2col:{bf:{help siman_blandaltman:siman blandaltman}}}bland altman plot: shows the difference of the estimate compared to the mean of the estimate (or likewise for the  standard error) with a selected method as the comparator
 
-{p2col:{bf:{help siman_zipplot:siman zipplot}}}zipplot plot
+{p2col:{bf:{help siman_zipplot:siman zipplot}}}zipplot plot: shows all of the confidence intervals for each data-generating mechanism and analysis method
 
 Graphs of results: Performance measures data
 
-{p2col:{bf:{help siman_lollyplot:siman lollyplot}}}lollyplot plot
+{p2col:{bf:{help siman_lollyplot:siman lollyplot}}}lollyplot plot: shows the performance for measures of interest with monte Carlo 95% confidence intervals 
 
-{p2col:{bf:{help siman_nestloop:siman nestloop}}}nestloop plot
-
-{p2col:{bf:{help siman_trellis:siman trellis}}}trellis plot
+{p2col:{bf:{help siman_nestloop:siman nestloop}}}nestloop plot: plots the results of a full factorial simulation study
 
 
 {marker description}{...}
@@ -70,7 +69,7 @@ Graphs of results: Performance measures data
 {marker formats}{...}
 {title:Data and formats}
 
-{pstd}There will be 2 data set types that siman will use: 
+{pstd}There are 2 data set types that siman uses: 
 
 {pstd}{bf:Estimates data set.}
 Contains summaries of results from individual repetitions of a simulation experiment.  
@@ -79,7 +78,7 @@ confidence intervals, an indicator of rejection of a hypothesis, and more.
 
 {pstd}{bf:Performance measures data set.}
 Produced by {bf:{help siman_analyse:siman analyse}}  which calculates performance measures including Monte Carlo error, 
-for use with {bf:{help siman_lollyplot:siman lollyplot}}, {bf:{help siman_nestloop:siman nestloop}} and {bf:{help siman_trellis:siman trellis}}.  Please note, this will usually be appended to the estimates data set.
+for use with {bf:{help siman_lollyplot:siman lollyplot}} and {bf:{help siman_nestloop:siman nestloop}}.  Please note, this will usually be appended to the estimates data set.
 
 {pstd}Data held in memory from {bf:{help siman_setup:siman setup}} can be reshaped in to either long-long format or long-wide format using {bf:{help siman_reshape:siman reshape}}.
 
@@ -88,17 +87,27 @@ for use with {bf:{help siman_lollyplot:siman lollyplot}}, {bf:{help siman_nestlo
 {marker examples}{...}
 {title:Examples}
 
+{pstd} An examples estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
 
-{pstd} Use res.rda converted into a Stata dataset from {help siman##ruckerschwarzer:Rücker and Schwarzer, 2014}.  The example Stata dataset
-is available {browse "https://github.com/UCL/simansuite/tree/main/Ella_testing/nestloop/res.dta":here}.
+{phang} To plot the estimates data graphs, first load the data set in to {cmd: siman}.
 
-{phang}. {stata "siman setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)"}
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
 
-{phang}. {stata "siman scatter, by(k)"}
+{phang}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
+
+{phang}. {stata "siman scatter"}
+
+{phang}. {stata "siman swarm"}
+
+{phang}. {stata "siman comparemethodsscatter if dgm == 3"}
+
+{phang}. {stata "siman blandaltman if dgm == 3"}
+
+{phang}. {stata "siman zipplot"}
+
+{pstd} Then create performance measures:
 
 {phang}. {stata "siman analyse"}
-
-{phang}. {stata `"siman nestloop mean, dgmorder(-theta rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("Odds ratio")"'}
 
 
 {title:Details}{marker details}
@@ -113,10 +122,6 @@ is available {browse "https://github.com/UCL/simansuite/tree/main/Ella_testing/n
 Using simulation studies to evaluate statistical methods.
 Statistics in Medicine 2019; 38: 2074-2102.
 {browse "https://onlinelibrary.wiley.com/doi/10.1002/sim.8086"}
-
-{phang}{marker ruckerschwarzer}Rücker G, Schwarzer G. 
-Presenting simulation results in a nested loop plot. BMC Med Res Methodol 14, 129 (2014). 
-{browse "https://doi.org/10.1186/1471-2288-14-129"}
 
 
 {title:Authors and updates}{marker updates}
