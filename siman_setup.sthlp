@@ -268,11 +268,13 @@ estimand, with labels {it:beta} and {it:gamma}) and 2 methods (with labels {it:1
 
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_wideE_wideM4.dta, clear"}
 
-{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(1 2) estimate(est) se(se) true(true) order(method)"}
+{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) order(method)"}
 
-{phang}Note the dataset is auto-reshaped to long-wide format by {cmd:siman setup}.
+{phang}Note that the data labels are {bf:estA_beta} etc and so the method labels need to be inputted with the separator underscores in {bf:method()}.  
 
 {phang}The method labels appear before the target labels in the wide-wide dataset so {cmd:order(method)} is entered.
+
+{phang} Also note that the dataset is auto-reshaped to long-wide format by {cmd:siman setup}.
 
 
 {pstd}Now to illustrate the original input data in format 3 (long-wide), the long-long data set 
@@ -308,7 +310,7 @@ will be reshaped before {cmd: siman setup} is run.
 
 {phang}Now the input data is in wide-long format, so {cmd: siman setup} will be as follows.
 
-{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(method) estimate(est) se(se)"}
+{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(method) estimate(est) se(se) true(true)"}
 
 {phang}Note this dataset is auto-reshaped to long-wide format by {cmd: siman setup}. 
 
