@@ -1,4 +1,5 @@
-*! version 1.11    05may2023
+*! version 1.12    14aug2023
+* version 1.12    14aug2023   IW changed to fast graph without graph combine; works for one or multiple dgmvars
 * version 1.11    05may2023   IW add "DGM=" to subtitles and "method" as legend title
 * version 1.10    08mar2023    
 *							added warning if multiple targets overlaid
@@ -37,7 +38,8 @@ version 15
 
 syntax [anything] [if] [, BYGRaphoptions(string) LABFormat(string) debug Moptions(string) ///
 	col(passthru) noCOMBine /// combined-graph options
-	name(passthru) refpower(real 80) * /// final-graph options
+	name(string) refpower(real 80) * /// final-graph options
+	dgmwidth(int 30) pmwidth(int 24) /// undocumented options
 	]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -65,7 +67,11 @@ else if "`anything'"=="all" local pmlist `allpms'
 else local pmlist `anything'
 local npm : word count `pmlist'
 
+* defaults
 if !mi("`debug'") local dicmd dicmd
+if mi("`name'") local name simanlolly
+
+*** END OF PARSING ***
 
 preserve   
 	
@@ -96,12 +102,6 @@ if _rc == 9 {
 	}
 
 qui keep if `touseif'
-
-* issue warning if multiple targets are in data
-if !mi("`target'") {
-	cap assert `target'==`target'[1]
-	if _rc di as text "Your data have multiple targets: one graph will be drawn for each target"
-}
 
 * take out underscores at the end of variable names if there are any
 foreach u of var * {
@@ -158,8 +158,9 @@ qui gen `r' = ")"
 * If method is a string variable, need to encode it to numeric format for graphs 
 capture confirm string variable `method'
 if !_rc {
-	encode `method', generate(numericmethod)
-	local method numericmethod // so that all remaining code handles both cases
+	rename `method' `method'0
+	encode `method'0, generate(`method')
+	drop `method'0
 }
 
 * find levels of method
@@ -174,15 +175,6 @@ if `dgmcreated' == 1 {
 	local ndgm=1
 }
 
-* for graphs
-qui levelsof _pm if _perfmeascode=="empse"
-qui assert `:word count `r(levels)''==1
-local listfive = "`r(levels)'" 
-qui levelsof _pm if _perfmeascode=="rmse"
-qui cap assert `:word count `r(levels)''==1
-if _rc local normse = 1
-local listeight = "`r(levels)'" 
-
 * only keep the performance measures that the user has specified (or keep all if the user has not specified any) and only create lollyplot graphs for these.
 qui gen tokeep = 0
 foreach pm of local pmlist {
@@ -193,9 +185,6 @@ qui drop if tokeep == 0
 qui drop tokeep
 
 qui levelsof _pm, local(pmlevels)
-
-if mi(`normse') local ifplot "`listfive',`listeight'"
-else local ifplot "`listfive'"
 
 di as text "working...."
 
@@ -214,37 +203,71 @@ foreach j of local methodlevels {
 		// don't use local order, which is a siman setting after reshape
 	}
 
-* create DGM graph title
-qui maketitlevar `dgm'
-local dgmtitlevars = r(newvars)
+* handle targets
+if !mi("`target'") {
+	qui levelsof `target', local(targetlevels) clean
+	local ntargetlevels = r(r)
+}
+else {
+	local target `""null""'
+	local targetlevels null
+	local ntargetlevels 0
+}
+if `ntargetlevels'>1 di as text "Your data have multiple targets: one graph will be drawn for each target"
+
+* handle DGMs
+local ndgmvars : word count `dgm'
+if `ndgmvars'>1 {
+	tempvar dgmgroup 
+	egen `dgmgroup' = group(`dgm'), label
+	local varname novarname
+}
+else local dgmgroup `dgm'
+qui maketitlevar `dgmgroup', `varname'
+local dgmtitlevar = r(newvars)
+qui levelsof `dgmtitlevar', local(dgmnames)
+
+local ndgmlevels = r(r)
+padding `dgmnames', width(`dgmwidth')
+local titlepadded = s(titlepadded)
+if `ndgmvars'>1 local titlepadded `"`"`dgm'"' `"`titlepadded'"'"'
+
+* create PM graph title for left
+qui levelsof _perfmeascode, local(pmlevels)
+padding `pmlevels', width(`pmwidth') reverse
+local ytitlepadded = s(titlepadded)
 
 * create graph
-qui levelsof `dgmtitlevars', local(dgmnames) // probably doesn't work with multiple dgmvars
-padding `dgmnames', width(30)
-local titlepadded = s(titlepadded)
-qui levelsof _perfmeascode, local(pmlevels)
-padding `pmlevels', width(24) reverse
-local ytitlepadded = s(titlepadded)
-qui levelsof `target', local(targetlevels) clean
 foreach thistarget of local targetlevels {
-	if !mi("`debug'") di as input `"Drawing graph for `target'==`thistarget'"'
+	if `ntargetlevels'>0 {
+		local targetcond `target'=="`thistarget'"
+		local note `target'=`thistarget'
+		if !mi("`debug'") di as input `"Drawing graph for `targetcond'"'
+	}
+	else {
+		local targetcond 1
+		local note
+		if !mi("`debug'") di as input `"Drawing graph"'
+	}
 	local cmd twoway 
 	local i 1
 	local order
 	foreach thismethod of local methodlevels {
+		local methtargetcond `method'==`thismethod' & `targetcond'
 		local order `order' `=4*`i'-3' "`method'=`thismethod'"
-		local cmd `cmd' scatter `method' `estimate' if `method'==`thismethod' & `target'=="`thistarget'", mcol("scheme p`i'") ||
-		local cmd `cmd' scatter `method' `lci' if `method'==`thismethod' & `target'=="`thistarget'", msym(i) mlab(`l') mlabpos(0) mlabcol("scheme p`i'") ||
-		local cmd `cmd' scatter `method' `uci' if `method'==`thismethod' & `target'=="`thistarget'", msym(i) mlab(`r') mlabpos(0) mlabcol("scheme p`i'") ||
-		local cmd `cmd' rspike `estimate' `ref' `method' if `method'==`thismethod' & `target'=="`thistarget'", horiz lcol("scheme p`i'") ||
+		local cmd `cmd' scatter `method' `estimate' if `methtargetcond', mcol("scheme p`i'") ||
+		local cmd `cmd' scatter `method' `lci' if `methtargetcond', msym(i) mlab(`l') mlabpos(0) mlabcol("scheme p`i'") ||
+		local cmd `cmd' scatter `method' `uci' if `methtargetcond', msym(i) mlab(`r') mlabpos(0) mlabcol("scheme p`i'") ||
+		local cmd `cmd' rspike `estimate' `ref' `method' if `methtargetcond', horiz lcol("scheme p`i'") ||
 		local ++i
 	}
-	local cmd `cmd' || scatter `method' `ref' if `target'=="`thistarget'", msym(i) c(l) col(gray) lpattern(dash)
-	local cmd `cmd' , by(_perfmeascode `dgm', note("") col(2) xrescale legend(order(1 5)) title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions') 
+	local cmd `cmd' scatter `method' `ref' if `targetcond', msym(i) c(l) col(gray) lpattern(dash)
+	local cmd `cmd' , by(_perfmeascode `dgm', note(`"`note'"') col(`ndgmlevels') xrescale legend(order(1 5)) title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions') 
 	local cmd `cmd' subtitle("") ylab(none) 
-	local cmd `cmd' ytitle("`ytitlepadded'", size(medium)) yscale(reverse)
+	local cmd `cmd' ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse)
 	local cmd `cmd' legend(order(`order'))
-	local cmd `cmd' name(`thistarget'_fastlolly2, replace)
+	if `ntargetlevels'<=1 local cmd `cmd' name(`name', replace)
+	else local cmd `cmd' name(`name'_`thistarget', replace)
 	local cmd `cmd' `options'
 	if !mi("`debug'") di as input `"Graph command is `cmd'"'
 	global F9 `cmd'
@@ -261,7 +284,7 @@ Create a string variable with values "varname=value", for graphs
 IW 5may2023
 */
 prog def maketitlevar, rclass
-syntax varlist, [suffix(string)]
+syntax varlist, [suffix(string) novarname]
 if mi("`suffix'") local suffix title
 foreach var of local varlist {
 	qui {
@@ -281,7 +304,7 @@ foreach var of local varlist {
 			}
 		}
 		if _rc di as error "maketitlevar: something went wrong"
-		replace `var'`suffix' = "`var'="+`var'`suffix' if !mi(`var')
+		if mi("`varname'") replace `var'`suffix' = "`var'="+`var'`suffix' if !mi(`var')
 	}
 	di as text "Created " as result "`var'`suffix'" as text " from " as result "`source'" as text " variable " as result "`var'"
 	local newvars `newvars' `var'`suffix'
@@ -301,7 +324,11 @@ foreach dgm in `anything' {
 foreach dgm in `anything' {
 	local dgml : _length "`dgm'"
 	local nspaces = round((`width'/`ndgm'-`dgml')/`spacel'/2,1)
-	local padding : display _dup(`nspaces') " "
+	if `nspaces'<0 {
+		di as error `"Error in subroutine padding: "`dgm'" too long"'
+		local padding
+	}
+	else local padding : display _dup(`nspaces') " "
 	if mi("`reverse'") local titlepadded = `"`titlepadded'`padding'`dgm'`padding'"'
 	else local titlepadded = `"`padding'`dgm'`padding'`titlepadded'"'
 }
