@@ -1,4 +1,11 @@
-*! version 1.7.3   01aug2023
+/*
+I don't think the if's are needed (check)
+The yvars are just PMs but seem mis-coded
+Need to nest the descriptor graph location within the target and PM loops - clean up structure 
+Maybe stagger will then work
+*/
+*! version 1.8   14aug2023
+* version 1.8   14aug2023	  IW extended lines to include last scenario; reduced default PMs; range correctly allows for all methods
 * version 1.7.3    01aug2023  IW added legendoff option; made name() work
 *  version 1.7.2   22may2023  IW fixes
 *  version 1.7.1 13mar2023    EMZ added error message
@@ -30,7 +37,7 @@ syntax [anything] [if], ///
 	FRACLegend(real 0.3) FRACGap(real 0) /// control sizing
 	LEGENDGap(real 3) LEGENDColor(string) /// control descriptor graph
 	LEGENDPattern(string) LEGENDSize(string) LEGENDSTYle(string) LEGENDWidth(string) /// control descriptor graph
-	debug legendoff /// undocumented
+	debug pause legendoff /// undocumented
 	LColor(passthru) LPattern(passthru) LSTYle(passthru) LWidth(passthru) name(string) * /// ordinary twoway options
 	] 
 
@@ -68,12 +75,11 @@ if !mi("`wrongpms'") {
 	
 * if performance measures are not specified, run graphs for all of them
 if "`anything'"=="" {
-	qui levelsof _perfmeascode, local(lablevelscode)
-		foreach lablevelc of local lablevelscode {
-			local varlist `varlist' *`lablevelc'
-		}
+	di as text "Performance measures not specified: defaulting to bias empse cover"
+	local anything bias empse cover
 }
-else foreach thing of local anything {
+else if "`anything'"=="all" local anything `allpms'
+foreach thing of local anything {
 	local varelement = "*`thing'"
 	local varlist `varlist' `varelement'
 	}
@@ -86,6 +92,7 @@ else {
 	local name simannestloop
 	local nameopts , replace
 }
+*** END OF PARSING ***
 
 preserve
 
@@ -157,8 +164,15 @@ if !_rc {
 if !mi("`dgmorder'") {
     qui gsort `dgmorder', gen(_scenario)
 }
-else qui gsort `theta' `dgm', gen(_scenario)
-qui replace _scenario = _scenario-0.5 // TRY THIS
+else qui gsort `true' `dgm', gen(_scenario)
+summ _scenario, meanonly
+local nscenarios = r(max)
+tempvar new
+qui expand 2 if _scenario==`nscenarios', gen(`new')
+qui replace _scenario=_scenario+1 if `new'
+drop `new'
+qui replace _scenario = _scenario-0.5
+label var _scenario "Scenario"
 
 * add in to existing macros
 local scenario _scenario
@@ -284,6 +298,7 @@ if mi("`legendcolor'") local legendcolor gs4
 if mi("`legendpattern'") local legendpattern solid
 if mi("`legendsize'") local legendsize vsmall
 
+* unab varlist : `varlist' // makes it worse
 local nvars : word count `varlist'
 local xvar :  word `nvars' of `varlist'
 local yvars : list varlist - xvar
@@ -293,7 +308,8 @@ if `nyvars'==1 & `stagger'>0 {
 	local stagger 0
 }
 
-* If true has been enetered as a single number, create a variable to be used in the graphs
+
+* If true has been entered as a single number, create a variable to be used in the graphs
 capture confirm number `true'
 		if !_rc {
 			qui gen true = `true'
@@ -308,13 +324,14 @@ qui save `dataforgraph'
 	
 qui keep `yvar' `xvar' `dgm' `true' `target' // IW 22may2023
 
-
-* range of upper part
+* range of upper part - SHOULD DO THIS BY PM AND ESTIMAND
 local min .
 local max .
-summ `yvar' `if', meanonly
-local min=min(`min',r(min))
-local max=max(`max',r(max))
+foreach thisyvar of varlist `yvar' {
+	summ `thisyvar' `if', meanonly
+	local min=min(`min',r(min))
+	local max=max(`max',r(max))
+}
 
 
 * resolve varlists in descriptors
@@ -342,6 +359,7 @@ local fracsum = `fraclegend' + `fracgap'
 local lmin = (`min'-`fracsum'*`max') / (1-`fracsum')
 local lmax = `min' - `fracgap'*(`max'-`lmin')
 local step = (`lmax'-`lmin') / ((`legendgap'+1)*`ndescriptors')
+if !mi("`debug'") di "Descriptor graph: lmax=`lmax', lmin=`lmin', step=`step'"
 local j 0
 foreach var of local descriptors2 {
 	if substr("`var'",1,2)=="c." {
@@ -418,7 +436,7 @@ forvalues i=1/`nmethodlabels' {
 	}
 	
 if "`yvar'" =="*mean" {
-    local legend `legend' `nmethodlabelsplus1' "True theta" 
+    local legend `legend' `nmethodlabelsplus1' "True" 
 	local yvar `yvar' `true'
 }
 else local yvar `yvar'
@@ -428,35 +446,45 @@ else local yvar `yvar'
 
 *di "`yvar'"
 
+* sort out targets
+if mi("`target'") {
+	local target _null
+}
+qui levelsof `target', local(targetlist)
+
 * graph
 if "`legendoff'"!="" local addplots // crude way to suppress descriptor graph labels
-#delimit ;
-if "`legendoff'"=="" local legendcmd 
-	(line `factorlist' `xvar' `if', c(J ...)
-	lcol(`legendcolor' ...)
-	lpattern(`legendpattern' ...)
-	lwidth(`legendwidth' ...)
-	lstyle(`legendstyle' ...)
+if "`legendoff'"=="" local legendcmd ///
+	(line `factorlist' `xvar' `if', c(J ...) ///
+	lcol(`legendcolor' ...)			///
+	lpattern(`legendpattern' ...)	///	
+	lwidth(`legendwidth' ...)		///
+	lstyle(`legendstyle' ...)		///
 	)
-;
-local cmd graph twoway 
-	(line `yvar' `xvar' `if', c(J ...)
-		`lcolor' `lpattern'	`lstyle' `lwidth'
-		)
-	`legendcmd'
-	,
-	legend(order(`legend'))
-	xtitle(`"`xvar'"')
-	ytitle("`yname'") 
-	yla(,nogrid) 
-	`addplots'
-	`options'
-	name(`name'_`yname' `nameopts')
-;
-if !mi("`debug'") di as text `"Command is: "' as input `"`cmd'"';
-`cmd';
-global F9 `cmd';
-#delimit cr
+foreach thistarget of local targetlist {
+	if "`target'"!="_null" {
+		local note note(`target'=`thistarget')
+		local targetname _`thistarget'
+	}
+	if !mi("`debug'") di as input "Drawing graph for `target'==`thistarget'"
+	local cmd graph twoway 												///
+		(line `yvar' `xvar' if `target'=="`thistarget'", c(J ...)		///
+			`lcolor' `lpattern'	`lstyle' `lwidth'						///
+			)															///
+		`legendcmd'														///
+		,																///
+		legend(order(`legend'))											///
+		ytitle("`yname'") 												///
+		xla(1/`nscenarios') yla(,nogrid) 								///
+		`addplots'														///
+		name(`name'`targetname'_`yname' `nameopts')						///
+		`note'															///
+		`options'
+	global F9 `cmd'
+	if !mi("`debug'") di as text `"Command is: "' as input `"`cmd'"'
+	if !mi("`pause'") pause
+	`cmd'
+}
 
 * don't want to add to existing factorlist etc, so clear macro contents ready for the next performance measure
 
