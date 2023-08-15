@@ -29,15 +29,14 @@
 
 {pstd}
 {p_end}
-{synopt:{opt if/in}}  The user can specify {it:if} and {it:in} within the siman swarm syntax. If they do not, but have already specified 
+{synopt:{opt if/in}}  The user can specify {it:if} and {it:in} within the {bf:siman swarm} syntax. If they do not, but have already specified 
 an {it:if/in} during {help siman_setup:siman setup}, then the {it:if/in} from {help siman_setup:siman setup} will be used.
 The {it:if} option will only apply to {bf:dgm}, {bf:target} and {bf:method}.  The {it:if} option is not allowed to be used on 
 {bf:repetition} and an error message will be issued if the user tries to do so.
 
 {pstd}
 {p_end}
-{synopt:{opt by(string)}}  specifies the nesting of the variables, only {bf:by(dgm)} is allowed for {cmd: siman swarm} for 
-example when dgm is defined by more than one variable.  The user is able to use the {it:if} statement to filter on target.
+{synopt:{opt by(string)}}  specifies the nesting of the variables, with the default being {bf:by(dgm target)} with method on the y-axis. 
 
 {syntab:Graph options}
 {pstd}
@@ -71,7 +70,7 @@ the points, with sample means in the middle. The {cmd: siman swarm} graphs help 
 in particular, to look for outliers in the data.
 
 {pstd}
-Please note that {help siman_setup:siman setup} needs to be run first before siman swarm.  If the data is not already in long-long format then it will be reshaped to this format to create the graphs 
+Please note that {help siman_setup:siman setup} needs to be run first before {cmd:siman swarm}.  If the data is not already in long-long format then it will be reshaped to this format to create the graphs 
 (see {help siman_reshape:siman reshape} for further details on data 
 format types and the reshape command).
 
@@ -91,9 +90,17 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {marker examples}{...}
 {title:Examples}
 
-{pstd}siman swarm, meanoff scheme(s1color) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title"))
+{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
 
-{pstd}siman swarm, scheme(economist) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title") xtitle("test x-title"))
+{phang} To plot the scatter graph, first load the data set in to {cmd: siman}.
+
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
+
+{phang}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
+
+{pstd}. {stata `"siman swarm, meanoff scheme(s1color) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title"))"'}
+
+{pstd}. {stata `"siman swarm, scheme(economist) bygraphoptions(title("My swarm plot")) graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm", replace))"'}
 
 {marker authors}{...}
 {title:Authors}

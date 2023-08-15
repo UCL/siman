@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.2 21nov2022}{...}
+{* *! version 1.3 15aug2023}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_scatter##syntax"}{...}
 {viewerjumpto "Description" "siman_scatter##description"}{...}
@@ -15,11 +15,11 @@
 {title:Syntax}
 
 {p 8 17 2}
-{cmdab:siman scatter} [estimate|se] {ifin}
+{cmdab:siman scatter} [{it:estimands}] {ifin}
 [{cmd:,}
 {it:options}]
 
-{pstd}If no variables are specified, then the scatter graph will be drawn for {it:estimate vs se}.  Alternatively the user can select {it:se vs estimate}.
+{pstd}If no variables are specified, then the scatter graph will be drawn for the {it:estimands:} {it:estimate vs se}.  Alternatively the user can select {it:se vs estimate} by typing {bf:siman scatter,} {it:se estimate}.
 
 {synoptset 20 tabbed}{...}
 {synopthdr}
@@ -66,7 +66,15 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {marker example}{...}
 {title:Example}
 
-{pstd}siman scatter, ytitle("test y-title") xtitle("test x-title") scheme(s2mono) by(dgm) bygraphoptions(title("main-title")) 
+{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
+
+{phang} To plot the scatter graph, first load the data set in to {cmd: siman}.
+
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
+
+{phang}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
+
+{phang}. {stata `"siman scatter, ytitle("test y-title") xtitle("test x-title") scheme(s2mono) by(dgm) bygraphoptions(title("main-title"))"'}
 
 {marker authors}{...}
 {title:Authors}

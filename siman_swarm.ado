@@ -1,4 +1,5 @@
-*! version 1.9.3 26june2023
+*! version 1.9.4 15aug2023
+*  version 1.9.4 15aug2023    EMZ only allow estimate or se to be specified for siman swarm
 *  version 1.9.3 26june2023   EMZ change: means are created with egen 'by' option.  Removed combinegraphoptions, cody tidy up.
 *  version 1.9.2 19june2023   EMZ change so that all dgm/target combinations appear on 1 graph when dgm defined by >1 variable with a warning.
 *  version 1.9.1 12june2023   EMZ minor bug fix to note()
@@ -54,13 +55,18 @@ if `nformat'!=1 {
 		}
 }
 
-* if statistics are not specified, run graphs for estimate only, otherwise run for all that are specified
+* if statistics are not specified, run graphs for estimate only
+* only allow estimate or se to be specified for siman swarm
+local anythingcount: word count `anything'
 if "`anything'"=="" local varlist `estimate'
 else foreach thing of local anything {
 	local varelement = "`thing'"
+		if ("`varelement'"!="`estimate'" & "`varelement'"!="`se'") | "`anythingcount'"!="1" {
+			di as error "only -estimate- or -se- allowed"
+			exit 498
+		}
 	local varlist `varlist' `varelement'
 }
-
 
 * if the user has not specified 'if' in the siman swarm syntax, but there is one from siman setup then use that 'if'
 if ("`if'"=="" & "`ifsetup'"!="") local ifswarm = `"`ifsetup'"'
@@ -223,7 +229,7 @@ if "`totaldgmnum'" == "" local totaldgmnum = 1
 
 local graphnumcheck = `totaldgmnum' * `numtargetcheck'
 if `graphnumcheck' > 15 {
-	di as error "{it: WARNING: `graphnumcheck' graphs will be printed out, consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}}"
+	di as error "{it: WARNING: `graphnumcheck' panels will be printed out, consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}}"
 }
 
 * defining 'by'
@@ -262,7 +268,7 @@ foreach el in `varlist' {
 			}
 			else {
 			local graphname `graphname' `el'
-			local cmd twoway (scatter newidrep`el', ///
+			local cmd twoway (scatter newidrep `el', ///
 			msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `options')	///
 			, ///
 			by(`by', title("") noxrescale legend(off) `bygraphoptions')	///

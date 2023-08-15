@@ -87,7 +87,7 @@ for use with {bf:{help siman_lollyplot:siman lollyplot}} and {bf:{help siman_nes
 {marker examples}{...}
 {title:Examples}
 
-{pstd} An examples estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
+{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
 
 {phang} To plot the estimates data graphs, first load the data set in to {cmd: siman}.
 
