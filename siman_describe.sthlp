@@ -59,7 +59,7 @@ For clarity the resulting {bf:target} and {bf:method} format will also be listed
 The number of {bf:dgm(s)}/number of variables that {bf:dgm} is defined by and the total number of {bf:dgm} levels will be displayed.
 
 {pstd}
-{cmd:siman describe} will also list the {bf:estimate}, {bf:se}, {bf:df}, {bf:ci}, {bf:p} and {bf:true} variable names if applicable, and whether estimates are contained in the dataset.  
+{cmd:siman describe} will also list the {bf:estimate}, {bf:se}, {bf:df}, {bf:ci}, and {bf:true} variable names if applicable, and whether estimates are contained in the dataset.  
 
 {pstd}
 {cmd:siman describe} will be called automatically by {bf:{help siman_setup:siman setup}}, but can also be called on it's own once the data has been imported by the {bf:siman suite}.

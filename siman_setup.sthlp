@@ -216,6 +216,8 @@ used to produce the estimates.
 {pstd}The variable {bf:dgm} needs to be in numerical format (string labels allowed), with integer values.  If {bf:dgm} is a string variable then {cmd:siman setup} will encode it to be numeric.  If {bf:dgm} has non-integer values, then {bf:dgm} 
 should be re-formatted by the user so that it has integer values with non-integer labels.
 
+{pstd} If the method variable is missing, then {cmd:siman setup} will create a variable {bf:_methodvar} in the dataset with a value of 1 in order that all the other {bf: siman} programs can run.
+
 {pstd}No special characters are allowed in the labels of the variables, as these are not allowed in Stata graphs.
 
 {pstd}If the user would like to specify a different name for any of the graphs using the graph options, the new name is not permitted to contain the word 'name' (e.g. name("testname") would not be allowed).
