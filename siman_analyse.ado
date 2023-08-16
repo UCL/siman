@@ -285,7 +285,7 @@ foreach thing in `allthings' {
 * IW change:
 * output table to show that siman analyse has run
 if "`table'"!="notable" siman_table
-else di "siman analyse has run"
+else di as text "siman analyse has run"
 
 end
 
