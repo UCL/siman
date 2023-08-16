@@ -60,8 +60,15 @@ if !mi("`wrongpms'") {
 	exit 498
 }
 if "`anything'"=="" {
-	di as text "Performance measures not specified: defaulting to bias empse cover"
-	local pmlist bias empse cover
+	if !mi("`true'") {
+		local pmdefault bias empse cover
+	}
+	else {
+		local pmdefault mean empse relerror
+		local missedmessage " and no true value"
+	}
+	di as text "Performance measures not specified`missedmessage': defaulting to `pmdefault'"
+	local anything `pmdefault'
 }
 else if "`anything'"=="all" local pmlist `allpms'
 else local pmlist `anything'
