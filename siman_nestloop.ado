@@ -71,10 +71,6 @@ if "`anything'"=="" {
 	local anything `pmdefault'
 }
 else if "`anything'"=="all" local anything `allpms'
-foreach thing of local anything {
-	local varelement = "*`thing'"
-	local varlist `varlist' `varelement'
-}
 local pmlist `anything'
 local npms : word count `pmlist'
 
@@ -191,12 +187,6 @@ if  substr("`true'",strlen("`true'"),1)=="_" local true = substr("`true'", 1, in
 * drop variables that we're not going to use
 qui drop `se' `df' `ci' `p' 
 
-* reshape to wide method format
-
-* defining true value based on whether it contains 1 or >1 values
-if "`ntruevalue'"=="single" local optionlist `estimate'  
-else if "`ntruevalue'"=="multiple" local optionlist `estimate' `true' 
-
 * Process methods
 * Take out underscores at the end of method value labels if there are any.  
 * Need to tokenize the method variable again as might have changed in a previous reshape.
@@ -238,33 +228,6 @@ local valmethod = "`metlist'"
 forvalues i=1/`nmethods' {
 	local m`i' = "``i''"
 }
-
-* check if method elements are numeric (e.g. 1 2) or string (e.g. A B) for reshape
-local string = 0
-capture confirm numeric variable `method'
-if _rc local string = 1
-
-* take out true from option list if included for the reshape, otherwise will be included in the optionlist as well as i() and reshape won't work
-local optionreshape `optionlist'
-local exclude "`true'"
-local optionreshape: list optionreshape - exclude
-
-if `string' == 0 {
-	qui reshape wide "`optionreshape'", i(`scenario' `dgm' `target' _perfmeascode) j(`method' "`valmethod'") 
-}
-else if `string' == 1 {
-	qui reshape wide "`optionreshape'", i(`scenario' `dgm' `target' _perfmeascode) j(`method' "`valmethod'") string
-}
-
-foreach option in `optionreshape' {
-	forvalues j = 1/`nmethods' {
-		local `option'stubreshape`j' = "`option'`m`j''"
-		if `j'==1 local optionlist2 ``option'stubreshape`j''
-		else if `j'>=2 local optionlist2 `optionlist2' ``option'stubreshape`j''
-	}
-}
-
-qui reshape wide `optionlist2', i(`rep' `scenario' `dgm' `target') j(_perfmeascode) string	
 
 ************************
 * DRAW NESTED LOOP GRAPH
@@ -328,7 +291,7 @@ foreach thispm of local pmlist { // loop over PMs
 		local min .
 		local max .
 		foreach thismethod of local methodlist {
-			summ `estimate'`thismethod'`thispm' if `target'=="`thistarget'", meanonly
+			summ `estimate' if `target'=="`thistarget'" & `method'=="`thismethod'" & _perfmeascode=="`thispm'", meanonly
 			local min=min(`min',r(min))
 			local max=max(`max',r(max))
 		}
@@ -418,8 +381,8 @@ foreach thispm of local pmlist { // loop over PMs
 			local ++k
 			if `stagger'>0 local xvar `scenario'_`thismethod'
 			else local xvar `scenario'
-			local thisgraphcmd line `estimate'`thismethod'`thispm' `xvar' ///
-				if `target'=="`thistarget'", c(`connect')
+			local thisgraphcmd line `estimate' `xvar' if `target'=="`thistarget'" & ///
+				`method'=="`thismethod'" & _perfmeascode=="`thispm'", c(`connect')
 			foreach thing in lcolor lpattern lstyle lwidth {
 				local this : word `k' of ``thing''
 				if !mi("`this'") local thisgraphcmd `thisgraphcmd' `thing'(`this')
@@ -433,7 +396,7 @@ foreach thispm of local pmlist { // loop over PMs
 			if "`thispm'"=="cover" local ref 95
 			else if inlist("`thispm'", "bias", "relprec", "relerror") local ref 0
 			else local ref
-			if !mi("`ref'") local yline yline(`ref',lcol(gs4))
+			if !mi("`ref'") local yline yline(`ref',lcol(gs12))
 		}
 
 		// draw main graph
