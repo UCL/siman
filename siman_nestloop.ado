@@ -60,8 +60,15 @@ if !mi("`wrongpms'") {
 	exit 498
 }	
 if "`anything'"=="" {
-	di as text "Performance measures not specified: defaulting to bias empse cover"
-	local anything bias empse cover
+	if !mi("`true'") {
+		local pmdefault bias empse cover
+	}
+	else {
+		local pmdefault mean empse relerror
+		local missedmessage " and no true value"
+	}
+	di as text "Performance measures not specified`missedmessage': defaulting to `pmdefault'"
+	local anything `pmdefault'
 }
 else if "`anything'"=="all" local anything `allpms'
 foreach thing of local anything {
@@ -404,7 +411,7 @@ foreach thispm of local pmlist { // loop over PMs
 		local main_graph_cmd
 		local legend
 		if "`thispm'" =="mean" {
-			local methodlist `methodlist' `true' // add true as another method
+			local methodlist `"`methodlist' `true'"' // add true as another method
 			local m`=`nmethods'+1' "True"
 		}
 		foreach thismethod of local methodlist {
@@ -418,7 +425,7 @@ foreach thispm of local pmlist { // loop over PMs
 				if !mi("`this'") local thisgraphcmd `thisgraphcmd' `thing'(`this')
 			}
 			local main_graph_cmd `main_graph_cmd' (`thisgraphcmd')
-			local legend `legend' `k' `"Method: `m`i''"'
+			local legend `legend' `k' `"Method: `m`k''"'
 		}
 
 		* reference lines
