@@ -1,5 +1,5 @@
 *! version 1.8   14aug2023
-* version 1.8.1 16aug2023	  IW changed how main graph is written, so that stagger works; correct looping over PMs and targets; general tidying up and clarifying
+* version 1.8.1 16aug2023	  IW changed how main graph is written, so that stagger works; correct looping over PMs and targets; general tidying up and clarifying; correct use of true
 * version 1.8   14aug2023	  IW extended lines to include last scenario; reduced default PMs; range correctly allows for all methods
 * version 1.7.3    01aug2023  IW added legendoff option; made name() work
 *  version 1.7.2   22may2023  IW fixes
@@ -154,7 +154,7 @@ tempvar scenario
 if !mi("`dgmorder'") {
     qui gsort `dgmorder', gen(`scenario')
 }
-else qui gsort `true' `dgm', gen(`scenario')
+else qui gsort `dgm', gen(`scenario')
 summ `scenario', meanonly
 local nscenarios = r(max)
 if upper("`connect'") != "L" {
@@ -295,6 +295,12 @@ foreach thispm of local pmlist { // loop over PMs
 			local min=min(`min',r(min))
 			local max=max(`max',r(max))
 		}
+		if "`thispm'" =="mean" { // add true as another method
+			summ `true' if `target'=="`thistarget'", meanonly
+			local min=min(`min',r(min))
+			local max=max(`max',r(max))
+			local methodlist2 `true'
+		}
 		if `max'<=`min' {
 			di as text "Warning: `thispm' does not vary for `target' `thistarget'"
 			local min = `min'-1
@@ -320,8 +326,12 @@ foreach thispm of local pmlist { // loop over PMs
 					di as error "Sorry, this program does not yet handle continuous variables"
 					exit 498
 				}
-				local ++j
 				summ `var' `if', meanonly
+				if r(max)==r(min) {
+					if !mi("`debug'") di as text "Warning: no variation for descriptor `var'"
+					continue
+				}
+				local ++j
 				tempvar S`var' // this is the variable containing the y-axis position for descriptor `var'
 				qui gen `S`var'' = ( (`var'-r(min)) / (r(max)-r(min)) + (`legendgap'+1)*(`j'-1)) * `step' + `lmin' `if'
 				label var `S`var'' "y-value for descriptor `var'"
@@ -373,24 +383,23 @@ foreach thispm of local pmlist { // loop over PMs
 		local k 0
 		local main_graph_cmd
 		local legend
-		if "`thispm'" =="mean" {
-			local methodlist `"`methodlist' `true'"' // add true as another method
-			local m`=`nmethods'+1' "True"
-		}
-		foreach thismethod of local methodlist {
+		foreach thismethod in `methodlist' `methodlist2' {
 			local ++k
+			local istruevar = `k'==`nmethods'+1
 			if `stagger'>0 local xvar `scenario'_`thismethod'
 			else local xvar `scenario'
-			local thisgraphcmd line `estimate' `xvar' if `target'=="`thistarget'" & ///
+			if `istruevar' local thisgraphcmd line `true' `scenario' if `target'=="`thistarget'" & ///
+				_perfmeascode=="`thispm'", c(`connect')
+			else local thisgraphcmd line `estimate' `xvar' if `target'=="`thistarget'" & ///
 				`method'=="`thismethod'" & _perfmeascode=="`thispm'", c(`connect')
 			foreach thing in lcolor lpattern lstyle lwidth {
 				local this : word `k' of ``thing''
 				if !mi("`this'") local thisgraphcmd `thisgraphcmd' `thing'(`this')
 			}
 			local main_graph_cmd `main_graph_cmd' (`thisgraphcmd')
-			local legend `legend' `k' `"Method: `m`k''"'
+			if `istruevar' local legend `legend' `k' `"True"'
+			else local legend `legend' `k' `"Method: `m`k''"'
 		}
-
 		* reference lines
 		if "`refline'"!="norefline" {
 			if "`thispm'"=="cover" local ref 95
