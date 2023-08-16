@@ -48,18 +48,18 @@ See {help siman_analyse##perfmeas:performance measures} as per {help siman_analy
 {p_end}
 {syntab:Options}
 
-{synopt:{opt dgmo:rder(string)}}order of data generating mechanisms for the nested loop plot. A negative sign infront of the variable name 
-will display it's values on the graph in descending order.{p_end}
-{synopt:{opt c:onnect(string)}}connecting option for main graph and descriptor graph.{p_end}
-{synopt:{opt stag:ger(#)}}stagger option for main graph.  Default # is 0.{p_end}
-{synopt:{opt fracl:egend(#)}}controls sizing for legend.  Default # is 0.35.{p_end}
-{synopt:{opt fracg:ap(#)}}controls sizing for gap in legend.  Default # is 0.{p_end}
-{synopt:{opt legendg:ap(#)}}controls sizing for descriptor graph.  Default # is 3.{p_end}
-{synopt:{opt legendc:olor(string)}}controls colours for descriptor graph.{p_end}
-{synopt:{opt legendp:attern(string)}}controls pattern for descriptor graph.{p_end}
-{synopt:{opt legends:ize(string)}}controls size of descriptor graph.{p_end}
-{synopt:{opt legendsty:le(string)}}controls style of descriptor graph.{p_end}
-{synopt:{opt legendw:idth(string)}}controls width of descriptor graph.{p_end}
+{synopt:{opt dgmo:rder(string)}}order of data generating mechanisms for the nested loop plot. A negative sign in front of the variable name 
+will display its values on the graph in descending order.{p_end}
+{synopt:{opt stag:ger(#)}}horizontally staggers the main graphs for different methods.  Default # is 0. Try {cmd:stagger(0.05)} to make the lines more distinct.{p_end}
+{synopt:{opt c:onnect(string)}}controls how the main graph and legend/descriptor graph are connected. Default is connect(J) which shows each performance measure value as a horizontal line with vertical joins (as described by Rucker and Schwarzer). An alternative is connect(L) which shows each performance measure value at a point with diagonal joins.{p_end}
+{synopt:{opt fracl:egend(#)}}defines the vertical size of the legend/descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.35.{p_end}
+{synopt:{opt fracg:ap(#)}}defines the vertical size of the gap between the main graph and the legend/descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.{p_end}
+{synopt:{opt legendg:ap(#)}}controls the vertical spacing between the  legend/descriptor graphs.  Default # is 3.{p_end}
+{synopt:{opt legendc:olor(string)}}controls the colour(s) for the legend/descriptor graphs and their labels. Deafult is gs4.{p_end}
+{synopt:{opt legendp:attern(string)}}controls the pattern(s) for descriptor graph. Deafult is solid.{p_end}
+{synopt:{opt legends:ize(string)}}controls the size of the legend/descriptor graph labels. Default is vsmall.{p_end}
+{synopt:{opt legendsty:le(string)}}controls the style(s) of the legend/descriptor graph.{p_end}
+{synopt:{opt legendw:idth(string)}}controls the width(s) of the legend/descriptor graph.{p_end}
 
 {pstd}
 {p_end}
