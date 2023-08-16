@@ -10,11 +10,18 @@ prog define siman_describe, rclass
 version 15
 
 * siman_describe only describes the data set, it does not change it.  So it should not have it's own [if] and [in] options.
-syntax
+syntax, [Chars]
+
+if !mi("`chars'") {
+	foreach thing in `_dta[siman_allthings]' {
+		char l _dta[siman_`thing']
+	}
+	exit
+}
+
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
-
 
 local titlewidth 20
 local colwidth 35
