@@ -21,11 +21,11 @@ version 15
 // PARSE
 syntax [anything] [if], ///
 	[DGMOrder(string) ///
-	STAGger(real 0) Connect(string) /// control main graph
+	STAGger(real 0) Connect(string) noREFline /// control main graph
 	FRACLegend(real 0.3) FRACGap(real 0) /// control sizing
 	LEGENDGap(real 3) LEGENDColor(string) /// control descriptor graph
 	LEGENDPattern(string) LEGENDSize(string) LEGENDSTYle(string) LEGENDWidth(string) /// control descriptor graph
-	debug pause legendoff noREFline /// undocumented
+	debug pause legendoff /// undocumented
 	LColor(string) LPattern(string) LSTYle(string) LWidth(string) /// twoway options for main graph
 	name(string) * /// twoway options for overall graph
 	] 
@@ -297,9 +297,6 @@ foreach descriptor of local dgm {
 *sort data ready for graphs
 qui sort `scenario'
 
-* take * out of variable name for graph name
-local yname = substr("`yvar'", 2, length("`yvar'") - 1)
-
 local nmethodlabelsplus1 = `nmethods' + 1
 
 * set up staggered versions of `scenario' 
@@ -403,38 +400,34 @@ foreach thispm of local pmlist { // loop over PMs
 		}
 		
 		// create main graph command
-		local m 0
+		local k 0
 		local main_graph_cmd
+		local legend
+		if "`thispm'" =="mean" {
+			local methodlist `methodlist' `true' // add true as another method
+			local m`=`nmethods'+1' "True"
+		}
 		foreach thismethod of local methodlist {
-			local ++m
+			local ++k
 			if `stagger'>0 local xvar `scenario'_`thismethod'
 			else local xvar `scenario'
 			local thisgraphcmd line `estimate'`thismethod'`thispm' `xvar' ///
 				if `target'=="`thistarget'", c(`connect')
 			foreach thing in lcolor lpattern lstyle lwidth {
-				local this : word `m' of ``thing''
+				local this : word `k' of ``thing''
 				if !mi("`this'") local thisgraphcmd `thisgraphcmd' `thing'(`this')
 			}
 			local main_graph_cmd `main_graph_cmd' (`thisgraphcmd')
+			local legend `legend' `k' `"Method: `m`i''"'
 		}
 
-		* legend labels
-		local legend
-		forvalues i=1/`nmethods' {
-			local legend `legend' `i' `"Method `m`i''"'
-		}	
-		if "`yvar'" =="*mean" { // add true as another method
-			local legend `legend' `nmethodlabelsplus1' "True" 
-			local yvar `yvar' `true'
-		}
-		
 		* reference lines
 		if "`refline'"!="norefline" {
 			if "`thispm'"=="cover" local ref 95
-			else if "`thispm'"=="bias" local ref 0
+			else if inlist("`thispm'", "bias", "relprec", "relerror") local ref 0
 			else local ref
 			if !mi("`ref'") local yline yline(`ref',lcol(gs4))
-			}
+		}
 
 		// draw main graph
 		if "`target'"!="_null" {

@@ -52,6 +52,7 @@ See {help siman_analyse##perfmeas:performance measures} as per {help siman_analy
 will display its values on the graph in descending order.{p_end}
 {synopt:{opt stag:ger(#)}}horizontally staggers the main graphs for different methods.  Default # is 0. Try {cmd:stagger(0.05)} to make the lines more distinct.{p_end}
 {synopt:{opt c:onnect(string)}}controls how the main graph and legend/descriptor graph are connected. Default is connect(J) which shows each performance measure value as a horizontal line with vertical joins (as described by Rucker and Schwarzer). An alternative is connect(L) which shows each performance measure value at a point with diagonal joins.{p_end}
+{synopt:{opt noref:line}}prevents display of reference lines at controls the width(s) of the legend/descriptor graph.{p_end}
 {synopt:{opt fracl:egend(#)}}defines the vertical size of the legend/descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.35.{p_end}
 {synopt:{opt fracg:ap(#)}}defines the vertical size of the gap between the main graph and the legend/descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.{p_end}
 {synopt:{opt legendg:ap(#)}}controls the vertical spacing between the  legend/descriptor graphs.  Default # is 3.{p_end}
