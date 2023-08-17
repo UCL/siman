@@ -1,5 +1,5 @@
 *! version 1.8.2   17aug2023
-* version 1.8.2 17aug2023	  IW renamed descriptor graph options from frac* and legend* to dg*; new checks for wrong dgmorder(), only 1 dgm; handle missing or numeric target; remove some unwanted `if's
+* version 1.8.2 17aug2023	  IW renamed descriptor graph options from frac* and legend* to dg*; new checks for wrong dgmorder(), only 1 dgm; handle missing or numeric target; remove some unwanted `if's; handle method as any type
 * version 1.8.1 16aug2023	  IW changed how main graph is written, so that stagger works; correct looping over PMs and targets; general tidying up and clarifying; correct use of true
 * version 1.8   14aug2023	  IW extended lines to include last scenario; reduced default PMs; range correctly allows for all methods
 * version 1.7.3    01aug2023  IW added legendoff option; made name() work
@@ -55,11 +55,6 @@ if "`simananalyserun'"=="0" | "`simananalyserun'"=="" {
 
 * check performance measures
 qui levelsof _perfmeascode, local(allpms) clean 
-local wrongpms : list anything - allpms
-if !mi("`wrongpms'") {
-	di as error "Performance measures wrongly specified: `wrongpms'"
-	exit 498
-}	
 if "`anything'"=="" {
 	if !mi("`true'") {
 		local pmdefault bias empse cover
@@ -73,6 +68,11 @@ if "`anything'"=="" {
 }
 else if "`anything'"=="all" local anything `allpms'
 local pmlist `anything'
+local wrongpms : list pmlist - allpms
+if !mi("`wrongpms'") {
+	di as error "Performance measures wrongly specified: `wrongpms'"
+	exit 498
+}	
 local npms : word count `pmlist'
 
 * parse name
@@ -199,46 +199,25 @@ if  substr("`true'",strlen("`true'"),1)=="_" local true = substr("`true'", 1, in
 qui drop `se' `df' `ci' `p' 
 
 * Process methods
-* Take out underscores at the end of method value labels if there are any.  
-* Need to tokenize the method variable again as might have changed in a previous reshape.
-					
+* If method is a string variable, encode it to numeric format
+capture confirm string variable `method'
+if !_rc {
+	rename `method' `method'0
+	encode `method'0, generate(`method')
+	drop `method'0
+}
 qui levelsof `method', local(methodlist)
 local nmethods = r(r)
-qui tokenize `"`methodlist'"'
-
-cap quietly label drop `method'
-local labelchange = 0
-
-forvalues m = 1/`nmethods' {
-	if  substr("``m''",strlen("``m''"),1)=="_" {
-		local label`m' = substr("``m''", 1, index("``m''","_") - 1)
-		local metlabel`m' = "``m''"
-		local labelchange = 1
-			if `m'==1 {
-				local labelvalues `m' "`label`m''" 
-				local metlist `metlabel`m''
-				}
-			else if `m'>1 {
-				local labelvalues `labelvalues' `m' "`label`m''" 
-				local metlist `metlist' `metlabel`m''
-				}
-	}
-	else {
-	local metlabel`m' = "``m''"
-	if `m'==1 local metlist `metlabel`m''
-	else if `m'>=2 local metlist `metlist' `metlabel`m''
-	}
-}	
-if `labelchange'==1 {
-	label define methodlab `labelvalues'
-	label values `method' methodlab
-	}
-	
-local valmethod = "`metlist'"
-
-forvalues i=1/`nmethods' {
-	local m`i' = "``i''"
+local i 0
+foreach thismethod of local methodlist {
+	local ++i
+	local m`i' = `thismethod' // numeric value of ith method
+	local mlab`i' : label (`method') `thismethod' // label of ith method
+	if substr("`mlab`i''",length("`mlab`i''"),1)=="_" /// remove final _
+		local mlab`i' = substr("`mlab`i''",1,length("`mlab`i''")-1)
+	if !mi("`debug'") di `"Method `i': numeric value `m`i'', label `mlab`i''"'
 }
+
 
 ************************
 * DRAW NESTED LOOP GRAPH
@@ -298,10 +277,8 @@ local nmethodlabelsplus1 = `nmethods' + 1
 
 * set up staggered versions of `scenario' 
 if `stagger'>0  {
-	local k 0
-	foreach thismethod of local methodlist {
-		local ++k
-		gen `scenario'_`thismethod' = `scenario' + `stagger'*(2*`k'-1-`nmethods')/(`nmethods'-1)
+	forvalues k = 1 / `nmethods' {
+		gen `scenario'`k' = `scenario' + `stagger'*(2*`k'-1-`nmethods')/(`nmethods'-1)
 	}
 }
 
@@ -311,17 +288,18 @@ foreach thispm of local pmlist { // loop over PMs
 		* range of upper part
 		local min .
 		local max .
-		foreach thismethod of local methodlist {
-			summ `estimate' if `target'=="`thistarget'" & `method'=="`thismethod'" & _perfmeascode=="`thispm'", meanonly
+		forvalues k = 1 / `nmethods' {
+			summ `estimate' if `target'=="`thistarget'" & `method'==`m`k'' & _perfmeascode=="`thispm'", meanonly
 			local min=min(`min',r(min))
 			local max=max(`max',r(max))
 		}
-		if "`thispm'" =="mean" { // add true as another method
+		if "`thispm'" =="mean" & !mi("`true'") { // add true as another method
 			summ `true' if `target'=="`thistarget'", meanonly
 			local min=min(`min',r(min))
 			local max=max(`max',r(max))
-			local methodlist2 `true'
+			local nmethods2 = `nmethods'+1
 		}
+		else local nmethods2 = `nmethods'
 		if `max'<=`min' {
 			di as text "Warning: `thispm' does not vary for `target' `thistarget'"
 			local min = `min'-1
@@ -400,26 +378,26 @@ foreach thispm of local pmlist { // loop over PMs
 				lstyle(`dgstyle' ...) )
 		}
 		
-		// create main graph command
-		local k 0
+		// CREATE MAIN GRAPH COMMAND
 		local main_graph_cmd
 		local legend
-		foreach thismethod in `methodlist' `methodlist2' {
-			local ++k
-			local istruevar = `k'==`nmethods'+1
-			if `stagger'>0 local xvar `scenario'_`thismethod'
+
+*		foreach thismethod in `methodlist' `methodlist2' {
+		forvalues k = 1 / `nmethods2' {
+			local istruevar = `k'>`nmethods' // handle "true" (if present) differently from the methods
+			if `stagger'>0 local xvar `scenario'`k'
 			else local xvar `scenario'
 			if `istruevar' local thisgraphcmd line `true' `scenario' if `target'=="`thistarget'" & ///
 				_perfmeascode=="`thispm'", c(`connect')
 			else local thisgraphcmd line `estimate' `xvar' if `target'=="`thistarget'" & ///
-				`method'=="`thismethod'" & _perfmeascode=="`thispm'", c(`connect')
+				`method'==`m`k'' & _perfmeascode=="`thispm'", c(`connect')
 			foreach thing in lcolor lpattern lstyle lwidth {
 				local this : word `k' of ``thing''
 				if !mi("`this'") local thisgraphcmd `thisgraphcmd' `thing'(`this')
 			}
 			local main_graph_cmd `main_graph_cmd' (`thisgraphcmd')
 			if `istruevar' local legend `legend' `k' `"True"'
-			else local legend `legend' `k' `"Method: `m`k''"'
+			else local legend `legend' `k' `"Method: `mlab`k''"'
 		}
 		* reference lines
 		if "`refline'"!="norefline" {

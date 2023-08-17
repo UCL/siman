@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  C:\ian\git\siman\Ella_testing\siman_nestloop_test.log
   log type:  text
- opened on:  17 Aug 2023, 09:57:34
+ opened on:  17 Aug 2023, 16:44:39
 
 . siman which
 C:\ian\git\siman\siman.ado
@@ -18,7 +18,7 @@ C:\ian\git\siman\siman_table.ado
 C:\ian\git\siman\siman_reshape.ado
 *! version 0.3.1   08mar2023   nodescribe option
 C:\ian\git\siman\siman_lollyplot.ado
-*! version 1.12    14aug2023
+*! version 1.12.1  17aug2023   IW 
 C:\ian\git\siman\siman_zipplot.ado
 *! version 1.8.5 04july2023  EMZ
 C:\ian\git\siman\siman_comparemethodsscatter.ado
@@ -66,7 +66,6 @@ C:\ian\git\siman\siman_trellis.ado
 . drop _pmiss _beta
 
 . save extendedtestdata2, replace
-(file extendedtestdata2.dta not found)
 file extendedtestdata2.dta saved
 
 . 
@@ -210,6 +209,319 @@ Drawing graph...
 
 . * graph should ignore mech
 . 
+. 
+. // COMPARE METHOD AS UNLABELLED/LABELLED NUMERIC OR STRING
+. 
+. * method is string (as in source data)
+. use extendedtestdata2, clear
+
+. tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b) // CCA, MeanIm
+> p, Noadj
+
+            |            Summary of b
+     method |        Mean   Std. dev.       Freq.
+------------+------------------------------------
+        CCA |   .00253414   .15817009       1,000
+    MeanImp |   .00217613    .1525731       1,000
+      Noadj |  -.00349635   .19110948       1,000
+------------+------------------------------------
+      Total |   .00040464   .16811256       3,000
+
+. siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
+> )
+  variable mech was long now byte
+  (324,000 bytes saved)
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been
+encoded as numeric so that subsequent siman commands will work. If you require a
+different order, encode mech as numeric before running -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            effect mean0 mean1
+
+The number of methods is:         3
+The method values are:            CCA MeanImp Noadj
+
+Data generating mechanism (dgm)
+The total number of dgms is:      12
+The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        b
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. qui siman analyse
+
+. siman nestloop empse if estimand=="effect", name(mstring,replace)
+Drawing graph...
+
+. 
+. * method is numeric labelled in alphabetical order
+. use extendedtestdata2, clear
+
+. sencode method, gsort(method) replace // 1=CCA, 2=MeanImp, 3=Noadj
+
+. tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+
+            |            Summary of b
+     method |        Mean   Std. dev.       Freq.
+------------+------------------------------------
+        CCA |   .00253414   .15817009       1,000
+    MeanImp |   .00217613    .1525731       1,000
+      Noadj |  -.00349635   .19110948       1,000
+------------+------------------------------------
+      Total |   .00040464   .16811256       3,000
+
+. siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
+> )
+  variable mech was long now byte
+  (324,000 bytes saved)
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been
+encoded as numeric so that subsequent siman commands will work. If you require a
+different order, encode mech as numeric before running -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            effect mean0 mean1
+
+The number of methods is:         3
+The method values are:            CCA MeanImp Noadj
+
+Data generating mechanism (dgm)
+The total number of dgms is:      12
+The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        b
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. qui siman analyse
+
+. siman nestloop empse if estimand=="effect", name(mlabalpha,replace)
+Drawing graph...
+
+. 
+. * method is numeric labelled in data order
+. use extendedtestdata2, clear
+
+. sencode method, replace // 1=Noadj, 2=CCA, 3=MeanImp
+
+. tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+
+            |            Summary of b
+     method |        Mean   Std. dev.       Freq.
+------------+------------------------------------
+      Noadj |  -.00349635   .19110948       1,000
+        CCA |   .00253414   .15817009       1,000
+    MeanImp |   .00217613    .1525731       1,000
+------------+------------------------------------
+      Total |   .00040464   .16811256       3,000
+
+. siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
+> )
+  variable mech was long now byte
+  (324,000 bytes saved)
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been
+encoded as numeric so that subsequent siman commands will work. If you require a
+different order, encode mech as numeric before running -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            effect mean0 mean1
+
+The number of methods is:         3
+The method values are:            Noadj CCA MeanImp
+
+Data generating mechanism (dgm)
+The total number of dgms is:      12
+The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        b
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. qui siman analyse
+
+. siman nestloop empse if estimand=="effect", name(mlabdata,replace)
+Drawing graph...
+
+. 
+. * method is numeric unlabelled in alphabetical order
+. use extendedtestdata2, clear
+
+. sencode method, gsort(method) replace // order is alphabetical: CCA MeanImp Noadj 
+
+. tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+
+            |            Summary of b
+     method |        Mean   Std. dev.       Freq.
+------------+------------------------------------
+        CCA |   .00253414   .15817009       1,000
+    MeanImp |   .00217613    .1525731       1,000
+      Noadj |  -.00349635   .19110948       1,000
+------------+------------------------------------
+      Total |   .00040464   .16811256       3,000
+
+. label val method // 1 [=Noadj], 2 [=CCA], 3 [=MeanImp]
+
+. tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+
+            |            Summary of b
+     method |        Mean   Std. dev.       Freq.
+------------+------------------------------------
+          1 |   .00253414   .15817009       1,000
+          2 |   .00217613    .1525731       1,000
+          3 |  -.00349635   .19110948       1,000
+------------+------------------------------------
+      Total |   .00040464   .16811256       3,000
+
+. siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
+> )
+  variable mech was long now byte
+  (324,000 bytes saved)
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been
+encoded as numeric so that subsequent siman commands will work. If you require a
+different order, encode mech as numeric before running -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            effect mean0 mean1
+
+The number of methods is:         3
+The method values are:            1 2 3
+
+Data generating mechanism (dgm)
+The total number of dgms is:      12
+The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        b
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. qui siman analyse
+
+. siman nestloop empse if estimand=="effect", name(munlabelled,replace)
+Drawing graph...
+
+. 
+. ** NB name(string) gives funny error
+. 
+. * method is not 1...
+. use extendedtestdata2, clear
+
+. gen methchar = 11 if method == "CCA"
+(72,000 missing values generated)
+
+. replace methchar = 12 if method == "MeanImp"
+(36,000 real changes made)
+
+. replace methchar = 13 if method == "Noadj"
+(36,000 real changes made)
+
+. label def methchar 11 "CCA" 12 "MeanImp" 13 "Noadj"
+
+. label val methchar methchar
+
+. drop method
+
+. tab methchar if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+
+            |            Summary of b
+   methchar |        Mean   Std. dev.       Freq.
+------------+------------------------------------
+        CCA |   .00253414   .15817009       1,000
+    MeanImp |   .00217613    .1525731       1,000
+      Noadj |  -.00349635   .19110948       1,000
+------------+------------------------------------
+      Total |   .00040464   .16811256       3,000
+
+. siman setup, rep(rep) dgm(beta pmiss mech) method(methchar) target(estimand) est(b) se(se) true(tr
+> ue)
+  variable mech was long now byte
+  (324,000 bytes saved)
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been
+encoded as numeric so that subsequent siman commands will work. If you require a
+different order, encode mech as numeric before running -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            effect mean0 mean1
+
+The number of methods is:         3
+The method values are:            CCA MeanImp Noadj
+
+Data generating mechanism (dgm)
+The total number of dgms is:      12
+The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        b
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. qui siman analyse
+
+. siman nestloop empse if estimand=="effect", name(munlabplus10,replace)
+Drawing graph...
+
+. * graph should be same as mstring
+. 
+. 
+. 
 . // more tests with true
 . * check mean 
 . use extendedtestdata2, clear
@@ -289,6 +601,13 @@ Surplus vars found in dgmorder(): mech
 . * abbreviated dgmorder
 . siman nestloop bias if estimand=="mean0", dgmorder(pmiss be -mec) name(sn3,replace)
 Drawing graph...
+
+. 
+. * wrong pm
+. cap noi siman nestloop rhubarb 
+Performance measures wrongly specified: rhubarb
+
+. assert _rc == 498
 
 . 
 . * only one dgm
@@ -392,7 +711,7 @@ siman analyse has run
 . siman nestloop bias, name(sn5,replace)
 Drawing 3 graphs (3 targets * 1 performance measures)...
 
-. siman nestloop bias if estinum==1, name(sn6,replace) nodg saving(sn6,replace)
+. siman nestloop bias if estinum==1, name(sn6,replace) nodg legend(row(1)) saving(sn6,replace)
 Drawing graph...
 (file sn6.gph not found)
 file sn6.gph saved
@@ -412,5 +731,5 @@ file sn6.gph saved
       name:  <unnamed>
        log:  C:\ian\git\siman\Ella_testing\siman_nestloop_test.log
   log type:  text
- closed on:  17 Aug 2023, 09:57:50
+ closed on:  17 Aug 2023, 16:45:13
 ----------------------------------------------------------------------------------------------------

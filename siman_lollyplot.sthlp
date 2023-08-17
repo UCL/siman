@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.4 21nov2022}{...}
+{* *! version 1.12.1 17aug2023}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "Main simsum help page" "simsum"}{...}
 {viewerjumpto "Syntax" "siman_lollyplot##syntax"}{...}
@@ -21,57 +21,51 @@
 [{cmd:,}
 {it:options}]
 
-{pstd}If no performance measures are specified, then the lollipop plot will be drawn for bias, empirical standard error and coverage. 
-Alternatively the user can select a subset of performance measures to be graphed using the 
-performance measures listed {help siman_lollyplot##perfmeas:below}.
+{pstd}Available performance measures are listed in {help siman_analyse##perfmeas:performance measures}.
 
 {synoptset 20 tabbed}{...}
 {synopthdr}
 {synoptline}
-{syntab:Main}
+{syntab:Main options}
 
-{pstd}
-{p_end}
-{synopt:{opt if}}  The user can specify {it:if} within the siman lollyplot syntax. If they do not, but have already specified 
-an {it:if} during {help siman_analyse:siman analyse}, then the {it:if} from {help siman_analyse:siman analyse} will be used.
-The {it:if} option will only apply to {bf:dgm}, {bf:target} and {bf:method}.  The {it:if} option is not allowed to be used on 
-{bf:repetition} and an error message will be issued if the user tries to do so.
+{synopt:{opt labf:ormat(string)}}Formats for the marker labels for (i) numeric performance measures (e.g. bias), (ii) percentage performance measures (e.g. coverage), and (iii) count performance measures (e.g. bsims).
 
-{pstd}
-{p_end}
+{synopt:{opt col:ors(string)}}Colours for the graphs: one per method.
 
-{marker perfmeas}{...}
-{syntab:Performance measure options:}
+{synopt:{opt ms:ymbol(string)}}Marker symbols for the graphs: one per method, or one for all methods.
+	
+{synopt:{opt refp:ower(string)}}Reference level for power. Default is 80.
 
-{pstd}
-See {help siman_analyse##perfmeas:performance measures} as per {help siman_analyse:siman analyse} and {help simsum:simsum}.
-{p_end}
+{syntab:General graph options}
 
-{syntab:Graph options:}
-{pstd}
-{p_end}
+{synopt:{opt bygr:aphoptions(string)}}graph options which need to be placed within the {cmd:by()} option.
 
-{pstd}
-{p_end}
-{synopt:{opt gr:aphoptions(string)}}  graph options for the constituent performance measure graphs.
-
-{pstd}
-{p_end}
-{synopt:{opt bygr:aphoptions(string)}}  graph options for the nesting of the graphs.
-
-{pstd}{it:For the siman lollyplot graph user-inputted options, most of the valid options for {help graph combine:graph combine} are available.}
+{synopt:{it:graph_options}}Most of the valid options for {help scatter:scatter} are available.{p_end}
 
 
 {marker description}{...}
 {title:Description}
 
 {pstd}
-{cmd:siman lollyplot} draws a lollipop plot of performance measures data.  It is a graphical presentation of estimated performance where different performance measures are stacked vertically; for each performance measure, the results for each 
-method occupy one row; results for different methods are arranged across the two columns. Monte Carlo 95% confidence intervals are represented via parentheses (a visual cue due to the usual presentation of 
-intervals as two numbers within parentheses) (see {help siman_lollyplot##reference:Morris et al, 2019}).
+{cmd:siman lollyplot} draws a lollipop plot of performance measures data.  
+Each panel shows the estimated values of one performance measure with one data generating mechanism for all methods.
+Monte Carlo 95% confidence intervals are represented via parentheses (a visual cue due to the usual presentation of 
+intervals as two numbers within parentheses)
+The graph shows several performance measures (as rows of panels) and several data generating mechanisms (as columns).
+One graph is drawn for each target.
+
+{pstd}For more background, see {help siman_lollyplot##reference:Morris et al, 2019}.
+
+{pstd}The user can select a subset of performance measures to be graphed using the 
+performance measures listed in {help siman_analyse##perfmeas:performance measures}.
+If no performance measures are specified, then graphs will be drawn for bias, empse (empirical standard error) and coverage; 
+except that if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for mean, empse and relerror (relative error in the model standard error).
 
 {pstd}
-The graphs will be produced by {bf:dgm}, with one point/line drawn per {bf:method}.
+The user can specify {it:if} within the siman lollyplot syntax. If they do not, but have already specified 
+an {it:if} during {help siman_analyse:siman analyse}, then the {it:if} from {help siman_analyse:siman analyse} will be used.
+The {it:if} option will only apply to {bf:dgm}, {bf:target} and {bf:method}.  The {it:if} option is not allowed to be used on 
+{bf:repetition} and an error message will be issued if the user tries to do so.
 
 {pstd}
 Please note that {help siman_setup:siman setup} and {help siman_analyse:siman analyse} need to be run first before {bf:siman lollyplot}.

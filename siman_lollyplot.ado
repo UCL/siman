@@ -1,4 +1,5 @@
-*! version 1.12    14aug2023
+* version 1.12.1  17aug2023
+*! version 1.12.1  17aug2023   IW 
 * version 1.12    14aug2023   IW changed to fast graph without graph combine; works for one or multiple dgmvars
 * version 1.11    05may2023   IW add "DGM=" to subtitles and "method" as legend title
 * version 1.10    08mar2023    
@@ -36,10 +37,10 @@ capture program drop siman_lollyplot
 program define siman_lollyplot, rclass
 version 15
 
-syntax [anything] [if] [, BYGRaphoptions(string) LABFormat(string) debug Moptions(string) ///
-	col(passthru) noCOMBine /// combined-graph options
-	name(string) refpower(real 80) * /// final-graph options
-	dgmwidth(int 30) pmwidth(int 24) /// undocumented options
+syntax [anything] [if] [, BYGRaphoptions(string) ///
+	LABFormat(string) COLors(string) MSymbol(string) ///
+	name(string) REFPower(real 80) * /// final-graph options
+	dgmwidth(int 30) pmwidth(int 24) debug pause /// undocumented options
 	]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -54,11 +55,6 @@ if "`simananalyserun'"=="0" | "`simananalyserun'"=="" {
 	
 * check performance measures
 qui levelsof _perfmeascode, local(allpms) clean 
-local wrongpms : list anything - allpms
-if !mi("`wrongpms'") {
-	di as error "Performance measures wrongly specified: `wrongpms'"
-	exit 498
-}
 if "`anything'"=="" {
 	if !mi("`true'") {
 		local pmdefault bias empse cover
@@ -68,15 +64,28 @@ if "`anything'"=="" {
 		local missedmessage " and no true value"
 	}
 	di as text "Performance measures not specified`missedmessage': defaulting to `pmdefault'"
-	local anything `pmdefault'
+	local pmlist `pmdefault'
 }
 else if "`anything'"=="all" local pmlist `allpms'
 else local pmlist `anything'
+local wrongpms : list pmlist - allpms
+if !mi("`wrongpms'") {
+	di as error "Performance measures wrongly specified: `wrongpms'"
+	exit 498
+}
 local npm : word count `pmlist'
 
 * defaults
-if !mi("`debug'") local dicmd dicmd
-if mi("`name'") local name simanlolly
+if !mi("`debug'") local digraph_cmd digraph_cmd
+
+* parse name
+if !mi(`"`name'"') {
+	gettoken name nameopts : name, parse(",")
+}
+else {
+	local name simanlolly
+	local nameopts , replace
+}
 
 *** END OF PARSING ***
 
@@ -193,22 +202,27 @@ qui drop tokeep
 
 qui levelsof _pm, local(pmlevels)
 
-di as text "working...."
-
 if !mi("`if'") {
     local ampersand = " &"
 	local if =  `"`if' `ampersand'"'
 }
 else local if "if"
 
+
 * handle method
 local graphpos = `nmethods'*3 // number of graphs that don't appear in legend
+local i 0
 foreach j of local methodlevels { 
-	local label : label (`method') `j' // assumes method is coded 1,2,3...
-	local ++graphpos
-	local graphorder `graphorder' `graphpos' "`label'" // for legend
-		// don't use local order, which is a siman setting after reshape
-	}
+	local label`j' : label (`method') `j' // defaults to `j' if no label
+	local ++i
+	local mcol`j' : word `i' of `colors'
+	if mi("`mcol`j'") local mcol`j' "scheme p`i'"
+	local msym`j' : word `i' of `msymbol'
+	if mi("`msym`j'") & `j'==1 local msym`j' O
+	else if mi("`msym`j'") & `j'>1 local msym`j' `msym`=`j'-1'
+}
+// don't use local order, which is a siman setting after reshape
+
 
 * handle targets
 if !mi("`target'") {
@@ -216,11 +230,12 @@ if !mi("`target'") {
 	local ntargetlevels = r(r)
 }
 else {
-	local target `""null""'
-	local targetlevels null
+	local target `""_null""'
+	local targetlevels _null
 	local ntargetlevels 0
 }
-if `ntargetlevels'>1 di as text "Your data have multiple targets: one graph will be drawn for each target"
+if `ntargetlevels'>1 di as text "Drawing `ntargetlevels' graphs (one per target)..."
+else di as text "Drawing graph..."
 
 * handle DGMs
 local ndgmvars : word count `dgm'
@@ -233,7 +248,6 @@ else local dgmgroup `dgm'
 qui maketitlevar `dgmgroup', `varname'
 local dgmtitlevar = r(newvars)
 qui levelsof `dgmtitlevar', local(dgmnames)
-
 local ndgmlevels = r(r)
 padding `dgmnames', width(`dgmwidth')
 local titlepadded = s(titlepadded)
@@ -249,36 +263,40 @@ foreach thistarget of local targetlevels {
 	if `ntargetlevels'>0 {
 		local targetcond `target'=="`thistarget'"
 		local note `target'=`thistarget'
-		if !mi("`debug'") di as input `"Drawing graph for `targetcond'"'
+		if !mi("`debug'") di as text `"Drawing graph for `targetcond'"'
 	}
 	else {
 		local targetcond 1
 		local note
-		if !mi("`debug'") di as input `"Drawing graph"'
 	}
-	local cmd twoway 
+	local graph_cmd twoway 
 	local i 1
-	local order
+	local graphorder
 	foreach thismethod of local methodlevels {
 		local methtargetcond `method'==`thismethod' & `targetcond'
-		local order `order' `=4*`i'-3' "`method'=`thismethod'"
-		local cmd `cmd' scatter `method' `estimate' if `methtargetcond', mcol("scheme p`i'") ||
-		local cmd `cmd' scatter `method' `lci' if `methtargetcond', msym(i) mlab(`l') mlabpos(0) mlabcol("scheme p`i'") ||
-		local cmd `cmd' scatter `method' `uci' if `methtargetcond', msym(i) mlab(`r') mlabpos(0) mlabcol("scheme p`i'") ||
-		local cmd `cmd' rspike `estimate' `ref' `method' if `methtargetcond', horiz lcol("scheme p`i'") ||
+		local graphorder `graphorder' `=4*`i'-3' "`method': `label`i''"
+		* main marker
+		local graph_cmd `graph_cmd' scatter `method' `estimate' if `methtargetcond', mcol(`mcol`i'') msym(`msym`i'') mlab(thelab) ||
+		* brackets for LCL and UCL
+		local graph_cmd `graph_cmd' scatter `method' `lci' if `methtargetcond', mlabcol(`mcol`i'') msym(i) mlab(`l') mlabpos(0) ||
+		local graph_cmd `graph_cmd' scatter `method' `uci' if `methtargetcond', mlabcol(`mcol`i'') msym(i) mlab(`r') mlabpos(0) ||
+		* line from ref to main marker
+		local graph_cmd `graph_cmd' rspike `estimate' `ref' `method' if `methtargetcond', horiz lcol(`mcol`i'')  ||
 		local ++i
 	}
-	local cmd `cmd' scatter `method' `ref' if `targetcond', msym(i) c(l) col(gray) lpattern(dash)
-	local cmd `cmd' , by(_perfmeascode `dgm', note(`"`note'"') col(`ndgmlevels') xrescale legend(order(1 5)) title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions') 
-	local cmd `cmd' subtitle("") ylab(none) 
-	local cmd `cmd' ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse)
-	local cmd `cmd' legend(order(`order'))
-	if `ntargetlevels'<=1 local cmd `cmd' name(`name', replace)
-	else local cmd `cmd' name(`name'_`thistarget', replace)
-	local cmd `cmd' `options'
-	if !mi("`debug'") di as input `"Graph command is `cmd'"'
-	global F9 `cmd'
-	cap noi `cmd'
+	local graph_cmd `graph_cmd' scatter `method' `ref' if `targetcond', msym(i) c(l) col(gray) lpattern(dash)
+	local graph_cmd `graph_cmd' , by(_perfmeascode `dgm', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions') 
+	local graph_cmd `graph_cmd' subtitle("") ylab(none) 
+	local graph_cmd `graph_cmd' ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse)
+	local graph_cmd `graph_cmd' legend(order(`graphorder'))
+	if `ntargetlevels'<=1 local graph_cmd `graph_cmd' name(`name'`nameopts')
+	else local graph_cmd `graph_cmd' name(`name'_`thistarget'`nameopts')
+	local graph_cmd `graph_cmd' `options'
+
+	global F9 `graph_cmd'
+	if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+	if !mi("`pause'") pause
+	`graph_cmd'
 }
 
 end
@@ -311,7 +329,7 @@ foreach var of local varlist {
 			}
 		}
 		if _rc di as error "maketitlevar: something went wrong"
-		if mi("`varname'") replace `var'`suffix' = "`var'="+`var'`suffix' if !mi(`var')
+		if mi("`varname'") replace `var'`suffix' = "`var': "+`var'`suffix' if !mi(`var')
 	}
 	di as text "Created " as result "`var'`suffix'" as text " from " as result "`source'" as text " variable " as result "`var'"
 	local newvars `newvars' `var'`suffix'

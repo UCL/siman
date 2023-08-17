@@ -54,6 +54,60 @@ siman analyse if mech!=2, notable
 siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) stagger(0.03) 
 * graph should ignore mech
 
+
+// COMPARE METHOD AS UNLABELLED/LABELLED NUMERIC OR STRING
+
+* method is string (as in source data)
+use extendedtestdata2, clear
+tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b) // CCA, MeanImp, Noadj
+siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
+qui siman analyse
+siman nestloop empse if estimand=="effect", name(mstring,replace)
+
+* method is numeric labelled in alphabetical order
+use extendedtestdata2, clear
+sencode method, gsort(method) replace // 1=CCA, 2=MeanImp, 3=Noadj
+tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
+qui siman analyse
+siman nestloop empse if estimand=="effect", name(mlabalpha,replace)
+
+* method is numeric labelled in data order
+use extendedtestdata2, clear
+sencode method, replace // 1=Noadj, 2=CCA, 3=MeanImp
+tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
+qui siman analyse
+siman nestloop empse if estimand=="effect", name(mlabdata,replace)
+
+* method is numeric unlabelled in alphabetical order
+use extendedtestdata2, clear
+sencode method, gsort(method) replace // order is alphabetical: CCA MeanImp Noadj 
+tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+label val method // 1 [=Noadj], 2 [=CCA], 3 [=MeanImp]
+tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
+qui siman analyse
+siman nestloop empse if estimand=="effect", name(munlabelled,replace)
+
+** NB name(string) gives funny error
+
+* method is not 1...
+use extendedtestdata2, clear
+gen methchar = 11 if method == "CCA"
+replace methchar = 12 if method == "MeanImp"
+replace methchar = 13 if method == "Noadj"
+label def methchar 11 "CCA" 12 "MeanImp" 13 "Noadj"
+label val methchar methchar
+drop method
+tab methchar if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+siman setup, rep(rep) dgm(beta pmiss mech) method(methchar) target(estimand) est(b) se(se) true(true)
+qui siman analyse
+siman nestloop empse if estimand=="effect", name(munlabplus10,replace)
+* graph should be same as mstring
+
+
+
 // more tests with true
 * check mean 
 use extendedtestdata2, clear
@@ -79,6 +133,10 @@ assert _rc == 498
 * abbreviated dgmorder
 siman nestloop bias if estimand=="mean0", dgmorder(pmiss be -mec) name(sn3,replace)
 
+* wrong pm
+cap noi siman nestloop rhubarb 
+assert _rc == 498
+
 * only one dgm
 cap noi siman nestloop bias if pmiss==1 & beta==1 & mech==1
 assert _rc == 498
@@ -98,7 +156,7 @@ drop estimand
 siman setup, target(estinum) rep(rep) dgm(beta pmiss mech) method(method) est(b) se(se) true(true)
 siman analyse, notable
 siman nestloop bias, name(sn5,replace)
-siman nestloop bias if estinum==1, name(sn6,replace) nodg saving(sn6,replace)
+siman nestloop bias if estinum==1, name(sn6,replace) nodg legend(row(1)) saving(sn6,replace)
 
 * tidy up
 erase extendedtestdata2.dta
