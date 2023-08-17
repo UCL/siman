@@ -1,4 +1,5 @@
-*! version 1.8   14aug2023
+*! version 1.8.2   17aug2023
+* version 1.8.2 17aug2023	  IW renamed descriptor graph options from frac* and legend* to dg*; new checks for wrong dgmorder(), only 1 dgm; handle missing or numeric target; remove some unwanted `if's
 * version 1.8.1 16aug2023	  IW changed how main graph is written, so that stagger works; correct looping over PMs and targets; general tidying up and clarifying; correct use of true
 * version 1.8   14aug2023	  IW extended lines to include last scenario; reduced default PMs; range correctly allows for all methods
 * version 1.7.3    01aug2023  IW added legendoff option; made name() work
@@ -22,10 +23,10 @@ version 15
 syntax [anything] [if], ///
 	[DGMOrder(string) ///
 	STAGger(real 0) Connect(string) noREFline /// control main graph
-	FRACLegend(real 0.3) FRACGap(real 0) /// control sizing
-	LEGENDGap(real 3) LEGENDColor(string) /// control descriptor graph
-	LEGENDPattern(string) LEGENDSize(string) LEGENDSTYle(string) LEGENDWidth(string) /// control descriptor graph
-	debug pause legendoff /// undocumented
+	DGSIze(real 0.3) DGGAp(real 0) /// control sizing of descriptor graph
+	DGINnergap(real 3) DGCOlor(string) /// control descriptor graph
+	DGPAttern(string) DGLAbsize(string) DGSTyle(string) DGLWidth(string) /// control descriptor graph
+	debug pause nodg /// undocumented
 	LColor(string) LPattern(string) LSTYle(string) LWidth(string) /// twoway options for main graph
 	name(string) * /// twoway options for overall graph
 	] 
@@ -84,18 +85,18 @@ else {
 }
 
 * graph option parsing
-if `fraclegend'<=0 | `fraclegend'>=1 {
-	di as error "fraclegend() must be >0 and <1"
+if `dgsize'<=0 | `dgsize'>=1 {
+	di as error "dgsize() must be >0 and <1"
 	exit 498
 }
-if `fracgap'<0 | `fracgap'>=1 {
-	di as error "fracgap() must be >=0 and <1"
+if `dggap'<0 | `dggap'>=1 {
+	di as error "dggap() must be >=0 and <1"
 	exit 498
 }
 if mi("`connect'") local connect J // could be L
-if mi("`legendcolor'") local legendcolor gs4
-if mi("`legendpattern'") local legendpattern solid
-if mi("`legendsize'") local legendsize vsmall
+if mi("`dgcolor'") local dgcolor gs4
+if mi("`dgpattern'") local dgpattern solid
+if mi("`dglabsize'") local dglabsize vsmall
 
 *** END OF PARSING ***
 
@@ -117,20 +118,26 @@ if `nformat'!=1 {
 if !mi("`dgmorder'") {
 	local ndgmorder: word count `dgmorder'
 	qui tokenize `dgmorder'
+	local dgmnew
 	forvalues d = 1/`ndgmorder' {
-		local dgmassigned = 0
-		if  substr("``d''",1,1)=="-" {
-			local e = substr("``d''", 2,strlen("``d''"))
-			if `d'==1 local dgmnew `e'
-			else local dgmnew `dgmnew' `e'
-			local dgmassigned = 1
+		local thisdgmvar ``d''
+		if  substr("`thisdgmvar'",1,1)=="-" {
+			local thisdgmvar = substr("`thisdgmvar'", 2, strlen("`thisdgmvar'"))
 		}
-		if `dgmassigned'!=1 {
-			if `d'==1 local dgmnew ``d''
-			else local dgmnew `dgmnew' ``d''
-		}
+		unab thisdgmvar : `thisdgmvar'
+		local dgmnew `dgmnew' `thisdgmvar'
 	}
-	local dgm = `"`dgmnew'"'
+	local dgmsurplus: list dgmnew - dgm
+	local dgmmissing: list dgm - dgmnew
+	if !mi("`dgmsurplus'") {
+		di as error "Surplus vars found in dgmorder(): `dgmsurplus'"
+		exit 498
+	}
+	if !mi("`dgmmissing'") {
+		di as error "dgmvars missing from dgmorder(): `dgmmissing'"
+		exit 498
+	}
+	local dgm `dgmnew'
 }
 
 * if the user has not specified 'if' in the siman nestloop syntax, but there is one from siman analyse then use that 'if'
@@ -157,6 +164,10 @@ if !mi("`dgmorder'") {
 else qui gsort `dgm', gen(`scenario')
 summ `scenario', meanonly
 local nscenarios = r(max)
+if `nscenarios'==1 {
+	di as error "siman nestloop requires more than 1 dgm combination"
+	exit 498
+}
 if upper("`connect'") != "L" {
 	tempvar new
 	qui expand 2 if `scenario'==`nscenarios', gen(`new')
@@ -245,7 +256,23 @@ if !_rc {
 	local true "true"
 }
 
-qui levelsof `target'
+* sort out target as an existing string variable
+if mi("`target'") {
+	tempvar target
+	gen `target' = "1"
+	label var `target' "target (always 1)"
+	local targetcreated true
+}
+cap confirm string var `target'
+if _rc {
+	if !mi("`: value label `target'") decode `target', gen(`target'char)
+	else gen `target'char = string(`target')
+	drop `target'
+	rename `target'char `target'
+}
+
+* summarise targets
+qui levelsof `target', local(targetlist)
 local ntargets = r(r)
 local ngraphs = `ntargets'*`npms'
 if `ngraphs'>1 di as text "Drawing `ngraphs' graphs (`ntargets' targets * `npms' performance measures)..."
@@ -278,12 +305,6 @@ if `stagger'>0  {
 	}
 }
 
-* sort out targets
-if mi("`target'") {
-	local target _null
-}
-qui levelsof `target', local(targetlist)
-
 foreach thispm of local pmlist { // loop over PMs
 	foreach thistarget of local targetlist { // loop over targets
 
@@ -308,15 +329,15 @@ foreach thispm of local pmlist { // loop over PMs
 		}
 		
 		* CREATE GRAPH COMMAND FOR DESCRIPTOR LINES 
-		if "`legendoff'" == "" {
+		if "`dg'" != "nodg" {
 			* main graph goes from y = `min' to `max'
-			* `fraclegend' defines fraction of graph given to legend
-			* `fracgap' defines fraction of graph given to gap
+			* `dgsize' defines fraction of graph given to legend
+			* `dggap' defines fraction of graph given to gap
 			* legends go from y = `lmin' to `lmax'
-			local fracsum = `fraclegend' + `fracgap'
+			local fracsum = `dgsize' + `dggap'
 			local lmin = (`min'-`fracsum'*`max') / (1-`fracsum')
-			local lmax = `min' - `fracgap'*(`max'-`lmin')
-			local step = (`lmax'-`lmin') / ((`legendgap'+1)*`ndescriptors')
+			local lmax = `min' - `dggap'*(`max'-`lmin')
+			local step = (`lmax'-`lmin') / ((`dginnergap'+1)*`ndescriptors')
 			* if !mi("`debug'") di as text "Descriptor graph: lmax=`lmax', lmin=`lmin', step=`step'"
 			local j 0
 			local descriptor_labels_cmd
@@ -326,16 +347,16 @@ foreach thispm of local pmlist { // loop over PMs
 					di as error "Sorry, this program does not yet handle continuous variables"
 					exit 498
 				}
-				summ `var' `if', meanonly
+				summ `var', meanonly
 				if r(max)==r(min) {
 					if !mi("`debug'") di as text "Warning: no variation for descriptor `var'"
 					continue
 				}
 				local ++j
 				tempvar S`var' // this is the variable containing the y-axis position for descriptor `var'
-				qui gen `S`var'' = ( (`var'-r(min)) / (r(max)-r(min)) + (`legendgap'+1)*(`j'-1)) * `step' + `lmin' `if'
+				qui gen `S`var'' = ( (`var'-r(min)) / (r(max)-r(min)) + (`dginnergap'+1)*(`j'-1)) * `step' + `lmin'
 				label var `S`var'' "y-value for descriptor `var'"
-				local Svarname_ypos = ( (`legendgap'+1)*(`j' - 1)+2.2 ) * `step' + `lmin'
+				local Svarname_ypos = ( (`dginnergap'+1)*(`j' - 1)+2.2 ) * `step' + `lmin'
 				local factorlist `factorlist' `S`var''
 				local varlabel : variable label `var'
 				if mi("`varlabel'") local varlabel `var'
@@ -366,17 +387,17 @@ foreach thispm of local pmlist { // loop over PMs
 					}
 				}
 				local levels`j' `levels'
-				local nextlegendcolor : word `j' of `legendcolor'
-				if !mi("`nextlegendcolor'") local thislegendcolor `nextlegendcolor' // keeps previous color if msg
+				local nextdgcolor : word `j' of `dgcolor'
+				if !mi("`nextdgcolor'") local thisdgcolor `nextdgcolor' // keeps previous color if msg
 				local descriptor_labels_cmd `descriptor_labels_cmd' ///
 					text(`Svarname_ypos' 1 `"`varlabel' (`levelsnoquote')"', ///
-					place(e) col(`thislegendcolor') size(`legendsize') justification(left)) 
+					place(e) col(`thisdgcolor') size(`dglabsize') justification(left)) 
 				local order `order' `j'
 			}
 			local descriptor_graph_cmd ///
-				(line `factorlist' `scenario' `if', c(`connect' ...) ///
-				lcol(`legendcolor' ...)	lpattern(`legendpattern' ...) lwidth(`legendwidth' ...) ///
-				lstyle(`legendstyle' ...) )
+				(line `factorlist' `scenario', c(`connect' ...) ///
+				lcol(`dgcolor' ...)	lpattern(`dgpattern' ...) lwidth(`dglwidth' ...) ///
+				lstyle(`dgstyle' ...) )
 		}
 		
 		// create main graph command
@@ -409,7 +430,7 @@ foreach thispm of local pmlist { // loop over PMs
 		}
 
 		// draw main graph
-		if "`target'"!="_null" {
+		if "`targetcreated'"!="true" {
 			local note note(`target'=`thistarget')
 			local targetname _`thistarget'
 		}
