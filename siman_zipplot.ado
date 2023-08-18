@@ -396,7 +396,7 @@ if `ntrue' == 1 {
 			ytit("Centile of ranked p-values for null: θ=`truevalue'")  
 			ylab(5 50 95)
 			by(`byvar', ixaxes noxrescale iscale(*.8) `bygraphoptions') scale(.8)
-			legend(order(4 "Coverers" 3 "Non-coverers"))
+			legend(order(3 "Coverers" 4 "Non-coverers"))
 			`scheme'
 			`options'
 			;
@@ -411,8 +411,8 @@ else if `ntrue'>1 {
 		#delimit ;
 			twoway (rspike _lpoint _rpoint _covlb, hor lw(thin) pstyle(p5)) // MC 
 			   (rspike _lpoint _rpoint _covub, hor lw(thin) pstyle(p5))
-			   (rspike `lci' `uci' _p`estimate'rank if !_covers & `true'calc == `k', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions')
 			   (rspike `lci' `uci' _p`estimate'rank if _covers & `true'calc == `k', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions')
+			   (rspike `lci' `uci' _p`estimate'rank if !_covers & `true'calc == `k', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions')
 			   (scatter _p`estimate'rank `estimate' if `true'calc == `k', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
 			   (pci 0 ``true'label`k'' 100 ``true'label`k'', pstyle(p5) lw(thin) `truegraphoptions')
 				,
@@ -421,7 +421,7 @@ else if `ntrue'>1 {
 				ytit("Centile of ranked p-values for null: θ=``true'label`k''") 
 				ylab(5 50 95)
 				by(`byvar', ixaxes noxrescale iscale(*.8) `bygraphoptions') scale(.8)
-				legend(order(4 "Coverers" 3 "Non-coverers"))
+				legend(order(3 "Coverers" 4 "Non-coverers"))
 				`scheme'
 				`options'
 				;
