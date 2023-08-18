@@ -4,8 +4,11 @@ Short testing file for discussion
 */
 clear all
 prog drop _all
-* cd "C:\git\siman\Ella_testing\" // change to correct directory here
-
+local path c:\ian\git\siman\ // Ian
+local path c:\git\siman\     // Ella
+cd `path'Ella_testing\" 
+adopath ++ `path'
+ 
 * dgm defined by 1 variable
 use data/simlongESTPM_longE_longM.dta, clear
 encode estimand, gen(estimand_num)
