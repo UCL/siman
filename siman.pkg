@@ -16,7 +16,7 @@ f siman_scatter.ado
 f siman_setup.ado
 f siman_swarm.ado
 f siman_table.ado
-f siman_trellis.ado
+*f siman_trellis.ado
 f siman_zipplot.ado
 f simsumv2.ado
 
