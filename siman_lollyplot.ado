@@ -1,7 +1,8 @@
-*! version 1.12.2  22aug2023   IW 
+*! version 1.12.3  22aug2023   IW 
+* version 1.12.3  22aug2023   IW bug fix with name("n")
 * version 1.12.2  22aug2023   IW handles target = numeric or string 
 * version 1.12.1  17aug2023   IW 
-* version 1.12    14aug2023   IW changed to fast graph without graph combine; works for one or multiple dgmvars
+* version 1.12    14aug2023   IW changed to fast graph without graph combine; works for one or multiple dgmvars. NB gr() no longer valid.
 * version 1.11    05may2023   IW add "DGM=" to subtitles and "method" as legend title
 * version 1.10    08mar2023    
 *							added warning if multiple targets overlaid
@@ -82,12 +83,16 @@ if !mi("`debug'") local digraph_cmd digraph_cmd
 * parse name
 if !mi(`"`name'"') {
 	gettoken name nameopts : name, parse(",")
+	local name = trim("`name'")
 }
 else {
 	local name simanlolly
 	local nameopts , replace
 }
-
+if wordcount("`name'_something")>1 {
+	di as error "Something has gone wrong with name()"
+	exit 498
+}
 *** END OF PARSING ***
 
 preserve   

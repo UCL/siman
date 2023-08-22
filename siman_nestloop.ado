@@ -78,10 +78,15 @@ local npms : word count `pmlist'
 * parse name
 if !mi(`"`name'"') {
 	gettoken name nameopts : name, parse(",")
+	local name = trim("`name'")
 }
 else {
 	local name simannestloop
 	local nameopts , replace
+}
+if wordcount("`name'_something")>1 {
+	di as error "Something has gone wrong with name()"
+	exit 498
 }
 
 * graph option parsing
