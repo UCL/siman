@@ -1,5 +1,6 @@
-* version 1.12.1  17aug2023
-*! version 1.12.1  17aug2023   IW 
+*! version 1.12.2  22aug2023   IW 
+* version 1.12.2  22aug2023   IW handles target = numeric or string 
+* version 1.12.1  17aug2023   IW 
 * version 1.12    14aug2023   IW changed to fast graph without graph combine; works for one or multiple dgmvars
 * version 1.11    05may2023   IW add "DGM=" to subtitles and "method" as legend title
 * version 1.10    08mar2023    
@@ -226,12 +227,18 @@ foreach j of local methodlevels {
 
 * handle targets
 if !mi("`target'") {
+	cap confirm numeric var `target'
+	if _rc { // convert string to numeric
+		rename `target' `target'0
+		encode `target'0, gen(`target')
+		drop `target'0
+	}
 	qui levelsof `target', local(targetlevels) clean
 	local ntargetlevels = r(r)
 }
 else {
-	local target `""_null""'
-	local targetlevels _null
+	local target 0
+	local targetlevels 0
 	local ntargetlevels 0
 }
 if `ntargetlevels'>1 di as text "Drawing `ntargetlevels' graphs (one per target)..."
@@ -261,8 +268,9 @@ local ytitlepadded = s(titlepadded)
 * create graph
 foreach thistarget of local targetlevels {
 	if `ntargetlevels'>0 {
-		local targetcond `target'=="`thistarget'"
-		local note `target'=`thistarget'
+		local thistargetname : label (`target') `thistarget'
+		local targetcond `target'==`thistarget'
+		local note `target': `thistargetname'
 		if !mi("`debug'") di as text `"Drawing graph for `targetcond'"'
 	}
 	else {
@@ -273,24 +281,32 @@ foreach thistarget of local targetlevels {
 	local i 1
 	local graphorder
 	foreach thismethod of local methodlevels {
-		local methtargetcond `method'==`thismethod' & `targetcond'
 		local graphorder `graphorder' `=4*`i'-3' "`method': `label`i''"
 		* main marker
-		local graph_cmd `graph_cmd' scatter `method' `estimate' if `methtargetcond', mcol(`mcol`i'') msym(`msym`i'') mlab(thelab) ||
+		local graph_cmd `graph_cmd' scatter `method' `estimate' ///
+			if `method'==`thismethod' & `targetcond', ///
+			mcol(`mcol`i'') msym(`msym`i'') mlab(thelab) mlabpos(12) ||
 		* brackets for LCL and UCL
-		local graph_cmd `graph_cmd' scatter `method' `lci' if `methtargetcond', mlabcol(`mcol`i'') msym(i) mlab(`l') mlabpos(0) ||
-		local graph_cmd `graph_cmd' scatter `method' `uci' if `methtargetcond', mlabcol(`mcol`i'') msym(i) mlab(`r') mlabpos(0) ||
+		local graph_cmd `graph_cmd' scatter `method' `lci' ///
+			if `method'==`thismethod' & `targetcond', ///
+			mlabcol(`mcol`i'') msym(i) mlab(`l') mlabpos(0) ||
+		local graph_cmd `graph_cmd' scatter `method' `uci' ///
+			if `method'==`thismethod' & `targetcond', ///
+			mlabcol(`mcol`i'') msym(i) mlab(`r') mlabpos(0) ||
 		* line from ref to main marker
-		local graph_cmd `graph_cmd' rspike `estimate' `ref' `method' if `methtargetcond', horiz lcol(`mcol`i'')  ||
+		local graph_cmd `graph_cmd' rspike `estimate' `ref' `method' ///
+			if `method'==`thismethod' & `targetcond', ///
+			horiz lcol(`mcol`i'')  ||
 		local ++i
 	}
-	local graph_cmd `graph_cmd' scatter `method' `ref' if `targetcond', msym(i) c(l) col(gray) lpattern(dash)
+	local graph_cmd `graph_cmd' scatter `method' `ref' if `targetcond', ///
+		msym(i) c(l) col(gray) lpattern(dash)
 	local graph_cmd `graph_cmd' , by(_perfmeascode `dgm', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions') 
-	local graph_cmd `graph_cmd' subtitle("") ylab(none) 
-	local graph_cmd `graph_cmd' ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse)
-	local graph_cmd `graph_cmd' legend(order(`graphorder'))
+	local graph_cmd `graph_cmd' subtitle("") ylab(none) ///
+		ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse range(0.8)) ///
+		legend(order(`graphorder'))
 	if `ntargetlevels'<=1 local graph_cmd `graph_cmd' name(`name'`nameopts')
-	else local graph_cmd `graph_cmd' name(`name'_`thistarget'`nameopts')
+	else local graph_cmd `graph_cmd' name(`name'_`thistargetname'`nameopts')
 	local graph_cmd `graph_cmd' `options'
 
 	global F9 `graph_cmd'
