@@ -1,4 +1,5 @@
-*! version 0.6.3   16aug2023
+*! version 0.6.4   22aug2023   IW: fix bug causing error if truevar also a dgmvar; new force option to pass to simsum
+* version 0.6.4   22aug2023
 * version 0.6.3   16aug2023   IW: if true is a variable and not a dgmvar, it is stored in the PM data
 * version 0.6.2   21jul2023   IW: use simsum not simsumv2
 * version 0.6.1   05may2023   IW: remove unused performancemeasures option
@@ -15,7 +16,7 @@ capture program drop siman_analyse
 program define siman_analyse, rclass
 version 15
 
-syntax [anything] [if], [PERFONLY replace noTABle]
+syntax [anything] [if], [PERFONLY replace noTABle force]
 
 capture which simsum.ado
 if _rc == 111 {
@@ -65,9 +66,12 @@ if "`simansetuprun'"=="0" | "`simansetuprun'"=="" {
 	exit 498
 	}
 
-* true variable, to be used in reshape
+* true variable, to be used in reshape, if not in dgm
 cap confirm variable `true'
-if _rc==0 local truevariable `true'
+if _rc==0 {
+	local extratrue : list true - dgm
+	if !mi("`extratrue'") local truevariable `true'
+}
 	
 * if the user has not specified 'if' in the siman analyse syntax, but there is one from siman setup then use that 'if'
 if ("`if'"=="" & "`ifsetup'"!="") local ifanalyse = `"`ifsetup'"'
@@ -180,8 +184,7 @@ if `nformat'==1 {
 		exit 498
 		}
 
-
-	qui simsum `estsimsum' `if', true(`true') se(`sesimsum') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas)
+	qui simsum `estsimsum' `if', true(`true') se(`sesimsum') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
 
 
 	* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
@@ -226,7 +229,7 @@ foreach v in `valmethod' {
 *if "`ntruevalue'"=="multiple" local estlist `estlist' `true' 
 
 
-qui simsum `estlist' `if', true(`true') se(`selist') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas)
+qui simsum `estlist' `if', true(`true') se(`selist') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
 
 
 
