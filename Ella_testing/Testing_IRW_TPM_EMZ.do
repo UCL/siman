@@ -5,8 +5,8 @@ Short testing file for discussion
 clear all
 prog drop _all
 local path c:\ian\git\siman\ // Ian
-local path c:\git\siman\     // Ella
-cd `path'Ella_testing\" 
+* local path c:\git\siman\     // Ella
+cd `path'Ella_testing\
 adopath ++ `path'
  
 * dgm defined by 1 variable
