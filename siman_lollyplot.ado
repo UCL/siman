@@ -75,7 +75,7 @@ if !mi("`wrongpms'") {
 	di as error "Performance measures wrongly specified: `wrongpms'"
 	exit 498
 }
-local npm : word count `pmlist'
+local npmlevels : word count `pmlist'
 
 * defaults
 if !mi("`debug'") local digraph_cmd digraph_cmd
@@ -246,8 +246,6 @@ else {
 	local targetlevels 0
 	local ntargetlevels 0
 }
-if `ntargetlevels'>1 di as text "Drawing `ntargetlevels' graphs (one per target)..."
-else di as text "Drawing graph..."
 
 * handle DGMs
 local ndgmvars : word count `dgm'
@@ -269,6 +267,14 @@ if `ndgmvars'>1 local titlepadded `"`"`dgm'"' `"`titlepadded'"'"'
 qui levelsof _perfmeascode, local(pmlevels)
 padding `pmlevels', width(`pmwidth') reverse
 local ytitlepadded = s(titlepadded)
+
+if `ntargetlevels'>1 {
+	di as text "Drawing `ntargetlevels' graphs (one per target)..."
+	local each "each "
+}
+else di as text "Drawing graph..."
+if `npmlevels'>5  di as error "WARNING: `each'graph will have `npmlevels' rows of panels: consider using fewer performance measures"
+if `ndgmlevels'>5 di as error "WARNING: `each'graph will have `ndgmlevels' columns of panels: consider using if option as detailed in {help siman lollyplot}"
 
 * create graph
 foreach thistarget of local targetlevels {
@@ -361,7 +367,7 @@ end
 ******************* START OF PROGRAM PADDING ************************
 * separate out the given words to create a title of given width
 prog def padding, sclass
-syntax anything, width(int) [reverse]
+syntax anything, width(int) [reverse debug]
 local ndgm 0
 local spacel : _length " "
 foreach dgm in `anything' {
@@ -371,7 +377,7 @@ foreach dgm in `anything' {
 	local dgml : _length "`dgm'"
 	local nspaces = round((`width'/`ndgm'-`dgml')/`spacel'/2,1)
 	if `nspaces'<0 {
-		di as error `"Error in subroutine padding: "`dgm'" too long"'
+		if !mi("`debug'") di as text `"Error in subroutine padding: "`dgm'" too long"'
 		local padding
 	}
 	else local padding : display _dup(`nspaces') " "
