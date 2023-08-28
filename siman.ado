@@ -9,6 +9,7 @@ IW 17sep2019
 */
 version 13
 syntax [anything] [if] [in], [which *]
+if "`anything'"=="cms" local anything comparemethodsscatter
 
 // LOAD SAVED SIMAN PARAMETERS
 foreach thing in `_dta[siman_allthings]' {

@@ -144,7 +144,7 @@ if !mi("`by'") {
 */
 
 * scatter plot
-* check if many graphs will be printed out - if so warn the user
+* check if many graphs will be created - if so warn the user
 local dgmcount: word count `dgm'
 qui tokenize `dgm'
 if `dgmcreated' == 0 {
@@ -165,7 +165,7 @@ if "`totaldgmnum'" == "" local totaldgmnum = 1
 
 local graphnumcheck = `totaldgmnum' * `nummethodcheck' * `numtargetcheck'
 if `graphnumcheck' > 15 {
-	di as error "{it: WARNING: `graphnumcheck' panels will be printed out, consider using 'if' or 'by' options as detailed in {help siman_scatter:siman scatter}}"
+	di as error "{it: WARNING: `graphnumcheck' panels will be created, consider using 'if' or 'by' options as detailed in {help siman_scatter:siman scatter}}"
 }
 
 * if dgm is defined by multiple variables, default is to plot scatter graphs for each dgm variable, split out by each level
@@ -189,7 +189,7 @@ twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`byvar', ixaxes
 
 restore
 
-use `origdata', clear
+qui use `origdata', clear
 
 end
 

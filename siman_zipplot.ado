@@ -1,5 +1,6 @@
-*! version 1.8.6 15aug2023   EMZ
-*  version 1.8.6 15aug2023   EMZ minor bug fix in name for when multiple graphs being printed out
+*! version 1.8.7 15aug2023   EMZ
+*  version 1.8.7 15aug2023   EMZ minor bug fix in name for when multiple graphs being printed out
+*  version 1.8.6 21july2023  IW suppress unwanted "obs dropped" message
 *  version 1.8.5 04july2023  EMZ major re-write for graphs when dgm is defined by > 1 variable, all combinations displayed on 1 graph. lpoint/rpoint not 
 *                            hard coded.
 *  version 1.8.4 16may2023   EMZ bug fix for multiple estimands with multiple targets, formatting to title
@@ -312,7 +313,7 @@ qui statsby, by(group) clear: ci proportions _covers
 tempfile statsbydata
 qui save `statsbydata'
 
-use `masterdata', clear
+qui use `masterdata', clear
 qui merge m:1 group using `statsbydata', keepusing(lb ub) 
 
 * check
@@ -349,7 +350,7 @@ if !mi(`"`options'"') {
 	}
 }
 
-* check if many graphs will be printed out - if so warn the user
+* check if many graphs will be created - if so warn the user
 local dgmcount: word count `dgm'
 qui tokenize `dgm'
 if `dgmcreated' == 0 {
@@ -370,9 +371,8 @@ if "`totaldgmnum'" == "" local totaldgmnum = 1
 
 local graphnumcheck = `totaldgmnum' * `nummethodcheck' * `numtargetcheck'
 if `graphnumcheck' > 15 {
-	di as error "{it: WARNING: `graphnumcheck' panels will be printed out, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}"
+	di as error "{it: WARNING: `graphnumcheck' panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}"
 }
-
 	
 * Plot of confidence interval coverage:
 * First two rspike plots: Monte Carlo confidence interval for percent coverage
@@ -406,8 +406,10 @@ else if `ntrue'>1 {
 * note have to use true_`j' in name to get true_1 etc, not value as will error out if e.g. have 0.25 in the name                           
 	forvalues k = 1/`ntrue' {
 		qui keep if `true'calc == `k'
+* have to create local noname as otherwise does not work in some cases
 		if mi("`name'") local noname = 1
 		if `noname'==1 local name "name(simanzip_true_`k', replace)"
+
 		#delimit ;
 			twoway (rspike _lpoint _rpoint _covlb, hor lw(thin) pstyle(p5)) // MC 
 			   (rspike _lpoint _rpoint _covub, hor lw(thin) pstyle(p5))
@@ -436,7 +438,7 @@ restore
 
 local dgm = "`dgmorig'"
 
-use `origdata', clear 
+qui use `origdata', clear 
 
 end
 

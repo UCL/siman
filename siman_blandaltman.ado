@@ -383,7 +383,7 @@ else local totalgroupnum = `groupnum'
 
 local graphnumcheck = `totalgroupnum' * `numtargetcheck'
 if `graphnumcheck' > 15 {
-di as error "{it: WARNING: `graphnumcheck' graphs will be printed out, consider using 'if' option as detailed in {help siman_blandaltman:siman blandaltman}}"
+di as error "{it: WARNING: `graphnumcheck' graphs will be created, consider using 'if' option as detailed in {help siman_blandaltman:siman blandaltman}}"
 }
 
 	
@@ -509,7 +509,7 @@ else {
 
 restore 
 
-use `origdata', clear  
+qui use `origdata', clear  
 
 end
 

@@ -1,5 +1,8 @@
-*! version 0.6.1   05may2023
-* version 0.6.1   05may2023   IW remove unused performancemeasures option
+*! version 0.6.4   22aug2023   IW: fix bug causing error if truevar also a dgmvar; new force option to pass to simsum
+* version 0.6.4   22aug2023
+* version 0.6.3   16aug2023   IW: if true is a variable and not a dgmvar, it is stored in the PM data
+* version 0.6.2   21jul2023   IW: use simsum not simsumv2
+* version 0.6.1   05may2023   IW: remove unused performancemeasures option
 * version 0.6     23dec2022   IW: preserves value label for method
 * version 0.5   11jul2022
 *  version 0.5  11july2022   EMZ changing created variable names to start with _, and adding error catching messages
@@ -13,13 +16,14 @@ capture program drop siman_analyse
 program define siman_analyse, rclass
 version 15
 
-syntax [anything] [if], [PERFONLY replace noTABle]
+syntax [anything] [if], [PERFONLY replace noTABle force]
 
-capture which simsumv2.ado
+capture which simsum.ado
 if _rc == 111 {
-	di as error "simsumv2.ado needs to be installed to run siman_analyse."  
+	di as error "simsum needs to be installed to run siman analyse. Please use {stata: ssc install simsum}"  
 	exit 498
 	}
+vercheck simsum, vermin(2.0.3) quietly
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -61,7 +65,13 @@ if "`simansetuprun'"=="0" | "`simansetuprun'"=="" {
 	di as error "siman setup has not been run.  Please use siman setup first before siman analyse."
 	exit 498
 	}
-	
+
+* true variable, to be used in reshape, if not in dgm
+cap confirm variable `true'
+if _rc==0 {
+	local extratrue : list true - dgm
+	if !mi("`extratrue'") local truevariable `true'
+}
 	
 * if the user has not specified 'if' in the siman analyse syntax, but there is one from siman setup then use that 'if'
 if ("`if'"=="" & "`ifsetup'"!="") local ifanalyse = `"`ifsetup'"'
@@ -78,7 +88,7 @@ qui sort `dgm' `target' `method' `touse'
 * The 'if' option will only apply to dgm, target and method.  The 'if' option is not allowed to be used on rep and an error message will be issued if the user tries to do so
 capture by `dgm' `target' `method': assert `touse'==`touse'[_n-1] if _n>1
 if _rc == 9 {
-	di as error "The 'if' option can not be applied to 'rep' in siman_analyse."  
+	di as error "The 'if' option can not be applied to 'rep' in siman analyse."  
 	exit 498
 	}
 restore
@@ -174,8 +184,7 @@ if `nformat'==1 {
 		exit 498
 		}
 
-
-	qui simsumv2 `estsimsum' `if', true(`true') se(`sesimsum') method(`method') id(`rep') by(`dgm' `target') max(20) `anything' clear mcse
+	qui simsum `estsimsum' `if', true(`true') se(`sesimsum') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
 
 
 	* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
@@ -220,7 +229,7 @@ foreach v in `valmethod' {
 *if "`ntruevalue'"=="multiple" local estlist `estlist' `true' 
 
 
-qui simsumv2 `estlist' `if', true(`true') se(`selist') id(`rep') by(`dgm' `target') max(20) `anything' clear mcse
+qui simsum `estlist' `if', true(`true') se(`selist') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
 
 
 
@@ -283,13 +292,139 @@ foreach thing in `allthings' {
 * IW change:
 * output table to show that siman analyse has run
 if "`table'"!="notable" siman_table
-else di "siman analyse has run"
+else di as text "siman analyse has run"
 
 end
 
 
 
 	
-	
+************************** START OF PROGRAM VERCHECK ******************************************	
+
+program define vercheck, sclass
+/* 
+9aug2023 new syntax
+	new options ereturn and return search e/r(progname_version) instead of/as well as file comments
+	example: vercheck simsum, vermin(2.0.4) return
+26jul2023 improved output if ok
+17sep2020
+	better error if called with no args
+	now finds version stated like v2.6.1 - specifically, any word starting v|ver|version then a number
+4sep2019 - ignores comma after version number, better error handling
+8may2015 - bug fix - handles missing values
+11mar2015 - bug fix - didn't search beyond first line
+*/
+version 9.2
+syntax name, [vermin(string) nofatal file ereturn return quietly]
+// Parsing
+local progname `namelist'
+if mi("`progname'") {
+	di as error "Syntax: vercheck progname [vermin [opt]]
+	exit 498
+}
+* default to checking file
+if mi("`file'`ereturn'`return'") local file file
+* If nofatal is set & an error is found, program exits without an error code.
+if missing("`fatal'") local exitcode 498
+if !mi("`quietly'") local ifnoi *
 
 
+// read version (3 ways) and store in local vernum
+// read version from r()
+if !mi("`return'") {
+	cap `progname'
+	if "`r(`progname'_version)'"!="" local vernum = r(`progname'_version)
+	local filename Program `progname'
+}
+// read version from e()
+if !mi("`ereturn'") & mi("`vernum'") {
+	cap `progname'
+	if "`e(`progname'_version)'"!="" local vernum = e(`progname'_version)
+	local filename Program `progname'
+}
+// read version from top of file 
+if !mi("`file'") & mi("`vernum'") {
+	tempname fh
+	qui findfile `progname'.ado // exits with error 601 if not found
+	local filename `r(fn)'
+	file open `fh' using `"`filename'"', read
+	local stop 0
+	while `stop'==0 {
+		file read `fh' line
+		if r(eof) continue, break
+		cap { 
+			// suppress error message if line contains expression like `=`a'' when a is empty
+			// cap { tokenize } achieves this, cap tokenize doesn't!
+			tokenize `"`line'"', parse(", ")
+		}
+		if `"`1'"' != `"*!"' continue
+		while "`1'" != "" {
+			mac shift
+			if inlist("`1'","version","ver","v") {
+				local vernum `2'
+				local stop 1
+				continue, break
+			}
+			if regexm("`1'","^v[0-9]") {
+				local vernum = substr("`1'",2,.)
+				local stop 1
+				continue, break
+			}
+			if regexm("`1'","^ver[0-9]") {
+				local vernum = substr("`1'",4,.)
+				local stop 1
+				continue, break
+			}
+			if regexm("`1'","^version[0-9]") {
+				local vernum = substr("`1'",8,.)
+				local stop 1
+				continue, break
+			}
+		}
+		if "`vernum'"!="" continue, break
+	}
+}
+
+sreturn local version `vernum'
+
+if "`vermin'" != "" {
+	if "`vernum'"=="" local match nover
+	else {
+		local vermin2 = subinstr("`vermin'","."," ",.)
+		local vernum2 = subinstr("`vernum'","."," ",.)
+		local words = max(wordcount("`vermin2'"),wordcount("`vernum2'"))
+		local match equal
+		forvalues i=1/`words' {
+			local wordmin = real(word("`vermin2'",`i'))
+			local wordnum = real(word("`vernum2'",`i'))
+			if `wordmin' == `wordnum' continue
+			if `wordmin' > `wordnum' local match old
+			if `wordmin' < `wordnum' local match new
+			if mi(`wordmin') local match new
+			else if mi(`wordnum') local match old
+			continue, break
+		}
+	}
+	if "`match'"=="old" {
+		di as error `"`filename' is version `vernum' which is older than target `vermin'"'
+		exit `exitcode'
+	}
+	if "`match'"=="nover" {
+		di as error `"`filename' has no version number found"'
+		exit `exitcode'
+	}
+	if "`match'"=="new" {
+		`ifnoi' di as text `"`filename' is version "' as result `"`vernum'"' as text `" which is newer than target"'
+	}
+	if "`match'"=="equal" {
+		`ifnoi' di as text `"`filename' is version "' as result `"`vernum'"' as text `" which is same as target"'
+	}
+}
+else {
+	`ifnoi' if "`vernum'"!="" di as text `"`filename' is version `vernum'"'
+	`ifnoi' else di as text `"`filename' has no version number found"'
+}
+
+end
+
+************************** END OF PROGRAM VERCHECK ******************************************	

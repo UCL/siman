@@ -1,4 +1,8 @@
-*! version 1.11    05may2023
+*! version 1.12.3  22aug2023   IW 
+* version 1.12.3  22aug2023   IW bug fix with name("n")
+* version 1.12.2  22aug2023   IW handles target = numeric or string 
+* version 1.12.1  17aug2023   IW 
+* version 1.12    14aug2023   IW changed to fast graph without graph combine; works for one or multiple dgmvars. NB gr() no longer valid.
 * version 1.11    05may2023   IW add "DGM=" to subtitles and "method" as legend title
 * version 1.10    08mar2023    
 *							added warning if multiple targets overlaid
@@ -35,9 +39,10 @@ capture program drop siman_lollyplot
 program define siman_lollyplot, rclass
 version 15
 
-syntax [anything] [if] [,GRaphoptions(string) BYGRaphoptions(string) LABFormat(string) debug Moptions(string) ///
-	col(passthru) noCOMBine /// combined-graph options
-	name(passthru) * /// final-graph options
+syntax [anything] [if] [, BYGRaphoptions(string) ///
+	LABFormat(string) COLors(string) MSymbol(string) ///
+	name(string) REFPower(real 80) * /// final-graph options
+	dgmwidth(int 30) pmwidth(int 24) debug pause /// undocumented options
 	]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -46,30 +51,49 @@ foreach thing in `_dta[siman_allthings]' {
 
 * check if siman analyse has been run, if not produce an error message
 if "`simananalyserun'"=="0" | "`simananalyserun'"=="" {
-	di as error "siman analyse has not been run.  Please use siman_analyse first before siman lollyplot."
+	di as error "siman analyse has not been run.  Please use siman analyse first before siman lollyplot."
 	exit 498
 	}
 	
-* if performance measures are not specified, run graphs for all of them
+* check performance measures
 qui levelsof _perfmeascode, local(allpms) clean 
-local wrongpms : list anything - allpms
+if "`anything'"=="" {
+	if !mi("`true'") {
+		local pmdefault bias empse cover
+	}
+	else {
+		local pmdefault mean empse relerror
+		local missedmessage " and no true value"
+	}
+	di as text "Performance measures not specified`missedmessage': defaulting to `pmdefault'"
+	local pmlist `pmdefault'
+}
+else if "`anything'"=="all" local pmlist `allpms'
+else local pmlist `anything'
+local wrongpms : list pmlist - allpms
 if !mi("`wrongpms'") {
 	di as error "Performance measures wrongly specified: `wrongpms'"
 	exit 498
 }
-if "`anything'"=="" local pmlist `allpms'
-else local pmlist `anything'
-local npm : word count `pmlist'
+local npmlevels : word count `pmlist'
 
-* check grc1leg2 is loaded if needed
-cap unabcmd grc1leg2
-if _rc & `npm'>1 {
-	di as error "siman lollyplot with multiple performance measures requires program grc1leg2 to be installed."
-	di as error `"Please use {stata "search grc1leg2"} and install the program."'
+* defaults
+if !mi("`debug'") local digraph_cmd digraph_cmd
+
+* parse name
+if !mi(`"`name'"') {
+	gettoken name nameopts : name, parse(",")
+	local name = trim("`name'")
+}
+else {
+	local name simanlolly
+	local nameopts , replace
+}
+if wordcount("`name'_something")>1 {
+	di as error "Something has gone wrong with name()"
 	exit 498
-}		
-
-if !mi("`debug'") local dicmd dicmd
+}
+*** END OF PARSING ***
 
 preserve   
 	
@@ -83,6 +107,7 @@ if `nformat'!=1 {
 
 * keep performance measures only
 qui drop if `rep'>0
+qui replace `estimate' = 0 if _perfmeascode=="relprec" & mi(`estimate')
 
 * if the user has not specified 'if' in the siman lollyplot syntax, but there is one from siman analyse then use that 'if'
 if ("`if'"=="" & "`ifanalyse'"!="") local iflollyplot = `"`ifanalyse'"'
@@ -99,12 +124,6 @@ if _rc == 9 {
 	}
 
 qui keep if `touseif'
-
-* issue warning if multiple targets are in data
-if !mi("`target'") {
-	cap assert `target'==`target'[1]
-	if _rc di as error "Your data have multiple targets. They will be overlaid in the lollyplot." _n "You may want to run the command with an if statement."
-}
 
 * take out underscores at the end of variable names if there are any
 foreach u of var * {
@@ -125,15 +144,16 @@ if _rc {
 	gen _pm = - `rep'
 	}
 else {
-	di as error "siman would like to create a variable '_pm', but that name already exists in your dataset.  Please rename your variable _pm as something else."
+	di as error "siman lollyplot would like to create a variable '_pm', but that name already exists in your dataset.  Please rename your variable _pm as something else."
 	exit 498
 	}
 		
 * generate ref variable
-qui gen ref=.
-qui replace ref=0 if inlist(_perfmeascode, "bias", "relerror", "relprec")
-qui replace ref=95 if _perfmeascode=="cover"
-qui replace ref=80 if _perfmeascode=="power"
+tempvar ref
+qui gen `ref'=.
+qui replace `ref' = 0 if inlist(_perfmeascode, "bias", "relerror", "relprec")
+qui replace `ref' = $S_level if _perfmeascode=="cover"
+qui replace `ref' = `refpower' if _perfmeascode=="power"
 
 * gen thelab variable
 local labformat1 : word 1 of `labformat'
@@ -148,27 +168,21 @@ qui replace thelab = string(`estimate',"`labformat2'") if inlist( _perfmeascode,
 qui replace thelab = string(`estimate',"`labformat3'") if inlist( _perfmeascode,"bsims","sesims")
 
 * confidence intervals
-capture confirm variable `lci'
-if _rc {
-	qui gen float lci = `estimate' + (`se'*invnorm(.025))
-	local lci lci
-	}
-capture confirm variable `uci'
-if _rc {
-	qui gen float uci = `estimate' + (`se'*invnorm(.975))
-	local uci uci
-	}
+tempvar lci uci l r
+qui gen float `lci' = `estimate' + (`se'*invnorm(.025))
+qui gen float `uci' = `estimate' + (`se'*invnorm(.975))
 
 * confidence interval markers for the graphs
-qui gen l = "("
-qui gen r = ")"
+qui gen `l' = "("
+qui gen `r' = ")"
 
 
 * If method is a string variable, need to encode it to numeric format for graphs 
 capture confirm string variable `method'
 if !_rc {
-	encode `method', generate(numericmethod)
-	local method numericmethod // so that all remaining code handles both cases
+	rename `method' `method'0
+	encode `method'0, generate(`method')
+	drop `method'0
 }
 
 * find levels of method
@@ -183,15 +197,6 @@ if `dgmcreated' == 1 {
 	local ndgm=1
 }
 
-* for graphs
-qui levelsof _pm if _perfmeascode=="empse"
-qui assert `:word count `r(levels)''==1
-local listfive = "`r(levels)'" 
-qui levelsof _pm if _perfmeascode=="rmse"
-qui cap assert `:word count `r(levels)''==1
-if _rc local normse = 1
-local listeight = "`r(levels)'" 
-
 * only keep the performance measures that the user has specified (or keep all if the user has not specified any) and only create lollyplot graphs for these.
 qui gen tokeep = 0
 foreach pm of local pmlist {
@@ -201,12 +206,7 @@ foreach pm of local pmlist {
 qui drop if tokeep == 0
 qui drop tokeep
 
-qui levelsof _pm, local(tograph)
-
-if mi(`normse') local ifplot "`listfive',`listeight'"
-else local ifplot "`listfive'"
-
-di as text "working...."
+qui levelsof _pm, local(pmlevels)
 
 if !mi("`if'") {
     local ampersand = " &"
@@ -214,87 +214,116 @@ if !mi("`if'") {
 }
 else local if "if"
 
+
 * handle method
 local graphpos = `nmethods'*3 // number of graphs that don't appear in legend
+local i 0
 foreach j of local methodlevels { 
-	local label : label (`method') `j' // assumes method is coded 1,2,3...
-	local ++graphpos
-	local graphorder `graphorder' `graphpos' "`label'" // for legend
-		// don't use local order, which is a siman setting after reshape
+	local label`j' : label (`method') `j' // defaults to `j' if no label
+	local ++i
+	local mcol`j' : word `i' of `colors'
+	if mi("`mcol`j'") local mcol`j' "scheme p`i'"
+	local msym`j' : word `i' of `msymbol'
+	if mi("`msym`j'") & `j'==1 local msym`j' O
+	else if mi("`msym`j'") & `j'>1 local msym`j' `msym`=`j'-1'
+}
+// don't use local order, which is a siman setting after reshape
+
+
+* handle targets
+if !mi("`target'") {
+	cap confirm numeric var `target'
+	if _rc { // convert string to numeric
+		rename `target' `target'0
+		encode `target'0, gen(`target')
+		drop `target'0
 	}
+	qui levelsof `target', local(targetlevels) clean
+	local ntargetlevels = r(r)
+}
+else {
+	local target 0
+	local targetlevels 0
+	local ntargetlevels 0
+}
 
-* create DGM graph title
-qui maketitlevar `dgm'
-local dgmtitlevars = r(newvars)
+* handle DGMs
+local ndgmvars : word count `dgm'
+if `ndgmvars'>1 {
+	tempvar dgmgroup 
+	egen `dgmgroup' = group(`dgm'), label
+	local varname novarname
+}
+else local dgmgroup `dgm'
+qui maketitlevar `dgmgroup', `varname'
+local dgmtitlevar = r(newvars)
+qui levelsof `dgmtitlevar', local(dgmnames)
+local ndgmlevels = r(r)
+padding `dgmnames', width(`dgmwidth')
+local titlepadded = s(titlepadded)
+if `ndgmvars'>1 local titlepadded `"`"`dgm'"' `"`titlepadded'"'"'
 
-* create separate plots 
-if `npm'==1 local graphoptions `graphoptions' `options' // options apply to PM-specific graph if there's only one PM
-summ `method', meanonly
-local methodlabmin = r(min)-0.5
-local methodlabmax = r(max)+0.5
-foreach pm of local tograph {
-	if !inlist(`pm',`ifplot') {
-		local refline
-		local rescale noxrescale
-		}
+* create PM graph title for left
+qui levelsof _perfmeascode, local(pmlevels)
+padding `pmlevels', width(`pmwidth') reverse
+local ytitlepadded = s(titlepadded)
+
+if `ntargetlevels'>1 {
+	di as text "Drawing `ntargetlevels' graphs (one per target)..."
+	local each "each "
+}
+else di as text "Drawing graph..."
+if `npmlevels'>5  di as error "WARNING: `each'graph will have `npmlevels' rows of panels: consider using fewer performance measures"
+if `ndgmlevels'>5 di as error "WARNING: `each'graph will have `ndgmlevels' columns of panels: consider using if option as detailed in {help siman lollyplot}"
+
+* create graph
+foreach thistarget of local targetlevels {
+	if `ntargetlevels'>0 {
+		local thistargetname : label (`target') `thistarget'
+		local targetcond `target'==`thistarget'
+		local note `target': `thistargetname'
+		if !mi("`debug'") di as text `"Drawing graph for `targetcond'"'
+	}
 	else {
-		local rescale xrescale
-		local refline (line `method' ref if _pm==`pm', lc(gs8))
-		}
-
-	local scatters
-	local spikes
-	local bounds
-	foreach j of local methodlevels { 
-		local scatter`j' = `"(scatter `method' `estimate' `if' `method'==`j' & _pm==`pm', mlab(thelab) mlabpos(1) mcol("scheme p`j'") mlabcol("scheme p`j'") msym(o) `moptions')"'
-		local scatters `scatters' `scatter`j''
-
-		local spike`j' = `"(rspike `estimate' ref `method' `if' `method'==`j' & _pm==`pm', lcol("scheme p`j'") hor)"'
-		local spikes `spikes' `spike`j''	
-
-		local bound`j' = `"(scatter `method' `lci' `if' `method'==`j' & _pm==`pm', msym(i) mlab(l) mlabpos(0) mcol("scheme p`j'") mlabcol("scheme p`j'")) (scatter `method' `uci' `if' `method'==`j' & _pm==`pm', msym(i) mlab(r) mlabpos(0) mcol("scheme p`j'") mlabcol("scheme p`j'"))"'
-		local bounds `bounds' `bound`j''	
-		} 
-	
-	* find short and long names for this PM
-	local longpmname: label (`rep') -`pm'
-	tempvar row
-	gen `row' = _n
-	qui summ `row' if `rep' == -`pm'
-	local shortpmname = _perfmeascode[`=r(min)']
-	assert _perfmeascode == "`shortpmname'" if `rep' == -`pm'
-
-	* draw the graph
-	if `npm'==1 local nameopt `name'
-	else local nameopt name(simanlollyplot_`shortpmname', replace) 
- 	#delimit ;
-	`dicmd' graph twoway
-		`refline' `spikes' `bounds' `scatters' 
-		,
-		by(`dgmtitlevars', `rescale' note("") b1tit(`longpmname') `bygraphoptions')
-		ytit("")
-		yla(none) 
-		yscale(off range(`methodlabmin', `methodlabmax') reverse)
-		xla(, grid)
-		legend(order(`graphorder') title("`method'"))
-		`nameopt'
-		`graphoptions'
-	;
-	#delimit cr
-	local graphstocombine `graphstocombine' simanlollyplot_`shortpmname'
-}
-
-if `npm'>1 { // multiple PMs 
-	if mi("`combine'") { // combine multiple PMs into a single graph
-		if mi("`col'") local col col(1)
-		`dicmd' grc1leg2 `graphstocombine', `col' `options' `name'
+		local targetcond 1
+		local note
 	}
-	else { 
-		di as error `"Warning: options ignored: `col' `options' `name'"'
+	local graph_cmd twoway 
+	local i 1
+	local graphorder
+	foreach thismethod of local methodlevels {
+		local graphorder `graphorder' `=4*`i'-3' "`method': `label`i''"
+		* main marker
+		local graph_cmd `graph_cmd' scatter `method' `estimate' ///
+			if `method'==`thismethod' & `targetcond', ///
+			mcol(`mcol`i'') msym(`msym`i'') mlab(thelab) mlabpos(12) ||
+		* brackets for LCL and UCL
+		local graph_cmd `graph_cmd' scatter `method' `lci' ///
+			if `method'==`thismethod' & `targetcond', ///
+			mlabcol(`mcol`i'') msym(i) mlab(`l') mlabpos(0) ||
+		local graph_cmd `graph_cmd' scatter `method' `uci' ///
+			if `method'==`thismethod' & `targetcond', ///
+			mlabcol(`mcol`i'') msym(i) mlab(`r') mlabpos(0) ||
+		* line from ref to main marker
+		local graph_cmd `graph_cmd' rspike `estimate' `ref' `method' ///
+			if `method'==`thismethod' & `targetcond', ///
+			horiz lcol(`mcol`i'')  ||
+		local ++i
 	}
-}
-else if !mi("`col'") { 
-	di as error `"Warning: options ignored: `col'"'
+	local graph_cmd `graph_cmd' scatter `method' `ref' if `targetcond', ///
+		msym(i) c(l) col(gray) lpattern(dash)
+	local graph_cmd `graph_cmd' , by(_perfmeascode `dgm', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions') 
+	local graph_cmd `graph_cmd' subtitle("") ylab(none) ///
+		ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse range(0.8)) ///
+		legend(order(`graphorder'))
+	if `ntargetlevels'<=1 local graph_cmd `graph_cmd' name(`name'`nameopts')
+	else local graph_cmd `graph_cmd' name(`name'_`thistargetname'`nameopts')
+	local graph_cmd `graph_cmd' `options'
+
+	global F9 `graph_cmd'
+	if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+	if !mi("`pause'") pause
+	`graph_cmd'
 }
 
 end
@@ -307,7 +336,7 @@ Create a string variable with values "varname=value", for graphs
 IW 5may2023
 */
 prog def maketitlevar, rclass
-syntax varlist, [suffix(string)]
+syntax varlist, [suffix(string) novarname]
 if mi("`suffix'") local suffix title
 foreach var of local varlist {
 	qui {
@@ -327,10 +356,35 @@ foreach var of local varlist {
 			}
 		}
 		if _rc di as error "maketitlevar: something went wrong"
-		replace `var'`suffix' = "`var'="+`var'`suffix' if !mi(`var')
+		if mi("`varname'") replace `var'`suffix' = "`var': "+`var'`suffix' if !mi(`var')
 	}
 	di as text "Created " as result "`var'`suffix'" as text " from " as result "`source'" as text " variable " as result "`var'"
 	local newvars `newvars' `var'`suffix'
 }
 return local newvars `newvars'
 end
+
+******************* START OF PROGRAM PADDING ************************
+* separate out the given words to create a title of given width
+prog def padding, sclass
+syntax anything, width(int) [reverse debug]
+local ndgm 0
+local spacel : _length " "
+foreach dgm in `anything' {
+	local ++ndgm
+}
+foreach dgm in `anything' {
+	local dgml : _length "`dgm'"
+	local nspaces = round((`width'/`ndgm'-`dgml')/`spacel'/2,1)
+	if `nspaces'<0 {
+		if !mi("`debug'") di as text `"Error in subroutine padding: "`dgm'" too long"'
+		local padding
+	}
+	else local padding : display _dup(`nspaces') " "
+	if mi("`reverse'") local titlepadded = `"`titlepadded'`padding'`dgm'`padding'"'
+	else local titlepadded = `"`padding'`dgm'`padding'`titlepadded'"'
+}
+sreturn local titlepadded `"`titlepadded'"'
+end
+
+******************* END OF PROGRAM PADDING ************************
