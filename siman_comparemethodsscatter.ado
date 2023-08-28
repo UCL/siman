@@ -718,8 +718,7 @@ else if `numberdgms' != 1 {
 
 				if `numbermethod'==2 {
 
-					`dicmd' graph combine `mlabelname1' `graphtheta12`d'`t'' `graphse12`d''`t' `mlabelname2', ///
-
+					`dicmd' graph combine `mlabelname1' `graphtheta12`d'`t'' `graphse12`d'`t'' `mlabelname2', ///
 						title("") note("Graphs for `dgmvalues': `dgmlevels`d'' `targetlab'") cols(2)	xsize(4) ///
 						name(`name'_`d'`tlab', replace) `options'
 				}

@@ -406,10 +406,11 @@ else if `ntrue'>1 {
 * note have to use true_`j' in name to get true_1 etc, not value as will error out if e.g. have 0.25 in the name                           
 	forvalues k = 1/`ntrue' {
 		qui keep if `true'calc == `k'
-* have to create local noname as otherwise does not work in some cases
+* have to create local noname for the loop (to re-set name later, so that each graph is named)
+        local noname 0
 		if mi("`name'") local noname = 1
 		if `noname'==1 local name "name(simanzip_true_`k', replace)"
-
+		else local name "name(`name'_`k', replace)"
 		#delimit ;
 			twoway (rspike _lpoint _rpoint _covlb, hor lw(thin) pstyle(p5)) // MC 
 			   (rspike _lpoint _rpoint _covub, hor lw(thin) pstyle(p5))

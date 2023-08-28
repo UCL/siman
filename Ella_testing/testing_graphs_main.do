@@ -8,7 +8,7 @@ Latest update Ian 22aug2023
 
 // SETUP: MODIFY FOR USER & PROJECT
 local codepath C:\ian\git\siman\ // for Ian
-
+local codepath C:\git\siman\ // for Ella
 
 // SETUP FOR ALL USERS
 local testpath `codepath'Ella_testing\
@@ -60,16 +60,16 @@ siman which
 * target long and string, method long and numeric, true variable 1 level
 use data/simlongESTPM_longE_longM.dta, clear
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
-* siman comparemethodsscatter if estimand=="beta" & dgm==2
+siman comparemethodsscatter if estimand=="beta" & dgm==2
 * graphs
 siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test1", replace) 
 
 siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test1", replace)) 
 
-siman zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test1", replace)
 
-* siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test1", replace) 
+siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test1", replace) 
 
 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test1", replace) 
 
@@ -104,10 +104,10 @@ siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test2
 
 siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test2", replace)) 
 
-siman zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test2", replace)
 
-* siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test2", replace) 
+siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test2", replace) 
 
 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test2", replace)        
 
@@ -137,12 +137,12 @@ siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test3
 
 siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test3", replace)) 
 
-cap siman zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+cap siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test3", replace)
 assert _rc == 498
 * siman zipplot can not be run w/o true value as required
 
-* siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test3", replace) 
+siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test3", replace) 
 
 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test3", replace) 
 
@@ -174,11 +174,11 @@ cap siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name
 assert _rc == 498
 * siman swarm can not be run without method as required
 
-siman zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test4", replace)    
 
-* cap siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test4", replace) 
-* assert _rc == 498
+cap siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test4", replace) 
+assert _rc == 498
 * siman cms can not be run without method as required
 
 cap siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test4", replace) 
@@ -203,7 +203,7 @@ siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(
 siman scatter
 siman swarm
 siman zipplot
-* siman comparemethodsscatter
+siman comparemethodsscatter
 siman blandaltman
 
 
@@ -220,10 +220,10 @@ siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test5
 
 siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test5", replace)) 
 
-siman zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test5", replace)
 
-* siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test5", replace) 
+siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test5", replace) 
 
 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test5", replace) 
 
@@ -292,10 +292,10 @@ siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test7
 
 siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test7", replace)) 
 
-siman zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test7", replace)
 
-* siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test7", replace) 
+siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test7", replace) 
 
 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test7", replace) 
 
