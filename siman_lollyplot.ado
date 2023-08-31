@@ -1,4 +1,4 @@
-*! version 1.12.3  22aug2023   IW 
+*! version 1.12.3  22aug2023
 * version 1.12.3  22aug2023   IW bug fix with name("n")
 * version 1.12.2  22aug2023   IW handles target = numeric or string 
 * version 1.12.1  17aug2023   IW 

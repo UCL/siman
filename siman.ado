@@ -36,6 +36,7 @@ if mi("`anything'") {
 if "`anything'"=="which" {
 	which siman
 	foreach subcmd of local subcmds {
+		if "`subcmd'"=="analyze" continue
 		cap noi which siman_`subcmd'
 	}
 	exit

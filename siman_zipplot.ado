@@ -1,4 +1,4 @@
-*! version 1.8.7 15aug2023   EMZ
+*! version 1.8.7 15aug2023
 *  version 1.8.7 15aug2023   EMZ minor bug fix in name for when multiple graphs being printed out
 *  version 1.8.6 21july2023  IW suppress unwanted "obs dropped" message
 *  version 1.8.5 04july2023  EMZ major re-write for graphs when dgm is defined by > 1 variable, all combinations displayed on 1 graph. lpoint/rpoint not 
