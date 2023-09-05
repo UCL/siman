@@ -4,8 +4,8 @@ Short testing file for discussion
 */
 
 // SETUP: MODIFY FOR USER & PROJECT
-local codepath C:\ian\git\siman\ 
-
+*local codepath C:\ian\git\siman\ 
+local codepath C:\git\siman\ 
 
 // SETUP FOR ALL USERS
 local testpath `codepath'Ella_testing\

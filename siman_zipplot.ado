@@ -1,4 +1,5 @@
-*! version 1.8.7 15aug2023   EMZ
+*! version 1.8.8 05sep2023   EMZ
+*  version 1.8.8 05sep2023   EMZ specified name used if true >1 value, named graph with suffix _x
 *  version 1.8.7 15aug2023   EMZ minor bug fix in name for when multiple graphs being printed out
 *  version 1.8.6 21july2023  IW suppress unwanted "obs dropped" message
 *  version 1.8.5 04july2023  EMZ major re-write for graphs when dgm is defined by > 1 variable, all combinations displayed on 1 graph. lpoint/rpoint not 
@@ -26,6 +27,9 @@ version 15
 syntax [if][in] [,* BY(varlist) ///
                     NONCOVeroptions(string) COVeroptions(string) SCAtteroptions(string) TRUEGRaphoptions(string) BYGRaphoptions(string) ///
 					SCHeme(string)]
+					
+set trace on
+set tracedepth 1
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -350,6 +354,12 @@ if !mi(`"`options'"') {
 	}
 }
 
+* strip out the actual name out of the command
+local namelastpart = subinstr(`"`name'"',"name("," ",1)
+local namefirstpart = strtrim(subinstr(`"`namelastpart'"',", replace)"," ",1))
+*di `"`namefirstpart'"'
+local namestub = substr(`namefirstpart',1,.)
+
 * check if many graphs will be created - if so warn the user
 local dgmcount: word count `dgm'
 qui tokenize `dgm'
@@ -410,7 +420,7 @@ else if `ntrue'>1 {
         local noname 0
 		if mi("`name'") local noname = 1
 		if `noname'==1 local name "name(simanzip_true_`k', replace)"
-		else local name "name(`name'_`k', replace)"
+		else local name "name(`namestub'_`k', replace)"
 		#delimit ;
 			twoway (rspike _lpoint _rpoint _covlb, hor lw(thin) pstyle(p5)) // MC 
 			   (rspike _lpoint _rpoint _covub, hor lw(thin) pstyle(p5))

@@ -1,4 +1,5 @@
-*! version 1.9.12 07aug2023
+*! version 1.9.13 05sep2023
+*  version 1.9.13 05sep2023   EMZ minor bug fix to prevent double looping
 *  version 1.9.12 07aug2023   EMZ further minor formatting bug fixes: metlist
 *  version 1.9.11 18july2023  EMZ minor formatting bug fixes from IW testing
 *  version 1.9.10 10july2023  EMZ change so that one graph is created for each target level and dgm level combination, with a warning if high number of 
@@ -589,6 +590,7 @@ else if `numberdgms' != 1 {
 				local loop = `loop' + 1
 			}
 		}
+	}
 
 		
 *		if `dgmlabels' == 0 local dgmfilter = "`dgmvar' == ``dgmvar'dlabel`d''"
@@ -736,7 +738,6 @@ else if `numberdgms' != 1 {
 				}
 			}
 		}
-	}
 }
 
 
