@@ -27,9 +27,6 @@ version 15
 syntax [if][in] [,* BY(varlist) ///
                     NONCOVeroptions(string) COVeroptions(string) SCAtteroptions(string) TRUEGRaphoptions(string) BYGRaphoptions(string) ///
 					SCHeme(string)]
-					
-set trace on
-set tracedepth 1
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
