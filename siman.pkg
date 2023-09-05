@@ -1,8 +1,8 @@
 v 3
 d siman: Suite of commands for analysing the results of simulation studies and producing graphs
 d Program by Ella Marley-Zagar
-d Version 0.2
-d Distribution-Date: 27mar2023
+d Version 0.3
+d Distribution-Date: 08aug2023
 
 f siman.ado
 f siman_analyse.ado
@@ -16,9 +16,7 @@ f siman_scatter.ado
 f siman_setup.ado
 f siman_swarm.ado
 f siman_table.ado
-*f siman_trellis.ado
 f siman_zipplot.ado
-f simsumv2.ado
 
 f siman.sthlp
 f siman_analyse.sthlp
@@ -32,5 +30,4 @@ f siman_scatter.sthlp
 f siman_setup.sthlp
 f siman_swarm.sthlp
 f siman_table.sthlp
-f siman_trellis.sthlp
 f siman_zipplot.sthlp

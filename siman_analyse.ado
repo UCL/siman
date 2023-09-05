@@ -1,5 +1,5 @@
-*! version 0.6.4   22aug2023   IW: fix bug causing error if truevar also a dgmvar; new force option to pass to simsum
-* version 0.6.4   22aug2023
+*! version 0.6.4   22aug2023
+* version 0.6.4   22aug2023   IW: fix bug causing error if truevar also a dgmvar; new force option to pass to simsum
 * version 0.6.3   16aug2023   IW: if true is a variable and not a dgmvar, it is stored in the PM data
 * version 0.6.2   21jul2023   IW: use simsum not simsumv2
 * version 0.6.1   05may2023   IW: remove unused performancemeasures option
