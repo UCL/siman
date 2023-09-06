@@ -355,7 +355,7 @@ if !mi(`"`options'"') {
 local namelastpart = subinstr(`"`name'"',"name("," ",1)
 local namefirstpart = strtrim(subinstr(`"`namelastpart'"',", replace)"," ",1))
 *di `"`namefirstpart'"'
-local namestub = substr(`namefirstpart',1,.)
+local namestub = substr(`"`namefirstpart'"',1,.)
 
 * check if many graphs will be created - if so warn the user
 local dgmcount: word count `dgm'
