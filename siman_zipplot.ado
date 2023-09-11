@@ -36,7 +36,7 @@ if "`simansetuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
 }
-	
+
 * if estimate or se are missing, give error message as program requires them for the graph(s)
 if mi("`estimate'") | mi("`se'") {
     di as error "siman zipplot requires estimate and se to plot"
@@ -348,14 +348,15 @@ if !mi(`"`options'"') {
 		local namestring = `_namestring'2
 		local name = `"name`namestring'"'
 		local options: list options - name
+		
+		* strip out the actual name out of the command
+		local namelastpart = subinstr(`"`name'"',"name("," ",1)
+		local namefirstpart = strtrim(subinstr(`"`namelastpart'"',", replace)"," ",1))
+		*di `"`namefirstpart'"'
+		local namestub = substr(`namefirstpart',1,.)
 	}
 }
 
-* strip out the actual name out of the command
-local namelastpart = subinstr(`"`name'"',"name("," ",1)
-local namefirstpart = strtrim(subinstr(`"`namelastpart'"',", replace)"," ",1))
-*di `"`namefirstpart'"'
-local namestub = substr(`namefirstpart',1,.)
 
 * check if many graphs will be created - if so warn the user
 local dgmcount: word count `dgm'
