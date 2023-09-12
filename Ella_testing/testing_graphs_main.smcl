@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}C:\git\siman\Ella_testing\testing_graphs_main.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}12 Sep 2023, 09:31:31
+ {txt}opened on:  {res}12 Sep 2023, 12:44:22
 {txt}
 {com}. siman which
 {txt}C:\git\siman\siman.ado
@@ -13,7 +13,7 @@
 {txt}C:\git\siman\siman_describe.ado
 {res}*! version 0.4     21jul2022  
 {txt}C:\git\siman\siman_analyse.ado
-{res}*! version 0.6.4   22aug2023
+{res}*! version 0.6.5  12sep2023
 {txt}C:\git\siman\siman_table.ado
 {res}*! version 0.8   23dec2022
 {txt}C:\git\siman\siman_reshape.ado
@@ -34,57 +34,13 @@
 {res}*! version 1.8.2   17aug2023
 {txt}
 {com}. 
-. ********************************
-. 
 {txt}end of do-file
 
-{com}. do "C:\Users\rmjlem1\AppData\Local\Temp\STD425c_000000.tmp"
+{com}. do "C:\Users\rmjlem1\AppData\Local\Temp\STD4684_000000.tmp"
 {txt}
-{com}. * DGM numeric, 1 var
-. *********************
-. * target long and string, method long and numeric, true variable 1 level
-. use data/simlongESTPM_longE_longM.dta, clear
-{txt}
-{com}. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
-
-{txt}{col 20}SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:{res}{col 35}format 1: long-long
-{txt}The format for targets is:{res}{col 35}long
-{txt}The format for methods is:{res}{col 35}long
-{txt}The number of targets is:{res}{col 35}2
-{txt}The target values are:{res}{col 35}beta gamma
-
-{txt}The number of methods is:{res}{col 35}2
-{txt}The method values are:{res}{col 35}1 2
-
-Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}2
-{txt}The dgm variables (# levels): {res}{col 35}dgm (2) 
-
-Estimates are contained in the dataset
-
-{txt}The estimates variable is:{res}{col 35}est
-{txt}The se variable is:{res}{col 35}se
-{txt}The df variable is:{res}{col 35}N/A
-{txt}The ci variables are:{res}{col 35}N/A
-{txt}The p variable is:{res}{col 35}N/A
-{txt}The true variable is:{res}{col 35}true
-{txt}_____________________________________________________
-
-{com}. siman comparemethodsscatter if estimand=="beta" & dgm==2
-{txt}Working.....
-{res}{txt}
-{com}. 
-{txt}end of do-file
-
-{com}. do "C:\Users\rmjlem1\AppData\Local\Temp\STD425c_000000.tmp"
-{txt}
-{com}. * DGM numeric with string labels, 1 var
-. *****************************************
-. 
-. * target wide and numeric with string labels, method wide and string, true value
+{com}. * DGM string, 1 var
+. ********************
+. * target and method long numeric string labels, true missing
 . use data/simlongESTPM_longE_longM.dta, clear
 {txt}
 {com}. encode estimand, gen(estimand_num)
@@ -93,158 +49,30 @@ Estimates are contained in the dataset
 {txt}
 {com}. rename estimand_num estimand
 {res}{txt}
-{com}. label define dgml 1 "D1" 2 "D2"
+{com}. label define methodl 1 "A" 2 "B"
 {txt}
-{com}. label values dgm dgml
+{com}. label values method methodl
 {txt}
-{com}. gen method_str = ""
+{com}. gen dgm_str = ""
 {txt}(8,000 missing values generated)
 
-{com}. replace method_str = "A" if method == 1
+{com}. replace dgm_str = "1" if dgm == 1
 {txt}(4,000 real changes made)
 
-{com}. replace method_str = "B" if method == 2
+{com}. replace dgm_str = "2" if dgm == 2
 {txt}(4,000 real changes made)
 
-{com}. drop method
+{com}. drop dgm true
 {txt}
-{com}. rename method_str method
-{res}{txt}
-{com}. drop true
-{txt}
-{com}. reshape wide est se, i(rep dgm estimand) j(method, string)
-{txt}(note: j = A B)
-
-Data{col 36}long{col 43}->{col 48}wide
-{hline 77}
-Number of obs.                 {res}    8000   {txt}->{res}    4000
-{txt}Number of variables            {res}       6   {txt}->{res}       7
-{txt}j variable (2 values)            {res}method   {txt}->   (dropped)
-xij variables:
-                                    {res}est   {txt}->   {res}estA estB
-                                     se   {txt}->   {res}seA seB
-{txt}{hline 77}
-
-{com}. reshape wide estA estB seA seB, i(rep dgm) j(estimand)
-{txt}(note: j = 1 2)
-
-Data{col 36}long{col 43}->{col 48}wide
-{hline 77}
-Number of obs.                 {res}    4000   {txt}->{res}    2000
-{txt}Number of variables            {res}       7   {txt}->{res}      10
-{txt}j variable (2 values)          {res}estimand   {txt}->   (dropped)
-xij variables:
-                                   {res}estA   {txt}->   {res}estA1 estA2
-                                   estB   {txt}->   {res}estB1 estB2
-                                    seA   {txt}->   {res}seA1 seA2
-                                    seB   {txt}->   {res}seB1 seB2
-{txt}{hline 77}
-
-{com}. siman setup, rep(rep) dgm(dgm) target(1 2) method(A B) estimate(est) se(se) true(0) order(method)
-
-{txt}{col 20}SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:{res}{col 35}format 3: long-wide
-{txt}The format for targets is:{res}{col 35}long
-{txt}The format for methods is:{res}{col 35}wide
-{txt}The number of targets is:{res}{col 35}2
-{txt}The target values are:{res}{col 35}1 2
-
-{txt}The number of methods is:{res}{col 35}2
-{txt}The method values are:{res}{col 35}A B
-
-Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}2
-{txt}The dgm variables (# levels): {res}{col 35}dgm (2) 
-
-Estimates are contained in the dataset
-
-{txt}The estimates stub is:{res}{col 35}est
-{txt}The se stub is:{res}{col 35}se
-{txt}The df stub is:{res}{col 35}N/A
-{txt}The ci stubs are:{res}{col 35}N/A
-{txt}The p stub is:{res}{col 35}N/A
-{txt}The true value is:{res}{col 35}0
-{txt}_____________________________________________________
-
-{com}. * has made target string
-.  
-. 
-{txt}end of do-file
-
-{com}. do "C:\Users\rmjlem1\AppData\Local\Temp\STD425c_000000.tmp"
-{txt}
-{com}. siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test2", replace) 
-{txt}Working.....
+{com}. rename dgm_str dgm
 {res}{txt}
 {com}. 
-{txt}end of do-file
-
-{com}. do "C:\Users\rmjlem1\AppData\Local\Temp\STD425c_000000.tmp"
-{txt}
-{com}. * more than 3 methods for plots, methlist option
-. ****************************************************
-. clear all
-{res}{txt}
-{com}. prog drop _all
-{txt}
-{com}. use data/bvsim_all_out.dta, clear
-{txt}
-{com}. rename _dnum dnum
-{res}{txt}
-{com}. drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
-{txt}
-{com}. drop if _n>100
-{txt}(17,900 observations deleted)
-
-{com}. reshape long beta_ sebeta_ gamma_ segamma_, i(dnum) j(method)
-{txt}(note: j = 1 2 3 4 5 6 7 8 9 10)
-
-Data{col 36}wide{col 43}->{col 48}long
-{hline 77}
-Number of obs.                 {res}     100   {txt}->{res}    1000
-{txt}Number of variables            {res}      41   {txt}->{res}       6
-{txt}j variable (10 values)                    ->   {res}method
-{txt}xij variables:
-              {res}beta_1 beta_2 ... beta_10   {txt}->   {res}beta_
-        sebeta_1 sebeta_2 ... sebeta_10   {txt}->   {res}sebeta_
-           gamma_1 gamma_2 ... gamma_10   {txt}->   {res}gamma_
-     segamma_1 segamma_2 ... segamma_10   {txt}->   {res}segamma_
-{txt}{hline 77}
-
-{com}. rename beta_ estbeta
-{res}{txt}
-{com}. rename sebeta_ sebeta
-{res}{txt}
-{com}. rename gamma_ estgamma
-{res}{txt}
-{com}. rename segamma_ segamma
-{res}{txt}
-{com}. reshape long est se, i(dnum method) j(target "beta" "gamma")
-
-{txt}Data{col 36}wide{col 43}->{col 48}long
-{hline 77}
-Number of obs.                 {res}    1000   {txt}->{res}    2000
-{txt}Number of variables            {res}       6   {txt}->{res}       5
-{txt}j variable (2 values)                     ->   {res}target
-{txt}xij variables:
-                       {res}estbeta estgamma   {txt}->   {res}est
-                         sebeta segamma   {txt}->   {res}se
-{txt}{hline 77}
-
-{com}. gen dgm = 1
-{txt}
-{com}. expand 2, gen(dupindicator)
-{txt}(2,000 observations created)
-
-{com}. replace dgm=2 if dupindicator==1
-{txt}(2,000 real changes made)
-
-{com}. drop dupindicator
-{txt}
-{com}. 
-. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) 
+{res}  {txt}variable {bf}dgm{sf} was {bf}{res}long{sf}{txt} now {bf}{res}byte{sf}
+{txt}  (24,000 bytes saved)
+{err}Warning: variable dgm, which appears in dgm(), was stored as a string. It has been
+encoded as numeric so that subsequent siman commands will work. If you require a
+different order, encode dgm as numeric before running -siman setup-.
 
 {txt}{col 20}SUMMARY OF DATA
 _____________________________________________________
@@ -255,8 +83,8 @@ The siman format is:{res}{col 35}format 1: long-long
 {txt}The number of targets is:{res}{col 35}2
 {txt}The target values are:{res}{col 35}beta gamma
 
-{txt}The number of methods is:{res}{col 35}10
-{txt}The method values are:{res}{col 35}1 2 3 4 5 6 7 8 9 10
+{txt}The number of methods is:{res}{col 35}2
+{txt}The method values are:{res}{col 35}A B
 
 Data generating mechanism (dgm)
 {txt}The total number of dgms is: {res}{col 35}2
@@ -275,412 +103,4 @@ Estimates are contained in the dataset
 {com}. 
 {txt}end of do-file
 
-{com}. do "C:\Users\rmjlem1\AppData\Local\Temp\STD425c_000000.tmp"
-{txt}
-{com}. siman comparemethodsscatter, methlist(3 5 7) name("cms_test6a", replace) 
-{txt}Working.....
-{res}{txt}
-{com}. 
-{txt}end of do-file
-
-{com}. clear all
-{res}
-{com}. prog drop all
-{err}program {bf}all{sf} not found
-{txt}{search r(111), local:r(111);}
-
-{com}. prog drop _all
-
-. h siman compremethodsscatter
-
-. h siman_compremethodsscatter
-
-. h siman_comparemethodsscatter
-
-. use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear
-{txt}(simcheck99 data from Analysis\Simulations\simcheck\missing confounder code)
-
-{com}. siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
-
-{txt}{col 20}SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:{res}{col 35}format 1: long-long
-{txt}The format for targets is:{res}{col 35}long
-{txt}The format for methods is:{res}{col 35}long
-{txt}The number of targets is:{res}{col 35}N/A
-{txt}The target values are:{res}{col 35}N/A
-
-{txt}The number of methods is:{res}{col 35}3
-{txt}The method values are:{res}{col 35}Full CCA MI
-
-Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}3
-{txt}The dgm variables (# levels): {res}{col 35}dgm (3) 
-
-Estimates are contained in the dataset
-
-{txt}The estimates variable is:{res}{col 35}b
-{txt}The se variable is:{res}{col 35}se
-{txt}The df variable is:{res}{col 35}N/A
-{txt}The ci variables are:{res}{col 35}N/A
-{txt}The p variable is:{res}{col 35}N/A
-{txt}The true value is:{res}{col 35}0
-{txt}_____________________________________________________
-
-{com}. siman comparemethodsscatter se, methlist(1 3) title("testtitle") subgr(xtit("testaxis")) name("cms_test1", replace)
-{txt}Working.....
-{res}
-{com}. h siman_comparemethodsscatter
-
-. use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear
-{txt}(simcheck99 data from Analysis\Simulations\simcheck\missing confounder code)
-
-{com}. siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
-
-{txt}{col 20}SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:{res}{col 35}format 1: long-long
-{txt}The format for targets is:{res}{col 35}long
-{txt}The format for methods is:{res}{col 35}long
-{txt}The number of targets is:{res}{col 35}N/A
-{txt}The target values are:{res}{col 35}N/A
-
-{txt}The number of methods is:{res}{col 35}3
-{txt}The method values are:{res}{col 35}Full CCA MI
-
-Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}3
-{txt}The dgm variables (# levels): {res}{col 35}dgm (3) 
-
-Estimates are contained in the dataset
-
-{txt}The estimates variable is:{res}{col 35}b
-{txt}The se variable is:{res}{col 35}se
-{txt}The df variable is:{res}{col 35}N/A
-{txt}The ci variables are:{res}{col 35}N/A
-{txt}The p variable is:{res}{col 35}N/A
-{txt}The true value is:{res}{col 35}0
-{txt}_____________________________________________________
-
-{com}. siman comparemethodsscatter se, methlist(1 3) title("My CMS plot") subgr(xtit("testaxis")) name("cms_test1", replace)
-{txt}Working.....
-{res}
-{com}. h siman_comparemethodsscatter
-
-. use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear
-{txt}(simcheck99 data from Analysis\Simulations\simcheck\missing confounder code)
-
-{com}. siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
-
-{txt}{col 20}SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:{res}{col 35}format 1: long-long
-{txt}The format for targets is:{res}{col 35}long
-{txt}The format for methods is:{res}{col 35}long
-{txt}The number of targets is:{res}{col 35}N/A
-{txt}The target values are:{res}{col 35}N/A
-
-{txt}The number of methods is:{res}{col 35}3
-{txt}The method values are:{res}{col 35}Full CCA MI
-
-Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}3
-{txt}The dgm variables (# levels): {res}{col 35}dgm (3) 
-
-Estimates are contained in the dataset
-
-{txt}The estimates variable is:{res}{col 35}b
-{txt}The se variable is:{res}{col 35}se
-{txt}The df variable is:{res}{col 35}N/A
-{txt}The ci variables are:{res}{col 35}N/A
-{txt}The p variable is:{res}{col 35}N/A
-{txt}The true value is:{res}{col 35}0
-{txt}_____________________________________________________
-
-{com}. siman comparemethodsscatter se, methlist(1 3) title("My Compare Methods Scatter plot") subgr(xtitle("test x-title")) name("cms_test1", replace)
-{err}type mismatch
-{txt}{search r(109), local:r(109);}
-
-{com}. h siman_comparemethodsscatter
-
-. use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear
-{txt}(simcheck99 data from Analysis\Simulations\simcheck\missing confounder code)
-
-{com}. siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
-
-{txt}{col 20}SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:{res}{col 35}format 1: long-long
-{txt}The format for targets is:{res}{col 35}long
-{txt}The format for methods is:{res}{col 35}long
-{txt}The number of targets is:{res}{col 35}N/A
-{txt}The target values are:{res}{col 35}N/A
-
-{txt}The number of methods is:{res}{col 35}3
-{txt}The method values are:{res}{col 35}Full CCA MI
-
-Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}3
-{txt}The dgm variables (# levels): {res}{col 35}dgm (3) 
-
-Estimates are contained in the dataset
-
-{txt}The estimates variable is:{res}{col 35}b
-{txt}The se variable is:{res}{col 35}se
-{txt}The df variable is:{res}{col 35}N/A
-{txt}The ci variables are:{res}{col 35}N/A
-{txt}The p variable is:{res}{col 35}N/A
-{txt}The true value is:{res}{col 35}0
-{txt}_____________________________________________________
-
-{com}. siman comparemethodsscatter se, methlist(1 3) title("My Compare Methods Scatter plot") subgr(xtitle("test xtitle")) name("cms_test1", replace)
-{err}type mismatch
-{txt}{search r(109), local:r(109);}
-
-{com}. h siman_comparemethodsscatter
-
-. use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear
-{txt}(simcheck99 data from Analysis\Simulations\simcheck\missing confounder code)
-
-{com}. siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
-
-{txt}{col 20}SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:{res}{col 35}format 1: long-long
-{txt}The format for targets is:{res}{col 35}long
-{txt}The format for methods is:{res}{col 35}long
-{txt}The number of targets is:{res}{col 35}N/A
-{txt}The target values are:{res}{col 35}N/A
-
-{txt}The number of methods is:{res}{col 35}3
-{txt}The method values are:{res}{col 35}Full CCA MI
-
-Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}3
-{txt}The dgm variables (# levels): {res}{col 35}dgm (3) 
-
-Estimates are contained in the dataset
-
-{txt}The estimates variable is:{res}{col 35}b
-{txt}The se variable is:{res}{col 35}se
-{txt}The df variable is:{res}{col 35}N/A
-{txt}The ci variables are:{res}{col 35}N/A
-{txt}The p variable is:{res}{col 35}N/A
-{txt}The true value is:{res}{col 35}0
-{txt}_____________________________________________________
-
-{com}. siman comparemethodsscatter se, methlist(1 3) title("My Compare Methods Scatter plot") subgr(xtitle("testxtitle")) name("cms_test1", replace)
-{txt}Working.....
-{res}
-{com}. h siman_comparemethodsscatter
-
-. use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear
-{txt}(simcheck99 data from Analysis\Simulations\simcheck\missing confounder code)
-
-{com}. siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
-
-{txt}{col 20}SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:{res}{col 35}format 1: long-long
-{txt}The format for targets is:{res}{col 35}long
-{txt}The format for methods is:{res}{col 35}long
-{txt}The number of targets is:{res}{col 35}N/A
-{txt}The target values are:{res}{col 35}N/A
-
-{txt}The number of methods is:{res}{col 35}3
-{txt}The method values are:{res}{col 35}Full CCA MI
-
-Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}3
-{txt}The dgm variables (# levels): {res}{col 35}dgm (3) 
-
-Estimates are contained in the dataset
-
-{txt}The estimates variable is:{res}{col 35}b
-{txt}The se variable is:{res}{col 35}se
-{txt}The df variable is:{res}{col 35}N/A
-{txt}The ci variables are:{res}{col 35}N/A
-{txt}The p variable is:{res}{col 35}N/A
-{txt}The true value is:{res}{col 35}0
-{txt}_____________________________________________________
-
-{com}. siman comparemethodsscatter se, methlist(1 3) title("My Compare Methods Scatter plot") subgr(ytitle("y_title") xtitle("x_title")) scheme(economist) name("cms", replace)
-{txt}Working.....
-{res}
-{com}. h siman_comparemethodsscatter
-
-. use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear
-{txt}(simcheck99 data from Analysis\Simulations\simcheck\missing confounder code)
-
-{com}. siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
-
-{txt}{col 20}SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:{res}{col 35}format 1: long-long
-{txt}The format for targets is:{res}{col 35}long
-{txt}The format for methods is:{res}{col 35}long
-{txt}The number of targets is:{res}{col 35}N/A
-{txt}The target values are:{res}{col 35}N/A
-
-{txt}The number of methods is:{res}{col 35}3
-{txt}The method values are:{res}{col 35}Full CCA MI
-
-Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}3
-{txt}The dgm variables (# levels): {res}{col 35}dgm (3) 
-
-Estimates are contained in the dataset
-
-{txt}The estimates variable is:{res}{col 35}b
-{txt}The se variable is:{res}{col 35}se
-{txt}The df variable is:{res}{col 35}N/A
-{txt}The ci variables are:{res}{col 35}N/A
-{txt}The p variable is:{res}{col 35}N/A
-{txt}The true value is:{res}{col 35}0
-{txt}_____________________________________________________
-
-{com}. siman comparemethodsscatter se, methlist(1 3) title("My Compare Methods Scatter plot") subgr(ytitle("y_title") xtitle("x_title")) name("cms", replace)
-{txt}Working.....
-{res}
-{com}. h scatter
-
-. h siman_comparemethodsscatter
-
-. use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear
-{txt}(simcheck99 data from Analysis\Simulations\simcheck\missing confounder code)
-
-{com}. siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
-
-{txt}{col 20}SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:{res}{col 35}format 1: long-long
-{txt}The format for targets is:{res}{col 35}long
-{txt}The format for methods is:{res}{col 35}long
-{txt}The number of targets is:{res}{col 35}N/A
-{txt}The target values are:{res}{col 35}N/A
-
-{txt}The number of methods is:{res}{col 35}3
-{txt}The method values are:{res}{col 35}Full CCA MI
-
-Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}3
-{txt}The dgm variables (# levels): {res}{col 35}dgm (3) 
-
-Estimates are contained in the dataset
-
-{txt}The estimates variable is:{res}{col 35}b
-{txt}The se variable is:{res}{col 35}se
-{txt}The df variable is:{res}{col 35}N/A
-{txt}The ci variables are:{res}{col 35}N/A
-{txt}The p variable is:{res}{col 35}N/A
-{txt}The true value is:{res}{col 35}0
-{txt}_____________________________________________________
-
-{com}. siman comparemethodsscatter se, methlist(1 3) title("My Compare Methods Scatter plot", small) name("cms", replace)
-{txt}Working.....
-{err}option {bf:small} not allowed
-{txt}{search r(198), local:r(198);}
-
-{com}. h siman_comparemethodsscatter
-
-. use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear
-{txt}(simcheck99 data from Analysis\Simulations\simcheck\missing confounder code)
-
-{com}. siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
-
-{txt}{col 20}SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:{res}{col 35}format 1: long-long
-{txt}The format for targets is:{res}{col 35}long
-{txt}The format for methods is:{res}{col 35}long
-{txt}The number of targets is:{res}{col 35}N/A
-{txt}The target values are:{res}{col 35}N/A
-
-{txt}The number of methods is:{res}{col 35}3
-{txt}The method values are:{res}{col 35}Full CCA MI
-
-Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}3
-{txt}The dgm variables (# levels): {res}{col 35}dgm (3) 
-
-Estimates are contained in the dataset
-
-{txt}The estimates variable is:{res}{col 35}b
-{txt}The se variable is:{res}{col 35}se
-{txt}The df variable is:{res}{col 35}N/A
-{txt}The ci variables are:{res}{col 35}N/A
-{txt}The p variable is:{res}{col 35}N/A
-{txt}The true value is:{res}{col 35}0
-{txt}_____________________________________________________
-
-{com}. siman comparemethodsscatter se, methlist(1 3) title("My Compare Methods Scatter plot") name("cms", replace)
-{txt}Working.....
-{res}
-{com}. h siman_comparemethodsscatter
-
-. use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear
-{txt}(simcheck99 data from Analysis\Simulations\simcheck\missing confounder code)
-
-{com}. siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
-
-{txt}{col 20}SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:{res}{col 35}format 1: long-long
-{txt}The format for targets is:{res}{col 35}long
-{txt}The format for methods is:{res}{col 35}long
-{txt}The number of targets is:{res}{col 35}N/A
-{txt}The target values are:{res}{col 35}N/A
-
-{txt}The number of methods is:{res}{col 35}3
-{txt}The method values are:{res}{col 35}Full CCA MI
-
-Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}3
-{txt}The dgm variables (# levels): {res}{col 35}dgm (3) 
-
-Estimates are contained in the dataset
-
-{txt}The estimates variable is:{res}{col 35}b
-{txt}The se variable is:{res}{col 35}se
-{txt}The df variable is:{res}{col 35}N/A
-{txt}The ci variables are:{res}{col 35}N/A
-{txt}The p variable is:{res}{col 35}N/A
-{txt}The true value is:{res}{col 35}0
-{txt}_____________________________________________________
-
-{com}. siman comparemethodsscatter se, methlist(1 3) title("My title") name("cms", replace)
-{txt}Working.....
-{res}
-{com}. h siman_comparemethodsscatter
-
-. h blandaltman
-
-. h siman_blandaltman
-
-. h siman_comparemethodsscatter
-
-. h siman_comparemethodsscatter
-
-. h siman_comparemethodsscatter
-
-. h siman_comparemethodsscatter
-
-. h siman_comparemethodsscatter
-
-. h siman_comparemethodsscatter
-
-. h siman_comparemethodsscatter
-
-. h siman_comparemethodsscatter
-
-. exit, clear
+{com}. exit, clear

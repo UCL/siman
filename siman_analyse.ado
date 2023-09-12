@@ -1,4 +1,5 @@
-*! version 0.6.4   22aug2023
+*! version 0.6.5  12sep2023
+* version 0.6.5   12sep2023   EMZ: restored missing characteristics for method labels after simsum run
 * version 0.6.4   22aug2023   IW: fix bug causing error if truevar also a dgmvar; new force option to pass to simsum
 * version 0.6.3   16aug2023   IW: if true is a variable and not a dgmvar, it is stored in the PM data
 * version 0.6.2   21jul2023   IW: use simsum not simsumv2
@@ -280,6 +281,73 @@ if "`perfonly'"!="" qui drop if `rep'>0 & `rep'!=.
 
 * restore the original order 
 qui order `allnames'
+
+* restore lost method labels in characteristics
+* If format is long-long, or wide-long then 
+* 'number of methods' will be the number of variable labels for method
+* wide-long: nformat = 3 and method in long format i.e. nmethod =1
+cap confirm numeric variable `method'
+if _rc local methodstringindi = 1
+else local methodstringindi = 0 
+
+local methodlabels = 0
+
+if `nformat'==1 | (`nformat'==3 & `nmethod'==1)  { 
+	if `nmethod'!=0 {
+		qui tab `method',m
+		local nmethodlabels = `r(r)'
+		
+				
+		* Get method label values
+		cap qui labelsof `method'
+		cap qui ret list
+
+			if `"`r(labels)'"'!="" {
+			local 0 = `"`r(labels)'"'
+
+			forvalues i = 1/`nmethodlabels' {  
+				gettoken `method'label`i' 0 : 0, parse(": ")
+				local methlist `methlist' ``method'label`i''
+				local methodlabels = 1
+				}
+			}
+	else {
+
+	qui levels `method', local(levels)
+	tokenize `"`levels'"'
+		if `methodstringindi' == 0 {		
+			forvalues i = 1/`nmethodlabels' {  
+				local `method'label`i' `i'
+				local methlist `methlist' ``method'label`i''
+				}
+		}
+		else forvalues i = 1/`nmethodlabels' {  
+				local `method'label`i' ``i''
+				local methlist `methlist' ``method'label`i''
+				}
+	 }	
+  }
+}
+if `nformat'==1 {
+    * For format 1, long-long: number of methods will be the number of method labels
+	local valmethod = "`methlist'"
+}
+else if `nformat'==2 {
+    * number of methods will be the number of methods that the user specified
+	local valmethod = "`method'"
+}
+else if `nformat'==3 {
+    * For format 3, long-wide format
+    * will be in long-wide with long targets and wide methods after auto-reshape
+	if `nmethod'==1 {
+        * the number of methods will be the number of method labels
+		local valmethod = "`methlist'"
+	}
+	else if `nmethod'>=1 & `nmethod'!=. {
+        *  number of methods will be the number of methods that the user specified
+		local valmethod = "`method'"
+	}
+}
 
 * Set indicator so that user can determine if siman analyse has been run (e.g. for use in siman lollyplot)
 local simananalyserun = 1

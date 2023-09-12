@@ -1,4 +1,6 @@
-*!  version 0.3.1   08mar2023
+*!  version 0.3.2   12sep2023
+*   version 0.3.2   12sep2023   EMZ: fix for when method numeric lablled string: going longlong - longwide - longlong, in-built Stata command looses labels 
+*                               in Stata version 17 and lower, put in fix so can go back and forth between formats
 *   version 0.3.1   08mar2023   nodescribe option
 *   version 0.3   26sep2022     EMZ fixed bug when transforming to longwide with dgm defined by multiple variables and true in both dgm() and true()
 *   version 0.2   05sep2022     EMZ added additional error messages
@@ -303,7 +305,8 @@ if "`longlong'"!="" {
 	if `nformat'==3 {
 	
 	* remove underscores from valmethod elements if there are any
-	tokenize "`valmethod'"
+	if `methodlabels' == 1 local valmethod "`metlist'"
+	tokenize "`valmethod'" 
 
 	if `nmethod'!=0 {
 		forvalues v=1/`nummethod' {
@@ -441,6 +444,11 @@ if "`longlong'"!="" {
 	
 	
 }
+
+* fix to add metlist to characteristics when method numeric labelled string
+local allthings `allthings' metlist
+char _dta[siman_metlist] `metlist'
+char _dta[siman_allthings] `allthings'
 
 if `dgmcreated' == 1 qui drop dgm
 

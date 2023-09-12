@@ -1,4 +1,5 @@
-*! version 1.9.4 15aug2023
+*! version 1.9.5 12sep2023
+*  version 1.9.5 12sep2023    EMZ slight change to error message condition when no method variable
 *  version 1.9.4 15aug2023    EMZ only allow estimate or se to be specified for siman swarm
 *  version 1.9.3 26june2023   EMZ change: means are created with egen 'by' option.  Removed combinegraphoptions, cody tidy up.
 *  version 1.9.2 19june2023   EMZ change so that all dgm/target combinations appear on 1 graph when dgm defined by >1 variable with a warning.
@@ -33,7 +34,9 @@ if "`simansetuprun'"!="1" {
 	exit 498
 }
 
-if "`method'"=="" & "`simansetuprun'"=="1" {
+* if the data is read in long-long format, then reshaped to longwide, then there will be no method variable (only
+* method values), so base the error message on number of methods
+if (`nmethod'<1 | `nummethod'<1) & "`simansetuprun'"=="1" {
 	di as error "The variable 'method' is missing so siman swarm can not be created.  Please create a variable in your dataset called method containing the method value(s)."
 	exit 498
 }
@@ -54,6 +57,7 @@ if `nformat'!=1 {
 		local `thing' : char _dta[siman_`thing']
 		}
 }
+
 
 * if statistics are not specified, run graphs for estimate only
 * only allow estimate or se to be specified for siman swarm

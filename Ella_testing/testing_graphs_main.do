@@ -111,7 +111,7 @@ siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cm
 
 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test2", replace)        
 
-siman analyse
+siman analyse                                 ////********************* BLANK **********************/////
 
 siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test2", replace)
 

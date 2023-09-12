@@ -771,7 +771,7 @@ foreach summary of varlist `estimate' `se' `df' `ci' `p' `true' {
 
 
 local allthings allthings rep dgm target method estimate se df ci p true order lci uci ifsetup insetup
-local allthings `allthings' format targetformat methodformat nformat ntarget ndgm nmethod numtarget valtarget nummethod valmethod ntrue ntruevalue dgmvar numdgm dgmcreated targetlabels methodcreated
+local allthings `allthings' format targetformat methodformat nformat ntarget ndgm nmethod numtarget valtarget nummethod valmethod ntrue ntruevalue dgmvar numdgm dgmcreated targetlabels methodcreated methodlabels
 local allthings `allthings' descriptiontype cidescriptiontype truedescriptiontype estvars sevars dfvars civars pvars truevars simansetuprun
 * need m1, m2 etc t1, t2 etc for siman_reshape
 forvalues me = 1/`nmethod' {

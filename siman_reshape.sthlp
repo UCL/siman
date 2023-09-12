@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.4 21nov2022}{...}
+{* *! version 0.5 12sep2023}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_reshape##syntax"}{...}
 {viewerjumpto "Description" "siman_reshape##description"}{...}
@@ -30,11 +30,15 @@ siman reshape, longwide
 {pstd}
 siman reshape takes the data imported from {bf:{help siman_setup:siman setup}} and either reshapes it in to long-long format or long-wide format.
 Please note that {bf:{help siman_setup:siman setup}} will automatically reshape wide-target data (i.e. wide targets, wide methods) or wide-long format data
-(i.e. wide targets, long methods) into long-wide format.  The reshaped data set is held in memory.
-There is also an auto-summary output available for the user to confirm the data set up (using  {bf:{help siman_describe:siman describe}}).
+(i.e. wide targets, long methods) into long-wide format.  Also note that {bf: siman reshape} uses the in-built {bf:{help reshape:reshape}} command, which has a known limitation of dropping the labels of numeric variables upon reshape 
+in Stata versions 18 and lower.
 
 {pstd}
-For troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
+The reshaped data set is held in memory.  There is also an auto-summary output available for the user to confirm the data set 
+up (using  {bf:{help siman_describe:siman describe}}).
+
+{pstd}
+For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
 
 {marker authors}{...}
 {title:Authors}
