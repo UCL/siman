@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.6.2 14aug2023}{...}
+{* *! version 0.6.3 12sep2023}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Input data formats" "siman_setup##data"}{...}
@@ -164,9 +164,10 @@ The {bf:labelsof} package (by Ben Jann) is required by {bf:siman setup}, which c
 {title:Output data format}
 {pstd}
 
-Estimates data will be converted by {cmd:siman setup} to be {it:long-long} or {it:long-wide}, examples of which are shown below. Note that {it:rep} indexes the repetition number, {it:dgm} 
-denotes the data-generating mechanism to which a method was applied, {it:target} sets out what quantity the analysis is trying to estimate and {it:method} denotes the method 
-used to produce the estimates.
+Estimates data will be converted by {cmd:siman setup} to be {it:long-long} or {it:long-wide}, examples of which are 
+shown below. Note that {it:rep} indexes the repetition number, {it:dgm} denotes the data-generating 
+mechanism to which a method was applied, {it:target} sets out what quantity the analysis is trying to 
+estimate and {it:method} denotes the method used to produce the estimates.
 
            {it:Long-long} format
         {c TLC}{hline 42}{c TRC}

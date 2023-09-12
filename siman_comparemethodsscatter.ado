@@ -1,4 +1,5 @@
-*! version 1.9.13 05sep2023
+*! version 1.9.14 12sep2023
+*  version 1.9.14 12sep2023   EMZ correction to labels for methlist when method is a numeric string labelled variable
 *  version 1.9.13 05sep2023   EMZ minor bug fix to prevent double looping
 *  version 1.9.12 07aug2023   EMZ further minor formatting bug fixes: metlist
 *  version 1.9.11 18july2023  EMZ minor formatting bug fixes from IW testing
@@ -330,10 +331,10 @@ local c 1
 		local mlabel`c' Method: `j'
 	}
 	else if `methodstringindi'==0 & `methodlabels' == 1 {
-		local k : word `j' of `methodvalues'
+		local k : word `j' of `valmethod'
 		label var `estimate'`j' "`estimate', Method_`k'"
 		label var `se'`j' "`se', Method_`k'"
-		local mlabel`c' Method: `k'
+		local mlabel`j' Method: `k'
 	}
 	else if `methodstringindi'==1 {
 		label var `estimate'``j'' "`estimate', Method: ``j''"
@@ -613,7 +614,7 @@ else if `numberdgms' != 1 {
 				di as error "{it: WARNING: `graphnumcheck' graphs will be created, consider using 'if' option as detailed in {help 		siman_comparemethodsscatter:siman comparemethodsscatter}}"
 			}
 
-		
+
 		forvalues d = 1/`groupnum' {
 			    
 			local dgmfilter = "`group'==`d'"
