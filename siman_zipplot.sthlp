@@ -90,7 +90,7 @@ The zipplot provides a means of understanding any issues with coverage by viewin
 Please note that {help siman_setup:siman setup} needs to be run first before siman zipplot.
 
 {pstd}
-The {cmd:labelsof} package (by Ben Jann) is required by siman swarm, which can be installed by clicking: {stata ssc install labelsof}
+The {cmd:labelsof} package (by Ben Jann) is required by siman zipplot, which can be installed by clicking: {stata ssc install labelsof}
 
 {pstd}
 siman zipplot requires a true variable in the estimates dataset defined in the {help siman_setup:siman setup} syntax by {bf:true()}. 
@@ -102,14 +102,23 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {marker examples}{...}
 {title:Examples}
 
-{pstd}To plot the graphs split by dgm only:
+{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
 
-{pstd}siman zipplot, by(dgm)
+{pstd} To plot the zipplot, first load the data set in to {cmd: siman}.
 
-{pstd}To change the colour scheme, legend and titles in the display:
+{pstd}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
 
-{pstd}siman zipplot, scheme(scheme(economist)) legend(order(4 "Covering" 3 "Not covering")) xtit("x-title") ytit("y-title") ylab(0 40 100) ///
-noncoveroptions(pstyle(p3)) coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6))
+{pstd}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
+
+{pstd}. {stata `"siman zipplot"'}
+
+{pstd} To plot the graphs split by dgm only:
+
+{pstd}. {stata `"siman zipplot, by(dgm)"'}
+
+{pstd} To change the colour scheme, legend and titles in the display:
+
+{pstd}. {stata `"siman zipplot, scheme(scheme(economist)) legend(order(4 "Covering" 3 "Not covering")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50))"'}
 
 {marker reference}{...}
 {title:Reference}
