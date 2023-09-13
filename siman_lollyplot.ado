@@ -1,4 +1,5 @@
-*! version 1.12.3  22aug2023
+*! version 1.13  13sep2023
+* version 1.13  13sep2023     IW add level() option; streamline pm variables; show PMs in order requested; use pstyle to harmonise graph; new logit option calculates CI for power & coverage on logit scale 
 * version 1.12.3  22aug2023   IW bug fix with name("n")
 * version 1.12.2  22aug2023   IW handles target = numeric or string 
 * version 1.12.1  17aug2023   IW 
@@ -40,9 +41,9 @@ program define siman_lollyplot, rclass
 version 15
 
 syntax [anything] [if] [, BYGRaphoptions(string) ///
-	LABFormat(string) COLors(string) MSymbol(string) ///
+	LABFormat(string) COLors(string) MSymbol(string) Level(cilevel) ///
 	name(string) REFPower(real 80) * /// final-graph options
-	dgmwidth(int 30) pmwidth(int 24) debug pause /// undocumented options
+	dgmwidth(int 30) pmwidth(int 24) debug pause logit /// undocumented options
 	]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -75,7 +76,7 @@ if !mi("`wrongpms'") {
 	di as error "Performance measures wrongly specified: `wrongpms'"
 	exit 498
 }
-local npmlevels : word count `pmlist'
+local npms : word count `pmlist'
 
 * defaults
 if !mi("`debug'") local digraph_cmd digraph_cmd
@@ -139,15 +140,6 @@ foreach u of var * {
 if  substr("`estimate'",strlen("`estimate'"),1)=="_" local estimate = substr("`estimate'", 1, index("`estimate'","_") - 1)
 if  substr("`se'",strlen("`se'"),1)=="_" local se = substr("`se'", 1, index("`se'","_") - 1)
 
-capture confirm variable _pm
-if _rc {
-	gen _pm = - `rep'
-	}
-else {
-	di as error "siman lollyplot would like to create a variable '_pm', but that name already exists in your dataset.  Please rename your variable _pm as something else."
-	exit 498
-	}
-		
 * generate ref variable
 tempvar ref
 qui gen `ref'=.
@@ -169,8 +161,21 @@ qui replace thelab = string(`estimate',"`labformat3'") if inlist( _perfmeascode,
 
 * confidence intervals
 tempvar lci uci l r
-qui gen float `lci' = `estimate' + (`se'*invnorm(.025))
-qui gen float `uci' = `estimate' + (`se'*invnorm(.975))
+local alpha2 = 1/2 - `level'/200
+
+qui gen float `lci' = `estimate' + (`se'*invnorm(`alpha2'))
+qui gen float `uci' = `estimate' + (`se'*invnorm(1-`alpha2'))
+
+* logit transform for power and cover
+if !mi("`logit'") {
+	if !mi("`debug'") di as text "Computing CI for power and coverage on logit scale"
+	qui replace `lci' = 100 * invlogit( logit(`estimate'/100) + `se'*invnorm(`alpha2')/(`estimate'*(1-`estimate'/100))) ///
+		if inlist( _perfmeascode,"power","cover")
+	qui replace `uci' = 100 * invlogit( logit(`estimate'/100) + `se'*invnorm(1-`alpha2')/(`estimate'*(1-`estimate'/100))) ///
+		if inlist( _perfmeascode,"power","cover")
+	qui replace `lci' = `estimate' if inlist(`estimate',0,100) & inlist( _perfmeascode,"power","cover")
+	qui replace `uci' = `estimate' if inlist(`estimate',0,100) & inlist( _perfmeascode,"power","cover")
+}
 
 * confidence interval markers for the graphs
 qui gen `l' = "("
@@ -198,15 +203,18 @@ if `dgmcreated' == 1 {
 }
 
 * only keep the performance measures that the user has specified (or keep all if the user has not specified any) and only create lollyplot graphs for these.
-qui gen tokeep = 0
+tempvar pmvar
+qui gen `pmvar' = 0
+label var `pmvar' "tempvar pmvar"
+local i 0
 foreach pm of local pmlist {
-	qui replace tokeep = 1 if _perfmeascode == "`pm'"
-	}
+	local ++i
+	qui replace `pmvar' = `i' if _perfmeascode == "`pm'"
+	label def `pmvar' `i' "`pm'", add
+}
+qui drop if `pmvar' == 0
+label val `pmvar' `pmvar'
 
-qui drop if tokeep == 0
-qui drop tokeep
-
-qui levelsof _pm, local(pmlevels)
 
 if !mi("`if'") {
     local ampersand = " &"
@@ -264,8 +272,7 @@ local titlepadded = s(titlepadded)
 if `ndgmvars'>1 local titlepadded `"`"`dgm'"' `"`titlepadded'"'"'
 
 * create PM graph title for left
-qui levelsof _perfmeascode, local(pmlevels)
-padding `pmlevels', width(`pmwidth') reverse
+padding `pmlist', width(`pmwidth') reverse
 local ytitlepadded = s(titlepadded)
 
 if `ntargetlevels'>1 {
@@ -273,7 +280,7 @@ if `ntargetlevels'>1 {
 	local each "each "
 }
 else di as text "Drawing graph..."
-if `npmlevels'>5  di as error "WARNING: `each'graph will have `npmlevels' rows of panels: consider using fewer performance measures"
+if `npms'>5  di as error "WARNING: `each'graph will have `npms' rows of panels: consider using fewer performance measures"
 if `ndgmlevels'>5 di as error "WARNING: `each'graph will have `ndgmlevels' columns of panels: consider using if option as detailed in {help siman lollyplot}"
 
 * create graph
@@ -295,24 +302,24 @@ foreach thistarget of local targetlevels {
 		local graphorder `graphorder' `=4*`i'-3' "`method': `label`i''"
 		* main marker
 		local graph_cmd `graph_cmd' scatter `method' `estimate' ///
-			if `method'==`thismethod' & `targetcond', ///
-			mcol(`mcol`i'') msym(`msym`i'') mlab(thelab) mlabpos(12) ||
+			if `method'==`thismethod' & `targetcond', pstyle(p`i') mlabstyle(p`i') ///
+			mcol(`mcol`i'') msym(`msym`i'') mlab(thelab) mlabpos(12) mlabcol(`mcol`i'') ||
 		* brackets for LCL and UCL
 		local graph_cmd `graph_cmd' scatter `method' `lci' ///
-			if `method'==`thismethod' & `targetcond', ///
+			if `method'==`thismethod' & `targetcond', pstyle(p`i') ///
 			mlabcol(`mcol`i'') msym(i) mlab(`l') mlabpos(0) ||
 		local graph_cmd `graph_cmd' scatter `method' `uci' ///
-			if `method'==`thismethod' & `targetcond', ///
+			if `method'==`thismethod' & `targetcond', pstyle(p`i') ///
 			mlabcol(`mcol`i'') msym(i) mlab(`r') mlabpos(0) ||
 		* line from ref to main marker
 		local graph_cmd `graph_cmd' rspike `estimate' `ref' `method' ///
-			if `method'==`thismethod' & `targetcond', ///
-			horiz lcol(`mcol`i'')  ||
+			if `method'==`thismethod' & `targetcond', pstyle(p`i') ///
+			horiz lcol(`mcol`i'') ||
 		local ++i
 	}
 	local graph_cmd `graph_cmd' scatter `method' `ref' if `targetcond', ///
 		msym(i) c(l) col(gray) lpattern(dash)
-	local graph_cmd `graph_cmd' , by(_perfmeascode `dgm', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions') 
+	local graph_cmd `graph_cmd' , by(`pmvar' `dgm', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions') 
 	local graph_cmd `graph_cmd' subtitle("") ylab(none) ///
 		ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse range(0.8)) ///
 		legend(order(`graphorder'))
