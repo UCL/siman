@@ -1,5 +1,6 @@
-*! version 1.6.5 08Aug2023
-*  version 1.6.5 08Aug2023   EMZ restricted siman scatter options to be -estimate se- or -se estimate- only
+*! version 1.6.6 18sept2023
+*  version 1.6.6 18sept2023  EMZ updated warning of # panels to be printed based on 'if' subset
+*  version 1.6.5 08aug2023   EMZ restricted siman scatter options to be -estimate se- or -se estimate- only
 *  version 1.6.4 26june2023  EMZ minor bug fix for when dgm/method is missing, and tidy up of code.
 *  version 1.6.3 13june2023  EMZ: changed if dgm is defined by > 1 variable, that a pannel for each dgm var/level, target and method is displayed on 1 *							graph, with a warning to the user as per IRW/TPM request
 *  version 1.6.2 06may2023   EMZ agreed updates from IRW/TPM/EMZ joint testing 
@@ -158,9 +159,17 @@ if `dgmcreated' == 0 {
 }
 
 if "`numtarget'" == "N/A" local numtargetcheck = 1
-else local numtargetcheck = `numtarget'
+else {
+    * need to re-count in case there is an 'if' statement.  Data is in long-long format from reshape above
+	qui tab `target'   
+	local numtargetcheck = `r(r)'
+}
 if "`nummethod'" == "N/A" local nummethodcheck = 1
-else local nummethodcheck = `nummethod'
+else {
+      * need to re-count in case there is an 'if' statement.  Data is in long-long format from reshape above
+	qui tab `method'   
+	local nummethodcheck = `r(r)'
+}
 if "`totaldgmnum'" == "" local totaldgmnum = 1
 
 local graphnumcheck = `totaldgmnum' * `nummethodcheck' * `numtargetcheck'

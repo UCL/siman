@@ -6,6 +6,7 @@ Short testing file for discussion
 // SETUP: MODIFY FOR USER & PROJECT
 *local codepath C:\ian\git\siman\ 
 local codepath C:\git\siman\ 
+global detail = 0
 
 // SETUP FOR ALL USERS
 local testpath `codepath'Ella_testing\
@@ -20,6 +21,9 @@ set linesize 100
 // START TESTING
 log using `filename', replace
 siman which
+
+* switch on detail if want to run all graphs
+global detail = 1
 
  
 * dgm defined by 1 variable
@@ -39,41 +43,42 @@ siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(
 
 
 siman scatter
-siman scatter est se, name(est_onyaxis)
-siman scatter se est, name(se_onyaxis)
+if ${detail} == 1 siman scatter est se, name(est_onyaxis)
+if ${detail} == 1 siman scatter se est, name(se_onyaxis)
 * 1 panel per dgm, method and target combination
 
-siman scatter, by(dgm)
+if ${detail} == 1 siman scatter, by(dgm)
 * by dgm only
-siman scatter if dgm == 1, by(method)
+if ${detail} == 1 siman scatter if dgm == 1, by(method)
 * by method only
-siman scatter, by(estimand)
+if ${detail} == 1 siman scatter, by(estimand)
 * by estimand only
 
 siman swarm
 * 1 panel per dgm and target combination, method on y-axis
-siman swarm if estimand == 1
-siman swarm if estimand == 2
+if ${detail} == 1 siman swarm if estimand == 1
+if ${detail} == 1 siman swarm if estimand == 2
 
 siman comparemethodsscatter 
 * 1 graph per dgm and target, comparing methods
-siman comparemethodsscatter if estimand == 1
+if ${detail} == 1 siman comparemethodsscatter if estimand == 1
 * metlist option too
 
 siman blandaltman 
 * 1 graph per dgm and target combination, comparison of methods
-siman blandaltman if dgm ==1
-siman blandaltman if estimand == 2
+if ${detail} == 1 siman blandaltman if dgm ==1
+if ${detail} == 1 siman blandaltman if estimand == 2
 
 siman zipplot
 * 1 panel per dgm, method and target combination
-siman zipplot, by(estimand) 
-siman zipplot, by(method) 
+if ${detail} == 1 siman zipplot, by(estimand) 
+if ${detail} == 1 siman zipplot, by(method) 
 
 siman analyse
 
 siman lollyplot
 
+siman nestloop
 
 
 * dgm defined by >1 variable
@@ -101,31 +106,34 @@ rename betastring beta
 siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(betatrue)
 
 siman scatter
-* 1 graph per dgm variable, 1 panel per dgm level, method and target
-siman scatter if method == "CCA"
+* 1 panel per dgm, target and method 
+if ${detail} == 1 siman scatter if method == "CCA"
 
 siman swarm
 * 1 panel per dgm level(s) and target, method on y-axis
 * for the first panel in the all-graph display (beta level 1, pmiss level 1, mech level 1, estimand == "effect"), the means per
 * method have a very small difference, visible as follows:
-siman swarm if beta == 1 & pmiss == 1 & mech == 1 & estimand == "effect"
+if ${detail} == 1 siman swarm if beta == 1 & pmiss == 1 & mech == 1 & estimand == "effect"
 * FYI:
 * mean method CCA: 0.0025341
 * mean method meanlmp: 0.0021761
 * mean noadj: -0.0034964
 
 siman comparemethodsscatter 
-* one graph per dgm and target combination
+* one graph per dgm and target combination, comparing methods
 
 siman blandaltman 
 * 1 graph per combination of dgm levels and target, by method difference
 
 siman zipplot
+* 1 pannel per dgm, target and method combination, 1 graph per beta (as defines y-axis)
 
 * different spelling
 siman analyze
 
 siman lollyplot
+
+siman nestloop
 
 
 * examples in paper
@@ -145,22 +153,6 @@ siman zipplot
 
 
 * trellis
-
-clear all
-prog drop _all
-use data/n500type1.dta, clear
-* there are 12 methods so just keep a few for the example
-keep if method =="CC" | method=="LRD1" | method=="PMM1"
-qui gen se = sqrt(var)
-gen dgm = 0
-replace dgm = 1 if mechanism == "marw"
-replace dgm = 2 if mechanism == "mcar"
-label define dgmlabelvalues 0 "mars" 1 "marw" 2 "mcar"
-label values dgm dgmlabelvalues
-drop mechanism auroc var
-siman setup, rep(repno) dgm(dgm beta) method(method) estimate(b) se(se) df(df) true(beta)
-siman analyse
-* siman trellis bias
 
 * nestloop
 

@@ -24,7 +24,6 @@ if "`simananalyserun'"=="0" | "`simananalyserun'"=="" {
 	di as error "siman analyse has not been run.  Please use siman_analyse first before siman_table."
 	exit 498
 	}
-	
 
 // PREPARE DATA
 

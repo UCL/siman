@@ -1,4 +1,5 @@
-*! version 0.6.5  12sep2023
+*! version 0.6.6  18sep2023
+* version 0.6.6   18sep2023   EMZ: updated valmethod to take method values, for use in siman reshape
 * version 0.6.5   12sep2023   EMZ: restored missing characteristics for method labels after simsum run
 * version 0.6.4   22aug2023   IW: fix bug causing error if truevar also a dgmvar; new force option to pass to simsum
 * version 0.6.3   16aug2023   IW: if true is a variable and not a dgmvar, it is stored in the PM data
@@ -345,7 +346,9 @@ else if `nformat'==3 {
 	}
 	else if `nmethod'>=1 & `nmethod'!=. {
         *  number of methods will be the number of methods that the user specified
-		local valmethod = "`method'"
+		* need valnethod to be method values for use in reshape command
+*		local valmethod = "`method'"
+		local valmethod = "`methlist'"
 	}
 }
 
