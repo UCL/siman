@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.12.1 17aug2023}{...}
+{* *! version 1.13 13sep2023}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "Main simsum help page" "simsum"}{...}
 {viewerjumpto "Syntax" "siman_lollyplot##syntax"}{...}
@@ -26,7 +26,7 @@
 {synoptset 20 tabbed}{...}
 {synopthdr}
 {synoptline}
-{syntab:Main options}
+{syntab:Specific options}
 
 {synopt:{opt labf:ormat(string)}}Formats for the marker labels for (i) numeric performance measures (e.g. bias), (ii) percentage performance measures (e.g. coverage), and (iii) count performance measures (e.g. bsims).
 
@@ -35,6 +35,10 @@
 {synopt:{opt ms:ymbol(string)}}Marker symbols for the graphs: one per method, or one for all methods.
 	
 {synopt:{opt refp:ower(string)}}Reference level for power. Default is 80.
+
+{synopt:{opt l:evel(#)}}Level for confidence intervals. Default is the current level (see {help level}).
+
+{synopt:{opt logit}}Calculates confidence intervals for power and coverage on the logit scale. This is only important with small numbers of repetitions: it ensures that confidence intervals lie between 0 and 100.
 
 {syntab:General graph options}
 
@@ -49,7 +53,7 @@
 {pstd}
 {cmd:siman lollyplot} draws a lollipop plot of performance measures data.  
 Each panel shows the estimated values of one performance measure with one data generating mechanism for all methods.
-Monte Carlo 95% confidence intervals are represented via parentheses (a visual cue due to the usual presentation of 
+Monte Carlo confidence intervals are represented via parentheses (a visual cue due to the usual presentation of 
 intervals as two numbers within parentheses)
 The graph shows several performance measures (as rows of panels) and several data generating mechanisms (as columns).
 One graph is drawn for each target.
