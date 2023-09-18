@@ -1,4 +1,5 @@
-*!  version 0.3.2   12sep2023
+*!  version 0.3.3   18sep2023
+*   version 0.3.3   18sep2023
 *   version 0.3.2   12sep2023   EMZ: fix for when method numeric lablled string: going longlong - longwide - longlong, in-built Stata command looses labels 
 *                               in Stata version 17 and lower, put in fix so can go back and forth between formats
 *   version 0.3.1   08mar2023   nodescribe option
@@ -40,6 +41,12 @@ if `dgmcreated' == 1 {
 		local dgm dgm
 		local ndgm = 1
 	}
+}
+
+* if method is numeric labelled string in long-long format, get numerical labels for reshape
+if "`methodlabels'" == "1" & `nformat'==1 {
+    qui labelsof `method'
+	local methodvalues `r(values)'
 }
 
 
@@ -243,8 +250,11 @@ else if `nformat'==1 & `nmethod'!=0 {
 		if `string' == 0 {
 			qui reshape wide "`optionlist'", i(`rep' `dgm' "`target'") j(`method' "`valmethod'") 
 		}
-		else if `string' == 1 {
+		else if `string' == 1 & "`methodlabels'" != "1" {
 			qui reshape wide "`optionlist'", i(`rep' `dgm' "`target'") j(`method' "`valmethod'") string
+		}
+		else if "`methodlabels'" == "1" {
+			qui reshape wide "`optionlist'", i(`rep' `dgm' "`target'") j(`method' "`methodvalues'") 
 		}
 
 		
@@ -355,40 +365,44 @@ if "`longlong'"!="" {
 		* or if it is:
 		else local optionlistreshape `optionlist'
 		if `truenumber' == 1 local optionlistreshape `optionlist'
+		
+		if "`methodlables'" == "1" local methodreshape "`methodvalues'"
+		else local methodreshape "`valmethod'"
+
 
 		if `string' == 0 & `ntarget'<=1 & `nmethod'!=0 {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target') j(method "`valmethod'") 
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target') j(method "`methodreshape'") 
 			}
 		else if `string' == 1 & `ntarget'<=1 & `nmethod'!=0  {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target') j(method "`valmethod'") string
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target') j(method "`methodreshape'") string
 			}
 		else if `ntarget'>1 & `ntarget'!=. & `nmethod'==0 {
 			qui reshape long "`optionlistreshape'", i(`rep' `dgm') j(target "`valtarget'") 
 			}
 		else if `string' == 0 & `ntarget'>1 & `ntarget'!=. & `nmethod'!=0 {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target) j(method "`valmethod'")
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target) j(method "`methodreshaped'")
 			}
 		else if `string' == 1 & `ntarget'>1 & `ntarget'!=. & `nmethod'!=0 {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target) j(method "`valmethod'") string
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target) j(method "`methodreshape'") string
 			}
 	} 
 	else if "`truedescriptiontype'" == "variable" & `truenumber' == 0 {
 		
 		if `string' == 0 & `ntarget'<=1 & `nmethod'!=0 {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target' `true') j(method "`valmethod'")    
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target' `true') j(method "`methodreshape'")    
 			}
 
 		else if `string' == 1 & `ntarget'<=1 & `nmethod'!=0  {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target' `true') j(method "`valmethod'") string
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target' `true') j(method "`methodreshape'") string
 			}
 		else if `ntarget'>1 & `ntarget'!=. & `nmethod'==0 {
 			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `true') j(target "`valtarget'") 
 			}
 		else if `string' == 0 & `ntarget'>1 & `ntarget'!=. & `nmethod'!=0 {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target `true') j(method "`valmethod'")
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target `true') j(method "`methodreshape'")
 			}
 		else if `string' == 1 & `ntarget'>1 & `ntarget'!=. & `nmethod'!=0 {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target `true') j(method "`valmethod'") string
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target `true') j(method "`methodreshape'") string
 			}
 	} 
 		

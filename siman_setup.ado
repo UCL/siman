@@ -1,4 +1,5 @@
-*!   version 0.8.0  04july2023
+*!   version 0.8.1  18sep2023
+*    version 0.8.1  18sep2023    EMZ: bug fix for when wide-long format and auto-reshpaed, allow for method being a numeric labelled string variable.  *                                Moved true error message to later in the code to account for wide true as well.
 *    version 0.8.0  04july2023   EMZ: true has to be numeric only
 *    version 0.7.9  26june2023   EMZ added methodcreated characteristic
 *    version 0.7.8  06june2023	 EMZ bug fix: numeric target with string labels not displayed in siman describe table (displayed numbers not values)
@@ -70,18 +71,6 @@ if !_rc {
     exit 498
 }
 
-* check that true is a numeric variable/value
-if !mi("`true'") {
-	capture confirm number `true' 
-		if _rc {
-			capture confirm numeric variable `true' 
-				if _rc {
-					di as error "true must be a numeric variable/value in siman."
-					exit 498
-				}
-	
-		}
-}
 		
 * check that the following only have one entry: rep, est, se, df, lci, uci, p, order, true
 foreach singlevar in "`rep'" "`estimate'" "`se'" "`df'" "`lci'" "`uci'" "`p'" "`order'" "`true'" {
@@ -358,26 +347,69 @@ if !_rc {
 forvalues i=1/`nmethod' {
 	forvalues j=1/`ntarget' {
 		cap confirm variable `true'`t`j''`m`i''
-		if !_rc local ntrue = 2
-    }
+		if !_rc {
+			local ntrue = 2
+			capture confirm numeric variable `true'`t`j''`m`i'' 
+				if _rc {
+					di as error "true must be a numeric variable/value in siman."
+					exit 498
+				}
+        }
+   }
 }
 	
 forvalues j=1/`ntarget' {
 	forvalues i=1/`nmethod' {
 		cap confirm variable `true'`m`i''`t`j''
-		if !_rc local ntrue = 2
+		if !_rc {
+		local ntrue = 2
+		capture confirm numeric variable `true'`m`i''`t`j''
+				if _rc {
+					di as error "true must be a numeric variable/value in siman."
+					exit 498
+				}
+		}
     }
 }
 	
 forvalues i=1/`nmethod' {
     cap confirm variable `true'`m`i''
-    if !_rc local ntrue = 2
+    if !_rc {
+		local ntrue = 2
+		capture confirm numeric variable `true'`m`i''
+				if _rc {
+					di as error "true must be a numeric variable/value in siman."
+					exit 498
+				}
+	}
 }
 	
 forvalues j=1/`ntarget' {
     cap confirm variable `true'`t`j''
-    if !_rc local ntrue = 2
+    if !_rc {
+		local ntrue = 2
+		capture confirm numeric variable `true'`t`j''
+				if _rc {
+					di as error "true must be a numeric variable/value in siman."
+					exit 498
+				}
+	}
 }
+
+
+* check that true is a numeric variable/value
+if !mi("`true'") & "`ntrue'" != "2" {
+	capture confirm number `true' 
+		if _rc {
+			capture confirm numeric variable `true' 
+				if _rc {
+					di as error "true must be a numeric variable/value in siman."
+					exit 498
+				}
+	
+		}
+}
+
 
 
 if `ntrue'<=1 local ntruevalue = "single"
@@ -542,7 +574,7 @@ local datasetvars: list uniq datasetvarswithtrue
 	}
 
 
-
+	
 * Identifying elements for summary output table   
 ************************************************
 
@@ -764,6 +796,12 @@ foreach summary of varlist `estimate' `se' `df' `ci' `p' `true' {
 	}
 */
 
+* if method is numeric labelled string, get numerical labels for reshape
+if "`methodlabels'" == "1" {
+     qui labelsof `method'
+	local methodvalues `r(values)'
+}
+
 * Assigning characteristics
 ******************************
 * NB Have to do this before reshape otherwise there will be no macros to transfer over to siman reshape - so
@@ -771,7 +809,7 @@ foreach summary of varlist `estimate' `se' `df' `ci' `p' `true' {
 
 
 local allthings allthings rep dgm target method estimate se df ci p true order lci uci ifsetup insetup
-local allthings `allthings' format targetformat methodformat nformat ntarget ndgm nmethod numtarget valtarget nummethod valmethod ntrue ntruevalue dgmvar numdgm dgmcreated targetlabels methodcreated methodlabels
+local allthings `allthings' format targetformat methodformat nformat ntarget ndgm nmethod numtarget valtarget nummethod valmethod ntrue ntruevalue dgmvar numdgm dgmcreated targetlabels methodcreated methodlabels methodvalues
 local allthings `allthings' descriptiontype cidescriptiontype truedescriptiontype estvars sevars dfvars civars pvars truevars simansetuprun
 * need m1, m2 etc t1, t2 etc for siman_reshape
 forvalues me = 1/`nmethod' {
@@ -823,13 +861,15 @@ else if `nformat'==3 & `nmethod'==1 {
 
     if "`ntruevalue'"=="single" {
         qui reshape long "`optionlist'", i(`rep' `dgm' `method' `true') j(target "`valtarget'") 
-        if `methodstringindi' == 0 qui reshape wide "`optionlist'", i(`rep' `dgm' target `true') j(`method' "`methlist'") 
-		else qui reshape wide "`optionlist'", i(`rep' `dgm' target `true') j(`method' "`methlist'") string
+        if `methodstringindi' == 0 & "`methodlabels'" != "1" qui reshape wide "`optionlist'", i(`rep' `dgm' target `true') j(`method' "`methlist'") 
+		else if `methodstringindi' == 1 qui reshape wide "`optionlist'", i(`rep' `dgm' target `true') j(`method' "`methlist'") string
+		else if `methodstringindi' == 0 & "`methodlabels'" == "1" qui reshape wide "`optionlist'", i(`rep' `dgm' target `true') j(`method' "`methodvalues'") 
     }
     else if "`ntruevalue'"=="multiple" {
         qui reshape long "`optionlist'", i(`rep' `dgm' `method') j(target "`valtarget'") 
-        if `methodstringindi' == 0 qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`methlist'") 	
-		else qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`methlist'") string
+        if `methodstringindi' == 0 & "`methodlabels'" != "1" qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`methlist'") 	
+		else if `methodstringindi' == 1 qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`methlist'") string
+		else if `methodstringindi' == 0 & "`methodlabels'" == "1" qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`methodvalues'") 	
     }
 
 

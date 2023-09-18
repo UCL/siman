@@ -74,7 +74,7 @@ if _rc==0 {
 	local extratrue : list true - dgm
 	if !mi("`extratrue'") local truevariable `true'
 }
-	
+
 * if the user has not specified 'if' in the siman analyse syntax, but there is one from siman setup then use that 'if'
 if ("`if'"=="" & "`ifsetup'"!="") local ifanalyse = `"`ifsetup'"'
 else local ifanalyse = `"`if'"'
@@ -219,7 +219,12 @@ else if `nformat'==3 {
 qui order `rep' `dgm' `target'
 qui sort `rep' `dgm' `target'
 
-foreach v in `valmethod' {
+
+* if method is numeric labelled string, get numerical labels for reshape
+if `methodstringindi' == 0 & "`methodlabels'" == "1" local methodloop `methodvalues'
+else local methodloop `valmethod'
+
+foreach v in `methodloop' {
 				if  substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
 				local estlist`v' `estvars'`v' 
 				local estlist `estlist' `estlist`v''

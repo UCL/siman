@@ -42,6 +42,7 @@ foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
 
+
 if "`simansetuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
@@ -197,13 +198,13 @@ qui drop if `rep'<0
 * only analyse the methods that the user has requested
 if !mi("`methlist'") {
 *	numlist "`methlist'"
-	local methodvalues = "`methlist'"
+	local methodvaluesloop = "`methlist'"
 	local methodcount: word count `methlist'
 *	local nummethod = `count'
 	tempvar tousemethod
 	qui generate `tousemethod' = 0
     tokenize `methlist'
-	foreach j in `methodvalues' {
+	foreach j in `methodvaluesloop' {
 		if `methodstringindi' == 0 qui replace `tousemethod' = 1  if `method' == `j'
 		else if `methodstringindi' == 1 qui replace `tousemethod' = 1  if `method' == "`j'"
 	}
@@ -227,8 +228,8 @@ if `"`r(labels)'"'!="" {
 
 	forvalues i = 1/`nummethod' {  
 		gettoken mlabel`i' 0 : 0, parse(": ")
-		local methodvalues `methodvalues' `mlabel`i''
-		local methodlabel`i': word `i' of `methodvalues'
+		local methodvaluesloop `methodvaluesloop' `mlabel`i''
+		local methodlabel`i': word `i' of `methodvaluesloop'
 		local mlabelname`i' Method_`methodlabel`i''
 		local methodlabels 1
 	}
@@ -243,7 +244,7 @@ else {
 			local mlabel`i' Method: `i'
 			local mlabelname`i' Method_`methodlabel`i''
 			local methodlabel`i' `i'
-			local methodvalues `methodvalues' `methodlabel`i''
+			local methodvaluesloop `methodvaluesloop' `methodlabel`i''
 		}
 	}
 	else if `methodstringindi'==1 {
@@ -252,11 +253,10 @@ else {
 			local mlabel`i' Method: ``i''
 			local mlabelname`i' Method_`methodlabel`i''
 			local methodlabel`i' ``i''
-			local methodvalues `methodvalues' `methodlabel`i''
+			local methodvaluesloop `methodvaluesloop' `methodlabel`i''
 		}
 	}
 }
-
 
 
 * for numeric method variables with string labels, need to re-assign valmethod later on to be numerical values
@@ -296,6 +296,7 @@ if  substr("`se'",strlen("`se'"),1)=="_" local se = substr("`se'", 1, index("`se
 if "`subgraphoptions'" == "" {
 	local subgraphoptions aspect(1) graphregion(margin(zero)) plotregion(margin(zero)) xtit("") legend(off) 
 }
+
 	
 di as text "Working....."
 
@@ -308,12 +309,12 @@ if `ifdgm' == 1 {
 
 if !mi("`methlist'") {
 	local numbermethod = `methodcount'
-	local methodvalues `methlist'
+	local methodvaluesloop `methlist'
 }
 else local numbermethod = `nummethod'
 
 if mi("`methlist'") | (!mi("`methlist'") & `methodstringindi'==1) local forcommand = "forvalues j = 1/`numbermethod'"
-else local forcommand = "foreach j in `methodvalues'"
+else local forcommand = "foreach j in `methodvaluesloop'"
 
 
 if "`by'"=="" local by ""
@@ -363,7 +364,7 @@ local c 1
 }
 
 * create ranges for theta and se graphs (min and max)
-qui tokenize `methodvalues'
+qui tokenize `methodvaluesloop'
 forvalues m = 1/`numbermethod' {
 	if `methodstringindi'==0 & mi("`methlist'")  {
 		qui summarize `estimate'`m'
@@ -400,7 +401,7 @@ forvalues m = 1/`numbermethod' {
 * If have number of methods > 3 then need list of estimate and se variables in long-wide format e.g. est1 est2 est3 etc for graph matrix command
 
 local track 1
-foreach j in `methodvalues' {
+foreach j in `methodvaluesloop' {
 	foreach option in `estimate' `se' {
 		local `option'`j' = "`option'`j'"
 		if `track'==1 local `option'list ``option'`j''
@@ -475,14 +476,14 @@ if `numberdgms'==1 {
 			if `methodstringindi'==0  {
 				if mi("`methlist'") {
 					* if numerical method without labels
-					if `methodlabels'!= 1 local methodvalues `valmethod'	
+					if `methodlabels'!= 1 local methodvaluesloop `valmethod'	
 					* if numerical method with labels
-					else local methodvalues `valmethodnumwithlabel'
+					else local methodvaluesloop `valmethodnumwithlabel'
 				}
-				local maxmethodvalues : word `numbermethod' of `methodvalues'
-				local maxmethodvaluesplus1 = substr("`methodvalues'", -`numbermethod', .)
+				local maxmethodvaluesloop : word `numbermethod' of `methodvaluesloop'
+				local maxmethodvaluesplus1 = substr("`methodvaluesloop'", -`numbermethod', .)
 				*di "`maxmethodvaluesplus1'"
-				local maxmethodvaluesminus1 = substr("`methodvalues'", 1 ,`numbermethod')
+				local maxmethodvaluesminus1 = substr("`methodvaluesloop'", 1 ,`numbermethod')
 				*di "`maxmethodvaluesminus1'"
 				local counter = 1
 				local counterplus1 = 2
@@ -645,14 +646,14 @@ else if `numberdgms' != 1 {
 				if `methodstringindi'==0   {		
 					if mi("`methlist'") {
 						* if numerical method without labels
-						if `methodlabels'!= 1 local methodvalues `valmethod'	
+						if `methodlabels'!= 1 local methodvaluesloop `valmethod'	
 						* if numerical method with labels
-						else local methodvalues `valmethodnumwithlabel'
+						else local methodvaluesloop `valmethodnumwithlabel'
 					}
-					local maxmethodvalues : word `numbermethod' of `methodvalues'
-					local maxmethodvaluesplus1 = substr("`methodvalues'", -`numbermethod', .)
+					local maxmethodvaluesloop : word `numbermethod' of `methodvaluesloop'
+					local maxmethodvaluesplus1 = substr("`methodvaluesloop'", -`numbermethod', .)
 					*di "`maxmethodvaluesplus1'"
-					local maxmethodvaluesminus1 = substr("`methodvalues'", 1 ,`numbermethod')
+					local maxmethodvaluesminus1 = substr("`methodvaluesloop'", 1 ,`numbermethod')
 					*di "`maxmethodvaluesminus1'"
 					local counter = 1
 					local counterplus1 = 2
