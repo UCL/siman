@@ -42,7 +42,6 @@ foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
 
-
 if "`simansetuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
@@ -54,7 +53,7 @@ if mi("`estimate'") | mi("`se'") {
 	exit 498
 }	
 
-if "`method'"=="" {
+if "`method'"=="" & "`valmethod'"=="" {
 	di as error "The variable 'method' is missing so siman comparemethodsscatter can not be created.  Please create a variable in your dataset called method containing the method value(s)."
 	exit 498
 }
@@ -219,8 +218,11 @@ if _rc {
 	exit
 } 
 
-qui labelsof `method'
-qui ret list
+* label values are lost during reshape so need to account for both versions
+qui capture labelsof `method'
+if !_rc qui ret list 
+else qui capture levelsof `method'
+
 
 local methodlabels 0
 if `"`r(labels)'"'!="" {

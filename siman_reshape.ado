@@ -1,5 +1,5 @@
-*!  version 0.3.3   18sep2023
-*   version 0.3.3   18sep2023
+*!  version 0.3.3   19sep2023
+*   version 0.3.3   19sep2023   EMZ: fix if the data has been reshaped long-wide then back to long-long the method name needs to be restored
 *   version 0.3.2   12sep2023   EMZ: fix for when method numeric lablled string: going longlong - longwide - longlong, in-built Stata command looses labels 
 *                               in Stata version 17 and lower, put in fix so can go back and forth between formats
 *   version 0.3.1   08mar2023   nodescribe option
@@ -24,7 +24,9 @@ if mi("`estimate'") & mi("`se'") {
 }
 
 * make a list of the optional elements that have been entered by the user, that would be stubs in the reshape
-if "`ntruevalue'"=="single" local optionlist `estimate' `se' `df' `ci' `p'  
+
+
+if "`ntruevalue'"=="single" | "`ntruestub'" != "1" local optionlist `estimate' `se' `df' `ci' `p'  
 else if "`ntruevalue'"=="multiple" local optionlist `estimate' `se' `df' `ci' `p' `true' 	
 *di "`optionlist'"
 
@@ -45,8 +47,10 @@ if `dgmcreated' == 1 {
 
 * if method is numeric labelled string in long-long format, get numerical labels for reshape
 if "`methodlabels'" == "1" & `nformat'==1 {
-    qui labelsof `method'
-	local methodvalues `r(values)'
+    qui cap labelsof `method'
+	if !_rc local methodvalues `r(values)'
+	else qui cap levelsof `method'
+	if !_rc local methodvalues `r(levels)'
 }
 
 
@@ -205,7 +209,7 @@ else if `nformat'==1 & `nmethod'!=0 {
 		local nmethodlabels = `r(r)'
 	
 		qui levels `method', local(mlevels)
-		tokenize `"`mlevels'"'
+		qui tokenize `"`mlevels'"'
 	
         cap quietly label drop `method'
 		local labelchange = 0
@@ -316,7 +320,7 @@ if "`longlong'"!="" {
 	
 	* remove underscores from valmethod elements if there are any
 	if `methodlabels' == 1 local valmethod "`metlist'"
-	tokenize "`valmethod'" 
+	qui tokenize "`valmethod'" 
 
 	if `nmethod'!=0 {
 		forvalues v=1/`nummethod' {
@@ -331,7 +335,7 @@ if "`longlong'"!="" {
 	* check if method elements are numeric (e.g. 1 2) or string (e.g. A B) for reshape
 	local string = 0
 	forvalues i=1/`nmethod' {
-		capture confirm number `m`i''
+		qui capture confirm number `m`i''
 		if _rc {
 			local string = 1
 			}
@@ -366,43 +370,48 @@ if "`longlong'"!="" {
 		else local optionlistreshape `optionlist'
 		if `truenumber' == 1 local optionlistreshape `optionlist'
 		
+		if "`ntruestub'" == "0" local optionlistreshape `optionlist'
+		
 		if "`methodlables'" == "1" local methodreshape "`methodvalues'"
 		else local methodreshape "`valmethod'"
-
+		
+		* If the data has been reshaped long-wide then back to long-long the method name needs to be restored
+		local methodname: char _dta[ReS_j]
+		if mi("`methodname'") local methodname "method"
 
 		if `string' == 0 & `ntarget'<=1 & `nmethod'!=0 {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target') j(method "`methodreshape'") 
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target') j(`methodname' "`methodreshape'") 
 			}
 		else if `string' == 1 & `ntarget'<=1 & `nmethod'!=0  {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target') j(method "`methodreshape'") string
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target') j(`methodname' "`methodreshape'") string
 			}
 		else if `ntarget'>1 & `ntarget'!=. & `nmethod'==0 {
 			qui reshape long "`optionlistreshape'", i(`rep' `dgm') j(target "`valtarget'") 
 			}
 		else if `string' == 0 & `ntarget'>1 & `ntarget'!=. & `nmethod'!=0 {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target) j(method "`methodreshaped'")
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target) j(`methodname' "`methodreshaped'")
 			}
 		else if `string' == 1 & `ntarget'>1 & `ntarget'!=. & `nmethod'!=0 {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target) j(method "`methodreshape'") string
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target) j(`methodname' "`methodreshape'") string
 			}
 	} 
 	else if "`truedescriptiontype'" == "variable" & `truenumber' == 0 {
 		
 		if `string' == 0 & `ntarget'<=1 & `nmethod'!=0 {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target' `true') j(method "`methodreshape'")    
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target' `true') j(`methodname' "`methodreshape'")    
 			}
 
 		else if `string' == 1 & `ntarget'<=1 & `nmethod'!=0  {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target' `true') j(method "`methodreshape'") string
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target' `true') j(`methodname' "`methodreshape'") string
 			}
 		else if `ntarget'>1 & `ntarget'!=. & `nmethod'==0 {
 			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `true') j(target "`valtarget'") 
 			}
 		else if `string' == 0 & `ntarget'>1 & `ntarget'!=. & `nmethod'!=0 {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target `true') j(method "`methodreshape'")
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target `true') j(`methodname' "`methodreshape'")
 			}
 		else if `string' == 1 & `ntarget'>1 & `ntarget'!=. & `nmethod'!=0 {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target `true') j(method "`methodreshape'") string
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target `true') j(`methodname' "`methodreshape'") string
 			}
 	} 
 		
@@ -426,7 +435,7 @@ if "`longlong'"!="" {
 	char _dta[siman_targetformat] "long"
 	char _dta[siman_methodformat] "long"
 	char _dta[siman_nformat] 1
-	if `nmethod'!=0 char _dta[siman_method] "method"
+	if `nmethod'!=0 char _dta[siman_method] "`methodname'"
 	if `nmethod'!=0 char _dta[siman_nmethod] 1
 	char _dta[siman_descriptiontype] "variable"
 	char _dta[siman_truedescriptiontype] "variable"
@@ -441,13 +450,13 @@ if "`longlong'"!="" {
 	* put non-missing point estimates at the top 
 	if "`simananalyserun'"=="1" {
 	preserve
-	tempfile sortperf
-	drop if `rep'<0 
-	save `sortperf'
+	qui tempfile sortperf
+	qui drop if `rep'<0 
+	qui save `sortperf'
 	restore
-	drop if `rep'>0
-	gsort -`rep' `dgm' `target' `method'
-	append using `sortperf'
+	qui drop if `rep'>0
+	qui gsort -`rep' `dgm' `target' `method'
+	qui append using `sortperf'
 	}
 
 

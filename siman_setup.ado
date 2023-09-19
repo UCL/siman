@@ -343,12 +343,14 @@ if !_rc {
 }
 
 * if true is a stub assume it has different values accross the target/method combinations
+local ntruestub 0
 
 forvalues i=1/`nmethod' {
 	forvalues j=1/`ntarget' {
 		cap confirm variable `true'`t`j''`m`i''
 		if !_rc {
 			local ntrue = 2
+			local ntruestub = 1
 			capture confirm numeric variable `true'`t`j''`m`i'' 
 				if _rc {
 					di as error "true must be a numeric variable/value in siman."
@@ -363,6 +365,7 @@ forvalues j=1/`ntarget' {
 		cap confirm variable `true'`m`i''`t`j''
 		if !_rc {
 		local ntrue = 2
+		local ntruestub = 1
 		capture confirm numeric variable `true'`m`i''`t`j''
 				if _rc {
 					di as error "true must be a numeric variable/value in siman."
@@ -376,6 +379,7 @@ forvalues i=1/`nmethod' {
     cap confirm variable `true'`m`i''
     if !_rc {
 		local ntrue = 2
+		local ntruestub = 1
 		capture confirm numeric variable `true'`m`i''
 				if _rc {
 					di as error "true must be a numeric variable/value in siman."
@@ -388,6 +392,7 @@ forvalues j=1/`ntarget' {
     cap confirm variable `true'`t`j''
     if !_rc {
 		local ntrue = 2
+		local ntruestub = 1
 		capture confirm numeric variable `true'`t`j''
 				if _rc {
 					di as error "true must be a numeric variable/value in siman."
@@ -807,9 +812,8 @@ if "`methodlabels'" == "1" {
 * NB Have to do this before reshape otherwise there will be no macros to transfer over to siman reshape - so
 * siman reshape won't recognise any of the variables/macros.
 
-
 local allthings allthings rep dgm target method estimate se df ci p true order lci uci ifsetup insetup
-local allthings `allthings' format targetformat methodformat nformat ntarget ndgm nmethod numtarget valtarget nummethod valmethod ntrue ntruevalue dgmvar numdgm dgmcreated targetlabels methodcreated methodlabels methodvalues
+local allthings `allthings' format targetformat methodformat nformat ntarget ndgm nmethod numtarget valtarget nummethod valmethod ntrue ntruevalue dgmvar numdgm dgmcreated targetlabels methodcreated methodlabels methodvalues ntruestub
 local allthings `allthings' descriptiontype cidescriptiontype truedescriptiontype estvars sevars dfvars civars pvars truevars simansetuprun
 * need m1, m2 etc t1, t2 etc for siman_reshape
 forvalues me = 1/`nmethod' {
