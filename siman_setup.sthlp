@@ -217,13 +217,15 @@ estimate and {it:method} denotes the method used to produce the estimates.
 {pstd}The variable {bf:dgm} needs to be in numerical format (string labels allowed), with integer values.  If {bf:dgm} is a string variable then {cmd:siman setup} will encode it to be numeric.  If {bf:dgm} has non-integer values, then {bf:dgm} 
 should be re-formatted by the user so that it has integer values with non-integer labels.
 
-{pstd} If the method variable is missing, then {cmd:siman setup} will create a variable {bf:_methodvar} in the dataset with a value of 1 in order that all the other {bf: siman} programs can run.
+{pstd}If the method variable is missing, then {cmd:siman setup} will create a variable {bf:_methodvar} in the dataset with a value of 1 in order that all the other {bf: siman} programs can run.
 
 {pstd}No special characters are allowed in the labels of the variables, as these are not allowed in Stata graphs.  No spaces in the variable labels are allowed either, to enable reshaping to {it:longwide} format and back again (required 
 internally for some of the graphs).  For example, if the data is in {it:longlong} format the estimate variable is {it:b} 
 and the method variable has labels {it: Complete case} and {it:Complete data}, then when reshaped to {it:longwide} format 
 the variable names would become {it:bComplete case} and {it:bComplete data} which is not permitted by Stata.  
 The method labels would therefore need to be {it:Complete_case} and {it:Complete_data}.
+
+{pstd} Dgm can not contain missing values.
 
 {pstd}If the user would like to specify a different name for any of the graphs using the graph options, the new name is not permitted to contain the word 'name' (e.g. name("testname") would not be allowed).
 

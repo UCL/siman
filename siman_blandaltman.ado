@@ -1,4 +1,5 @@
-*! version 1.6.7 11july2023
+*! version 1.6.8 19sep2023
+*  version 1.6.8 19sep2023   EMZ accounting for lost labels on method numeric labelled string durng multiple reshapes
 *  version 1.6.7 11july2023  EMZ change so that one graph is created for each target level and dgm level combination.
 *  version 1.6.6 19june2023  EMZ small changes to note.
 *  version 1.6.5 13june2023  EMZ methlist fix: can now have flexible reference method e.g. methlist(C A B) for method C as the reference (before only 2 *                            methods in methlist allowed), minor formatting to title and note, setting default norescale.
@@ -35,7 +36,7 @@ if "`simansetuprun'"!="1" {
 }
 
 
-if "`method'"=="" {
+if "`method'"=="" & "`valmethod'"=="" {
 	di as error "The variable 'method' is missing so siman blandaltman can not be created.  Please create a variable in your dataset called method containing the method value(s)."
 	exit 498
 }
@@ -113,8 +114,10 @@ if _rc {
 	exit
 } 
 
-qui labelsof `method'
-qui ret list
+* label values are lost during reshape so need to account for both versions
+qui capture labelsof `method'
+if !_rc qui ret list 
+else qui capture levelsof `method'
 
 if "`r(labels)'"!="" {
 	local 0 = `"`r(labels)'"'

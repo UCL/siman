@@ -182,7 +182,7 @@ if _rc {
 					gettoken `true'label`t' 0 : 0, parse(" ")
 	*				local `true'number`t' `t' 
 					local `true'value`t' `t'
-					qui replace `true'calc = ``true'value`t'' if `true' == `t'
+					qui replace `true'calc = ``true'value`t'' if `true' == float(`t')
 					local truelabels = 1
 					}
 				}
@@ -196,7 +196,7 @@ if _rc {
 					forvalues t = 1/`ntrue' {  
 					local `true'label`t' ``t''
 					local `true'value`t' `t'
-					qui replace `true'calc = ``true'value`t'' if `true' == ``t''
+					qui replace `true'calc = ``true'value`t'' if `true' == float(``t'')
 					}
 				}
 				

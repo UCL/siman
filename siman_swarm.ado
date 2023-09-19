@@ -1,4 +1,5 @@
-*! version 1.9.5 12sep2023
+*! version 1.9.6 19sep2023
+*  version 1.9.6 19sep2023    EMZ accounting for lost labels on method numeric labelled string durng multiple reshapes
 *  version 1.9.5 12sep2023    EMZ slight change to error message condition when no method variable
 *  version 1.9.4 15aug2023    EMZ only allow estimate or se to be specified for siman swarm
 *  version 1.9.3 26june2023   EMZ change: means are created with egen 'by' option.  Removed combinegraphoptions, cody tidy up.
@@ -33,6 +34,9 @@ if "`simansetuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
 }
+
+set trace on
+set tracedepth 1
 
 * if the data is read in long-long format, then reshaped to longwide, then there will be no method variable (only
 * method values), so base the error message on number of methods
@@ -129,8 +133,10 @@ if _rc {
 	exit
 } 
 
-qui labelsof `method'
-qui ret list
+* label values are lost during reshape so need to account for both versions
+qui capture labelsof `method'
+if !_rc qui ret list 
+else qui capture levelsof `method'
 
 if "`r(labels)'"!="" {
 	local 0 = `"`r(labels)'"'
