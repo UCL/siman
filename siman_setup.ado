@@ -170,11 +170,13 @@ local insetup = `"`in'"'
 cap confirm existence `target'
 	if !_rc {
 		local ntarget: word count `target'
-		tokenize `target'
-        forvalues j=1/`ntarget' {
-			local t`j' "``j''"
-			local tlist `tlist' `t`j''
-        }
+		if `ntarget'>1 {
+		    tokenize `target'
+			forvalues j=1/`ntarget' {
+				local t`j' "``j''"
+				local tlist `tlist' `t`j''
+			}
+		}
 	}
 else local ntarget = 0
 
@@ -183,11 +185,13 @@ else local ntarget = 0
 cap confirm existence `method'
 	if !_rc {
 		local nmethod: word count `method'
-		tokenize `method'
-        forvalues i = 1/`nmethod' {
-			local m`i' "``i''"
-			local mlist `mlist' `m`i''
-        }
+		if `nmethod'>1 {
+			tokenize `method'
+			forvalues i = 1/`nmethod' {
+				local m`i' "``i''"
+				local mlist `mlist' `m`i''
+			}
+		}
 	}
 else local nmethod 0
 
