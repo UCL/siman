@@ -1,4 +1,5 @@
-*!   version 0.8.1  18sep2023
+*!   version 0.8.2  25sep2023
+*    version 0.8.2  25sep2023    EMZ: produce warning if dgm variable(s) and/or method variables contain missing values.
 *    version 0.8.1  18sep2023    EMZ: bug fix for when wide-long format and auto-reshpaed, allow for method being a numeric labelled string variable.  *                                Moved true error message to later in the code to account for wide true as well.
 *    version 0.8.0  04july2023   EMZ: true has to be numeric only
 *    version 0.7.9  26june2023   EMZ added methodcreated characteristic
@@ -106,6 +107,11 @@ if mi("`method'") {
 	 local methodcreated = 1
 }
 
+* check if method contains missing values
+qui count if missing(`method')
+cap assert r(N)==0
+if _rc di as error "Warning: variable `method' should not contain missing values."
+
 
 * check that dgm takes numerical values; if not, encode and replace so that siman can do its things.
 if !mi("`dgm'") {
@@ -121,6 +127,9 @@ if !mi("`dgm'") {
             "encoded as numeric so that subsequent siman commands will work. If you require a" _newline ///
             "different order, encode `var' as numeric before running -siman setup-."
         }
+		qui count if missing(`var')
+		cap assert r(N)==0
+		if _rc di as error "Warning: variable `var' should not contain missing values.  Consider combining dgms."
     }
 }
 
