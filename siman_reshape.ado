@@ -357,6 +357,10 @@ if "`longlong'"!="" {
 	local optionlistreshape `optionlist'
 	local exclude "`true'"
 	local optionlistreshape: list optionlistreshape - exclude
+	
+	* If the data has been reshaped long-wide then back to long-long the method name needs to be restored
+	local methodname: char _dta[ReS_j]
+	if mi("`methodname'") | "`methodname'" == "_j" | "`methodname'" == "mcse" local methodname "method"
 
 		
 	if "`truedescriptiontype'" == "stub" | `truenumber' == 1 {
@@ -375,9 +379,6 @@ if "`longlong'"!="" {
 		if "`methodlables'" == "1" local methodreshape "`methodvalues'"
 		else local methodreshape "`valmethod'"
 		
-		* If the data has been reshaped long-wide then back to long-long the method name needs to be restored
-		local methodname: char _dta[ReS_j]
-		if mi("`methodname'") | "`methodname'" == "_j" | "`methodname'" == "mcse" local methodname "method"
 
 		if `string' == 0 & `ntarget'<=1 & `nmethod'!=0 {
 			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target') j(`methodname' "`methodreshape'") 
