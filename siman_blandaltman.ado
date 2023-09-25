@@ -29,6 +29,9 @@ foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
 
+set trace on
+set tracedepth 1
+
 
 if "`simansetuprun'"!="1" {
 	di as error "siman_setup needs to be run first."

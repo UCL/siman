@@ -35,9 +35,6 @@ if "`simansetuprun'"!="1" {
 	exit 498
 }
 
-set trace on
-set tracedepth 1
-
 * if the data is read in long-long format, then reshaped to longwide, then there will be no method variable (only
 * method values), so base the error message on number of methods
 if (`nmethod'<1 | `nummethod'<1) & "`simansetuprun'"=="1" {

@@ -377,7 +377,7 @@ if "`longlong'"!="" {
 		
 		* If the data has been reshaped long-wide then back to long-long the method name needs to be restored
 		local methodname: char _dta[ReS_j]
-		if mi("`methodname'") local methodname "method"
+		if mi("`methodname'") | "`methodname'" == "_j" local methodname "method"
 
 		if `string' == 0 & `ntarget'<=1 & `nmethod'!=0 {
 			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target') j(`methodname' "`methodreshape'") 
