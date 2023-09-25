@@ -107,12 +107,6 @@ if mi("`method'") {
 	 local methodcreated = 1
 }
 
-* check if method contains missing values
-qui count if missing(`method')
-cap assert r(N)==0
-if _rc di as error "Warning: variable `method' should not contain missing values."
-
-
 * check that dgm takes numerical values; if not, encode and replace so that siman can do its things.
 if !mi("`dgm'") {
     foreach var of varlist `dgm' {
@@ -196,6 +190,13 @@ cap confirm existence `method'
         }
 	}
 else local nmethod 0
+
+* check if method contains missing values
+if `nmethod' == 1 {
+	qui count if missing(`method')
+	cap assert r(N)==0
+	if _rc di as error "Warning: variable `method' should not contain missing values."
+}
 
 
 * if the user has accidentally put the value of target or method instead of the variable name in long format, issue an error message
