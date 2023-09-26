@@ -335,7 +335,7 @@ capture confirm variable _lpoint
 capture confirm variable _rpoint
 	if _rc {
 	qui egen _rpoint = max(`uci') if !missing(_covlb), by(`byvar' `true') 
-	}	
+	}
 	
 * Can't tokenize/substr as many "" in the string
 if !mi(`"`options'"') {
@@ -407,6 +407,7 @@ if `ntrue' == 1 {
 			legend(order(3 "Coverers" 4 "Non-coverers"))
 			`scheme'
 			`options'
+			`name'
 			;
 		#delimit cr
 }
