@@ -17,17 +17,18 @@ siman_scatter if dgm==2, name(siman_scatter_dgm2)
 siman_swarm
 siman_swarm, meanoff scheme(s1color) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title"))
 siman_swarm, scheme(economist) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title") xtitle("test x-title"))
-siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) combinegraphoptions(name("test2", replace))     
+siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("test2", replace))
 siman_swarm if dgm == 1   
 
 
 *siman_zipplot
 siman_zipplot
 siman_zipplot, by(dgm estimand method)
-siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
-coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) 
-siman_zipplot, scheme(scheme(s2color)) legend(order(4 "Carrot" 3 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
-coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6)) name("carrot")
+
+siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) 
+siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("carrot", replace)
 
 use simlongESTPM_longE_longM.dta, clear
 drop true
@@ -79,7 +80,7 @@ siman_comparemethodsscatter, title("test")
 * to have subtitles in consituent graphs (looks messy, but just for testing)
 siman_comparemethodsscatter, subgr(xtit("test"))
 siman_comparemethodsscatter, name("test")     
-siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("test")    
+siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("test", replace)    
 
 clear all
 prog drop _all
@@ -112,7 +113,7 @@ siman_blandaltman, methlist(3 7) by(dgm)
 siman_blandaltman, methlist(10 4 8)
 siman_blandaltman, methlist(2 9 3)                
 siman_blandaltman
-siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("yabberdabberdoo") 
+siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("yabberdabberdoo", replace) 
 siman_blandaltman, ytitle("test y-title") xtitle("test x-title")
 
 clear all
@@ -727,7 +728,7 @@ siman_scatter
 siman scatter, by(theta)
 siman_reshape, longlong
 siman scatter, by(method)
-siman scatter if method == "peto", name(simanscatter_peto, replace)
+siman scatter if method == "peto", name("simanscatter_peto", replace)
 
 
 
@@ -739,7 +740,7 @@ siman swarm, by(theta)
 siman swarm, by(k)
 siman_reshape, longlong
 siman swarm if method == "peto" | method == "g2"   
-siman swarm if (method == "peto" | method == "g2"), by(theta) combinegraphoptions(name(simanswarm_theta1, replace))                  
+siman swarm if (method == "peto" | method == "g2"), by(theta) graphoptions(name("simanswarm_theta1", replace))                  
 siman swarm if (method == "peto" | method == "g2"), by(k)
 
 * Testing siman blandaltman
