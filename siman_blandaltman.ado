@@ -29,7 +29,6 @@ foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
 
-
 if "`simansetuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
@@ -342,7 +341,6 @@ foreach dgmvar in `dgmbyvar' {
 		}
 	}
 
-
 	qui tab `dgmvar'
 	local n`dgmvar'labels = `r(r)'
 }
@@ -389,7 +387,7 @@ if `graphnumcheck' > 15 {
 di as error "{it: WARNING: `graphnumcheck' graphs will be created, consider using 'if' option as detailed in {help siman_blandaltman:siman blandaltman}}"
 }
 
-	
+
 * If target is not missing	
 if "`valtarget'" != "N/A" {
 		
@@ -479,7 +477,7 @@ else {
 				
 				local dgmlevels`d' : label grouplevels `d'
 
-				if ("`by'"=="" | "`by'"=="`dgmvar'") {
+				if ("`by'"=="" | "`by'"=="`dgmbyvar'") {
 					local bytitle = "`dgm': `dgmlevels`d''"
 					local byvarlist = `"`group'==`d'"'
 					local byname = `d'
