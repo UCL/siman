@@ -1,4 +1,5 @@
-*! version 1.6.8 19sep2023
+*! version 1.6.9 02oct2023
+*  version 1.6.9 02oct2023   EMZ bug fix when dgm defined >1 variable, by() option now working again
 *  version 1.6.8 19sep2023   EMZ accounting for lost labels on method numeric labelled string durng multiple reshapes
 *  version 1.6.7 11july2023  EMZ change so that one graph is created for each target level and dgm level combination.
 *  version 1.6.6 19june2023  EMZ small changes to note.
@@ -33,7 +34,6 @@ if "`simansetuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
 }
-
 
 if "`method'"=="" & "`valmethod'"=="" {
 	di as error "The variable 'method' is missing so siman blandaltman can not be created.  Please create a variable in your dataset called method containing the method value(s)."
@@ -371,7 +371,7 @@ if !_rc local targetstringindi = 1
 
 * make a group for when dgm is defined by >1 variable
 tempvar _group
-qui egen `_group' = group(`dgm'), label lname(grouplevels)
+qui egen `_group' = group(`dgmbyvar'), label lname(grouplevels)
 local group "`_group'"
 qui tab `group'
 local groupnum = `r(r)'
@@ -388,8 +388,8 @@ di as error "{it: WARNING: `graphnumcheck' graphs will be created, consider usin
 }
 
 
-* If target is not missing	
-if "`valtarget'" != "N/A" {
+* If target is not missing / 'by' is not by a dgm variable (i.e. not splititng out by target)
+if "`valtarget'" != "N/A" & "`by'"!="`dgmbyvar'" {
 		
 	* check number of targets in case 'if' syntax has been applied
 	qui tab `target',m
@@ -402,7 +402,7 @@ if "`valtarget'" != "N/A" {
 		if `e'==1 local valtargetloop `tarlabel`e''
 		else if `e'>=2 local valtargetloop `valtargetloop' `tarlabel`e''
 	}
-		
+	
 	forvalues d = 1/`groupnum' {
 		foreach t in `valtargetloop' {
 			foreach el in `varlist' {
@@ -429,7 +429,7 @@ if "`valtarget'" != "N/A" {
 
 				if ("`by'"=="" | "`by'"=="`dgm' `target'") {
 			
-					local bytitle = "`dgm': `dgmlevels`d'', target: `tlab'"
+					local bytitle = "`dgmbyvar': `dgmlevels`d'', target: `tlab'"
 					
 					if `targetstringindi' == 1 local byvarlist = `"`group'==`d' & `target'=="`t'""'
 					else local byvarlist = `"`group'==`d' & `target'==`t'"'
@@ -438,8 +438,8 @@ if "`valtarget'" != "N/A" {
 
 				}
 
-				else if "`by'"=="`dgm'" {
-				local bytitle = "`dgm': `dgmlevels`d''"
+				else if "`by'"=="`dgmbyvar'" {
+				local bytitle = "`dgmbyvar': `dgmlevels`d''"
 			    local byvarlist = `"`group'==`d'"'
 				local byname = `d'
 				}
@@ -478,7 +478,7 @@ else {
 				local dgmlevels`d' : label grouplevels `d'
 
 				if ("`by'"=="" | "`by'"=="`dgmbyvar'") {
-					local bytitle = "`dgm': `dgmlevels`d''"
+					local bytitle = "`dgmbyvar': `dgmlevels`d''"
 					local byvarlist = `"`group'==`d'"'
 					local byname = `d'
 				}	

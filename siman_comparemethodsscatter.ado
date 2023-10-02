@@ -1,4 +1,5 @@
-*! version 1.9.14 12sep2023
+*! version 1.9.15 02oct2023
+*  version 1.9.15 02oct2023   EMZ bug fix so graphs not displayed >1 time when by(dgm) used
 *  version 1.9.14 12sep2023   EMZ correction to labels for methlist when method is a numeric string labelled variable
 *  version 1.9.13 05sep2023   EMZ minor bug fix to prevent double looping
 *  version 1.9.12 07aug2023   EMZ further minor formatting bug fixes: metlist
@@ -117,6 +118,7 @@ cap confirm variable `dgm'
 			}
 		}
 	}
+
 
 * if the user has not specified 'if' in the siman comparemethods scatter syntax, but there is one from siman setup then use that 'if'
 if ("`if'"=="" & "`ifsetup'"!="") local ifscatterc = `"`ifsetup'"'
@@ -540,6 +542,8 @@ if `numberdgms'==1 {
 			}
 			if "`valtarget'"== "N/A" local targetlab
 			
+			if mi("``dgm'dlabel`m''") local `dgm'dlabel`m' `m'
+			
 			if `numbermethod'==2 {
 				`dicmd' graph combine `mlabelname1' `graphtheta12`m'`t'' ///
 					`graphse12`m'`t'' `mlabelname2' ///
@@ -596,7 +600,6 @@ else if `numberdgms' != 1 {
 		}
 	}
 
-		
 *		if `dgmlabels' == 0 local dgmfilter = "`dgmvar' == ``dgmvar'dlabel`d''"
 *		else if `dgmlabels' == 1 local dgmfilter = "`dgmvar'==`d'"
 			

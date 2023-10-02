@@ -1,4 +1,5 @@
-*! version 1.8.8 05sep2023   EMZ
+*! version 1.8.9 02oct2023   EMZ
+*  version 1.8.9 02oct2023   EMZ bug fix so works with dgm == x when dgm defined >1 variable
 *  version 1.8.8 05sep2023   EMZ specified name used if true >1 value, named graph with suffix _x
 *  version 1.8.7 15aug2023   EMZ minor bug fix in name for when multiple graphs being printed out
 *  version 1.8.6 21july2023  IW suppress unwanted "obs dropped" message
@@ -167,7 +168,8 @@ if _rc {
 				local `true'value1 = `r(levels)'
 				local `true'label1 = `r(levels)'
 				*local `true'number`truevalue' `truevalue'
-				qui replace `true'calc = `truevalue'
+				qui replace `true'calc = ``true'value'
+				local truevalue ``true'value'
 				
 			}
 			else if `r(r)'>1 {

@@ -3,8 +3,8 @@
 clear all
 prog drop _all
 which siman_setup
-cd C:\git\siman\Ella_testing\data\
-use simlongESTPM_longE_longM.dta, clear
+global cd C:\git\siman\Ella_testing\data\ 
+use ${cd}\simlongESTPM_longE_longM.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
 * siman scatter
@@ -30,7 +30,7 @@ coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p
 siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("carrot", replace)
 
-use simlongESTPM_longE_longM.dta, clear
+use ${cd}\simlongESTPM_longE_longM.dta, clear
 drop true
 gen true = -0.5
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
@@ -40,8 +40,7 @@ siman_zipplot
 * Check dgm labels when dgm numeric with string labels
 clear all
 prog drop _all
-cd C:\git\siman\Ella_testing\data\
-use simlongESTPM_longE_longM.dta, clear
+use ${cd}\simlongESTPM_longE_longM.dta, clear
 label define dgmvar 1 "A" 2 "B"
 label values dgm dgmvar
 label define methodvar 1 "X" 2 "Y"
@@ -55,7 +54,7 @@ siman blandaltman
 
 
 * Different true values per target
-use simlongESTPM_longE_longM.dta, clear
+use ${cd}\simlongESTPM_longE_longM.dta, clear
 replace true=0.5 if estimand=="beta"
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman_zipplot  
@@ -63,7 +62,7 @@ siman_zipplot, scheme(scheme(economist)) legend(order(4 "Covering" 3 "Not coveri
 noncoveroptions(pstyle(p3)) coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6))
 
 * siman scatter
-use simlongESTPM_longE_longM.dta, clear
+use ${cd}\simlongESTPM_longE_longM.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman_scatter
 siman_scatter, by(dgm)
@@ -85,8 +84,7 @@ siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("te
 clear all
 prog drop _all
 * more than 3 methods for plots
-cd C:\git\siman\Ella_testing\data\
-use bvsim_all_out.dta, clear
+use ${cd}\bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -118,8 +116,7 @@ siman_blandaltman, ytitle("test y-title") xtitle("test x-title")
 
 clear all
 prog drop _all
-cd C:\git\siman\Ella_testing\data\
-use bvsim_all_out.dta, clear
+use ${cd}\bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -148,8 +145,7 @@ siman_comparemethodsscatter se, methlist(1 3 8 9) by(target)
 * method numeric labelled string variable
 clear all
 prog drop _all
-cd C:\git\siman\Ella_testing\data\
-use bvsim_all_out.dta, clear
+use ${cd}\bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -170,8 +166,7 @@ siman_blandaltman, methlist(10 4 8)
 siman_blandaltman, methlist(2 9 3)
 
 * String variable method
-cd C:\git\siman\Ella_testing\data\
-use simlongESTPM_wideE_wideM4.dta, clear
+use ${cd}\simlongESTPM_wideE_wideM4.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) order(method)
 siman_comparemethodsscatter 
 siman_blandaltman
@@ -179,8 +174,7 @@ siman_blandaltman est se
 siman_blandaltman, by(dgm)                                                                                
 * To test methlist subset, create a dataset with more than 3 string method variables
 clear all
-cd C:\git\siman\Ella_testing\data\
-use bvsim_all_out.dta, clear
+use ${cd}\bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -211,7 +205,7 @@ siman_blandaltman, methlist(B A C)
 
 clear all
 prog drop _all
-use N:\My_files\siman\simexample\estimates.dta, clear
+use ${cd}\estimates.dta, clear
 gen dgmnew = 0
 replace dgmnew = 1 if dgm==2
 label define dgmlabelvalues 0 "y = 1" 1 "y = 1.5"
@@ -226,8 +220,7 @@ siman swarm
 
 * Numeric methods
 *******************
-cd C:\git\siman\Ella_testing\data\
-use bvsim_all_out.dta, clear
+use ${cd}\bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -243,6 +236,7 @@ replace dgm=2 if dupindicator==1
 drop dupindicator
 tempfile origdata
 save `origdata', replace
+global origdata `origdata'
 
 * 2 methods, true variable
 drop if method>2
@@ -256,7 +250,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * 3 methods, true variable
-use `origdata', clear
+use ${origdata}, clear
 
 drop if method>3
 gen true = 0.5
@@ -269,7 +263,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * > 3 methods, true variable
-use `origdata', clear
+use ${origdata}, clear
 gen true = 0.5
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
@@ -282,7 +276,7 @@ siman zipplot
 siman swarm
 
 * 2 methods, true value
-use `origdata', clear
+use ${origdata}, clear
 drop if method>2
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 
@@ -295,7 +289,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * 3 methods, true value
-use `origdata', clear
+use ${origdata}, clear
 drop if method>3
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
@@ -306,7 +300,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * > 3 methods, true value
-use `origdata', clear
+use ${origdata}, clear
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
@@ -321,8 +315,7 @@ siman swarm
 * String methods
 *******************
 clear all
-cd C:\git\siman\Ella_testing\data\
-use bvsim_all_out.dta, clear
+use ${cd}\bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -344,7 +337,7 @@ replace method_string = "D" if method == 4
 drop method
 rename method_string method
 tempfile origdata
-save `origdata', replace
+save ${origdata}, replace
 * 2 methods, true variable
 drop if method == "C" | method == "D"
 gen true = 0.5
@@ -357,7 +350,7 @@ siman blandaltman est se
 siman zipplot                                                   
 siman swarm
 * 3 methods, true variable
-use `origdata', clear
+use ${origdata}, clear
 drop if  method == "D"
 gen true = 0.5
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
@@ -369,7 +362,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * > 3 methods, true variable
-use `origdata', clear
+use ${origdata}, clear
 gen true = 0.5
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
@@ -381,7 +374,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * 2 methods, true value
-use `origdata', clear
+use ${origdata}, clear
 drop if method == "C" | method == "D"
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
@@ -392,7 +385,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * 3 methods, true value
-use `origdata', clear
+use ${origdata}, clear
 drop if  method == "D"
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
@@ -403,7 +396,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * > 3 methods, true value
-use `origdata', clear
+use ${origdata}, clear
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
@@ -417,8 +410,7 @@ siman swarm
 
 * Numeric targets
 *******************
-cd C:\git\siman\Ella_testing\data\
-use bvsim_all_out.dta, clear
+use ${cd}\bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -439,8 +431,9 @@ rename method target
 rename method_new method
 tempfile origdata
 save `origdata', replace
+global origdata `origdata'
 * 2 targets, true variable
-use `origdata', clear
+use ${origdata}, clear
 drop if  target > 2
 gen true = 0.5
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
@@ -452,7 +445,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * 3 targets, true variable
-use `origdata', clear
+use ${origdata}, clear
 drop if target > 3
 gen true = 0.5
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
@@ -464,7 +457,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * > 3 targets, true variable
-use `origdata', clear
+use ${origdata}, clear
 gen true = 0.5
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
@@ -476,7 +469,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * 2 targets, true value
-use `origdata', clear
+use ${origdata}, clear
 drop if  target > 2
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
@@ -487,7 +480,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * 3 targets, true value
-use `origdata', clear
+use ${origdata}, clear
 drop if target > 3
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
@@ -498,7 +491,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * > 3 targets, true value
-use `origdata', clear
+use ${origdata}, clear
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
@@ -512,8 +505,7 @@ siman swarm
   
 * String targets
 *******************
-cd C:\git\siman\Ella_testing\data\
-use bvsim_all_out.dta, clear
+use ${cd}\bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -544,8 +536,9 @@ rename methodnew method
 rename targetnew target
 tempfile origdata
 save `origdata', replace
+global origdata `origdata'
 * 2 targets, true variable
-use `origdata', clear
+use ${origdata}, clear
 drop if  target == "C" | target == "D" | target == "E" | target == "F" | target == "G" | target == "H" | target == "I" | target == "J"
 gen true = 0.5
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
@@ -557,7 +550,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * 3 targets, true variable
-use `origdata', clear
+use ${origdata}, clear
 drop if target == "D" | target == "E" | target == "F" | target == "G" | target == "H" | target == "I" | target == "J"
 gen true = 0.5
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
@@ -569,7 +562,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * > 3 targets, true variable
-use `origdata', clear
+use ${origdata}, clear
 gen true = 0.5
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
@@ -581,7 +574,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * 2 targets, true value
-use `origdata', clear
+use ${origdata}, clear
 drop if  target == "C" | target == "D" | target == "E" | target == "F" | target == "G" | target == "H" | target == "I" | target == "J"
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
@@ -592,7 +585,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * 3 targets, true value
-use `origdata', clear
+use ${origdata}, clear
 drop if target == "D" | target == "E" | target == "F" | target == "G" | target == "H" | target == "I" | target == "J"
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
@@ -603,7 +596,7 @@ siman blandaltman est se
 siman zipplot
 siman swarm
 * > 3 targets, true value
-use `origdata', clear
+use ${origdata}, clear
 siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
@@ -616,7 +609,7 @@ siman swarm
 
 * missing target
 * creating a data set that has long method and missing target
-use simlongESTPM_longE_longM.dta, clear
+use ${cd}\simlongESTPM_longE_longM.dta, clear
 drop estimand
 bysort rep dgm method: gen repitionindi=_n
 drop if repitionindi==2
@@ -638,7 +631,7 @@ siman_comparemethodsscatter
 
 * missing method
 * creating a data set that has long target and missing method
-use simlongESTPM_longE_longM.dta, clear
+use ${cd}\simlongESTPM_longE_longM.dta, clear
 drop method
 bysort rep dgm estimand: gen repitionindi=_n
 drop if repitionindi==2
@@ -667,8 +660,7 @@ siman zipplot
 * Testing siman scatter.  Check if have 2 dgms, A (0/1) and B(0/1).  Then siman scatter, by A B if A==0 should be same as siman scatter, by B.
 clear all
 prog drop _all
-cd C:\git\siman\Ella_testing\data\
-use simlongESTPM_longE_longM.dta, clear
+use ${cd}\simlongESTPM_longE_longM.dta, clear
 replace dgm = 0 if dgm==2
 rename dgm dgmA
 egen dgmB = fill(1 1 0 0 1 1 0 0)
@@ -702,105 +694,85 @@ siman blandaltman, bygraphoptions(yrescale) // yrescale works
 *************************
 clear all
 prog drop _all
-cd C:\git\siman\Ella_testing\nestloop\
-use res.dta, clear
-keep v1 theta rho pc k exppeto expg2 var2peto var2g2
-* theta needs to be in integer format for levelsof command to work (doesn't accept non-integer values), so make integer values with non-integer labels
-gen theta_new=2
-replace theta_new=1 if theta == 0.5
-replace theta_new=3 if theta == 0.75
-replace theta_new=4 if theta == 1 
-label define theta_new 1 "0.5" 2 "0.67" 3 "0.75" 4 "1"
-label values theta_new theta_new
-label var theta_new "theta categories"
-*br theta theta_new
-drop theta
-rename theta_new theta
-gen pc_str = ""
-replace pc_str = "5%" if pc == 1
-replace pc_str = "10%" if pc == 2
-replace pc_str = "20%" if pc == 3
-replace pc_str = "30%" if pc == 4
-drop pc
-rename pc_str pc
-siman_setup, rep(v1) dgm(theta rho pc k) method(peto g2) estimate(exp) se(var2) true(theta)
+clear all
+prog drop _all
+use ${cd}\extendedtestdata_postfile.dta, clear
+
+* remove non-integer values
+gen betatrue=beta
+foreach var in beta pmiss {
+	gen `var'char = strofreal(`var')
+	drop `var'
+	sencode `var'char, gen(`var')
+	drop `var'char
+}
+order beta pmiss
+
+* create a string dgm var as well for testing
+gen betastring = "0"
+replace betastring = "0.25" if beta == 2
+replace betastring = "0.5" if beta == 3
+drop beta
+rename betastring beta
+
+siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(betatrue)
+
 siman_scatter
-siman scatter, by(theta)
+siman scatter, by(beta)
 siman_reshape, longlong
 siman scatter, by(method)
-siman scatter if method == "peto", name("simanscatter_peto", replace)
-
+siman scatter if method == "CCA", name("simanscatter_CCA", replace)
 
 
 * Testing siman swarm
 *************************
 
 siman_swarm                                                          
-siman swarm, by(theta)              
-siman swarm, by(k)
+siman swarm, by(pmiss)              
+siman swarm, by(mech)
 siman_reshape, longlong
-siman swarm if method == "peto" | method == "g2"   
-siman swarm if (method == "peto" | method == "g2"), by(theta) graphoptions(name("simanswarm_theta1", replace))                  
-siman swarm if (method == "peto" | method == "g2"), by(k)
+siman swarm if method == "Noadj" | method == "MeanImp"   
+siman swarm if (method == "Noadj" | method == "MeanImp"), by(beta) graphoptions(name("simanswarm_beta", replace))                  
+siman swarm if (method == "Noadj" | method == "MeanImp"), by(pmiss)
 
 * Testing siman blandaltman
 ****************************
 
-clear all
-prog drop _all
-cd N:\My_files\siman\GertaRucker\12874_2014_1136_MOESM1_ESM\
-use res.dta, clear
-gen theta_new=2
-replace theta_new=1 if theta == 0.5
-replace theta_new=3 if theta == 0.75
-replace theta_new=4 if theta == 1 
-label define theta_new 1 "0.5" 2 "0.67" 3 "0.75" 4 "1"
-label values theta_new theta_new
-label var theta_new "theta categories"
-drop theta
-rename theta_new theta
-keep v1 theta rho pc k exppeto expg2 var2peto var2g2 explimf var2limf
-siman_setup, rep(v1) dgm(theta rho pc k) method(peto g2 limf) estimate(exp) se(var2) true(theta)
 siman blandaltman
-siman blandaltman, by(theta)              
-siman blandaltman, by(k)
+siman blandaltman, by(beta)              
+siman blandaltman, by(mech)
 siman reshape, longlong
-siman blandaltman if method == "peto" | method == "limf"  
-siman blandaltman if (method == "peto" | method == "limf"), by(k) 
-siman blandaltman if (method == "peto" | method == "limf"), by(theta) name("simanba_new", replace)                  
+siman blandaltman if method == "Noadj" | method == "CCA"  
+siman blandaltman if (method == "Noadj" | method == "MeanImp"), by(pmiss) 
+siman blandaltman if (method == "CCA" | method == "MeanImp"), by(beta) name("simanba_new", replace)                  
 
 * Testing siman comparemethodsscatter
 **************************************
-
+serset clear
 siman comparemethodsscatter
-siman comparemethodsscatter, methlist("peto" "limf") 
-siman comparemethodsscatter, methlist("peto" "limf") name("simancms_new", replace) 
-siman comparemethodsscatter if theta == 1  
-siman comparemethodsscatter if theta == 4 
-siman comparemethodsscatter if pc == 2, name("simancmspc", replace)                                   
+siman comparemethodsscatter, methlist("CCA" "MeanImp") 
+siman comparemethodsscatter, methlist("Noadj" "MeanImp") name("simancms_new", replace) 
+siman comparemethodsscatter if beta == 1  
+siman comparemethodsscatter if mech == 2, name("simancmsmech", replace)                                   
 
 
 * Testing siman zipplot
 ************************
 
 siman_zipplot  
-siman zipplot, by(k)       
+siman zipplot, by(mech)       
 siman reshape, longlong 
-siman zipplot if (method == "peto" | method == "limf"), name("simanzip_new", replace) 
-siman zipplot, by(method k)
-siman zipplot if (method == "peto" | method == "limf"), by(method k) 
-siman zipplot if theta == 1  
-
-
+siman zipplot if (method == "Noadj" | method == "MeanImp"), name("simanzip_new", replace) 
+siman zipplot, by(method pmiss)
+siman zipplot if (method == "CCA" | method == "MeanImp"), by(method mech) 
+siman zipplot if beta == 1  
 
 
 * Testing string dgm input (auto encoded to numeric with Tim's code)
 clear all
 prog drop _all
-cd C:\git\siman\
 which siman_setup
-cd C:\git\siman\Ella_testing\data\
-use simlongESTPM_longE_longM.dta, clear
+use ${cd}\simlongESTPM_longE_longM.dta, clear
 gen dgm_string = "1"
 replace dgm_string = "2" if dgm == 2
 drop dgm
@@ -812,12 +784,6 @@ siman swarm
 siman zipplot
 siman blandaltman
 
-
-
-/*
-siman reshape, longlong
-bysort theta method: gen sortvar = _n
-*/
 
 
         
