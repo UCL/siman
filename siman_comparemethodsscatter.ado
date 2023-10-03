@@ -1,4 +1,6 @@
-*! version 1.9.15 02oct2023
+*! version 1.9.16 03oct2023
+*  version 1.9.16 03oct2023   EMZ updates: don't allow 'by' option as will just print blank graphs in the grid (previously only allowed for by(target)). User
+*                             should just use 'if' option to subset.  Fix when if == target and warning messages
 *  version 1.9.15 02oct2023   EMZ bug fix so graphs not displayed >1 time when by(dgm) used
 *  version 1.9.14 12sep2023   EMZ correction to labels for methlist when method is a numeric string labelled variable
 *  version 1.9.13 05sep2023   EMZ minor bug fix to prevent double looping
@@ -37,7 +39,7 @@ capture program drop siman_comparemethodsscatter
 program define siman_comparemethodsscatter, rclass
 version 16
 
-syntax [anything] [if][in] [,* Methlist(string) SUBGRaphoptions(string) BY(varlist) debug]
+syntax [anything] [if][in] [,* Methlist(string) SUBGRaphoptions(string) debug]
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -125,7 +127,7 @@ if ("`if'"=="" & "`ifsetup'"!="") local ifscatterc = `"`ifsetup'"'
 else local ifscatterc = `"`if'"'
 * handle if dgm defined by multiple variables, and user specifies 'if dgm1 == x'
 local ifdgm = 0
-if !mi("`ifscatterc'") {
+if !mi("`ifscatterc'") & strpos("`dgm'", "`ifscatterc'")>0 {
 	cap confirm variable `dgm'
 	if !_rc {
 		local numberdgms: word count `dgm'
@@ -211,6 +213,15 @@ if !mi("`methlist'") {
 	}
 	qui keep if `tousemethod' == 1	
 	qui drop `tousemethod'	
+}
+
+* check number of methods (for example if the 'if' syntax has been used)
+qui tab `method'
+local nummethodnew = `r(r)'
+
+if `nummethodnew' < 2 {
+	di as error "There are not enough methods to compare, siman comparemethodsscatter requires at least 2 methods."
+	exit 498
 }
 
 * Need labelsof package installed to extract method labels
@@ -611,7 +622,11 @@ else if `numberdgms' != 1 {
 			
 		* give user a warning if lots of graphs will be created
 		if "`numtarget'" == "N/A" local numtargetcheck = 1
-		else local numtargetcheck = `numtarget'
+		else {
+				* need to re-count in case there is an 'if' statement.  Data is in long-long format from reshape above
+				qui tab `target'   
+				local numtargetcheck = `r(r)'
+		}
 		if "`groupnum'" == "" local totalgroupnum = 1
 		else local totalgroupnum = `groupnum'
 

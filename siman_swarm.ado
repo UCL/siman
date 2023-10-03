@@ -1,4 +1,5 @@
-*! version 1.9.6 19sep2023
+*! version 1.9.7 03oct2023
+*  version 1.9.7 03oct2023    EMZ update to warning message when if/by conditions used
 *  version 1.9.6 19sep2023    EMZ accounting for lost labels on method numeric labelled string durng multiple reshapes
 *  version 1.9.5 12sep2023    EMZ slight change to error message condition when no method variable
 *  version 1.9.4 15aug2023    EMZ only allow estimate or se to be specified for siman swarm
@@ -231,8 +232,18 @@ if `dgmcreated' == 0 {
 	}
 }
 if "`numtarget'" == "N/A" local numtargetcheck = 1
-else local numtargetcheck = `numtarget'
+else {
+    * need to re-count in case there is an 'if' statement.  Data is in long-long format from reshape above
+	qui tab `target'   
+	local numtargetcheck = `r(r)'
+}
 if "`totaldgmnum'" == "" local totaldgmnum = 1
+if "`by'" == "`target'" local totaldgmnum = 1
+if !mi("`by'") & strpos("`dgm'", "`by'")>0 {
+    local numtargetcheck = 1
+	cap qui tab `by'
+	local totaldgmnum = `r(r)'
+}
 
 local graphnumcheck = `totaldgmnum' * `numtargetcheck'
 if `graphnumcheck' > 15 {

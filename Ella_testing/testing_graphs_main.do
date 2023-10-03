@@ -5,6 +5,7 @@ Ella 21mar2023
 Latest update Ian 22aug2023
 23aug2023 temporarily commented out all -siman cms- (slow and failing)
 *****************************************************************/
+global detail = 0
 
 // SETUP: MODIFY FOR USER & PROJECT
 local codepath C:\ian\git\siman\ // for Ian
@@ -19,6 +20,8 @@ cd `testpath'
 cap log close
 set linesize 100
 
+* switch on detail if want to run all graphs
+global detail = 1
 
 // START TESTING
 log using `filename', replace
@@ -295,9 +298,10 @@ siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("sw
 siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test7", replace)
 
-siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test7", replace) 
+serset clear
+if ${detail} == 1 siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test7", replace) 
 
-siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test7", replace) 
+if ${detail} == 1 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test7", replace) 
 
 siman analyse
 
@@ -306,7 +310,77 @@ siman lollyplot if k==5, xtitle("test x-title") name("lollyplot_test7", replace)
 
 siman nestloop mean, dgmorder(-theta rho -pc -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") name("nestloop_test7", replace)
 
+if ${detail} == 1 {
 
+* Testing warning messages correspond to the number of panels/graphs that will be printed
+
+clear all
+prog drop _all
+use data\extendedtestdata_postfile.dta, clear
+
+* remove non-integer values
+gen betatrue=beta
+foreach var in beta pmiss {
+	gen `var'char = strofreal(`var')
+	drop `var'
+	sencode `var'char, gen(`var')
+	drop `var'char
+}
+order beta pmiss
+
+* create a string dgm var as well for testing
+gen betastring = "0"
+replace betastring = "0.25" if beta == 2
+replace betastring = "0.5" if beta == 3
+drop beta
+rename betastring beta
+
+siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(betatrue)
+
+* scatter
+siman scatter
+siman scatter if method == "CCA"
+siman scatter if estimand == "effect"
+siman scatter if mech =="MCAR": mech
+
+siman scatter, by(pmiss)
+siman scatter, by(estimand)
+siman scatter, by(method)
+
+* swarm, requires 2 methods
+siman swarm
+siman swarm if (method == "CCA" | method == "MeanImp")
+siman swarm if estimand == "effect"
+siman swarm if mech =="MCAR": mech
+
+siman swarm, by(pmiss)
+siman swarm, by(estimand)
+
+* blandaltman
+siman blandaltman
+siman blandaltman if estimand == "effect"
+siman blandaltman if mech =="MCAR": mech
+
+siman blandaltman, by(pmiss)
+
+siman blandaltman, methlist(Noadj MeanImp)
+
+* comparemethodsscatter
+siman comparemethodsscatter
+siman comparemethodsscatter if estimand == "effect"
+siman comparemethodsscatter if mech =="MCAR": mech
+
+siman comparemethodsscatter, methlist(Noadj MeanImp)
+
+* zipplot
+siman zipplot
+siman zipplot if method == "CCA" 
+siman zipplot if estimand == "effect"
+siman zipplot if mech =="MCAR": mech
+
+siman zipplot, by(pmiss)
+siman zipplot, by(method)
+}
 
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THESE TESTS ***"
 

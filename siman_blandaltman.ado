@@ -1,4 +1,5 @@
-*! version 1.6.9 02oct2023
+*! version 1.6.10 03oct2023
+*  version 1.6.10 03oct2023  EMZ update to warning message when if condition used
 *  version 1.6.9 02oct2023   EMZ bug fix when dgm defined >1 variable, by() option now working again
 *  version 1.6.8 19sep2023   EMZ accounting for lost labels on method numeric labelled string durng multiple reshapes
 *  version 1.6.7 11july2023  EMZ change so that one graph is created for each target level and dgm level combination.
@@ -90,11 +91,16 @@ generate `tousein' = 0
 qui replace `tousein' = 1 `inba' 
 qui keep if `tousein'
 	
-	
-if `nummethod' < 2 {
+
+* check number of methods (for example if the 'if' syntax has been used)
+qui tab `method'
+local nummethodnew = `r(r)'
+
+if `nummethodnew' < 2 {
 	di as error "There are not enough methods to compare, siman blandaltman requires at least 2 methods."
 	exit 498
-}
+}	
+
 
 * Due to the way that siman ba splits out the methods (e.g. m1 and m2) and then calculates e.g. est_m2 - est_m1
 * the program does not work if there are different true values
@@ -378,7 +384,11 @@ local groupnum = `r(r)'
 	
 * give user a warning if lots of graphs will be created
 if "`numtarget'" == "N/A" local numtargetcheck = 1
-else local numtargetcheck = `numtarget'
+else {
+    * need to re-count in case there is an 'if' statement.  Data is in long-long format from reshape above
+	qui tab `target'   
+	local numtargetcheck = `r(r)'
+}
 if "`groupnum'" == "" local totalgroupnum = 1
 else local totalgroupnum = `groupnum'
 

@@ -1,4 +1,5 @@
-*! version 1.8.9 02oct2023   EMZ
+*! version 1.8.10 03oct2023
+*  version 1.8.10 03oct2023  EMZ update to warning message when if/by conditions used
 *  version 1.8.9 02oct2023   EMZ bug fix so works with dgm == x when dgm defined >1 variable
 *  version 1.8.8 05sep2023   EMZ specified name used if true >1 value, named graph with suffix _x
 *  version 1.8.7 15aug2023   EMZ minor bug fix in name for when multiple graphs being printed out
@@ -374,10 +375,27 @@ if `dgmcreated' == 0 {
 }
 
 if "`numtarget'" == "N/A" local numtargetcheck = 1
-else local numtargetcheck = `numtarget'
+else {
+    * need to re-count in case there is an 'if' statement.  Data is in long-long format from reshape above
+	qui tab `target'   
+	local numtargetcheck = `r(r)'
+}
 if "`nummethod'" == "N/A" local nummethodcheck = 1
-else local nummethodcheck = `nummethod'
+else {
+    * need to re-count in case there is an 'if' statement.  Data is in long-long format from reshape above
+	qui tab `method'   
+	local nummethodcheck = `r(r)'
+}
 if "`totaldgmnum'" == "" local totaldgmnum = 1
+if "`by'" == "`method'" {
+	local totaldgmnum = 1
+	local numtargetcheck = 1
+}
+if !mi("`by'") & strpos("`dgm'", "`by'")>0 {
+	local nummethodcheck = 1
+	cap qui tab `by'
+	local totaldgmnum = `r(r)'
+}
 
 local graphnumcheck = `totaldgmnum' * `nummethodcheck' * `numtargetcheck'
 if `graphnumcheck' > 15 {

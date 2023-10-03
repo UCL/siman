@@ -17,13 +17,13 @@ cd `testpath'
 cap log close
 set linesize 100
 
+* switch on detail if want to run all graphs
+global detail = 1
+
 
 // START TESTING
 log using `filename', replace
 siman which
-
-* switch on detail if want to run all graphs
-global detail = 1
 
  
 * dgm defined by 1 variable

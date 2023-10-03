@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.5 11sep2023}{...}
+{* *! version 1.6 03oct2023}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Syntax" "siman_comparemethodsscatter##syntax"}{...}
@@ -34,10 +34,6 @@
 then the {bf:if/in} from {help siman_setup:siman setup} will be used.
 The {bf:if} option should only be applied to {bf:dgm} and {bf:target}, use the {bf: methlist()} option to subset on method.  The {bf:if} option is not allowed to be used on {bf:repetition} and an error message will be issued if 
 the user tries to do so.
-
-{pstd}
-{p_end}
-{synopt:{opt by(string)}}  specifies the nesting of the variables.  Only {bf: by(target)} is allowed for {cmd: siman comparemethodsscatter}.
 
 {syntab:Graph options}
 {pstd}

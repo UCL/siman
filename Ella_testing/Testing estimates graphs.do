@@ -71,8 +71,7 @@ siman_scatter, ytitle("test y-title") xtitle("test x-title") scheme(economist) b
 siman_scatter, ytitle("test y-title") xtitle("test x-title") scheme(s2mono) by(dgm) bygraphoptions(title("main-title")) 
 
 * siman comparemethodsscatter
-siman_comparemethodsscatter
-siman_comparemethodsscatter, by(estimand)  
+siman_comparemethodsscatter 
 siman_comparemethodsscatter, scheme(economist) 
 * to change title in main graph
 siman_comparemethodsscatter, title("test")
@@ -138,9 +137,8 @@ siman_comparemethodsscatter est
 siman_comparemethodsscatter, methlist(3 8) 
 siman_comparemethodsscatter, methlist(1 3 8)                      
 siman_comparemethodsscatter se, methlist(1 3 8 9) 
-siman_comparemethodsscatter, by(target)  
-siman_comparemethodsscatter, methlist(1 3 8) by(target)                      
-siman_comparemethodsscatter se, methlist(1 3 8 9) by(target) 
+siman_comparemethodsscatter, methlist(1 3 8)                      
+siman_comparemethodsscatter se, methlist(1 3 8 9) 
 
 * method numeric labelled string variable
 clear all
@@ -199,7 +197,7 @@ siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
 siman_comparemethodsscatter
 siman_comparemethodsscatter, methlist(A C)                       
 siman_comparemethodsscatter, methlist(B C D) 
-siman_comparemethodsscatter, methlist(B C D)  by(target)                       
+siman_comparemethodsscatter, methlist(B C D)                       
 siman_blandaltman	
 siman_blandaltman, methlist(B A C)  
 
@@ -784,6 +782,3 @@ siman swarm
 siman zipplot
 siman blandaltman
 
-
-
-        

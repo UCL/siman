@@ -1,4 +1,5 @@
-*! version 1.6.6 18sept2023
+*! version 1.6.7 03oct2023
+*  version 1.6.7 03oct2023   EMZ update to warning message when by() conditions used
 *  version 1.6.6 18sept2023  EMZ updated warning of # panels to be printed based on 'if' subset
 *  version 1.6.5 08aug2023   EMZ restricted siman scatter options to be -estimate se- or -se estimate- only
 *  version 1.6.4 26june2023  EMZ minor bug fix for when dgm/method is missing, and tidy up of code.
@@ -171,6 +172,22 @@ else {
 	local nummethodcheck = `r(r)'
 }
 if "`totaldgmnum'" == "" local totaldgmnum = 1
+
+if !mi("`by'") & strpos("`dgm'", "`by'")>0 {
+	local numtargetcheck = 1
+	local nummethodcheck = 1
+	cap qui tab `by'
+	local totaldgmnum = `r(r)'
+}
+if !mi("`by'") & "`by'" == "`target'" {
+	local totaldgmnum = 1
+	local nummethodcheck = 1
+}
+if !mi("`by'") & "`by'" == "`method'" {
+	local totaldgmnum = 1
+	local numtargetcheck = 1
+}
+
 
 local graphnumcheck = `totaldgmnum' * `nummethodcheck' * `numtargetcheck'
 if `graphnumcheck' > 15 {
