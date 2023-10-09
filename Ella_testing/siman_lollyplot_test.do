@@ -120,7 +120,7 @@ use extendedtestdata2, clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 qui siman analyse
 siman lol bias relprec power cover if beta==3, ///
-	refpower(90) dgmwidth(35) pmwidth(20) legend(row(1)) name(l`++i', replace)
+	refpower(90) dgmwidth(35) pmwidth(20) legend(col(1)) name(l`++i', replace)
 
 * tidy up
 erase extendedtestdata2.dta
