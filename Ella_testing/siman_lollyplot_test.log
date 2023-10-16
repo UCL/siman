@@ -2,33 +2,33 @@
       name:  <unnamed>
        log:  C:\ian\git\siman\Ella_testing\siman_lollyplot_test.log
   log type:  text
- opened on:  13 Sep 2023, 11:56:44
+ opened on:   9 Oct 2023, 17:27:45
 
 . siman which
 C:\ian\git\siman\siman.ado
 *!version 0.3  08aug2023
 C:\ian\git\siman\siman_setup.ado
-*!   version 0.8.0  04july2023
+*!   version 0.8.2  25sep2023
 C:\ian\git\siman\siman_describe.ado
 *! version 0.4     21jul2022  
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.6.5  12sep2023
+*! version 0.6.6  18sep2023
 C:\ian\git\siman\siman_table.ado
 *! version 0.8   23dec2022
 C:\ian\git\siman\siman_reshape.ado
-*!  version 0.3.2   12sep2023
+*!  version 0.3.3   19sep2023
 C:\ian\git\siman\siman_lollyplot.ado
 *! version 1.13  13sep2023
 C:\ian\git\siman\siman_zipplot.ado
-*! version 1.8.8 05sep2023   EMZ
+*! version 1.8.10 03oct2023
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*! version 1.9.14 12sep2023
+*! version 1.9.16 03oct2023
 C:\ian\git\siman\siman_blandaltman.ado
-*! version 1.6.7 11july2023
+*! version 1.6.10 03oct2023
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.9.5 12sep2023
+*! version 1.9.7 03oct2023
 C:\ian\git\siman\siman_scatter.ado
-*! version 1.6.5 08Aug2023
+*! version 1.6.7 03oct2023
 C:\ian\git\siman\siman_nestloop.ado
 *! version 1.8.2   17aug2023
 
@@ -345,7 +345,7 @@ _____________________________________________________
 . qui siman analyse
 
 . siman lol bias relprec power cover if beta==3, ///
->         refpower(90) dgmwidth(35) pmwidth(20) legend(row(1)) name(l`++i', replace)
+>         refpower(90) dgmwidth(35) pmwidth(20) legend(col(1)) name(l`++i', replace)
 Drawing 3 graphs (one per target)...
 
 . 
@@ -361,5 +361,5 @@ Drawing 3 graphs (one per target)...
       name:  <unnamed>
        log:  C:\ian\git\siman\Ella_testing\siman_lollyplot_test.log
   log type:  text
- closed on:  13 Sep 2023, 11:57:39
+ closed on:   9 Oct 2023, 17:28:36
 ----------------------------------------------------------------------------------------------------
