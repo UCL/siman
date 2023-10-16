@@ -261,6 +261,17 @@ siman comparemethodsscatter, methlist(3 5 7) name("cms_test6a", replace)
 siman comparemethodsscatter if target=="beta" & dgm==1
 siman comparemethodsscatter if target=="beta" & dgm==1, methlist(1 2 3) 
 siman_blandaltman, methlist(3 7) name("ba_test6", replace)
+
+* check error messages
+cap siman comparemethodsscatter if method <= 3
+assert _rc
+cap siman comparemethodsscatter, methlist(1/5)
+assert _rc
+cap siman blandaltman if method <= 3
+assert _rc
+cap siman blandaltman, methlist(1/5)
+assert _rc
+
  
   
 **********************************************************

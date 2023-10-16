@@ -1,4 +1,5 @@
-*! version 1.6.10 03oct2023
+*! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
+*  version 1.6.11 16oct2023  EMZ update to warning message when if condition used
 *  version 1.6.10 03oct2023  EMZ update to warning message when if condition used
 *  version 1.6.9 02oct2023   EMZ bug fix when dgm defined >1 variable, by() option now working again
 *  version 1.6.8 19sep2023   EMZ accounting for lost labels on method numeric labelled string durng multiple reshapes
@@ -101,6 +102,19 @@ if `nummethodnew' < 2 {
 	exit 498
 }	
 
+if !mi("`if'") {
+	if strpos("`if'","<=")!= 0 | strpos("`if'","=>")!= 0 {
+	di as error "<= and >= are not permitted.  Please use methlist() option if subsetting on method."
+	exit 498
+	}
+}
+
+if !mi("`methlist'") {
+	if strpos("`methlist'","/")!= 0 {
+	di as error "The notation x/y is not permitted.  Please write out methlist() subset in full."
+	exit 498
+	}
+}
 
 * Due to the way that siman ba splits out the methods (e.g. m1 and m2) and then calculates e.g. est_m2 - est_m1
 * the program does not work if there are different true values

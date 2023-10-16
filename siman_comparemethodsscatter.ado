@@ -1,4 +1,5 @@
-*! version 1.9.16 03oct2023
+*! version 1.9.17 16oct2023
+*  version 1.9.17 16oct2023   EMZ produce error message if >=, <= or methlist(x/y) is used.
 *  version 1.9.16 03oct2023   EMZ updates: don't allow 'by' option as will just print blank graphs in the grid (previously only allowed for by(target)). User
 *                             should just use 'if' option to subset.  Fix when if == target and warning messages
 *  version 1.9.15 02oct2023   EMZ bug fix so graphs not displayed >1 time when by(dgm) used
@@ -66,6 +67,20 @@ if `nummethod' < 2 {
 	exit 498
 }
 if !mi("`debug'") local dicmd dicmd
+
+if !mi("`if'") {
+	if strpos("`if'","<=")!= 0 | strpos("`if'","=>")!= 0 {
+	di as error "<= and >= are not permitted.  Please use methlist() option if subsetting on method."
+	exit 498
+	}
+}
+
+if !mi("`methlist'") {
+	if strpos("`methlist'","/")!= 0 {
+	di as error "The notation x/y is not permitted.  Please write out methlist() subset in full."
+	exit 498
+	}
+}
 
 tempfile origdata
 qui save `origdata'

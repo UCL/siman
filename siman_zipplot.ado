@@ -1,4 +1,5 @@
-*! version 1.8.10 03oct2023
+*! version 1.8.11 16oct2023
+*  version 1.8.11 16oct2023  EMZ minor update to warning message (# graphs each of # panels)
 *  version 1.8.10 03oct2023  EMZ update to warning message when if/by conditions used
 *  version 1.8.9 02oct2023   EMZ bug fix so works with dgm == x when dgm defined >1 variable
 *  version 1.8.8 05sep2023   EMZ specified name used if true >1 value, named graph with suffix _x
@@ -397,9 +398,12 @@ if !mi("`by'") & strpos("`dgm'", "`by'")>0 {
 	local totaldgmnum = `r(r)'
 }
 
-local graphnumcheck = `totaldgmnum' * `nummethodcheck' * `numtargetcheck'
+local numtruecheck = 1
+if !mi("`ntrue'") local numtruecheck `ntrue'
+
+local graphnumcheck = (`totaldgmnum' * `nummethodcheck' * `numtargetcheck')/`numtruecheck'
 if `graphnumcheck' > 15 {
-	di as error "{it: WARNING: `graphnumcheck' panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}"
+	di as error "{it: WARNING: `numtruecheck' graphs each of `graphnumcheck' panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}"
 }
 	
 * Plot of confidence interval coverage:
