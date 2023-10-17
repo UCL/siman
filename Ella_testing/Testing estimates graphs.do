@@ -43,14 +43,16 @@ prog drop _all
 use ${cd}\simlongESTPM_longE_longM.dta, clear
 label define dgmvar 1 "A" 2 "B"
 label values dgm dgmvar
-label define methodvar 1 "X" 2 "Y"
+label define methodvar 1 "X" 2 "Y_"
 label values method methodvar
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman scatter                  
 siman zipplot                  
 siman swarm                   
 siman comparemethodsscatter 
-siman blandaltman   
+siman blandaltman  
+* check works ok
+siman analyse
 
 
 * Different true values per target

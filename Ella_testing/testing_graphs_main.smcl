@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}C:\git\siman\Ella_testing\testing_graphs_main.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 3 Oct 2023, 17:42:16
+ {txt}opened on:  {res}17 Oct 2023, 14:15:47
 {txt}
 {com}. siman which
 {txt}C:\git\siman\siman.ado
@@ -11,7 +11,7 @@
 {txt}C:\git\siman\siman_setup.ado
 {res}*!   version 0.8.2  25sep2023
 {txt}C:\git\siman\siman_describe.ado
-{res}*! version 0.4     21jul2022  
+{res}*! version 0.5   17oct2022  
 {txt}C:\git\siman\siman_analyse.ado
 {res}*! version 0.6.6  18sep2023
 {txt}C:\git\siman\siman_table.ado
@@ -21,11 +21,11 @@
 {txt}C:\git\siman\siman_lollyplot.ado
 {res}*! version 1.13  13sep2023
 {txt}C:\git\siman\siman_zipplot.ado
-{res}*! version 1.8.10 03oct2023
+{res}*! version 1.8.11 16oct2023
 {txt}C:\git\siman\siman_comparemethodsscatter.ado
-{res}*! version 1.9.16 03oct2023
+{res}*! version 1.9.17 16oct2023
 {txt}C:\git\siman\siman_blandaltman.ado
-{res}*! version 1.6.10 03oct2023
+{res}*! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
 {txt}C:\git\siman\siman_swarm.ado
 {res}*! version 1.9.7 03oct2023
 {txt}C:\git\siman\siman_scatter.ado
@@ -1236,7 +1236,26 @@ Working.....
 {com}. siman_blandaltman, methlist(3 7) name("ba_test6", replace)
 {txt}working....
 {res}{txt}
-{com}.  
+{com}. 
+. * check error messages
+. cap siman comparemethodsscatter if method <= 3
+{txt}
+{com}. assert _rc
+{txt}
+{com}. cap siman comparemethodsscatter, methlist(1/5)
+{txt}
+{com}. assert _rc
+{txt}
+{com}. cap siman blandaltman if method <= 3
+{txt}
+{com}. assert _rc
+{txt}
+{com}. cap siman blandaltman, methlist(1/5)
+{txt}
+{com}. assert _rc
+{txt}
+{com}. 
+.  
 .   
 . **********************************************************
 . * DGM defined by multiple variables with multiple levels
@@ -1313,7 +1332,7 @@ The siman format is:{res}{col 35}format 3: long-wide
 {txt}The method values are:{res}{col 35}peto g2
 
 Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}192
+{txt}The total number of dgm vars is: {res}{col 35}192
 {txt}The dgm variables (# levels): {res}{col 35}theta (4) rho (4) pc (4) k (3) 
 
 Estimates are contained in the dataset
@@ -1339,7 +1358,7 @@ Estimates are contained in the dataset
 {com}. 
 . siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 > coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test7", replace)
-{err}{it: WARNING: 96 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}
+{err}{it: WARNING: 4 graphs each of 24 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}
 {res}{txt}
 {com}. 
 . serset clear
@@ -9688,7 +9707,7 @@ The siman format is:{res}{col 35}format 1: long-long
 {txt}The method values are:{res}{col 35}CCA MeanImp Noadj
 
 Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}12
+{txt}The total number of dgm vars is: {res}{col 35}12
 {txt}The dgm variables (# levels): {res}{col 35}beta (3) pmiss (2) mech (2) 
 
 Estimates are contained in the dataset
@@ -9773,13 +9792,11 @@ Estimates are contained in the dataset
 {res}{com}. 
 . * zipplot
 . siman zipplot
-{err}{it: WARNING: 108 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}
+{err}{it: WARNING: 3 graphs each of 36 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}
 {res}{com}. siman zipplot if method == "CCA" 
-{err}{it: WARNING: 36 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}
 {res}{com}. siman zipplot if estimand == "effect"
-{err}{it: WARNING: 36 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}
 {res}{com}. siman zipplot if mech =="MCAR": mech
-{err}{it: WARNING: 54 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}
+{err}{it: WARNING: 3 graphs each of 18 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}
 {res}{com}. 
 . siman zipplot, by(pmiss)
 {res}{com}. siman zipplot, by(method)
@@ -9794,7 +9811,7 @@ Estimates are contained in the dataset
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}C:\git\siman\Ella_testing\testing_graphs_main.smcl
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 3 Oct 2023, 18:32:07
+ {txt}closed on:  {res}17 Oct 2023, 15:25:02
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

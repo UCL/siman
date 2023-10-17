@@ -1,4 +1,5 @@
-*! version 0.4     21jul2022  
+*! version 0.5   17oct2022  
+*  version 0.5   17oct2022     EMZ minor change to table for when method values have a mix of undersocres after them e.g. X Y_
 *  version 0.4   21july2022    EMZ change how dgms are displayed in the table
 *  version 0.3   30 june2022   EMZ minor formatting changes from IW/TM testing
 *  version 0.2   06jan2022     EMZ changes
@@ -26,6 +27,7 @@ foreach thing in `_dta[siman_allthings]' {
 local titlewidth 20
 local colwidth 35
 
+/*
 * remove underscores from the end of method and target labels if there are any (for aesthetic purposes in the output table)
 if strpos("`valmethod'","_")!=0 {
     tokenize "`valmethod'"
@@ -33,8 +35,12 @@ if strpos("`valmethod'","_")!=0 {
             if  substr("``k''",strlen("``k''"),1)=="_" {
             local l = substr("``k''", 1,strlen("``k''","_") - 1)
             if "`k'"=="1" local valmethod "`l'"
-            else if "`l'">"1" local valmethod "`valmethod'" " " "`l'"
+            else if "`k'">"1" local valmethod "`valmethod'" " " "`l'"
             }
+			else {
+				if "`k'"=="1" local valmethod "``k''"
+				else if "`k'">"1" local valmethod "`valmethod'" " " "``k''"
+			}	
     }
 }
 
@@ -48,6 +54,7 @@ if strpos("`valtarget'","_")!=0 {
             }
     }
 }
+*/
 
 
 
@@ -125,7 +132,8 @@ else if `dgmcreated' == 1 {
 	}
 
     di as result _newline "Data generating mechanism (dgm)
-	di as text "The total number of dgms is: " as result _col(`colwidth') "`totaldgmnum'" 
+	if `dgmcount' == 1 di as text "The total number of dgms is: " as result _col(`colwidth') "`totaldgmnum'" 
+	else di as text "The total number of dgm vars is: " as result _col(`colwidth') "`totaldgmnum'"
     di as text "The dgm variables (# levels): " as result _col(`colwidth') `"`dgmvarsandlevels'"' _newline
 	if "`estimate'"!="" di as result "Estimates are contained in the dataset"
 	else if "`estimate'"=="" di as result "Estimates are not contained in the dataset"
