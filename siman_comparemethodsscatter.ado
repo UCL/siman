@@ -587,8 +587,8 @@ if `numberdgms'==1 {
 			}
 			else if `numbermethod'>3 {
 				if mi("`anything'") local anything = "est"
-				`dicmd' graph matrix `varlist' if `dgm'==`m' `iftarget', `half' `by' title("") note("") ///
-					name(`name'_`anything'`j'`k'dgm`m'`tlab', replace) `options'
+				`dicmd' graph matrix `varlist' if `dgm'==`m' `iftarget', `half' `by' title("") note("") ms(o) mlc(gs10) msize(tiny) ///
+				name(`name'_`anything'`j'`k'dgm`m'`tlab', replace) `options'
 			}
 		}
 	}
@@ -770,7 +770,7 @@ else if `numberdgms' != 1 {
 				}
 				else if `numbermethod'>3 {
 					if mi("`anything'") local anything = "est"
-					`dicmd' graph matrix `varlist' if `group'==`d' `iftarget', `half' `by' title("") note("") ///
+					`dicmd' graph matrix `varlist' if `group'==`d' `iftarget', `half' `by' title("") note("") ms(o) mlc(gs10) msize(tiny)///
 						name(`name'_`anything'`j'`k'`d'`tlab', replace) `options'
 				}
 			}
