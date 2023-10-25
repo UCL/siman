@@ -101,7 +101,7 @@ if mi("`estimate'") &  mi("`se'") {
 * produce a warning message if no method contained in dataset, and create a constant
 local methodcreated = 0
 if mi("`method'") {
-	 di as error "{it: WARNING: no method specified, siman will procedd assuming there is only one method.  If this is a mistake, enter method() option in -siman setup-}"
+	 di as error "{it:WARNING: no method specified, siman will proceed assuming there is only one method.}" _n "{it:If this is a mistake, enter method() option in -siman setup-}"
 	 qui gen _methodvar = 1
 	 local method "_methodvar"
 	 local methodcreated = 1

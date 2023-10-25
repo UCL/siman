@@ -23,16 +23,16 @@
 The input data for {cmd:siman setup} is an estimates data set.  This contains the results from analysing multiple simulated data sets, with data relating to different statistics for each simulated data set.  Each row in the estimates data set 
 relates to one simulation, labelled here as repetition ({bf:rep}).
   
-{pstd}Input data can be either in:
+{pstd}Input data can be in any of these formats:
 
 {pstd}
-(1) long-long format (i.e. long targets, long methods)
+(1) long-long format (i.e. long targets, long methods),
 
 {pstd}
-(2) wide-wide format
+(2) wide-wide format (i.e. wide targets, wide methods),
 
 {pstd}
-(3) long-wide format (i.e. long targets, wide methods), or
+(3) long-wide format (i.e. long targets, wide methods),
 
 {pstd}
 (4) wide-long format (i.e. wide targets, long methods).
@@ -279,7 +279,8 @@ estimand, with labels {it:beta} and {it:gamma}) and 2 methods (with labels {it:1
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) order(method)"}
 
-{phang}Note that the data labels are {bf:estA_beta} etc and so the method labels need to be inputted with the separator underscores in {bf:method()}.  
+{phang}Note that the variable names are {bf:estA_beta} etc and so the method values need to be inputted with the separator underscores in {bf:method()}.  
+This could also be done with {bf:target(beta_ gamma_) method(A B)}.
 
 {phang}The method labels appear before the target labels in the wide-wide dataset so {cmd:order(method)} is entered.
 

@@ -1,4 +1,5 @@
-*! version 1.9.17 16oct2023
+*! version 1.9.18 25oct2023
+*  version 1.9.18 25oct2023   IW removed space before comma in note
 *  version 1.9.17 16oct2023   EMZ produce error message if >=, <= or methlist(x/y) is used.
 *  version 1.9.16 03oct2023   EMZ updates: don't allow 'by' option as will just print blank graphs in the grid (previously only allowed for by(target)). User
 *                             should just use 'if' option to subset.  Fix when if == target and warning messages
@@ -573,7 +574,7 @@ if `numberdgms'==1 {
 			if `numbermethod'==2 {
 				`dicmd' graph combine `mlabelname1' `graphtheta12`m'`t'' ///
 					`graphse12`m'`t'' `mlabelname2' ///
-					, title("") note("Graphs for `dgm': ``dgm'dlabel`m'' `targetlab'") cols(2)	///
+					, title("") note("Graphs for `dgm': ``dgm'dlabel`m''`targetlab'") cols(2)	///
 					xsize(4)	///
 					name(`name'_dgm`m'`tlab', replace) `options'
 			}
@@ -581,7 +582,7 @@ if `numberdgms'==1 {
 				`dicmd' graph combine `mlabelname1' `graphtheta12`m'`t'' `graphtheta13`m'`t''	///
 					`graphse12`m'`t'' `mlabelname2' `graphtheta23`m'`t''	///
 					`graphse13`m'`t'' `graphse23`m'`t'' `mlabelname3'	///
-					, title("") note("Graphs for `dgm': ``dgm'dlabel`m'' `targetlab'") cols(3)	///
+					, title("") note("Graphs for `dgm': ``dgm'dlabel`m''`targetlab'") cols(3)	///
 					xsize(4)	///
 					name(`name'_dgm`m'`tlab', replace) `options'
 			}
@@ -758,14 +759,14 @@ else if `numberdgms' != 1 {
 				if `numbermethod'==2 {
 
 					`dicmd' graph combine `mlabelname1' `graphtheta12`d'`t'' `graphse12`d'`t'' `mlabelname2', ///
-						title("") note("Graphs for `dgmvalues': `dgmlevels`d'' `targetlab'") cols(2)	xsize(4) ///
+						title("") note("Graphs for `dgmvalues': `dgmlevels`d''`targetlab'") cols(2)	xsize(4) ///
 						name(`name'_`d'`tlab', replace) `options'
 				}
 				else if `numbermethod'==3 {
 					`dicmd' graph combine `mlabelname1' `graphtheta12`d'`t'' `graphtheta13`d'`t'' ///
 						`graphse12`d'`t'' `mlabelname2' `graphtheta23`d'`t'' ///
 						`graphse13`d'`t'' `graphse23`d'`t'' `mlabelname3', ///
-						title("") note("Graphs for `dgmvalues': `dgmlevels`d'' `targetlab'") cols(3)	xsize(4) ///
+						title("") note("Graphs for `dgmvalues': `dgmlevels`d''`targetlab'") cols(3)	xsize(4) ///
 						name(`name'_`d'`tlab', replace) `options'
 				}
 				else if `numbermethod'>3 {

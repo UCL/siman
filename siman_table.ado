@@ -1,4 +1,5 @@
-*! version 0.8   23dec2022
+*! version 0.8.1   25oct2023
+*  version 0.8.1 25oct2023     IW put PMs in same order as in simsum
 *  version 0.8   23dec2022     IW major rewrite: never pools over dgms, targets or methods
 *  version 0.7   05dec2022     EMZ removed 'if' option, as already applied by siman analyse to the data (otherwise applying it twice).
 *  version 0.6   11july2022    EMZ changed generated variables to have _ infront
@@ -78,7 +79,7 @@ if "`anything'"!="" {
 
 
 * re-order performance measures for display in the table as per simsum
-local perfvar = "bsims sesims bias empse relprec mse modelse relerror cover power mean rmse ciwidth"
+local perfvar = "bsims sesims bias mean empse relprec mse rmse modelse ciwidth relerror cover power"
 qui gen _perfmeascodeorder=.
 local p = 0
 foreach perf of local perfvar {

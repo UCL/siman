@@ -1,4 +1,5 @@
-*! version 1.13  13sep2023
+*! version 1.13.1  25oct2023
+* version 1.13.1  25oct2023   IW clearer error if no obs; helpful message with pause option
 * version 1.13  13sep2023     IW add level() option; streamline pm variables; show PMs in order requested; use pstyle to harmonise graph; new logit option calculates CI for power & coverage on logit scale 
 * version 1.12.3  22aug2023   IW bug fix with name("n")
 * version 1.12.2  22aug2023   IW handles target = numeric or string 
@@ -42,8 +43,9 @@ version 15
 
 syntax [anything] [if] [, BYGRaphoptions(string) ///
 	LABFormat(string) COLors(string) MSymbol(string) Level(cilevel) ///
-	name(string) REFPower(real 80) * /// final-graph options
-	dgmwidth(int 30) pmwidth(int 24) debug pause logit /// undocumented options
+	name(string) REFPower(real 80) pause * /// final-graph options
+	logit /// calculation option
+	dgmwidth(int 30) pmwidth(int 24) debug /// undocumented options
 	]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -125,6 +127,8 @@ if _rc == 9 {
 	}
 
 qui keep if `touseif'
+
+if _N==0 error 2000
 
 * take out underscores at the end of variable names if there are any
 foreach u of var * {
@@ -329,7 +333,7 @@ foreach thistarget of local targetlevels {
 
 	global F9 `graph_cmd'
 	if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
-	if !mi("`pause'") pause
+	if !mi("`pause'") pause Press F9 to recall, optionally edit and run the graph command for `targetcond'
 	`graph_cmd'
 }
 

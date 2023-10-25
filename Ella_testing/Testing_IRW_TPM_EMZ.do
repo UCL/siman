@@ -10,7 +10,7 @@ global detail = 0
 
 // SETUP FOR ALL USERS
 local testpath `codepath'Ella_testing\
-local filename testing_graphs_main
+local filename Testing_IRW_TPM_EMZ
 prog drop _all
 adopath ++ `codepath'
 cd `testpath'
@@ -82,12 +82,14 @@ siman nestloop
 
 
 * dgm defined by >1 variable
-clear all
-prog drop _all
 use data/extendedtestdata_postfile.dta, clear
 
+* create true values, corrected 25oct2023
+gen betatrue = beta if estimand == "effect"
+replace betatrue = 1 if estimand == "mean0"
+replace betatrue = 1 + beta if estimand == "mean1"
+
 * remove non-integer values
-gen betatrue=beta
 foreach var in beta pmiss {
 	gen `var'char = strofreal(`var')
 	drop `var'
@@ -126,7 +128,7 @@ siman blandaltman
 * 1 graph per combination of dgm levels and target, by method difference
 
 siman zipplot
-* 1 pannel per dgm, target and method combination, 1 graph per beta (as defines y-axis)
+* 1 panel per dgm, target and method combination, 1 graph per beta (as defines y-axis)
 
 * different spelling
 siman analyze
@@ -179,10 +181,13 @@ drop expfem exprem expmh msefem mserem msemh msepeto mseg2 mselimf covfem covrem
 
 siman setup, rep(v1) dgm(theta_new rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)
 
-* siman analyse needs force option to cope with only 1 repetition per dgm [NB gets many lines of red output], and notable option because siman table fails
-qui siman analyse, force notable
+* siman analyse needs force option to cope with only 1 repetition per dgm [NB gets many lines of red output, suppressed by cap], and notable option because siman table fails
+cap siman analyse, force 
+assert _rc == 198
+
 * Recreating Gerta's graph, Figure 2
 siman nestloop mean, dgmorder(-theta_new rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") xlabel(none) xtitle("")
 
 
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THESE TESTS ***"
+log close
