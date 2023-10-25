@@ -33,7 +33,7 @@ if mi("`anything'") {
 }
 
 // "which" option
-if "`anything'"=="which" {
+if inlist("`anything'", "which", "whic", "whi") {
 	which siman
 	foreach subcmd of local subcmds {
 		if "`subcmd'"=="analyze" continue
