@@ -1,0 +1,3486 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\git\siman\Ella_testing\Testing_IRW_TPM_EMZ.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}30 Oct 2023, 16:36:39
+{txt}
+{com}. siman which
+{txt}C:\git\siman\siman.ado
+{res}*!version 0.3  08aug2023
+{txt}C:\git\siman\siman_setup.ado
+{res}*!   version 0.8.3  30oct2023
+{txt}C:\git\siman\siman_describe.ado
+{res}*! version 0.5   17oct2022  
+{txt}C:\git\siman\siman_analyse.ado
+{res}*! version 0.6.8  30oct2023
+{txt}C:\git\siman\siman_table.ado
+{res}*! version 0.8.1   25oct2023
+{txt}C:\git\siman\siman_reshape.ado
+{res}*!  version 0.3.3   19sep2023
+{txt}C:\git\siman\siman_lollyplot.ado
+{res}*! version 1.13.1  25oct2023
+{txt}C:\git\siman\siman_zipplot.ado
+{res}*! version 1.8.12 25oct2023
+{txt}C:\git\siman\siman_comparemethodsscatter.ado
+{res}*! version 1.9.18 25oct2023
+{txt}C:\git\siman\siman_blandaltman.ado
+{res}*! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
+{txt}C:\git\siman\siman_swarm.ado
+{res}*! version 1.9.7 03oct2023
+{txt}C:\git\siman\siman_scatter.ado
+{res}*! version 1.6.7 03oct2023
+{txt}C:\git\siman\siman_nestloop.ado
+{res}*! version 1.8.2   17aug2023
+{txt}
+{com}. 
+.  
+. * dgm defined by 1 variable
+. use data/simlongESTPM_longE_longM.dta, clear
+{txt}
+{com}. encode estimand, gen(estimand_num)
+{txt}
+{com}. drop estimand
+{txt}
+{com}. rename estimand_num estimand
+{res}{txt}
+{com}. label define methodl 1 "A" 2 "B"
+{txt}
+{com}. label values method methodl
+{txt}
+{com}. gen dgm_str = ""
+{txt}(8,000 missing values generated)
+
+{com}. replace dgm_str = "1" if dgm == 1
+{txt}(4,000 real changes made)
+
+{com}. replace dgm_str = "2" if dgm == 2
+{txt}(4,000 real changes made)
+
+{com}. drop dgm true
+{txt}
+{com}. rename dgm_str dgm
+{res}{txt}
+{com}. 
+. siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(0)
+{res}  {txt}variable {bf}dgm{sf} was {bf}{res}long{sf}{txt} now {bf}{res}byte{sf}
+{txt}  (24,000 bytes saved)
+{err}Warning: variable dgm, which appears in dgm(), was stored as a string. It has been
+encoded as numeric so that subsequent siman commands will work. If you require a
+different order, encode dgm as numeric before running -siman setup-.
+
+{txt}{col 20}SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:{res}{col 35}format 1: long-long
+{txt}The format for targets is:{res}{col 35}long
+{txt}The format for methods is:{res}{col 35}long
+{txt}The number of targets is:{res}{col 35}2
+{txt}The target values are:{res}{col 35}beta gamma
+
+{txt}The number of methods is:{res}{col 35}2
+{txt}The method values are:{res}{col 35}A B
+
+Data generating mechanism (dgm)
+{txt}The total number of dgms is: {res}{col 35}2
+{txt}The dgm variables (# levels): {res}{col 35}dgm (2) 
+
+Estimates are contained in the dataset
+
+{txt}The estimates variable is:{res}{col 35}est
+{txt}The se variable is:{res}{col 35}se
+{txt}The df variable is:{res}{col 35}N/A
+{txt}The ci variables are:{res}{col 35}N/A
+{txt}The p variable is:{res}{col 35}N/A
+{txt}The true value is:{res}{col 35}0
+{txt}_____________________________________________________
+
+{com}. 
+. 
+. siman scatter
+{txt}working.....
+{res}{txt}
+{com}. if ${c -(}detail{c )-} == 1 siman scatter est se, name(est_onyaxis)
+{txt}working.....
+{res}{txt}
+{com}. if ${c -(}detail{c )-} == 1 siman scatter se est, name(se_onyaxis)
+{txt}working.....
+{res}{txt}
+{com}. * 1 panel per dgm, method and target combination
+. 
+. if ${c -(}detail{c )-} == 1 siman scatter, by(dgm)
+{txt}working.....
+{res}{txt}
+{com}. * by dgm only
+. if ${c -(}detail{c )-} == 1 siman scatter if dgm == 1, by(method)
+{txt}working.....
+{res}{txt}
+{com}. * by method only
+. if ${c -(}detail{c )-} == 1 siman scatter, by(estimand)
+{txt}working.....
+{res}{txt}
+{com}. * by estimand only
+. 
+. siman swarm
+{txt}working.....
+
+{com}. * 1 panel per dgm and target combination, method on y-axis
+. if ${c -(}detail{c )-} == 1 siman swarm if estimand == 1
+{txt}working.....
+
+{com}. if ${c -(}detail{c )-} == 1 siman swarm if estimand == 2
+{txt}working.....
+
+{com}. 
+. siman comparemethodsscatter 
+{txt}Working.....
+{res}{txt}
+{com}. * 1 graph per dgm and target, comparing methods
+. if ${c -(}detail{c )-} == 1 siman comparemethodsscatter if estimand == 1
+{txt}Working.....
+{res}{txt}
+{com}. * metlist option too
+. 
+. siman blandaltman 
+{txt}working....
+{res}{txt}
+{com}. * 1 graph per dgm and target combination, comparison of methods
+. if ${c -(}detail{c )-} == 1 siman blandaltman if dgm ==1
+{txt}working....
+{res}{txt}
+{com}. if ${c -(}detail{c )-} == 1 siman blandaltman if estimand == 2
+{txt}working....
+{res}{txt}
+{com}. 
+. siman zipplot
+{res}{txt}
+{com}. * 1 panel per dgm, method and target combination
+. if ${c -(}detail{c )-} == 1 siman zipplot, by(estimand) 
+{res}{txt}
+{com}. if ${c -(}detail{c )-} == 1 siman zipplot, by(method) 
+{res}{txt}
+{com}. 
+. siman analyse
+    {txt}- set tracedepth 1
+    - if "`method'"=="" {c -(}
+    = if "method"=="" {c -(}
+      di as error "The variable 'method' is missing so siman analyse can not be run.  Please create a variable in your dataset called method containing the method value(s)."
+      exit 498
+      {c )-}
+    - if "`simananalyserun'"=="1" & "`replace'" == "" {c -(}
+    = if ""=="1" & "" == "" {c -(}
+      di as error "There are already performance measures in the dataset.  If you would like to replace these, please use the 'replace' option"
+      exit 498
+      {c )-}
+    - if mi("`estimate'") | mi("`se'") {c -(}
+    = if mi("est") | mi("se") {c -(}
+      di as error "siman analyse requires est() and se() to be specified in set-up"
+      exit 498
+      {c )-}
+    - local estimatesindi = (`rep'[_N]>0)
+    = local estimatesindi = (rep[_N]>0)
+    - if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==1 {c -(}
+    = if ""=="1" & "" == "replace" & 1==1 {c -(}
+      qui drop if `rep'<0
+      qui drop _perfmeascode
+      qui drop _dataset
+      {c )-}
+    - else if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==0 {c -(}
+    = else if ""=="1" & "" == "replace" & 1==0 {c -(}
+      di as error "There are no estimates data in the data set.  Please re-load data and use siman setup to import data."
+      exit 498
+      {c )-}
+    - local simananalyserun = 0
+    - if "`simansetuprun'"=="0" | "`simansetuprun'"=="" {c -(}
+    = if "1"=="0" | "1"=="" {c -(}
+      di as error "siman setup has not been run.  Please use siman setup first before siman analyse."
+      exit 498
+      {c )-}
+    - cap confirm variable `true'
+    = cap confirm variable 0
+    - if _rc==0 {c -(}
+      local extratrue : list true - dgm
+      if !mi("`extratrue'") local truevariable `true'
+      {c )-}
+    - if ("`if'"=="" & "`ifsetup'"!="") local ifanalyse = `"`ifsetup'"'
+    = if (""=="" & ""!="") local ifanalyse = `""'
+    - else local ifanalyse = `"`if'"'
+    = else local ifanalyse = `""'
+    - qui tempvar touse
+    - qui generate `touse' = 0
+    = qui generate __000000 = 0
+    - qui replace `touse' = 1 `ifanalyse'
+    = qui replace __000000 = 1 
+    - preserve
+    - if `nformat'!=1 {c -(}
+    = if 1!=1 {c -(}
+      qui siman_reshape, longlong
+      local method method
+      {c )-}
+    - qui sort `dgm' `target' `method' `touse'
+    = qui sort dgm estimand method __000000
+    - capture by `dgm' `target' `method': assert `touse'==`touse'[_n-1] if _n>1
+    = capture by dgm estimand method: assert __000000==__000000[_n-1] if _n>1
+    - if _rc == 9 {c -(}
+      di as error "The 'if' option can not be applied to 'rep' in siman analyse."
+      exit 498
+      {c )-}
+    - restore
+    - qui keep if `touse'
+    = qui keep if __000000
+    - qui unab allnames : *
+      {hline 79} begin unab {hline}
+      - version 6
+      - gettoken user 0: 0, parse(" :")
+      - gettoken colon 0: 0, parse(" :")
+      - if `"`colon'"' != ":" {c -(} error 198 {c )-}
+      = if `":"' != ":" {c -(} error 198 {c )-}
+      - syntax [varlist(default=empty)] [, MIN(integer 1) MAX(integer 120000) NAME(string)]
+      - c_local `user' `varlist'
+      = c_local allnames rep method est se estimand dgm __000000
+      - local n : word count `varlist'
+      = local n : word count rep method est se estimand dgm __000000
+      - if `n'>=`min' & `n'<=`max' {c -(} exit {c )-}
+      = if 7>=1 & 7<=120000 {c -(} exit {c )-}
+      {hline 81} end unab {hline}
+    - tempfile estimatesdata
+    - qui save `estimatesdata'
+    = qui save C:\Users\rmjlem1\AppData\Local\Temp\ST_4a88_000002.tmp
+    - qui drop if `rep'<0
+    = qui drop if rep<0
+    - local methodstringindi = 0
+    - capture confirm string variable `method'
+    = capture confirm string variable method
+    - if !_rc local methodstringindi = 1
+    - local optionlist `estimate' `se'
+    = local optionlist est se
+    - foreach u of var * {c -(}
+    - if substr("`u'",strlen("`u'"),1)=="_" {c -(}
+    = if substr("rep",strlen("rep"),1)=="_" {c -(}
+      local U = substr("`u'", 1, index("`u'","_") - 1)
+      if "`U'" != "" {c -(}
+      capture rename `u' `U'
+      if _rc di as txt "problem with `u'"
+      {c )-}
+      {c )-}
+    - {c )-}
+    - if substr("`u'",strlen("`u'"),1)=="_" {c -(}
+    = if substr("method",strlen("method"),1)=="_" {c -(}
+      local U = substr("`u'", 1, index("`u'","_") - 1)
+      if "`U'" != "" {c -(}
+      capture rename `u' `U'
+      if _rc di as txt "problem with `u'"
+      {c )-}
+      {c )-}
+    - {c )-}
+    - if substr("`u'",strlen("`u'"),1)=="_" {c -(}
+    = if substr("est",strlen("est"),1)=="_" {c -(}
+      local U = substr("`u'", 1, index("`u'","_") - 1)
+      if "`U'" != "" {c -(}
+      capture rename `u' `U'
+      if _rc di as txt "problem with `u'"
+      {c )-}
+      {c )-}
+    - {c )-}
+    - if substr("`u'",strlen("`u'"),1)=="_" {c -(}
+    = if substr("se",strlen("se"),1)=="_" {c -(}
+      local U = substr("`u'", 1, index("`u'","_") - 1)
+      if "`U'" != "" {c -(}
+      capture rename `u' `U'
+      if _rc di as txt "problem with `u'"
+      {c )-}
+      {c )-}
+    - {c )-}
+    - if substr("`u'",strlen("`u'"),1)=="_" {c -(}
+    = if substr("estimand",strlen("estimand"),1)=="_" {c -(}
+      local U = substr("`u'", 1, index("`u'","_") - 1)
+      if "`U'" != "" {c -(}
+      capture rename `u' `U'
+      if _rc di as txt "problem with `u'"
+      {c )-}
+      {c )-}
+    - {c )-}
+    - if substr("`u'",strlen("`u'"),1)=="_" {c -(}
+    = if substr("dgm",strlen("dgm"),1)=="_" {c -(}
+      local U = substr("`u'", 1, index("`u'","_") - 1)
+      if "`U'" != "" {c -(}
+      capture rename `u' `U'
+      if _rc di as txt "problem with `u'"
+      {c )-}
+      {c )-}
+    - {c )-}
+    - if substr("`u'",strlen("`u'"),1)=="_" {c -(}
+    = if substr("__000000",strlen("__000000"),1)=="_" {c -(}
+      local U = substr("`u'", 1, index("`u'","_") - 1)
+      if "`U'" != "" {c -(}
+      capture rename `u' `U'
+      if _rc di as txt "problem with `u'"
+      {c )-}
+      {c )-}
+    - {c )-}
+    - local estchange = 0
+    - if substr("`estimate'",strlen("`estimate'"),1)=="_" {c -(}
+    = if substr("est",strlen("est"),1)=="_" {c -(}
+      local estimate = substr("`estimate'", 1, index("`estimate'","_") - 1)
+      local estchange = 1
+      {c )-}
+    - local sechange = 0
+    - if substr("`se'",strlen("`se'"),1)=="_" {c -(}
+    = if substr("se",strlen("se"),1)=="_" {c -(}
+      local se = substr("`se'", 1, index("`se'","_") - 1)
+      local sechange = 1
+      {c )-}
+    - local optionlist `estimate' `se'
+    = local optionlist est se
+    - if `nformat'==1 {c -(}
+    = if 1==1 {c -(}
+    - local methodformat : value label `method'
+    = local methodformat : value label method
+    - qui order `rep' `dgm' `target' `method'
+    = qui order rep dgm estimand method
+      {hline 78} begin order {hline}
+      - version 11
+      - if (_caller()<11) {c -(}
+        _order `macval(0)'
+        exit
+        {c )-}
+      - syntax varlist[, Before(varname) After(varname) first last SEQuential ALPHAbetic]
+      - if (`"`before'"' == "" & `"`after'"' == "" & "`first'" == "" & "`last'" == "" & "`alphabetic'" == "" & "`sequential'" == "") {c -(}
+      = if (`""' == "" & `""' == "" & "" == "" & "" == "" & "" == "" & "" == "") {c -(}
+      - _order `macval(0)'
+      = _order rep dgm estimand method
+      - exit
+      {hline 80} end order {hline}
+    - qui sort `rep' `dgm' `target' `method'
+    = qui sort rep dgm estimand method
+    - qui tab `method'
+    = qui tab method
+    - local nmethodlabels = `r(r)'
+    = local nmethodlabels = 2
+    - qui levels `method', local(levels)
+    = qui levels method, local(levels)
+      {hline 77} begin levels {hline}
+      - version 8
+      - syntax varname [if] [in] [, Separate(str) MISSing Local(str) Clean ]
+      - if "`separate'" == "" local sep " "
+      = if "" == "" local sep " "
+      - else local sep "`separate'"
+      = else local sep ""
+      - if "`missing'" != "" local novarlist "novarlist"
+      = if "" != "" local novarlist "novarlist"
+      - marksample touse, strok `novarlist'
+      = marksample touse, strok 
+      - capture confirm numeric variable `varlist'
+      = capture confirm numeric variable method
+      - local isnum = _rc != 7
+      - if `isnum' {c -(}
+      = if 1 {c -(}
+      - capture assert `varlist' == int(`varlist') if `touse'
+      = capture assert method == int(method) if __000002
+      - if _rc {c -(}
+        di as err "`varlist' contains non-integer values"
+        exit 459
+        {c )-}
+      - tempname Vals
+      - qui tab `varlist' if `touse', `missing' matrow(`Vals')
+      = qui tab method if __000002,  matrow(__000003)
+      - local nvals = r(r)
+      - forval i = 1 / `nvals' {c -(}
+      = forval i = 1 / 2 {c -(}
+      - local val = `Vals'[`i',1]
+      = local val = __000003[1,1]
+      - if `i' < `nvals' local vals "`vals'`val'`sep'"
+      = if 1 < 2 local vals "1 "
+      - else local vals "`vals'`val'"
+      = else local vals "1 1"
+      - {c )-}
+      - local val = `Vals'[`i',1]
+      = local val = __000003[2,1]
+      - if `i' < `nvals' local vals "`vals'`val'`sep'"
+      = if 2 < 2 local vals "1 2 "
+      - else local vals "`vals'`val'"
+      = else local vals "1 2"
+      - {c )-}
+      - {c )-}
+      - else {c -(}
+        tempvar select counter
+        bysort `touse' `varlist' : gen byte `select' = (_n == 1) * `touse'
+        generate `counter' = sum(`select') * (`select' == 1)
+        sort `counter'
+        qui count if `counter' == 0
+        local j = 1 + r(N)
+        local nvals = _N
+        if "`clean'" != "" {c -(}
+        forval i = `j' / `nvals' {c -(}
+        if `i' < `nvals' {c -(}
+        local vals "`vals'`=`varlist'[`i']'`sep'"
+        {c )-}
+        else local vals "`vals'`=`varlist'[`i']'"
+        {c )-}
+        {c )-}
+        else {c -(}
+        forval i = `j' / `nvals' {c -(}
+        if `i' < `nvals' {c -(}
+        local vals `"`vals'`"`=`varlist'[`i']'"'`sep'"'
+        {c )-}
+        else local vals `"`vals'`"`=`varlist'[`i']'"'"'
+        {c )-}
+        {c )-}
+        {c )-}
+      - di as txt `"`vals'"'
+      = di as txt `"1 2"'
+      - return local levels `"`vals'"'
+      = return local levels `"1 2"'
+      - if "`local'" != "" {c -(}
+      = if "levels" != "" {c -(}
+      - c_local `local' `"`vals'"'
+      = c_local levels `"1 2"'
+      - {c )-}
+      {hline 79} end levels {hline}
+    - tokenize `"`levels'"'
+    = tokenize `"1 2"'
+    - forvalues f = 1/`nmethodlabels' {c -(}
+    = forvalues f = 1/2 {c -(}
+    - if substr("``f''",strlen("``f''"),1)=="_" local g = substr("``f''", 1, index("``f''","_") - 1)
+    = if substr("1",strlen("1"),1)=="_" local g = substr("1", 1, index("1","_") - 1)
+    - if `methodstringindi' == 0 local methodlabel`f' = "`g'"
+    = if 0 == 0 local methodlabel1 = ""
+    - else local methodlabel`f' = "``g''"
+    = else local methodlabel1 = ""
+    - if `f'==1 local methodlist `methodlabel`f''
+    = if 1==1 local methodlist 
+    - else if `f'>=2 local methodlist `methodlist' `methodlabel`f''
+    = else if 1>=2 local methodlist  
+    - {c )-}
+    - if substr("``f''",strlen("``f''"),1)=="_" local g = substr("``f''", 1, index("``f''","_") - 1)
+    = if substr("2",strlen("2"),1)=="_" local g = substr("2", 1, index("2","_") - 1)
+    - if `methodstringindi' == 0 local methodlabel`f' = "`g'"
+    = if 0 == 0 local methodlabel2 = ""
+    - else local methodlabel`f' = "``g''"
+    = else local methodlabel2 = ""
+    - if `f'==1 local methodlist `methodlabel`f''
+    = if 2==1 local methodlist 
+    - else if `f'>=2 local methodlist `methodlist' `methodlabel`f''
+    = else if 2>=2 local methodlist  
+    - {c )-}
+    - local estsimsum = "`estimate'"
+    = local estsimsum = "est"
+    - local sesimsum = "`se'"
+    = local sesimsum = "se"
+    - capture confirm variable _perfmeascode
+    - if !_rc {c -(}
+      di as error "siman would like to name a variable '_perfmeascode', but that name already exists in your dataset.  Please rename your variable _perfmeascode as something else."
+      exit 498
+      {c )-}
+    - capture confirm variable _dataset
+    - if !_rc {c -(}
+      di as error "siman would like to name a variable '_dataset', but that name already exists in your data.  Please rename your variable _dataset as something else."
+      exit 498
+      {c )-}
+    - qui simsum `estsimsum' `if', true(`true') se(`sesimsum') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
+    = qui simsum est , true(0) se(se) method(method) id(rep) by( dgm estimand) max(20)  clear mcse gen(_perfmeas) 
+      {hline 77} begin simsum {hline}
+      - version 10
+      - if _caller() >= 12 {c -(}
+      - local hidden hidden
+      - {c )-}
+      - return `hidden' local simsum_version "2.0.3"
+      = return hidden local simsum_version "2.0.3"
+      - syntax varlist [if] [in], [true(string) METHodvar(varname) id(varlist) se(varlist) SEPrefix(string) SESuffix(string) graph GRAPH2(string) noMEMcheck max(real 10) semax(real 100) dropbig nolistbig listmiss level(real $S_level) by(varlist) mcse robust MODELSEMethod(string) ref(string) null(real 0) df(string) DFPrefix(string) DFSuffix(string) bsims sesims bias mean empse relprec mse rmse modelse ciwidth relerror cover power force nolist listsep format(string) sepby(varlist) ABbreviate(passthru) clear saving(string) gen(string) TRANSpose debug ]
+      = syntax varlist [if] [in], [true(string) METHodvar(varname) id(varlist) se(varlist) SEPrefix(string) SESuffix(string) graph GRAPH2(string) noMEMcheck max(real 10) semax(real 100) dropbig nolistbig listmiss level(real 95) by(varlist) mcse robust MODELSEMethod(string) ref(string) null(real 0) df(string) DFPrefix(string) DFSuffix(string) bsims sesims bias mean empse relprec mse rmse modelse ciwidth relerror cover power force nolist listsep format(string) sepby(varlist) ABbreviate(passthru) clear saving(string) gen(string) TRANSpose debug ]
+      - if "`modelsemethod'"=="" local modelsemethod rmse
+      = if ""=="" local modelsemethod rmse
+      - if "`modelsemethod'"!="rmse" & "`modelsemethod'"!="mean" {c -(}
+      = if "rmse"!="rmse" & "rmse"!="mean" {c -(}
+        di as error "Syntax: modelsemethod(rmse|mean)"
+        exit 498
+        {c )-}
+      - if !mi("`graph2'") local graph graph
+      = if !mi("") local graph graph
+      - if "`by'"!="" {c -(}
+      = if "dgm estimand"!="" {c -(}
+      - local byby by(`by')
+      = local byby by(dgm estimand)
+      - local byvar `by'
+      = local byvar dgm estimand
+      - {c )-}
+      - else {c -(}
+        tempvar byvar
+        gen `byvar'=0
+        {c )-}
+      - local i 0
+      - foreach beta of varlist `varlist' {c -(}
+      = foreach beta of varlist est {c -(}
+      - local ++i
+      - local beta`i' `beta'
+      = local beta1 est
+      - local betalist `betalist' `beta'
+      = local betalist  est
+      - {c )-}
+      - local m `i'
+      = local m 1
+      - if "`seprefix'"!="" | "`sesuffix'"!="" {c -(}
+      = if ""!="" | ""!="" {c -(}
+        if "`se'"!="" {c -(}
+        di as error "Can't specify se() with seprefix() or sesuffix()"
+        exit 498
+        {c )-}
+        forvalues i=1/`m' {c -(}
+        local se`i' `seprefix'`beta`i''`sesuffix'
+        confirm var `se`i''
+        local selist `selist' `se`i''
+        {c )-}
+        {c )-}
+      - else if "`se'"!="" {c -(}
+      = else if "se"!="" {c -(}
+      - local i 0
+      - foreach sevar of varlist `se' {c -(}
+      = foreach sevar of varlist se {c -(}
+      - local ++i
+      - local se`i' `sevar'
+      = local se1 se
+      - local selist `selist' `se`i''
+      = local selist  se
+      - {c )-}
+      - if `i'<`m' {c -(}
+      = if 1<1 {c -(}
+        di as error "Fewer variables in se(`se') than in `betalist'"
+        exit 498
+        {c )-}
+      - if `i'>`m' {c -(}
+      = if 1>1 {c -(}
+        di as error "More variables in se(`se') than in `betalist'"
+        exit 498
+        {c )-}
+      - {c )-}
+      - if "`dfprefix'"!="" | "`dfsuffix'"!="" {c -(}
+      = if ""!="" | ""!="" {c -(}
+        if "`df'"!="" {c -(}
+        di as error "Can't specify df() with dfprefix() or dfsuffix()"
+        exit 498
+        {c )-}
+        forvalues i=1/`m' {c -(}
+        local df`i' `dfprefix'`beta`i''`dfsuffix'
+        confirm var `df`i''
+        local dflist `dflist' `df`i''
+        {c )-}
+        {c )-}
+      - else if "`df'"!="" {c -(}
+      = else if ""!="" {c -(}
+        cap confirm number `df'
+        if !_rc local dftype number
+        else {c -(}
+        cap assert `df'==`df'
+        if !_rc local dftype varname
+        else {c -(}
+        cap confirm var `df'
+        if !_rc local dftype varlist
+        else local dftype error
+        {c )-}
+        {c )-}
+        if inlist("`dftype'","number","varname") {c -(}
+        forvalues i=1/`m' {c -(}
+        local df`i' `df'
+        {c )-}
+        if "`dftype'"=="varname" local dflist `df'
+        cap assert !mi(`df')
+        if _rc di as error "Warning: missing values in df()"
+        {c )-}
+        else if "`dftype'"=="varlist" {c -(}
+        local i 0
+        foreach dfvar of varlist `df' {c -(}
+        local ++i
+        local df`i' `dfvar'
+        local dflist `dflist' `dfvar'
+        cap assert !mi(`df`i'')
+        if _rc di as error "Warning: missing values in df()"
+        {c )-}
+        if `i'!=`m' local dftype error
+        {c )-}
+        if "`dftype'"=="error" {c -(}
+        di as error "df must contain number, string or varlist of same length as estimates"
+        exit 498
+        {c )-}
+        {c )-}
+      - local allpms bsims sesims bias mean empse relprec mse rmse modelse ciwidth relerror cover power
+      - foreach pm of local allpms {c -(}
+      - if !mi("``pm''") local origoutput `origoutput' `pm'
+      = if !mi("") local origoutput  bsims
+      - {c )-}
+      - if !mi("``pm''") local origoutput `origoutput' `pm'
+      = if !mi("") local origoutput  sesims
+      - {c )-}
+      - if !mi("``pm''") local origoutput `origoutput' `pm'
+      = if !mi("") local origoutput  bias
+      - {c )-}
+      - if !mi("``pm''") local origoutput `origoutput' `pm'
+      = if !mi("") local origoutput  mean
+      - {c )-}
+      - if !mi("``pm''") local origoutput `origoutput' `pm'
+      = if !mi("") local origoutput  empse
+      - {c )-}
+      - if !mi("``pm''") local origoutput `origoutput' `pm'
+      = if !mi("") local origoutput  relprec
+      - {c )-}
+      - if !mi("``pm''") local origoutput `origoutput' `pm'
+      = if !mi("") local origoutput  mse
+      - {c )-}
+      - if !mi("``pm''") local origoutput `origoutput' `pm'
+      = if !mi("") local origoutput  rmse
+      - {c )-}
+      - if !mi("``pm''") local origoutput `origoutput' `pm'
+      = if !mi("") local origoutput  modelse
+      - {c )-}
+      - if !mi("``pm''") local origoutput `origoutput' `pm'
+      = if !mi("") local origoutput  ciwidth
+      - {c )-}
+      - if !mi("``pm''") local origoutput `origoutput' `pm'
+      = if !mi("") local origoutput  relerror
+      - {c )-}
+      - if !mi("``pm''") local origoutput `origoutput' `pm'
+      = if !mi("") local origoutput  cover
+      - {c )-}
+      - if !mi("``pm''") local origoutput `origoutput' `pm'
+      = if !mi("") local origoutput  power
+      - {c )-}
+      - if mi("`origoutput'") {c -(}
+      = if mi("") {c -(}
+      - foreach pm of local allpms {c -(}
+      - local `pm' `pm'
+      = local bsims bsims
+      - {c )-}
+      - local `pm' `pm'
+      = local sesims sesims
+      - {c )-}
+      - local `pm' `pm'
+      = local bias bias
+      - {c )-}
+      - local `pm' `pm'
+      = local mean mean
+      - {c )-}
+      - local `pm' `pm'
+      = local empse empse
+      - {c )-}
+      - local `pm' `pm'
+      = local relprec relprec
+      - {c )-}
+      - local `pm' `pm'
+      = local mse mse
+      - {c )-}
+      - local `pm' `pm'
+      = local rmse rmse
+      - {c )-}
+      - local `pm' `pm'
+      = local modelse modelse
+      - {c )-}
+      - local `pm' `pm'
+      = local ciwidth ciwidth
+      - {c )-}
+      - local `pm' `pm'
+      = local relerror relerror
+      - {c )-}
+      - local `pm' `pm'
+      = local cover cover
+      - {c )-}
+      - local `pm' `pm'
+      = local power power
+      - {c )-}
+      - {c )-}
+      - if "`se1'"=="" {c -(}
+      = if "se"=="" {c -(}
+        foreach perfmeas in sesims modelse ciwidth relerror cover power {c -(}
+        if !mi("``perfmeas''") local droppm1 `droppm1' `perfmeas'
+        local `perfmeas'
+        {c )-}
+        if !mi("`droppm1'") {c -(}
+        if !mi("`origoutput'") di as error "" _c
+        else di as text "" _c
+        di "SE not reported, so ignoring performance measures: `droppm1'"
+        {c )-}
+        {c )-}
+      - if "`true'"=="" {c -(}
+      = if "0"=="" {c -(}
+        foreach perfmeas in bias mse rmse cover {c -(}
+        if !mi("``perfmeas''") local droppm2 `droppm2' `perfmeas'
+        local `perfmeas'
+        {c )-}
+        if !mi("`droppm2'") {c -(}
+        if !mi("`origoutput'") di as error "" _c
+        else di as text "" _c
+        di "true() not specified, so ignoring performance measures: `droppm2'"
+        {c )-}
+        {c )-}
+      - foreach pm of local allpms {c -(}
+      - if !mi("``pm''") local output `output' `pm'
+      = if !mi("bsims") local output  bsims
+      - {c )-}
+      - if !mi("``pm''") local output `output' `pm'
+      = if !mi("sesims") local output bsims sesims
+      - {c )-}
+      - if !mi("``pm''") local output `output' `pm'
+      = if !mi("bias") local output bsims sesims bias
+      - {c )-}
+      - if !mi("``pm''") local output `output' `pm'
+      = if !mi("mean") local output bsims sesims bias mean
+      - {c )-}
+      - if !mi("``pm''") local output `output' `pm'
+      = if !mi("empse") local output bsims sesims bias mean empse
+      - {c )-}
+      - if !mi("``pm''") local output `output' `pm'
+      = if !mi("relprec") local output bsims sesims bias mean empse relprec
+      - {c )-}
+      - if !mi("``pm''") local output `output' `pm'
+      = if !mi("mse") local output bsims sesims bias mean empse relprec mse
+      - {c )-}
+      - if !mi("``pm''") local output `output' `pm'
+      = if !mi("rmse") local output bsims sesims bias mean empse relprec mse rmse
+      - {c )-}
+      - if !mi("``pm''") local output `output' `pm'
+      = if !mi("modelse") local output bsims sesims bias mean empse relprec mse rmse modelse
+      - {c )-}
+      - if !mi("``pm''") local output `output' `pm'
+      = if !mi("ciwidth") local output bsims sesims bias mean empse relprec mse rmse modelse ciwidth
+      - {c )-}
+      - if !mi("``pm''") local output `output' `pm'
+      = if !mi("relerror") local output bsims sesims bias mean empse relprec mse rmse modelse ciwidth relerror
+      - {c )-}
+      - if !mi("``pm''") local output `output' `pm'
+      = if !mi("cover") local output bsims sesims bias mean empse relprec mse rmse modelse ciwidth relerror cover
+      - {c )-}
+      - if !mi("``pm''") local output `output' `pm'
+      = if !mi("power") local output bsims sesims bias mean empse relprec mse rmse modelse ciwidth relerror cover power
+      - {c )-}
+      - if "`output'"=="" {c -(}
+      = if "bsims sesims bias mean empse relprec mse rmse modelse ciwidth relerror cover power"=="" {c -(}
+        di as error "No performance measures specified"
+        exit 498
+        {c )-}
+      - if inlist("`output'","bsims","sesims","bims sesims") & "`mcse'"=="mcse" {c -(}
+      = if inlist("bsims sesims bias mean empse relprec mse rmse modelse ciwidth relerror cover power","bsims","sesims","bims sesims") & "mcse"=="mcse" {c -(}
+        di as error "Only bsims and/or sesims specified - mcse ignored"
+        local mcse
+        {c )-}
+      - if "`methodvar'"!="" {c -(}
+      = if "method"!="" {c -(}
+      - if `m'>1 {c -(}
+      = if 1>1 {c -(}
+        di as error "Only one estimate variable allowed with long format"
+        exit 498
+        {c )-}
+      - if "`id'"=="" {c -(}
+      = if "rep"=="" {c -(}
+        di as error "id() is required with long format"
+        exit 498
+        {c )-}
+      - {c )-}
+      - if "`list'"=="nolist" & "`clear'"=="" & "`saving'"=="" {c -(}
+      = if ""=="nolist" & "clear"=="" & ""=="" {c -(}
+        di as error "No output requested! Please specify clear or saving(), or don't specify nolist"
+        exit 498
+        {c )-}
+      - if "`gen'"=="" local gen perfmeas
+      = if "_perfmeas"=="" local gen perfmeas
+      - cap confirm new variable `gen'num
+      = cap confirm new variable _perfmeasnum
+      - local rc1=_rc
+      - cap confirm new variable `gen'code
+      = cap confirm new variable _perfmeascode
+      - if _rc | `rc1' {c -(}
+      = if _rc | 0 {c -(}
+        di as error as smcl "{c -(}p{c )-}Variable `gen'num and/or `gen'code already exists. This is probably because the current data are -simsum- output. If this is what you want, use the gen() option.{c -(}p_end{c )-}"
+        exit 498
+        {c )-}
+      - if "`memcheck'"!="nomemcheck" {c -(}
+      = if ""!="nomemcheck" {c -(}
+      - qui desc, short
+      - if r(width)/r(widthmax)>0.45 {c -(}
+        di as error "simsum is memory-hungry and can fail slowly if memory is more than 50% occupied."
+        di as error as smcl "Please increase the memory using {c -(}help memory:set memory{c )-}, or use the nomemcheck option."
+        exit 498
+        {c )-}
+      - {c )-}
+      - marksample touse, novarlist
+      - qui count if `touse'
+      = qui count if __000001
+      - if r(N)==0 {c -(}
+        di in red "no observations"
+        exit 2000
+        {c )-}
+      - if "`bias'"=="bias" | "`mse'"=="mse" | "`rmse'"=="rmse" | "`cover'"=="cover" {c -(}
+      = if "bias"=="bias" | "mse"=="mse" | "rmse"=="rmse" | "cover"=="cover" {c -(}
+      - tempvar truevar
+      - qui gen `truevar' = `true'
+      = qui gen __000002 = 0
+      - qui count if missing(`truevar') & `touse'
+      = qui count if missing(__000002) & __000001
+      - if r(N)>0 {c -(}
+        di as error "Missing values found for true value `true'"
+        exit 498
+        {c )-}
+      - {c )-}
+      - preserve
+      - qui keep if `touse'
+      = qui keep if __000001
+      - if "`methodvar'"!="" {c -(}
+      = if "method"!="" {c -(}
+      - local origformat long
+      - local betastub `betalist'
+      = local betastub est
+      - qui levelsof `methodvar', local(methods)
+      = qui levelsof method, local(methods)
+      - local label : val label `methodvar'
+      = local label : val label method
+      - local i 0
+      - foreach method in `methods' {c -(}
+      = foreach method in 1 2 {c -(}
+      - if strpos("`method'"," ") {c -(}
+      = if strpos("1"," ") {c -(}
+        di as error `"Sorry, I can't handle method = "`method'". Please recode it without spaces."'
+        exit 498
+        {c )-}
+      - if strtoname("b`method'")!="b`method'" {c -(}
+      = if strtoname("b1")!="b1" {c -(}
+        di as error `"Sorry, I can't handle method = "`method'". Please recode it using standard characters."'
+        exit 498
+        {c )-}
+      - local ++i
+      - local beta`i' `betalist'`method'
+      = local beta1 est1
+      - local newbetalist `newbetalist' `betalist'`method'
+      = local newbetalist  est1
+      - if "`selist'"!="" local se`i' `selist'`method'
+      = if "se"!="" local se1 se1
+      - if "`selist'"!="" local newselist `newselist' `selist'`method'
+      = if "se"!="" local newselist  se1
+      - if "`dftype'"=="number" local df`i' `df'
+      = if ""=="number" local df1 
+      - if "`dftype'"=="varname" local df`i' `dflist'`method'
+      = if ""=="varname" local df1 1
+      - if "`label'"!="" local label`i' : label `label' `method'
+      = if "methodl"!="" local label1 : label methodl 1
+      - else local label`i' "`method'"
+      = else local label1 "1"
+      - if "`label`i''"=="`ref'" local refmethod `i'
+      = if "A"=="" local refmethod 1
+      - {c )-}
+      - if strpos("`method'"," ") {c -(}
+      = if strpos("2"," ") {c -(}
+        di as error `"Sorry, I can't handle method = "`method'". Please recode it without spaces."'
+        exit 498
+        {c )-}
+      - if strtoname("b`method'")!="b`method'" {c -(}
+      = if strtoname("b2")!="b2" {c -(}
+        di as error `"Sorry, I can't handle method = "`method'". Please recode it using standard characters."'
+        exit 498
+        {c )-}
+      - local ++i
+      - local beta`i' `betalist'`method'
+      = local beta2 est2
+      - local newbetalist `newbetalist' `betalist'`method'
+      = local newbetalist est1 est2
+      - if "`selist'"!="" local se`i' `selist'`method'
+      = if "se"!="" local se2 se2
+      - if "`selist'"!="" local newselist `newselist' `selist'`method'
+      = if "se"!="" local newselist se1 se2
+      - if "`dftype'"=="number" local df`i' `df'
+      = if ""=="number" local df2 
+      - if "`dftype'"=="varname" local df`i' `dflist'`method'
+      = if ""=="varname" local df2 2
+      - if "`label'"!="" local label`i' : label `label' `method'
+      = if "methodl"!="" local label2 : label methodl 2
+      - else local label`i' "`method'"
+      = else local label2 "2"
+      - if "`label`i''"=="`ref'" local refmethod `i'
+      = if "B"=="" local refmethod 2
+      - {c )-}
+      - local m `i'
+      = local m 2
+      - if "`refmethod'"=="" {c -(}
+      = if ""=="" {c -(}
+      - if "`ref'"!="" {c -(}
+      = if ""!="" {c -(}
+        if "`label'"=="" local offenders values
+        else local offenders value labels
+        di as error "Error in ref(): `ref' is not one of the `offenders' of `methodvar'"
+        exit 498
+        {c )-}
+      - else local refmethod 1
+      - {c )-}
+      - di as text "Reshaping data to wide format ..."
+      - keep `betalist' `selist' `dflist' `by' `byvar' `id' `methodvar' `touse' `truevar'
+      = keep est se  dgm estimand dgm estimand rep method __000001 __000002
+      - cap confirm string var `methodvar'
+      = cap confirm string var method
+      - if _rc==0 local string string
+      - local bfmt0: format `betalist'
+      = local bfmt0: format est
+      - qui reshape wide `betalist' `selist' `dflist', i(`by' `id') j(`methodvar') `string'
+      = qui reshape wide est se , i(dgm estimand rep) j(method) 
+      - local betalist `newbetalist'
+      = local betalist est1 est2
+      - local selist `newselist'
+      = local selist se1 se2
+      - {c )-}
+      - else {c -(}
+        local origformat wide
+        forvalues i=1/`m' {c -(}
+        local label`i' : var label `beta`i''
+        if "`label`i''"=="" local label`i' "`beta`i''"
+        if "`beta`i''"=="`ref'" local refmethod `i'
+        {c )-}
+        if "`refmethod'"=="" {c -(}
+        if "`ref'"!="" {c -(}
+        di as error "ref(`ref') is not one of the listed point estimates"
+        exit 498
+        {c )-}
+        else local refmethod 1
+        {c )-}
+        keep `betalist' `selist' `dflist' `by' `byvar' `id' `touse' `truevar'
+        {c )-}
+      - if mi("`force'") {c -(}
+      = if mi("") {c -(}
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - tempvar betafreq`i'
+      = tempvar betafreq1
+      - egen `betafreq`i'' = count(`beta`i''), `byby'
+      = egen __000003 = count(est1), by(dgm estimand)
+      - cap assert `betafreq`i''!=1
+      = cap assert __000003!=1
+      - if _rc {c -(}
+        di as error "Only one observation for `beta`i''. If this is what you intended, use the force option."
+        exit 498
+        {c )-}
+      - {c )-}
+      - tempvar betafreq`i'
+      = tempvar betafreq2
+      - egen `betafreq`i'' = count(`beta`i''), `byby'
+      = egen __000004 = count(est2), by(dgm estimand)
+      - cap assert `betafreq`i''!=1
+      = cap assert __000004!=1
+      - if _rc {c -(}
+        di as error "Only one observation for `beta`i''. If this is what you intended, use the force option."
+        exit 498
+        {c )-}
+      - {c )-}
+      - {c )-}
+      - tempvar missing
+      - gen `missing' = 0
+      = gen __000005 = 0
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - qui replace `missing' = missing(`beta`i'') & `touse'
+      = qui replace __000005 = missing(est1) & __000001
+      - if "`se`i''"!="" qui replace `missing' = 1 if missing(`se`i'') & `touse'
+      = if "se1"!="" qui replace __000005 = 1 if missing(se1) & __000001
+      - if "`se`i''"!="" qui replace `missing' = 1 if `se`i''==0 & `touse'
+      = if "se1"!="" qui replace __000005 = 1 if se1==0 & __000001
+      - qui count if `missing'
+      = qui count if __000005
+      - if r(N)>0 {c -(}
+        if "`se`i''"!="" {c -(}
+        qui replace `missing' = missing(`beta`i'') & missing(`se`i'') & `touse'
+        qui count if `missing'
+        if r(N)>0 {c -(}
+        di as text _new "Warning for method `label`i'': " as result r(N) as text " observation(s) have both estimate and SE missing"
+        if "`listmiss'"=="listmiss" list `by' `id' `beta`i'' `se`i'' if `missing', sepby(`sepby')
+        di as text "--> no action taken"
+        {c )-}
+        qui replace `missing' = !missing(`se`i'') & missing(`beta`i'') & `touse'
+        qui count if `missing'
+        if r(N)>0 {c -(}
+        di as text _new "Warning for method `label`i'': " as result r(N) as text " observation(s) have estimate missing and SE observed"
+        if "`listmiss'"=="listmiss" list `by' `id' `beta`i'' `se`i'' if `missing', sepby(`sepby')
+        qui replace `se`i'' = . if `missing'
+        di as text "--> SE changed to missing"
+        {c )-}
+        qui replace `missing' = missing(`se`i'') & !missing(`beta`i'') & `touse'
+        qui count if `missing'
+        if r(N)>0 {c -(}
+        di as text _new "Warning for method `label`i'': " as result r(N) as text " observation(s) have estimate observed and SE missing"
+        if "`listmiss'"=="listmiss" list `by' `id' `beta`i'' `se`i'' if `missing', sepby(`sepby')
+        qui replace `beta`i'' = . if `missing'
+        di as text "--> estimate changed to missing"
+        {c )-}
+        qui replace `missing' = (`se`i''==0) & `touse'
+        qui count if `missing'
+        if r(N)>0 {c -(}
+        di as text _new "Warning for method `label`i'': " as result r(N) as text " observation(s) have zero values of SE"
+        if "`listmiss'"=="listmiss" list `by' `id' `beta`i'' `se`i'' if `missing', sepby(`sepby')
+        qui replace `beta`i'' = . if `missing'
+        qui replace `se`i'' = . if `missing'
+        di as text "--> estimate and SE changed to missing"
+        {c )-}
+        {c )-}
+        {c )-}
+      - {c )-}
+      - qui replace `missing' = missing(`beta`i'') & `touse'
+      = qui replace __000005 = missing(est2) & __000001
+      - if "`se`i''"!="" qui replace `missing' = 1 if missing(`se`i'') & `touse'
+      = if "se2"!="" qui replace __000005 = 1 if missing(se2) & __000001
+      - if "`se`i''"!="" qui replace `missing' = 1 if `se`i''==0 & `touse'
+      = if "se2"!="" qui replace __000005 = 1 if se2==0 & __000001
+      - qui count if `missing'
+      = qui count if __000005
+      - if r(N)>0 {c -(}
+        if "`se`i''"!="" {c -(}
+        qui replace `missing' = missing(`beta`i'') & missing(`se`i'') & `touse'
+        qui count if `missing'
+        if r(N)>0 {c -(}
+        di as text _new "Warning for method `label`i'': " as result r(N) as text " observation(s) have both estimate and SE missing"
+        if "`listmiss'"=="listmiss" list `by' `id' `beta`i'' `se`i'' if `missing', sepby(`sepby')
+        di as text "--> no action taken"
+        {c )-}
+        qui replace `missing' = !missing(`se`i'') & missing(`beta`i'') & `touse'
+        qui count if `missing'
+        if r(N)>0 {c -(}
+        di as text _new "Warning for method `label`i'': " as result r(N) as text " observation(s) have estimate missing and SE observed"
+        if "`listmiss'"=="listmiss" list `by' `id' `beta`i'' `se`i'' if `missing', sepby(`sepby')
+        qui replace `se`i'' = . if `missing'
+        di as text "--> SE changed to missing"
+        {c )-}
+        qui replace `missing' = missing(`se`i'') & !missing(`beta`i'') & `touse'
+        qui count if `missing'
+        if r(N)>0 {c -(}
+        di as text _new "Warning for method `label`i'': " as result r(N) as text " observation(s) have estimate observed and SE missing"
+        if "`listmiss'"=="listmiss" list `by' `id' `beta`i'' `se`i'' if `missing', sepby(`sepby')
+        qui replace `beta`i'' = . if `missing'
+        di as text "--> estimate changed to missing"
+        {c )-}
+        qui replace `missing' = (`se`i''==0) & `touse'
+        qui count if `missing'
+        if r(N)>0 {c -(}
+        di as text _new "Warning for method `label`i'': " as result r(N) as text " observation(s) have zero values of SE"
+        if "`listmiss'"=="listmiss" list `by' `id' `beta`i'' `se`i'' if `missing', sepby(`sepby')
+        qui replace `beta`i'' = . if `missing'
+        qui replace `se`i'' = . if `missing'
+        di as text "--> estimate and SE changed to missing"
+        {c )-}
+        {c )-}
+        {c )-}
+      - {c )-}
+      - drop `missing'
+      = drop __000005
+      - if "`graph'"=="graph" {c -(}
+      = if ""=="graph" {c -(}
+        tempfile graph
+        set graphics off
+        forvalues i=1/`m' {c -(}
+        cap gr7 `se`i'' `beta`i'', xla yla b2title("`beta`i''") l1title("`se`i''") t1title("`label`i''") saving(`graph'`i', replace) `graph2'
+        if !_rc local gphlist `gphlist' `graph'`i'
+        {c )-}
+        if "`selist'"=="" local title Point estimates by method
+        else local title Std error vs. point estimate by method
+        set graphics on
+        gr7 using `gphlist', title(`title')
+        {c )-}
+      - tempvar infb infse
+      - gen `infb' = 0
+      = gen __000006 = 0
+      - gen `infse' = 0
+      = gen __000007 = 0
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - qui summ `beta`i''
+      = qui summ est1
+      - if r(sd)<=0 {c -(}
+        di as text "Warning for method `label`i'': estimate doesn't vary"
+        continue
+        {c )-}
+      - qui replace `infb' = (abs(`beta`i''-r(mean))/r(sd) > `max') & !missing(`beta`i'')
+      = qui replace __000006 = (abs(est1-r(mean))/r(sd) > 20) & !missing(est1)
+      - if "`se`i''"!="" {c -(}
+      = if "se1"!="" {c -(}
+      - qui summ `se`i''
+      = qui summ se1
+      - if r(mean)<=0 {c -(}
+        di as text "Warning for method `label`i'': `se`i'' is always 0"
+        {c )-}
+      - else qui replace `infse' = (`se`i''/r(mean) > `semax') & !missing(`se`i'')
+      = else qui replace __000007 = (se1/r(mean) > 100) & !missing(se1)
+      - {c )-}
+      - qui count if `infb'
+      = qui count if __000006
+      - local ninfb = r(N)
+      - qui count if `infse'
+      = qui count if __000007
+      - local ninfse = r(N)
+      - if `ninfb'+`ninfse' > 0 {c -(}
+      = if 0+0 > 0 {c -(}
+        local text = cond("`dropbig'"=="dropbig","text","error")
+        local warning = cond("`dropbig'"=="dropbig","Warning","Error")
+        di as `text' `"`warning' for method `label`i'': "' as result `ninfb' as `text' `" observation(s) have standardised estimate > `max'"' _c
+        if "`se`i''"!="" di as `text' `" and "' as result `ninfse' as `text' `" observation(s) have scaled SE > `semax'"'
+        else di
+        if "`listbig'"!="nolistbig" l `by' `id' `beta`i'' `se`i'' if `infb'|`infse', sepby(`sepby')
+        else di as `text' "--> remove nolistbig option to list these observation(s)"
+        if "`dropbig'"=="dropbig" {c -(}
+        qui replace `beta`i'' = . if `infb'|`infse'
+        if "`se`i''"!="" qui replace `se`i'' = . if `infb'|`infse'
+        di as text `"--> estimate "' _c
+        if "`se`i''"!="" di as text `"and SE "' _c
+        di as text `"have been changed to missing values for these observation(s)"'
+        {c )-}
+        else {c -(}
+        di as error "--> use dropbig option to drop these observation(s)"
+        di as error "--> use max() option to change acceptable limit of point estimates"
+        if "`se'"!="" di as error "--> use semax() option to change acceptable limit of standard errors"
+        exit 498
+        {c )-}
+        {c )-}
+      - {c )-}
+      - qui summ `beta`i''
+      = qui summ est2
+      - if r(sd)<=0 {c -(}
+        di as text "Warning for method `label`i'': estimate doesn't vary"
+        continue
+        {c )-}
+      - qui replace `infb' = (abs(`beta`i''-r(mean))/r(sd) > `max') & !missing(`beta`i'')
+      = qui replace __000006 = (abs(est2-r(mean))/r(sd) > 20) & !missing(est2)
+      - if "`se`i''"!="" {c -(}
+      = if "se2"!="" {c -(}
+      - qui summ `se`i''
+      = qui summ se2
+      - if r(mean)<=0 {c -(}
+        di as text "Warning for method `label`i'': `se`i'' is always 0"
+        {c )-}
+      - else qui replace `infse' = (`se`i''/r(mean) > `semax') & !missing(`se`i'')
+      = else qui replace __000007 = (se2/r(mean) > 100) & !missing(se2)
+      - {c )-}
+      - qui count if `infb'
+      = qui count if __000006
+      - local ninfb = r(N)
+      - qui count if `infse'
+      = qui count if __000007
+      - local ninfse = r(N)
+      - if `ninfb'+`ninfse' > 0 {c -(}
+      = if 0+0 > 0 {c -(}
+        local text = cond("`dropbig'"=="dropbig","text","error")
+        local warning = cond("`dropbig'"=="dropbig","Warning","Error")
+        di as `text' `"`warning' for method `label`i'': "' as result `ninfb' as `text' `" observation(s) have standardised estimate > `max'"' _c
+        if "`se`i''"!="" di as `text' `" and "' as result `ninfse' as `text' `" observation(s) have scaled SE > `semax'"'
+        else di
+        if "`listbig'"!="nolistbig" l `by' `id' `beta`i'' `se`i'' if `infb'|`infse', sepby(`sepby')
+        else di as `text' "--> remove nolistbig option to list these observation(s)"
+        if "`dropbig'"=="dropbig" {c -(}
+        qui replace `beta`i'' = . if `infb'|`infse'
+        if "`se`i''"!="" qui replace `se`i'' = . if `infb'|`infse'
+        di as text `"--> estimate "' _c
+        if "`se`i''"!="" di as text `"and SE "' _c
+        di as text `"have been changed to missing values for these observation(s)"'
+        {c )-}
+        else {c -(}
+        di as error "--> use dropbig option to drop these observation(s)"
+        di as error "--> use max() option to change acceptable limit of point estimates"
+        if "`se'"!="" di as error "--> use semax() option to change acceptable limit of standard errors"
+        exit 498
+        {c )-}
+        {c )-}
+      - {c )-}
+      - di as text _newline "Starting to process results ..."
+      - if `level'<1 local level=`level'*100
+      = if 95<1 local level=95*100
+      - if "`robust'"=="robust" & ("`relprec'"=="relprec" | "`relerror'"=="relerror") {c -(}
+      = if ""=="robust" & ("relprec"=="relprec" | "relerror"=="relerror") {c -(}
+        forvalues i=1/`m' {c -(}
+        tempvar betamean`i'
+        egen `betamean`i'' = mean(`beta`i''), `byby'
+        {c )-}
+        {c )-}
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - tempvar crit`i'
+      = tempvar crit1
+      - gen `crit`i'' = -invnorm((1-`level'/100)/2)
+      = gen __000008 = -invnorm((1-95/100)/2)
+      - if "`df`i''"!="" qui replace `crit`i'' = invttail(`df`i'',(1-`level'/100)/2) if !mi(`df`i'')
+      = if ""!="" qui replace __000008 = invttail(,(1-95/100)/2) if !mi()
+      - assert !mi(`crit`i'')
+      = assert !mi(__000008)
+      - local collcount `collcount' bsims_`i'=`beta`i''
+      = local collcount  bsims_1=est1
+      - if "`bias'"=="bias" {c -(}
+      = if "bias"=="bias" {c -(}
+      - qui gen bias_`i' = `beta`i'' - `truevar'
+      = qui gen bias_1 = est1 - __000002
+      - local collmean `collmean' bias_`i'
+      = local collmean  bias_1
+      - local collsd `collsd' biassd_`i' = bias_`i'
+      = local collsd  biassd_1 = bias_1
+      - {c )-}
+      - if "`mean'"=="mean" {c -(}
+      = if "mean"=="mean" {c -(}
+      - local collmean `collmean' mean_`i' = `beta`i''
+      = local collmean bias_1 mean_1 = est1
+      - local collsd `collsd' meansd_`i' = `beta`i''
+      = local collsd biassd_1 = bias_1 meansd_1 = est1
+      - {c )-}
+      - if "`relerror'"=="relerror" | "`modelse'"=="modelse" {c -(}
+      = if "relerror"=="relerror" | "modelse"=="modelse" {c -(}
+      - qui gen var_`i'=`se`i''^2
+      = qui gen var_1=se1^2
+      - {c )-}
+      - if "`empse'"=="empse" | "`relerror'"=="relerror" | "`relprec'"=="relprec" | "`bias'"=="bias" {c -(}
+      = if "empse"=="empse" | "relerror"=="relerror" | "relprec"=="relprec" | "bias"=="bias" {c -(}
+      - local collsd `collsd' empse_`i'=`beta`i''
+      = local collsd biassd_1 = bias_1 meansd_1 = est1 empse_1=est1
+      - {c )-}
+      - if "`mse'"=="mse" | "`rmse'"=="rmse" {c -(}
+      = if "mse"=="mse" | "rmse"=="rmse" {c -(}
+      - qui gen mse_`i' = (`beta`i'' - `truevar')^2
+      = qui gen mse_1 = (est1 - __000002)^2
+      - local collmean `collmean' mse_`i'
+      = local collmean bias_1 mean_1 = est1 mse_1
+      - local collsd `collsd' msesd_`i'=mse_`i'
+      = local collsd biassd_1 = bias_1 meansd_1 = est1 empse_1=est1 msesd_1=mse_1
+      - {c )-}
+      - if "`relprec'"=="relprec" & `i'!=`refmethod' {c -(}
+      = if "relprec"=="relprec" & 1!=1 {c -(}
+        qui byvar `byvar', r(rho N) gen unique: corr `beta`refmethod'' `beta`i''
+        rename Rrho_ corr_`i'
+        rename RN_ ncorr_`i'
+        local collsum `collsum' corr_`i' ncorr_`i'
+        {c )-}
+      - if "`modelse'"=="modelse" | "`relerror'"=="relerror" | "`sesims'"=="sesims" {c -(}
+      = if "modelse"=="modelse" | "relerror"=="relerror" | "sesims"=="sesims" {c -(}
+      - local collcount `collcount' sesims_`i'=`se`i''
+      = local collcount bsims_1=est1 sesims_1=se1
+      - {c )-}
+      - if "`modelse'"=="modelse" | "`relerror'"=="relerror" {c -(}
+      = if "modelse"=="modelse" | "relerror"=="relerror" {c -(}
+      - local collmean `collmean' modelse_`i'=`se`i''
+      = local collmean bias_1 mean_1 = est1 mse_1 modelse_1=se1
+      - local collmean `collmean' varmean_`i'=var_`i'
+      = local collmean bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1
+      - local collsd `collsd' varsd_`i'=var_`i'
+      = local collsd biassd_1 = bias_1 meansd_1 = est1 empse_1=est1 msesd_1=mse_1 varsd_1=var_1
+      - local collsd `collsd' modelsesd_`i'=`se`i''
+      = local collsd biassd_1 = bias_1 meansd_1 = est1 empse_1=est1 msesd_1=mse_1 varsd_1=var_1 modelsesd_1=se1
+      - {c )-}
+      - if "`ciwidth'"=="ciwidth" {c -(}
+      = if "ciwidth"=="ciwidth" {c -(}
+      - qui gen ciwidth_`i' = 2*(`crit`i'')*`se`i''
+      = qui gen ciwidth_1 = 2*(__000008)*se1
+      - local collmean `collmean' ciwidth_`i'
+      = local collmean bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1 ciwidth_1
+      - local collsd `collsd' ciwidthsd_`i' = ciwidth_`i'
+      = local collsd biassd_1 = bias_1 meansd_1 = est1 empse_1=est1 msesd_1=mse_1 varsd_1=var_1 modelsesd_1=se1 ciwidthsd_1 = ciwidth_1
+      - {c )-}
+      - if "`cover'"=="cover" | "`power'"=="power" {c -(}
+      = if "cover"=="cover" | "power"=="power" {c -(}
+      - if "`cover'"=="cover" local collcount `collcount' bothsims_`i'=cover_`i'
+      = if "cover"=="cover" local collcount bsims_1=est1 sesims_1=se1 bothsims_1=cover_1
+      - else local collcount `collcount' bothsims_`i'=power_`i'
+      = else local collcount bsims_1=est1 sesims_1=se1 bothsims_1=cover_1 bothsims_1=power_1
+      - {c )-}
+      - if "`cover'"=="cover" {c -(}
+      = if "cover"=="cover" {c -(}
+      - qui gen cover_`i' = 100*(abs(`beta`i''-`truevar')<(`crit`i'')*`se`i'') if !missing(`beta`i'') & !missing(`se`i'')
+      = qui gen cover_1 = 100*(abs(est1-__000002)<(__000008)*se1) if !missing(est1) & !missing(se1)
+      - local collmean `collmean' cover_`i'
+      = local collmean bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1 ciwidth_1 cover_1
+      - {c )-}
+      - if "`power'"=="power" {c -(}
+      = if "power"=="power" {c -(}
+      - qui gen power_`i' = 100*(abs(`beta`i''-`null')>=(`crit`i'')*`se`i'') if !missing(`beta`i'') & !missing(`se`i'')
+      = qui gen power_1 = 100*(abs(est1-0)>=(__000008)*se1) if !missing(est1) & !missing(se1)
+      - local collmean `collmean' power_`i'
+      = local collmean bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1 ciwidth_1 cover_1 power_1
+      - {c )-}
+      - if "`robust'"=="robust" {c -(}
+      = if ""=="robust" {c -(}
+        if "`empse'"=="empse" {c -(}
+        tempvar empseT`i' empseB`i' empseTT`i' empseBB`i' empseTB`i'
+        qui gen `empseT`i'' = (`beta`i''-`betamean`i'')^2
+        qui gen `empseB`i'' = 1
+        qui gen `empseTT`i'' = `empseT`i''^2
+        qui gen `empseBB`i'' = `empseB`i''^2
+        qui gen `empseTB`i'' = `empseT`i''*`empseB`i''
+        local collsum `collsum' `empseT`i'' `empseB`i'' `empseTT`i'' `empseTB`i'' `empseBB`i''
+        {c )-}
+        if "`relprec'"=="relprec" {c -(}
+        tempvar relprecT`i' relprecB`i' relprecTT`i' relprecBB`i' relprecTB`i'
+        qui gen `relprecT`i'' = (`beta`refmethod''-`betamean`refmethod'')^2
+        qui gen `relprecB`i'' = (`beta`i''-`betamean`i'')^2
+        qui gen `relprecTT`i'' = `relprecT`i''^2
+        qui gen `relprecBB`i'' = `relprecB`i''^2
+        qui gen `relprecTB`i'' = `relprecT`i''*`relprecB`i''
+        local collsum `collsum' `relprecT`i'' `relprecB`i'' `relprecTT`i'' `relprecTB`i'' `relprecBB`i''
+        {c )-}
+        if "`relerror'"=="relerror" {c -(}
+        tempvar relerrorT`i' relerrorB`i' relerrorTT`i' relerrorBB`i' relerrorTB`i'
+        qui gen `relerrorT`i'' = `se`i''^2
+        qui gen `relerrorB`i'' = (`beta`i''-`betamean`i'')^2
+        qui gen `relerrorTT`i'' = `relerrorT`i''^2
+        qui gen `relerrorBB`i'' = `relerrorB`i''^2
+        qui gen `relerrorTB`i'' = `relerrorT`i''*`relerrorB`i''
+        local collsum `collsum' `relerrorT`i'' `relerrorB`i'' `relerrorTT`i'' `relerrorTB`i'' `relerrorBB`i''
+        {c )-}
+        {c )-}
+      - {c )-}
+      - tempvar crit`i'
+      = tempvar crit2
+      - gen `crit`i'' = -invnorm((1-`level'/100)/2)
+      = gen __000009 = -invnorm((1-95/100)/2)
+      - if "`df`i''"!="" qui replace `crit`i'' = invttail(`df`i'',(1-`level'/100)/2) if !mi(`df`i'')
+      = if ""!="" qui replace __000009 = invttail(,(1-95/100)/2) if !mi()
+      - assert !mi(`crit`i'')
+      = assert !mi(__000009)
+      - local collcount `collcount' bsims_`i'=`beta`i''
+      = local collcount bsims_1=est1 sesims_1=se1 bothsims_1=cover_1 bsims_2=est2
+      - if "`bias'"=="bias" {c -(}
+      = if "bias"=="bias" {c -(}
+      - qui gen bias_`i' = `beta`i'' - `truevar'
+      = qui gen bias_2 = est2 - __000002
+      - local collmean `collmean' bias_`i'
+      = local collmean bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1 ciwidth_1 cover_1 power_1 bias_2
+      - local collsd `collsd' biassd_`i' = bias_`i'
+      = local collsd biassd_1 = bias_1 meansd_1 = est1 empse_1=est1 msesd_1=mse_1 varsd_1=var_1 modelsesd_1=se1 ciwidthsd_1 = ciwidth_1 biassd_2 = bias_2
+      - {c )-}
+      - if "`mean'"=="mean" {c -(}
+      = if "mean"=="mean" {c -(}
+      - local collmean `collmean' mean_`i' = `beta`i''
+      = local collmean bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1 ciwidth_1 cover_1 power_1 bias_2 mean_2 = est2
+      - local collsd `collsd' meansd_`i' = `beta`i''
+      = local collsd biassd_1 = bias_1 meansd_1 = est1 empse_1=est1 msesd_1=mse_1 varsd_1=var_1 modelsesd_1=se1 ciwidthsd_1 = ciwidth_1 biassd_2 = bias_2 meansd_2 = est2
+      - {c )-}
+      - if "`relerror'"=="relerror" | "`modelse'"=="modelse" {c -(}
+      = if "relerror"=="relerror" | "modelse"=="modelse" {c -(}
+      - qui gen var_`i'=`se`i''^2
+      = qui gen var_2=se2^2
+      - {c )-}
+      - if "`empse'"=="empse" | "`relerror'"=="relerror" | "`relprec'"=="relprec" | "`bias'"=="bias" {c -(}
+      = if "empse"=="empse" | "relerror"=="relerror" | "relprec"=="relprec" | "bias"=="bias" {c -(}
+      - local collsd `collsd' empse_`i'=`beta`i''
+      = local collsd biassd_1 = bias_1 meansd_1 = est1 empse_1=est1 msesd_1=mse_1 varsd_1=var_1 modelsesd_1=se1 ciwidthsd_1 = ciwidth_1 biassd_2 = bias_2 meansd_2 = est2 empse_2=est2
+      - {c )-}
+      - if "`mse'"=="mse" | "`rmse'"=="rmse" {c -(}
+      = if "mse"=="mse" | "rmse"=="rmse" {c -(}
+      - qui gen mse_`i' = (`beta`i'' - `truevar')^2
+      = qui gen mse_2 = (est2 - __000002)^2
+      - local collmean `collmean' mse_`i'
+      = local collmean bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1 ciwidth_1 cover_1 power_1 bias_2 mean_2 = est2 mse_2
+      - local collsd `collsd' msesd_`i'=mse_`i'
+      = local collsd biassd_1 = bias_1 meansd_1 = est1 empse_1=est1 msesd_1=mse_1 varsd_1=var_1 modelsesd_1=se1 ciwidthsd_1 = ciwidth_1 biassd_2 = bias_2 meansd_2 = est2 empse_2=est2 msesd_2=mse_2
+      - {c )-}
+      - if "`relprec'"=="relprec" & `i'!=`refmethod' {c -(}
+      = if "relprec"=="relprec" & 2!=1 {c -(}
+      - qui byvar `byvar', r(rho N) gen unique: corr `beta`refmethod'' `beta`i''
+      = qui byvar dgm estimand, r(rho N) gen unique: corr est1 est2
+      - rename Rrho_ corr_`i'
+      = rename Rrho_ corr_2
+      - rename RN_ ncorr_`i'
+      = rename RN_ ncorr_2
+      - local collsum `collsum' corr_`i' ncorr_`i'
+      = local collsum  corr_2 ncorr_2
+      - {c )-}
+      - if "`modelse'"=="modelse" | "`relerror'"=="relerror" | "`sesims'"=="sesims" {c -(}
+      = if "modelse"=="modelse" | "relerror"=="relerror" | "sesims"=="sesims" {c -(}
+      - local collcount `collcount' sesims_`i'=`se`i''
+      = local collcount bsims_1=est1 sesims_1=se1 bothsims_1=cover_1 bsims_2=est2 sesims_2=se2
+      - {c )-}
+      - if "`modelse'"=="modelse" | "`relerror'"=="relerror" {c -(}
+      = if "modelse"=="modelse" | "relerror"=="relerror" {c -(}
+      - local collmean `collmean' modelse_`i'=`se`i''
+      = local collmean bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1 ciwidth_1 cover_1 power_1 bias_2 mean_2 = est2 mse_2 modelse_2=se2
+      - local collmean `collmean' varmean_`i'=var_`i'
+      = local collmean bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1 ciwidth_1 cover_1 power_1 bias_2 mean_2 = est2 mse_2 modelse_2=se2 varmean_2=var_2
+      - local collsd `collsd' varsd_`i'=var_`i'
+      = local collsd biassd_1 = bias_1 meansd_1 = est1 empse_1=est1 msesd_1=mse_1 varsd_1=var_1 modelsesd_1=se1 ciwidthsd_1 = ciwidth_1 biassd_2 = bias_2 meansd_2 = est2 empse_2=est2 msesd_2=mse_2 varsd_2=var_2
+      - local collsd `collsd' modelsesd_`i'=`se`i''
+      = local collsd biassd_1 = bias_1 meansd_1 = est1 empse_1=est1 msesd_1=mse_1 varsd_1=var_1 modelsesd_1=se1 ciwidthsd_1 = ciwidth_1 biassd_2 = bias_2 meansd_2 = est2 empse_2=est2 msesd_2=mse_2 varsd_2=var_2 modelsesd_2=se2
+      - {c )-}
+      - if "`ciwidth'"=="ciwidth" {c -(}
+      = if "ciwidth"=="ciwidth" {c -(}
+      - qui gen ciwidth_`i' = 2*(`crit`i'')*`se`i''
+      = qui gen ciwidth_2 = 2*(__000009)*se2
+      - local collmean `collmean' ciwidth_`i'
+      = local collmean bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1 ciwidth_1 cover_1 power_1 bias_2 mean_2 = est2 mse_2 modelse_2=se2 varmean_2=var_2 ciwidth_2
+      - local collsd `collsd' ciwidthsd_`i' = ciwidth_`i'
+      = local collsd biassd_1 = bias_1 meansd_1 = est1 empse_1=est1 msesd_1=mse_1 varsd_1=var_1 modelsesd_1=se1 ciwidthsd_1 = ciwidth_1 biassd_2 = bias_2 meansd_2 = est2 empse_2=est2 msesd_2=mse_2 varsd_2=var_2 modelsesd_2=se2 ciwidthsd_2 = ciwidth_2
+      - {c )-}
+      - if "`cover'"=="cover" | "`power'"=="power" {c -(}
+      = if "cover"=="cover" | "power"=="power" {c -(}
+      - if "`cover'"=="cover" local collcount `collcount' bothsims_`i'=cover_`i'
+      = if "cover"=="cover" local collcount bsims_1=est1 sesims_1=se1 bothsims_1=cover_1 bsims_2=est2 sesims_2=se2 bothsims_2=cover_2
+      - else local collcount `collcount' bothsims_`i'=power_`i'
+      = else local collcount bsims_1=est1 sesims_1=se1 bothsims_1=cover_1 bsims_2=est2 sesims_2=se2 bothsims_2=cover_2 bothsims_2=power_2
+      - {c )-}
+      - if "`cover'"=="cover" {c -(}
+      = if "cover"=="cover" {c -(}
+      - qui gen cover_`i' = 100*(abs(`beta`i''-`truevar')<(`crit`i'')*`se`i'') if !missing(`beta`i'') & !missing(`se`i'')
+      = qui gen cover_2 = 100*(abs(est2-__000002)<(__000009)*se2) if !missing(est2) & !missing(se2)
+      - local collmean `collmean' cover_`i'
+      = local collmean bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1 ciwidth_1 cover_1 power_1 bias_2 mean_2 = est2 mse_2 modelse_2=se2 varmean_2=var_2 ciwidth_2 cover_2
+      - {c )-}
+      - if "`power'"=="power" {c -(}
+      = if "power"=="power" {c -(}
+      - qui gen power_`i' = 100*(abs(`beta`i''-`null')>=(`crit`i'')*`se`i'') if !missing(`beta`i'') & !missing(`se`i'')
+      = qui gen power_2 = 100*(abs(est2-0)>=(__000009)*se2) if !missing(est2) & !missing(se2)
+      - local collmean `collmean' power_`i'
+      = local collmean bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1 ciwidth_1 cover_1 power_1 bias_2 mean_2 = est2 mse_2 modelse_2=se2 varmean_2=var_2 ciwidth_2 cover_2 power_2
+      - {c )-}
+      - if "`robust'"=="robust" {c -(}
+      = if ""=="robust" {c -(}
+        if "`empse'"=="empse" {c -(}
+        tempvar empseT`i' empseB`i' empseTT`i' empseBB`i' empseTB`i'
+        qui gen `empseT`i'' = (`beta`i''-`betamean`i'')^2
+        qui gen `empseB`i'' = 1
+        qui gen `empseTT`i'' = `empseT`i''^2
+        qui gen `empseBB`i'' = `empseB`i''^2
+        qui gen `empseTB`i'' = `empseT`i''*`empseB`i''
+        local collsum `collsum' `empseT`i'' `empseB`i'' `empseTT`i'' `empseTB`i'' `empseBB`i''
+        {c )-}
+        if "`relprec'"=="relprec" {c -(}
+        tempvar relprecT`i' relprecB`i' relprecTT`i' relprecBB`i' relprecTB`i'
+        qui gen `relprecT`i'' = (`beta`refmethod''-`betamean`refmethod'')^2
+        qui gen `relprecB`i'' = (`beta`i''-`betamean`i'')^2
+        qui gen `relprecTT`i'' = `relprecT`i''^2
+        qui gen `relprecBB`i'' = `relprecB`i''^2
+        qui gen `relprecTB`i'' = `relprecT`i''*`relprecB`i''
+        local collsum `collsum' `relprecT`i'' `relprecB`i'' `relprecTT`i'' `relprecTB`i'' `relprecBB`i''
+        {c )-}
+        if "`relerror'"=="relerror" {c -(}
+        tempvar relerrorT`i' relerrorB`i' relerrorTT`i' relerrorBB`i' relerrorTB`i'
+        qui gen `relerrorT`i'' = `se`i''^2
+        qui gen `relerrorB`i'' = (`beta`i''-`betamean`i'')^2
+        qui gen `relerrorTT`i'' = `relerrorT`i''^2
+        qui gen `relerrorBB`i'' = `relerrorB`i''^2
+        qui gen `relerrorTB`i'' = `relerrorT`i''*`relerrorB`i''
+        local collsum `collsum' `relerrorT`i'' `relerrorB`i'' `relerrorTT`i'' `relerrorTB`i'' `relerrorBB`i''
+        {c )-}
+        {c )-}
+      - {c )-}
+      - if "`collmean'"!="" local collmean (mean) `collmean'
+      = if "bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1 ciwidth_1 cover_1 power_1 bias_2 mean_2 = est2 mse_2 modelse_2=se2 varmean_2=var_2 ciwidth_2 cover_2 power_2"!="" local collmean (mean) bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1 ciwidth_1 cover_1 power_1 bias_2 mean_2 = est2 mse_2 modelse_2=se2 varmean_2=var_2 ciwidth_2 cover_2 power_2
+      - if "`collsd'"!="" local collsd (sd) `collsd'
+      = if "biassd_1 = bias_1 meansd_1 = est1 empse_1=est1 msesd_1=mse_1 varsd_1=var_1 modelsesd_1=se1 ciwidthsd_1 = ciwidth_1 biassd_2 = bias_2 meansd_2 = est2 empse_2=est2 msesd_2=mse_2 varsd_2=var_2 modelsesd_2=se2 ciwidthsd_2 = ciwidth_2"!="" local collsd (sd) biassd_1 = bias_1 meansd_1 = est1 empse_1=est1 msesd_1=mse_1 varsd_1=var_1 modelsesd_1=se1 ciwidthsd_1 = ciwidth_1 biassd_2 = bias_2 meansd_2 = est2 empse_2=est2 msesd_2=mse_2 varsd_2=var_2 modelsesd_2=se2 ciwidthsd_2 = ciwidth_2
+      - if "`collcount'"!="" local collcount (count) `collcount'
+      = if "bsims_1=est1 sesims_1=se1 bothsims_1=cover_1 bsims_2=est2 sesims_2=se2 bothsims_2=cover_2"!="" local collcount (count) bsims_1=est1 sesims_1=se1 bothsims_1=cover_1 bsims_2=est2 sesims_2=se2 bothsims_2=cover_2
+      - if "`collsum'"!="" local collsum (sum) `collsum'
+      = if "corr_2 ncorr_2"!="" local collsum (sum) corr_2 ncorr_2
+      - collapse `collmean' `collsd' `collcount' `collsum', by(`byvar')
+      = collapse (mean) bias_1 mean_1 = est1 mse_1 modelse_1=se1 varmean_1=var_1 ciwidth_1 cover_1 power_1 bias_2 mean_2 = est2 mse_2 modelse_2=se2 varmean_2=var_2 ciwidth_2 cover_2 power_2 (sd) biassd_1 = bias_1 meansd_1 = est1 empse_1=est1 msesd_1=mse_1 varsd_1=var_1 modelsesd_1=se1 ciwidthsd_1 = ciwidth_1 biassd_2 = bias_2 meansd_2 = est2 empse_2=est2 msesd_2=mse_2 varsd_2=var_2 modelsesd_2=se2 ciwidthsd_2 = ciwidth_2 (count) bsims_1=est1 sesims_1=se1 bothsims_1=cover_1 bsims_2=est2 sesims_2=se2 bothsims_2=cover_2 (sum) corr_2 ncorr_2, by(dgm estimand)
+      - if !mi("`debug'") {c -(}
+      = if !mi("") {c -(}
+        di as input "Data after collapse:"
+        l
+        {c )-}
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - qui gen k_`i' = bsims_`i'/(bsims_`i'-1)
+      = qui gen k_1 = bsims_1/(bsims_1-1)
+      - if "`bias'"=="bias" {c -(}
+      = if "bias"=="bias" {c -(}
+      - qui gen bias_mcse_`i' = biassd_`i' / sqrt(bsims_`i')
+      = qui gen bias_mcse_1 = biassd_1 / sqrt(bsims_1)
+      - {c )-}
+      - if "`mean'"=="mean" {c -(}
+      = if "mean"=="mean" {c -(}
+      - qui gen mean_mcse_`i' = meansd_`i' / sqrt(bsims_`i')
+      = qui gen mean_mcse_1 = meansd_1 / sqrt(bsims_1)
+      - {c )-}
+      - if ("`empse'"=="empse" | "`relerror'"=="relerror") & "`robust'"=="" {c -(}
+      = if ("empse"=="empse" | "relerror"=="relerror") & ""=="" {c -(}
+      - qui gen empse_mcse_`i' = empse_`i'/sqrt(2*(bsims_`i'-1))
+      = qui gen empse_mcse_1 = empse_1/sqrt(2*(bsims_1-1))
+      - {c )-}
+      - else if ("`empse'"=="empse") & "`robust'"=="robust" {c -(}
+      = else if ("empse"=="empse") & ""=="robust" {c -(}
+        qui replace `empseTT`i''=`empseTT`i''*(k_`i'^2)
+        qui replace `empseTB`i''=`empseTB`i''*k_`i'
+        qui replace `empseT`i'' =`empseT`i'' *k_`i'
+        qui gen empse_mcse_`i' = sqrt(k_`i') * sqrt(`empseTT`i'' -2*(`empseT`i''/`empseB`i'')*`empseTB`i'' +(`empseT`i''/`empseB`i'')^2*`empseBB`i'') / `empseB`i''
+        qui replace empse_mcse_`i' = empse_mcse_`i' / (2*empse_`i')
+        {c )-}
+      - if "`relprec'"=="relprec" {c -(}
+      = if "relprec"=="relprec" {c -(}
+      - if `i'!=`refmethod' {c -(}
+      = if 1!=1 {c -(}
+        qui gen relprec_`i' = 100 * ((empse_`refmethod'/empse_`i')^2-1)
+        if "`robust'"=="" {c -(}
+        qui gen relprec_mcse_`i' = 200 * (empse_`refmethod'/empse_`i')^2 * sqrt((1-(corr_`i')^2)/(ncorr_`i'-1))
+        {c )-}
+        else {c -(}
+        qui gen relprec_mcse_`i' = 100 * sqrt(`relprecTT`i'' -2*(`relprecT`i''/`relprecB`i'')*`relprecTB`i'' +(`relprecT`i''/`relprecB`i'')^2*`relprecBB`i'') / `relprecB`i''
+        {c )-}
+        {c )-}
+      - else {c -(}
+      - qui gen relprec_`i' = .
+      = qui gen relprec_1 = .
+      - qui gen relprec_mcse_`i' = .
+      = qui gen relprec_mcse_1 = .
+      - {c )-}
+      - {c )-}
+      - if "`mse'"=="mse" {c -(}
+      = if "mse"=="mse" {c -(}
+      - qui gen mse_mcse_`i' = msesd_`i' / sqrt(bsims_`i')
+      = qui gen mse_mcse_1 = msesd_1 / sqrt(bsims_1)
+      - {c )-}
+      - if "`rmse'"=="rmse" {c -(}
+      = if "rmse"=="rmse" {c -(}
+      - qui gen rmse_`i' = sqrt(mse_`i')
+      = qui gen rmse_1 = sqrt(mse_1)
+      - qui gen rmse_mcse_`i' = msesd_`i' / (2 * sqrt(bsims_`i') * rmse_`i')
+      = qui gen rmse_mcse_1 = msesd_1 / (2 * sqrt(bsims_1) * rmse_1)
+      - {c )-}
+      - if "`modelse'"=="modelse" | "`relerror'"=="relerror" {c -(}
+      = if "modelse"=="modelse" | "relerror"=="relerror" {c -(}
+      - if "`modelsemethod'"=="rmse" {c -(}
+      = if "rmse"=="rmse" {c -(}
+      - qui replace modelse_`i' = sqrt(varmean_`i')
+      = qui replace modelse_1 = sqrt(varmean_1)
+      - qui gen modelse_mcse_`i' = varsd_`i' / sqrt(4 * sesims_`i' * varmean_`i')
+      = qui gen modelse_mcse_1 = varsd_1 / sqrt(4 * sesims_1 * varmean_1)
+      - {c )-}
+      - else if "`modelsemethod'"=="mean" {c -(}
+      = else if "rmse"=="mean" {c -(}
+        qui gen modelse_mcse_`i' = modelsesd_`i' / sqrt(sesims_`i')
+        {c )-}
+      - {c )-}
+      - if "`ciwidth'"=="ciwidth" {c -(}
+      = if "ciwidth"=="ciwidth" {c -(}
+      - qui gen ciwidth_mcse_`i' = ciwidthsd_`i' / sqrt(bsims_`i')
+      = qui gen ciwidth_mcse_1 = ciwidthsd_1 / sqrt(bsims_1)
+      - {c )-}
+      - if "`relerror'"=="relerror" {c -(}
+      = if "relerror"=="relerror" {c -(}
+      - qui gen relerror_`i' = 100*(modelse_`i'/empse_`i'-1)
+      = qui gen relerror_1 = 100*(modelse_1/empse_1-1)
+      - if "`robust'"=="" qui gen relerror_mcse_`i' = 100*(modelse_`i'/empse_`i') * sqrt((modelse_mcse_`i'/modelse_`i')^2 + (empse_mcse_`i'/empse_`i')^2 )
+      = if ""=="" qui gen relerror_mcse_1 = 100*(modelse_1/empse_1) * sqrt((modelse_mcse_1/modelse_1)^2 + (empse_mcse_1/empse_1)^2 )
+      - else {c -(}
+        qui gen relerror_mcse_`i' = sqrt(`relerrorTT`i'' -2*(`relerrorT`i''/`relerrorB`i'')*`relerrorTB`i'' +(`relerrorT`i''/`relerrorB`i'')^2*`relerrorBB`i'') / `relerrorB`i''
+        qui replace relerror_mcse_`i' = relerror_mcse_`i' * 100 / (2*(1+relerror_`i'/100))
+        {c )-}
+      - {c )-}
+      - if "`cover'"=="cover" {c -(}
+      = if "cover"=="cover" {c -(}
+      - qui gen cover_mcse_`i' = sqrt(cover_`i'*(100-cover_`i')/bothsims_`i') if bothsims_`i'>1
+      = qui gen cover_mcse_1 = sqrt(cover_1*(100-cover_1)/bothsims_1) if bothsims_1>1
+      - {c )-}
+      - if "`power'"=="power" {c -(}
+      = if "power"=="power" {c -(}
+      - qui gen power_mcse_`i' = sqrt(power_`i'*(100-power_`i')/bothsims_`i') if bothsims_`i'>1
+      = qui gen power_mcse_1 = sqrt(power_1*(100-power_1)/bothsims_1) if bothsims_1>1
+      - {c )-}
+      - cap drop varmean_`i'
+      = cap drop varmean_1
+      - cap drop varsd_`i'
+      = cap drop varsd_1
+      - {c )-}
+      - qui gen k_`i' = bsims_`i'/(bsims_`i'-1)
+      = qui gen k_2 = bsims_2/(bsims_2-1)
+      - if "`bias'"=="bias" {c -(}
+      = if "bias"=="bias" {c -(}
+      - qui gen bias_mcse_`i' = biassd_`i' / sqrt(bsims_`i')
+      = qui gen bias_mcse_2 = biassd_2 / sqrt(bsims_2)
+      - {c )-}
+      - if "`mean'"=="mean" {c -(}
+      = if "mean"=="mean" {c -(}
+      - qui gen mean_mcse_`i' = meansd_`i' / sqrt(bsims_`i')
+      = qui gen mean_mcse_2 = meansd_2 / sqrt(bsims_2)
+      - {c )-}
+      - if ("`empse'"=="empse" | "`relerror'"=="relerror") & "`robust'"=="" {c -(}
+      = if ("empse"=="empse" | "relerror"=="relerror") & ""=="" {c -(}
+      - qui gen empse_mcse_`i' = empse_`i'/sqrt(2*(bsims_`i'-1))
+      = qui gen empse_mcse_2 = empse_2/sqrt(2*(bsims_2-1))
+      - {c )-}
+      - else if ("`empse'"=="empse") & "`robust'"=="robust" {c -(}
+      = else if ("empse"=="empse") & ""=="robust" {c -(}
+        qui replace `empseTT`i''=`empseTT`i''*(k_`i'^2)
+        qui replace `empseTB`i''=`empseTB`i''*k_`i'
+        qui replace `empseT`i'' =`empseT`i'' *k_`i'
+        qui gen empse_mcse_`i' = sqrt(k_`i') * sqrt(`empseTT`i'' -2*(`empseT`i''/`empseB`i'')*`empseTB`i'' +(`empseT`i''/`empseB`i'')^2*`empseBB`i'') / `empseB`i''
+        qui replace empse_mcse_`i' = empse_mcse_`i' / (2*empse_`i')
+        {c )-}
+      - if "`relprec'"=="relprec" {c -(}
+      = if "relprec"=="relprec" {c -(}
+      - if `i'!=`refmethod' {c -(}
+      = if 2!=1 {c -(}
+      - qui gen relprec_`i' = 100 * ((empse_`refmethod'/empse_`i')^2-1)
+      = qui gen relprec_2 = 100 * ((empse_1/empse_2)^2-1)
+      - if "`robust'"=="" {c -(}
+      = if ""=="" {c -(}
+      - qui gen relprec_mcse_`i' = 200 * (empse_`refmethod'/empse_`i')^2 * sqrt((1-(corr_`i')^2)/(ncorr_`i'-1))
+      = qui gen relprec_mcse_2 = 200 * (empse_1/empse_2)^2 * sqrt((1-(corr_2)^2)/(ncorr_2-1))
+      - {c )-}
+      - else {c -(}
+        qui gen relprec_mcse_`i' = 100 * sqrt(`relprecTT`i'' -2*(`relprecT`i''/`relprecB`i'')*`relprecTB`i'' +(`relprecT`i''/`relprecB`i'')^2*`relprecBB`i'') / `relprecB`i''
+        {c )-}
+      - {c )-}
+      - else {c -(}
+        qui gen relprec_`i' = .
+        qui gen relprec_mcse_`i' = .
+        {c )-}
+      - {c )-}
+      - if "`mse'"=="mse" {c -(}
+      = if "mse"=="mse" {c -(}
+      - qui gen mse_mcse_`i' = msesd_`i' / sqrt(bsims_`i')
+      = qui gen mse_mcse_2 = msesd_2 / sqrt(bsims_2)
+      - {c )-}
+      - if "`rmse'"=="rmse" {c -(}
+      = if "rmse"=="rmse" {c -(}
+      - qui gen rmse_`i' = sqrt(mse_`i')
+      = qui gen rmse_2 = sqrt(mse_2)
+      - qui gen rmse_mcse_`i' = msesd_`i' / (2 * sqrt(bsims_`i') * rmse_`i')
+      = qui gen rmse_mcse_2 = msesd_2 / (2 * sqrt(bsims_2) * rmse_2)
+      - {c )-}
+      - if "`modelse'"=="modelse" | "`relerror'"=="relerror" {c -(}
+      = if "modelse"=="modelse" | "relerror"=="relerror" {c -(}
+      - if "`modelsemethod'"=="rmse" {c -(}
+      = if "rmse"=="rmse" {c -(}
+      - qui replace modelse_`i' = sqrt(varmean_`i')
+      = qui replace modelse_2 = sqrt(varmean_2)
+      - qui gen modelse_mcse_`i' = varsd_`i' / sqrt(4 * sesims_`i' * varmean_`i')
+      = qui gen modelse_mcse_2 = varsd_2 / sqrt(4 * sesims_2 * varmean_2)
+      - {c )-}
+      - else if "`modelsemethod'"=="mean" {c -(}
+      = else if "rmse"=="mean" {c -(}
+        qui gen modelse_mcse_`i' = modelsesd_`i' / sqrt(sesims_`i')
+        {c )-}
+      - {c )-}
+      - if "`ciwidth'"=="ciwidth" {c -(}
+      = if "ciwidth"=="ciwidth" {c -(}
+      - qui gen ciwidth_mcse_`i' = ciwidthsd_`i' / sqrt(bsims_`i')
+      = qui gen ciwidth_mcse_2 = ciwidthsd_2 / sqrt(bsims_2)
+      - {c )-}
+      - if "`relerror'"=="relerror" {c -(}
+      = if "relerror"=="relerror" {c -(}
+      - qui gen relerror_`i' = 100*(modelse_`i'/empse_`i'-1)
+      = qui gen relerror_2 = 100*(modelse_2/empse_2-1)
+      - if "`robust'"=="" qui gen relerror_mcse_`i' = 100*(modelse_`i'/empse_`i') * sqrt((modelse_mcse_`i'/modelse_`i')^2 + (empse_mcse_`i'/empse_`i')^2 )
+      = if ""=="" qui gen relerror_mcse_2 = 100*(modelse_2/empse_2) * sqrt((modelse_mcse_2/modelse_2)^2 + (empse_mcse_2/empse_2)^2 )
+      - else {c -(}
+        qui gen relerror_mcse_`i' = sqrt(`relerrorTT`i'' -2*(`relerrorT`i''/`relerrorB`i'')*`relerrorTB`i'' +(`relerrorT`i''/`relerrorB`i'')^2*`relerrorBB`i'') / `relerrorB`i''
+        qui replace relerror_mcse_`i' = relerror_mcse_`i' * 100 / (2*(1+relerror_`i'/100))
+        {c )-}
+      - {c )-}
+      - if "`cover'"=="cover" {c -(}
+      = if "cover"=="cover" {c -(}
+      - qui gen cover_mcse_`i' = sqrt(cover_`i'*(100-cover_`i')/bothsims_`i') if bothsims_`i'>1
+      = qui gen cover_mcse_2 = sqrt(cover_2*(100-cover_2)/bothsims_2) if bothsims_2>1
+      - {c )-}
+      - if "`power'"=="power" {c -(}
+      = if "power"=="power" {c -(}
+      - qui gen power_mcse_`i' = sqrt(power_`i'*(100-power_`i')/bothsims_`i') if bothsims_`i'>1
+      = qui gen power_mcse_2 = sqrt(power_2*(100-power_2)/bothsims_2) if bothsims_2>1
+      - {c )-}
+      - cap drop varmean_`i'
+      = cap drop varmean_2
+      - cap drop varsd_`i'
+      = cap drop varsd_2
+      - {c )-}
+      - if !mi("`debug'") {c -(}
+      = if !mi("") {c -(}
+        di as input "Data after post-processing:"
+        l
+        {c )-}
+      - local alpha=100-`level'
+      = local alpha=100-95
+      - local bsimsname Non-missing point estimates
+      - local sesimsname Non-missing standard errors
+      - local biasname Bias in point estimate
+      - local meanname Mean of point estimate
+      - local empsename Empirical standard error
+      - local relprecname % gain in precision relative to method `label`refmethod''
+      = local relprecname % gain in precision relative to method A
+      - local msename Mean squared error
+      - local rmsename Root mean squared error
+      - if "`modelsemethod'" =="mean" local modelsename Mean model-based standard error `sebeta'
+      = if "rmse" =="mean" local modelsename Mean model-based standard error 
+      - if "`modelsemethod'" =="rmse" local modelsename RMS model-based standard error `sebeta'
+      = if "rmse" =="rmse" local modelsename RMS model-based standard error 
+      - local ciwidthname Mean conf. interval width
+      - local relerrorname Relative % error in standard error
+      - local covername % coverage of nominal `level'% conf. interval
+      = local covername % coverage of nominal 95% conf. interval
+      - local powername % power of `alpha'% level test
+      = local powername % power of 5% level test
+      - local keeplist `byvar'
+      = local keeplist dgm estimand
+      - foreach name in `output' {c -(}
+      = foreach name in bsims sesims bias mean empse relprec mse rmse modelse ciwidth relerror cover power {c -(}
+      - local domcse = "`mcse'"=="mcse" & "`name'"!="bsims" & "`name'"!="sesims"
+      = local domcse = "mcse"=="mcse" & "bsims"!="bsims" & "bsims"!="sesims"
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - rename `name'_`i' method`i'`name'
+      = rename bsims_1 method1bsims
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims
+      - if `domcse' {c -(}
+      = if 0 {c -(}
+        rename `name'_mcse_`i' method`i'`name'_mcse
+        local keeplist `keeplist' method`i'`name'_mcse
+        {c )-}
+      - {c )-}
+      - rename `name'_`i' method`i'`name'
+      = rename bsims_2 method2bsims
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims
+      - if `domcse' {c -(}
+      = if 0 {c -(}
+        rename `name'_mcse_`i' method`i'`name'_mcse
+        local keeplist `keeplist' method`i'`name'_mcse
+        {c )-}
+      - {c )-}
+      - {c )-}
+      - local domcse = "`mcse'"=="mcse" & "`name'"!="bsims" & "`name'"!="sesims"
+      = local domcse = "mcse"=="mcse" & "sesims"!="bsims" & "sesims"!="sesims"
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - rename `name'_`i' method`i'`name'
+      = rename sesims_1 method1sesims
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims
+      - if `domcse' {c -(}
+      = if 0 {c -(}
+        rename `name'_mcse_`i' method`i'`name'_mcse
+        local keeplist `keeplist' method`i'`name'_mcse
+        {c )-}
+      - {c )-}
+      - rename `name'_`i' method`i'`name'
+      = rename sesims_2 method2sesims
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims
+      - if `domcse' {c -(}
+      = if 0 {c -(}
+        rename `name'_mcse_`i' method`i'`name'_mcse
+        local keeplist `keeplist' method`i'`name'_mcse
+        {c )-}
+      - {c )-}
+      - {c )-}
+      - local domcse = "`mcse'"=="mcse" & "`name'"!="bsims" & "`name'"!="sesims"
+      = local domcse = "mcse"=="mcse" & "bias"!="bsims" & "bias"!="sesims"
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - rename `name'_`i' method`i'`name'
+      = rename bias_1 method1bias
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename bias_mcse_1 method1bias_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse
+      - {c )-}
+      - {c )-}
+      - rename `name'_`i' method`i'`name'
+      = rename bias_2 method2bias
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename bias_mcse_2 method2bias_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse
+      - {c )-}
+      - {c )-}
+      - {c )-}
+      - local domcse = "`mcse'"=="mcse" & "`name'"!="bsims" & "`name'"!="sesims"
+      = local domcse = "mcse"=="mcse" & "mean"!="bsims" & "mean"!="sesims"
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - rename `name'_`i' method`i'`name'
+      = rename mean_1 method1mean
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename mean_mcse_1 method1mean_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse
+      - {c )-}
+      - {c )-}
+      - rename `name'_`i' method`i'`name'
+      = rename mean_2 method2mean
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename mean_mcse_2 method2mean_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse
+      - {c )-}
+      - {c )-}
+      - {c )-}
+      - local domcse = "`mcse'"=="mcse" & "`name'"!="bsims" & "`name'"!="sesims"
+      = local domcse = "mcse"=="mcse" & "empse"!="bsims" & "empse"!="sesims"
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - rename `name'_`i' method`i'`name'
+      = rename empse_1 method1empse
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename empse_mcse_1 method1empse_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse
+      - {c )-}
+      - {c )-}
+      - rename `name'_`i' method`i'`name'
+      = rename empse_2 method2empse
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename empse_mcse_2 method2empse_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse
+      - {c )-}
+      - {c )-}
+      - {c )-}
+      - local domcse = "`mcse'"=="mcse" & "`name'"!="bsims" & "`name'"!="sesims"
+      = local domcse = "mcse"=="mcse" & "relprec"!="bsims" & "relprec"!="sesims"
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - rename `name'_`i' method`i'`name'
+      = rename relprec_1 method1relprec
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename relprec_mcse_1 method1relprec_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse
+      - {c )-}
+      - {c )-}
+      - rename `name'_`i' method`i'`name'
+      = rename relprec_2 method2relprec
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename relprec_mcse_2 method2relprec_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse
+      - {c )-}
+      - {c )-}
+      - {c )-}
+      - local domcse = "`mcse'"=="mcse" & "`name'"!="bsims" & "`name'"!="sesims"
+      = local domcse = "mcse"=="mcse" & "mse"!="bsims" & "mse"!="sesims"
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - rename `name'_`i' method`i'`name'
+      = rename mse_1 method1mse
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename mse_mcse_1 method1mse_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse
+      - {c )-}
+      - {c )-}
+      - rename `name'_`i' method`i'`name'
+      = rename mse_2 method2mse
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename mse_mcse_2 method2mse_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse
+      - {c )-}
+      - {c )-}
+      - {c )-}
+      - local domcse = "`mcse'"=="mcse" & "`name'"!="bsims" & "`name'"!="sesims"
+      = local domcse = "mcse"=="mcse" & "rmse"!="bsims" & "rmse"!="sesims"
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - rename `name'_`i' method`i'`name'
+      = rename rmse_1 method1rmse
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename rmse_mcse_1 method1rmse_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse
+      - {c )-}
+      - {c )-}
+      - rename `name'_`i' method`i'`name'
+      = rename rmse_2 method2rmse
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename rmse_mcse_2 method2rmse_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse
+      - {c )-}
+      - {c )-}
+      - {c )-}
+      - local domcse = "`mcse'"=="mcse" & "`name'"!="bsims" & "`name'"!="sesims"
+      = local domcse = "mcse"=="mcse" & "modelse"!="bsims" & "modelse"!="sesims"
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - rename `name'_`i' method`i'`name'
+      = rename modelse_1 method1modelse
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename modelse_mcse_1 method1modelse_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse
+      - {c )-}
+      - {c )-}
+      - rename `name'_`i' method`i'`name'
+      = rename modelse_2 method2modelse
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename modelse_mcse_2 method2modelse_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse
+      - {c )-}
+      - {c )-}
+      - {c )-}
+      - local domcse = "`mcse'"=="mcse" & "`name'"!="bsims" & "`name'"!="sesims"
+      = local domcse = "mcse"=="mcse" & "ciwidth"!="bsims" & "ciwidth"!="sesims"
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - rename `name'_`i' method`i'`name'
+      = rename ciwidth_1 method1ciwidth
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename ciwidth_mcse_1 method1ciwidth_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse
+      - {c )-}
+      - {c )-}
+      - rename `name'_`i' method`i'`name'
+      = rename ciwidth_2 method2ciwidth
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename ciwidth_mcse_2 method2ciwidth_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth method2ciwidth_mcse
+      - {c )-}
+      - {c )-}
+      - {c )-}
+      - local domcse = "`mcse'"=="mcse" & "`name'"!="bsims" & "`name'"!="sesims"
+      = local domcse = "mcse"=="mcse" & "relerror"!="bsims" & "relerror"!="sesims"
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - rename `name'_`i' method`i'`name'
+      = rename relerror_1 method1relerror
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth method2ciwidth_mcse method1relerror
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename relerror_mcse_1 method1relerror_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth method2ciwidth_mcse method1relerror method1relerror_mcse
+      - {c )-}
+      - {c )-}
+      - rename `name'_`i' method`i'`name'
+      = rename relerror_2 method2relerror
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth method2ciwidth_mcse method1relerror method1relerror_mcse method2relerror
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename relerror_mcse_2 method2relerror_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth method2ciwidth_mcse method1relerror method1relerror_mcse method2relerror method2relerror_mcse
+      - {c )-}
+      - {c )-}
+      - {c )-}
+      - local domcse = "`mcse'"=="mcse" & "`name'"!="bsims" & "`name'"!="sesims"
+      = local domcse = "mcse"=="mcse" & "cover"!="bsims" & "cover"!="sesims"
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - rename `name'_`i' method`i'`name'
+      = rename cover_1 method1cover
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth method2ciwidth_mcse method1relerror method1relerror_mcse method2relerror method2relerror_mcse method1cover
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename cover_mcse_1 method1cover_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth method2ciwidth_mcse method1relerror method1relerror_mcse method2relerror method2relerror_mcse method1cover method1cover_mcse
+      - {c )-}
+      - {c )-}
+      - rename `name'_`i' method`i'`name'
+      = rename cover_2 method2cover
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth method2ciwidth_mcse method1relerror method1relerror_mcse method2relerror method2relerror_mcse method1cover method1cover_mcse method2cover
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename cover_mcse_2 method2cover_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth method2ciwidth_mcse method1relerror method1relerror_mcse method2relerror method2relerror_mcse method1cover method1cover_mcse method2cover method2cover_mcse
+      - {c )-}
+      - {c )-}
+      - {c )-}
+      - local domcse = "`mcse'"=="mcse" & "`name'"!="bsims" & "`name'"!="sesims"
+      = local domcse = "mcse"=="mcse" & "power"!="bsims" & "power"!="sesims"
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - rename `name'_`i' method`i'`name'
+      = rename power_1 method1power
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth method2ciwidth_mcse method1relerror method1relerror_mcse method2relerror method2relerror_mcse method1cover method1cover_mcse method2cover method2cover_mcse method1power
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename power_mcse_1 method1power_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth method2ciwidth_mcse method1relerror method1relerror_mcse method2relerror method2relerror_mcse method1cover method1cover_mcse method2cover method2cover_mcse method1power method1power_mcse
+      - {c )-}
+      - {c )-}
+      - rename `name'_`i' method`i'`name'
+      = rename power_2 method2power
+      - local keeplist `keeplist' method`i'`name'
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth method2ciwidth_mcse method1relerror method1relerror_mcse method2relerror method2relerror_mcse method1cover method1cover_mcse method2cover method2cover_mcse method1power method1power_mcse method2power
+      - if `domcse' {c -(}
+      = if 1 {c -(}
+      - rename `name'_mcse_`i' method`i'`name'_mcse
+      = rename power_mcse_2 method2power_mcse
+      - local keeplist `keeplist' method`i'`name'_mcse
+      = local keeplist dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth method2ciwidth_mcse method1relerror method1relerror_mcse method2relerror method2relerror_mcse method1cover method1cover_mcse method2cover method2cover_mcse method1power method1power_mcse method2power method2power_mcse
+      - {c )-}
+      - {c )-}
+      - {c )-}
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - local methodlist `methodlist' method`i'
+      = local methodlist  method1
+      - {c )-}
+      - local methodlist `methodlist' method`i'
+      = local methodlist method1 method2
+      - {c )-}
+      - keep `keeplist'
+      = keep dgm estimand method1bsims method2bsims method1sesims method2sesims method1bias method1bias_mcse method2bias method2bias_mcse method1mean method1mean_mcse method2mean method2mean_mcse method1empse method1empse_mcse method2empse method2empse_mcse method1relprec method1relprec_mcse method2relprec method2relprec_mcse method1mse method1mse_mcse method2mse method2mse_mcse method1rmse method1rmse_mcse method2rmse method2rmse_mcse method1modelse method1modelse_mcse method2modelse method2modelse_mcse method1ciwidth method1ciwidth_mcse method2ciwidth method2ciwidth_mcse method1relerror method1relerror_mcse method2relerror method2relerror_mcse method1cover method1cover_mcse method2cover method2cover_mcse method1power method1power_mcse method2power method2power_mcse
+      - qui reshape long `methodlist', i(`byvar') j(`gen'code) string
+      = qui reshape long method1 method2, i(dgm estimand) j(_perfmeascode) string
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - char method`i'[varname] "`label`i''"
+      = char method1[varname] "A"
+      - label var method`i' "`label`i''"
+      = label var method1 "A"
+      - {c )-}
+      - char method`i'[varname] "`label`i''"
+      = char method2[varname] "B"
+      - label var method`i' "`label`i''"
+      = label var method2 "B"
+      - {c )-}
+      - local i 0
+      - qui gen mcse = .
+      - qui gen `gen'num = .
+      = qui gen _perfmeasnum = .
+      - foreach perfmeas in bsims sesims bias mean empse relprec mse rmse modelse ciwidth relerror cover power {c -(}
+      - local ++i
+      - qui replace mcse=0 if `gen'code=="`perfmeas'"
+      = qui replace mcse=0 if _perfmeascode=="bsims"
+      - qui replace mcse=1 if `gen'code=="`perfmeas'_mcse"
+      = qui replace mcse=1 if _perfmeascode=="bsims_mcse"
+      - qui replace `gen'code="`perfmeas'" if `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeascode="bsims" if _perfmeascode=="bsims_mcse"
+      - qui replace `gen'num = `i' if `gen'code=="`perfmeas'" | `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeasnum = 1 if _perfmeascode=="bsims" | _perfmeascode=="bsims_mcse"
+      - if "`perfmeas'"=="bsims" local label "Non-missing point estimates"
+      = if "bsims"=="bsims" local label "Non-missing point estimates"
+      - if "`perfmeas'"=="sesims" local label "Non-missing standard errors"
+      = if "bsims"=="sesims" local label "Non-missing standard errors"
+      - if "`perfmeas'"=="bias" local label "Bias in point estimate"
+      = if "bsims"=="bias" local label "Bias in point estimate"
+      - if "`perfmeas'"=="mean" local label "Mean of point estimate"
+      = if "bsims"=="mean" local label "Mean of point estimate"
+      - if "`perfmeas'"=="empse" local label "Empirical standard error"
+      = if "bsims"=="empse" local label "Empirical standard error"
+      - if "`perfmeas'"=="relprec" local label "% precision gain relative to method `label`refmethod''"
+      = if "bsims"=="relprec" local label "% precision gain relative to method A"
+      - if "`perfmeas'"=="mse" local label "Mean squared error"
+      = if "bsims"=="mse" local label "Mean squared error"
+      - if "`perfmeas'"=="rmse" local label "Root mean squared error"
+      = if "bsims"=="rmse" local label "Root mean squared error"
+      - if "`perfmeas'"=="modelse" {c -(}
+      = if "bsims"=="modelse" {c -(}
+        if "`modelsemethod'" =="mean" local label "Mean model-based standard error"
+        if "`modelsemethod'" =="rmse" local label "RMS model-based standard error"
+        {c )-}
+      - if "`perfmeas'"=="ciwidth" local label "Mean conf. interval width"
+      = if "bsims"=="ciwidth" local label "Mean conf. interval width"
+      - if "`perfmeas'"=="relerror" local label "Relative % error in standard error"
+      = if "bsims"=="relerror" local label "Relative % error in standard error"
+      - if "`perfmeas'"=="cover" local label "% coverage of nominal `level'% conf. interval"
+      = if "bsims"=="cover" local label "% coverage of nominal 95% conf. interval"
+      - if "`perfmeas'"=="power" local label "% power of `alpha'% level test"
+      = if "bsims"=="power" local label "% power of 5% level test"
+      - label def `gen'num `i' "`label'", add
+      = label def _perfmeasnum 1 "Non-missing point estimates", add
+      - label val `gen'num `gen'num
+      = label val _perfmeasnum _perfmeasnum
+      - {c )-}
+      - local ++i
+      - qui replace mcse=0 if `gen'code=="`perfmeas'"
+      = qui replace mcse=0 if _perfmeascode=="sesims"
+      - qui replace mcse=1 if `gen'code=="`perfmeas'_mcse"
+      = qui replace mcse=1 if _perfmeascode=="sesims_mcse"
+      - qui replace `gen'code="`perfmeas'" if `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeascode="sesims" if _perfmeascode=="sesims_mcse"
+      - qui replace `gen'num = `i' if `gen'code=="`perfmeas'" | `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeasnum = 2 if _perfmeascode=="sesims" | _perfmeascode=="sesims_mcse"
+      - if "`perfmeas'"=="bsims" local label "Non-missing point estimates"
+      = if "sesims"=="bsims" local label "Non-missing point estimates"
+      - if "`perfmeas'"=="sesims" local label "Non-missing standard errors"
+      = if "sesims"=="sesims" local label "Non-missing standard errors"
+      - if "`perfmeas'"=="bias" local label "Bias in point estimate"
+      = if "sesims"=="bias" local label "Bias in point estimate"
+      - if "`perfmeas'"=="mean" local label "Mean of point estimate"
+      = if "sesims"=="mean" local label "Mean of point estimate"
+      - if "`perfmeas'"=="empse" local label "Empirical standard error"
+      = if "sesims"=="empse" local label "Empirical standard error"
+      - if "`perfmeas'"=="relprec" local label "% precision gain relative to method `label`refmethod''"
+      = if "sesims"=="relprec" local label "% precision gain relative to method A"
+      - if "`perfmeas'"=="mse" local label "Mean squared error"
+      = if "sesims"=="mse" local label "Mean squared error"
+      - if "`perfmeas'"=="rmse" local label "Root mean squared error"
+      = if "sesims"=="rmse" local label "Root mean squared error"
+      - if "`perfmeas'"=="modelse" {c -(}
+      = if "sesims"=="modelse" {c -(}
+        if "`modelsemethod'" =="mean" local label "Mean model-based standard error"
+        if "`modelsemethod'" =="rmse" local label "RMS model-based standard error"
+        {c )-}
+      - if "`perfmeas'"=="ciwidth" local label "Mean conf. interval width"
+      = if "sesims"=="ciwidth" local label "Mean conf. interval width"
+      - if "`perfmeas'"=="relerror" local label "Relative % error in standard error"
+      = if "sesims"=="relerror" local label "Relative % error in standard error"
+      - if "`perfmeas'"=="cover" local label "% coverage of nominal `level'% conf. interval"
+      = if "sesims"=="cover" local label "% coverage of nominal 95% conf. interval"
+      - if "`perfmeas'"=="power" local label "% power of `alpha'% level test"
+      = if "sesims"=="power" local label "% power of 5% level test"
+      - label def `gen'num `i' "`label'", add
+      = label def _perfmeasnum 2 "Non-missing standard errors", add
+      - label val `gen'num `gen'num
+      = label val _perfmeasnum _perfmeasnum
+      - {c )-}
+      - local ++i
+      - qui replace mcse=0 if `gen'code=="`perfmeas'"
+      = qui replace mcse=0 if _perfmeascode=="bias"
+      - qui replace mcse=1 if `gen'code=="`perfmeas'_mcse"
+      = qui replace mcse=1 if _perfmeascode=="bias_mcse"
+      - qui replace `gen'code="`perfmeas'" if `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeascode="bias" if _perfmeascode=="bias_mcse"
+      - qui replace `gen'num = `i' if `gen'code=="`perfmeas'" | `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeasnum = 3 if _perfmeascode=="bias" | _perfmeascode=="bias_mcse"
+      - if "`perfmeas'"=="bsims" local label "Non-missing point estimates"
+      = if "bias"=="bsims" local label "Non-missing point estimates"
+      - if "`perfmeas'"=="sesims" local label "Non-missing standard errors"
+      = if "bias"=="sesims" local label "Non-missing standard errors"
+      - if "`perfmeas'"=="bias" local label "Bias in point estimate"
+      = if "bias"=="bias" local label "Bias in point estimate"
+      - if "`perfmeas'"=="mean" local label "Mean of point estimate"
+      = if "bias"=="mean" local label "Mean of point estimate"
+      - if "`perfmeas'"=="empse" local label "Empirical standard error"
+      = if "bias"=="empse" local label "Empirical standard error"
+      - if "`perfmeas'"=="relprec" local label "% precision gain relative to method `label`refmethod''"
+      = if "bias"=="relprec" local label "% precision gain relative to method A"
+      - if "`perfmeas'"=="mse" local label "Mean squared error"
+      = if "bias"=="mse" local label "Mean squared error"
+      - if "`perfmeas'"=="rmse" local label "Root mean squared error"
+      = if "bias"=="rmse" local label "Root mean squared error"
+      - if "`perfmeas'"=="modelse" {c -(}
+      = if "bias"=="modelse" {c -(}
+        if "`modelsemethod'" =="mean" local label "Mean model-based standard error"
+        if "`modelsemethod'" =="rmse" local label "RMS model-based standard error"
+        {c )-}
+      - if "`perfmeas'"=="ciwidth" local label "Mean conf. interval width"
+      = if "bias"=="ciwidth" local label "Mean conf. interval width"
+      - if "`perfmeas'"=="relerror" local label "Relative % error in standard error"
+      = if "bias"=="relerror" local label "Relative % error in standard error"
+      - if "`perfmeas'"=="cover" local label "% coverage of nominal `level'% conf. interval"
+      = if "bias"=="cover" local label "% coverage of nominal 95% conf. interval"
+      - if "`perfmeas'"=="power" local label "% power of `alpha'% level test"
+      = if "bias"=="power" local label "% power of 5% level test"
+      - label def `gen'num `i' "`label'", add
+      = label def _perfmeasnum 3 "Bias in point estimate", add
+      - label val `gen'num `gen'num
+      = label val _perfmeasnum _perfmeasnum
+      - {c )-}
+      - local ++i
+      - qui replace mcse=0 if `gen'code=="`perfmeas'"
+      = qui replace mcse=0 if _perfmeascode=="mean"
+      - qui replace mcse=1 if `gen'code=="`perfmeas'_mcse"
+      = qui replace mcse=1 if _perfmeascode=="mean_mcse"
+      - qui replace `gen'code="`perfmeas'" if `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeascode="mean" if _perfmeascode=="mean_mcse"
+      - qui replace `gen'num = `i' if `gen'code=="`perfmeas'" | `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeasnum = 4 if _perfmeascode=="mean" | _perfmeascode=="mean_mcse"
+      - if "`perfmeas'"=="bsims" local label "Non-missing point estimates"
+      = if "mean"=="bsims" local label "Non-missing point estimates"
+      - if "`perfmeas'"=="sesims" local label "Non-missing standard errors"
+      = if "mean"=="sesims" local label "Non-missing standard errors"
+      - if "`perfmeas'"=="bias" local label "Bias in point estimate"
+      = if "mean"=="bias" local label "Bias in point estimate"
+      - if "`perfmeas'"=="mean" local label "Mean of point estimate"
+      = if "mean"=="mean" local label "Mean of point estimate"
+      - if "`perfmeas'"=="empse" local label "Empirical standard error"
+      = if "mean"=="empse" local label "Empirical standard error"
+      - if "`perfmeas'"=="relprec" local label "% precision gain relative to method `label`refmethod''"
+      = if "mean"=="relprec" local label "% precision gain relative to method A"
+      - if "`perfmeas'"=="mse" local label "Mean squared error"
+      = if "mean"=="mse" local label "Mean squared error"
+      - if "`perfmeas'"=="rmse" local label "Root mean squared error"
+      = if "mean"=="rmse" local label "Root mean squared error"
+      - if "`perfmeas'"=="modelse" {c -(}
+      = if "mean"=="modelse" {c -(}
+        if "`modelsemethod'" =="mean" local label "Mean model-based standard error"
+        if "`modelsemethod'" =="rmse" local label "RMS model-based standard error"
+        {c )-}
+      - if "`perfmeas'"=="ciwidth" local label "Mean conf. interval width"
+      = if "mean"=="ciwidth" local label "Mean conf. interval width"
+      - if "`perfmeas'"=="relerror" local label "Relative % error in standard error"
+      = if "mean"=="relerror" local label "Relative % error in standard error"
+      - if "`perfmeas'"=="cover" local label "% coverage of nominal `level'% conf. interval"
+      = if "mean"=="cover" local label "% coverage of nominal 95% conf. interval"
+      - if "`perfmeas'"=="power" local label "% power of `alpha'% level test"
+      = if "mean"=="power" local label "% power of 5% level test"
+      - label def `gen'num `i' "`label'", add
+      = label def _perfmeasnum 4 "Mean of point estimate", add
+      - label val `gen'num `gen'num
+      = label val _perfmeasnum _perfmeasnum
+      - {c )-}
+      - local ++i
+      - qui replace mcse=0 if `gen'code=="`perfmeas'"
+      = qui replace mcse=0 if _perfmeascode=="empse"
+      - qui replace mcse=1 if `gen'code=="`perfmeas'_mcse"
+      = qui replace mcse=1 if _perfmeascode=="empse_mcse"
+      - qui replace `gen'code="`perfmeas'" if `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeascode="empse" if _perfmeascode=="empse_mcse"
+      - qui replace `gen'num = `i' if `gen'code=="`perfmeas'" | `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeasnum = 5 if _perfmeascode=="empse" | _perfmeascode=="empse_mcse"
+      - if "`perfmeas'"=="bsims" local label "Non-missing point estimates"
+      = if "empse"=="bsims" local label "Non-missing point estimates"
+      - if "`perfmeas'"=="sesims" local label "Non-missing standard errors"
+      = if "empse"=="sesims" local label "Non-missing standard errors"
+      - if "`perfmeas'"=="bias" local label "Bias in point estimate"
+      = if "empse"=="bias" local label "Bias in point estimate"
+      - if "`perfmeas'"=="mean" local label "Mean of point estimate"
+      = if "empse"=="mean" local label "Mean of point estimate"
+      - if "`perfmeas'"=="empse" local label "Empirical standard error"
+      = if "empse"=="empse" local label "Empirical standard error"
+      - if "`perfmeas'"=="relprec" local label "% precision gain relative to method `label`refmethod''"
+      = if "empse"=="relprec" local label "% precision gain relative to method A"
+      - if "`perfmeas'"=="mse" local label "Mean squared error"
+      = if "empse"=="mse" local label "Mean squared error"
+      - if "`perfmeas'"=="rmse" local label "Root mean squared error"
+      = if "empse"=="rmse" local label "Root mean squared error"
+      - if "`perfmeas'"=="modelse" {c -(}
+      = if "empse"=="modelse" {c -(}
+        if "`modelsemethod'" =="mean" local label "Mean model-based standard error"
+        if "`modelsemethod'" =="rmse" local label "RMS model-based standard error"
+        {c )-}
+      - if "`perfmeas'"=="ciwidth" local label "Mean conf. interval width"
+      = if "empse"=="ciwidth" local label "Mean conf. interval width"
+      - if "`perfmeas'"=="relerror" local label "Relative % error in standard error"
+      = if "empse"=="relerror" local label "Relative % error in standard error"
+      - if "`perfmeas'"=="cover" local label "% coverage of nominal `level'% conf. interval"
+      = if "empse"=="cover" local label "% coverage of nominal 95% conf. interval"
+      - if "`perfmeas'"=="power" local label "% power of `alpha'% level test"
+      = if "empse"=="power" local label "% power of 5% level test"
+      - label def `gen'num `i' "`label'", add
+      = label def _perfmeasnum 5 "Empirical standard error", add
+      - label val `gen'num `gen'num
+      = label val _perfmeasnum _perfmeasnum
+      - {c )-}
+      - local ++i
+      - qui replace mcse=0 if `gen'code=="`perfmeas'"
+      = qui replace mcse=0 if _perfmeascode=="relprec"
+      - qui replace mcse=1 if `gen'code=="`perfmeas'_mcse"
+      = qui replace mcse=1 if _perfmeascode=="relprec_mcse"
+      - qui replace `gen'code="`perfmeas'" if `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeascode="relprec" if _perfmeascode=="relprec_mcse"
+      - qui replace `gen'num = `i' if `gen'code=="`perfmeas'" | `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeasnum = 6 if _perfmeascode=="relprec" | _perfmeascode=="relprec_mcse"
+      - if "`perfmeas'"=="bsims" local label "Non-missing point estimates"
+      = if "relprec"=="bsims" local label "Non-missing point estimates"
+      - if "`perfmeas'"=="sesims" local label "Non-missing standard errors"
+      = if "relprec"=="sesims" local label "Non-missing standard errors"
+      - if "`perfmeas'"=="bias" local label "Bias in point estimate"
+      = if "relprec"=="bias" local label "Bias in point estimate"
+      - if "`perfmeas'"=="mean" local label "Mean of point estimate"
+      = if "relprec"=="mean" local label "Mean of point estimate"
+      - if "`perfmeas'"=="empse" local label "Empirical standard error"
+      = if "relprec"=="empse" local label "Empirical standard error"
+      - if "`perfmeas'"=="relprec" local label "% precision gain relative to method `label`refmethod''"
+      = if "relprec"=="relprec" local label "% precision gain relative to method A"
+      - if "`perfmeas'"=="mse" local label "Mean squared error"
+      = if "relprec"=="mse" local label "Mean squared error"
+      - if "`perfmeas'"=="rmse" local label "Root mean squared error"
+      = if "relprec"=="rmse" local label "Root mean squared error"
+      - if "`perfmeas'"=="modelse" {c -(}
+      = if "relprec"=="modelse" {c -(}
+        if "`modelsemethod'" =="mean" local label "Mean model-based standard error"
+        if "`modelsemethod'" =="rmse" local label "RMS model-based standard error"
+        {c )-}
+      - if "`perfmeas'"=="ciwidth" local label "Mean conf. interval width"
+      = if "relprec"=="ciwidth" local label "Mean conf. interval width"
+      - if "`perfmeas'"=="relerror" local label "Relative % error in standard error"
+      = if "relprec"=="relerror" local label "Relative % error in standard error"
+      - if "`perfmeas'"=="cover" local label "% coverage of nominal `level'% conf. interval"
+      = if "relprec"=="cover" local label "% coverage of nominal 95% conf. interval"
+      - if "`perfmeas'"=="power" local label "% power of `alpha'% level test"
+      = if "relprec"=="power" local label "% power of 5% level test"
+      - label def `gen'num `i' "`label'", add
+      = label def _perfmeasnum 6 "% precision gain relative to method A", add
+      - label val `gen'num `gen'num
+      = label val _perfmeasnum _perfmeasnum
+      - {c )-}
+      - local ++i
+      - qui replace mcse=0 if `gen'code=="`perfmeas'"
+      = qui replace mcse=0 if _perfmeascode=="mse"
+      - qui replace mcse=1 if `gen'code=="`perfmeas'_mcse"
+      = qui replace mcse=1 if _perfmeascode=="mse_mcse"
+      - qui replace `gen'code="`perfmeas'" if `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeascode="mse" if _perfmeascode=="mse_mcse"
+      - qui replace `gen'num = `i' if `gen'code=="`perfmeas'" | `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeasnum = 7 if _perfmeascode=="mse" | _perfmeascode=="mse_mcse"
+      - if "`perfmeas'"=="bsims" local label "Non-missing point estimates"
+      = if "mse"=="bsims" local label "Non-missing point estimates"
+      - if "`perfmeas'"=="sesims" local label "Non-missing standard errors"
+      = if "mse"=="sesims" local label "Non-missing standard errors"
+      - if "`perfmeas'"=="bias" local label "Bias in point estimate"
+      = if "mse"=="bias" local label "Bias in point estimate"
+      - if "`perfmeas'"=="mean" local label "Mean of point estimate"
+      = if "mse"=="mean" local label "Mean of point estimate"
+      - if "`perfmeas'"=="empse" local label "Empirical standard error"
+      = if "mse"=="empse" local label "Empirical standard error"
+      - if "`perfmeas'"=="relprec" local label "% precision gain relative to method `label`refmethod''"
+      = if "mse"=="relprec" local label "% precision gain relative to method A"
+      - if "`perfmeas'"=="mse" local label "Mean squared error"
+      = if "mse"=="mse" local label "Mean squared error"
+      - if "`perfmeas'"=="rmse" local label "Root mean squared error"
+      = if "mse"=="rmse" local label "Root mean squared error"
+      - if "`perfmeas'"=="modelse" {c -(}
+      = if "mse"=="modelse" {c -(}
+        if "`modelsemethod'" =="mean" local label "Mean model-based standard error"
+        if "`modelsemethod'" =="rmse" local label "RMS model-based standard error"
+        {c )-}
+      - if "`perfmeas'"=="ciwidth" local label "Mean conf. interval width"
+      = if "mse"=="ciwidth" local label "Mean conf. interval width"
+      - if "`perfmeas'"=="relerror" local label "Relative % error in standard error"
+      = if "mse"=="relerror" local label "Relative % error in standard error"
+      - if "`perfmeas'"=="cover" local label "% coverage of nominal `level'% conf. interval"
+      = if "mse"=="cover" local label "% coverage of nominal 95% conf. interval"
+      - if "`perfmeas'"=="power" local label "% power of `alpha'% level test"
+      = if "mse"=="power" local label "% power of 5% level test"
+      - label def `gen'num `i' "`label'", add
+      = label def _perfmeasnum 7 "Mean squared error", add
+      - label val `gen'num `gen'num
+      = label val _perfmeasnum _perfmeasnum
+      - {c )-}
+      - local ++i
+      - qui replace mcse=0 if `gen'code=="`perfmeas'"
+      = qui replace mcse=0 if _perfmeascode=="rmse"
+      - qui replace mcse=1 if `gen'code=="`perfmeas'_mcse"
+      = qui replace mcse=1 if _perfmeascode=="rmse_mcse"
+      - qui replace `gen'code="`perfmeas'" if `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeascode="rmse" if _perfmeascode=="rmse_mcse"
+      - qui replace `gen'num = `i' if `gen'code=="`perfmeas'" | `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeasnum = 8 if _perfmeascode=="rmse" | _perfmeascode=="rmse_mcse"
+      - if "`perfmeas'"=="bsims" local label "Non-missing point estimates"
+      = if "rmse"=="bsims" local label "Non-missing point estimates"
+      - if "`perfmeas'"=="sesims" local label "Non-missing standard errors"
+      = if "rmse"=="sesims" local label "Non-missing standard errors"
+      - if "`perfmeas'"=="bias" local label "Bias in point estimate"
+      = if "rmse"=="bias" local label "Bias in point estimate"
+      - if "`perfmeas'"=="mean" local label "Mean of point estimate"
+      = if "rmse"=="mean" local label "Mean of point estimate"
+      - if "`perfmeas'"=="empse" local label "Empirical standard error"
+      = if "rmse"=="empse" local label "Empirical standard error"
+      - if "`perfmeas'"=="relprec" local label "% precision gain relative to method `label`refmethod''"
+      = if "rmse"=="relprec" local label "% precision gain relative to method A"
+      - if "`perfmeas'"=="mse" local label "Mean squared error"
+      = if "rmse"=="mse" local label "Mean squared error"
+      - if "`perfmeas'"=="rmse" local label "Root mean squared error"
+      = if "rmse"=="rmse" local label "Root mean squared error"
+      - if "`perfmeas'"=="modelse" {c -(}
+      = if "rmse"=="modelse" {c -(}
+        if "`modelsemethod'" =="mean" local label "Mean model-based standard error"
+        if "`modelsemethod'" =="rmse" local label "RMS model-based standard error"
+        {c )-}
+      - if "`perfmeas'"=="ciwidth" local label "Mean conf. interval width"
+      = if "rmse"=="ciwidth" local label "Mean conf. interval width"
+      - if "`perfmeas'"=="relerror" local label "Relative % error in standard error"
+      = if "rmse"=="relerror" local label "Relative % error in standard error"
+      - if "`perfmeas'"=="cover" local label "% coverage of nominal `level'% conf. interval"
+      = if "rmse"=="cover" local label "% coverage of nominal 95% conf. interval"
+      - if "`perfmeas'"=="power" local label "% power of `alpha'% level test"
+      = if "rmse"=="power" local label "% power of 5% level test"
+      - label def `gen'num `i' "`label'", add
+      = label def _perfmeasnum 8 "Root mean squared error", add
+      - label val `gen'num `gen'num
+      = label val _perfmeasnum _perfmeasnum
+      - {c )-}
+      - local ++i
+      - qui replace mcse=0 if `gen'code=="`perfmeas'"
+      = qui replace mcse=0 if _perfmeascode=="modelse"
+      - qui replace mcse=1 if `gen'code=="`perfmeas'_mcse"
+      = qui replace mcse=1 if _perfmeascode=="modelse_mcse"
+      - qui replace `gen'code="`perfmeas'" if `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeascode="modelse" if _perfmeascode=="modelse_mcse"
+      - qui replace `gen'num = `i' if `gen'code=="`perfmeas'" | `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeasnum = 9 if _perfmeascode=="modelse" | _perfmeascode=="modelse_mcse"
+      - if "`perfmeas'"=="bsims" local label "Non-missing point estimates"
+      = if "modelse"=="bsims" local label "Non-missing point estimates"
+      - if "`perfmeas'"=="sesims" local label "Non-missing standard errors"
+      = if "modelse"=="sesims" local label "Non-missing standard errors"
+      - if "`perfmeas'"=="bias" local label "Bias in point estimate"
+      = if "modelse"=="bias" local label "Bias in point estimate"
+      - if "`perfmeas'"=="mean" local label "Mean of point estimate"
+      = if "modelse"=="mean" local label "Mean of point estimate"
+      - if "`perfmeas'"=="empse" local label "Empirical standard error"
+      = if "modelse"=="empse" local label "Empirical standard error"
+      - if "`perfmeas'"=="relprec" local label "% precision gain relative to method `label`refmethod''"
+      = if "modelse"=="relprec" local label "% precision gain relative to method A"
+      - if "`perfmeas'"=="mse" local label "Mean squared error"
+      = if "modelse"=="mse" local label "Mean squared error"
+      - if "`perfmeas'"=="rmse" local label "Root mean squared error"
+      = if "modelse"=="rmse" local label "Root mean squared error"
+      - if "`perfmeas'"=="modelse" {c -(}
+      = if "modelse"=="modelse" {c -(}
+      - if "`modelsemethod'" =="mean" local label "Mean model-based standard error"
+      = if "rmse" =="mean" local label "Mean model-based standard error"
+      - if "`modelsemethod'" =="rmse" local label "RMS model-based standard error"
+      = if "rmse" =="rmse" local label "RMS model-based standard error"
+      - {c )-}
+      - if "`perfmeas'"=="ciwidth" local label "Mean conf. interval width"
+      = if "modelse"=="ciwidth" local label "Mean conf. interval width"
+      - if "`perfmeas'"=="relerror" local label "Relative % error in standard error"
+      = if "modelse"=="relerror" local label "Relative % error in standard error"
+      - if "`perfmeas'"=="cover" local label "% coverage of nominal `level'% conf. interval"
+      = if "modelse"=="cover" local label "% coverage of nominal 95% conf. interval"
+      - if "`perfmeas'"=="power" local label "% power of `alpha'% level test"
+      = if "modelse"=="power" local label "% power of 5% level test"
+      - label def `gen'num `i' "`label'", add
+      = label def _perfmeasnum 9 "RMS model-based standard error", add
+      - label val `gen'num `gen'num
+      = label val _perfmeasnum _perfmeasnum
+      - {c )-}
+      - local ++i
+      - qui replace mcse=0 if `gen'code=="`perfmeas'"
+      = qui replace mcse=0 if _perfmeascode=="ciwidth"
+      - qui replace mcse=1 if `gen'code=="`perfmeas'_mcse"
+      = qui replace mcse=1 if _perfmeascode=="ciwidth_mcse"
+      - qui replace `gen'code="`perfmeas'" if `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeascode="ciwidth" if _perfmeascode=="ciwidth_mcse"
+      - qui replace `gen'num = `i' if `gen'code=="`perfmeas'" | `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeasnum = 10 if _perfmeascode=="ciwidth" | _perfmeascode=="ciwidth_mcse"
+      - if "`perfmeas'"=="bsims" local label "Non-missing point estimates"
+      = if "ciwidth"=="bsims" local label "Non-missing point estimates"
+      - if "`perfmeas'"=="sesims" local label "Non-missing standard errors"
+      = if "ciwidth"=="sesims" local label "Non-missing standard errors"
+      - if "`perfmeas'"=="bias" local label "Bias in point estimate"
+      = if "ciwidth"=="bias" local label "Bias in point estimate"
+      - if "`perfmeas'"=="mean" local label "Mean of point estimate"
+      = if "ciwidth"=="mean" local label "Mean of point estimate"
+      - if "`perfmeas'"=="empse" local label "Empirical standard error"
+      = if "ciwidth"=="empse" local label "Empirical standard error"
+      - if "`perfmeas'"=="relprec" local label "% precision gain relative to method `label`refmethod''"
+      = if "ciwidth"=="relprec" local label "% precision gain relative to method A"
+      - if "`perfmeas'"=="mse" local label "Mean squared error"
+      = if "ciwidth"=="mse" local label "Mean squared error"
+      - if "`perfmeas'"=="rmse" local label "Root mean squared error"
+      = if "ciwidth"=="rmse" local label "Root mean squared error"
+      - if "`perfmeas'"=="modelse" {c -(}
+      = if "ciwidth"=="modelse" {c -(}
+        if "`modelsemethod'" =="mean" local label "Mean model-based standard error"
+        if "`modelsemethod'" =="rmse" local label "RMS model-based standard error"
+        {c )-}
+      - if "`perfmeas'"=="ciwidth" local label "Mean conf. interval width"
+      = if "ciwidth"=="ciwidth" local label "Mean conf. interval width"
+      - if "`perfmeas'"=="relerror" local label "Relative % error in standard error"
+      = if "ciwidth"=="relerror" local label "Relative % error in standard error"
+      - if "`perfmeas'"=="cover" local label "% coverage of nominal `level'% conf. interval"
+      = if "ciwidth"=="cover" local label "% coverage of nominal 95% conf. interval"
+      - if "`perfmeas'"=="power" local label "% power of `alpha'% level test"
+      = if "ciwidth"=="power" local label "% power of 5% level test"
+      - label def `gen'num `i' "`label'", add
+      = label def _perfmeasnum 10 "Mean conf. interval width", add
+      - label val `gen'num `gen'num
+      = label val _perfmeasnum _perfmeasnum
+      - {c )-}
+      - local ++i
+      - qui replace mcse=0 if `gen'code=="`perfmeas'"
+      = qui replace mcse=0 if _perfmeascode=="relerror"
+      - qui replace mcse=1 if `gen'code=="`perfmeas'_mcse"
+      = qui replace mcse=1 if _perfmeascode=="relerror_mcse"
+      - qui replace `gen'code="`perfmeas'" if `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeascode="relerror" if _perfmeascode=="relerror_mcse"
+      - qui replace `gen'num = `i' if `gen'code=="`perfmeas'" | `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeasnum = 11 if _perfmeascode=="relerror" | _perfmeascode=="relerror_mcse"
+      - if "`perfmeas'"=="bsims" local label "Non-missing point estimates"
+      = if "relerror"=="bsims" local label "Non-missing point estimates"
+      - if "`perfmeas'"=="sesims" local label "Non-missing standard errors"
+      = if "relerror"=="sesims" local label "Non-missing standard errors"
+      - if "`perfmeas'"=="bias" local label "Bias in point estimate"
+      = if "relerror"=="bias" local label "Bias in point estimate"
+      - if "`perfmeas'"=="mean" local label "Mean of point estimate"
+      = if "relerror"=="mean" local label "Mean of point estimate"
+      - if "`perfmeas'"=="empse" local label "Empirical standard error"
+      = if "relerror"=="empse" local label "Empirical standard error"
+      - if "`perfmeas'"=="relprec" local label "% precision gain relative to method `label`refmethod''"
+      = if "relerror"=="relprec" local label "% precision gain relative to method A"
+      - if "`perfmeas'"=="mse" local label "Mean squared error"
+      = if "relerror"=="mse" local label "Mean squared error"
+      - if "`perfmeas'"=="rmse" local label "Root mean squared error"
+      = if "relerror"=="rmse" local label "Root mean squared error"
+      - if "`perfmeas'"=="modelse" {c -(}
+      = if "relerror"=="modelse" {c -(}
+        if "`modelsemethod'" =="mean" local label "Mean model-based standard error"
+        if "`modelsemethod'" =="rmse" local label "RMS model-based standard error"
+        {c )-}
+      - if "`perfmeas'"=="ciwidth" local label "Mean conf. interval width"
+      = if "relerror"=="ciwidth" local label "Mean conf. interval width"
+      - if "`perfmeas'"=="relerror" local label "Relative % error in standard error"
+      = if "relerror"=="relerror" local label "Relative % error in standard error"
+      - if "`perfmeas'"=="cover" local label "% coverage of nominal `level'% conf. interval"
+      = if "relerror"=="cover" local label "% coverage of nominal 95% conf. interval"
+      - if "`perfmeas'"=="power" local label "% power of `alpha'% level test"
+      = if "relerror"=="power" local label "% power of 5% level test"
+      - label def `gen'num `i' "`label'", add
+      = label def _perfmeasnum 11 "Relative % error in standard error", add
+      - label val `gen'num `gen'num
+      = label val _perfmeasnum _perfmeasnum
+      - {c )-}
+      - local ++i
+      - qui replace mcse=0 if `gen'code=="`perfmeas'"
+      = qui replace mcse=0 if _perfmeascode=="cover"
+      - qui replace mcse=1 if `gen'code=="`perfmeas'_mcse"
+      = qui replace mcse=1 if _perfmeascode=="cover_mcse"
+      - qui replace `gen'code="`perfmeas'" if `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeascode="cover" if _perfmeascode=="cover_mcse"
+      - qui replace `gen'num = `i' if `gen'code=="`perfmeas'" | `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeasnum = 12 if _perfmeascode=="cover" | _perfmeascode=="cover_mcse"
+      - if "`perfmeas'"=="bsims" local label "Non-missing point estimates"
+      = if "cover"=="bsims" local label "Non-missing point estimates"
+      - if "`perfmeas'"=="sesims" local label "Non-missing standard errors"
+      = if "cover"=="sesims" local label "Non-missing standard errors"
+      - if "`perfmeas'"=="bias" local label "Bias in point estimate"
+      = if "cover"=="bias" local label "Bias in point estimate"
+      - if "`perfmeas'"=="mean" local label "Mean of point estimate"
+      = if "cover"=="mean" local label "Mean of point estimate"
+      - if "`perfmeas'"=="empse" local label "Empirical standard error"
+      = if "cover"=="empse" local label "Empirical standard error"
+      - if "`perfmeas'"=="relprec" local label "% precision gain relative to method `label`refmethod''"
+      = if "cover"=="relprec" local label "% precision gain relative to method A"
+      - if "`perfmeas'"=="mse" local label "Mean squared error"
+      = if "cover"=="mse" local label "Mean squared error"
+      - if "`perfmeas'"=="rmse" local label "Root mean squared error"
+      = if "cover"=="rmse" local label "Root mean squared error"
+      - if "`perfmeas'"=="modelse" {c -(}
+      = if "cover"=="modelse" {c -(}
+        if "`modelsemethod'" =="mean" local label "Mean model-based standard error"
+        if "`modelsemethod'" =="rmse" local label "RMS model-based standard error"
+        {c )-}
+      - if "`perfmeas'"=="ciwidth" local label "Mean conf. interval width"
+      = if "cover"=="ciwidth" local label "Mean conf. interval width"
+      - if "`perfmeas'"=="relerror" local label "Relative % error in standard error"
+      = if "cover"=="relerror" local label "Relative % error in standard error"
+      - if "`perfmeas'"=="cover" local label "% coverage of nominal `level'% conf. interval"
+      = if "cover"=="cover" local label "% coverage of nominal 95% conf. interval"
+      - if "`perfmeas'"=="power" local label "% power of `alpha'% level test"
+      = if "cover"=="power" local label "% power of 5% level test"
+      - label def `gen'num `i' "`label'", add
+      = label def _perfmeasnum 12 "% coverage of nominal 95% conf. interval", add
+      - label val `gen'num `gen'num
+      = label val _perfmeasnum _perfmeasnum
+      - {c )-}
+      - local ++i
+      - qui replace mcse=0 if `gen'code=="`perfmeas'"
+      = qui replace mcse=0 if _perfmeascode=="power"
+      - qui replace mcse=1 if `gen'code=="`perfmeas'_mcse"
+      = qui replace mcse=1 if _perfmeascode=="power_mcse"
+      - qui replace `gen'code="`perfmeas'" if `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeascode="power" if _perfmeascode=="power_mcse"
+      - qui replace `gen'num = `i' if `gen'code=="`perfmeas'" | `gen'code=="`perfmeas'_mcse"
+      = qui replace _perfmeasnum = 13 if _perfmeascode=="power" | _perfmeascode=="power_mcse"
+      - if "`perfmeas'"=="bsims" local label "Non-missing point estimates"
+      = if "power"=="bsims" local label "Non-missing point estimates"
+      - if "`perfmeas'"=="sesims" local label "Non-missing standard errors"
+      = if "power"=="sesims" local label "Non-missing standard errors"
+      - if "`perfmeas'"=="bias" local label "Bias in point estimate"
+      = if "power"=="bias" local label "Bias in point estimate"
+      - if "`perfmeas'"=="mean" local label "Mean of point estimate"
+      = if "power"=="mean" local label "Mean of point estimate"
+      - if "`perfmeas'"=="empse" local label "Empirical standard error"
+      = if "power"=="empse" local label "Empirical standard error"
+      - if "`perfmeas'"=="relprec" local label "% precision gain relative to method `label`refmethod''"
+      = if "power"=="relprec" local label "% precision gain relative to method A"
+      - if "`perfmeas'"=="mse" local label "Mean squared error"
+      = if "power"=="mse" local label "Mean squared error"
+      - if "`perfmeas'"=="rmse" local label "Root mean squared error"
+      = if "power"=="rmse" local label "Root mean squared error"
+      - if "`perfmeas'"=="modelse" {c -(}
+      = if "power"=="modelse" {c -(}
+        if "`modelsemethod'" =="mean" local label "Mean model-based standard error"
+        if "`modelsemethod'" =="rmse" local label "RMS model-based standard error"
+        {c )-}
+      - if "`perfmeas'"=="ciwidth" local label "Mean conf. interval width"
+      = if "power"=="ciwidth" local label "Mean conf. interval width"
+      - if "`perfmeas'"=="relerror" local label "Relative % error in standard error"
+      = if "power"=="relerror" local label "Relative % error in standard error"
+      - if "`perfmeas'"=="cover" local label "% coverage of nominal `level'% conf. interval"
+      = if "power"=="cover" local label "% coverage of nominal 95% conf. interval"
+      - if "`perfmeas'"=="power" local label "% power of `alpha'% level test"
+      = if "power"=="power" local label "% power of 5% level test"
+      - label def `gen'num `i' "`label'", add
+      = label def _perfmeasnum 13 "% power of 5% level test", add
+      - label val `gen'num `gen'num
+      = label val _perfmeasnum _perfmeasnum
+      - {c )-}
+      - assert !mi(mcse)
+      - foreach var in `methodlist' {c -(}
+      = foreach var in method1 method2 {c -(}
+      - rename `var' `var'_
+      = rename method1 method1_
+      - local methodlist2 `methodlist2' `var'_
+      = local methodlist2  method1_
+      - {c )-}
+      - rename `var' `var'_
+      = rename method2 method2_
+      - local methodlist2 `methodlist2' `var'_
+      = local methodlist2 method1_ method2_
+      - {c )-}
+      - qui reshape wide `methodlist2', i(`byvar' `gen'num) j(mcse)
+      = qui reshape wide method1_ method2_, i(dgm estimand _perfmeasnum) j(mcse)
+      - local ids `gen'num `by'
+      = local ids _perfmeasnum dgm estimand
+      - local betas
+      - forvalues i=1/`m' {c -(}
+      = forvalues i=1/2 {c -(}
+      - rename method`i'_0 `beta`i''
+      = rename method1_0 est1
+      - label var `beta`i'' "`label`i''"
+      = label var est1 "A"
+      - char `beta`i''[varname] "`label`i''"
+      = char est1[varname] "A"
+      - local betasnomcse `betasnomcse' `beta`i''
+      = local betasnomcse  est1
+      - local betas `betas' `beta`i''
+      = local betas  est1
+      - if "`mcse'"=="mcse" {c -(}
+      = if "mcse"=="mcse" {c -(}
+      - rename method`i'_1 `beta`i''_mcse
+      = rename method1_1 est1_mcse
+      - local betas `betas' `beta`i''_mcse
+      = local betas est1 est1_mcse
+      - label var `beta`i''_mcse "`label`i'' (MCse)"
+      = label var est1_mcse "A (MCse)"
+      - char `beta`i''_mcse[varname] "(MCse)"
+      = char est1_mcse[varname] "(MCse)"
+      - {c )-}
+      - {c )-}
+      - rename method`i'_0 `beta`i''
+      = rename method2_0 est2
+      - label var `beta`i'' "`label`i''"
+      = label var est2 "B"
+      - char `beta`i''[varname] "`label`i''"
+      = char est2[varname] "B"
+      - local betasnomcse `betasnomcse' `beta`i''
+      = local betasnomcse est1 est2
+      - local betas `betas' `beta`i''
+      = local betas est1 est1_mcse est2
+      - if "`mcse'"=="mcse" {c -(}
+      = if "mcse"=="mcse" {c -(}
+      - rename method`i'_1 `beta`i''_mcse
+      = rename method2_1 est2_mcse
+      - local betas `betas' `beta`i''_mcse
+      = local betas est1 est1_mcse est2 est2_mcse
+      - label var `beta`i''_mcse "`label`i'' (MCse)"
+      = label var est2_mcse "B (MCse)"
+      - char `beta`i''_mcse[varname] "(MCse)"
+      = char est2_mcse[varname] "(MCse)"
+      - {c )-}
+      - {c )-}
+      - char `gen'num[varname] "Performance measure"
+      = char _perfmeasnum[varname] "Performance measure"
+      - label var `gen'num "Performance measure"
+      = label var _perfmeasnum "Performance measure"
+      - label var `gen'code "Performance measure"
+      = label var _perfmeascode "Performance measure"
+      - order `ids' `betas'
+      = order _perfmeasnum dgm estimand est1 est1_mcse est2 est2_mcse
+      - sort `gen'num `by'
+      = sort _perfmeasnum dgm estimand
+      - tokenize `format'
+      = tokenize 
+      - local bfmt "`1'"
+      = local bfmt ""
+      - local pctfmt "`2'"
+      = local pctfmt ""
+      - local nfmt "`3'"
+      = local nfmt ""
+      - if "`bfmt'"=="" {c -(}
+      = if ""=="" {c -(}
+      - if mi("`methodvar'") local bfmt: format `beta1'
+      = if mi("method") local bfmt: format est1
+      - else local bfmt `bfmt0'
+      = else local bfmt %9.0g
+      - {c )-}
+      - if "`pctfmt'"=="" | "`pctfmt'"=="=" | "`pctfmt'"=="." local pctfmt `bfmt'
+      = if ""=="" | ""=="=" | ""=="." local pctfmt %9.0g
+      - if "`nfmt'"=="" local nfmt %7.0f
+      = if ""=="" local nfmt %7.0f
+      - if mi("`transpose'") {c -(}
+      = if mi("") {c -(}
+      - if "`list'"!="nolist" {c -(}
+      = if ""!="nolist" {c -(}
+      - if "`listsep'"=="" {c -(}
+      = if ""=="" {c -(}
+      - qui format `betas' `bfmt'
+      = qui format est1 est1_mcse est2 est2_mcse %9.0g
+      - list `ids' `betas', noo subvarname sepby(`gen'num `sepby') `abbreviate'
+      = list _perfmeasnum dgm estimand est1 est1_mcse est2 est2_mcse, noo subvarname sepby(_perfmeasnum ) 
+      - {c )-}
+      - else {c -(}
+        foreach perfmeas in `output' {c -(}
+        di as text _new "``perfmeas'name'"
+        local thisbetas = cond(inlist("`perfmeas'","bsims","sesims"), "betasnomcse", "betas")
+        if inlist("`perfmeas'","bsims","sesims") local format `nfmt'
+        else if inlist("`perfmeas'","bias","empse","modelse","mse") local format `bfmt'
+        else local format `pctfmt'
+        qui format `betas' `format'
+        list `by' ``thisbetas'' if `gen'code=="`perfmeas'", noo subvarname sepby(`gen'num `sepby') `abbreviate'
+        {c )-}
+        {c )-}
+      - {c )-}
+      - qui format `betas' `bfmt'
+      = qui format est1 est1_mcse est2 est2_mcse %9.0g
+      - char `gen'num[varname]
+      = char _perfmeasnum[varname]
+      - {c )-}
+      - else {c -(}
+        di "Transposing results ..."
+        drop `gen'num
+        if "`origformat'"=="long" {c -(}
+        {c )-}
+        else if "`origformat'"=="wide" {c -(}
+        foreach var of varlist `betas' {c -(}
+        rename `var' b_`var'
+        {c )-}
+        local betastub b_
+        {c )-}
+        else exit 499
+        qui reshape long `betastub', i(`gen'code `by') j(method) string
+        qui reshape wide `betastub', i(`by' method) j(`gen'code) string
+        if "`mcse'"=="mcse" {c -(}
+        gen type = cond(substr(method,length(method)-4,5)=="_mcse","mcse","est")
+        qui replace method = substr(method,1,length(method)-5) if type=="mcse"
+        local type type
+        local sep2 method
+        {c )-}
+        sort `by' method `type'
+        foreach varname of varlist `betastub'* {c -(}
+        local varname2 = substr("`varname'", 1+length("`betastub'"), .)
+        rename `varname' `varname2'
+        label var `varname2'
+        {c )-}
+        cap format `bias' `empse' `mse' `modelse' `bfmt'
+        cap format `relprec' `relerror' `cover' `power' `pctfmt'
+        cap format `bsims' `sesims' `sesims' `nfmt'
+        if "`list'"!="nolist" {c -(}
+        l `by' method `type' `bsims' `sesims' `bias' `empse' `relprec' `mse' `modelse' `relerror' `cover' `power', sepby(`by' `sep2') noo
+        {c )-}
+        {c )-}
+      - if "`saving'"!="" {c -(}
+      = if ""!="" {c -(}
+        if "`by'"=="" drop `byvar'
+        save `saving'
+        {c )-}
+      - if "`clear'"=="clear" {c -(}
+      = if "clear"=="clear" {c -(}
+      - restore, not
+      - di as text "Results are now in memory."
+      - {c )-}
+      {hline 79} end simsum {hline}
+    - foreach v in `valmethod' {c -(}
+    = foreach v in A B {c -(}
+    - if !mi("`se'") {c -(}
+    = if !mi("se") {c -(}
+    - qui rename `estimate'`v'_mcse `se'`v'
+    = qui rename estA_mcse seA
+      =struct rename_peldf {c -(}
+      =        string scalar        element
+      =        real scalar  elementtype
+      =        real scalar            arg
+      =        real scalar            match
+      =struct rename_patterndf {c -(}
+      =        real scalar  patterntype
+      =        string scalar            original
+      =        struct rename_peldf rowvector          ellist
+      =        real rowvector            n_of
+      =        string rowvector            varnames
+      =        string matrix            pieces
+      =struct rename_optiondf {c -(}
+      =        real scalar       isrecase
+      =        real scalar       isrecase_upper, isrecase_lower, isrecase_proper
+      =        real scalar       isdryrun
+      =        real scalar       isrenumber, isaddnumber
+      =        real scalar            from
+      =        real scalar       issort
+      =        real scalar       isdebug
+      =        real scalar       istest
+      =        real scalar       isr
+      =void rename_optiondf_init(struct rename_optiondf scalar option)
+      =        option.isrecase = option.isdryrun = 0
+      =                                option.isrecase_proper = 0
+      =        option.isrenumber = option.isaddnumber = 0
+      =        option.issort     = 0
+      =        option.isdebug    = 0
+      =        option.istest     = 0
+      =        option.isr        = 0
+      =struct rename_renamedf {c -(}
+      =        struct rename_patterndf rowvector      oldplist
+      =        struct rename_patterndf rowvector      newplist
+      =        struct rename_optiondf scalar       option
+      =void rename_cmd(string scalar thirdarg)
+      =        string scalar    input
+      =real scalar can_do_fast(string scalar input)
+      =        string rowvector    token
+      =        real scalar    rc
+      =        if (length(token)!=2) return(0)
+      =        if (!st_isname(token[1])) return(0)
+      =        if (!st_isname(token[2])) return(0)
+      =        if (token[1] == token[2]) return(0)
+      =        return(1)
+      =void rename_cmd_u(string scalar input)
+      =        struct rename_renamedf scalar       ren
+      =                dump_pattern(ren.oldplist, "old after parsing", 0)
+      =                dump_pattern(ren.newplist, "new after parsing", 0)
+      =void xeq_old_to_new(struct rename_renamedf scalar ren)
+      =                dump_pattern(ren.oldplist, "old after linkage", 0)
+      =                dump_pattern(ren.newplist, "new after linkage", 0)
+      =                dump_pattern(ren.oldplist, "old final", 1)
+      =                dump_pattern(ren.newplist, "new final", 1)
+      =void xeq_recase(struct rename_renamedf scalar ren)
+      =        fillin_old_varnames(ren.oldplist, ren.newplist, 0)
+      =                dump_pattern(ren.oldplist, "old final", 1)
+      =                dump_pattern(ren.newplist, "new final", 1)
+      =void parse_cmd(struct rename_renamedf scalar ren, string scalar input)
+      =        real scalar            c
+      =        string scalar            lhs, ops
+      =        string scalar            oldnames, newnames
+      =        parse_cmd_pat_els(ren.oldplist, oldnames, 0)
+      =                parse_cmd_pat_els(ren.newplist, newnames, 1)
+      =real scalar parse_cmd_commaloc(string scalar s)
+      =        real scalar    i, L
+      =        real scalar    nestlev
+      =        string scalar    c
+      =void getarg(string scalar input, string scalar arg, string scalar rest)
+      =        real scalar    L, npar, i
+      =        string scalar    c
+      =void parse_cmd_options(struct rename_optiondf scalar option, string scalar ops)
+      =        string scalar            token
+      =        transmorphic      t
+      =        rename_optiondf_init(option)
+      =void confirm_options_consistent(struct rename_optiondf scalar option)
+      =        string rowvector    list
+      =void parse_cmd_options_u(struct rename_optiondf scalar option, string scalar token, transmorphic t)
+      =real scalar parse_cmd_options_u_std(struct rename_optiondf scalar option, string scalar source)
+      =        real scalar    l
+      =                option.isdebug = 1
+      =                option.isdryrun = 1
+      =                option.isrecase = option.isrecase_lower = 1
+      =                option.isrecase = option.isrecase_proper= 1
+      =                option.isr = 1
+      =                option.issort = 1
+      =                option.istest = 1
+      =                option.isrecase = option.isrecase_upper = 1
+      =        else    return(0)
+      =        return(1)
+      =real scalar parse_cmd_options_u_number(struct rename_optiondf scalar option, string scalar source,
+      =                                                                transmorphic t)
+      =        string scalar            token
+      =        real scalar            from
+      =        real scalar            l
+      =        string scalar            op
+      =        if (option.isrenumber | option.isaddnumber)  return(0)
+      =                option.isrenumber = 1
+      =                option.isaddnumber = 1
+      =                return(1)
+      =        return(1)
+      =void parse_cmd_pat_els(struct rename_patterndf rowvector pat, string scalar toparse, real pattype)
+      =        string scalar            token, curlist
+      =        transmorphic      t
+      =        real scalar       first
+      =        first   = 1
+      =                                first    = 1
+      =                                first   = 0
+      =void parse_cmd_pat_el(struct rename_patterndf rowvector pat, string scalar token, real pattype)
+      =        string scalar            mytoken
+      =        struct rename_patterndf scalar      mypat
+      =        real scalar            i, j
+      =        real matrix            found
+      =        mypat.n_of        = J(1, (8), 0)
+      =        confirm_not_empty(mytoken, pattype==0 ?
+      =                if (i=strpos(mytoken, "*")) found = (found \ (i, (3)))
+      =                if (i=strpos(mytoken, "?")) found = (found \ (i, (4) ))
+      =                if (i=strpos(mytoken, "#")) found = (found \ (i, (5)))
+      =                if (i=strpos(mytoken, "(")) found = (found \ (i, (6)))
+      =                if (i=strpos(mytoken, "=")) found = (found \ (i, (7)))
+      =                if (i=strpos(mytoken, ".")) found = (found \ (i, (8)))
+      =                        if (i==(3)) {c -(}
+      =                        else if (i==(4)) {c -(}
+      =                        else if (i==(5)) {c -(}
+      =                        else if (i==(6)) {c -(}
+      =                        else if (i==(7)) {c -(}
+      =                        else if (i==(8)) {c -(}
+      =string scalar set_subscript(struct rename_patterndf scalar pat, string scalar token, real pt)
+      =        real scalar    i
+      =        string scalar    c
+      =        if (pt != 1) {c -(}
+      =        if (pt != 1)              return(token)
+      =void set_pat_ETstrlist(struct rename_patterndf scalar pat, string scalar token)
+      =        struct rename_peldf scalar          el
+      =        el.elementtype = (1)
+      =        pat.n_of[(1)] = pat.n_of[(1)] + 1
+      =string scalar set_pat_str(struct rename_patterndf scalar pat, string scalar token)
+      =        struct rename_peldf scalar          el
+      =        el.elementtype = (2)
+      =string scalar set_pat_ETstar(struct rename_patterndf scalar pat, string scalar token, real scalar loc)
+      =        struct rename_peldf scalar          el
+      =        if (pat.patterntype == 0 && length(pat.ellist)) {c -(}
+      =                if (pat.ellist[length(pat.ellist)].elementtype == (3)) {c -(}
+      =        el.elementtype = (3)
+      =string scalar set_pat_ETnum_v(struct rename_patterndf scalar pat, string scalar token, real scalar loc)
+      =        struct rename_peldf scalar          el
+      =        if (pat.patterntype == 0 && length(pat.ellist)) {c -(}
+      =                if (pat.ellist[length(pat.ellist)].elementtype == (5)) {c -(}
+      =        el.elementtype = (5)
+      =string scalar set_pat_ETeq(struct rename_patterndf scalar pat, string scalar token, real scalar loc)
+      =        struct rename_peldf scalar  el
+      =        if (pat.patterntype == 0) {c -(}
+      =        el.elementtype = (7)
+      =string scalar set_pat_ETodot(struct rename_patterndf scalar pat, string scalar token, real scalar loc)
+      =        struct rename_peldf scalar  el
+      =        if (pat.patterntype == 0) {c -(}
+      =        el.elementtype = (8)
+      =string scalar set_pat_ETqm(struct rename_patterndf scalar pat, string scalar token, real scalar loc)
+      =        struct rename_peldf scalar  el
+      =        el.elementtype = (4)
+      =string scalar set_pat_ETnum_f(struct rename_patterndf scalar pat, string scalar token, real scalar loc)
+      =        struct rename_peldf scalar          el
+      =        real scalar            j
+      =        el.elementtype = (6)
+      =        if (el.arg > 10) {c -(}
+      =void make_patternlist_lengths_equal(struct rename_renamedf scalar ren)
+      =void build_recase_newpattern(struct rename_renamedf scalar ren)
+      =        real scalar    i
+      =        ren.newplist = rename_patterndf(length(ren.oldplist))
+      =                ren.newplist[i].n_of        = J(1, (8), 0)
+      =void link_patterns(struct rename_renamedf scalar ren)
+      =        real scalar    i, jn
+      =real scalar check_and_fix_ETnum(struct rename_patterndf scalar newp, struct rename_optiondf scalar option)
+      =        real scalar            n, j, jn
+      =        real scalar  tt
+      =                if (tt==(5) | tt==(6)) {c -(}
+      =                                (tt==(5) ? (9) : (10))
+      =struct rename_linklocdf {c -(}
+      =        real scalar    j_old, last_sequential_j_old
+      =        real scalar    j_new
+      =        real scalar    jn
+      =        real rowvector    mapsub
+      =void rename_linklocdf_init(struct rename_linklocdf scalar ll, real scalar jn)
+      =void rename_linklocdf_next(struct rename_linklocdf scalar ll, struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp)
+      =        real scalar subscr
+      =real scalar map_subscript(real scalar subscr, real rowvector mapsub, struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp)
+      =void link_patterns_u(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp, real scalar jn)
+      =        struct rename_linklocdf scalar      ll
+      =        rename_linklocdf_init(ll, jn)
+      =        rename_linklocdf_next(ll, oldp, newp)
+      =                rename_linklocdf_next(ll, oldp, newp)
+      =real rowvector pelidx_of_wcidx(struct rename_patterndf scalar oldp)
+      =        real rowvector            toret
+      =        real scalar            i
+      =        real scalar  tt
+      =                if (tt!=(1) & tt!=(2)) toret = (toret, i)
+      =void confirm_wildcards_link(struct rename_patterndf scalar oldp, real scalar j_old,
+      =                            struct rename_patterndf scalar newp, real scalar j_new)
+      =        real scalar  tt_old, tt_new
+      =        if (tt_new == (3)) return
+      =        if (tt_new == (8))  return
+      =        if (tt_new == (4)) {c -(}
+      =                if (tt_old == (4)) return
+      =        if (tt_new==(5) | tt_new==(6)) {c -(}
+      =                if (tt_old==(5) | tt_old==(6)) return
+      =string scalar printable_wildcard(struct rename_peldf scalar el)
+      =        real scalar  tt
+      =        if (tt == (3))  return("*")
+      =        if (tt == (4))    return("?")
+      =        if (tt == (8))  return(".")
+      =        if (tt == (5)) return("#")
+      =        if (tt == (6)) return("(" + el.arg*"*" + ")")
+      =real scalar count_wildcards(struct rename_patterndf scalar pat)
+      =        return(pat.n_of[(3)]  +
+      =               pat.n_of[(4)]    +
+      =               pat.n_of[(5)] +
+      =               pat.n_of[(6)] +
+      =               pat.n_of[(8)])
+      =real scalar is_wildcard(real scalar tt)
+      =        return( tt == (3)  |
+      =                tt == (4)    |
+      =                tt == (5) |
+      =                tt == (6) |
+      =                tt == (9) |
+      =                tt == (10) |
+      =                tt == (8)  )
+      =real scalar find_next_wildcard(struct rename_peldf rowvector d, real scalar j0)
+      =        real scalar    j
+      =void fillin_old_varnames(struct rename_patterndf rowvector oldplist, struct rename_patterndf rowvector newplist,
+      =                                                        real scalar issort)
+      =        real scalar    i
+      =        string scalar    tmpname
+      =void fillin_old_varnames_u(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp,
+      =                                        real scalar issort, string scalar tmpname)
+      =        string rowvector            varnames, piece
+      =        real scalar            i, n, nvars, nels
+      =        string matrix            pieces
+      =        real scalar  tt
+      =        real scalar       filter_varlist, fillin_pieces
+      =        filter_varlist = (oldp.n_of[(5)] + oldp.n_of[(6)] != 0)
+      =        fillin_pieces  = (newp.n_of[(5)] + newp.n_of[(6)] +
+      =                          newp.n_of[(3)]  + newp.n_of[(4)]    != 0)
+      =        if (issort) fillin_pieces = 1
+      =                        if (tt==(3) | tt==(4)) {c -(}
+      =string scalar varlistpattern(struct rename_peldf rowvector ellist)
+      =        real scalar    j
+      =        string scalar    result
+      =        if (ellist[1].elementtype == (1)) return(ellist[1].element)
+      =string scalar varlist_el(struct rename_peldf scalar el)
+      =        if (el.elementtype == (2))    return(el.element)
+      =        if (el.elementtype == (3))   return("*")
+      =        if (el.elementtype == (4))     return("?")
+      =        if (el.elementtype == (5))  return("?*")
+      =        if (el.elementtype == (6))  return(el.arg*"?")
+      =struct rename_matchdf {c -(}
+      =        real scalar    j0, j1
+      =        real scalar    i0, i1
+      =        string scalar    name
+      =        string rowvector    pieces
+      =real scalar matchvarname(string rowvector pieces, struct rename_peldf rowvector ellist, string scalar name)
+      =        struct rename_matchdf scalar        m
+      =                if (ellist[1].elementtype==(1)) {c -(}
+      =                        return(1)
+      =        if (!match_step(m, ellist)) return(0)
+      =        return(1)
+      =void match_setup(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist, string scalar name)
+      =real scalar match_step(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist)
+      =        real scalar            lefttomatch
+      =        real scalar      mr
+      =        real scalar     r
+      =                if ((r=match_query_done(m))!=(-1)) return(r)
+      =                if (match_simplification(m, ellist)==-1) return(0)
+      =                if ((r=match_query_done(m))!=(-1)) return(r)
+      =                        if (match_step_1(m, ellist)==-1) return(0)
+      =                        if ((r=match_query_done(m))!=(-1)) return(r)
+      =                        return(0)
+      =                        if (mr==-1 | mr==0) return(0)
+      =                        if (mr==-1 | mr==0) return(0)
+      =real scalar match_step_1(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist)
+      =        if (ellist[m.j0].elementtype==(5)) {c -(}
+      =                return(match_ETnum_v(m, ellist, 1))
+      =        if (ellist[m.j0].elementtype==(3)) {c -(}
+      =        return(-1)
+      =real scalar match_step_2(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist)
+      =        if (ellist[m.j0].elementtype==(5)) {c -(}
+      =                return(match_ETnum_v(m, ellist, 1))
+      =        if (ellist[m.j0+1].elementtype==(5)) {c -(}
+      =                return(match_ETnum_v(m, ellist, 0))
+      =        return(-1)
+      =real scalar match_step_3p(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist)
+      =        real scalar    j
+      =        if (ellist[m.j0].elementtype==(3)) {c -(}
+      =                if (ellist[j].elementtype==(3)) {c -(}
+      =                if (ellist[j].elementtype==(5)) {c -(}
+      =                        return(match_ETnum_v(m, ellist, 0))
+      =        if (ellist[m.j0].elementtype==(5)) {c -(}
+      =                return(match_ETnum_v(m, ellist, 1))
+      =        return(-1)
+      =real scalar match_query_done(struct rename_matchdf scalar m)
+      =                if (m.i0 < m.i1) return(0)
+      =                return(1)
+      =        return((-1))
+      =real scalar match_simplification(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist)
+      =        real scalar      mr
+      =        while ((m.i1 >m.i0 & m.j1> m.j0)) {c -(}
+      =                mr = match_fixed(m, ellist, 1)
+      =                if (mr==-1) return(-1)
+      =                if (mr==0)   break
+      =        while ((m.i1 >m.i0 & m.j1> m.j0)) {c -(}
+      =                mr = match_fixed(m, ellist, 0)
+      =                if (mr==-1) return(-1)
+      =                if (mr==0)   break
+      =real scalar match_fixed(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist, real scalar s)
+      =        real scalar    j
+      =        j = (s==1 ? m.j0 : m.j1-1)
+      =        if (ellist[j].elementtype==(2))   return(match_ETstr(m, ellist, s))
+      =        if (ellist[j].elementtype==(6)) return(match_ETnum_f(m, ellist, s))
+      =        if (ellist[j].elementtype==(4))    return(match_ETqm(m, ellist, s))
+      =        return(0)
+      =real scalar match_ETstr(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist, real scalar s)
+      =        real scalar    j, len
+      =        j = (s==1 ? m.j0 : m.j1-1)
+      =        if (ellist[j].elementtype != (2)) return(0)
+      =        if ((s==1 ?  usubstr(m.name, m.i0, len) :
+      =                return(-1)
+      =        return(1)
+      =real scalar match_ETnum_f(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist, real scalar s)
+      =        real scalar    j, i, len
+      =        string scalar    str, c
+      =        j = (s==1 ? m.j0 : m.j1-1)
+      =        if (ellist[j].elementtype != (6)) return(0)
+      =        str = (s==1 ?  usubstr(m.name, m.i0, len) : usubstr(m.name, -len, .))
+      =        if (ustrlen(str)!=len) return(-1)
+      =                if (c<"0" | c>"9") return(-1)
+      =        return(1)
+      =real scalar match_ETqm(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist, real scalar s)
+      =        if (ellist[s==1 ? m.j0 : m.j1-1].elementtype != (4)) {c -(}
+      =                return(0)
+      =        if (m.i0==m.i1) return(-1)
+      =        return(1)
+      =real scalar match_ETnum_v(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist, real scalar s)
+      =        real scalar            j, i0, i1, len
+      =        string scalar            c
+      =        string scalar            c1
+      =        struct rename_matchdf scalar        hold
+      =        j = (s==1 ? m.j0 : m.j1-1)
+      =        if (ellist[j].elementtype != (5)) return(0)
+      =        if (s==1) {c -(}
+      =                if (match_step(m, ellist)==1) return(1)
+      =        return(-1)
+      =real scalar match_ETstar_left(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist)
+      =        real scalar            len, newlen
+      =        struct rename_matchdf scalar        hold
+      =        real scalar       next_is_ETnum_v
+      =        if (ellist[m.j0].elementtype != (3)) return(0)
+      =                post_match_piece(m, 1, len)
+      =                return(1)
+      =        next_is_ETnum_v = (ellist[m.j0+1].elementtype==(5))
+      =                post_match_piece(m, 1, len)
+      =                if (match_step(m, ellist)==1) {c -(}
+      =                                        post_match_piece(m, 1, newlen)
+      =                        return(1)
+      =        return(-1)
+      =real scalar mstargiveback(string scalar s)
+      =        real scalar    l
+      =        string scalar    c
+      =        string scalar    c1
+      =void post_match_piece(struct rename_matchdf scalar m, real scalar s, real scalar len)
+      =        if (s==1) {c -(}
+      =void sort_old_varnames(struct rename_renamedf scalar ren)
+      =        real scalar i
+      =void sort_appropriate_field(struct rename_patterndf rowvector oldplist, struct rename_patterndf rowvector newplist)
+      =        real scalar            i
+      =        real scalar            j
+      =real scalar j_of_renumber(struct rename_patterndf scalar plist)
+      =        real scalar            j
+      =        real scalar  tt
+      =                if (tt==(9) | tt==(10)) return(j)
+      =real scalar j_of_number(struct rename_patterndf scalar plist)
+      =        real scalar            j, jtoret
+      =        real scalar  tt
+      =                if (tt==(3) | tt==(4) | tt==(5) | tt==(6)) {c -(}
+      =void sort_on_field(struct rename_patterndf scalar plist, real scalar j)
+      =        real scalar  tt
+      =        real colvector            o
+      =        string colvector            vc
+      =                if (tt==(5) | tt==(6)) {c -(}
+      =void fillin_new_varnames_recase(struct rename_renamedf scalar ren)
+      =        real scalar    i
+      =void fillin_new_varnames(struct rename_patterndf rowvector oldplist, struct rename_patterndf rowvector newplist, real scalar from)
+      =        real scalar    i
+      =void fillin_new_varnames_u(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp, real scalar from)
+      =        real scalar    i
+      =        if (newp.ellist[1].elementtype==(1)) {c -(}
+      =void fillin_new_varnames_u_u(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp, real scalar from, real scalar i)
+      =        real scalar            j
+      =        string scalar            name
+      =        real scalar  tt
+      =                if (tt==(2)) {c -(}
+      =                else if (tt==(3)) {c -(}
+      =                else if (tt==(4)) {c -(}
+      =                else if (tt==(5)) {c -(}
+      =                else if (tt==(6)) {c -(}
+      =                else if (tt==(7)) {c -(}
+      =                else if (tt==(9)) {c -(}
+      =                else if (tt==(10)) {c -(}
+      =                else if (tt != (8)) {c -(}
+      =string scalar fmt_ETnum_f(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp, real scalar i, real scalar j)
+      =        real scalar    n, len
+      =        string scalar    res, orig
+      =string scalar fmt_ETnum_f_r(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp, real scalar j, real scalar from)
+      =        real scalar    n, len
+      =        string scalar res
+      =string matrix build_toren(struct rename_patterndf rowvector oldplist, struct rename_patterndf rowvector newplist)
+      =        string matrix    toren
+      =        real scalar    i, N, n, k, k2
+      =        real colvector    toselect
+      =        string rowvector    lastrow, newrow
+      =        real scalar hasomissions
+      =                                hasomissions = 1
+      =void perform_renames(string matrix toren, struct rename_optiondf scalar option)
+      =        real scalar       use_intermediary
+      =        string matrix            toren_nonulls
+      =                        perform_dryrun(toren, toren_nonulls, 0)
+      =void confirm_newnames_new(string matrix toren)
+      =        real scalar    i
+      =        real rowvector    varnum
+      =        string rowvector    tocheck, badvar
+      =void perform_set_r(string matrix toren)
+      =void perform_test(string matrix toren, real scalar use_intermediary)
+      =        real scalar    i
+      =void perform_rename_straight(string matrix toren)
+      =        real scalar    i
+      =        real scalar    breakstatus
+      =void perform_rename_intermediary(string matrix toren)
+      =        real scalar    i
+      =        real scalar    breakstatus
+      =        string rowvector    tmpname
+      =void perform_dryrun(string matrix toren, string matrix toren_nonulls, real scalar use_intermediary)
+      =        real scalar    i
+      =        real scalar    maxlen
+      =        string scalar    sfmt, sfmtit
+      =void dryrun_note1(string matrix toren, string matrix toren_nonulls)
+      =        real scalar    i
+      =        real scalar    nulls
+      =void dryrun_note2(string matrix toren, real scalar use_intermediary)
+      =        string colvector    dupnames, newname, oldname
+      =real scalar names_not_jointly_unique(string matrix toren)
+      =        real scalar    n0, n1
+      =        string colvector    fulllist
+      =void confirm_names_unique(string matrix toren)
+      =void confirm_names_unique_1(string matrix toren, real scalar j)
+      =        string colvector    names, corresponding
+      =        string scalar    s
+      =        real scalar    n
+      =string colvector corresponding_names(string matrix toren, string scalar name, real scalar js, real scalar jd)
+      =        real scalar    i
+      =        string colvector    dups
+      =void confirm_new_varnames_valid(string matrix toren)
+      =        real scalar    i, n
+      =        real colvector    bad
+      =void confirm_not_empty(string scalar str, string scalar expected)
+      =void errprint_bf_list(string vector list , |real scalar USER_MAXEL)
+      =        real scalar            MAXEL
+      =        real scalar            i, top
+      =        real scalar       chopped
+      =                        chopped = 1
+      =                        chopped = 0
+      =void errprint_bf_string(string scalar user_s, |real scalar USER_MAXLEN)
+      =        real scalar            MAXLEN
+      =        real scalar            len_last, target_last
+      =        real scalar            len_remaining
+      =        real scalar            i
+      =        string rowvector            els
+      =        string scalar            s, first, last
+      =        real scalar       cont
+      =        cont = 1
+      =                else            cont   = 0
+      =        string scalar    indent
+      =void error_preceding_dash( pattype)
+      =                        (pattype==0 ? "oldname" : "newname" ) )
+      =void error_following_dash( pattype, string scalar what)
+      =                        (pattype==0 ? "oldname" : "newname" ) )
+      =void option_not_allowed(string scalar option)
+      =void option_number_misspecified(string scalar op)
+      =void error_ETnum_f_too_long(real scalar n_digits)
+      =        errprintf("the {c -(}bf:(###...#){c )-} pattern is %g.\n", 10)
+      =void error_patternlengths_unequal(struct rename_patterndf rowvector oldplist, struct rename_patterndf rowvector newplist)
+      =        string scalar    s_old, s_new
+      =void error_too_many_renumbers(string scalar op, struct rename_patterndf scalar newp)
+      =void error_strlist_length(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp)
+      =        real scalar    n_old, n_new
+      =        string scalar    s_old, s_new
+      =void error_missing_ETnum(string scalar opname, struct rename_patterndf scalar newp)
+      =void error_too_many_wildcards(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp,
+      =                                                        real scalar isaddnumber)
+      =void error_wildcardmatch_qm(struct rename_patterndf scalar oldp, real scalar j_old,
+      =                            struct rename_patterndf scalar newp, real scalar j_new)
+      =void error_wildcardmatch_hash(struct rename_patterndf scalar oldp, real scalar j_old,
+      =                              struct rename_patterndf scalar newp, real scalar j_new)
+      =void error_no_right_bracket(string scalar original)
+      =void error_inside_brackets(string scalar original)
+      =void error_newnumber_subscripted(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp)
+      =void error_subscript_invalid(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp, real scalar subscr)
+      =void error_subscripts_in_old(struct rename_patterndf scalar pat)
+      =void dump_pattern(struct rename_patterndf rowvector pat, string scalar typ, real scalar incl_names)
+      =        real scalar    i, j, n
+      =        real scalar    nv, k, m
+      =                        pat[i].n_of[(2)],
+      =                        pat[i].n_of[(3)],
+      =                        pat[i].n_of[(4)],
+      =                        pat[i].n_of[(5)],
+      =                        pat[i].n_of[(6)],
+      =                        pat[i].n_of[(7)],
+      =                        pat[i].n_of[(8)])
+      =string scalar dump_xlate_tt(real scalar t)
+      =        if (t==(1))     return("ETstrlist")
+      =        if (t==(2))         return("ETstr")
+      =        if (t==(3))        return("ETstar")
+      =        if (t==(4))          return("ETqm")
+      =        if (t==(5))       return("ETnum_v")
+      =        if (t==(6))       return("ETnum_f")
+      =        if (t==(7))          return("ETeq")
+      =        if (t==(8))        return("ETodot")
+      =        if (t==(9))     return("ETnum_v_r")
+      =        if (t==(10))     return("ETnum_f_r")
+      =void dump_options(struct rename_renamedf scalar ren)
+      =void match_debug(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist, string scalar msg)
+      =string rowvector list_subtract(string rowvector a, string rowvector b)
+      =        string rowvector result
+      =string rowvector expand_varlist(string scalar pattern, string scalar tmpname)
+      =        real scalar    rc
+      =        string rowvector    result
+      =string scalar ordinal_suffix(real scalar i)
+      =        real scalar    lastdigit
+      {hline 77} begin rename {hline}
+      - version 12
+      - mata: rename_cmd("`3'")
+      = mata: rename_cmd("")
+{err}variable {bf}estA_mcse{sf} not found
+{txt}      {hline 79} end rename {hline}
+      {c )-}
+      else qui rename `estimate'`v'_mcse se`v'
+      {c )-}
+      local optionlistreshape `optionlist'
+      local exclude "`true'"
+      local optionlistreshape: list optionlistreshape - exclude
+      if `methodstringindi'==1 {c -(}
+      qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`valmethod'") string
+      {c )-}
+      else {c -(}
+      qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`valmethod'")
+      label value `method' `methodformat'
+      {c )-}
+      {c )-}
+{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. char list
+  {txt}_dta[ReS_Xij]:{space 14}{res}method1_ method2_
+  {txt}_dta[ReS_str]:{space 14}{res}0
+  {txt}_dta[ReS_j]:{space 16}{res}mcse
+  {txt}_dta[ReS_ver]:{space 14}{res}v.2
+  {txt}_dta[ReS_i]:{space 16}{res}dgm estimand _perfmeasnum
+  {txt}_dta[siman_allthings]:{space 6}{res}allthings rep dgm target method estimate se df ci p true order lci {txt}..
+  _dta[siman_rep]:{space 12}{res}rep
+  {txt}_dta[siman_dgm]:{space 12}{res}dgm
+  {txt}_dta[siman_target]:{space 9}{res}estimand
+  {txt}_dta[siman_method]:{space 9}{res}method
+  {txt}_dta[siman_estimate]:{space 7}{res}est
+  {txt}_dta[siman_se]:{space 13}{res}se
+  {txt}_dta[siman_true]:{space 11}{res}0
+  {txt}_dta[siman_format]:{space 9}{res}format 1: long-long
+  {txt}_dta[siman_targetformat]:{space 3}{res}long
+  {txt}_dta[siman_methodformat]:{space 3}{res}long
+  {txt}_dta[siman_nformat]:{space 8}{res}1
+  {txt}_dta[siman_ntarget]:{space 8}{res}1
+  {txt}_dta[siman_ndgm]:{space 11}{res}2
+  {txt}_dta[siman_nmethod]:{space 8}{res}1
+  {txt}_dta[siman_numtarget]:{space 6}{res}2
+  {txt}_dta[siman_valtarget]:{space 6}{res}beta gamma
+  {txt}_dta[siman_nummethod]:{space 6}{res}2
+  {txt}_dta[siman_valmethod]:{space 6}{res}A B
+  {txt}_dta[siman_ntrue]:{space 10}{res}0
+  {txt}_dta[siman_ntruevalue]:{space 5}{res}single
+  {txt}_dta[siman_dgmvar]:{space 9}{res}dgm
+  {txt}_dta[siman_numdgm]:{space 9}{res}2
+  {txt}_dta[siman_dgmcreated]:{space 5}{res}0
+  {txt}_dta[siman_targetlabels]:{space 3}{res}1
+  {txt}_dta[siman_methodcreated]:{space 2}{res}0
+  {txt}_dta[siman_methodlabels]:{space 3}{res}1
+  {txt}_dta[siman_methodvalues]:{space 3}{res}1 2
+  {txt}_dta[siman_ntruestub]:{space 6}{res}0
+  {txt}_dta[siman_descriptiontype]:
+{space 30}{res}variable
+  {txt}_dta[siman_cidescriptiontype]:
+{space 30}{res}variables
+  {txt}_dta[siman_truedescriptiontype]:
+{space 30}{res}variable
+  {txt}_dta[siman_estvars]:{space 8}{res}est
+  {txt}_dta[siman_sevars]:{space 9}{res}se
+  {txt}_dta[siman_dfvars]:{space 9}{res}N/A
+  {txt}_dta[siman_civars]:{space 9}{res}N/A
+  {txt}_dta[siman_pvars]:{space 10}{res}N/A
+  {txt}_dta[siman_truevars]:{space 7}{res}0
+  {txt}_dta[siman_simansetuprun]:{space 2}{res}1
+  {txt}est1[varname]:{space 14}{res}A
+  {txt}est1_mcse[varname]:{space 9}{res}(MCse)
+  {txt}est2[varname]:{space 14}{res}B
+  {txt}est2_mcse[varname]:{space 9}{res}(MCse)
+
+{com}. clear all
+{res}
+{com}. prog drop _all
+
+. do "C:\Users\rmjlem1\AppData\Local\Temp\STD4a88_000000.tmp"
+{txt}
+{com}. /*
+> Testing_IRW_TPM_EMZ.do
+> Short testing file for discussion
+> */
+. 
+. // SETUP: MODIFY FOR USER & PROJECT
+. *local codepath C:\ian\git\siman\ 
+. local codepath C:\git\siman\ 
+{txt}
+{com}. global detail = 0
+{txt}
+{com}. 
+. // SETUP FOR ALL USERS
+. local testpath `codepath'Ella_testing\
+{txt}
+{com}. local filename Testing_IRW_TPM_EMZ
+{txt}
+{com}. prog drop _all
+{txt}
+{com}. adopath ++ `codepath'
+{txt}  [1]              "{res}C:\git\siman\{txt}"
+  [2]  (BASE)      "{res}C:\Program Files\Stata16\ado\base/{txt}"
+  [3]  (SITE)      "{res}C:\Program Files\Stata16\ado\site/{txt}"
+  [4]              "{res}.{txt}"
+  [5]  (PERSONAL)  "{res}c:\ado\personal/{txt}"
+  [6]  (PLUS)      "{res}c:\ado\plus/{txt}"
+  [7]  (OLDPLACE)  "{res}c:\ado/{txt}"
+
+{com}. cd `testpath'
+{res}C:\git\siman\Ella_testing
+{txt}
+{com}. cap log close
+{smcl}
+{com}{sf}{ul off}

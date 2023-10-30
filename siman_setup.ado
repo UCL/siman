@@ -1,4 +1,6 @@
-*!   version 0.8.2  25sep2023
+*!   version 0.8.3  30oct2023
+*    version 0.8.3  30oct2023    EMZ: fix for format 4, bug introduced from error checks - now fixed.  Warning if est or se is missing for siman analyse 
+*                                later.  Note added that target variable being created when convert from wide-wide.
 *    version 0.8.2  25sep2023    EMZ: produce warning if dgm variable(s) and/or method variables contain missing values.
 *    version 0.8.1  18sep2023    EMZ: bug fix for when wide-long format and auto-reshpaed, allow for method being a numeric labelled string variable.  *                                Moved true error message to later in the code to account for wide true as well.
 *    version 0.8.0  04july2023   EMZ: true has to be numeric only
@@ -95,7 +97,10 @@ if mi("`estimate'") &  mi("`se'") & mi("`lci'") & mi("`uci'") & mi("`p'") {
 * produce a warning message if no est and no se contained in dataset
 if mi("`estimate'") &  mi("`se'") {
 	 di as error "{it: WARNING: no estimates or SEs, siman's output will be limited.}"
-    exit 498
+}
+
+if mi("`estimate'") | mi("`se'") {
+	di as error "{it: WARNING: siman analyse will require est() and se() to be specified in set-up}"
 }
 
 * produce a warning message if no method contained in dataset, and create a constant
@@ -359,62 +364,69 @@ if !_rc {
 * if true is a stub assume it has different values accross the target/method combinations
 local ntruestub 0
 
-forvalues i=1/`nmethod' {
-	forvalues j=1/`ntarget' {
-		cap confirm variable `true'`t`j''`m`i''
-		if !_rc {
-			local ntrue = 2
-			local ntruestub = 1
-			capture confirm numeric variable `true'`t`j''`m`i'' 
-				if _rc {
-					di as error "true must be a numeric variable/value in siman."
-					exit 498
-				}
-        }
-   }
-}
-	
-forvalues j=1/`ntarget' {
+if `nmethod'!=1 & `ntarget'!=1 {
 	forvalues i=1/`nmethod' {
-		cap confirm variable `true'`m`i''`t`j''
-		if !_rc {
-		local ntrue = 2
-		local ntruestub = 1
-		capture confirm numeric variable `true'`m`i''`t`j''
-				if _rc {
-					di as error "true must be a numeric variable/value in siman."
-					exit 498
-				}
-		}
-    }
-}
-	
-forvalues i=1/`nmethod' {
-    cap confirm variable `true'`m`i''
-    if !_rc {
-		local ntrue = 2
-		local ntruestub = 1
-		capture confirm numeric variable `true'`m`i''
-				if _rc {
-					di as error "true must be a numeric variable/value in siman."
-					exit 498
-				}
-	}
-}
-	
-forvalues j=1/`ntarget' {
-    cap confirm variable `true'`t`j''
-    if !_rc {
-		local ntrue = 2
-		local ntruestub = 1
-		capture confirm numeric variable `true'`t`j''
-				if _rc {
-					di as error "true must be a numeric variable/value in siman."
-					exit 498
-				}
+		forvalues j=1/`ntarget' {
+			cap confirm variable `true'`t`j''`m`i''
+			if !_rc {
+				local ntrue = 2
+				local ntruestub = 1
+				capture confirm numeric variable `true'`t`j''`m`i'' 
+					if _rc {
+						di as error "true must be a numeric variable/value in siman."
+						exit 498
+					}
+			}
+	   }
 	}
 }
 
+if `ntarget'!=1 & `nmethod'!=1 {	
+	forvalues j=1/`ntarget' {
+		forvalues i=1/`nmethod' {
+			cap confirm variable `true'`m`i''`t`j''
+			if !_rc {
+			local ntrue = 2
+			local ntruestub = 1
+			capture confirm numeric variable `true'`m`i''`t`j''
+					if _rc {
+						di as error "true must be a numeric variable/value in siman."
+						exit 498
+					}
+			}
+		}
+	}
+}
+	
+if `nmethod'!=1 {	
+	forvalues i=1/`nmethod' {
+		cap confirm variable `true'`m`i''
+		if !_rc {
+			local ntrue = 2
+			local ntruestub = 1
+			capture confirm numeric variable `true'`m`i''
+					if _rc {
+						di as error "true must be a numeric variable/value in siman."
+						exit 498
+					}
+		}
+	}
+}
+
+if `ntarget'!=1 {	
+	forvalues j=1/`ntarget' {
+		cap confirm variable `true'`t`j''
+		if !_rc {
+			local ntrue = 2
+			local ntruestub = 1
+			capture confirm numeric variable `true'`t`j''
+					if _rc {
+						di as error "true must be a numeric variable/value in siman."
+						exit 498
+					}
+		}
+	}
+}
 
 * check that true is a numeric variable/value
 if !mi("`true'") & "`ntrue'" != "2" {
@@ -848,6 +860,7 @@ local autoreshape 0
 
 * if in format 2, reshape to long-wide format
 if `nformat'==2 {
+	di as txt "note: converting to long-wide format, creating variable target"
     qui siman_reshape, longwide
     local autoreshape = 1
 		
@@ -864,6 +877,8 @@ if `nformat'==2 {
 }
 * if have long method and wide targets (i.e. 'wide-long' format), then reshape in to long-wide format
 else if `nformat'==3 & `nmethod'==1 {
+	
+	di as txt "note: converting to long-wide format, creating variable target"
 	
     * need the est stub to be est`target1' est`target2' etc so create a macro list.  
     if "`ntruevalue'"=="single" local optionlist `estimate' `se' `df' `ci' `p'  
@@ -986,6 +1001,7 @@ else if `nformat'==3 & `nmethod'==1 {
 
 * If method is missing and target is wide, siman setup will auto reshape this to long-long format (instead of reading in the data as it is and calling it format 3).
 if (`nmethod'==0 & `ntarget'>1 ) {
+	di as txt "note: converting to long-long format, creating variable target"
     qui siman reshape, longlong
     foreach thing in `_dta[siman_allthings]' {
         local `thing' : char _dta[siman_`thing']

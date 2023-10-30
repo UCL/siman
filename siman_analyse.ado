@@ -1,4 +1,5 @@
-*! version 0.6.7  25oct2023
+*! version 0.6.8  30oct2023
+* version 0.6.8   30oct2023   EMZ: retained underscores instead of removing them to tidy up wide variable names
 * version 0.6.7   25oct2023   IW made clearer output when analyse runs but table fails
 * version 0.6.6   18sep2023   EMZ: updated valmethod to take method values, for use in siman reshape
 * version 0.6.5   12sep2023   EMZ: restored missing characteristics for method labels after simsum run
@@ -7,12 +8,11 @@
 * version 0.6.2   21jul2023   IW: use simsum not simsumv2
 * version 0.6.1   05may2023   IW: remove unused performancemeasures option
 * version 0.6     23dec2022   IW: preserves value label for method
-* version 0.5   11jul2022
-*  version 0.5  11july2022   EMZ changing created variable names to start with _, and adding error catching messages
-*  version 0.4  16may2022    EMZ minor bug fix with renaming of mcse's
-*  version 0.3  28feb2022    Changes from IW testing
-*  version 0.2  23june2020   IW change: added in notable option
-*  version 0.1  08june2020   Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
+* version 0.5  11july2022     EMZ changing created variable names to start with _, and adding error catching messages
+* version 0.4  16may2022      EMZ minor bug fix with renaming of mcse's
+* version 0.3  28feb2022      Changes from IW testing
+* version 0.2  23june2020     IW change: added in notable option
+* version 0.1  08june2020     Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
 * Uses Ian's new simsumv2
 
 capture program drop siman_analyse
@@ -162,12 +162,13 @@ if `nformat'==1 {
 	qui levels `method', local(levels)
 	tokenize `"`levels'"'
 	forvalues f = 1/`nmethodlabels' {
-		if  substr("``f''",strlen("``f''"),1)=="_" local f = substr("``f''", 1, index("``f''","_") - 1)
-		local methodlabel`f' = "``f''"
+		if  substr("``f''",strlen("``f''"),1)=="_" local g = substr("``f''", 1, index("``f''","_") - 1)
+		if `methodstringindi' == 0 & `methodlabels'!=1 local methodlabel`f' = "`g'"
+		else local methodlabel`f' = "``g''"
 		if `f'==1 local methodlist `methodlabel`f''
 		else if `f'>=2 local methodlist `methodlist' `methodlabel`f''
 		}
-	local valmethod = "`methodlist'"
+*	local valmethod = "`methodlist'"
 
 		
 	* simsum doesn't like to parse "`estimate'" etc so define a macro for simsum for estimate and se
@@ -191,7 +192,7 @@ if `nformat'==1 {
 
 
 	* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
-	foreach v in `methodlist' {
+	foreach v in `valmethod' {
 		if !mi("`se'") {
 			qui rename `estimate'`v'_mcse `se'`v'
 		}

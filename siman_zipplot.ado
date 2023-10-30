@@ -406,6 +406,8 @@ local graphnumcheck = (`totaldgmnum' * `nummethodcheck' * `numtargetcheck')/`num
 if `graphnumcheck' > 15 {
 	di as error "{it: WARNING: `numtruecheck' graphs each of `graphnumcheck' panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}"
 }
+
+di as txt "Drawing `numtruecheck' graphs (1 per true value)..."
 	
 * Plot of confidence interval coverage:
 * First two rspike plots: Monte Carlo confidence interval for percent coverage

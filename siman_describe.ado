@@ -132,8 +132,9 @@ else if `dgmcreated' == 1 {
 	}
 
     di as result _newline "Data generating mechanism (dgm)
-	if `dgmcount' == 1 di as text "The total number of dgms is: " as result _col(`colwidth') "`totaldgmnum'" 
-	else di as text "The total number of dgm vars is: " as result _col(`colwidth') "`totaldgmnum'"
+*	if `dgmcount' == 1 di as text "The total number of dgms is: " as result _col(`colwidth') "`totaldgmnum'" 
+*	else di as text "The total number of dgm vars is: " as result _col(`colwidth') "`totaldgmnum'"
+    di as text "The total number of dgms is: " as result _col(`colwidth') "`totaldgmnum'" 
     di as text "The dgm variables (# levels): " as result _col(`colwidth') `"`dgmvarsandlevels'"' _newline
 	if "`estimate'"!="" di as result "Estimates are contained in the dataset"
 	else if "`estimate'"=="" di as result "Estimates are not contained in the dataset"
