@@ -1,4 +1,5 @@
-*! version 0.6.6  18sep2023
+*! version 0.6.7  25oct2023
+* version 0.6.7   25oct2023   IW made clearer output when analyse runs but table fails
 * version 0.6.6   18sep2023   EMZ: updated valmethod to take method values, for use in siman reshape
 * version 0.6.5   12sep2023   EMZ: restored missing characteristics for method labels after simsum run
 * version 0.6.4   22aug2023   IW: fix bug causing error if truevar also a dgmvar; new force option to pass to simsum
@@ -365,10 +366,15 @@ foreach thing in `allthings' {
     char _dta[siman_`thing'] ``thing''
 }
 
-* IW change:
-* output table to show that siman analyse has run
-if "`table'"!="notable" siman_table
-else di as text "siman analyse has run"
+di as text "siman analyse has run successfully"
+
+if "`table'"!="notable" {
+	cap noi siman_table
+	if _rc {
+		di as text "siman analyse has run successfully, but presenting the results using siman table has failed"
+		exit _rc
+	}
+}
 
 end
 

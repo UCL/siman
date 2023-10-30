@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.13 13sep2023}{...}
+{* *! version 1.13.1 25oct2023}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "Main simsum help page" "simsum"}{...}
 {viewerjumpto "Syntax" "siman_lollyplot##syntax"}{...}
@@ -45,6 +45,11 @@
 {synopt:{opt bygr:aphoptions(string)}}graph options which need to be placed within the {cmd:by()} option.
 
 {synopt:{it:graph_options}}Most of the valid options for {help scatter:scatter} are available.{p_end}
+
+{syntab:Advanced graph options}
+
+{synopt:{opt pause}}Pauses before drawing each graph, allowing the user to retrieve and edit each graph command before running it. 
+Requires {help pause} to be on.
 
 
 {marker description}{...}

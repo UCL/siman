@@ -1,4 +1,5 @@
-*! version 1.8.11 16oct2023
+*! version 1.8.12 25oct2023
+*  version 1.8.12 25oct2023  IW Added true value to note
 *  version 1.8.11 16oct2023  EMZ minor update to warning message (# graphs each of # panels)
 *  version 1.8.10 03oct2023  EMZ update to warning message when if/by conditions used
 *  version 1.8.9 02oct2023   EMZ bug fix so works with dgm == x when dgm defined >1 variable
@@ -456,7 +457,7 @@ else if `ntrue'>1 {
 				xtit("95% confidence intervals")
 				ytit("Centile of ranked p-values for null: θ=``true'label`k''") 
 				ylab(5 50 95)
-				by(`byvar', ixaxes noxrescale iscale(*.8) `bygraphoptions') scale(.8)
+				by(`byvar', ixaxes noxrescale iscale(*.8) `bygraphoptions' note("Graphs by `byvar', true=``true'label`k''")) scale(.8)
 				legend(order(3 "Coverers" 4 "Non-coverers"))
 				`scheme'
 				`options'

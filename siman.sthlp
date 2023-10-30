@@ -22,25 +22,21 @@
 {p2colset 5 25 25 0}{...}
 
 
-Get started
+{p}Get started
 
 {p2col:{bf:{help siman_setup:siman setup}}}set up data in the format required by siman, with the user’s raw simulation data (estimates data set)
 
-Utilities
-
-{p2col:{bf:{help siman_reshape:siman reshape}}}convert dataset held in memory from any format in to long-long or long-wide format (i.e. long target-wide method)
-
-Analyses
+{p}Analyses
 
 {p2col:{bf:{help siman_analyse:siman analyse}}}creates performance measures data set from the estimates data set, and can hold both in memory
 
-Descriptive tables and figures
+{p}Descriptive tables and figures
 
 {p2col:{bf:{help siman_describe:siman describe}}}tabulates imported estimates data
 
 {p2col:{bf:{help siman_table:siman table}}}tabulates computed performance measures data
 
-Graphs of results: Estimates data
+{p}Graphs of results: Estimates data
 
 {p2col:{bf:{help siman_scatter:siman scatter}}}scatter plot: plots the estimate versus the standard error
 
@@ -52,11 +48,19 @@ Graphs of results: Estimates data
 
 {p2col:{bf:{help siman_zipplot:siman zipplot}}}zipplot plot: shows all of the confidence intervals for each data-generating mechanism and analysis method
 
-Graphs of results: Performance measures data
+{p}Graphs of results: Performance measures data
 
 {p2col:{bf:{help siman_lollyplot:siman lollyplot}}}lollyplot plot: shows the performance for measures of interest with monte Carlo 95% confidence intervals 
 
 {p2col:{bf:{help siman_nestloop:siman nestloop}}}nestloop plot: plots the results of a full factorial simulation study
+
+{p}Utilities
+
+{p2col:{bf:{help siman_reshape:siman reshape}}}convert dataset held in memory from any format in to long-long or long-wide format (i.e. long target-wide method)
+
+{p2col:{bf:siman which}}report the version number and date for each siman subcommand
+
+{p}Subcommands may be abbreviated to 3 or more characters, and {cmd:comparemethodsscatter} may be abbreviated to {cmd:cms}.
 
 
 {marker description}{...}

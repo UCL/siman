@@ -23,6 +23,8 @@
 
 {pstd}The scatter graph will be drawn for estimate {it:and} se if and only if the number of methods is <= 3.  Alternatively the user can select estimate {it:or} se for more than 3 methods.
 
+{pstd}The subcommand {cmd:comparemethodsscatter} may be abbreviated to 3 or more characters or to {cmd:cms}.
+
 {synoptset 20 tabbed}{...}
 {synopthdr}
 {synoptline}
