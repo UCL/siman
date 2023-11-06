@@ -598,9 +598,16 @@ local datasetvars: list uniq datasetvarswithtrue
 	* test for equivalence
 	local testothervars: list simanvarswithtrue === datasetvars
 	if `testothervars' == 0 {
-		local wrongvars : list datasetvars - simanvarswithtrue
-		di as error "Additional variables found in dataset other than those specified in siman setup.  Please remove extra variables from data set and re-run siman."
-		di as error "Unwanted variables are: `wrongvars'"
+		local countdatasetvars: word count `datasetvars'
+		local countsimanvarswithtrue: word count `simanvarswithtrue'
+
+		if `countdatasetvars' > `countsimanvarswithtrue' {
+			local wrongvars : list datasetvars - simanvarswithtrue
+			di as error "Additional variables found in dataset other than those specified in siman setup.  Please remove extra variables from data set and re-run siman.  Note that if your data is in wide-wide format and your variable names contain underscores, these will need to be included in the setup syntax.  See {help siman_setup:siman setup} for further details."
+			di as error "Unwanted variables are: `wrongvars'"
+			exit 498
+		}
+		else di as error "There are variables specified in siman setup that are not in your dataset.  Note that if your data is in wide-wide format and your variable names contain underscores, these will need to be included in the setup syntax.  See {help siman_setup:siman setup} for further details."
 		exit 498
 	}
 
