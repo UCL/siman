@@ -1,4 +1,6 @@
-*!   version 0.8.3  30oct2023
+*!   version 0.8.4  06nov2023
+*    version 0.8.4  06nov2023    EMZ change so that if targets are wide and data is auto-reshaped by siman, then true becomes a long variable (does not 
+*                                remain wide)
 *    version 0.8.3  30oct2023    EMZ: fix for format 4, bug introduced from error checks - now fixed.  Warning if est or se is missing for siman analyse 
 *                                later.  Note added that target variable being created when convert from wide-wide.
 *    version 0.8.2  25sep2023    EMZ: produce warning if dgm variable(s) and/or method variables contain missing values.
@@ -888,8 +890,8 @@ else if `nformat'==3 & `nmethod'==1 {
 	di as txt "note: converting to long-wide format, creating variable target"
 	
     * need the est stub to be est`target1' est`target2' etc so create a macro list.  
-    if "`ntruevalue'"=="single" local optionlist `estimate' `se' `df' `ci' `p'  
-    else if "`ntruevalue'"=="multiple" local optionlist `estimate' `se' `df' `ci' `p' `true' 
+   if "`ntruevalue'"=="single" local optionlist `estimate' `se' `df' `ci' `p'  
+  else if "`ntruevalue'"=="multiple" local optionlist `estimate' `se' `df' `ci' `p' `true' 
     forvalues j = 1/`ntarget' {
         foreach option in `optionlist' {
             local `option'stubreshape`t`j'' = "`option'`t`j''"
@@ -901,18 +903,24 @@ else if `nformat'==3 & `nmethod'==1 {
 
     if "`ntruevalue'"=="single" {
         qui reshape long "`optionlist'", i(`rep' `dgm' `method' `true') j(target "`valtarget'") 
-        if `methodstringindi' == 0 & "`methodlabels'" != "1" qui reshape wide "`optionlist'", i(`rep' `dgm' target `true') j(`method' "`methlist'") 
-		else if `methodstringindi' == 1 qui reshape wide "`optionlist'", i(`rep' `dgm' target `true') j(`method' "`methlist'") string
-		else if `methodstringindi' == 0 & "`methodlabels'" == "1" qui reshape wide "`optionlist'", i(`rep' `dgm' target `true') j(`method' "`methodvalues'") 
     }
     else if "`ntruevalue'"=="multiple" {
         qui reshape long "`optionlist'", i(`rep' `dgm' `method') j(target "`valtarget'") 
-        if `methodstringindi' == 0 & "`methodlabels'" != "1" qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`methlist'") 	
-		else if `methodstringindi' == 1 qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`methlist'") string
-		else if `methodstringindi' == 0 & "`methodlabels'" == "1" qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`methodvalues'") 	
+*       if `methodstringindi' == 0 & "`methodlabels'" != "1" qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`methlist'") 	
+*		else if `methodstringindi' == 1 qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`methlist'") string
+*		else if `methodstringindi' == 0 & "`methodlabels'" == "1" qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`methodvalues'") 	
     }
 
+	 local optionlist: list optionlist - true
+	 if `methodstringindi' == 0 & "`methodlabels'" != "1" qui reshape wide "`optionlist'", i(`rep' `dgm' target `true') j(`method' "`methlist'")     	   
+	 else if `methodstringindi' == 1 qui reshape wide "`optionlist'", i(`rep' `dgm' target `true') j(`method' "`methlist'") string
+     else if `methodstringindi' == 0 & "`methodlabels'" == "1" qui reshape wide "`optionlist'", i(`rep' `dgm' target `true') j(`method' "`methodvalues'") 
 
+	 local truedescriptiontype = "variable"
+	 local ntruestub 0
+	 char _dta[siman_truedescriptiontype] `truedescriptiontype'
+     char _dta[siman_ntruestub] `ntruestub'
+	 
     * Take out underscores at the end of target value labels if there are any.  
     * Firstly, if they are string variables then encode to numeric. - removed *****************
     * Need to tokenize the target variable again as might have changed in the reshape.

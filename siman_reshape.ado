@@ -1,4 +1,6 @@
-*!  version 0.3.3   19sep2023
+*!  version 0.3.4   06nov2023
+*   version 0.3.4   06nov2023   EMZ change so that if targets are wide and data is auto-reshaped by siman, then true becomes a long variable (does not 
+*                               remain wide), extra coding added to other formats to ensure this too.  Bug fix for when method var is created.
 *   version 0.3.3   19sep2023   EMZ: fix if the data has been reshaped long-wide then back to long-long the method name needs to be restored
 *   version 0.3.2   12sep2023   EMZ: fix for when method numeric lablled string: going longlong - longwide - longlong, in-built Stata command looses labels 
 *                               in Stata version 17 and lower, put in fix so can go back and forth between formats
@@ -92,13 +94,25 @@ if `nformat'==2 {
 	}
 
 
-	if "`ntruevalue'"=="single" & `truenumber' == 0 {
+	if ("`ntruevalue'"=="single" & `truenumber' == 0) {
 		qui reshape long "``estimate'stubreshapelist' ``se'stubreshapelist' ``df'stubreshapelist' ``lci'stubreshapelist' ``uci'stubreshapelist' ``p'stubreshapelist'", i(`rep' `dgm' `true') j(`j') string
 	}
 	else if "`ntruevalue'"=="multiple" | `truenumber' == 1 {
-		qui reshape long "``estimate'stubreshapelist' ``se'stubreshapelist' ``df'stubreshapelist' ``lci'stubreshapelist' ``uci'stubreshapelist' ``p'stubreshapelist'", i(`rep' `dgm') j(`j') string
+		qui reshape long "``estimate'stubreshapelist' ``se'stubreshapelist' ``df'stubreshapelist' ``lci'stubreshapelist' ``uci'stubreshapelist' ``p'stubreshapelist' ``true'stubreshapelist'", i(`rep' `dgm') j(`j') string
+	
+		if "`order'" == "method" {
+		* retain 1 true variable (they are copies of each other), do not want true[method1] true[method2] etc all with same true values
+			forvalues j = 1/`nmethod' {
+				qui tokenize ``true'stubreshapelist'
+				if `j'==1 qui rename ``j'' `true'
+				else qui drop ``j''	
+			}
+		char _dta[siman_truedescriptiontype] "variable"
+		local ntruestub 0
+		char _dta[siman_ntruestub] 0
+		}
 	}
-		
+	
 	* j(`j' "`valmethod'") string
 	
 	* take out underscores at the end of variable names if there are any
@@ -134,7 +148,7 @@ if `nformat'==2 {
 		if `ntarget'!=0 char _dta[siman_ntarget] 1
 		char _dta[siman_descriptiontype] "stub"
 		if "`ntruevalue'"=="single" char _dta[siman_truedescriptiontype] "variable"
-		if "`ntruevalue'"=="multiple" char _dta[siman_truedescriptiontype] "stub"
+		if "`ntruevalue'"=="multiple" & `ntruestub'==1 char _dta[siman_truedescriptiontype] "stub"
 		char _dta[siman_cidescriptiontype] "stubs"
 		
 		if mi("`describe") siman_describe
@@ -156,6 +170,19 @@ if `nformat'==2 {
 		qui reshape long "`optionlist'", i(`rep' `dgm' `method') j(target) string		
 		qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`valmethod'") string
 		
+		* retain 1 true variable (they are copies of each other), do not want true[method1] true[method2] etc all with same true values
+		local c 1
+		foreach j in `valmethod' {
+			if `c'==1 {
+				qui rename `true'`j' `true'
+				local c = `c' + 1
+			}
+			else qui drop `true'`j'	
+		}
+		local truedescriptiontype "variable"
+		char _dta[siman_truedescriptiontype] "variable"
+		local ntruestub 0
+		
 		
 		* redefine characteristics:
 		
@@ -168,8 +195,8 @@ if `nformat'==2 {
 		if `ntarget'!=0 char _dta[siman_ntarget] 1
 		char _dta[siman_descriptiontype] "stub"
 		char _dta[siman_order]: method
-		if "`ntruevalue'"=="single" char _dta[siman_truedescriptiontype] "variable"
-		if "`ntruevalue'"=="multiple" char _dta[siman_truedescriptiontype] "stub"
+		if ("`ntruevalue'"=="single" | `ntruestub'== 0) char _dta[siman_truedescriptiontype] "variable"
+		if "`ntruevalue'"=="multiple" & `ntruestub'== 1 char _dta[siman_truedescriptiontype] "stub"
 		char _dta[siman_cidescriptiontype] "stubs"
 		
 		if "`truevaluecreated'" == "1" {
@@ -456,7 +483,8 @@ if "`longlong'"!="" {
 	qui save `sortperf'
 	restore
 	qui drop if `rep'>0
-	qui gsort -`rep' `dgm' `target' `method'
+	if `methodcreated'!= 1 qui gsort -`rep' `dgm' `target' `method'
+	else qui gsort -`rep' `dgm' `target'
 	qui append using `sortperf'
 	}
 
@@ -469,12 +497,16 @@ if "`longlong'"!="" {
 	
 }
 
+
+
 * fix to add metlist to characteristics when method numeric labelled string
 local allthings `allthings' metlist
-char _dta[siman_metlist] `metlist'
+char _dta[siman_metlist] "`metlist'"
 char _dta[siman_allthings] `allthings'
 
+
 if `dgmcreated' == 1 qui drop dgm
+
 
 end
 

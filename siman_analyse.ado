@@ -1,4 +1,5 @@
-*! version 0.6.8  30oct2023
+*! version 0.6.9  07nov2023
+* version 0.6.9   07nov2023   EMZ bug fix: restoring lost method labels issue for when method has been created by siman (i.e. _methodvar = 1)
 * version 0.6.8   30oct2023   EMZ: retained underscores instead of removing them to tidy up wide variable names
 * version 0.6.7   25oct2023   IW made clearer output when analyse runs but table fails
 * version 0.6.6   18sep2023   EMZ: updated valmethod to take method values, for use in siman reshape
@@ -85,7 +86,8 @@ qui replace `touse' = 1 `ifanalyse'
 preserve
 if `nformat'!=1 {
 	qui siman_reshape, longlong
-	local method method
+	if `methodcreated' == 0 local method method
+	else local method `method'
 	}
 qui sort `dgm' `target' `method' `touse'
 * The 'if' option will only apply to dgm, target and method.  The 'if' option is not allowed to be used on rep and an error message will be issued if the user tries to do so
@@ -294,68 +296,70 @@ qui order `allnames'
 * If format is long-long, or wide-long then 
 * 'number of methods' will be the number of variable labels for method
 * wide-long: nformat = 3 and method in long format i.e. nmethod =1
-cap confirm numeric variable `method'
-if _rc local methodstringindi = 1
-else local methodstringindi = 0 
+if `methodcreated'!=1 {
+	cap confirm numeric variable `method'
+	if _rc local methodstringindi = 1
+	else local methodstringindi = 0 
 
-local methodlabels = 0
+	local methodlabels = 0
 
-if `nformat'==1 | (`nformat'==3 & `nmethod'==1)  { 
-	if `nmethod'!=0 {
-		qui tab `method',m
-		local nmethodlabels = `r(r)'
-		
-				
-		* Get method label values
-		cap qui labelsof `method'
-		cap qui ret list
+	if `nformat'==1 | (`nformat'==3 & `nmethod'==1)  { 
+		if `nmethod'!=0 {
+			qui tab `method',m
+			local nmethodlabels = `r(r)'
+			
+					
+			* Get method label values
+			cap qui labelsof `method'
+			cap qui ret list
 
-			if `"`r(labels)'"'!="" {
-			local 0 = `"`r(labels)'"'
+				if `"`r(labels)'"'!="" {
+				local 0 = `"`r(labels)'"'
 
-			forvalues i = 1/`nmethodlabels' {  
-				gettoken `method'label`i' 0 : 0, parse(": ")
-				local methlist `methlist' ``method'label`i''
-				local methodlabels = 1
+				forvalues i = 1/`nmethodlabels' {  
+					gettoken `method'label`i' 0 : 0, parse(": ")
+					local methlist `methlist' ``method'label`i''
+					local methodlabels = 1
+					}
 				}
+		else {
+
+		qui levels `method', local(levels)
+		tokenize `"`levels'"'
+			if `methodstringindi' == 0 {		
+				forvalues i = 1/`nmethodlabels' {  
+					local `method'label`i' `i'
+					local methlist `methlist' ``method'label`i''
+					}
 			}
-	else {
-
-	qui levels `method', local(levels)
-	tokenize `"`levels'"'
-		if `methodstringindi' == 0 {		
-			forvalues i = 1/`nmethodlabels' {  
-				local `method'label`i' `i'
-				local methlist `methlist' ``method'label`i''
-				}
-		}
-		else forvalues i = 1/`nmethodlabels' {  
-				local `method'label`i' ``i''
-				local methlist `methlist' ``method'label`i''
-				}
-	 }	
-  }
-}
-if `nformat'==1 {
-    * For format 1, long-long: number of methods will be the number of method labels
-	local valmethod = "`methlist'"
-}
-else if `nformat'==2 {
-    * number of methods will be the number of methods that the user specified
-	local valmethod = "`method'"
-}
-else if `nformat'==3 {
-    * For format 3, long-wide format
-    * will be in long-wide with long targets and wide methods after auto-reshape
-	if `nmethod'==1 {
-        * the number of methods will be the number of method labels
+			else forvalues i = 1/`nmethodlabels' {  
+					local `method'label`i' ``i''
+					local methlist `methlist' ``method'label`i''
+					}
+		 }	
+	  }
+	}
+	if `nformat'==1 {
+		* For format 1, long-long: number of methods will be the number of method labels
 		local valmethod = "`methlist'"
 	}
-	else if `nmethod'>=1 & `nmethod'!=. {
-        *  number of methods will be the number of methods that the user specified
-		* need valnethod to be method values for use in reshape command
-*		local valmethod = "`method'"
-		local valmethod = "`methlist'"
+	else if `nformat'==2 {
+		* number of methods will be the number of methods that the user specified
+		local valmethod = "`method'"
+	}
+	else if `nformat'==3 {
+		* For format 3, long-wide format
+		* will be in long-wide with long targets and wide methods after auto-reshape
+		if `nmethod'==1 {
+			* the number of methods will be the number of method labels
+			local valmethod = "`methlist'"
+		}
+		else if `nmethod'>=1 & `nmethod'!=. {
+			*  number of methods will be the number of methods that the user specified
+			* need valnethod to be method values for use in reshape command
+	*		local valmethod = "`method'"
+			local valmethod = "`methlist'"
+		}
 	}
 }
 

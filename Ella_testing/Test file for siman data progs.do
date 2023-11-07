@@ -288,10 +288,12 @@ gen true1gamma = 0.5
 gen true2beta = 0
 gen true2gamma = 0.5
 siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(1 2) estimate(est) se(se) true(true) order(method)
+siman analyse
 siman_reshape, longlong
 siman_reshape, longwide
 
-
+clear all
+prog drop _all
 use simlongESTPM_wideE_wideM2.dta, clear
 drop true
 gen truebeta_1 = 0
@@ -299,8 +301,24 @@ gen truegamma_1 = 0.5
 gen truebeta_2 = 0
 gen truegamma_2 = 0.5
 siman_setup, rep(rep) dgm(dgm) target(beta_ gamma_) method(1 2) estimate(est) se(se) true(true) order(target)
+siman analyse
 siman_reshape, longlong
 siman_reshape, longwide
+
+clear all
+prog drop _all
+* wide targets, missing method
+use simlongESTPM_wideE_nomethod.dta, clear
+* this is now like wide-long format with missing method
+drop true
+* create different true values for targets
+gen truebeta = 0
+gen truegamma = 0.5
+siman_setup, rep(rep) dgm(dgm) target(beta gamma) estimate(est) se(se) true(true)  
+siman analyse
+* auto reshapes to long-long as required                                    
+* siman_reshape, longwide
+* gives error message as expected, as can not reshape targets to wide format
 
 
 * testing CIs
