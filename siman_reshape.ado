@@ -19,6 +19,9 @@ foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
 
+set trace on
+set tracedepth 1
+
 * if both estimate and se are missing, give error message as requires something to reshape
 if mi("`estimate'") & mi("`se'") {
     di as error "siman reshape requires either estimate or se, otherwise nothing to reshape"
@@ -97,21 +100,24 @@ if `nformat'==2 {
 	if ("`ntruevalue'"=="single" & `truenumber' == 0) {
 		qui reshape long "``estimate'stubreshapelist' ``se'stubreshapelist' ``df'stubreshapelist' ``lci'stubreshapelist' ``uci'stubreshapelist' ``p'stubreshapelist'", i(`rep' `dgm' `true') j(`j') string
 	}
-	else if "`ntruevalue'"=="multiple" | `truenumber' == 1 {
+	else if ("`ntruevalue'"=="multiple" | `truenumber' == 1) {
 		qui reshape long "``estimate'stubreshapelist' ``se'stubreshapelist' ``df'stubreshapelist' ``lci'stubreshapelist' ``uci'stubreshapelist' ``p'stubreshapelist' ``true'stubreshapelist'", i(`rep' `dgm') j(`j') string
+	}
 	
 		if "`order'" == "method" {
 		* retain 1 true variable (they are copies of each other), do not want true[method1] true[method2] etc all with same true values
-			forvalues j = 1/`nmethod' {
-				qui tokenize ``true'stubreshapelist'
-				if `j'==1 qui rename ``j'' `true'
-				else qui drop ``j''	
+			if !mi("``true'stubreshapelist'") {
+				forvalues j = 1/`nmethod' {
+					qui tokenize ``true'stubreshapelist'
+					if `j'==1 qui rename ``j'' `true'
+					else qui drop ``j''	
+					}
 			}
 		char _dta[siman_truedescriptiontype] "variable"
 		local ntruestub 0
 		char _dta[siman_ntruestub] 0
 		}
-	}
+*	}
 	
 	* j(`j' "`valmethod'") string
 	
@@ -174,10 +180,13 @@ if `nformat'==2 {
 		local c 1
 		foreach j in `valmethod' {
 			if `c'==1 {
-				qui rename `true'`j' `true'
+				cap confirm variable `true'`j'
+				if !_rc {
+					qui rename `true'`j' `true'
+				}
 				local c = `c' + 1
 			}
-			else qui drop `true'`j'	
+			else cap qui drop `true'`j'	
 		}
 		local truedescriptiontype "variable"
 		char _dta[siman_truedescriptiontype] "variable"
@@ -389,6 +398,8 @@ if "`longlong'"!="" {
 	local methodname: char _dta[ReS_j]
 	if mi("`methodname'") | "`methodname'" == "_j" | "`methodname'" == "mcse" local methodname "method"
 
+	if "`methodlables'" == "1" local methodreshape "`methodvalues'"
+	else local methodreshape "`valmethod'"
 		
 	if "`truedescriptiontype'" == "stub" | `truenumber' == 1 {
 		
@@ -402,10 +413,7 @@ if "`longlong'"!="" {
 		if `truenumber' == 1 local optionlistreshape `optionlist'
 		
 		if "`ntruestub'" == "0" local optionlistreshape `optionlist'
-		
-		if "`methodlables'" == "1" local methodreshape "`methodvalues'"
-		else local methodreshape "`valmethod'"
-		
+
 
 		if `string' == 0 & `ntarget'<=1 & `nmethod'!=0 {
 			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target') j(`methodname' "`methodreshape'") 

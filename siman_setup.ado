@@ -1,4 +1,5 @@
-*!   version 0.8.4  06nov2023
+*!   version 0.8.5  13nov2023
+*    version 0.8.5  13nov2023    EMZ create a true variable if true is put in to the syntax as numeric e.g. true(0.5), for use by other siman programs
 *    version 0.8.4  06nov2023    EMZ change so that if targets are wide and data is auto-reshaped by siman, then true becomes a long variable (does not 
 *                                remain wide)
 *    version 0.8.3  30oct2023    EMZ: fix for format 4, bug introduced from error checks - now fixed.  Warning if est or se is missing for siman analyse 
@@ -74,6 +75,17 @@ capture confirm variable _scenario
 if !_rc {
     di as error "siman would like to name a variable '_scenario', but that name already exists in your data." _n "Please rename your variable _scenario as something else."
     exit 498
+}
+
+cap confirm number `true'
+if !_rc {
+	capture confirm variable _true
+	if !_rc {
+		di as error "siman would like to name a variable '_true', but that name already exists in your data." _n "Please rename your variable _true as something else."
+		exit 498
+	}
+gen _true = `true'
+local true _true
 }
 
 		

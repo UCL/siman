@@ -1,4 +1,5 @@
-*! version 0.6.9  07nov2023
+*! version 0.6.10 13nov2023
+* version 0.6.10  13nov2023   EMZ bug fix: labelling mcse vars when method a numeric labelled string variable - use values not labels
 * version 0.6.9   07nov2023   EMZ bug fix: restoring lost method labels issue for when method has been created by siman (i.e. _methodvar = 1)
 * version 0.6.8   30oct2023   EMZ: retained underscores instead of removing them to tidy up wide variable names
 * version 0.6.7   25oct2023   IW made clearer output when analyse runs but table fails
@@ -32,6 +33,9 @@ vercheck simsum, vermin(2.0.3) quietly
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
+
+set trace on
+set tracedepth 1
 
 if "`method'"=="" {
 	di as error "The variable 'method' is missing so siman analyse can not be run.  Please create a variable in your dataset called method containing the method value(s)."
@@ -194,10 +198,14 @@ if `nformat'==1 {
 
 
 	* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
-	foreach v in `valmethod' {
+	if `methodlabels' == 0 local methodloop `metlist'
+	else local methodloop `methodvalues' 
+	foreach v in `methodloop'  {
 		if !mi("`se'") {
-			qui rename `estimate'`v'_mcse `se'`v'
+			if  substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse `se'`v'
+			else qui rename `estimate'`v'_mcse `se'`v'
 		}
+		else if  substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse se`v'
 		else qui rename `estimate'`v'_mcse se`v'
 	}
 
@@ -205,12 +213,20 @@ if `nformat'==1 {
 	local optionlistreshape `optionlist'
 	local exclude "`true'"
 	local optionlistreshape: list optionlistreshape - exclude
+	
+	if !mi("`metlist'") local methodreshape `metlist'
+	else local methodreshape `valmethod'
 
-	if `methodstringindi'==1 {
-		qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`valmethod'") string
+	if `methodstringindi'==1  {
+		qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'") string
 		}
-	else {
-		qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`valmethod'")
+	else if `methodstringindi'==0 & `methodlabels' == 0 {
+		qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'")
+		* restore number format to method
+		label value `method' `methodformat'
+		}
+	else if `methodstringindi'==0 & `methodlabels' == 1 {
+		qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodvalues'")
 		* restore number format to method
 		label value `method' `methodformat'
 		}
@@ -243,7 +259,6 @@ foreach v in `methodloop' {
 qui simsum `estlist' `if', true(`true') se(`selist') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
 
 
-
 foreach v in `valmethod' {
 			if  substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
 			if `estchange' == 1 {
@@ -252,7 +267,8 @@ foreach v in `valmethod' {
 				qui rename `estimate'_`v'_mcse `se'`v'
 				}
 				else {
-				qui rename `estimate'`v'_mcse `se'`v'
+				if  substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse `se'`v'
+				else qui rename `estimate'`v'_mcse `se'`v'
 				}
 			if `sechange' == 1 qui rename `se'`v' `se'_`v'
 			}

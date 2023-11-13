@@ -27,7 +27,7 @@ foreach thing in `_dta[siman_allthings]' {
 local titlewidth 20
 local colwidth 35
 
-/*
+
 * remove underscores from the end of method and target labels if there are any (for aesthetic purposes in the output table)
 if strpos("`valmethod'","_")!=0 {
     tokenize "`valmethod'"
@@ -54,7 +54,7 @@ if strpos("`valtarget'","_")!=0 {
             }
     }
 }
-*/
+
 
 
 
