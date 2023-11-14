@@ -34,9 +34,6 @@ foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
 
-set trace on
-set tracedepth 1
-
 if "`method'"=="" {
 	di as error "The variable 'method' is missing so siman analyse can not be run.  Please create a variable in your dataset called method containing the method value(s)."
 	exit 498
@@ -338,23 +335,25 @@ if `methodcreated'!=1 {
 					local methodlabels = 1
 					}
 				}
-		else {
+				else {
 
-		qui levels `method', local(levels)
-		tokenize `"`levels'"'
-			if `methodstringindi' == 0 {		
-				forvalues i = 1/`nmethodlabels' {  
-					local `method'label`i' `i'
-					local methlist `methlist' ``method'label`i''
+				qui levels `method', local(levels)
+				tokenize `"`levels'"'
+					if `methodstringindi' == 0 {		
+						forvalues i = 1/`nmethodlabels' {  
+							local `method'label`i' `i'
+							local methlist `methlist' ``method'label`i''
+							}
 					}
-			}
-			else forvalues i = 1/`nmethodlabels' {  
-					local `method'label`i' ``i''
-					local methlist `methlist' ``method'label`i''
-					}
-		 }	
+					else forvalues i = 1/`nmethodlabels' {  
+							local `method'label`i' ``i''
+							local methlist `methlist' ``method'label`i''
+							}
+				 }	
 	  }
 	}
+	else local methlist `valmethod'
+	
 	if `nformat'==1 {
 		* For format 1, long-long: number of methods will be the number of method labels
 		local valmethod = "`methlist'"
@@ -381,7 +380,7 @@ if `methodcreated'!=1 {
 
 * Set indicator so that user can determine if siman analyse has been run (e.g. for use in siman lollyplot)
 local simananalyserun = 1
-local allthings `allthings' simananalyserun ifanalyse estchange sechange
+local allthings `allthings' simananalyserun ifanalyse estchange sechange 
 
 foreach thing in `allthings' {
     char _dta[siman_`thing'] ``thing''

@@ -19,8 +19,6 @@ foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
 
-set trace on
-set tracedepth 1
 
 * if both estimate and se are missing, give error message as requires something to reshape
 if mi("`estimate'") & mi("`se'") {
@@ -353,10 +351,13 @@ if "`longlong'"!="" {
 *  Shouldn't ever be wide-wide as this is auto reshaped to long-wide in siman setup.  
 	
 	if `nformat'==3 {
-	
+		
+		
 	* remove underscores from valmethod elements if there are any
 	if `methodlabels' == 1 local valmethod "`metlist'"
-	qui tokenize "`valmethod'" 
+	else local valmethod `valmethod'
+	tokenize `valmethod'
+
 
 	if `nmethod'!=0 {
 		forvalues v=1/`nummethod' {
@@ -367,6 +368,7 @@ if "`longlong'"!="" {
 				}
 			}
 	}
+	
 	
 	* check if method elements are numeric (e.g. 1 2) or string (e.g. A B) for reshape
 	local string = 0
@@ -400,7 +402,7 @@ if "`longlong'"!="" {
 
 	if "`methodlables'" == "1" local methodreshape "`methodvalues'"
 	else local methodreshape "`valmethod'"
-		
+	
 	if "`truedescriptiontype'" == "stub" | `truenumber' == 1 {
 		
 		* need a different reshape for nestloop where the true value is a separate variable AND also included in the dgm list
@@ -425,14 +427,14 @@ if "`longlong'"!="" {
 			qui reshape long "`optionlistreshape'", i(`rep' `dgm') j(target "`valtarget'") 
 			}
 		else if `string' == 0 & `ntarget'>1 & `ntarget'!=. & `nmethod'!=0 {
-			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target) j(`methodname' "`methodreshaped'")
+			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target) j(`methodname' "`methodreshape'")
 			}
 		else if `string' == 1 & `ntarget'>1 & `ntarget'!=. & `nmethod'!=0 {
 			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target) j(`methodname' "`methodreshape'") string
 			}
 	} 
 	else if "`truedescriptiontype'" == "variable" & `truenumber' == 0 {
-		
+			
 		if `string' == 0 & `ntarget'<=1 & `nmethod'!=0 {
 			qui reshape long "`optionlistreshape'", i(`rep' `dgm' `target' `true') j(`methodname' "`methodreshape'")    
 			}

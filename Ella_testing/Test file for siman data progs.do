@@ -376,7 +376,7 @@ siman_reshape, longlong
 siman_analyse                                                                             
 use simlongESTPM_longE_wideM2.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(A B) estimate(est) se(se) true(true)
-siman_analyse, perfonly   /********************************** HERE: valmethod has disappeared (there after setup, gone after analyse) **************/
+siman_analyse, perfonly   
 
 * missing target
 use simlongESTPM_longE_wideM2.dta, clear
