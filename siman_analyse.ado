@@ -193,9 +193,8 @@ if `nformat'==1 {
 
 	qui simsum `estsimsum' `if', true(`true') se(`sesimsum') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
 
-
 	* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
-	if `methodlabels' == 0 local methodloop `metlist'
+	if `methodlabels' == 0 local methodloop `valmethod'
 	else local methodloop `methodvalues' 
 	foreach v in `methodloop'  {
 		if !mi("`se'") {
@@ -205,6 +204,7 @@ if `nformat'==1 {
 		else if  substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse se`v'
 		else qui rename `estimate'`v'_mcse se`v'
 	}
+	
 
 	* take out true from option list if included for the reshape, otherwise will be included in the optionlist as well as i() and reshape won't work
 	local optionlistreshape `optionlist'
