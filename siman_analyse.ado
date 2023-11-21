@@ -256,7 +256,7 @@ foreach v in `methodloop' {
 qui simsum `estlist' `if', true(`true') se(`selist') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
 
 
-foreach v in `valmethod' {
+foreach v in `methodloop' {
 			if  substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
 			if `estchange' == 1 {
 				* can't use `estimate' on it's own as if the variable was est_1, `estimate' is taken to be est_, the _ is removed above so then
@@ -314,7 +314,7 @@ if `methodcreated'!=1 {
 	if _rc local methodstringindi = 1
 	else local methodstringindi = 0 
 
-	local methodlabels = 0
+	local methodlabelsn = 0
 
 	if `nformat'==1 | (`nformat'==3 & `nmethod'==1)  { 
 		if `nmethod'!=0 {
@@ -332,7 +332,7 @@ if `methodcreated'!=1 {
 				forvalues i = 1/`nmethodlabels' {  
 					gettoken `method'label`i' 0 : 0, parse(": ")
 					local methlist `methlist' ``method'label`i''
-					local methodlabels = 1
+					local methodlabelsn = 1
 					}
 				}
 				else {
@@ -377,6 +377,7 @@ if `methodcreated'!=1 {
 		}
 	}
 }
+
 
 * Set indicator so that user can determine if siman analyse has been run (e.g. for use in siman lollyplot)
 local simananalyserun = 1

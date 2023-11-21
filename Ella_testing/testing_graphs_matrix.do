@@ -3,7 +3,6 @@ Testing siman setup and analyse for all different permutation of the data (>100 
 NOTE: to be run in "Ella_testing" folder
 Ella 14novar2023
 ************************************************************************************************/
-global detail = 0
 
 // SETUP: MODIFY FOR USER & PROJECT
 local codepath C:\ian\git\siman\ // for Ian
@@ -17,9 +16,6 @@ adopath ++ `codepath '
 cd `testpath'
 cap log close
 set linesize 100
-
-* switch on detail if want to run all graphs
-global detail = 1
 
 // START TESTING
 log using `filename', replace
@@ -158,12 +154,286 @@ siman analyse
 
 * DGM numeric, 1 var
 *********************
-* target string, 
+* target string, true variable 1 level
 use data/simlongESTPM_longE_wideM1.dta, clear
 siman setup, rep(rep) dgm(dgm) est(est) se(se) target(estimand) method(_1 _2) true(true)
 siman analyse
 
+* DGM numeric with string labels, 1 var
+*****************************************
+* target numeric, true missing
+use data/simlongESTPM_longE_wideM.dta, clear
+label define dgmlabel 1 "MCAR" 2 "MNAR"
+label values dgm dgmlabel
+gen target = 1 if estimand == "beta"
+replace target = 2 if estimand == "gamma"
+drop estimand true
+rename target estimand
+siman setup, rep(rep) dgm(dgm) est(est) se(se) target(estimand) method(1 2) 
+siman analyse
 
+
+* DGM string, 1 var
+********************
+* target numeric with string labels, true value
+
+use data/simlongESTPM_longE_wideM1.dta, clear
+encode estimand, gen(estimand_new)
+gen dgm_new = "1"
+replace dgm_new = "2" if dgm == 2
+drop true estimand dgm
+rename estimand_new estimand
+rename dgm_new dgm
+siman setup, rep(rep) dgm(dgm) est(est) se(se) target(estimand) method(_1 _2) true(0.5)
+siman analyse
+
+* DGM missing
+************** 
+* true variable with >1 level, method missing
+use data/simlongESTPM_longE_wideM1.dta, clear
+drop dgm est_2 se_2
+replace true = 0.5 if estimand == "gamma"
+rename est_1 est
+rename se_1 se
+bysort rep estimand: gen n = _n
+drop if n==2
+drop n
+siman setup, rep(rep) est(est) se(se) target(estimand) true(true)
+siman analyse
+
+* missing target
+use data/simlongESTPM_longE_wideM1.dta, clear
+drop estimand
+bysort rep dgm: gen n = _n
+drop if n==2
+drop n
+siman setup, rep(rep) dgm(dgm) est(est) se(se) method(_1 _2) true(true)
+siman analyse
+
+* DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
+************************************************************************************************
+use data/extendedtestdata_postfile.dta, clear
+
+* remove non-integer values
+foreach var in beta pmiss {
+	gen `var'char = strofreal(`var')
+	drop `var'
+	sencode `var'char, gen(`var')
+	drop `var'char
+}
+order beta pmiss
+* reshape in to long-wide format
+reshape wide b se, i(rep mech pmiss beta estimand) j(method "Noadj" "CCA" "MeanImp") string
+
+siman setup, rep(rep) dgm(beta pmiss mech) method(Noadj CCA MeanImp) target(estimand) est(b) se(se) 
+siman analyse
+
+*************************************************************************
+*************************************************************************
+* WIDE-WIDE, order(method)
+*************************************************************************
+*************************************************************************
+
+* DGM numeric, 1 var
+*********************
+
+use data/simlongESTPM_wideE_wideM.dta, clear
+* true variable, 1 value
+siman setup, rep(rep) dgm(dgm) est(est) se(se) method(1_ 2_) target(beta gamma) true(true) order(method)
+
+* DGM numeric with string labels, 1 var
+*****************************************
+* true missing
+use data/simlongESTPM_wideE_wideM.dta, clear
+label define dgmlabel 1 "MCAR" 2 "MNAR"
+label values dgm dgmlabel
+bysort rep dgm: gen n = _n
+drop if n==2
+drop n true
+siman setup, rep(rep) dgm(dgm) est(est) se(se) target(beta gamma) method(1_ 2_) order(method)
+siman analyse
+
+* DGM string, 1 var
+********************
+* true numeric value
+use data/simlongESTPM_wideE_wideM.dta, clear
+gen dgm_new = "1"
+replace dgm_new = "2" if dgm == 2
+drop dgm true
+rename dgm_new dgm
+siman setup, rep(rep) dgm(dgm) est(est) se(se) target(beta gamma) method(1_ 2_) true(0.5) order(method)
+siman analyse
+
+* DGM missing
+************** 
+
+use data/simlongESTPM_wideE_wideM.dta, clear
+drop dgm
+bysort rep: gen n = _n
+drop if n==2
+drop n 
+siman setup, rep(rep) est(est) se(se) target(beta gamma) method(1_ 2_) true(true) order(method)
+siman analyse
+
+* DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
+************************************************************************************************
+use data/extendedtestdata_postfile.dta, clear
+
+* remove non-integer values
+foreach var in beta pmiss {
+	gen `var'char = strofreal(`var')
+	drop `var'
+	sencode `var'char, gen(`var')
+	drop `var'char
+}
+order beta pmiss
+* reshape in to wide-wide format, method in label first
+reshape wide b se, i(rep mech pmiss beta estimand) j(method "Noadj" "CCA" "MeanImp") string
+reshape wide bNoadj seNoadj bCCA seCCA bMeanImp seMeanImp, i(rep mech pmiss beta) j(estimand "effect" "mean0" "mean1") string
+siman setup, rep(rep) dgm(beta pmiss mech) method(Noadj CCA MeanImp) target(effect mean0 mean1) est(b) se(se) order(method)
+siman analyse
+
+*************************************************************************
+*************************************************************************
+* WIDE-WIDE, order(target)
+*************************************************************************
+*************************************************************************
+
+* DGM numeric, 1 var
+*********************
+* true variable 1 level
+use data/simlongESTPM_wideE_wideM2.dta, clear
+siman setup, dgm(dgm) rep(rep) est(est) se(se) target(beta_ gamma_) method(1 2) true(true) order(target)
+siman analyse
+
+* DGM numeric with string labels, 1 var
+*****************************************
+* true missing
+use data/simlongESTPM_wideE_wideM2.dta, clear
+label define dgmlabel 1 "MCAR" 2 "MNAR"
+label values dgm dgmlabel
+bysort rep dgm: gen n = _n
+drop if n==2
+drop n true
+siman setup, dgm(dgm) rep(rep) est(est) se(se) target(beta_ gamma_) method(1 2) order(target)
+siman analyse
+
+* DGM string, 1 var
+********************
+* true numeric value
+use data/simlongESTPM_wideE_wideM2.dta, clear
+gen dgm_new = "1"
+replace dgm_new = "2" if dgm == 2
+drop dgm true
+rename dgm_new dgm
+siman setup, dgm(dgm) rep(rep) est(est) se(se) target(beta_ gamma_) method(1 2) true(0.5)  order(target) 
+siman analyse
+
+* DGM missing
+************** 
+use data/simlongESTPM_wideE_wideM2.dta, clear
+drop dgm
+bysort rep: gen n = _n
+drop if n==2
+drop n 
+siman setup, rep(rep) est(est) se(se) target(beta_ gamma_) method(1 2) true(true)  order(target) 
+siman analyse
+
+* DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
+************************************************************************************************
+use data/extendedtestdata_postfile.dta, clear
+
+* remove non-integer values
+foreach var in beta pmiss {
+	gen `var'char = strofreal(`var')
+	drop `var'
+	sencode `var'char, gen(`var')
+	drop `var'char
+}
+order beta pmiss
+* reshape in to wide-wide format, target in label first
+reshape wide b se, i(rep mech pmiss beta method) j(estimand "effect" "mean0" "mean1") string
+reshape wide beffect seeffect bmean0 semean0 bmean1 semean1, i(rep mech pmiss beta) j(method "Noadj" "CCA" "MeanImp") string
+siman setup, rep(rep) dgm(beta pmiss mech) method(Noadj CCA MeanImp) target(effect mean0 mean1) est(b) se(se) order(target)
+siman analyse
+
+*************************************************************************
+*************************************************************************
+* WIDE-LONG
+*************************************************************************
+*************************************************************************
+
+* DGM numeric, 1 var
+*********************
+* method numeric, true variable 1 level
+use data/simlongESTPM_longM_wideE1.dta, clear
+siman setup, rep(rep) dgm(dgm) est(est) se(se) target(_beta _gamma) method(method) true(true)
+siman analyse
+
+* DGM numeric with string labels, 1 var
+*****************************************
+* method string, true missing
+use data/simlongESTPM_longM_wideE1.dta, clear
+label define dgmlabel 1 "MCAR" 2 "MNAR"
+label values dgm dgmlabel
+gen method_new = "1"
+replace method_new = "2" if method == 2
+drop method true
+rename method_new method
+siman setup, rep(rep) dgm(dgm) est(est) se(se) target(_beta _gamma) method(method)
+siman analyse
+
+
+* DGM string, 1 var
+********************
+* method numeric with string labels, true value
+
+use data/simlongESTPM_longM_wideE.dta, clear
+label define mlabel 1 "Method1" 2 "Method2"
+label values method mlabel
+gen dgm_new = "1"
+replace dgm_new = "2" if dgm == 2
+drop true dgm
+rename dgm_new dgm
+siman setup, rep(rep) dgm(dgm) est(est) se(se) target(beta_ gamma_) method(method) true(0.5)
+siman analyse
+
+
+* DGM missing
+************** 
+use data/simlongESTPM_longM_wideE2.dta, clear
+drop dgm
+bysort rep method: gen n = _n
+drop if n==2
+drop n
+siman setup, rep(rep) est(est) se(se) method(method) target(1 2) true(true)
+siman analyse
+
+* missing method
+use data/simlongESTPM_longM_wideE.dta, clear
+drop method
+bysort rep dgm: gen n = _n
+drop if n==2
+drop n
+siman setup, rep(rep) dgm(dgm) est(est) se(se) target(beta_ gamma_) true(true)
+siman analyse
+
+* DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
+************************************************************************************************
+use data/extendedtestdata_postfile.dta, clear
+
+* remove non-integer values
+foreach var in beta pmiss {
+	gen `var'char = strofreal(`var')
+	drop `var'
+	sencode `var'char, gen(`var')
+	drop `var'char
+}
+order beta pmiss
+* reshape in to wide-long format
+reshape wide b se, i(rep mech pmiss beta method) j(estimand "effect" "mean0" "mean1") string
+siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(effect mean0 mean1) est(b) se(se) 
+siman analyse
 
 
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THESE TESTS ***"

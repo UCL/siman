@@ -19,7 +19,6 @@ foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
 
-
 * if both estimate and se are missing, give error message as requires something to reshape
 if mi("`estimate'") & mi("`se'") {
     di as error "siman reshape requires either estimate or se, otherwise nothing to reshape"
@@ -170,8 +169,8 @@ if `nformat'==2 {
 		}
 			
 		* need to get into long-wide format with long target and wide method
-		
-		qui reshape long "`optionlist'", i(`rep' `dgm' `method') j(target) string		
+		if strpos("`valtarget'","_")==0 qui reshape long "`optionlist'", i(`rep' `dgm' `method') j(target "`valtarget'") string
+        else qui reshape long "`optionlist'", i(`rep' `dgm' `method') j(target) string
 		qui reshape wide "`optionlist'", i(`rep' `dgm' target) j(`method' "`valmethod'") string
 		
 		* retain 1 true variable (they are copies of each other), do not want true[method1] true[method2] etc all with same true values
@@ -347,14 +346,15 @@ else if `nformat'==1 & `nmethod'==0 {
 else
 
 if "`longlong'"!="" {
-
+    
 *  Shouldn't ever be wide-wide as this is auto reshaped to long-wide in siman setup.  
 	
 	if `nformat'==3 {
 		
 		
 	* remove underscores from valmethod elements if there are any
-	if `methodlabels' == 1 local valmethod "`metlist'"
+	if `methodlabels' == 1 & !mi("`metlist'") local valmethod "`metlist'"
+	else if `methodlabels' == 1 & mi("`metlist'") local valmethod "`methodvalues'"
 	else local valmethod `valmethod'
 	tokenize `valmethod'
 
@@ -452,8 +452,7 @@ if "`longlong'"!="" {
 			qui reshape long "`optionlistreshape'", i(`rep' `dgm' target `true') j(`methodname' "`methodreshape'") string
 			}
 	} 
-		
-		
+
 	* take out underscores at the end of variable names if there are any
 		foreach u of var * {
 			if  substr("`u'",strlen("`u'"),1)=="_" {

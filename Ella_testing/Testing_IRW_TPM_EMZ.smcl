@@ -3,13 +3,13 @@
       name:  {res}<unnamed>
        {txt}log:  {res}C:\git\siman\Ella_testing\Testing_IRW_TPM_EMZ.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}14 Nov 2023, 17:41:46
+ {txt}opened on:  {res}21 Nov 2023, 14:22:25
 {txt}
 {com}. siman which
 {txt}C:\git\siman\siman.ado
 {res}*!version 0.3  08aug2023
 {txt}C:\git\siman\siman_setup.ado
-{res}*!   version 0.8.5  13nov2023
+{res}*!   version 0.8.6  20nov2023 
 {txt}C:\git\siman\siman_describe.ado
 {res}*! version 0.5   17oct2022  
 {txt}C:\git\siman\siman_analyse.ado
@@ -2198,7 +2198,7 @@ Estimates are contained in the dataset
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}C:\git\siman\Ella_testing\Testing_IRW_TPM_EMZ.smcl
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}14 Nov 2023, 18:00:05
+ {txt}closed on:  {res}21 Nov 2023, 14:35:10
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

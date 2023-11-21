@@ -1,4 +1,5 @@
-*!   version 0.8.5  13nov2023
+*!   version 0.8.6  20nov2023 
+*    version 0.8.6  20nov2023    EMZ minor bug fix for when dgm is missing, count of variables specified in setup vs dataset mis-macth as dgm is a tempvar.
 *    version 0.8.5  13nov2023    EMZ create a true variable if true is put in to the syntax as numeric e.g. true(0.5), for use by other siman programs
 *    version 0.8.4  06nov2023    EMZ change so that if targets are wide and data is auto-reshaped by siman, then true becomes a long variable (does not 
 *                                remain wide)
@@ -88,7 +89,6 @@ gen _true = `true'
 local true _true
 }
 
-		
 * check that the following only have one entry: rep, est, se, df, lci, uci, p, order, true
 foreach singlevar in "`rep'" "`estimate'" "`se'" "`df'" "`lci'" "`uci'" "`p'" "`order'" "`true'" {
 	* have to tokenize to show which vars have been entered together by the user.  Otherwise if the user has
@@ -561,7 +561,8 @@ local datasetvars: list uniq datasetvarswithtrue
 				else local truevariables `truevariables' `true'`i'`j'
 			}
 		}
-	local simanvarswithtrue `rep' `dgm' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+	if `dgmcreated'!=1 local simanvarswithtrue `rep' `dgm' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+	else local simanvarswithtrue `rep' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
 	}
 	* wide-wide format, order = target
 	else if `nformat' == 2 & "`order'" == "target"{
@@ -577,7 +578,8 @@ local datasetvars: list uniq datasetvarswithtrue
 				else local truevariables `truevariables' `true'`j'`i'
 			}
 		}
-	local simanvarswithtrue `rep' `dgm' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+	if `dgmcreated'!=1 local simanvarswithtrue `rep' `dgm' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+	else local simanvarswithtrue `rep' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
 	}
 	* long-wide format
 	else if `nformat' == 3 & `nmethod'!=1 & `nmethod'!=0 {
@@ -591,7 +593,8 @@ local datasetvars: list uniq datasetvarswithtrue
 				if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
 				else local truevariables `truevariables' `true'`i'
 		}
-	local simanvarswithtruenotuniq `rep' `dgm' `target' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+	if `dgmcreated'!=1 local simanvarswithtruenotuniq `rep' `dgm' `target' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+	else local simanvarswithtruenotuniq `rep' `target' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
 	local simanvarswithtrue: list uniq simanvarswithtruenotuniq
 	}
 	* long method, wide target
@@ -606,7 +609,8 @@ local datasetvars: list uniq datasetvarswithtrue
 				if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
 				else local truevariables `truevariables' `true'`j'
 				
-	local simanvarswithtrue `rep' `dgm' `method' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+	if `dgmcreated'!=1 local simanvarswithtrue `rep' `dgm' `method' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+	else local simanvarswithtrue `rep' `method' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
 			}	
 	}
 	* test for equivalence
