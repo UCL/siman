@@ -29,19 +29,22 @@
 {synopt:{opt dgmo:rder(string)}}order of data generating mechanisms for the nested loop plot. A negative sign in front of the variable name 
 will display its values on the graph in descending order.{p_end}
 {synopt:{opt stag:ger(#)}}horizontally staggers the main graphs for different methods.  Default # is 0. Try {cmd:stagger(0.05)} to make the lines more distinct.{p_end}
-{synopt:{opt c:onnect(string)}}controls how the main graph and legend/descriptor graph are connected. Default is connect(J) which shows each performance measure value as a horizontal line with vertical joins (as described by Rucker and Schwarzer). An alternative is connect(L) which shows each performance measure value at a point with diagonal joins.{p_end}
-{synopt:{opt noref:line}}prevents display of reference lines at controls the width(s) of the legend/descriptor graph.{p_end}
+{synopt:{opt c:onnect(string)}}controls how the main graph and descriptor graph are connected. 
+Default is {cmd:connect(J)} which shows each performance measure value as a horizontal line with vertical joins (as described by {help siman_nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}). 
+An alternative is {cmd:connect(L)} which shows each performance measure value at a point with diagonal joins.{p_end}
+{synopt:{opt noref:line}}prevents display of reference lines for certain performance measures (coverage, bias, relprec and relerror).{p_end}
+{synopt:{opt lev:el}}specifies where the reference line for performance measure coverage will be drawn.{p_end}
 
 {syntab:Descriptor graph options}
 
-{synopt:{opt dgsi:ze(#)}} defines the vertical size of the legend/descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.35.{p_end}
-{synopt:{opt dgga:p(#)}} defines the vertical size of the gap between the main graph and the legend/descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.{p_end}
-{synopt:{opt dgin:nergap(#)}} controls the vertical spacing between the  legend/descriptor graphs.  Default # is 3.{p_end}
-{synopt:{opt dgco:lor(string)}} controls the colour(s) for the legend/descriptor graphs and their labels. Default is gs4.{p_end}
+{synopt:{opt dgsi:ze(#)}} defines the vertical size of the descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.35.{p_end}
+{synopt:{opt dgga:p(#)}} defines the vertical size of the gap between the main graph and the descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.{p_end}
+{synopt:{opt dgin:nergap(#)}} controls the vertical spacing between the  descriptor graphs.  Default # is 3.{p_end}
+{synopt:{opt dgco:lor(string)}} controls the colour(s) for the descriptor graphs and their labels. Default is gs4.{p_end}
 {synopt:{opt dgpa:ttern(string)}} controls the pattern(s) for descriptor graph. Deafult is solid.{p_end}
-{synopt:{opt dgla:bsize(string)}} controls the size of the legend/descriptor graph labels. Default is vsmall.{p_end}
-{synopt:{opt dgst:yle(string)}} controls the style(s) of the legend/descriptor graph.{p_end}
-{synopt:{opt dglw:idth(string)}} controls the width(s) of the legend/descriptor graph.{p_end}
+{synopt:{opt dgla:bsize(string)}} controls the size of the descriptor graph labels. Default is vsmall.{p_end}
+{synopt:{opt dgst:yle(string)}} controls the style(s) of the descriptor graph.{p_end}
+{synopt:{opt dglw:idth(string)}} controls the width(s) of the descriptor graph.{p_end}
 
 {syntab:Other graph options}
 
@@ -57,14 +60,14 @@ Each graph presents the simulation results for all data generating mechanisms an
 
 {pstd}
 The performance measure is split by method and is stacked according to the levels of the data generating mechanisms along the horizontal axis. 
-The “nested-loop plot” loops through nested data-generating mechanisms and plots results for different methods on top of each other in a full factorial design.
+The nested loop plot loops through nested data-generating mechanisms and plots results for different methods on top of each other in a full factorial design.
 
 {pstd}The user can select a subset of performance measures to be graphed using the 
 performance measures listed in {help siman_analyse##perfmeas:performance measures}.
-If no performance measures are specified, then graphs will be drawn for bias, empse (empirical standard error) and coverage; 
-except that if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for mean, empse and relerror (relative error in the model standard error).
+If no performance measures are specified, then graphs will be drawn for {help siman_analyse##bias:bias}, {help siman_analyse##empse:empse} and {help siman_analyse##cover:coverage}; 
+except that if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for {help siman_analyse##mean:mean}, {help siman_analyse##empse:empse} and {help siman_analyse##relerror:relerror}.
 
-{pstd}The user can specify {it:if} within the siman nestloop syntax. If they do not, but have already specified 
+{pstd}The user can specify {it:if} within the {cmd:siman nestloop} syntax. If they do not, but have already specified 
 an {it:if} during {help siman analyse}, then the {it:if} from {help siman analyse} will be used.
 The {it:if} option will only apply to {bf:dgm}, {bf:target} and {bf:method}.  The {it:if} option is not allowed to be used on 
 {bf:repetition} and an error message will be issued if the user tries to do so.
@@ -82,10 +85,10 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {marker example}{...}
 {title:Example}
 
-{pstd} Re-creating the nestloop plot in Figure 2 from {help siman_nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}, found {browse "https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/1471-2288-14-129#Sec23":here}.
- 
-{pstd} Use res.rda converted into a Stata dataset from {help siman_nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}, which can be
-found {browse "https://github.com/UCL/simansuite/tree/main/Ella_testing/nestloop/res.dta":here}.
+{pstd} Re-creating the nestloop plot in Figure 2 from {help siman_nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}, found {browse "https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/1471-2288-14-129#Sec23":here}. The data can be
+found {browse "https://github.com/UCL/simansuite/tree/main/Ella_testing/nestloop/res.dta":here} or opened directly (with siman setup and siman analyse already performed) using the command below.
+
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/nestloop/res2.dta, clear"}
 
 {phang}. {stata "siman setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)"}
 

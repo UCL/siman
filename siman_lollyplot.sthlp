@@ -36,13 +36,15 @@
 	
 {synopt:{opt refp:ower(string)}}Reference level for power. Default is 80.
 
+{syntab:Calculation options}
+
 {synopt:{opt l:evel(#)}}Level for confidence intervals. Default is the current level (see {help level}).
 
 {synopt:{opt logit}}Calculates confidence intervals for power and coverage on the logit scale. This is only important with small numbers of repetitions: it ensures that confidence intervals lie between 0 and 100.
 
 {syntab:General graph options}
 
-{synopt:{opt bygr:aphoptions(string)}}graph options which need to be placed within the {cmd:by()} option.
+{synopt:{opt bygr:aphoptions(string)}}Graph options which need to be placed within the {cmd:by()} option.
 
 {synopt:{it:graph_options}}Most of the valid options for {help scatter:scatter} are available.{p_end}
 
@@ -59,7 +61,7 @@ Requires {help pause} to be on.
 {cmd:siman lollyplot} draws a lollipop plot of performance measures data.  
 Each panel shows the estimated values of one performance measure with one data generating mechanism for all methods.
 Monte Carlo confidence intervals are represented via parentheses (a visual cue due to the usual presentation of 
-intervals as two numbers within parentheses)
+intervals as two numbers within parentheses).
 The graph shows several performance measures (as rows of panels) and several data generating mechanisms (as columns).
 One graph is drawn for each target.
 
@@ -67,11 +69,11 @@ One graph is drawn for each target.
 
 {pstd}The user can select a subset of performance measures to be graphed using the 
 performance measures listed in {help siman_analyse##perfmeas:performance measures}.
-If no performance measures are specified, then graphs will be drawn for bias, empse (empirical standard error) and coverage; 
-except that if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for mean, empse and relerror (relative error in the model standard error).
+If no performance measures are specified, then graphs will be drawn for {help siman_analyse##bias:bias}, {help siman_analyse##empse:empse} and {help siman_analyse##cover:coverage}; 
+except that if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for {help siman_analyse##mean:mean}, {help siman_analyse##empse:empse} and {help siman_analyse##relerror:relerror}.
 
 {pstd}
-The user can specify {it:if} within the siman lollyplot syntax. If they do not, but have already specified 
+The user can specify {it:if} within the {cmd:siman lollyplot} syntax. If they do not, but have already specified 
 an {it:if} during {help siman_analyse:siman analyse}, then the {it:if} from {help siman_analyse:siman analyse} will be used.
 The {it:if} option will only apply to {bf:dgm}, {bf:target} and {bf:method}.  The {it:if} option is not allowed to be used on 
 {bf:repetition} and an error message will be issued if the user tries to do so.
@@ -93,8 +95,8 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {title:Reference}
 
 {pstd}
- Morris, TP, White, IR, Crowther, MJ. Using simulation studies to evaluate statistical methods. Statistics in Medicine. 2019; 38: 2074– 2102. 
- {browse "https://doi.org/10.1002/sim.8086"}
+Morris TP, White IR, Crowther MJ. Using simulation studies to evaluate statistical methods. Statistics in Medicine. 2019; 38: 2074– 2102. 
+{browse "https://doi.org/10.1002/sim.8086"}
 
 {marker authors}{...}
 {title:Authors}

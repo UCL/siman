@@ -36,36 +36,35 @@
 {syntab:Performance measure options:}
 
 {pstd}
-As per {help simsum:simsum}.  If none of the following options are specified, then all available performance measures are computed.
+As per {help simsum:simsum}.  If none of the following options are specified, then all available performance measures are estimated.
 
-{synopt:{opt bsims} } reports the number of simulations with non-missing point estimates.
+{marker bsims}{synopt:{opt bsims}}the number of repetitions with non-missing point estimates.
 
-{synopt:{opt sesims} } reports the number of simulations with non-missing standard errors.
+{marker sesims}{synopt:{opt sesims} }the number of repetitions with non-missing standard errors.
 
-{synopt:{opt bias} } estimates the bias in the point estimates.
+{marker bias}{synopt:{opt bias} }the bias in the point estimates.
 
-{synopt:{opt mean} } the average (mean) of the point estimates.
+{marker mean}{synopt:{opt mean} }the average (mean) of the point estimates.
 
-{synopt:{opt empse} } estimates the empirical standard error -- the standard deviation of the point estimates.
+{marker empse}{synopt:{opt empse} }the empirical standard error -- the standard deviation of the point estimates.
 
-{synopt:{opt relprec} } estimates the relative precision -- the inverse squared ratio of the empirical standard error
- of this method to the empirical standard error of the reference method.  This calculation is 
- slow: omitting it can reduce run time by up to 90%.
+{marker relprec}{synopt:{opt relprec} }the relative precision -- the inverse squared ratio of the empirical standard error
+of this method to the empirical standard error of the reference method.  
+This calculation is slow: omitting it can reduce run time by up to 90%.
 
-{synopt:{opt mse} } estimates the mean squared error.
+{marker mse}{synopt:{opt mse} }the mean squared error.
 
-{synopt:{opt rmse} } estimates the root mean squared error.
+{marker rmse}{synopt:{opt rmse} }the root mean squared error.
  
-{synopt:{opt modelse} } estimates the model-based standard error. 
+{marker modelse}{synopt:{opt modelse} }the model-based standard error - more precisely, the average of the model-based standard errors across repetitions. 
 
-{synopt:{opt ciwidth} } estimates the width of the confidence interval at the specified level.
+{marker ciwidth}{synopt:{opt ciwidth} }the width of the confidence interval at the specified level.
 
-{synopt:{opt relerror} } estimates the proportional error in the model-based standard error, using the empirical standard error 
-as gold standard.
+{marker relerror}{synopt:{opt relerror} }the relative error in the model-based standard error, using the empirical standard error as gold standard.
 
-{synopt:{opt cover} } estimates the coverage of nominal confidence intervals at the specified level.
+{marker cover}{synopt:{opt cover} }the coverage of nominal confidence intervals at the specified level.
 
-{synopt:{opt power} } estimates the power to reject the null hypothesis that the true parameter is zero, at the specified level.
+{marker power}{synopt:{opt power} }the power to reject the null hypothesis that the true parameter is zero, at the specified level.
 
 {marker addopts}{...}
 {syntab:Additional options:}
@@ -98,7 +97,7 @@ Additionally the performance measure code (as listed above) and the dataset (est
 
 {pstd}
 {cmd:siman analyse} will also calculate Monte-Carlo standard errors (mcses).  MSCEs quantify a measure of the simulation uncertainty.  They provide an estimate of the standard error of the performance measure, as a finite number of 
-simulations are used.  For example, for the performance measure bias, the Monte-Carlo standard error would show the uncertainty around the estimate of the bias of all of the estimates over all of the simulations 
+repetitions are used.  For example, for the performance measure bias, the Monte-Carlo standard error would show the uncertainty around the estimate of the bias of all of the estimates over all of the repetitions 
 (i.e. for all in the estimates data set).
 
 {pstd}
