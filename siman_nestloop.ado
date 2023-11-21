@@ -22,7 +22,7 @@ version 15
 // PARSE
 syntax [anything] [if], ///
 	[DGMOrder(string) ///
-	STAGger(real 0) Connect(string) noREFline /// control main graph
+	STAGger(real 0) Connect(string) noREFline LEVel(cilevel) /// control main graph
 	DGSIze(real 0.3) DGGAp(real 0) /// control sizing of descriptor graph
 	DGINnergap(real 3) DGCOlor(string) /// control descriptor graph
 	DGPAttern(string) DGLAbsize(string) DGSTyle(string) DGLWidth(string) /// control descriptor graph
@@ -102,6 +102,8 @@ if mi("`connect'") local connect J // could be L
 if mi("`dgcolor'") local dgcolor gs4
 if mi("`dgpattern'") local dgpattern solid
 if mi("`dglabsize'") local dglabsize vsmall
+
+local cilevel `level'
 
 *** END OF PARSING ***
 
@@ -406,7 +408,7 @@ foreach thispm of local pmlist { // loop over PMs
 		}
 		* reference lines
 		if "`refline'"!="norefline" {
-			if "`thispm'"=="cover" local ref 95
+			if "`thispm'"=="cover" local ref `cilevel'
 			else if inlist("`thispm'", "bias", "relprec", "relerror") local ref 0
 			else local ref
 			if !mi("`ref'") local yline yline(`ref',lcol(gs12))
