@@ -1,4 +1,5 @@
-*!   version 0.8.6  20nov2023 
+*!   version 0.8.7  27nov2023
+*    version 0.8.7  27nov2023    EMZ add check and error if true is not constant across methods
 *    version 0.8.6  20nov2023    EMZ minor bug fix for when dgm is missing, count of variables specified in setup vs dataset mis-macth as dgm is a tempvar.
 *    version 0.8.5  13nov2023    EMZ create a true variable if true is put in to the syntax as numeric e.g. true(0.5), for use by other siman programs
 *    version 0.8.4  06nov2023    EMZ change so that if targets are wide and data is auto-reshaped by siman, then true becomes a long variable (does not 
@@ -102,9 +103,9 @@ foreach singlevar in "`rep'" "`estimate'" "`se'" "`df'" "`lci'" "`uci'" "`p'" "`
 }
 
 
-* produce error message if no est, se, p or ci contained in dataset
-if mi("`estimate'") &  mi("`se'") & mi("`lci'") & mi("`uci'") & mi("`p'") {
-	 di as error "no estimates, SEs, p-values or confidence intervals specified.  Need to specify at least one for siman to run."
+* produce error message if no est, se, or ci contained in dataset
+if mi("`estimate'") &  mi("`se'") & mi("`lci'") & mi("`uci'") {
+	 di as error "no estimates, SEs, or confidence intervals specified.  Need to specify at least one for siman to run."
     exit 498
 }
 
@@ -125,6 +126,7 @@ if mi("`method'") {
 	 local method "_methodvar"
 	 local methodcreated = 1
 }
+
 
 * check that dgm takes numerical values; if not, encode and replace so that siman can do its things.
 if !mi("`dgm'") {
@@ -546,6 +548,7 @@ local datasetvars: list uniq datasetvarswithtrue
 		local simanvarswithtrue0 `simanvars' `true'
 		* for cases where true is in dgm() and true(), only include once
 		local simanvarswithtrue: list uniq simanvarswithtrue0
+		local truevariables `true'
 	}
 	* wide-wide format, order = method
 	else if `nformat' == 2 & "`order'" == "method"{
@@ -628,6 +631,18 @@ local datasetvars: list uniq datasetvarswithtrue
 		else di as error "There are variables specified in siman setup that are not in your dataset.  Note that if your data is in wide-wide format and your variable names contain underscores, these will need to be included in the setup syntax.  See {help siman_setup:siman setup} for further details."
 		exit 498
 	}
+	
+
+* check that true is constant accross methods
+if !mi("`truevariables'") {
+	foreach truevar of varlist `truevariables' {
+		qui cap bysort `method' (`truevar') : assert `truevar'[1] == `truevar'[_N]
+		if _rc {
+			di as error "`true' needs to be constant across methods.  Please make `true' constant across methods and then run -siman setup- again."
+			exit 498
+		}
+	}
+}
 
 
 	

@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.6.4 19sep2023}{...}
+{* *! version 0.6.5 27nov2023}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Input data formats" "siman_setup##data"}{...}
@@ -21,7 +21,7 @@
 
 {pstd}
 The input data for {cmd:siman setup} is an estimates data set.  This contains the results from analysing multiple simulated data sets, with data relating to different statistics for each simulated data set.  Each row in the estimates data set 
-relates to one simulation, labelled here as repetition ({bf:rep}).
+relates to one simulation combination of {bf:dgm}/{bf:method}/{bf:target}, labelled here as repetition ({bf:rep}).
   
 {pstd}Input data can be in any of these formats:
 
@@ -50,7 +50,7 @@ relates to one simulation, labelled here as repetition ({bf:rep}).
 ]
 
 {pstd}
-{it:Note {cmd: rep} is to be numeric variable only}.
+{it:Note {cmd: rep} is to be numeric variable only}.  At least one of {bf:est()} and {bf:se()} is required.
 
 
 {pstd}
@@ -127,7 +127,7 @@ clear
 {synopt:{opt df(varname|stub_varname)}}the degrees of freedom variable name or the name of its stub if in wide format.{p_end}
 {synopt:{opt lci(varname|stub_varname)}}the lower confidence interval variable name or the name of its stub if in wide format.{p_end}
 {synopt:{opt uci(varname|stub_varname)}}the upper confidence interval variable name or the name of its stub if in wide format.{p_end}
-{synopt:{opt true(#|varname|stub_varname)}}the true value, or variable name or the name of its stub if in wide format. A number/numeric variable only.{p_end}
+{synopt:{opt true(#|varname|stub_varname)}}the true value, or variable name or the name of its stub if in wide format. A number/numeric variable only that has to be constant across method.{p_end}
 {synopt:{opt ord:er(varname)}}if in wide-wide format, this must be either {it:target} or {it:method}, 
 denoting that either the target stub is first or the method stub is first in the variable names.{p_end}
 {synopt:{opt clear}}to clear the existing data held in memory.{p_end}
@@ -218,6 +218,13 @@ estimate and {it:method} denotes the method used to produce the estimates.
 should be re-formatted by the user so that it has integer values with non-integer labels.
 
 {pstd}If the method variable is missing, then {cmd:siman setup} will create a variable {bf:_methodvar} in the dataset with a value of 1 in order that all the other {bf: siman} programs can run.
+
+{pstd} If true exists, it has to be constant across methods.  If using {bf:true({it:stub_varname})}, this stub has to be in the same format as the other variables.  For example if {bf: method} and {bf: target} are in wide format with values 1/2 
+and beta/gamma respectively, with a different true value per target, and estimate defined as {bf: est}, standard error as {bf: se}, then the variables in the dataset would need to be as follows:
+est1beta est2beta est1gamma est2gamma se1beta se2beta se1gamma se2gamma true1beta true2beta true1gamma true2gamma.
+
+{pstd}Note that if the data was in {it:widewide} format similar to above with variable names {it:est1_beta est2_beta est1_gamma est2_gamma}, then 
+the underscores would need to be included in {bf:siman setup}, i.e. {bf:siman setup, est(est) method(1_ 2_) target(beta gamma) order(method)}.
 
 {pstd}No special characters are allowed in the labels of the variables, as these are not allowed in Stata graphs.  No spaces in the variable labels are allowed either, to enable reshaping to {it:longwide} format and back again (required 
 internally for some of the graphs).  For example, if the data is in {it:longlong} format the estimate variable is {it:b} 
