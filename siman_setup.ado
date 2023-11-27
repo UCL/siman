@@ -633,7 +633,7 @@ local datasetvars: list uniq datasetvarswithtrue
 	}
 	
 * check that true is constant accross methods.  Can only do this when method is a variable (otherwise `method' will be label values and can not sort)
-if !mi("`truevariables'") & (`nformat' == 1 | `nformat' == 4) {
+if !mi("`truevariables'") & (`nformat' == 1 | `nformat' == 4) & `methodcreated' == 0 {
 	foreach truevar of varlist `truevariables' {
 		qui cap bysort `method' (`truevar') : assert `truevar'[1] == `truevar'[_N]
 		if _rc {

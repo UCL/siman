@@ -188,27 +188,6 @@ cap siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_te
 assert _rc == 498
 * siman bland altman can not be run without method as required
 
-* Target numeric, method numeric, true > 1 level (different true values per target)
-clear all
-prog drop _all
-use data/simlongESTPM_longE_longM.dta, clear
-* need to alter data set so have 2 values of true corresponding to 2 estimands,
-* and a complete method set for each of these. 
-replace true=0.5 if estimand=="beta"
-gen estimand_num = .
-replace estimand_num = 1 if estimand == "beta"
-replace estimand_num = 2 if estimand == "gamma"
-drop estimand
-*drop if dgm == 2
-rename estimand_num estimand
-siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
-
-siman scatter
-siman swarm
-siman zipplot
-siman comparemethodsscatter
-siman blandaltman
-
 
 * now try with missing target
 use data/simlongESTPM_longE_longM.dta, clear
@@ -321,6 +300,8 @@ siman lollyplot if k==5, xtitle("test x-title") name("lollyplot_test7", replace)
 
 siman nestloop mean, dgmorder(-theta rho -pc -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") name("nestloop_test7", replace)
 
+/*
+* Won't work as true not constant accross methods
 if ${detail} == 1 {
 
 * Testing warning messages correspond to the number of panels/graphs that will be printed
@@ -392,7 +373,7 @@ siman zipplot if mech =="MCAR": mech
 siman zipplot, by(pmiss)
 siman zipplot, by(method)
 }
-
+*/
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THESE TESTS ***"
 
 log close
