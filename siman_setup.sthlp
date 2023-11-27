@@ -226,6 +226,10 @@ est1beta est2beta est1gamma est2gamma se1beta se2beta se1gamma se2gamma true1bet
 {pstd}Note that if the data was in {it:widewide} format similar to above with variable names {it:est1_beta est2_beta est1_gamma est2_gamma}, then 
 the underscores would need to be included in {bf:siman setup}, i.e. {bf:siman setup, est(est) method(1_ 2_) target(beta gamma) order(method)}.
 
+{pstd}If the data is in {it:widewide} format with underscores separating the {bf:method} and {bf:target} labels (as in the example above), or in
+{it:widelong} format with underscores after the {bf:target} labels, then these underscores will be removed by the {bf:siman} auto-reshape in to 
+{it:longwide} format.  Underscores will be removed from the end of variable labels displayed by {bf:{help siman describe:siman describe}}, e.g. A_ and B_ will be displayed as A and B.
+
 {pstd}No special characters are allowed in the labels of the variables, as these are not allowed in Stata graphs.  No spaces in the variable labels are allowed either, to enable reshaping to {it:longwide} format and back again (required 
 internally for some of the graphs).  For example, if the data is in {it:longlong} format the estimate variable is {it:b} 
 and the method variable has labels {it: Complete case} and {it:Complete data}, then when reshaped to {it:longwide} format 

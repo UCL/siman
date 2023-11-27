@@ -268,8 +268,8 @@ else if `nformat'==1 & `nmethod'!=0 {
 			}
 		}	
 		if `labelchange'==1 {
-			label define methodlab `labelvalues'
-			label values `method' methodlab
+			cap label define methodlab `labelvalues'
+			cap label values `method' methodlab
 			}
 			
 		local valmethod = "`metlist'"

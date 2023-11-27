@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.3 20dec2021}{...}
+{* *! version 0.4 27nov2023}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_describe##syntax"}{...}
 {viewerjumpto "Data formats" "siman_describe##data"}{...}
@@ -60,6 +60,8 @@ The number of {bf:dgm(s)}/number of variables that {bf:dgm} is defined by and th
 
 {pstd}
 {cmd:siman describe} will also list the {bf:estimate}, {bf:se}, {bf:df}, {bf:ci}, and {bf:true} variable names if applicable, and whether estimates are contained in the dataset.  
+
+{pstd}Underscores will be removed from the end of variable labels displayed by {bf:siman describe}, e.g. A_ and B_ will be displayed as A and B.
 
 {pstd}
 {cmd:siman describe} will be called automatically by {bf:{help siman_setup:siman setup}}, but can also be called on it's own once the data has been imported by the {bf:siman suite}.
