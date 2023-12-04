@@ -635,7 +635,7 @@ local datasetvars: list uniq datasetvarswithtrue
 * check that true is constant accross methods.  Can only do this when method is a variable (otherwise `method' will be label values and can not sort)
 if !mi("`truevariables'") & (`nformat' == 1 | `nformat' == 4) & `methodcreated' == 0 {
 	foreach truevar of varlist `truevariables' {
-		qui cap bysort `method' (`truevar') : assert `truevar'[1] == `truevar'[_N]
+		cap bysort `dgm' `target' : assert `truevar' == `truevar'[1]
 		if _rc {
 			di as error "`true' needs to be constant across methods.  Please make `true' constant across methods and then run -siman setup- again."
 			exit 498
