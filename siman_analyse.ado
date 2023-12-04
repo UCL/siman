@@ -171,7 +171,7 @@ if `nformat'==1 {
 		if `f'==1 local methodlist `methodlabel`f''
 		else if `f'>=2 local methodlist `methodlist' `methodlabel`f''
 		}
-*	local valmethod = "`methodlist'"
+	local valmethod `methodlist'
 
 		
 	* simsum doesn't like to parse "`estimate'" etc so define a macro for simsum for estimate and se

@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.8 13mar2023}{...}
+{* *! version 0.9 28nov2023}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "simsum (if installed)" "simsum"}{...}
 {viewerjumpto "Syntax" "siman_analyse##syntax"}{...}
@@ -107,26 +107,51 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {title:Examples}
 {pstd}
 
+{pstd}Using the {browse "https://github.com/UCL/siman/tree/master/Ella_testing/data/simlongESTPM_wideE_wideM4.dta":widewide_dataset} from
+{bf:{help siman_setup:siman setup}}.
+{p_end}
+
+{phang}. {stata "clear all"}
+
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_wideE_wideM4.dta, clear"}
+
+{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) order(method)"}
+
 {pstd}
 Display performance measures only:
 {p_end}
-{pstd}
-{bf:siman analyse, perfonly}
-{p_end}
+
+{phang}. {stata "siman analyse, perfonly"}
 
 {pstd}
-If more than one method, with method labels {it:1,2..k}:
+If more than one method, with method labels 1 and 2, using the {browse "https://github.com/UCL/siman/tree/master/Ella_testing/data/simlongESTPM_longE_longM.dta":longlong_dataset} from
+{bf:{help siman_setup:siman setup}}.
 {p_end}
+
+{phang}. {stata "clear all"}
+
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
+
+{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)"}
+
 {pstd}
-{bf:siman analyse if method==1, replace}
+Run for method 2 only:
 {p_end}
+
+{phang}. {stata "siman analyse if method==2, replace"}
+
 
 {pstd}
 To only calculate the performance measures bias and model-based standard error:
 {p_end}
-{pstd}
-{bf:siman analyse, bias modelse}
-{p_end}
+
+{phang}. {stata "clear all"}
+
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
+
+{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)"}
+
+{phang}. {stata "siman analyse bias modelse"}
 
 {marker authors}{...}
 {title:Authors}

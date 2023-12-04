@@ -3,13 +3,13 @@
       name:  {res}<unnamed>
        {txt}log:  {res}C:\git\siman\Ella_testing\testing_graphs_main.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}21 Nov 2023, 14:41:18
+ {txt}opened on:  {res}27 Nov 2023, 18:55:48
 {txt}
 {com}. siman which
 {txt}C:\git\siman\siman.ado
 {res}*!version 0.3  08aug2023
 {txt}C:\git\siman\siman_setup.ado
-{res}*!   version 0.8.6  20nov2023 
+{res}*!   version 0.8.7  27nov2023
 {txt}C:\git\siman\siman_describe.ado
 {res}*! version 0.5   17oct2022  
 {txt}C:\git\siman\siman_analyse.ado
@@ -908,77 +908,6 @@ Estimates are contained in the dataset
 {txt}
 {com}. * siman bland altman can not be run without method as required
 . 
-. * Target numeric, method numeric, true > 1 level (different true values per target)
-. clear all
-{res}{txt}
-{com}. prog drop _all
-{txt}
-{com}. use data/simlongESTPM_longE_longM.dta, clear
-{txt}
-{com}. * need to alter data set so have 2 values of true corresponding to 2 estimands,
-. * and a complete method set for each of these. 
-. replace true=0.5 if estimand=="beta"
-{txt}(4,000 real changes made)
-
-{com}. gen estimand_num = .
-{txt}(8,000 missing values generated)
-
-{com}. replace estimand_num = 1 if estimand == "beta"
-{txt}(4,000 real changes made)
-
-{com}. replace estimand_num = 2 if estimand == "gamma"
-{txt}(4,000 real changes made)
-
-{com}. drop estimand
-{txt}
-{com}. *drop if dgm == 2
-. rename estimand_num estimand
-{res}{txt}
-{com}. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
-
-{txt}{col 20}SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:{res}{col 35}format 1: long-long
-{txt}The format for targets is:{res}{col 35}long
-{txt}The format for methods is:{res}{col 35}long
-{txt}The number of targets is:{res}{col 35}2
-{txt}The target values are:{res}{col 35}1 2
-
-{txt}The number of methods is:{res}{col 35}2
-{txt}The method values are:{res}{col 35}1 2
-
-Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}2
-{txt}The dgm variables (# levels): {res}{col 35}dgm (2) 
-
-Estimates are contained in the dataset
-
-{txt}The estimates variable is:{res}{col 35}est
-{txt}The se variable is:{res}{col 35}se
-{txt}The df variable is:{res}{col 35}N/A
-{txt}The ci variables are:{res}{col 35}N/A
-{txt}The p variable is:{res}{col 35}N/A
-{txt}The true variable is:{res}{col 35}true
-{txt}_____________________________________________________
-
-{com}. 
-. siman scatter
-{txt}working.....
-{res}{txt}
-{com}. siman swarm
-{txt}working.....
-
-{com}. siman zipplot
-{txt}Drawing 2 graphs (1 per true value)...
-{res}{txt}
-{com}. siman comparemethodsscatter
-{txt}Working.....
-{res}{txt}
-{com}. siman blandaltman
-{txt}working....
-{res}{txt}
-{com}. 
 . 
 . * now try with missing target
 . use data/simlongESTPM_longE_longM.dta, clear
@@ -1057,38 +986,38 @@ measure              {c |}         1          2
               sesims {c |}      {res}1000       1000
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                bias {c |} {res}-.0030238   .0007223
-                     {txt}{c |}  {res}.0025301    .003602
+                bias {c |} {res}-.0038596   .0003962
+                     {txt}{c |}  {res}.0024936   .0035731
                      {txt}{c |} 
-                mean {c |} {res}-.0030238   .0007223
-                     {txt}{c |}  {res}.0025301    .003602
+                mean {c |} {res}-.0038596   .0003962
+                     {txt}{c |}  {res}.0024936   .0035731
                      {txt}{c |} 
-               empse {c |}  {res}.0800099   .1139046
-                     {txt}{c |}    {res}.00179   .0025483
+               empse {c |}  {res}.0788533   .1129912
+                     {txt}{c |}  {res}.0017641   .0025278
                      {txt}{c |} 
-             relprec {c |}          {res}  -50.65929
-                     {txt}{c |}          {res}   2.918897
+             relprec {c |}          {res}  -51.29752
+                     {txt}{c |}          {res}   2.833655
                      {txt}{c |} 
-                 mse {c |}  {res}.0064043   .0129618
-                     {txt}{c |}  {res}.0002854   .0005854
+                 mse {c |}  {res}.0062265   .0127544
+                     {txt}{c |}  {res}.0002802   .0005903
                      {txt}{c |} 
-                rmse {c |}  {res}.0800271   .1138499
-                     {txt}{c |}  {res}.0017831   .0025707
+                rmse {c |}  {res}.0789083   .1129354
+                     {txt}{c |}  {res}.0017756   .0026133
                      {txt}{c |} 
-             modelse {c |}  {res}.0786741   .1138215
-                     {txt}{c |}  {res}.0001526   .0003386
+             modelse {c |}  {res}.0788832   .1137272
+                     {txt}{c |}  {res}.0001537   .0003471
                      {txt}{c |} 
-             ciwidth {c |}  {res}.3078286   .4442286
-                     {txt}{c |}   {res}.000592   .0013162
+             ciwidth {c |}  {res}.3086369   .4437612
+                     {txt}{c |}  {res}.0005987   .0013481
                      {txt}{c |} 
-            relerror {c |}  {res}-1.66958  -.0729199
-                     {txt}{c |}  {res}2.208086   2.255232
+            relerror {c |}  {res}.0378797   .6513767
+                     {txt}{c |}  {res}2.246508    2.27262
                      {txt}{c |} 
-               cover {c |}      {res}94.6       96.7
-                     {txt}{c |}  {res}.7147308   .5648985
+               cover {c |}      {res}94.9       96.2
+                     {txt}{c |}  {res}.6956938   .6046158
                      {txt}{c |} 
-               power {c |}       {res}5.4        3.3
-                     {txt}{c |}  {res}.7147307   .5648982
+               power {c |}       {res}5.1        3.8
+                     {txt}{c |}  {res}.6956939   .6046156
 {txt}{hline 21}{c +}{hline 21}
 2                    {c |}
                bsims {c |}      {res}1000       1000
@@ -1097,38 +1026,38 @@ measure              {c |}         1          2
               sesims {c |}      {res}1000       1000
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                bias {c |}  {res}.0002291  -.0100817
-                     {txt}{c |}  {res}.0029279   .0040396
+                bias {c |} {res}-.0026442   .0028076
+                     {txt}{c |}  {res}.0029341   .0039156
                      {txt}{c |} 
-                mean {c |}  {res}.0002291  -.0100817
-                     {txt}{c |}  {res}.0029279   .0040396
+                mean {c |} {res}-.0026442   .0028076
+                     {txt}{c |}  {res}.0029341   .0039156
                      {txt}{c |} 
-               empse {c |}  {res}.0925875   .1277433
-                     {txt}{c |}  {res}.0020714   .0028579
+               empse {c |}  {res}.0927849   .1238229
+                     {txt}{c |}  {res}.0020758   .0027701
                      {txt}{c |} 
-             relprec {c |}          {res}  -47.46748
-                     {txt}{c |}          {res}   3.279644
+             relprec {c |}          {res}  -43.84954
+                     {txt}{c |}          {res}   3.516978
                      {txt}{c |} 
-                 mse {c |}  {res}.0085639   .0164037
-                     {txt}{c |}  {res}.0003805   .0007124
+                 mse {c |}  {res}.0086074   .0153247
+                     {txt}{c |}  {res}.0003856   .0006661
                      {txt}{c |} 
-                rmse {c |}  {res}.0925415   .1280769
-                     {txt}{c |}   {res}.002056    .002781
+                rmse {c |}  {res}.0927762   .1237928
+                     {txt}{c |}  {res}.0020782   .0026905
                      {txt}{c |} 
-             modelse {c |}  {res}.0909858   .1315659
-                     {txt}{c |}  {res}.0001743   .0003794
+             modelse {c |}  {res}.0910866   .1312743
+                     {txt}{c |}  {res}.0001763   .0003698
                      {txt}{c |} 
-             ciwidth {c |}  {res}.3560126   .5136362
-                     {txt}{c |}  {res}.0006784   .0014684
+             ciwidth {c |}  {res}.3563914   .5125872
+                     {txt}{c |}  {res}.0006872   .0014335
                      {txt}{c |} 
-            relerror {c |} {res}-1.729927   2.992367
-                     {txt}{c |}  {res}2.206533   2.323191
+            relerror {c |} {res}-1.830458   6.017814
+                     {txt}{c |}   {res}2.20444   2.390545
                      {txt}{c |} 
-               cover {c |}        {res}95       95.7
-                     {txt}{c |}  {res}.6892024   .6414907
+               cover {c |}      {res}94.8       96.4
+                     {txt}{c |}  {res}.7021109   .5891009
                      {txt}{c |} 
-               power {c |}         {res}5        4.3
-                     {txt}{c |}  {res}.6892024   .6414905
+               power {c |}       {res}5.2        3.6
+                     {txt}{c |}  {res}.7021111    .589101
 {txt}{hline 21}{c BT}{hline 21}
 {it: NOTE: Where there are 2 entries in the table, }
 {it: the first entry is the performance measure and }
@@ -9706,131 +9635,57 @@ different order, encode beta as numeric before running -siman setup-.
 {err}Warning: variable mech, which appears in dgm(), was stored as a string. It has been
 encoded as numeric so that subsequent siman commands will work. If you require a
 different order, encode mech as numeric before running -siman setup-.
-
-{txt}{col 20}SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:{res}{col 35}format 1: long-long
-{txt}The format for targets is:{res}{col 35}long
-{txt}The format for methods is:{res}{col 35}long
-{txt}The number of targets is:{res}{col 35}3
-{txt}The target values are:{res}{col 35}effect mean0 mean1
-
-{txt}The number of methods is:{res}{col 35}3
-{txt}The method values are:{res}{col 35}CCA MeanImp Noadj
-
-Data generating mechanism (dgm)
-{txt}The total number of dgms is: {res}{col 35}12
-{txt}The dgm variables (# levels): {res}{col 35}beta (3) pmiss (2) mech (2) 
-
-Estimates are contained in the dataset
-
-{txt}The estimates variable is:{res}{col 35}b
-{txt}The se variable is:{res}{col 35}se
-{txt}The df variable is:{res}{col 35}N/A
-{txt}The ci variables are:{res}{col 35}N/A
-{txt}The p variable is:{res}{col 35}N/A
-{txt}The true variable is:{res}{col 35}betatrue
-{txt}_____________________________________________________
+betatrue needs to be constant across methods.  Please make betatrue constant across methods and then run -siman setup- again.
+{txt}{search r(498), local:r(498);}
 {com}. 
 . * scatter
 . siman scatter
-{txt}working.....
-{err}{it: WARNING: 108 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_scatter:siman scatter}}
-{res}{com}. siman scatter if method == "CCA"
-{txt}working.....
-{err}{it: WARNING: 36 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_scatter:siman scatter}}
-{res}{com}. siman scatter if estimand == "effect"
-{txt}working.....
-{err}{it: WARNING: 36 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_scatter:siman scatter}}
-{res}{com}. siman scatter if mech =="MCAR": mech
-{txt}working.....
-{err}{it: WARNING: 54 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_scatter:siman scatter}}
-{res}{com}. 
+. siman scatter if method == "CCA"
+. siman scatter if estimand == "effect"
+. siman scatter if mech =="MCAR": mech
+. 
 . siman scatter, by(pmiss)
-{txt}working.....
-{res}{com}. siman scatter, by(estimand)
-{txt}working.....
-{res}{com}. siman scatter, by(method)
-{txt}working.....
-{res}{com}. 
+. siman scatter, by(estimand)
+. siman scatter, by(method)
+. 
 . * swarm, requires 2 methods
 . siman swarm
-{res}{txt}working.....
-{err}{it: WARNING: 36 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}}
-{com}. siman swarm if (method == "CCA" | method == "MeanImp")
-{res}{txt}working.....
-{err}{it: WARNING: 36 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}}
-{com}. siman swarm if estimand == "effect"
-{res}{txt}working.....
-{com}. siman swarm if mech =="MCAR": mech
-{res}{txt}working.....
-{err}{it: WARNING: 18 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}}
-{com}. 
+. siman swarm if (method == "CCA" | method == "MeanImp")
+. siman swarm if estimand == "effect"
+. siman swarm if mech =="MCAR": mech
+. 
 . siman swarm, by(pmiss)
-{res}{txt}working.....
-{com}. siman swarm, by(estimand)
-{res}{txt}working.....
-{com}. 
+. siman swarm, by(estimand)
+. 
 . * blandaltman
 . siman blandaltman
-{txt}working....
-{err}{it: WARNING: 36 graphs will be created, consider using 'if' option as detailed in {help siman_blandaltman:siman blandaltman}}
-{res}{com}. siman blandaltman if estimand == "effect"
-{txt}working....
-{res}{com}. siman blandaltman if mech =="MCAR": mech
-{txt}working....
-{err}{it: WARNING: 18 graphs will be created, consider using 'if' option as detailed in {help siman_blandaltman:siman blandaltman}}
-{res}{com}. 
+. siman blandaltman if estimand == "effect"
+. siman blandaltman if mech =="MCAR": mech
+. 
 . siman blandaltman, by(pmiss)
-{txt}working....
-{res}{com}. 
+. 
 . siman blandaltman, methlist(Noadj MeanImp)
-{txt}working....
-{err}{it: WARNING: 36 graphs will be created, consider using 'if' option as detailed in {help siman_blandaltman:siman blandaltman}}
-{res}{com}. 
+. 
 . * comparemethodsscatter
 . siman comparemethodsscatter
-{txt}Working.....
-{err}{it: WARNING: 36 graphs will be created, consider using 'if' option as detailed in {help              siman_comparemethodsscatter:siman comparemethodsscatter}}
-{res}{com}. siman comparemethodsscatter if estimand == "effect"
-{txt}Working.....
-{res}{com}. siman comparemethodsscatter if mech =="MCAR": mech
-{txt}Working.....
-{err}{it: WARNING: 18 graphs will be created, consider using 'if' option as detailed in {help              siman_comparemethodsscatter:siman comparemethodsscatter}}
-{res}{com}. 
+. siman comparemethodsscatter if estimand == "effect"
+. siman comparemethodsscatter if mech =="MCAR": mech
+. 
 . siman comparemethodsscatter, methlist(Noadj MeanImp)
-{txt}Working.....
-{err}{it: WARNING: 36 graphs will be created, consider using 'if' option as detailed in {help              siman_comparemethodsscatter:siman comparemethodsscatter}}
-{res}{com}. 
+. 
 . * zipplot
 . siman zipplot
-{err}{it: WARNING: 3 graphs each of 36 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}
-{txt}Drawing 3 graphs (1 per true value)...
-{res}{com}. siman zipplot if method == "CCA" 
-{txt}Drawing 3 graphs (1 per true value)...
-{res}{com}. siman zipplot if estimand == "effect"
-{txt}Drawing 3 graphs (1 per true value)...
-{res}{com}. siman zipplot if mech =="MCAR": mech
-{err}{it: WARNING: 3 graphs each of 18 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}
-{txt}Drawing 3 graphs (1 per true value)...
-{res}{com}. 
+. siman zipplot if method == "CCA" 
+. siman zipplot if estimand == "effect"
+. siman zipplot if mech =="MCAR": mech
+. 
 . siman zipplot, by(pmiss)
-{txt}Drawing 3 graphs (1 per true value)...
-{res}{com}. siman zipplot, by(method)
-{txt}Drawing 3 graphs (1 per true value)...
-{res}{com}. {c )-}
-{txt}
-{com}. 
-. di as result "*** SIMAN GRAPHS HAVE PASSED ALL THESE TESTS ***"
-{res}*** SIMAN GRAPHS HAVE PASSED ALL THESE TESTS ***
-{txt}
-{com}. 
-. log close
-      {txt}name:  {res}<unnamed>
-       {txt}log:  {res}C:\git\siman\Ella_testing\testing_graphs_main.smcl
-  {txt}log type:  {res}smcl
- {txt}closed on:  {res}21 Nov 2023, 15:32:28
-{txt}{.-}
-{smcl}
-{txt}{sf}{ul off}
+. siman zipplot, by(method)
+. {c )-}
+{txt}{search r(498), local:r(498);}
+
+end of do-file
+
+{search r(498), local:r(498);}
+
+{com}. exit, clear
