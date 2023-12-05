@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}C:\git\siman\Ella_testing\testing_graphs_matrix.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 4 Dec 2023, 09:53:02
+ {txt}opened on:  {res} 5 Dec 2023, 09:27:03
 {txt}
 {com}. siman which
 {txt}C:\git\siman\siman.ado
@@ -430,16 +430,16 @@ D1                   {c |}
                bsims {c |}         {res}                                   gamma
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
-              sesims {c |}         {res}                                    beta
+              sesims {c |}         {res}                                   gamma
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
-                bias {c |}         {res}                                    beta
+                bias {c |}         {res}                                   gamma
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
                 mean {c |}         {res}                                    beta
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
-               empse {c |}         {res}                                   gamma
+               empse {c |}         {res}                                    beta
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
              relprec {c |}         {res}                                   gamma
@@ -448,7 +448,7 @@ D1                   {c |}
                  mse {c |}         {res}                                    beta
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
-                rmse {c |}         {res}                                    beta
+                rmse {c |}         {res}                                   gamma
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
              modelse {c |}         {res}                                   gamma
@@ -550,34 +550,34 @@ gamma                {c |}
 {txt}{hline 21}{c +}{hline 49}
 D2                   {c |}
 .                    {c |}
-               bsims {c |}         {res}                                    beta
+               bsims {c |}         {res}                                   gamma
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
-              sesims {c |}         {res}                                   gamma
+              sesims {c |}         {res}                                    beta
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
-                bias {c |}         {res}                                    beta
+                bias {c |}         {res}                                   gamma
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
-                mean {c |}         {res}                                    beta
+                mean {c |}         {res}                                   gamma
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
                empse {c |}         {res}                                   gamma
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
-             relprec {c |}         {res}                                    beta
+             relprec {c |}         {res}                                   gamma
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
-                 mse {c |}         {res}                                   gamma
+                 mse {c |}         {res}                                    beta
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
-                rmse {c |}         {res}                                    beta
+                rmse {c |}         {res}                                   gamma
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
              modelse {c |}         {res}                                    beta
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
-             ciwidth {c |}         {res}                                    beta
+             ciwidth {c |}         {res}                                   gamma
                      {txt}{c |}         {res}                                        
                      {txt}{c |} 
             relerror {c |}         {res}                                    beta
@@ -860,37 +860,37 @@ performance measure  {c |}         1          2
               sesims {c |}      {res}1000       1000
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                bias {c |} {res}-.5037065   .0043746
+                bias {c |} {res}-.5084577    .005523
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                mean {c |} {res}-.0037064   .0043746
+                mean {c |} {res}-.0084576    .005523
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               empse {c |}  {res}.1042586   .1063411
+               empse {c |}  {res}.1037762   .1099226
                      {txt}{c |}          {res}           
                      {txt}{c |} 
              relprec {c |}          {res}           
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                 mse {c |}  {res}.2645792   .0113163
+                 mse {c |}  {res}.2692879   .0121014
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                rmse {c |}  {res}.5143726   .1063779
+                rmse {c |}  {res}.5189296   .1100063
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             modelse {c |}  {res}.1069798   .1063706
+             modelse {c |}  {res}.1064814   .1083833
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             ciwidth {c |}  {res}.4101317   .4078058
+             ciwidth {c |}   {res}.407933   .4154416
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-            relerror {c |}  {res}2.610017    .027745
+            relerror {c |}  {res}2.606764  -1.400333
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               cover {c |}       {res}1.4       95.1
+               cover {c |}         {res}1       95.1
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               power {c |}         {res}5        4.9
+               power {c |}       {res}4.3        4.9
                      {txt}{c |}          {res}           
 {txt}{hline 21}{c BT}{hline 21}
 
@@ -949,37 +949,37 @@ measure              {c |}         1          2
               sesims {c |}      {res}1000       1000
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                bias {c |} {res}-.0031263   .0015035
+                bias {c |}  {res}-.002127  -.0009529
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                mean {c |} {res}-.0031263   .0015035
+                mean {c |}  {res}-.002127  -.0009529
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               empse {c |}  {res}.0803518   .1155162
+               empse {c |}   {res}.081016    .112626
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             relprec {c |}          {res}  -51.61552
+             relprec {c |}          {res}  -48.25553
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                 mse {c |}  {res}.0064597   .0133329
+                 mse {c |}  {res}.0065616   .0126728
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                rmse {c |}  {res}.0803725   .1154682
+                rmse {c |}  {res}.0810034   .1125737
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             modelse {c |}  {res}.0789108   .1141059
+             modelse {c |}  {res}.0787894   .1133331
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             ciwidth {c |}  {res}.3087694   .4453718
+             ciwidth {c |}  {res}.3083129   .4422557
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-            relerror {c |} {res}-1.793356  -1.220866
+            relerror {c |} {res}-2.748299   .6277946
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               cover {c |}      {res}94.6       95.8
+               cover {c |}        {res}94       96.6
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               power {c |}       {res}5.4        4.2
+               power {c |}         {res}6        3.4
                      {txt}{c |}          {res}           
 {txt}{hline 21}{c +}{hline 21}
 2                    {c |}
@@ -989,37 +989,37 @@ measure              {c |}         1          2
               sesims {c |}      {res}1000       1000
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                bias {c |}  {res}-.000565  -.0035868
+                bias {c |} {res}-.0014503  -.0038775
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                mean {c |}  {res}-.000565  -.0035868
+                mean {c |} {res}-.0014503  -.0038775
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               empse {c |}  {res}.0902414   .1282531
+               empse {c |}   {res}.093837   .1258807
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             relprec {c |}          {res}  -50.49193
+             relprec {c |}          {res}   -44.4313
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                 mse {c |}  {res}.0081357   .0164453
+                 mse {c |}  {res}.0087987   .0158451
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                rmse {c |}  {res}.0901981   .1282391
+                rmse {c |}  {res}.0938013   .1258775
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             modelse {c |}  {res}.0910087   .1311756
+             modelse {c |}  {res}.0912503     .13183
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             ciwidth {c |}   {res}.356095   .5120789
+             ciwidth {c |}  {res}.3570167   .5145614
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-            relerror {c |}  {res}.8502643   2.278689
+            relerror {c |} {res}-2.756644   4.726168
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               cover {c |}      {res}95.1       96.1
+               cover {c |}      {res}94.5       96.3
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               power {c |}       {res}4.9        3.9
+               power {c |}       {res}5.5        3.7
                      {txt}{c |}          {res}           
 {txt}{hline 21}{c BT}{hline 21}
 
@@ -3697,37 +3697,6 @@ mean1                {c |}
 .2                   {c |}
 MCAR                 {c |}
 effect               {c |}
-               bsims {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-              sesims {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-                mean {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               empse {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             relprec {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             modelse {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             ciwidth {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-            relerror {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               power {c |}            {res}0
-                     {txt}{c |}             {res}
-{txt}{hline 21}{c +}{hline 13}
-.                    {c |}
-.2                   {c |}
-MCAR                 {c |}
-mean0                {c |}
                bsims {c |}          {res}.25
                      {txt}{c |}             {res}
                      {txt}{c |} 
@@ -3738,223 +3707,6 @@ mean0                {c |}
                      {txt}{c |}             {res}
                      {txt}{c |} 
                empse {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             relprec {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             modelse {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             ciwidth {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-            relerror {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               power {c |}          {res}.25
-                     {txt}{c |}             {res}
-{txt}{hline 21}{c +}{hline 13}
-.                    {c |}
-.2                   {c |}
-MCAR                 {c |}
-mean1                {c |}
-               bsims {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-              sesims {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-                mean {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               empse {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             relprec {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             modelse {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             ciwidth {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-            relerror {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               power {c |}            {res}0
-                     {txt}{c |}             {res}
-{txt}{hline 21}{c +}{hline 13}
-.                    {c |}
-.2                   {c |}
-MNAR                 {c |}
-effect               {c |}
-               bsims {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-              sesims {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-                mean {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               empse {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             relprec {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             modelse {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             ciwidth {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-            relerror {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               power {c |}            {res}0
-                     {txt}{c |}             {res}
-{txt}{hline 21}{c +}{hline 13}
-.                    {c |}
-.2                   {c |}
-MNAR                 {c |}
-mean0                {c |}
-               bsims {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-              sesims {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-                mean {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               empse {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             relprec {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             modelse {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             ciwidth {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-            relerror {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               power {c |}            {res}0
-                     {txt}{c |}             {res}
-{txt}{hline 21}{c +}{hline 13}
-.                    {c |}
-.2                   {c |}
-MNAR                 {c |}
-mean1                {c |}
-               bsims {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-              sesims {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-                mean {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               empse {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             relprec {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             modelse {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             ciwidth {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-            relerror {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               power {c |}           {res}.5
-                     {txt}{c |}             {res}
-{txt}{hline 21}{c +}{hline 13}
-.                    {c |}
-.4                   {c |}
-MCAR                 {c |}
-effect               {c |}
-               bsims {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-              sesims {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-                mean {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               empse {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             relprec {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             modelse {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             ciwidth {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-            relerror {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               power {c |}           {res}.5
-                     {txt}{c |}             {res}
-{txt}{hline 21}{c +}{hline 13}
-.                    {c |}
-.4                   {c |}
-MCAR                 {c |}
-mean0                {c |}
-               bsims {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-              sesims {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-                mean {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               empse {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             relprec {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             modelse {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-             ciwidth {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-            relerror {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               power {c |}          {res}.25
-                     {txt}{c |}             {res}
-{txt}{hline 21}{c +}{hline 13}
-.                    {c |}
-.4                   {c |}
-MCAR                 {c |}
-mean1                {c |}
-               bsims {c |}          {res}.25
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-              sesims {c |}           {res}.5
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-                mean {c |}            {res}0
-                     {txt}{c |}             {res}
-                     {txt}{c |} 
-               empse {c |}           {res}.5
                      {txt}{c |}             {res}
                      {txt}{c |} 
              relprec {c |}            {res}0
@@ -3963,10 +3715,165 @@ mean1                {c |}
              modelse {c |}          {res}.25
                      {txt}{c |}             {res}
                      {txt}{c |} 
-             ciwidth {c |}          {res}.25
+             ciwidth {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+            relerror {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               power {c |}           {res}.5
+                     {txt}{c |}             {res}
+{txt}{hline 21}{c +}{hline 13}
+.                    {c |}
+.2                   {c |}
+MCAR                 {c |}
+mean0                {c |}
+               bsims {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+              sesims {c |}          {res}.25
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+                mean {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               empse {c |}          {res}.25
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             relprec {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             modelse {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             ciwidth {c |}            {res}0
                      {txt}{c |}             {res}
                      {txt}{c |} 
             relerror {c |}          {res}.25
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               power {c |}            {res}0
+                     {txt}{c |}             {res}
+{txt}{hline 21}{c +}{hline 13}
+.                    {c |}
+.2                   {c |}
+MCAR                 {c |}
+mean1                {c |}
+               bsims {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+              sesims {c |}          {res}.25
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+                mean {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               empse {c |}          {res}.25
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             relprec {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             modelse {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             ciwidth {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+            relerror {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               power {c |}          {res}.25
+                     {txt}{c |}             {res}
+{txt}{hline 21}{c +}{hline 13}
+.                    {c |}
+.2                   {c |}
+MNAR                 {c |}
+effect               {c |}
+               bsims {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+              sesims {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+                mean {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               empse {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             relprec {c |}          {res}.25
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             modelse {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             ciwidth {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+            relerror {c |}          {res}.25
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               power {c |}           {res}.5
+                     {txt}{c |}             {res}
+{txt}{hline 21}{c +}{hline 13}
+.                    {c |}
+.2                   {c |}
+MNAR                 {c |}
+mean0                {c |}
+               bsims {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+              sesims {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+                mean {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               empse {c |}          {res}.25
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             relprec {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             modelse {c |}          {res}.25
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             ciwidth {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+            relerror {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               power {c |}          {res}.25
+                     {txt}{c |}             {res}
+{txt}{hline 21}{c +}{hline 13}
+.                    {c |}
+.2                   {c |}
+MNAR                 {c |}
+mean1                {c |}
+               bsims {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+              sesims {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+                mean {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               empse {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             relprec {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             modelse {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             ciwidth {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+            relerror {c |}            {res}0
                      {txt}{c |}             {res}
                      {txt}{c |} 
                power {c |}          {res}.25
@@ -3974,15 +3881,15 @@ mean1                {c |}
 {txt}{hline 21}{c +}{hline 13}
 .                    {c |}
 .4                   {c |}
-MNAR                 {c |}
+MCAR                 {c |}
 effect               {c |}
-               bsims {c |}           {res}.5
+               bsims {c |}            {res}0
                      {txt}{c |}             {res}
                      {txt}{c |} 
               sesims {c |}           {res}.5
                      {txt}{c |}             {res}
                      {txt}{c |} 
-                mean {c |}          {res}.25
+                mean {c |}            {res}0
                      {txt}{c |}             {res}
                      {txt}{c |} 
                empse {c |}          {res}.25
@@ -3994,10 +3901,10 @@ effect               {c |}
              modelse {c |}          {res}.25
                      {txt}{c |}             {res}
                      {txt}{c |} 
-             ciwidth {c |}            {res}0
+             ciwidth {c |}           {res}.5
                      {txt}{c |}             {res}
                      {txt}{c |} 
-            relerror {c |}           {res}.5
+            relerror {c |}            {res}0
                      {txt}{c |}             {res}
                      {txt}{c |} 
                power {c |}           {res}.5
@@ -4005,18 +3912,80 @@ effect               {c |}
 {txt}{hline 21}{c +}{hline 13}
 .                    {c |}
 .4                   {c |}
-MNAR                 {c |}
+MCAR                 {c |}
 mean0                {c |}
+               bsims {c |}          {res}.25
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+              sesims {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+                mean {c |}          {res}.25
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               empse {c |}          {res}.25
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             relprec {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             modelse {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             ciwidth {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+            relerror {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               power {c |}          {res}.25
+                     {txt}{c |}             {res}
+{txt}{hline 21}{c +}{hline 13}
+.                    {c |}
+.4                   {c |}
+MCAR                 {c |}
+mean1                {c |}
                bsims {c |}            {res}0
                      {txt}{c |}             {res}
                      {txt}{c |} 
               sesims {c |}            {res}0
                      {txt}{c |}             {res}
                      {txt}{c |} 
-                mean {c |}           {res}.5
+                mean {c |}          {res}.25
                      {txt}{c |}             {res}
                      {txt}{c |} 
                empse {c |}          {res}.25
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             relprec {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             modelse {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             ciwidth {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+            relerror {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               power {c |}          {res}.25
+                     {txt}{c |}             {res}
+{txt}{hline 21}{c +}{hline 13}
+.                    {c |}
+.4                   {c |}
+MNAR                 {c |}
+effect               {c |}
+               bsims {c |}          {res}.25
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+              sesims {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+                mean {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               empse {c |}            {res}0
                      {txt}{c |}             {res}
                      {txt}{c |} 
              relprec {c |}          {res}.25
@@ -4028,7 +3997,38 @@ mean0                {c |}
              ciwidth {c |}          {res}.25
                      {txt}{c |}             {res}
                      {txt}{c |} 
-            relerror {c |}            {res}0
+            relerror {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               power {c |}            {res}0
+                     {txt}{c |}             {res}
+{txt}{hline 21}{c +}{hline 13}
+.                    {c |}
+.4                   {c |}
+MNAR                 {c |}
+mean0                {c |}
+               bsims {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+              sesims {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+                mean {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+               empse {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             relprec {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             modelse {c |}           {res}.5
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+             ciwidth {c |}            {res}0
+                     {txt}{c |}             {res}
+                     {txt}{c |} 
+            relerror {c |}           {res}.5
                      {txt}{c |}             {res}
                      {txt}{c |} 
                power {c |}            {res}0
@@ -4041,25 +4041,25 @@ mean1                {c |}
                bsims {c |}            {res}0
                      {txt}{c |}             {res}
                      {txt}{c |} 
-              sesims {c |}          {res}.25
+              sesims {c |}            {res}0
                      {txt}{c |}             {res}
                      {txt}{c |} 
-                mean {c |}          {res}.25
+                mean {c |}            {res}0
                      {txt}{c |}             {res}
                      {txt}{c |} 
-               empse {c |}           {res}.5
+               empse {c |}            {res}0
                      {txt}{c |}             {res}
                      {txt}{c |} 
-             relprec {c |}           {res}.5
+             relprec {c |}          {res}.25
                      {txt}{c |}             {res}
                      {txt}{c |} 
-             modelse {c |}          {res}.25
+             modelse {c |}           {res}.5
                      {txt}{c |}             {res}
                      {txt}{c |} 
              ciwidth {c |}          {res}.25
                      {txt}{c |}             {res}
                      {txt}{c |} 
-            relerror {c |}          {res}.25
+            relerror {c |}            {res}0
                      {txt}{c |}             {res}
                      {txt}{c |} 
                power {c |}           {res}.5
@@ -4751,37 +4751,37 @@ performance measure  {c |}      beta      gamma
               sesims {c |}      {res}1000       1000
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                bias {c |} {res}-.0063147  -.4994769
+                bias {c |} {res}-.0037758  -.4991875
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                mean {c |} {res}-.0063147   .0005231
+                mean {c |} {res}-.0037758   .0008125
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               empse {c |}  {res}.0835272   .0875449
+               empse {c |}  {res}.0851751   .0874591
                      {txt}{c |}          {res}           
                      {txt}{c |} 
              relprec {c |}          {res}           
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                 mse {c |}  {res}.0070097   .2571336
+                 mse {c |}  {res}.0072618   .2568296
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                rmse {c |}  {res}.0837239   .5070834
+                rmse {c |}  {res}.0852162   .5067836
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             modelse {c |}   {res}.084472   .0852267
+             modelse {c |}  {res}.0843793   .0853744
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             ciwidth {c |}  {res}.3295852   .3327145
+             ciwidth {c |}  {res}.3292494   .3332455
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-            relerror {c |}  {res}1.131084  -2.647983
+            relerror {c |}  {res}-.934359  -2.383638
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               cover {c |}      {res}94.9          0
+               cover {c |}      {res}94.7          0
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               power {c |}       {res}5.1        5.5
+               power {c |}       {res}5.3        5.5
                      {txt}{c |}          {res}           
 {txt}{hline 21}{c BT}{hline 21}
 
@@ -10524,38 +10524,38 @@ performance measure  {c |}         A          B
               sesims {c |}      {res}1000       1000
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                bias {c |} {res}-.0043575  -.0042444
-                     {txt}{c |}  {res}.0026524   .0037643
+                bias {c |}  {res}-.006339  -.0037813
+                     {txt}{c |}  {res}.0026524   .0037376
                      {txt}{c |} 
-                mean {c |} {res}-.0043575  -.0042444
-                     {txt}{c |}  {res}.0026524   .0037643
+                mean {c |}  {res}-.006339  -.0037813
+                     {txt}{c |}  {res}.0026524   .0037376
                      {txt}{c |} 
-               empse {c |}  {res}.0838755   .1190377
-                     {txt}{c |}  {res}.0018765   .0026631
+               empse {c |}  {res}.0838749   .1181931
+                     {txt}{c |}  {res}.0018764   .0026442
                      {txt}{c |} 
-             relprec {c |}          {res}  -50.35204
-                     {txt}{c |}          {res}   2.427171
+             relprec {c |}          {res}  -49.64067
+                     {txt}{c |}          {res}   2.500127
                      {txt}{c |} 
-                 mse {c |}  {res}.0070471   .0141738
-                     {txt}{c |}  {res}.0003264   .0006941
+                 mse {c |}  {res}.0070682   .0139699
+                     {txt}{c |}  {res}.0003282   .0006701
                      {txt}{c |} 
-                rmse {c |}  {res}.0839467   .1190538
-                     {txt}{c |}  {res}.0019439   .0029149
+                rmse {c |}  {res}.0840723   .1181945
+                     {txt}{c |}  {res}.0019522   .0028345
                      {txt}{c |} 
-             modelse {c |}  {res}.0843478   .1229352
-                     {txt}{c |}  {res}.0002534   .0004506
+             modelse {c |}  {res}.0841489   .1233403
+                     {txt}{c |}  {res}.0002594    .000473
                      {txt}{c |} 
-             ciwidth {c |}  {res}.3291643   .4786892
-                     {txt}{c |}  {res}.0009863   .0017563
+             ciwidth {c |}  {res}.3283306   .4800003
+                     {txt}{c |}   {res}.001003   .0018333
                      {txt}{c |} 
-            relerror {c |}  {res}.5630695   3.274176
-                     {txt}{c |}  {res}2.269978   2.341237
+            relerror {c |}  {res}.3266088   4.354891
+                     {txt}{c |}  {res}2.265697   2.368659
                      {txt}{c |} 
-               cover {c |}        {res}95       95.7
-                     {txt}{c |}  {res}.6892024   .6414907
+               cover {c |}      {res}94.4         96
+                     {txt}{c |}  {res}.7270762   .6196774
                      {txt}{c |} 
-               power {c |}         {res}5        4.3
-                     {txt}{c |}  {res}.6892024   .6414905
+               power {c |}       {res}5.6          4
+                     {txt}{c |}  {res}.7270764   .6196774
 {txt}{hline 21}{c +}{hline 21}
 2                    {c |}
                bsims {c |}      {res}1000       1000
@@ -10564,32 +10564,32 @@ performance measure  {c |}         A          B
               sesims {c |}      {res}1000       1000
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                bias {c |}   {res}.000504   .0060767
-                     {txt}{c |}  {res}.0027166   .0038706
+                bias {c |}  {res}.0010349   .0059526
+                     {txt}{c |}  {res}.0027149   .0038717
                      {txt}{c |} 
-                mean {c |}   {res}.000504   .0060767
-                     {txt}{c |}  {res}.0027166   .0038706
+                mean {c |}  {res}.0010349   .0059526
+                     {txt}{c |}  {res}.0027149   .0038717
                      {txt}{c |} 
-               empse {c |}  {res}.0859069    .122398
-                     {txt}{c |}  {res}.0019219   .0027383
+               empse {c |}  {res}.0858516   .1224339
+                     {txt}{c |}  {res}.0019207   .0027391
                      {txt}{c |} 
-             relprec {c |}          {res}  -50.73851
-                     {txt}{c |}          {res}   2.259702
+             relprec {c |}          {res}  -50.83075
+                     {txt}{c |}          {res}   2.253464
                      {txt}{c |} 
-                 mse {c |}  {res}.0073729   .0150032
-                     {txt}{c |}   {res}.000321   .0006255
+                 mse {c |}  {res}.0073642   .0150105
+                     {txt}{c |}  {res}.0003252   .0006357
                      {txt}{c |} 
-                rmse {c |}  {res}.0858654   .1224876
-                     {txt}{c |}  {res}.0018693   .0025531
+                rmse {c |}  {res}.0858149   .1225173
+                     {txt}{c |}  {res}.0018948   .0025943
                      {txt}{c |} 
-             modelse {c |}  {res}.0844142   .1233229
-                     {txt}{c |}  {res}.0002518   .0004559
+             modelse {c |}  {res}.0842509   .1235794
+                     {txt}{c |}  {res}.0002551   .0004743
                      {txt}{c |} 
-             ciwidth {c |}  {res}.3294567   .4801956
-                     {txt}{c |}  {res}.0009759   .0017627
+             ciwidth {c |}  {res}.3287815   .4809693
+                     {txt}{c |}  {res}.0009867   .0018267
                      {txt}{c |} 
-            relerror {c |} {res}-1.737632   .7556438
-                     {txt}{c |}  {res}2.217773   2.284656
+            relerror {c |} {res}-1.864537   .9356229
+                     {txt}{c |}  {res}2.215496   2.291106
                      {txt}{c |} 
                cover {c |}      {res}94.5       96.4
                      {txt}{c |}  {res}.7209369   .5891009
@@ -11941,7 +11941,7 @@ mean1                {c |}
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}C:\git\siman\Ella_testing\testing_graphs_matrix.smcl
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 4 Dec 2023, 09:54:05
+ {txt}closed on:  {res} 5 Dec 2023, 09:27:53
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

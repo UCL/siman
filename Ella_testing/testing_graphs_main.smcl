@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}C:\git\siman\Ella_testing\testing_graphs_main.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}27 Nov 2023, 18:55:48
+ {txt}opened on:  {res} 5 Dec 2023, 09:29:01
 {txt}
 {com}. siman which
 {txt}C:\git\siman\siman.ado
@@ -139,37 +139,37 @@ beta                 {c |}
                      {txt}{c |}          {res}           
                      {txt}{c |} 
                 bias {c |} {res}-.0043991  -.0025973
-                     {txt}{c |}  {res}.0024993   .0035644
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                 mean {c |} {res}-.0043991  -.0025973
-                     {txt}{c |}  {res}.0024993   .0035644
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                empse {c |}  {res}.0790336   .1127159
-                     {txt}{c |}  {res}.0017681   .0025217
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
              relprec {c |}          {res}   -50.8353
-                     {txt}{c |}          {res}    2.28676
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                  mse {c |}  {res}.0062594   .0126989
-                     {txt}{c |}  {res}.0002881   .0006187
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                 rmse {c |}  {res}.0791165   .1126895
-                     {txt}{c |}  {res}.0018209   .0027454
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
              modelse {c |}  {res}.0787452   .1136343
-                     {txt}{c |}  {res}.0001572   .0003405
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
              ciwidth {c |}  {res}.3080681   .4434751
-                     {txt}{c |}  {res}.0006123   .0013217
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
             relerror {c |} {res}-.3649609   .8147949
-                     {txt}{c |}  {res}2.237882   2.275551
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                cover {c |}      {res}94.7       95.7
-                     {txt}{c |}  {res}.7084563   .6414907
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                power {c |}       {res}5.3        4.3
-                     {txt}{c |}  {res}.7084561   .6414905
+                     {txt}{c |}          {res}           
 {txt}{hline 21}{c +}{hline 21}
 1                    {c |}
 gamma                {c |}
@@ -180,37 +180,37 @@ gamma                {c |}
                      {txt}{c |}          {res}           
                      {txt}{c |} 
                 bias {c |}  {res}.0005151   .0056354
-                     {txt}{c |}  {res}.0025476   .0035789
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                 mean {c |}  {res}.0005151   .0056354
-                     {txt}{c |}  {res}.0025476   .0035789
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                empse {c |}  {res}.0805615   .1131762
-                     {txt}{c |}  {res}.0018023    .002532
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
              relprec {c |}          {res}  -49.33068
-                     {txt}{c |}          {res}   2.314097
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                  mse {c |}  {res}.0064839   .0128278
-                     {txt}{c |}  {res}.0002847   .0005329
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                 rmse {c |}  {res}.0805229   .1132599
-                     {txt}{c |}  {res}.0017676   .0023524
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
              modelse {c |}  {res}.0788425   .1140264
-                     {txt}{c |}  {res}.0001466   .0003426
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
              ciwidth {c |}  {res}.3085282   .4450112
-                     {txt}{c |}  {res}.0005716   .0013243
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
             relerror {c |} {res}-2.133844   .7512448
-                     {txt}{c |}  {res}2.196998   2.274225
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                cover {c |}      {res}94.5       96.4
-                     {txt}{c |}  {res}.7209369   .5891009
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                power {c |}       {res}5.5        3.6
-                     {txt}{c |}  {res}.7209369    .589101
+                     {txt}{c |}          {res}           
 {txt}{hline 21}{c +}{hline 21}
 2                    {c |}
 beta                 {c |}
@@ -221,37 +221,37 @@ beta                 {c |}
                      {txt}{c |}          {res}           
                      {txt}{c |} 
                 bias {c |} {res}-.0046965  -.0058509
-                     {txt}{c |}  {res}.0028908   .0039932
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                 mean {c |} {res}-.0046965  -.0058509
-                     {txt}{c |}  {res}.0028908   .0039932
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                empse {c |}  {res}.0914144   .1262755
-                     {txt}{c |}  {res}.0020451    .002825
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
              relprec {c |}          {res}  -47.59274
-                     {txt}{c |}          {res}   2.430245
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                  mse {c |}  {res}.0083703   .0159638
-                     {txt}{c |}  {res}.0003797   .0007445
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                 rmse {c |}  {res}.0914893   .1263479
-                     {txt}{c |}  {res}.0020748   .0029462
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
              modelse {c |}  {res}.0910296   .1313619
-                     {txt}{c |}  {res}.0001752   .0003826
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
              ciwidth {c |}   {res}.356176   .5127883
-                     {txt}{c |}   {res}.000683   .0014841
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
             relerror {c |}  {res}-.420924   4.028049
-                     {txt}{c |}  {res}2.236001   2.346937
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                cover {c |}        {res}95       95.6
-                     {txt}{c |}  {res}.6892024   .6485677
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                power {c |}         {res}5        4.4
-                     {txt}{c |}  {res}.6892024   .6485677
+                     {txt}{c |}          {res}           
 {txt}{hline 21}{c +}{hline 21}
 2                    {c |}
 gamma                {c |}
@@ -262,41 +262,38 @@ gamma                {c |}
                      {txt}{c |}          {res}           
                      {txt}{c |} 
                 bias {c |}  {res}.0005948   .0065072
-                     {txt}{c |}  {res}.0029417   .0041326
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                 mean {c |}  {res}.0005948   .0065072
-                     {txt}{c |}  {res}.0029417   .0041326
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                empse {c |}  {res}.0930244   .1306846
-                     {txt}{c |}  {res}.0020811   .0029237
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
              relprec {c |}          {res}  -49.33068
-                     {txt}{c |}          {res}   2.314097
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                  mse {c |}  {res}.0086452   .0171037
-                     {txt}{c |}  {res}.0003795   .0007105
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                 rmse {c |}  {res}.0929798   .1307813
-                     {txt}{c |}   {res}.002041   .0027163
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
              modelse {c |}  {res}.0910394   .1316664
-                     {txt}{c |}  {res}.0001693   .0003955
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
              ciwidth {c |}  {res}.3562577   .5138547
-                     {txt}{c |}  {res}.0006601   .0015292
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
             relerror {c |} {res}-2.133846    .751246
-                     {txt}{c |}  {res}2.196998   2.274225
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                cover {c |}      {res}94.5       96.4
-                     {txt}{c |}  {res}.7209369   .5891009
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
                power {c |}       {res}5.5        3.6
-                     {txt}{c |}  {res}.7209369    .589101
+                     {txt}{c |}          {res}           
 {txt}{hline 21}{c BT}{hline 21}
-{it: NOTE: Where there are 2 entries in the table, }
-{it: the first entry is the performance measure and }
-{it: the second entry is its Monte Carlo error.}
 
 {com}. 
 . siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test1", replace)
@@ -986,38 +983,38 @@ measure              {c |}         1          2
               sesims {c |}      {res}1000       1000
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                bias {c |} {res}-.0038596   .0003962
-                     {txt}{c |}  {res}.0024936   .0035731
+                bias {c |}  {res}.0001017   .0013024
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-                mean {c |} {res}-.0038596   .0003962
-                     {txt}{c |}  {res}.0024936   .0035731
+                mean {c |}  {res}.0001017   .0013024
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-               empse {c |}  {res}.0788533   .1129912
-                     {txt}{c |}  {res}.0017641   .0025278
+               empse {c |}  {res}.0792258   .1119854
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-             relprec {c |}          {res}  -51.29752
-                     {txt}{c |}          {res}   2.833655
+             relprec {c |}          {res}  -49.94931
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-                 mse {c |}  {res}.0062265   .0127544
-                     {txt}{c |}  {res}.0002802   .0005903
+                 mse {c |}  {res}.0062705   .0125299
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-                rmse {c |}  {res}.0789083   .1129354
-                     {txt}{c |}  {res}.0017756   .0026133
+                rmse {c |}  {res}.0791862    .111937
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-             modelse {c |}  {res}.0788832   .1137272
-                     {txt}{c |}  {res}.0001537   .0003471
+             modelse {c |}  {res}.0787788   .1136717
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-             ciwidth {c |}  {res}.3086369   .4437612
-                     {txt}{c |}  {res}.0005987   .0013481
+             ciwidth {c |}  {res}.3082439   .4436266
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-            relerror {c |}  {res}.0378797   .6513767
-                     {txt}{c |}  {res}2.246508    2.27262
+            relerror {c |} {res}-.5641415   1.505846
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-               cover {c |}      {res}94.9       96.2
-                     {txt}{c |}  {res}.6956938   .6046158
+               cover {c |}      {res}95.1       96.3
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-               power {c |}       {res}5.1        3.8
-                     {txt}{c |}  {res}.6956939   .6046156
+               power {c |}       {res}4.9        3.7
+                     {txt}{c |}          {res}           
 {txt}{hline 21}{c +}{hline 21}
 2                    {c |}
                bsims {c |}      {res}1000       1000
@@ -1026,42 +1023,39 @@ measure              {c |}         1          2
               sesims {c |}      {res}1000       1000
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                bias {c |} {res}-.0026442   .0028076
-                     {txt}{c |}  {res}.0029341   .0039156
+                bias {c |} {res}-1.93e-06   .0039336
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-                mean {c |} {res}-.0026442   .0028076
-                     {txt}{c |}  {res}.0029341   .0039156
+                mean {c |} {res}-1.93e-06   .0039336
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-               empse {c |}  {res}.0927849   .1238229
-                     {txt}{c |}  {res}.0020758   .0027701
+               empse {c |}  {res}.0923273   .1259693
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-             relprec {c |}          {res}  -43.84954
-                     {txt}{c |}          {res}   3.516978
+             relprec {c |}          {res}  -46.28071
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-                 mse {c |}  {res}.0086074   .0153247
-                     {txt}{c |}  {res}.0003856   .0006661
+                 mse {c |}  {res}.0085158   .0158679
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-                rmse {c |}  {res}.0927762   .1237928
-                     {txt}{c |}  {res}.0020782   .0026905
+                rmse {c |}  {res}.0922811   .1259678
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-             modelse {c |}  {res}.0910866   .1312743
-                     {txt}{c |}  {res}.0001763   .0003698
+             modelse {c |}  {res}.0911902   .1311606
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-             ciwidth {c |}  {res}.3563914   .5125872
-                     {txt}{c |}  {res}.0006872   .0014335
+             ciwidth {c |}  {res}.3568238   .5119641
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-            relerror {c |} {res}-1.830458   6.017814
-                     {txt}{c |}   {res}2.20444   2.390545
+            relerror {c |} {res}-1.231517   4.121045
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-               cover {c |}      {res}94.8       96.4
-                     {txt}{c |}  {res}.7021109   .5891009
+               cover {c |}      {res}94.7       95.8
+                     {txt}{c |}          {res}           
                      {txt}{c |} 
-               power {c |}       {res}5.2        3.6
-                     {txt}{c |}  {res}.7021111    .589101
+               power {c |}       {res}5.3        4.2
+                     {txt}{c |}          {res}           
 {txt}{hline 21}{c BT}{hline 21}
-{it: NOTE: Where there are 2 entries in the table, }
-{it: the first entry is the performance measure and }
-{it: the second entry is its Monte Carlo error.}
 
 {com}. 
 . siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test5")
@@ -9596,6 +9590,8 @@ strong               {c |}
 {res}{txt}Drawing graph...
 {res}{txt}
 {com}. 
+. 
+. * Won't work as true not constant accross methods
 . if ${c -(}detail{c )-} == 1 {c -(}
 . 
 . * Testing warning messages correspond to the number of panels/graphs that will be printed
@@ -9635,57 +9631,131 @@ different order, encode beta as numeric before running -siman setup-.
 {err}Warning: variable mech, which appears in dgm(), was stored as a string. It has been
 encoded as numeric so that subsequent siman commands will work. If you require a
 different order, encode mech as numeric before running -siman setup-.
-betatrue needs to be constant across methods.  Please make betatrue constant across methods and then run -siman setup- again.
-{txt}{search r(498), local:r(498);}
+
+{txt}{col 20}SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:{res}{col 35}format 1: long-long
+{txt}The format for targets is:{res}{col 35}long
+{txt}The format for methods is:{res}{col 35}long
+{txt}The number of targets is:{res}{col 35}3
+{txt}The target values are:{res}{col 35}effect mean0 mean1
+
+{txt}The number of methods is:{res}{col 35}3
+{txt}The method values are:{res}{col 35}CCA MeanImp Noadj
+
+Data generating mechanism (dgm)
+{txt}The total number of dgms is: {res}{col 35}12
+{txt}The dgm variables (# levels): {res}{col 35}beta (3) pmiss (2) mech (2) 
+
+Estimates are contained in the dataset
+
+{txt}The estimates variable is:{res}{col 35}b
+{txt}The se variable is:{res}{col 35}se
+{txt}The df variable is:{res}{col 35}N/A
+{txt}The ci variables are:{res}{col 35}N/A
+{txt}The p variable is:{res}{col 35}N/A
+{txt}The true variable is:{res}{col 35}betatrue
+{txt}_____________________________________________________
 {com}. 
 . * scatter
 . siman scatter
-. siman scatter if method == "CCA"
-. siman scatter if estimand == "effect"
-. siman scatter if mech =="MCAR": mech
-. 
+{txt}working.....
+{err}{it: WARNING: 108 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_scatter:siman scatter}}
+{res}{com}. siman scatter if method == "CCA"
+{txt}working.....
+{err}{it: WARNING: 36 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_scatter:siman scatter}}
+{res}{com}. siman scatter if estimand == "effect"
+{txt}working.....
+{err}{it: WARNING: 36 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_scatter:siman scatter}}
+{res}{com}. siman scatter if mech =="MCAR": mech
+{txt}working.....
+{err}{it: WARNING: 54 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_scatter:siman scatter}}
+{res}{com}. 
 . siman scatter, by(pmiss)
-. siman scatter, by(estimand)
-. siman scatter, by(method)
-. 
+{txt}working.....
+{res}{com}. siman scatter, by(estimand)
+{txt}working.....
+{res}{com}. siman scatter, by(method)
+{txt}working.....
+{res}{com}. 
 . * swarm, requires 2 methods
 . siman swarm
-. siman swarm if (method == "CCA" | method == "MeanImp")
-. siman swarm if estimand == "effect"
-. siman swarm if mech =="MCAR": mech
-. 
+{res}{txt}working.....
+{err}{it: WARNING: 36 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}}
+{com}. siman swarm if (method == "CCA" | method == "MeanImp")
+{res}{txt}working.....
+{err}{it: WARNING: 36 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}}
+{com}. siman swarm if estimand == "effect"
+{res}{txt}working.....
+{com}. siman swarm if mech =="MCAR": mech
+{res}{txt}working.....
+{err}{it: WARNING: 18 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}}
+{com}. 
 . siman swarm, by(pmiss)
-. siman swarm, by(estimand)
-. 
+{res}{txt}working.....
+{com}. siman swarm, by(estimand)
+{res}{txt}working.....
+{com}. 
 . * blandaltman
 . siman blandaltman
-. siman blandaltman if estimand == "effect"
-. siman blandaltman if mech =="MCAR": mech
-. 
+{txt}working....
+{err}{it: WARNING: 36 graphs will be created, consider using 'if' option as detailed in {help siman_blandaltman:siman blandaltman}}
+{res}{com}. siman blandaltman if estimand == "effect"
+{txt}working....
+{res}{com}. siman blandaltman if mech =="MCAR": mech
+{txt}working....
+{err}{it: WARNING: 18 graphs will be created, consider using 'if' option as detailed in {help siman_blandaltman:siman blandaltman}}
+{res}{com}. 
 . siman blandaltman, by(pmiss)
-. 
+{txt}working....
+{res}{com}. 
 . siman blandaltman, methlist(Noadj MeanImp)
-. 
+{txt}working....
+{err}{it: WARNING: 36 graphs will be created, consider using 'if' option as detailed in {help siman_blandaltman:siman blandaltman}}
+{res}{com}. 
 . * comparemethodsscatter
 . siman comparemethodsscatter
-. siman comparemethodsscatter if estimand == "effect"
-. siman comparemethodsscatter if mech =="MCAR": mech
-. 
+{txt}Working.....
+{err}{it: WARNING: 36 graphs will be created, consider using 'if' option as detailed in {help              siman_comparemethodsscatter:siman comparemethodsscatter}}
+{res}{com}. siman comparemethodsscatter if estimand == "effect"
+{txt}Working.....
+{res}{com}. siman comparemethodsscatter if mech =="MCAR": mech
+{txt}Working.....
+{err}{it: WARNING: 18 graphs will be created, consider using 'if' option as detailed in {help              siman_comparemethodsscatter:siman comparemethodsscatter}}
+{res}{com}. 
 . siman comparemethodsscatter, methlist(Noadj MeanImp)
-. 
+{txt}Working.....
+{err}{it: WARNING: 36 graphs will be created, consider using 'if' option as detailed in {help              siman_comparemethodsscatter:siman comparemethodsscatter}}
+{res}{com}. 
 . * zipplot
 . siman zipplot
-. siman zipplot if method == "CCA" 
-. siman zipplot if estimand == "effect"
-. siman zipplot if mech =="MCAR": mech
-. 
+{err}{it: WARNING: 3 graphs each of 36 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}
+{txt}Drawing 3 graphs (1 per true value)...
+{res}{com}. siman zipplot if method == "CCA" 
+{txt}Drawing 3 graphs (1 per true value)...
+{res}{com}. siman zipplot if estimand == "effect"
+{txt}Drawing 3 graphs (1 per true value)...
+{res}{com}. siman zipplot if mech =="MCAR": mech
+{err}{it: WARNING: 3 graphs each of 18 panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}
+{txt}Drawing 3 graphs (1 per true value)...
+{res}{com}. 
 . siman zipplot, by(pmiss)
-. siman zipplot, by(method)
-. {c )-}
-{txt}{search r(498), local:r(498);}
-
-end of do-file
-
-{search r(498), local:r(498);}
-
-{com}. exit, clear
+{txt}Drawing 3 graphs (1 per true value)...
+{res}{com}. siman zipplot, by(method)
+{txt}Drawing 3 graphs (1 per true value)...
+{res}{com}. {c )-}
+{txt}
+{com}. 
+. di as result "*** SIMAN GRAPHS HAVE PASSED ALL THESE TESTS ***"
+{res}*** SIMAN GRAPHS HAVE PASSED ALL THESE TESTS ***
+{txt}
+{com}. 
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\git\siman\Ella_testing\testing_graphs_main.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res} 5 Dec 2023, 10:15:02
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

@@ -300,7 +300,7 @@ siman lollyplot if k==5, xtitle("test x-title") name("lollyplot_test7", replace)
 
 siman nestloop mean, dgmorder(-theta rho -pc -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") name("nestloop_test7", replace)
 
-/*
+
 * Won't work as true not constant accross methods
 if ${detail} == 1 {
 
@@ -373,7 +373,7 @@ siman zipplot if mech =="MCAR": mech
 siman zipplot, by(pmiss)
 siman zipplot, by(method)
 }
-*/
+
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THESE TESTS ***"
 
 log close
