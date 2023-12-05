@@ -36,7 +36,7 @@ siman analyse
 * check get error if true is not constant across methods
 clear all
 
-use "C:\Users\rmjlem1\OneDrive - University College London\Desktop\SIMAN TO DO\msgbsl_inter_try_postfile.dta"
+use data/msgbsl_inter_try_postfile.dta
 
 * targets are wide, methods are long 
 * so data are in wide-long format (format 4)

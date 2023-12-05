@@ -78,6 +78,7 @@ siman analyse
 
 siman lollyplot
 
+serset clear
 siman nestloop
 
 
@@ -121,6 +122,7 @@ if ${detail} == 1 siman swarm if beta == 1 & pmiss == 1 & mech == 1 & estimand =
 * mean method meanlmp: 0.0021761
 * mean noadj: -0.0034964
 
+serset clear
 siman comparemethodsscatter 
 * one graph per dgm and target combination, comparing methods
 
