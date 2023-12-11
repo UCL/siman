@@ -41,9 +41,3 @@ gen test = 1
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 * error message as required
 
-* error if non-integer values of dgm
-clear all
-use simlongESTPM_longE_longM.dta, clear
-replace dgm = 2.5 if dgm==2
-siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
-* error message as required

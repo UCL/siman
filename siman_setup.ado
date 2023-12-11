@@ -632,7 +632,8 @@ local datasetvars: list uniq datasetvarswithtrue
 		exit 498
 	}
 	
-
+/*
+IW code for error capture: does not work for wide targets
 * check that true is constant accross methods.  Can only do this when method is a variable (otherwise `method' will be label values and can not sort)
 if !mi("`truevariables'") & (`nformat' == 1 | `nformat' == 3 & (`nmethod'==1 | `nmethod' == 0)) & `methodcreated' == 0 {
 	foreach truevar of varlist `truevariables' {
@@ -643,7 +644,7 @@ if !mi("`truevariables'") & (`nformat' == 1 | `nformat' == 3 & (`nmethod'==1 | `
 		}
 	}
 }
-
+*/
 
 	
 * Identifying elements for summary output table   

@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}C:\git\siman\Ella_testing\testing_graphs_main.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 5 Dec 2023, 09:29:01
+ {txt}opened on:  {res}11 Dec 2023, 17:12:38
 {txt}
 {com}. siman which
 {txt}C:\git\siman\siman.ado
@@ -983,37 +983,37 @@ measure              {c |}         1          2
               sesims {c |}      {res}1000       1000
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                bias {c |}  {res}.0001017   .0013024
+                bias {c |}  {res}-.005546   .0080487
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                mean {c |}  {res}.0001017   .0013024
+                mean {c |}  {res}-.005546   .0080487
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               empse {c |}  {res}.0792258   .1119854
+               empse {c |}  {res}.0786647   .1157925
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             relprec {c |}          {res}  -49.94931
+             relprec {c |}          {res}  -53.84712
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                 mse {c |}  {res}.0062705   .0125299
+                 mse {c |}  {res}.0062127   .0134593
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                rmse {c |}  {res}.0791862    .111937
+                rmse {c |}  {res}.0788207   .1160141
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             modelse {c |}  {res}.0787788   .1136717
+             modelse {c |}   {res}.078676   .1138138
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             ciwidth {c |}  {res}.3082439   .4436266
+             ciwidth {c |}  {res}.3078414   .4441444
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-            relerror {c |} {res}-.5641415   1.505846
+            relerror {c |}  {res}.0143112  -1.708835
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               cover {c |}      {res}95.1       96.3
+               cover {c |}      {res}94.5       95.3
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               power {c |}       {res}4.9        3.7
+               power {c |}       {res}5.5        4.7
                      {txt}{c |}          {res}           
 {txt}{hline 21}{c +}{hline 21}
 2                    {c |}
@@ -1023,37 +1023,37 @@ measure              {c |}         1          2
               sesims {c |}      {res}1000       1000
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                bias {c |} {res}-1.93e-06   .0039336
+                bias {c |}  {res}.0002931   .0063908
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                mean {c |} {res}-1.93e-06   .0039336
+                mean {c |}  {res}.0002931   .0063908
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               empse {c |}  {res}.0923273   .1259693
+               empse {c |}  {res}.0918647   .1272733
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             relprec {c |}          {res}  -46.28071
+             relprec {c |}          {res}  -47.90174
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                 mse {c |}  {res}.0085158   .0158679
+                 mse {c |}  {res}.0084308   .0162231
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-                rmse {c |}  {res}.0922811   .1259678
+                rmse {c |}  {res}.0918193   .1273701
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             modelse {c |}  {res}.0911902   .1311606
+             modelse {c |}   {res}.090955   .1313078
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-             ciwidth {c |}  {res}.3568238   .5119641
+             ciwidth {c |}  {res}.3559307   .5124968
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-            relerror {c |} {res}-1.231517   4.121045
+            relerror {c |} {res}-.9903504   3.169977
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               cover {c |}      {res}94.7       95.8
+               cover {c |}      {res}94.7       96.3
                      {txt}{c |}          {res}           
                      {txt}{c |} 
-               power {c |}       {res}5.3        4.2
+               power {c |}       {res}5.3        3.7
                      {txt}{c |}          {res}           
 {txt}{hline 21}{c BT}{hline 21}
 
@@ -9755,7 +9755,7 @@ Estimates are contained in the dataset
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}C:\git\siman\Ella_testing\testing_graphs_main.smcl
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 5 Dec 2023, 10:15:02
+ {txt}closed on:  {res}11 Dec 2023, 18:00:47
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}
