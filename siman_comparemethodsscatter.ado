@@ -2,7 +2,7 @@
 *  version 1.9.18 25oct2023   IW removed space before comma in note
 *  version 1.9.17 16oct2023   EMZ produce error message if >=, <= or methlist(x/y) is used.
 *  version 1.9.16 03oct2023   EMZ updates: don't allow 'by' option as will just print blank graphs in the grid (previously only allowed for by(target)). User
-*                             should just use 'if' option to subset.  Fix when if == target and warning messages
+*                             should just use 'if' condition to subset.  Fix when if == target and warning messages
 *  version 1.9.15 02oct2023   EMZ bug fix so graphs not displayed >1 time when by(dgm) used
 *  version 1.9.14 12sep2023   EMZ correction to labels for methlist when method is a numeric string labelled variable
 *  version 1.9.13 05sep2023   EMZ minor bug fix to prevent double looping
@@ -168,10 +168,10 @@ qui generate `touseif' = 0
 qui replace `touseif' = 1 `ifscatterc' 
 preserve
 sort `dgm' `target' `method' `touseif'
-* The 'if' option will only apply to dgm, target and method.  The 'if' option is not allowed to be used on rep and an error message will be issued if the user tries to do so
+* The 'if' condition will only apply to dgm, target and method.  The 'if' condition is not allowed to be used on rep and an error message will be issued if the user tries to do so
 capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
 if _rc == 9 {
-	di as error "The 'if' option can not be applied to 'rep' in siman comparemethodsscatter (cms).  If you have not specified an 'if' in siman cms, but you specified one in siman setup, then that 'if' will have been applied to siman cms."  
+	di as error "The 'if' condition can not be applied to 'rep' in siman comparemethodsscatter (cms).  If you have not specified an 'if' in siman cms, but you specified one in siman setup, then that 'if' will have been applied to siman cms."  
 	exit 498
 }
 restore
@@ -648,7 +648,7 @@ else if `numberdgms' != 1 {
 
 			local graphnumcheck = `totalgroupnum' * `numtargetcheck'
 			if `graphnumcheck' > 15 {
-				di as error "{it: WARNING: `graphnumcheck' graphs will be created, consider using 'if' option as detailed in {help 		siman_comparemethodsscatter:siman comparemethodsscatter}}"
+				di as error "{it: WARNING: `graphnumcheck' graphs will be created, consider using 'if' condition as detailed in {help 		siman_comparemethodsscatter:siman comparemethodsscatter}}"
 			}
 
 
