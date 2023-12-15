@@ -12,7 +12,7 @@ adopath ++ `path'
 cd `pathtest'
 cap log close
 set linesize 100
-log using siman_lollyplot_test, replace
+log using siman_lollyplot_test, replace text nomsg
 siman which
 
 local i 0

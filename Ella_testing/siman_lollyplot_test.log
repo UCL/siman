@@ -1,30 +1,25 @@
-----------------------------------------------------------------------------------------------------
-      name:  <unnamed>
-       log:  C:\ian\git\siman\Ella_testing\siman_lollyplot_test.log
-  log type:  text
- opened on:   9 Oct 2023, 17:27:45
 
 . siman which
 C:\ian\git\siman\siman.ado
 *!version 0.3  08aug2023
 C:\ian\git\siman\siman_setup.ado
-*!   version 0.8.2  25sep2023
+*!   version 0.8.7  27nov2023
 C:\ian\git\siman\siman_describe.ado
-*! version 0.4     21jul2022  
+*! version 0.5   17oct2022  
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.6.6  18sep2023
+*! version 0.6.10 13nov2023
 C:\ian\git\siman\siman_table.ado
-*! version 0.8   23dec2022
+*! version 0.8.1   25oct2023
 C:\ian\git\siman\siman_reshape.ado
-*!  version 0.3.3   19sep2023
+*!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
-*! version 1.13  13sep2023
+*! version 1.13.1  25oct2023
 C:\ian\git\siman\siman_zipplot.ado
-*! version 1.8.10 03oct2023
+*! version 1.8.12 25oct2023
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*! version 1.9.16 03oct2023
+*! version 1.9.18 25oct2023
 C:\ian\git\siman\siman_blandaltman.ado
-*! version 1.6.10 03oct2023
+*! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
 C:\ian\git\siman\siman_swarm.ado
 *! version 1.9.7 03oct2023
 C:\ian\git\siman\siman_scatter.ado
@@ -296,7 +291,7 @@ _____________________________________________________
 
 . 
 . siman analyse, notable
-siman analyse has run
+siman analyse has run successfully
 
 . siman lollyplot if beta==1
 Performance measures not specified: defaulting to bias empse cover
@@ -358,8 +353,3 @@ Drawing 3 graphs (one per target)...
 
 . 
 . log close
-      name:  <unnamed>
-       log:  C:\ian\git\siman\Ella_testing\siman_lollyplot_test.log
-  log type:  text
- closed on:   9 Oct 2023, 17:28:36
-----------------------------------------------------------------------------------------------------

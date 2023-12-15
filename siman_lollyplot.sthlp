@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.13.1 25oct2023}{...}
+{* *! version 1.13.2 15dec2023}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "Main simsum help page" "simsum"}{...}
 {viewerjumpto "Syntax" "siman_lollyplot##syntax"}{...}
@@ -75,7 +75,7 @@ except that if {cmd:true()} was not specified in {help siman setup}, then graphs
 {pstd}
 The user can specify {it:if} within the {cmd:siman lollyplot} syntax. If they do not, but have already specified 
 an {it:if} during {help siman_analyse:siman analyse}, then the {it:if} from {help siman_analyse:siman analyse} will be used.
-The {it:if} option will only apply to {bf:dgm}, {bf:target} and {bf:method}.  The {it:if} option is not allowed to be used on 
+The {it:if} condition will only apply to {bf:dgm}, {bf:target} and {bf:method}.  The {it:if} condition is not allowed to be used on 
 {bf:repetition} and an error message will be issued if the user tries to do so.
 
 {pstd}
@@ -87,9 +87,15 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {marker examples}{...}
 {title:Examples}
 
-{pstd} siman lollyplot, scheme(economist) title("New title")
+{pstd} {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
 
-{pstd} siman lollyplot modelse power cover
+{pstd} {stata siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)}
+
+{pstd} {stata siman analyse, notable}
+
+{pstd} {stata siman lollyplot, scheme(economist) bygr(title("Simulation results"))}
+
+{pstd} {stata siman lollyplot modelse power cover if estimand=="beta"}
 
 {marker reference}{...}
 {title:Reference}

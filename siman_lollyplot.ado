@@ -1,4 +1,5 @@
-*! version 1.13.1  25oct2023
+*! version 1.13.2  15dec2023
+* version 1.13.2  15dec2023   IW 'if' is a condition not an option
 * version 1.13.1  25oct2023   IW clearer error if no obs; helpful message with pause option
 * version 1.13  13sep2023     IW add level() option; streamline pm variables; show PMs in order requested; use pstyle to harmonise graph; new logit option calculates CI for power & coverage on logit scale 
 * version 1.12.3  22aug2023   IW bug fix with name("n")
@@ -41,10 +42,12 @@ capture program drop siman_lollyplot
 program define siman_lollyplot, rclass
 version 15
 
-syntax [anything] [if] [, BYGRaphoptions(string) ///
-	LABFormat(string) COLors(string) MSymbol(string) Level(cilevel) ///
-	name(string) REFPower(real 80) pause * /// final-graph options
-	logit /// calculation option
+syntax [anything] [if] [, ///
+	LABFormat(string) COLors(string) MSymbol(string)  ///
+	REFPower(real 80) /// specific graph options
+	Level(cilevel) logit /// calculation options
+	BYGRaphoptions(string) name(string) * /// general graph options
+	pause /// advanced graph option
 	dgmwidth(int 30) pmwidth(int 24) debug /// undocumented options
 	]
 
@@ -119,10 +122,10 @@ qui tempvar touseif
 qui generate `touseif' = 0
 qui replace `touseif' = 1 `iflollyplot' 
 qui sort `dgm' `target' `method' `touseif'
-* The 'if' option will only apply to dgm, target and method.  The 'if' option is not allowed to be used on rep and an error message will be issued if the user tries to do so
+* The 'if' condition will only apply to dgm, target and method.  The 'if' condition is not allowed to be used on rep and an error message will be issued if the user tries to do so
 capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
 if _rc == 9 {
-	di as error "The 'if' option can not be applied to 'rep' in siman lollyplot.  If you have not specified an 'if' in siman lollyplot, but you specified one in siman setup/analyse, then that 'if' will have been applied to siman lollyplot."
+	di as error "The 'if' condition can not be applied to 'rep' in siman lollyplot.  If you have not specified an 'if' in siman lollyplot, but you specified one in siman setup/analyse, then that 'if' will have been applied to siman lollyplot."
 	exit 498
 	}
 
@@ -285,7 +288,7 @@ if `ntargetlevels'>1 {
 }
 else di as text "Drawing graph..."
 if `npms'>5  di as error "WARNING: `each'graph will have `npms' rows of panels: consider using fewer performance measures"
-if `ndgmlevels'>5 di as error "WARNING: `each'graph will have `ndgmlevels' columns of panels: consider using if option as detailed in {help siman lollyplot}"
+if `ndgmlevels'>5 di as error "WARNING: `each'graph will have `ndgmlevels' columns of panels: consider using 'if' condition as detailed in {help siman lollyplot}"
 
 * create graph
 foreach thistarget of local targetlevels {
