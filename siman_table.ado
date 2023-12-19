@@ -70,7 +70,7 @@ if "`anything'"!="" {
 	gen `keep' = 0
 	foreach thing of local anything {
 		qui count if _perfmeascode == "`thing'" 
-		if r(N)==0 di as error "Warning: performance measure not found: `thing'"
+		if r(N)==0 di as smcl as text "{p 0 2}Warning: performance measure not found: `thing'"
 		qui replace `keep' = 1 if _perfmeascode == "`thing'" 
 		}
 	qui keep if `keep'

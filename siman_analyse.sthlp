@@ -111,8 +111,6 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {bf:{help siman_setup:siman setup}}.
 {p_end}
 
-{phang}. {stata "clear all"}
-
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_wideE_wideM4.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) order(method)"}
@@ -128,8 +126,6 @@ If more than one method, with method labels 1 and 2, using the {browse "https://
 {bf:{help siman_setup:siman setup}}.
 {p_end}
 
-{phang}. {stata "clear all"}
-
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)"}
@@ -144,8 +140,6 @@ Run for method 2 only:
 {pstd}
 To only calculate the performance measures bias and model-based standard error:
 {p_end}
-
-{phang}. {stata "clear all"}
 
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
 

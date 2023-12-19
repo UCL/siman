@@ -100,7 +100,7 @@ capture confirm string variable `method'
 if !_rc local methodstringindi = 1
 
 if mi("`methlist'") & `nummethod' > 5 {
-    di as text "Warning: With `nummethod' methods compared, this plot may be too dense to read.  If you find it unreadable, you can choose the methods to compare using -siman comparemethodsscatter-, methlist(a b) where a and b are the methods you are particularly interested to compare."
+    di as smcl as text "{p 0 2}Warning: with `nummethod' methods compared, this plot may be too dense to read.  If you find it unreadable, you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a and b are the methods you are particularly interested to compare."
 }
 
 cap confirm variable `dgm'
@@ -648,7 +648,7 @@ else if `numberdgms' != 1 {
 
 			local graphnumcheck = `totalgroupnum' * `numtargetcheck'
 			if `graphnumcheck' > 15 {
-				di as error "{it: WARNING: `graphnumcheck' graphs will be created, consider using 'if' condition as detailed in {help 		siman_comparemethodsscatter:siman comparemethodsscatter}}"
+				di as smcl as text "{p 0 2}Warning: `graphnumcheck' graphs will be created: consider using 'if' condition as detailed in {help siman_comparemethodsscatter:siman comparemethodsscatter}"
 			}
 
 

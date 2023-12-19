@@ -284,8 +284,6 @@ estimand, with labels {it:beta} and {it:gamma}) and 2 methods (with labels {it:1
 
 {pstd}{bf:Data in format 2} (wide-wide: wide target, wide method):
 
-{phang}. {stata "clear all"}
-
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_wideE_wideM4.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) order(method)"}
@@ -305,8 +303,6 @@ will be reshaped before {cmd:siman setup} is run.
 
 {pstd}{bf:Data in format 3} (long-wide: long target, wide method):
 
-{phang}. {stata "clear all"}
-
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
 
 {phang}. {stata "reshape wide est se, i(rep dgm estimand true) j(method)"}
@@ -322,8 +318,6 @@ will be reshaped before {cmd: siman setup} is run.
 
 
 {pstd}{bf:Data in format 4} (wide-long: wide target, long method ):
-
-{phang}. {stata "clear all"}
 
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
 

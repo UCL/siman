@@ -408,7 +408,7 @@ else local totalgroupnum = `groupnum'
 
 local graphnumcheck = `totalgroupnum' * `numtargetcheck'
 if `graphnumcheck' > 15 {
-di as error "{it: WARNING: `graphnumcheck' graphs will be created, consider using 'if' condition as detailed in {help siman_blandaltman:siman blandaltman}}"
+di as smcl as text "{p 0 2}Warning: `graphnumcheck' graphs will be created: consider using 'if' condition as detailed in {help siman_blandaltman:siman blandaltman}"
 }
 
 

@@ -111,17 +111,17 @@ if mi("`estimate'") &  mi("`se'") & mi("`lci'") & mi("`uci'") {
 
 * produce a warning message if no est and no se contained in dataset
 if mi("`estimate'") &  mi("`se'") {
-	 di as error "{it: WARNING: no estimates or SEs, siman's output will be limited.}"
+	 di as smcl as text "{p 0 2}Warning: no estimates or SEs, siman's output will be limited."
 }
 
 if mi("`estimate'") | mi("`se'") {
-	di as error "{it: WARNING: siman analyse will require est() and se() to be specified in set-up}"
+	di as smcl as text "{p 0 2}Warning: siman analyse will require est() and se() to be specified in set-up"
 }
 
 * produce a warning message if no method contained in dataset, and create a constant
 local methodcreated = 0
 if mi("`method'") {
-	 di as error "{it:WARNING: no method specified, siman will proceed assuming there is only one method.}" _n "{it:If this is a mistake, enter method() option in -siman setup-}"
+	 di as smcl as text "{p 0 2}Warning: no method specified. siman will proceed assuming there is only one method. If this is a mistake, enter method() option in -siman setup-."
 	 qui gen _methodvar = 1
 	 local method "_methodvar"
 	 local methodcreated = 1
@@ -138,13 +138,11 @@ if !mi("`dgm'") {
             drop `var'
             rename `t`var'' `var'
             compress `var'
-            display as error "Warning: variable `var', which appears in dgm(), was stored as a string. It has been" _newline ///
-            "encoded as numeric so that subsequent siman commands will work. If you require a" _newline ///
-            "different order, encode `var' as numeric before running -siman setup-."
+            di as smcl as text "{p 0 2}Warning: variable `var', which appears in dgm(), was stored as a string. It has been encoded as numeric so that subsequent siman commands will work. If you require a different order, encode `var' as numeric before running -siman setup-."
         }
 		qui count if missing(`var')
 		cap assert r(N)==0
-		if _rc di as error "Warning: variable `var' should not contain missing values.  Consider combining dgms."
+		if _rc di as smcl as text "{p 0 2}Warning: variable `var' should not contain missing values.  Consider combining dgms."
     }
 }
 
@@ -220,7 +218,7 @@ else local nmethod 0
 if `nmethod' == 1 {
 	qui count if missing(`method')
 	cap assert r(N)==0
-	if _rc di as error "Warning: variable `method' should not contain missing values."
+	if _rc di as smcl as text "{p 0 2}Warning: variable `method' should not contain missing values."
 }
 
 

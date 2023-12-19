@@ -404,7 +404,7 @@ if !mi("`ntrue'") local numtruecheck `ntrue'
 
 local graphnumcheck = (`totaldgmnum' * `nummethodcheck' * `numtargetcheck')/`numtruecheck'
 if `graphnumcheck' > 15 {
-	di as error "{it: WARNING: `numtruecheck' graphs each of `graphnumcheck' panels will be created, consider using 'if' or 'by' options as detailed in {help siman_zipplot:siman zipplot}}"
+	di as smcl as text "{p 0 2}Warning: `numtruecheck' graphs each of `graphnumcheck' panels will be created: consider using 'if' condition or 'by' option as detailed in {help siman_zipplot:siman zipplot}"
 }
 
 di as txt "Drawing `numtruecheck' graphs (1 per true value)..."
