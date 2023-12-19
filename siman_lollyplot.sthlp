@@ -23,24 +23,26 @@
 
 {pstd}Available performance measures are listed in {help siman_analyse##perfmeas:performance measures}.
 
-{synoptset 20 tabbed}{...}
+{synoptset 25 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Specific options}
 
-{synopt:{opt labf:ormat(string)}}Formats for the marker labels for (i) numeric performance measures (e.g. bias), (ii) percentage performance measures (e.g. coverage), and (iii) count performance measures (e.g. bsims).
+{synopt:{opt labf:ormat(string)}}defines formats for the marker labels for (i) numeric performance measures (e.g. bias), (ii) percentage performance measures (e.g. coverage), and (iii) count performance measures (e.g. bsims).
 
-{synopt:{opt col:ors(string)}}Colours for the graphs: one per method.
+{synopt:{opt col:ors(string)}}specifies colours for the graphs: one per method.
 
-{synopt:{opt ms:ymbol(string)}}Marker symbols for the graphs: one per method, or one for all methods.
+{synopt:{opt ms:ymbol(string)}}specifies marker symbols for the graphs: one per method, or one for all methods.
 	
-{synopt:{opt refp:ower(string)}}Reference level for power. Default is 80.
+{synopt:{opt refp:ower(string)}}sets the reference level for power. Default is 80.
+
+{synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
 
 {syntab:Calculation options}
 
-{synopt:{opt l:evel(#)}}Level for confidence intervals. Default is the current level (see {help level}).
+{synopt:{opt l:evel(#)}}sets the level for confidence intervals. Default is the current level (see {help level}).
 
-{synopt:{opt logit}}Calculates confidence intervals for power and coverage on the logit scale. This is only important with small numbers of repetitions: it ensures that confidence intervals lie between 0 and 100.
+{synopt:{opt logit}}calculates confidence intervals for power and coverage on the logit scale. This is only important with small numbers of repetitions: it ensures that confidence intervals lie between 0 and 100.
 
 {syntab:General graph options}
 
@@ -80,6 +82,9 @@ The {it:if} condition will only apply to {bf:dgm}, {bf:target} and {bf:method}. 
 
 {pstd}
 Please note that {help siman_setup:siman setup} and {help siman_analyse:siman analyse} need to be run first before {bf:siman lollyplot}.
+
+{pstd}
+If {cmd:siman lollyplot} fails with the error "Too many sersets", try again after typing {cmd:serset clear}.
 
 {pstd}
 For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.

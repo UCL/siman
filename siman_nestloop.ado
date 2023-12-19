@@ -26,7 +26,7 @@ syntax [anything] [if], ///
 	DGSIze(real 0.3) DGGAp(real 0) /// control sizing of descriptor graph
 	DGINnergap(real 3) DGCOlor(string) /// control descriptor graph
 	DGPAttern(string) DGLAbsize(string) DGSTyle(string) DGLWidth(string) /// control descriptor graph
-	debug pause nodg /// undocumented
+	debug pause nodg METHLEGend(string) /// undocumented
 	LColor(string) LPattern(string) LSTYle(string) LWidth(string) /// twoway options for main graph
 	name(string) * /// twoway options for overall graph
 	] 
@@ -104,6 +104,13 @@ if mi("`dgpattern'") local dgpattern solid
 if mi("`dglabsize'") local dglabsize vsmall
 
 local cilevel `level'
+
+if "`methlegend'"=="item" local methlegitem "`method': "
+else if "`methlegend'"=="title" local methlegtitle title(`method')
+else if "`methlegend'"!="" {
+	di as error "Syntax: methlegend(item|title)"
+	exit 198
+}
 
 *** END OF PARSING ***
 
@@ -308,7 +315,7 @@ foreach thispm of local pmlist { // loop over PMs
 		}
 		else local nmethods2 = `nmethods'
 		if `max'<=`min' {
-			di as text "Warning: `thispm' does not vary for `target' `thistarget'"
+			di as smcl as text "{p 0 2}Warning: `thispm' does not vary for `target' `thistarget'"
 			local min = `min'-1
 			local max = `max'+1
 		}
@@ -334,7 +341,7 @@ foreach thispm of local pmlist { // loop over PMs
 				}
 				summ `var', meanonly
 				if r(max)==r(min) {
-					if !mi("`debug'") di as text "Warning: no variation for descriptor `var'"
+					if !mi("`debug'") di as smcl as text "{p 0 2}Warning: no variation for descriptor `var'"
 					continue
 				}
 				local ++j
@@ -388,7 +395,6 @@ foreach thispm of local pmlist { // loop over PMs
 		// CREATE MAIN GRAPH COMMAND
 		local main_graph_cmd
 		local legend
-
 *		foreach thismethod in `methodlist' `methodlist2' {
 		forvalues k = 1 / `nmethods2' {
 			local istruevar = `k'>`nmethods' // handle "true" (if present) differently from the methods
@@ -404,7 +410,7 @@ foreach thispm of local pmlist { // loop over PMs
 			}
 			local main_graph_cmd `main_graph_cmd' (`thisgraphcmd')
 			if `istruevar' local legend `legend' `k' `"True"'
-			else local legend `legend' `k' `"Method: `mlab`k''"'
+			else local legend `legend' `k' `"`methlegitem'`mlab`k''"'
 		}
 		* reference lines
 		if "`refline'"!="norefline" {
@@ -424,7 +430,7 @@ foreach thispm of local pmlist { // loop over PMs
 			`main_graph_cmd'														///
 			`descriptor_graph_cmd'											///
 			,																///
-			legend(order(`legend'))											///
+			legend(order(`legend') `methlegtitle')											///
 			ytitle("`thispm'") 												///
 			xla(1/`nscenarios') yla(,nogrid) 								///
 			`descriptor_labels_cmd'											///

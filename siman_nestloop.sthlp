@@ -21,12 +21,12 @@
 
 {pstd}Available performance measures are listed in {help siman_analyse##perfmeas:performance measures}.
 
-{synoptset 30 tabbed}{...}
+{synoptset 25 tabbed}{...}
 {synopthdr}
 {synoptline}
-{syntab:Main graph options}
+{syntab:Options controlling the main graph}
 
-{synopt:{opt dgmo:rder(string)}}order of data generating mechanisms for the nested loop plot. A negative sign in front of the variable name 
+{synopt:{opt dgmo:rder(string)}}defines the order of data generating mechanisms for the nested loop plot. A negative sign in front of the variable name 
 will display its values on the graph in descending order.{p_end}
 {synopt:{opt stag:ger(#)}}horizontally staggers the main graphs for different methods.  Default # is 0. Try {cmd:stagger(0.05)} to make the lines more distinct.{p_end}
 {synopt:{opt c:onnect(string)}}controls how the main graph and descriptor graph are connected. 
@@ -35,19 +35,20 @@ An alternative is {cmd:connect(L)} which shows each performance measure value at
 {synopt:{opt noref:line}}prevents display of reference lines for certain performance measures (coverage, bias, relprec and relerror).{p_end}
 {synopt:{opt lev:el}}specifies where the reference line for performance measure coverage will be drawn.{p_end}
 
-{syntab:Descriptor graph options}
+{syntab:Options controlling the descriptor graph}
 
-{synopt:{opt dgsi:ze(#)}} defines the vertical size of the descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.35.{p_end}
-{synopt:{opt dgga:p(#)}} defines the vertical size of the gap between the main graph and the descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.{p_end}
-{synopt:{opt dgin:nergap(#)}} controls the vertical spacing between the  descriptor graphs.  Default # is 3.{p_end}
-{synopt:{opt dgco:lor(string)}} controls the colour(s) for the descriptor graphs and their labels. Default is gs4.{p_end}
-{synopt:{opt dgpa:ttern(string)}} controls the pattern(s) for descriptor graph. Deafult is solid.{p_end}
-{synopt:{opt dgla:bsize(string)}} controls the size of the descriptor graph labels. Default is vsmall.{p_end}
-{synopt:{opt dgst:yle(string)}} controls the style(s) of the descriptor graph.{p_end}
-{synopt:{opt dglw:idth(string)}} controls the width(s) of the descriptor graph.{p_end}
+{synopt:{opt dgsi:ze(#)}}defines the vertical size of the descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.35.{p_end}
+{synopt:{opt dgga:p(#)}}defines the vertical size of the gap between the main graph and the descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.{p_end}
+{synopt:{opt dgin:nergap(#)}}controls the vertical spacing between the  descriptor graphs.  Default # is 3.{p_end}
+{synopt:{opt dgco:lor(string)}}controls the colour(s) for the descriptor graphs and their labels. Default is gs4.{p_end}
+{synopt:{opt dgpa:ttern(string)}}controls the pattern(s) for descriptor graph. Deafult is solid.{p_end}
+{synopt:{opt dgla:bsize(string)}}controls the size of the descriptor graph labels. Default is vsmall.{p_end}
+{synopt:{opt dgst:yle(string)}}controls the style(s) of the descriptor graph.{p_end}
+{synopt:{opt dglw:idth(string)}}controls the width(s) of the descriptor graph.{p_end}
 
 {syntab:Other graph options}
 
+{synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
 {synopt:{it:graph_options}}Most of the valid options for {help line:line} are available.{p_end}
 
 {marker description}{...}

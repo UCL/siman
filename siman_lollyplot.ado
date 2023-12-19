@@ -48,7 +48,7 @@ syntax [anything] [if] [, ///
 	Level(cilevel) logit /// calculation options
 	BYGRaphoptions(string) name(string) * /// general graph options
 	pause /// advanced graph option
-	dgmwidth(int 30) pmwidth(int 24) debug /// undocumented options
+	dgmwidth(int 30) pmwidth(int 24) debug METHLEGend(string) /// undocumented options
 	]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -99,6 +99,14 @@ if wordcount("`name'_something")>1 {
 	di as error "Something has gone wrong with name()"
 	exit 498
 }
+
+if "`methlegend'"=="item" local methlegitem "`method': "
+else if "`methlegend'"=="title" local methlegtitle title(`method')
+else if "`methlegend'"!="" {
+	di as error "Syntax: methlegend(item|title)"
+	exit 198
+}
+
 *** END OF PARSING ***
 
 preserve   
@@ -287,8 +295,8 @@ if `ntargetlevels'>1 {
 	local each "each "
 }
 else di as text "Drawing graph..."
-if `npms'>5  di as error "WARNING: `each'graph will have `npms' rows of panels: consider using fewer performance measures"
-if `ndgmlevels'>5 di as error "WARNING: `each'graph will have `ndgmlevels' columns of panels: consider using 'if' condition as detailed in {help siman lollyplot}"
+if `npms'>5  di as smcl as text "{p 0 2}Warning: `each'graph will have `npms' rows of panels: consider using fewer performance measures"
+if `ndgmlevels'>5 di as smcl as text "{p 0 2}Warning: `each'graph will have `ndgmlevels' columns of panels: consider using 'if' condition as detailed in {help siman lollyplot}"
 
 * create graph
 foreach thistarget of local targetlevels {
@@ -306,7 +314,7 @@ foreach thistarget of local targetlevels {
 	local i 1
 	local graphorder
 	foreach thismethod of local methodlevels {
-		local graphorder `graphorder' `=4*`i'-3' "`method': `label`i''"
+		local graphorder `graphorder' `=4*`i'-3' "`methlegitem'`label`i''"
 		* main marker
 		local graph_cmd `graph_cmd' scatter `method' `estimate' ///
 			if `method'==`thismethod' & `targetcond', pstyle(p`i') mlabstyle(p`i') ///
@@ -329,7 +337,7 @@ foreach thistarget of local targetlevels {
 	local graph_cmd `graph_cmd' , by(`pmvar' `dgm', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions') 
 	local graph_cmd `graph_cmd' subtitle("") ylab(none) ///
 		ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse range(0.8)) ///
-		legend(order(`graphorder'))
+		legend(order(`graphorder') `methlegtitle')
 	if `ntargetlevels'<=1 local graph_cmd `graph_cmd' name(`name'`nameopts')
 	else local graph_cmd `graph_cmd' name(`name'_`thistargetname'`nameopts')
 	local graph_cmd `graph_cmd' `options'
