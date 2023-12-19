@@ -1,4 +1,5 @@
-*! version 0.6.10 13nov2023
+*! version 0.6.11 19dec2023
+* version 0.6.11 19dec2023    IW bug fix in method values for reshape
 * version 0.6.10  13nov2023   EMZ bug fix: labelling mcse vars when method a numeric labelled string variable - use values not labels
 * version 0.6.9   07nov2023   EMZ bug fix: restoring lost method labels issue for when method has been created by siman (i.e. _methodvar = 1)
 * version 0.6.8   30oct2023   EMZ: retained underscores instead of removing them to tidy up wide variable names
@@ -21,7 +22,9 @@ capture program drop siman_analyse
 program define siman_analyse, rclass
 version 15
 
-syntax [anything] [if], [PERFONLY replace noTABle force]
+syntax [anything] [if], [PERFONLY replace noTABle force debug]
+
+if "`debug'"=="" local qui qui
 
 capture which simsum.ado
 if _rc == 111 {
@@ -164,12 +167,12 @@ if `nformat'==1 {
 		
 	qui levels `method', local(levels)
 	tokenize `"`levels'"'
-	forvalues f = 1/`nmethodlabels' {
-		if  substr("``f''",strlen("``f''"),1)=="_" local g = substr("``f''", 1, index("``f''","_") - 1)
-		if `methodstringindi' == 0 & `methodlabels'!=1 local methodlabel`f' = "`g'"
-		else local methodlabel`f' = "``g''"
-		if `f'==1 local methodlist `methodlabel`f''
-		else if `f'>=2 local methodlist `methodlist' `methodlabel`f''
+	forvalues f = 1/`nmethodlabels' { // edited 19dec2023
+		if `methodstringindi' == 0 & `methodlabels'!=1 local ff = "`f'"
+		else local ff = "``f''"
+		if  substr("`ff'",strlen("`ff'"),1)=="_" local ff = substr("`ff'", 1, index("`ff'","_") - 1)
+		local methodlabel`f' `ff'
+		local methodlist `methodlist' `methodlabel`f''
 		}
 	local valmethod `methodlist'
 
@@ -215,15 +218,15 @@ if `nformat'==1 {
 	else local methodreshape `valmethod'
 
 	if `methodstringindi'==1  {
-		qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'") string
+		`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'") string
 		}
 	else if `methodstringindi'==0 & `methodlabels' == 0 {
-		qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'")
+		`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'")
 		* restore number format to method
 		label value `method' `methodformat'
 		}
 	else if `methodstringindi'==0 & `methodlabels' == 1 {
-		qui reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodvalues'")
+		`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodvalues'")
 		* restore number format to method
 		label value `method' `methodformat'
 		}
@@ -371,7 +374,7 @@ if `methodcreated'!=1 {
 		}
 		else if `nmethod'>=1 & `nmethod'!=. {
 			*  number of methods will be the number of methods that the user specified
-			* need valnethod to be method values for use in reshape command
+			* need valmethod to be method values for use in reshape command
 	*		local valmethod = "`method'"
 			local valmethod = "`methlist'"
 		}
