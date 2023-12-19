@@ -109,21 +109,21 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 
 {pstd} To plot the {bf: comparemethodsscatter (cms)} graph, first load the data set in to {cmd: siman}.
 
-{pstd}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
+{phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
 
-{pstd}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
+{phang}. {stata  "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
 
 {pstd} To display the {bf: cms} graphs by a specific dgm {it:MAR}, where dgm is defined by more than one variable:
 
-{pstd}. {stata `"siman comparemethodsscatter if dgm ==2"'}
+{phang}. {stata  `"siman comparemethodsscatter if dgm ==2"'}
 
 {pstd} Or alternatively, to subset based on the dgm value label:
 
-{pstd}. {stata `"siman comparemethodsscatter if dgm =="MAR": dgm"'}
+{phang}. {stata  `"siman comparemethodsscatter if dgm =="MAR": dgm"'}
 
 {pstd} To display {bf: cms} graphs for the standard errors with the difference of methods 3 ({it:MI}) - 1 ({it:Full}) only, and changing the graph options:
 
-{pstd}. {stata `"siman comparemethodsscatter se, methlist(1 3) title("My title") name("cms", replace)"'}
+{phang}. {stata  `"siman comparemethodsscatter se, methlist(1 3) title("My title") name("cms", replace)"'}
 
 {marker authors}{...}
 {title:Authors}

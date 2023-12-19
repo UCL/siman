@@ -106,19 +106,19 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 
 {pstd} To plot the zipplot, first load the data set in to {cmd: siman}.
 
-{pstd}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
+{phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
 
-{pstd}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
+{phang}. {stata  "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
 
-{pstd}. {stata `"siman zipplot"'}
+{phang}. {stata  `"siman zipplot"'}
 
 {pstd} To plot the graphs split by dgm only:
 
-{pstd}. {stata `"siman zipplot, by(dgm)"'}
+{phang}. {stata  `"siman zipplot, by(dgm)"'}
 
 {pstd} To change the colour scheme, legend and titles in the display:
 
-{pstd}. {stata `"siman zipplot, scheme(scheme(economist)) legend(order(4 "Covering" 3 "Not covering")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50))"'}
+{phang}. {stata  `"siman zipplot, scheme(scheme(economist)) legend(order(4 "Covering" 3 "Not covering")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50))"'}
 
 {marker reference}{...}
 {title:Reference}

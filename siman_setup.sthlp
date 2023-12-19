@@ -249,13 +249,13 @@ Note that {bf:true} must be a {bf:variable} in the dataset for {bf:{help siman n
 
 {pstd}For example, instead of:
 
-{phang} {stata "reshape wide est , i(rep scenario dgm severity CTE switchproportion treateffect switcherprog sfunccomp estimand perfmeascode) j(method 1 2)"}
+{phang}. {stata "reshape wide est , i(rep scenario dgm severity CTE switchproportion treateffect switcherprog sfunccomp estimand perfmeascode) j(method 1 2)"}
 
 {pstd}use:
 
-{phang} {stata "egen i = group(rep scenario dgm severity CTE switchproportion treateffect switcherprog sfunccomp estimand perfmeascode)"}
+{phang}. {stata "egen i = group(rep scenario dgm severity CTE switchproportion treateffect switcherprog sfunccomp estimand perfmeascode)"}
 
-{phang} {stata "reshape wide est , i(i) j(method 1 2)"}
+{phang}. {stata "reshape wide est , i(i) j(method 1 2)"}
 
 
 {marker examples}{...}

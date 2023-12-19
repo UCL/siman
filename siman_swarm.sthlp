@@ -98,9 +98,9 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 
 {phang}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
 
-{pstd}. {stata `"siman swarm, meanoff scheme(s1color) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title"))"'}
+{phang}. {stata `"siman swarm, meanoff scheme(s1color) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title"))"'}
 
-{pstd}. {stata `"siman swarm, scheme(economist) bygraphoptions(title("My swarm plot")) graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm", replace))"'}
+{phang}. {stata `"siman swarm, scheme(economist) bygraphoptions(title("My swarm plot")) graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm", replace))"'}
 
 {marker authors}{...}
 {title:Authors}

@@ -89,21 +89,21 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 
 {pstd} To plot the Bland-Altman graph, first load the data set in to {cmd: siman}.
 
-{pstd}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
+{phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
 
-{pstd}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
+{phang}. {stata  "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
 
 {pstd} To display the Bland-Altman graphs by a specific dgm {it:MCAR}, where dgm is defined by more than one variable:
 
-{pstd}. {stata `"siman blandaltman if dgm ==1"'}
+{phang}. {stata  `"siman blandaltman if dgm ==1"'}
 
 {pstd} Or alternatively, to subset based on the dgm value label:
 
-{pstd}. {stata `"siman blandaltman if dgm =="MCAR": dgm"'}
+{phang}. {stata  `"siman blandaltman if dgm =="MCAR": dgm"'}
 
 {pstd} To display Bland-Altman graphs for the standard errors with the difference of methods 3 ({it:MI}) - 1 ({it:Full}) only, and changing the graph options:
 
-{pstd}. {stata `"siman blandaltman se, methlist(1 3) bygraphoptions(title("My Bland-Altman plot")) ytitle("test y-title") xtitle("test x-title") name("blandaltman", replace)"'}
+{phang}. {stata  `"siman blandaltman se, methlist(1 3) bygraphoptions(title("My Bland-Altman plot")) ytitle("test y-title") xtitle("test x-title") name("blandaltman", replace)"'}
 
 
 {marker authors}{...}

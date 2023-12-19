@@ -87,15 +87,15 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {marker examples}{...}
 {title:Examples}
 
-{pstd} {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
+{phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
 
-{pstd} {stata siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)}
+{phang}. {stata  siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)}
 
-{pstd} {stata siman analyse, notable}
+{phang}. {stata  siman analyse, notable}
 
-{pstd} {stata siman lollyplot, scheme(economist) bygr(title("Simulation results"))}
+{phang}. {stata  siman lollyplot, scheme(economist) bygr(title("Simulation results"))}
 
-{pstd} {stata siman lollyplot modelse power cover if estimand=="beta"}
+{phang}. {stata  siman lollyplot modelse power cover if estimand=="beta"}
 
 {marker reference}{...}
 {title:Reference}
