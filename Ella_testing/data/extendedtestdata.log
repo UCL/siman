@@ -1,0 +1,232 @@
+-------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  N:\Home\Analysis\Simulations\siman\extendedtestdata\extendedtestdata.log
+  log type:  text
+ opened on:  18 Dec 2023, 09:08:14
+
+. /*
+> extendedtestdata.do
+> Extended simulation study for siman testing
+> Aim: compare methods for handling incomplete baseline in RCT
+> DGM: 3 dgmvars giving 12 dgms: 
+>         trt effect beta = 0, 0.25 or 0.5
+>         percent missing pi = .2 or .4
+>         missing data mech = MCAR or MNAR
+> Fixed aspects of DGM: 
+>         n=200, 1:1 allocation;
+>         covariate x std normal;
+>         normal outcome, intercept 1, x effect gamma = 1, 
+>         residual variance 1, 
+> Estimands (3): 
+>         effect = treatment effect
+>         mean0 = mean in control arm
+>         mean1 = mean in treatment arm
+>         True value depends on beta for estimands 1 & 3.
+> Methods (3): 
+>         Noadj = unadjusted
+>         CCA = complete cases
+>         MeanImp = mean imputation 
+> Performance measures: everything
+> Implementation: 1000 repetitions
+> These settings chosen to make both nestloop and trellis sensible
+> 
+> IW 27mar2023: created
+> IW 15dec2023: postfile renamed extendedtestdata.dta, and create extendedtestdata2.dta
+> */
+. 
+. * set up
+. version 17
+
+. local filename extendedtestdata
+
+. local run 1
+
+. prog drop _all
+
+. 
+. * run simulation (if required)
+. if `run' {
+.         clear
+.         set seed 481964
+. 
+.         prog def simgen
+  1.                 syntax, beta(real) pmiss(real) mech(string) obs(int)
+  2.                 local gamma 1
+  3.                 drop _all
+  4.                 set obs `obs'
+  5.                 gen z = _n>_N/2
+  6.                 gen x = rnormal()
+  7.                 gen y = 1 + `beta'*z + `gamma'*x + rnormal()
+  8.                 if "`mech'"=="MCAR" replace x = . if runiform()<`pmiss'
+  9.                 else if "`mech'"=="MNAR" replace x = . if runiform()<2*`pmiss' & x<0
+ 10.                 else exit 497
+ 11.         end
+. 
+.         local nreps 1000
+.         cap postclose ian
+.         postfile ian beta pmiss str4(mech) rep str8(method estimand) b se using `filename
+> ', replace
+.         forvalues i=1/`nreps' {
+  2.                 if `i'==1 di as text "Running `nreps' repetitions"
+  3.                 _dots `i' 0
+  4.                 foreach beta in 0 0.25 0.5 {
+  5.                         foreach pmiss in .2 .4 {
+  6.                                 foreach mech in MCAR MNAR {
+  7.                                         qui {
+  8.                                                 simgen, beta(`beta') pmiss(`pmiss') me
+> ch(`mech') obs(200)
+  9.                                                 summ x, meanonly
+ 10.                                                 gen xfill = cond(mi(x),r(mean),x)-r(me
+> an) // NB mean 0
+ 11.                                                 foreach method in Noadj CCA MeanImp {
+ 12.                                                         if "`method'"=="Noadj"   reg y
+>  z
+ 13.                                                         if "`method'"=="CCA"     reg y
+>  z x
+ 14.                                                         if "`method'"=="MeanImp" reg y
+>  z xfill
+ 15.                                                         foreach estimand in effect mea
+> n0 mean1 {
+ 16.                                                                 if "`estimand'"=="effe
+> ct" lincom z
+ 17.                                                                 if "`estimand'"=="mean
+> 0" lincom _cons
+ 18.                                                                 if "`estimand'"=="mean
+> 1" lincom _cons+z
+ 19.                                                                 post ian (`beta') (`pm
+> iss') ("`mech'") (`i') ("`method'") ("`estimand'") (r(estimate)) (r(se))
+ 20.                                                         }
+ 21.                                                 }
+ 22.                                         }
+ 23.                                 }
+ 24.                         }
+ 25.                 }
+ 26.         }
+Running 1000 repetitions
+..................................................    50
+..................................................   100
+..................................................   150
+..................................................   200
+..................................................   250
+..................................................   300
+..................................................   350
+..................................................   400
+..................................................   450
+..................................................   500
+..................................................   550
+..................................................   600
+..................................................   650
+..................................................   700
+..................................................   750
+..................................................   800
+..................................................   850
+..................................................   900
+..................................................   950
+.................................................. 1,000
+.         postclose ian
+. }
+
+. 
+. // make extendedtestdata2 in format required for siman setup
+. 
+. use `filename', clear
+
+. 
+. * store true value
+. gen true = 1 if estimand=="mean0"
+(72,000 missing values generated)
+
+. replace true = 1+beta if estimand=="mean1"
+(36,000 real changes made)
+
+. replace true = beta if estimand=="effect"
+(36,000 real changes made)
+
+. 
+. * siman setup requires beta, pmiss to be integer
+. rename beta _beta
+
+. gen beta=string(_beta)
+
+. sencode beta, replace
+
+. rename pmiss _pmiss
+
+. gen pmiss=string(_pmiss)
+
+. sencode pmiss, replace
+
+. drop _pmiss _beta
+
+. order beta pmiss
+
+. 
+. * save
+. save extendedtestdata2, replace
+(file extendedtestdata2.dta not found)
+file extendedtestdata2.dta saved
+
+. 
+. * view DGMvars
+. table beta pmiss mech
+
+----------------------------------------
+            |             mech          
+            |    MCAR     MNAR     Total
+------------+---------------------------
+beta        |                           
+  0         |                           
+    pmiss   |                           
+      .2    |   9,000    9,000    18,000
+      .4    |   9,000    9,000    18,000
+      Total |  18,000   18,000    36,000
+  .25       |                           
+    pmiss   |                           
+      .2    |   9,000    9,000    18,000
+      .4    |   9,000    9,000    18,000
+      Total |  18,000   18,000    36,000
+  .5        |                           
+    pmiss   |                           
+      .2    |   9,000    9,000    18,000
+      .4    |   9,000    9,000    18,000
+      Total |  18,000   18,000    36,000
+  Total     |                           
+    pmiss   |                           
+      .2    |  27,000   27,000    54,000
+      .4    |  27,000   27,000    54,000
+      Total |  54,000   54,000   108,000
+----------------------------------------
+
+. * view estimands
+. tab1 estimand
+
+-> tabulation of estimand  
+
+   estimand |      Freq.     Percent        Cum.
+------------+-----------------------------------
+     effect |     36,000       33.33       33.33
+      mean0 |     36,000       33.33       66.67
+      mean1 |     36,000       33.33      100.00
+------------+-----------------------------------
+      Total |    108,000      100.00
+
+. * view methods
+. tab1 method 
+
+-> tabulation of method  
+
+     method |      Freq.     Percent        Cum.
+------------+-----------------------------------
+        CCA |     36,000       33.33       33.33
+    MeanImp |     36,000       33.33       66.67
+      Noadj |     36,000       33.33      100.00
+------------+-----------------------------------
+      Total |    108,000      100.00
+
+. 
+end of do-file
+      name:  <unnamed>
+       log:  N:\Home\Analysis\Simulations\siman\extendedtestdata\extendedtestdata.log
+  log type:  text
+ closed on:  18 Dec 2023, 09:23:22
+-------------------------------------------------------------------------------------------
