@@ -85,16 +85,29 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {marker example}{...}
 {title:Example}
 
-{pstd} Re-creating the nestloop plot in Figure 2 from {help siman_nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}, found {browse "https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/1471-2288-14-129#Sec23":here}. The data can be
-found {browse "https://github.com/UCL/simansuite/tree/main/Ella_testing/nestloop/res.dta":here} or opened directly (with siman setup and siman analyse already performed) using the command below.
+{pstd}Read and set up data
 
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/nestloop/res2.dta, clear"}
+{phang}. {stata "use extendedtestdata2, clear"}
 
-{phang}. {stata "siman setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)"}
+{phang}. {stata "siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)"}
 
-{phang}. {stata "siman analyse"}
+{phang}. {stata "siman analyse, notable"}
 
-{phang}. {stata `"siman nestloop mean, dgmorder(-theta rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("Odds ratio")"'}
+{pstd}Simple use of nestloop, focussing on one performance measure (% error in model-based standard error)
+
+{phang}. {stata "siman nestloop relerror"}
+
+{pstd}Focus on one estimand
+
+{phang}. {stata `"siman nestloop relerror if estimand=="effect""'}
+
+{pstd}Tailor the graph appearance
+
+{phang}. {stata `"siman nestloop relerror if estimand=="effect", dgmorder(beta pmiss -mech) stagger(0.04) lcol(black red blue) title(Estimand: effect) xlab(none) norefline legend(row(1)) ytitle(% error in model-based SE) note("")"'}
+
+{pstd}Tailor the descriptor graph appearance
+
+{phang}. {stata `"siman nestloop relerror if estimand=="effect", dgsize(.4) dggap(.1) dgcol(green orange purple) dgpatt(dash solid =) dglabsize(medium) dglwidth(*2)"'}
 
 {marker references}{...}
 {title:References}
