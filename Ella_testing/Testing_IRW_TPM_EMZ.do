@@ -9,11 +9,11 @@ local codepath C:\git\siman\
 global detail = 0
 
 // SETUP FOR ALL USERS
-local testpath `codepath'Ella_testing\
+local testpath $codepathElla_testing\
 local filename Testing_IRW_TPM_EMZ
 prog drop _all
-adopath ++ `codepath'
-cd `testpath'
+adopath ++ $codepath
+cd $testpath
 cap log close
 set linesize 100
 
@@ -22,12 +22,12 @@ global detail = 1
 
 
 // START TESTING
-log using `filename', replace
+log using `filename', replace text nomsg
 siman which
 
  
 * dgm defined by 1 variable
-use data/simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 encode estimand, gen(estimand_num)
 drop estimand
 rename estimand_num estimand
@@ -83,7 +83,7 @@ siman nestloop
 
 
 * dgm defined by >1 variable
-use data/extendedtestdata_postfile.dta, clear
+use $testpath/data/extendedtestdata.dta, clear
 
 * create true values, corrected 25oct2023
 gen betatrue = beta if estimand == "effect"
@@ -160,7 +160,7 @@ siman zipplot
 
 * nestloop
 
-use nestloop/res.dta, clear
+use $testpath/nestloop/res.dta, clear
 * theta as dgmvar must be encoded, but theta as true value mustn't be
 gen theta_new = 1
 replace theta_new = 0 if theta == 0.5

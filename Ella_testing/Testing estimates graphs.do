@@ -1,10 +1,14 @@
 * Testing estimates graph options
-
+local filename Testing estimates graphs
 clear all
 prog drop _all
+set linesize 100
+cap log close
+
+log using "`filename'", replace text nomsg
+// START TESTING
 which siman_setup
-global cd C:\git\siman\Ella_testing\data\ 
-use ${cd}\simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
 * siman scatter
@@ -30,7 +34,7 @@ coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p
 siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("carrot", replace)
 
-use ${cd}\simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 drop true
 gen true = -0.5
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
@@ -40,7 +44,7 @@ siman_zipplot
 * Check dgm labels when dgm numeric with string labels
 clear all
 prog drop _all
-use ${cd}\simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 label define dgmvar 1 "A" 2 "B"
 label values dgm dgmvar
 label define methodvar 1 "X" 2 "Y_"
@@ -56,7 +60,7 @@ siman analyse
 
 
 * Different true values per target
-use ${cd}\simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 replace true=0.5 if estimand=="beta"
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman_zipplot  
@@ -64,7 +68,7 @@ siman_zipplot, scheme(scheme(economist)) legend(order(4 "Covering" 3 "Not coveri
 noncoveroptions(pstyle(p3)) coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6))
 
 * siman scatter
-use ${cd}\simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman_scatter
 siman_scatter, by(dgm)
@@ -85,7 +89,7 @@ siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("te
 clear all
 prog drop _all
 * more than 3 methods for plots
-use ${cd}\bvsim_all_out.dta, clear
+use $testpath/data/bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -117,7 +121,7 @@ siman_blandaltman, ytitle("test y-title") xtitle("test x-title")
 
 clear all
 prog drop _all
-use ${cd}\bvsim_all_out.dta, clear
+use $testpath/data/bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -145,7 +149,7 @@ siman_comparemethodsscatter se, methlist(1 3 8 9)
 * method numeric labelled string variable
 clear all
 prog drop _all
-use ${cd}\bvsim_all_out.dta, clear
+use $testpath/data/bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -166,7 +170,7 @@ siman_blandaltman, methlist(10 4 8)
 siman_blandaltman, methlist(2 9 3)
 
 * String variable method
-use ${cd}\simlongESTPM_wideE_wideM4.dta, clear
+use $testpath/data/simlongESTPM_wideE_wideM4.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) order(method)
 siman_comparemethodsscatter 
 siman_blandaltman
@@ -174,7 +178,7 @@ siman_blandaltman est se
 siman_blandaltman, by(dgm)                                                                                
 * To test methlist subset, create a dataset with more than 3 string method variables
 clear all
-use ${cd}\bvsim_all_out.dta, clear
+use $testpath/data/bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -205,7 +209,7 @@ siman_blandaltman, methlist(B A C)
 
 clear all
 prog drop _all
-use ${cd}\estimates.dta, clear
+use $testpath/data/estimates.dta, clear
 gen dgmnew = 0
 replace dgmnew = 1 if dgm==2
 label define dgmlabelvalues 0 "y = 1" 1 "y = 1.5"
@@ -220,7 +224,7 @@ siman swarm
 
 * Numeric methods
 *******************
-use ${cd}\bvsim_all_out.dta, clear
+use $testpath/data/bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -315,7 +319,7 @@ siman swarm
 * String methods
 *******************
 clear all
-use ${cd}\bvsim_all_out.dta, clear
+use $testpath/data/bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -410,7 +414,7 @@ siman swarm
 
 * Numeric targets
 *******************
-use ${cd}\bvsim_all_out.dta, clear
+use $testpath/data/bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -505,7 +509,7 @@ siman swarm
   
 * String targets
 *******************
-use ${cd}\bvsim_all_out.dta, clear
+use $testpath/data/bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -609,7 +613,7 @@ siman swarm
 
 * missing target
 * creating a data set that has long method and missing target
-use ${cd}\simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 drop estimand
 bysort rep dgm method: gen repitionindi=_n
 drop if repitionindi==2
@@ -631,7 +635,7 @@ siman_comparemethodsscatter
 
 * missing method
 * creating a data set that has long target and missing method
-use ${cd}\simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 drop method
 bysort rep dgm estimand: gen repitionindi=_n
 drop if repitionindi==2
@@ -660,7 +664,7 @@ siman zipplot
 * Testing siman scatter.  Check if have 2 dgms, A (0/1) and B(0/1).  Then siman scatter, by A B if A==0 should be same as siman scatter, by B.
 clear all
 prog drop _all
-use ${cd}\simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 replace dgm = 0 if dgm==2
 rename dgm dgmA
 egen dgmB = fill(1 1 0 0 1 1 0 0)
@@ -696,7 +700,7 @@ clear all
 prog drop _all
 clear all
 prog drop _all
-use ${cd}\extendedtestdata_postfile.dta, clear
+use $testpath/data/extendedtestdata.dta, clear
 
 * remove non-integer values
 gen betatrue=beta
@@ -772,7 +776,7 @@ siman zipplot if beta == 1
 clear all
 prog drop _all
 which siman_setup
-use ${cd}\simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 gen dgm_string = "1"
 replace dgm_string = "2" if dgm == 2
 drop dgm
@@ -784,3 +788,4 @@ siman swarm
 siman zipplot
 siman blandaltman
 
+log close

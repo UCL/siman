@@ -4,21 +4,14 @@ NOTE: to be run in "Ella_testing" folder
 Ella 14novar2023
 ************************************************************************************************/
 
-// SETUP: MODIFY FOR USER & PROJECT
-local codepath C:\ian\git\siman\ // for Ian
-local codepath C:\git\siman\ // for Ella
-
-// SETUP FOR ALL USERS
-local testpath `codepath'Ella_testing\
-local filename testing_graphs_matrix
 prog drop _all
-adopath ++ `codepath '
-cd `testpath'
+adopath ++ $codepath
+cd $testpath
 cap log close
 set linesize 100
 
 // START TESTING
-log using `filename', replace
+log using `filename', replace text nomsg
 siman which
 
 ********************************
@@ -60,7 +53,7 @@ siman which
 * DGM numeric, 1 var
 *********************
 * target long and string, method long and numeric, true variable 1 level
-use data/simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman analyse
 
@@ -68,7 +61,7 @@ siman analyse
 *****************************************
 
 * target wide and numeric with string labels, method wide and string, true value
-use data/simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 encode estimand, gen(estimand_num)
 drop estimand
 rename estimand_num estimand
@@ -87,7 +80,7 @@ siman analyse
 * DGM string, 1 var
 ********************
 * method long numeric string labels, target numeric, true missing
-use data/simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 gen estimand_num = 1 if estimand == "beta"
 replace estimand_num = 2 if estimand == "gamma"
 drop estimand
@@ -106,7 +99,7 @@ siman analyse
 * DGM missing
 ************** 
 * Target numeric, method missing, true > 1 level (different true values per target)
-use data/simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 replace true=0.5 if estimand=="beta"
 drop dgm method
 gen estimand_num = .
@@ -121,7 +114,7 @@ siman setup, rep(rep) target(estimand) estimate(est) se(se) true(true)
 siman analyse
 
 * missing target
-use data/simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 drop estimand
 bysort rep dgm method: gen repitionindi=_n
 drop if repitionindi == 2
@@ -132,7 +125,7 @@ siman analyse
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
-use data/extendedtestdata_postfile.dta, clear
+use $testpath/data/extendedtestdata.dta, clear
 
 * remove non-integer values
 foreach var in beta pmiss {
@@ -155,14 +148,14 @@ siman analyse
 * DGM numeric, 1 var
 *********************
 * target string, true variable 1 level
-use data/simlongESTPM_longE_wideM1.dta, clear
+use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
 siman setup, rep(rep) dgm(dgm) est(est) se(se) target(estimand) method(_1 _2) true(true)
 siman analyse
 
 * DGM numeric with string labels, 1 var
 *****************************************
 * target numeric, true missing
-use data/simlongESTPM_longE_wideM.dta, clear
+use $testpath/data/simlongESTPM_longE_wideM.dta, clear
 label define dgmlabel 1 "MCAR" 2 "MNAR"
 label values dgm dgmlabel
 gen target = 1 if estimand == "beta"
@@ -177,7 +170,7 @@ siman analyse
 ********************
 * target numeric with string labels, true value
 
-use data/simlongESTPM_longE_wideM1.dta, clear
+use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
 encode estimand, gen(estimand_new)
 gen dgm_new = "1"
 replace dgm_new = "2" if dgm == 2
@@ -190,7 +183,7 @@ siman analyse
 * DGM missing
 ************** 
 * true variable with >1 level, method missing
-use data/simlongESTPM_longE_wideM1.dta, clear
+use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
 drop dgm est_2 se_2
 replace true = 0.5 if estimand == "gamma"
 rename est_1 est
@@ -202,7 +195,7 @@ siman setup, rep(rep) est(est) se(se) target(estimand) true(true)
 siman analyse
 
 * missing target
-use data/simlongESTPM_longE_wideM1.dta, clear
+use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
 drop estimand
 bysort rep dgm: gen n = _n
 drop if n==2
@@ -212,7 +205,7 @@ siman analyse
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
-use data/extendedtestdata_postfile.dta, clear
+use $testpath/data/extendedtestdata.dta, clear
 
 * remove non-integer values
 foreach var in beta pmiss {
@@ -237,14 +230,14 @@ siman analyse
 * DGM numeric, 1 var
 *********************
 
-use data/simlongESTPM_wideE_wideM.dta, clear
+use $testpath/data/simlongESTPM_wideE_wideM.dta, clear
 * true variable, 1 value
 siman setup, rep(rep) dgm(dgm) est(est) se(se) method(1_ 2_) target(beta gamma) true(true) order(method)
 
 * DGM numeric with string labels, 1 var
 *****************************************
 * true missing
-use data/simlongESTPM_wideE_wideM.dta, clear
+use $testpath/data/simlongESTPM_wideE_wideM.dta, clear
 label define dgmlabel 1 "MCAR" 2 "MNAR"
 label values dgm dgmlabel
 bysort rep dgm: gen n = _n
@@ -256,7 +249,7 @@ siman analyse
 * DGM string, 1 var
 ********************
 * true numeric value
-use data/simlongESTPM_wideE_wideM.dta, clear
+use $testpath/data/simlongESTPM_wideE_wideM.dta, clear
 gen dgm_new = "1"
 replace dgm_new = "2" if dgm == 2
 drop dgm true
@@ -267,7 +260,7 @@ siman analyse
 * DGM missing
 ************** 
 
-use data/simlongESTPM_wideE_wideM.dta, clear
+use $testpath/data/simlongESTPM_wideE_wideM.dta, clear
 drop dgm
 bysort rep: gen n = _n
 drop if n==2
@@ -277,7 +270,7 @@ siman analyse
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
-use data/extendedtestdata_postfile.dta, clear
+use $testpath/data/extendedtestdata.dta, clear
 
 * remove non-integer values
 foreach var in beta pmiss {
@@ -302,14 +295,14 @@ siman analyse
 * DGM numeric, 1 var
 *********************
 * true variable 1 level
-use data/simlongESTPM_wideE_wideM2.dta, clear
+use $testpath/data/simlongESTPM_wideE_wideM2.dta, clear
 siman setup, dgm(dgm) rep(rep) est(est) se(se) target(beta_ gamma_) method(1 2) true(true) order(target)
 siman analyse
 
 * DGM numeric with string labels, 1 var
 *****************************************
 * true missing
-use data/simlongESTPM_wideE_wideM2.dta, clear
+use $testpath/data/simlongESTPM_wideE_wideM2.dta, clear
 label define dgmlabel 1 "MCAR" 2 "MNAR"
 label values dgm dgmlabel
 bysort rep dgm: gen n = _n
@@ -321,7 +314,7 @@ siman analyse
 * DGM string, 1 var
 ********************
 * true numeric value
-use data/simlongESTPM_wideE_wideM2.dta, clear
+use $testpath/data/simlongESTPM_wideE_wideM2.dta, clear
 gen dgm_new = "1"
 replace dgm_new = "2" if dgm == 2
 drop dgm true
@@ -331,7 +324,7 @@ siman analyse
 
 * DGM missing
 ************** 
-use data/simlongESTPM_wideE_wideM2.dta, clear
+use $testpath/data/simlongESTPM_wideE_wideM2.dta, clear
 drop dgm
 bysort rep: gen n = _n
 drop if n==2
@@ -341,7 +334,7 @@ siman analyse
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
-use data/extendedtestdata_postfile.dta, clear
+use $testpath/data/extendedtestdata.dta, clear
 
 * remove non-integer values
 foreach var in beta pmiss {
@@ -366,14 +359,14 @@ siman analyse
 * DGM numeric, 1 var
 *********************
 * method numeric, true variable 1 level
-use data/simlongESTPM_longM_wideE1.dta, clear
+use $testpath/data/simlongESTPM_longM_wideE1.dta, clear
 siman setup, rep(rep) dgm(dgm) est(est) se(se) target(_beta _gamma) method(method) true(true)
 siman analyse
 
 * DGM numeric with string labels, 1 var
 *****************************************
 * method string, true missing
-use data/simlongESTPM_longM_wideE1.dta, clear
+use $testpath/data/simlongESTPM_longM_wideE1.dta, clear
 label define dgmlabel 1 "MCAR" 2 "MNAR"
 label values dgm dgmlabel
 gen method_new = "1"
@@ -388,7 +381,7 @@ siman analyse
 ********************
 * method numeric with string labels, true value
 
-use data/simlongESTPM_longM_wideE.dta, clear
+use $testpath/data/simlongESTPM_longM_wideE.dta, clear
 label define mlabel 1 "Method1" 2 "Method2"
 label values method mlabel
 gen dgm_new = "1"
@@ -401,7 +394,7 @@ siman analyse
 
 * DGM missing
 ************** 
-use data/simlongESTPM_longM_wideE2.dta, clear
+use $testpath/data/simlongESTPM_longM_wideE2.dta, clear
 drop dgm
 bysort rep method: gen n = _n
 drop if n==2
@@ -410,7 +403,7 @@ siman setup, rep(rep) est(est) se(se) method(method) target(1 2) true(true)
 siman analyse
 
 * missing method
-use data/simlongESTPM_longM_wideE.dta, clear
+use $testpath/data/simlongESTPM_longM_wideE.dta, clear
 drop method
 bysort rep dgm: gen n = _n
 drop if n==2
@@ -420,7 +413,7 @@ siman analyse
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
-use data/extendedtestdata_postfile.dta, clear
+use $testpath/data/extendedtestdata.dta, clear
 
 * remove non-integer values
 foreach var in beta pmiss {

@@ -7,16 +7,10 @@ Latest update Ian 22aug2023
 *****************************************************************/
 global detail = 0
 
-// SETUP: MODIFY FOR USER & PROJECT
-local codepath C:\ian\git\siman\ // for Ian
-local codepath C:\git\siman\ // for Ella
-
-// SETUP FOR ALL USERS
-local testpath `codepath'Ella_testing\
 local filename testing_graphs_main
 prog drop _all
 adopath ++ `codepath '
-cd `testpath'
+cd $testpath
 cap log close
 set linesize 100
 
@@ -24,7 +18,7 @@ set linesize 100
 global detail = 1
 
 // START TESTING
-log using `filename', replace
+log using `filename', replace text nomsg
 siman which
 
 ********************************
@@ -61,7 +55,7 @@ siman which
 * DGM numeric, 1 var
 *********************
 * target long and string, method long and numeric, true variable 1 level
-use data/simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman comparemethodsscatter if estimand=="beta" & dgm==2
 * graphs
@@ -85,7 +79,7 @@ siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_t
 *****************************************
 
 * target wide and numeric with string labels, method wide and string, true value
-use data/simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 encode estimand, gen(estimand_num)
 drop estimand
 rename estimand_num estimand
@@ -122,7 +116,7 @@ siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_t
 * DGM string, 1 var
 ********************
 * target and method long numeric string labels, true missing
-use data/simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 encode estimand, gen(estimand_num)
 drop estimand
 rename estimand_num estimand
@@ -157,7 +151,7 @@ siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_t
 * DGM missing
 ************** 
 * Target numeric, method missing, true > 1 level (different true values per target)
-use data/simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 replace true=0.5 if estimand=="beta"
 drop dgm method
 gen estimand_num = .
@@ -190,7 +184,7 @@ assert _rc == 498
 
 
 * now try with missing target
-use data/simlongESTPM_longE_longM.dta, clear
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
 drop estimand
 bysort rep dgm method: gen repitionindi=_n
 drop if repitionindi == 2
@@ -219,7 +213,7 @@ siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_t
 ****************************************************
 clear all
 prog drop _all
-use data/bvsim_all_out.dta, clear
+use $testpath/data/bvsim_all_out.dta, clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -308,7 +302,7 @@ if ${detail} == 1 {
 
 clear all
 prog drop _all
-use data\extendedtestdata_postfile.dta, clear
+use $testpath/data/extendedtestdata.dta, clear
 
 * remove non-integer values
 gen betatrue=beta

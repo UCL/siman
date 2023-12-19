@@ -1,20 +1,23 @@
-/* IW quick sim on missing baseline 30/10/2023
-N:\Home\missing\Missing baselines\interactions\msgbsl_inter_try.do
+/* 
+IW quick sim on missing baseline 30/10/2023
+was N:\Home\missing\Missing baselines\interactions\msgbsl_inter_try.do
 Used to test siman
+EMZ 06/11/2023
 */
-* EMZ 06/11/2023
 
 clear all
 prog drop _all
+
+adopath ++ $codepath
+cd $testpath
+
+cap log close
+
+// START TESTING
 which siman
+log using `filename', replace text nomsg
 
-local codepath C:\git\siman\ 
-// SETUP FOR ALL USERS
-local testpath `codepath'Ella_testing\
-adopath ++ `codepath'
-cd `testpath'
-
-use data/msgbsl_inter_try_postfile.dta
+use $testpath/data/msgbsl_inter_try_postfile.dta
 
 * targets are wide, methods are long 
 * so data are in wide-long format (format 4)
@@ -36,7 +39,7 @@ siman analyse
 * check get error if true is not constant across methods
 clear all
 
-use data/msgbsl_inter_try_postfile.dta
+use $testpath/data/msgbsl_inter_try_postfile.dta
 
 * targets are wide, methods are long 
 * so data are in wide-long format (format 4)

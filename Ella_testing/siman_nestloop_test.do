@@ -12,10 +12,10 @@ adopath ++ `path'
 cd `path'Ella_testing
 cap log close
 set linesize 100
-log using siman_nestloop_test, replace
+log using siman_nestloop_test, replace text nomsg
 siman which
 
-use data/extendedtestdata_postfile.dta, clear
+use $testpath/data/extendedtestdata.dta, clear
 
 * siman setup requires beta, pmiss to be integer
 gen true = 1 if estimand=="mean0"
