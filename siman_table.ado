@@ -1,4 +1,5 @@
-*! version 0.8.1   25oct2023
+*! version 0.8.2   20dec2023
+*  version 0.8.2   20dec2023   IW add row() option (undocumented at present)
 *  version 0.8.1 25oct2023     IW put PMs in same order as in simsum
 *  version 0.8   23dec2022     IW major rewrite: never pools over dgms, targets or methods
 *  version 0.7   05dec2022     EMZ removed 'if' condition, as already applied by siman analyse to the data (otherwise applying it twice).
@@ -12,7 +13,7 @@
 capture program drop siman_table
 prog define siman_table, rclass
 version 15
-syntax [anything] [if], [Column(varlist) debug]
+syntax [anything] [if], [Column(varlist) Row(varlist) debug]
 
 // PARSING
 
@@ -90,7 +91,8 @@ foreach perf of local perfvar {
 label define perfl `perflabels'
 label values _perfmeascodeorder perfl 
 label variable _perfmeascodeorder "performance measure"
-
+drop _perfmeascode
+rename _perfmeascodeorder _perfmeascode
 if "`sevars'" == "N/A" local sevars
 
 
@@ -103,7 +105,7 @@ foreach onedgmvar in `dgmvar' {
 	else if !mi("`debug'") di as error "Ignoring non-varying dgmvar: `onedgmvar'"
 	}
 local dgmvar `newdgmvar'
-local myfactors _perfmeascodeorder `dgmvar' `target' `method'
+local myfactors _perfmeascode `dgmvar' `target' `method'
 if !mi("`debug'") di as input "Factors to display: `myfactors'"
 tempvar group
 foreach thing in dgmvar target method {
@@ -125,10 +127,12 @@ if "`column'"=="" {
 	else if `ntargetlevels'>1 local column `target'
 	else local column : word 1 of `dgmvar'
 }
-if !strpos("`column'","perfmeas") local row _perfmeascodeorder
-else di as error "siman table doesn't yet know how to format the table when perfmeas is in the columns"
-local by : list myfactors - column
-local by : list by - row
+local myfactors : list myfactors - column
+if "`row'"=="" {
+	if !strpos("`column'","perfmeas") local row _perfmeascode
+	else local row : word 1 of `myfactors'
+}
+local by : list myfactors - row
 if wordcount("`by'")>4 {
 	di as error "There are too many factors to display. Consider using an if condition for your dgmvars."
 	
@@ -149,9 +153,7 @@ if !mi("`debug'") {
 * if mcses are reported, print the following note
 cap assert missing(`sevars')  
 if _rc {
-	di "{it: NOTE: Where there are 2 entries in the table, }"
-	di "{it: the first entry is the performance measure and }"
-	di "{it: the second entry is its Monte Carlo error.}"
+	di as smcl as text "{p 0 2}{it: NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the second entry is its Monte Carlo error.}"
 }
 
 restore
