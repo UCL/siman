@@ -5,19 +5,18 @@ Used to test siman
 EMZ 06/11/2023
 */
 
-clear all
+local filename test_siman_widelong_EMZ
+
 prog drop _all
-
-adopath ++ $codepath
 cd $testpath
-
 cap log close
+set linesize 100
 
 // START TESTING
-which siman
 log using `filename', replace text nomsg
+siman which
 
-use $testpath/data/msgbsl_inter_try_postfile.dta
+use $testpath/data/msgbsl_inter_try_postfile.dta, clear
 
 * targets are wide, methods are long 
 * so data are in wide-long format (format 4)
@@ -59,6 +58,6 @@ replace truemain = 0.2 in 2
 * set up
 siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
 
+di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 
-
-
+log close

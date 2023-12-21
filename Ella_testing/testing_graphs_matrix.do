@@ -4,8 +4,9 @@ NOTE: to be run in "Ella_testing" folder
 Ella 14novar2023
 ************************************************************************************************/
 
+local filename testing_graphs_matrix
+
 prog drop _all
-adopath ++ $codepath
 cd $testpath
 cap log close
 set linesize 100
@@ -428,7 +429,6 @@ reshape wide b se, i(rep mech pmiss beta method) j(estimand "effect" "mean0" "me
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(effect mean0 mean1) est(b) se(se) 
 siman analyse
 
-
-di as result "*** SIMAN GRAPHS HAVE PASSED ALL THESE TESTS ***"
+di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 
 log close

@@ -4,18 +4,19 @@ NOTE: to be run in "Ella_testing" folder
 Ella 21mar2023
 Latest update Ian 22aug2023
 23aug2023 temporarily commented out all -siman cms- (slow and failing)
+20dec2023 removed 2 instances of non-reproducible record selection
 *****************************************************************/
-global detail = 0
-
-local filename testing_graphs_main
-prog drop _all
-adopath ++ `codepath '
-cd $testpath
-cap log close
-set linesize 100
 
 * switch on detail if want to run all graphs
 global detail = 1
+
+local filename testing_graphs_main
+
+prog drop _all
+cd $testpath
+cap log close
+set linesize 100
+clear all // avoids the "too many sersets" error
 
 // START TESTING
 log using `filename', replace text nomsg
@@ -153,15 +154,16 @@ siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_t
 * Target numeric, method missing, true > 1 level (different true values per target)
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
 replace true=0.5 if estimand=="beta"
+keep if dgm==1 & method==1 // new 20dec2023 - reproducibly selects records
 drop dgm method
 gen estimand_num = .
 replace estimand_num = 1 if estimand == "beta"
 replace estimand_num = 2 if estimand == "gamma"
 drop estimand
 rename estimand_num estimand
-bysort rep estimand: gen repitionindi=_n
-drop if repitionindi>1
-drop repitionindi
+*bysort rep estimand: gen repitionindi=_n
+*drop if repitionindi>1 // pre 20dec2023 non-reproducibly selects records
+*drop repitionindi
 siman setup, rep(rep) target(estimand) estimate(est) se(se) true(true)
 
 * graphs
@@ -185,10 +187,11 @@ assert _rc == 498
 
 * now try with missing target
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
+keep if estimand=="beta" // new 20dec2023 - reproducibly selects records
 drop estimand
-bysort rep dgm method: gen repitionindi=_n
-drop if repitionindi == 2
-drop repitionindi
+*bysort rep dgm method: gen repitionindi=_n
+*drop if repitionindi == 2 // pre 20dec2023 non-reproducibly selects records
+*drop repitionindi
 siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
  
 * graphs
@@ -328,6 +331,7 @@ siman scatter
 siman scatter if method == "CCA"
 siman scatter if estimand == "effect"
 siman scatter if mech =="MCAR": mech
+	* this means the value whose label is "MCAR" in the value label mech
 
 siman scatter, by(pmiss)
 siman scatter, by(estimand)
@@ -368,6 +372,6 @@ siman zipplot, by(pmiss)
 siman zipplot, by(method)
 }
 
-di as result "*** SIMAN GRAPHS HAVE PASSED ALL THESE TESTS ***"
+di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 
 log close

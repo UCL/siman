@@ -7,13 +7,13 @@ C:\ian\git\siman\siman_setup.ado
 C:\ian\git\siman\siman_describe.ado
 *! version 0.5   17oct2022  
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.6.10 13nov2023
+*! version 0.6.11 19dec2023
 C:\ian\git\siman\siman_table.ado
 *! version 0.8.1   25oct2023
 C:\ian\git\siman\siman_reshape.ado
 *!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
-*! version 1.13.1  25oct2023
+*! version 1.13.2  15dec2023
 C:\ian\git\siman\siman_zipplot.ado
 *! version 1.8.12 25oct2023
 C:\ian\git\siman\siman_comparemethodsscatter.ado
@@ -33,7 +33,7 @@ C:\ian\git\siman\siman_nestloop.ado
 . 
 . // ONE DGMVAR
 . * multiple targets
-. use `pathtest'data/simlongESTPM_longE_longM.dta, clear
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
 . foreach var in rep dgm estimand method est se true {
   2.         rename `var' my`var'
@@ -68,7 +68,8 @@ The p variable is:                N/A
 The true variable is:             mytrue
 _____________________________________________________
 
-. qui siman analyse
+. siman analyse, notable
+siman analyse has run successfully
 
 . siman lol bias relprec power cover, refpower(10)  name(l`++i', replace)
 Drawing 2 graphs (one per target)...
@@ -78,7 +79,7 @@ Drawing graph...
 
 . 
 . * no target
-. use `pathtest'data/simlongESTPM_longE_longM.dta, clear
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
 . drop if esti=="gamma"
 (4,000 observations deleted)
@@ -113,7 +114,8 @@ The p variable is:                N/A
 The true variable is:             true
 _____________________________________________________
 
-. qui siman analyse
+. siman analyse, notable
+siman analyse has run successfully
 
 . siman lol bias relprec power cover, refpower(10)  name(l`++i', replace)
 Drawing graph...
@@ -123,7 +125,7 @@ Drawing graph...
 . // COMPARE METHOD AS UNLABELLED/LABELLED NUMERIC OR STRING
 . 
 . * method is numeric unlabelled
-. use `pathtest'data/simlongESTPM_longE_longM.dta, clear
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
 . drop if esti=="gamma"
 (4,000 observations deleted)
@@ -132,14 +134,15 @@ Drawing graph...
 
 . qui siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true) 
 
-. qui siman analyse
+. siman analyse, notable
+siman analyse has run successfully
 
 . siman lol bias relprec power cover, refpower(10) name(munlabelled,replace)
 Drawing graph...
 
 . 
 . * method is numeric labelled
-. use `pathtest'data/simlongESTPM_longE_longM.dta, clear
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
 . drop if esti=="gamma"
 (4,000 observations deleted)
@@ -152,14 +155,15 @@ Drawing graph...
 
 . qui siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true) 
 
-. qui siman analyse
+. siman analyse, notable
+siman analyse has run successfully
 
 . siman lol bias relprec power cover, refpower(10) name(mlabelled,replace)
 Drawing graph...
 
 . 
 . * method is string
-. use `pathtest'data/simlongESTPM_longE_longM.dta, clear
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
 . drop if esti=="gamma"
 (4,000 observations deleted)
@@ -170,7 +174,8 @@ Drawing graph...
 
 . qui siman setup, rep(rep) dgm(dgm) method(methchar) estimate(est) se(se) true(true) 
 
-. qui siman analyse
+. siman analyse, notable
+siman analyse has run successfully
 
 . siman lol bias relprec power cover, refpower(10) name(mstring,replace)
 Drawing graph...
@@ -179,7 +184,7 @@ Drawing graph...
 . ** NB name(string) gives funny error
 . 
 . * method is not 1...
-. use `pathtest'data/simlongESTPM_longE_longM.dta, clear
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
 . drop if esti=="gamma"
 (4,000 observations deleted)
@@ -193,7 +198,8 @@ Drawing graph...
 
 . qui siman setup, rep(rep) dgm(dgm) method(methchar) estimate(est) se(se) true(true) 
 
-. qui siman analyse
+. siman analyse, notable
+siman analyse has run successfully
 
 . siman lol bias relprec power cover, refpower(10) name(mstringplus,replace)
 Drawing graph...
@@ -201,7 +207,7 @@ Drawing graph...
 . * graph should be same as mstring
 . 
 . * method orderings disagree: numeric ordering should be used
-. use `pathtest'data/simlongESTPM_longE_longM.dta, clear
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
 . drop if esti=="gamma"
 (4,000 observations deleted)
@@ -214,7 +220,8 @@ Drawing graph...
 
 . qui siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true) 
 
-. qui siman analyse
+. siman analyse, notable
+siman analyse has run successfully
 
 . siman lol bias relprec power cover, refpower(10) name(mstringrev,replace)
 Drawing graph...
@@ -223,45 +230,15 @@ Drawing graph...
 . 
 . 
 . // MULTIPLE DGMVARS
-. use `pathtest'data/extendedtestdata_postfile.dta, clear
+. use $testpath/data/extendedtestdata2.dta, clear
 
-. 
-. * siman setup requires beta, pmiss to be integer
-. gen true = 1 if estimand=="mean0"
-(72,000 missing values generated)
-
-. replace true = 1+beta if estimand=="mean1"
-(36,000 real changes made)
-
-. replace true = beta if estimand=="effect"
-(36,000 real changes made)
-
-. rename beta _beta
-
-. gen beta=string(_beta)
-
-. sencode beta, replace
-
-. rename pmiss _pmiss
-
-. gen pmiss=string(_pmiss)
-
-. sencode pmiss, replace
-
-. drop _pmiss _beta
-
-. save extendedtestdata2, replace
-(file extendedtestdata2.dta not found)
-file extendedtestdata2.dta saved
-
-. 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
   variable mech was long now byte
   (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been
-encoded as numeric so that subsequent siman commands will work. If you require a
-different order, encode mech as numeric before running -siman setup-.
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -293,60 +270,18 @@ _____________________________________________________
 . siman analyse, notable
 siman analyse has run successfully
 
-. siman lollyplot if beta==1
-Performance measures not specified: defaulting to bias empse cover
-Drawing 3 graphs (one per target)...
-
-. 
-. 
-. 
-. // dgm defined by >1 variable - WORKS
-. use extendedtestdata2, clear
-
-. siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
-> )
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been
-encoded as numeric so that subsequent siman commands will work. If you require a
-different order, encode mech as numeric before running -siman setup-.
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         3
-The target values are:            effect mean0 mean1
-
-The number of methods is:         3
-The method values are:            CCA MeanImp Noadj
-
-Data generating mechanism (dgm)
-The total number of dgms is:      12
-The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
-
-Estimates are contained in the dataset
-
-The estimates variable is:        b
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
-_____________________________________________________
-
-. qui siman analyse
-
 . siman lol bias relprec power cover if beta==3, ///
 >         refpower(90) dgmwidth(35) pmwidth(20) legend(col(1)) name(l`++i', replace)
 Drawing 3 graphs (one per target)...
 
 . 
-. * tidy up
-. erase extendedtestdata2.dta
+. * finish with a high quality graph
+. siman lol bias relprec power cover if beta==3 & esti=="effect", ///
+>         legend(row(1)) name(l`++i', replace) col(red green blue) ///
+>         bygr(note(Good lollyplot for estimand effect) title(,size(medium))) 
+Drawing graph...
 
+. 
 . 
 . di as result  "*** SIMAN LOLLYPLOT HAS PASSED ALL ITS TESTS ***"
 *** SIMAN LOLLYPLOT HAS PASSED ALL ITS TESTS ***

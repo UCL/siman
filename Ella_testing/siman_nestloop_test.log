@@ -1,81 +1,43 @@
-----------------------------------------------------------------------------------------------------
-      name:  <unnamed>
-       log:  C:\ian\git\siman\Ella_testing\siman_nestloop_test.log
-  log type:  text
- opened on:  17 Aug 2023, 16:44:39
 
 . siman which
 C:\ian\git\siman\siman.ado
-*! version 0.2     27mar2023
+*!version 0.3  08aug2023
 C:\ian\git\siman\siman_setup.ado
-*!   version 0.8.0  04july2023
+*!   version 0.8.7  27nov2023
 C:\ian\git\siman\siman_describe.ado
-*! version 0.4     21jul2022  
+*! version 0.5   17oct2022  
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.6.3   16aug2023
+*! version 0.6.11 19dec2023
 C:\ian\git\siman\siman_table.ado
-*! version 0.8   23dec2022     IW major rewrite: never pools over dgms, targets or methods
+*! version 0.8.1   25oct2023
 C:\ian\git\siman\siman_reshape.ado
-*! version 0.3.1   08mar2023   nodescribe option
+*!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
-*! version 1.12.1  17aug2023   IW 
+*! version 1.13.2  15dec2023
 C:\ian\git\siman\siman_zipplot.ado
-*! version 1.8.5 04july2023  EMZ
+*! version 1.8.12 25oct2023
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*! version 1.9.11 18july2023
+*! version 1.9.18 25oct2023
 C:\ian\git\siman\siman_blandaltman.ado
-*! version 1.6.7 11july2023
+*! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.9.3 26june2023
+*! version 1.9.7 03oct2023
 C:\ian\git\siman\siman_scatter.ado
-*! version 1.6.4 26june2023
+*! version 1.6.7 03oct2023
 C:\ian\git\siman\siman_nestloop.ado
 *! version 1.8.2   17aug2023
-C:\ian\git\siman\siman_trellis.ado
-*! version 1.7.2  09may2023
 
 . 
-. use data/extendedtestdata_postfile.dta, clear
-
-. 
-. * siman setup requires beta, pmiss to be integer
-. gen true = 1 if estimand=="mean0"
-(72,000 missing values generated)
-
-. replace true = 1+beta if estimand=="mean1"
-(36,000 real changes made)
-
-. replace true = beta if estimand=="effect"
-(36,000 real changes made)
-
-. 
-. rename beta _beta
-
-. gen beta=string(_beta)
-
-. sencode beta, replace
-
-. 
-. rename pmiss _pmiss
-
-. gen pmiss=string(_pmiss)
-
-. sencode pmiss, replace
-
-. 
-. drop _pmiss _beta
-
-. save extendedtestdata2, replace
-file extendedtestdata2.dta saved
+. use $testpath/data/extendedtestdata2.dta, clear
 
 . 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
   variable mech was long now byte
   (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been
-encoded as numeric so that subsequent siman commands will work. If you require a
-different order, encode mech as numeric before running -siman setup-.
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -105,7 +67,7 @@ _____________________________________________________
 
 . 
 . siman analyse, notable
-siman analyse has run
+siman analyse has run successfully
 
 . siman nestloop bias, lcol(black red blue) 
 Drawing 3 graphs (3 targets * 1 performance measures)...
@@ -118,16 +80,16 @@ Drawing graph...
 
 . 
 . * setup without true
-. use extendedtestdata2, clear
+. use $testpath/data/extendedtestdata2, clear
 
 . drop true
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) 
   variable mech was long now byte
   (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been
-encoded as numeric so that subsequent siman commands will work. If you require a
-different order, encode mech as numeric before running -siman setup-.
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -156,7 +118,7 @@ The true variable is:             N/A
 _____________________________________________________
 
 . siman analyse, notable
-siman analyse has run
+siman analyse has run successfully
 
 . siman nestloop if estimand=="effect", lcol(black red blue) xtitle("") xlabel(none) stagger(0.03) 
 Performance measures not specified and no true value: defaulting to mean empse relerror
@@ -164,15 +126,15 @@ Drawing 3 graphs (1 targets * 3 performance measures)...
 
 . 
 . * siman analyse with if
-. use extendedtestdata2, clear
+. use $testpath/data/extendedtestdata2, clear
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
   variable mech was long now byte
   (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been
-encoded as numeric so that subsequent siman commands will work. If you require a
-different order, encode mech as numeric before running -siman setup-.
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -201,7 +163,7 @@ The true variable is:             true
 _____________________________________________________
 
 . siman analyse if mech!=2, notable
-siman analyse has run
+siman analyse has run successfully
 
 . siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) stagger(0.0
 > 3) 
@@ -213,7 +175,7 @@ Drawing graph...
 . // COMPARE METHOD AS UNLABELLED/LABELLED NUMERIC OR STRING
 . 
 . * method is string (as in source data)
-. use extendedtestdata2, clear
+. use $testpath/data/extendedtestdata2, clear
 
 . tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b) // CCA, MeanIm
 > p, Noadj
@@ -231,9 +193,9 @@ Drawing graph...
 > )
   variable mech was long now byte
   (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been
-encoded as numeric so that subsequent siman commands will work. If you require a
-different order, encode mech as numeric before running -siman setup-.
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -261,14 +223,15 @@ The p variable is:                N/A
 The true variable is:             true
 _____________________________________________________
 
-. qui siman analyse
+. siman analyse, notable
+siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mstring,replace)
 Drawing graph...
 
 . 
 . * method is numeric labelled in alphabetical order
-. use extendedtestdata2, clear
+. use $testpath/data/extendedtestdata2, clear
 
 . sencode method, gsort(method) replace // 1=CCA, 2=MeanImp, 3=Noadj
 
@@ -287,9 +250,9 @@ Drawing graph...
 > )
   variable mech was long now byte
   (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been
-encoded as numeric so that subsequent siman commands will work. If you require a
-different order, encode mech as numeric before running -siman setup-.
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -317,14 +280,15 @@ The p variable is:                N/A
 The true variable is:             true
 _____________________________________________________
 
-. qui siman analyse
+. siman analyse, notable
+siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mlabalpha,replace)
 Drawing graph...
 
 . 
 . * method is numeric labelled in data order
-. use extendedtestdata2, clear
+. use $testpath/data/extendedtestdata2, clear
 
 . sencode method, replace // 1=Noadj, 2=CCA, 3=MeanImp
 
@@ -343,9 +307,9 @@ Drawing graph...
 > )
   variable mech was long now byte
   (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been
-encoded as numeric so that subsequent siman commands will work. If you require a
-different order, encode mech as numeric before running -siman setup-.
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -373,14 +337,15 @@ The p variable is:                N/A
 The true variable is:             true
 _____________________________________________________
 
-. qui siman analyse
+. siman analyse, notable
+siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mlabdata,replace)
 Drawing graph...
 
 . 
 . * method is numeric unlabelled in alphabetical order
-. use extendedtestdata2, clear
+. use $testpath/data/extendedtestdata2, clear
 
 . sencode method, gsort(method) replace // order is alphabetical: CCA MeanImp Noadj 
 
@@ -412,9 +377,9 @@ Drawing graph...
 > )
   variable mech was long now byte
   (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been
-encoded as numeric so that subsequent siman commands will work. If you require a
-different order, encode mech as numeric before running -siman setup-.
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -442,7 +407,8 @@ The p variable is:                N/A
 The true variable is:             true
 _____________________________________________________
 
-. qui siman analyse
+. siman analyse, notable
+siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(munlabelled,replace)
 Drawing graph...
@@ -451,7 +417,7 @@ Drawing graph...
 . ** NB name(string) gives funny error
 . 
 . * method is not 1...
-. use extendedtestdata2, clear
+. use $testpath/data/extendedtestdata2, clear
 
 . gen methchar = 11 if method == "CCA"
 (72,000 missing values generated)
@@ -483,56 +449,9 @@ Drawing graph...
 > ue)
   variable mech was long now byte
   (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been
-encoded as numeric so that subsequent siman commands will work. If you require a
-different order, encode mech as numeric before running -siman setup-.
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         3
-The target values are:            effect mean0 mean1
-
-The number of methods is:         3
-The method values are:            CCA MeanImp Noadj
-
-Data generating mechanism (dgm)
-The total number of dgms is:      12
-The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
-
-Estimates are contained in the dataset
-
-The estimates variable is:        b
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
-_____________________________________________________
-
-. qui siman analyse
-
-. siman nestloop empse if estimand=="effect", name(munlabplus10,replace)
-Drawing graph...
-
-. * graph should be same as mstring
-. 
-. 
-. 
-. // more tests with true
-. * check mean 
-. use extendedtestdata2, clear
-
-. siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
-> )
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been
-encoded as numeric so that subsequent siman commands will work. If you require a
-different order, encode mech as numeric before running -siman setup-.
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -561,7 +480,55 @@ The true variable is:             true
 _____________________________________________________
 
 . siman analyse, notable
-siman analyse has run
+siman analyse has run successfully
+
+. siman nestloop empse if estimand=="effect", name(munlabplus10,replace)
+Drawing graph...
+
+. * graph should be same as mstring
+. 
+. 
+. 
+. // more tests with true
+. * check mean 
+. use $testpath/data/extendedtestdata2, clear
+
+. siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
+> )
+  variable mech was long now byte
+  (324,000 bytes saved)
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            effect mean0 mean1
+
+The number of methods is:         3
+The method values are:            CCA MeanImp Noadj
+
+Data generating mechanism (dgm)
+The total number of dgms is:      12
+The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        b
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman analyse, notable
+siman analyse has run successfully
 
 . siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) stagger(0.0
 > 3)
@@ -618,7 +585,7 @@ siman nestloop requires more than 1 dgm combination
 
 . 
 . * no target
-. use extendedtestdata2, clear
+. use $testpath/data/extendedtestdata2, clear
 
 . keep if estimand=="mean0"
 (72,000 observations deleted)
@@ -628,9 +595,9 @@ siman nestloop requires more than 1 dgm combination
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) est(b) se(se) true(true)
   variable mech was long now byte
   (108,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been
-encoded as numeric so that subsequent siman commands will work. If you require a
-different order, encode mech as numeric before running -siman setup-.
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -659,14 +626,14 @@ The true variable is:             true
 _____________________________________________________
 
 . siman analyse, notable
-siman analyse has run
+siman analyse has run successfully
 
 . siman nestloop bias, name(sn4,replace)
 Drawing graph...
 
 . 
 . * numeric target
-. use extendedtestdata2, clear
+. use $testpath/data/extendedtestdata2, clear
 
 . encode estimand, gen(estinum)
 
@@ -675,9 +642,9 @@ Drawing graph...
 . siman setup, target(estinum) rep(rep) dgm(beta pmiss mech) method(method) est(b) se(se) true(true)
   variable mech was long now byte
   (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been
-encoded as numeric so that subsequent siman commands will work. If you require a
-different order, encode mech as numeric before running -siman setup-.
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -706,7 +673,7 @@ The true variable is:             true
 _____________________________________________________
 
 . siman analyse, notable
-siman analyse has run
+siman analyse has run successfully
 
 . siman nestloop bias, name(sn5,replace)
 Drawing 3 graphs (3 targets * 1 performance measures)...
@@ -716,10 +683,21 @@ Drawing graph...
 (file sn6.gph not found)
 file sn6.gph saved
 
+. siman nestloop bias if estinum==1, nodg legend(row(1)) methlegend(item)
+Drawing graph...
+
+. siman nestloop bias if estinum==1, nodg legend(row(1)) methlegend(title)
+Drawing graph...
+
+. 
+. * this is a good quality graph
+. siman nestloop bias if estinum==1, legend(row(1)) ///
+>         title(Good nestloop graph for estimand effect) note("") stagger(.05) xlab(none) lcol(red g
+> reen blue)
+Drawing graph...
+
 . 
 . * tidy up
-. erase extendedtestdata2.dta
-
 . erase sn6.gph
 
 . 
@@ -728,8 +706,3 @@ file sn6.gph saved
 
 . 
 . log close
-      name:  <unnamed>
-       log:  C:\ian\git\siman\Ella_testing\siman_nestloop_test.log
-  log type:  text
- closed on:  17 Aug 2023, 16:45:13
-----------------------------------------------------------------------------------------------------

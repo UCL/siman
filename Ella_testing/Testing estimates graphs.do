@@ -1,13 +1,15 @@
 * Testing estimates graph options
 local filename Testing estimates graphs
-clear all
-prog drop _all
-set linesize 100
-cap log close
 
-log using "`filename'", replace text nomsg
+prog drop _all
+cd $testpath
+cap log close
+set linesize 100
+
 // START TESTING
-which siman_setup
+log using "`filename'", replace text nomsg
+siman which
+
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
 siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
@@ -787,5 +789,7 @@ siman comparemethodsscatter
 siman swarm
 siman zipplot
 siman blandaltman
+
+di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 
 log close

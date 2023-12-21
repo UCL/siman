@@ -3,23 +3,15 @@ Testing_IRW_TPM_EMZ.do
 Short testing file for discussion
 */
 
-// SETUP: MODIFY FOR USER & PROJECT
-*local codepath C:\ian\git\siman\ 
-local codepath C:\git\siman\ 
-global detail = 0
-
-// SETUP FOR ALL USERS
-local testpath $codepathElla_testing\
-local filename Testing_IRW_TPM_EMZ
-prog drop _all
-adopath ++ $codepath
-cd $testpath
-cap log close
-set linesize 100
-
 * switch on detail if want to run all graphs
 global detail = 1
 
+local filename Testing_IRW_TPM_EMZ
+
+prog drop _all
+cd $testpath
+cap log close
+set linesize 100
 
 // START TESTING
 log using `filename', replace text nomsg
@@ -123,10 +115,12 @@ if ${detail} == 1 siman swarm if beta == 1 & pmiss == 1 & mech == 1 & estimand =
 * mean noadj: -0.0034964
 
 serset clear
-siman comparemethodsscatter 
-* one graph per dgm and target combination, comparing methods
+* siman comparemethodsscatter
+* one graph per dgm and target combination, comparing methods - too slow
+siman comparemethodsscatter if beta == 1 & pmiss == 1 & mech == 2 
+* one graph per target, comparing methods
 
-siman blandaltman 
+siman blandaltman if beta == 1 & pmiss == 2 & mech == 2
 * 1 graph per combination of dgm levels and target, by method difference
 
 siman zipplot
@@ -190,6 +184,6 @@ assert _rc == 198
 * Recreating Gerta's graph, Figure 2
 siman nestloop mean, dgmorder(-theta_new rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") xlabel(none) xtitle("")
 
+di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 
-di as result "*** SIMAN GRAPHS HAVE PASSED ALL THESE TESTS ***"
 log close

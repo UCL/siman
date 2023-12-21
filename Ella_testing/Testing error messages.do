@@ -1,12 +1,16 @@
 * Testing error messages
 
-clear all
+local filename Testing error messages
+
 prog drop _all
-set linesize 100
+cd $testpath
 cap log close
+set linesize 100
 
 // START TESTING
 log using `filename', replace text nomsg
+siman which
+
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
 * more than 1 entry in est()
