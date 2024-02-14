@@ -1,3 +1,4 @@
+* 14feb2024 IW allow new perfromance measure (pctbias) from simsum
 *! version 0.8.2   20dec2023
 *  version 0.8.2   20dec2023   IW add row() option (undocumented at present)
 *  version 0.8.1 25oct2023     IW put PMs in same order as in simsum
@@ -80,7 +81,7 @@ if "`anything'"!="" {
 
 
 * re-order performance measures for display in the table as per simsum
-local perfvar = "bsims sesims bias mean empse relprec mse rmse modelse ciwidth relerror cover power"
+local perfvar = "bsims sesims bias pctbias mean empse relprec mse rmse modelse ciwidth relerror cover power"
 qui gen _perfmeascodeorder=.
 local p = 0
 foreach perf of local perfvar {
