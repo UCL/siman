@@ -42,10 +42,13 @@ if "`simansetuprun'"!="1" {
 }
 
 * if estimate or se are missing, give error message as program requires them for the graph(s)
-if mi("`estimate'") | mi("`se'") {
-    di as error "siman zipplot requires estimate and se to plot"
-	exit 498
-}	
+capture confirm _lci _uci
+if _rc {
+	if mi("`estimate'") | mi("`se'") {
+		di as error "siman zipplot requires either lower & upper CI" _n "or estimate & se (optionally df)"
+		exit 498
+	}	
+}
 
 * if true is missing, produce an error message
 if "`true'"=="" {
@@ -123,13 +126,15 @@ else if mi("`by'") {
 
 capture confirm variable _lci
 if _rc {
-	qui gen float _lci = `estimate' + (`se'*invnorm(.025))
-	local lci _lci
-}
-capture confirm variable _uci
-if _rc {
-	qui gen float _uci = `estimate' + (`se'*invnorm(.975))
-	local uci _uci
+	capture confirm variable df
+	if !_rc {
+		qui gen float _lci = `estimate' + (`se'*invttail(`df', .025))
+		qui gen float _uci = `estimate' + (`se'*invttail(`df', .975))
+	}
+	else {
+		qui gen float _lci = `estimate' + (`se'*invnorm(.025))
+		qui gen float _uci = `estimate' + (`se'*invnorm(.975))
+	}
 }
 
 if "`method'"!="" {
@@ -331,17 +336,17 @@ qui drop _merge lb ub
 
 
 qui bysort `byvar': replace _covlb = . if _n>1
-qui bysort `byvar' : replace _covub = . if _n>1
-	
+qui bysort `byvar': replace _covub = . if _n>1
+
 capture confirm variable _lpoint
 	if _rc {
 	qui egen _lpoint = min(`lci') if !missing(_covlb), by(`byvar' `true') 
-	}
+}
 capture confirm variable _rpoint
 	if _rc {
 	qui egen _rpoint = max(`uci') if !missing(_covlb), by(`byvar' `true') 
-	}
-	
+}
+
 * Can't tokenize/substr as many "" in the string
 if !mi(`"`options'"') {
 	tempvar _namestring
