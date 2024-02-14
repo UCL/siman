@@ -1,0 +1,29 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}N:\Home\Analysis\Simulations\siman\siman20231025/unhelpful1.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}25 Oct 2023, 09:36:05
+
+{com}. use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_wideE_wideM4.dta, clear
+
+. siman setup, rep(rep) dgm(dgm) target(beta gamma) method(A B) estimate(est) se(se) true(true) order(method)
+{err}Additional variables found in dataset other than those specified in siman setup.  Please remove extra variables from data set and re-run siman.
+Unwanted variables are: estA_beta seA_beta estB_beta seB_beta estA_gamma seA_gamma estB_gamma seB_gamma
+{txt}{search r(498), local:r(498);}
+
+{com}. drop estA_beta seA_beta estB_beta seB_beta estA_gamma seA_gamma estB_gamma seB_gamma
+
+. siman setup, rep(rep) dgm(dgm) target(beta gamma) method(A B) estimate(est) se(se) true(true) order(method)
+{err}Additional variables found in dataset other than those specified in siman setup.  Please remove extra variables from data set and re-run siman.
+Unwanted variables are: 
+{txt}{search r(498), local:r(498);}
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}N:\Home\Analysis\Simulations\siman\siman20231025/unhelpful1.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}25 Oct 2023, 09:36:16
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

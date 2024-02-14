@@ -1,0 +1,42 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}N:\Home\Analysis\Simulations\siman\siman20231025/error2.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}25 Oct 2023, 09:58:58
+
+{com}. use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear
+
+. reshape wide est se, i(rep dgm method true) j(estimand) string
+{txt}(j = beta gamma)
+
+Data{col 36}Long{col 43}->{col 48}Wide
+{hline 77}
+Number of observations     {res}       8,000   {txt}->   {res}4,000       
+{txt}Number of variables        {res}           7   {txt}->   {res}8           
+{txt}j variable (2 values)          {res}estimand   {txt}->   (dropped)
+xij variables:
+                                    {res}est   {txt}->   {res}estbeta estgamma
+                                     se   {txt}->   {res}sebeta segamma
+{txt}{hline 77}
+
+{com}. siman setup, rep(rep) dgm(dgm) target(beta gamma) method(method) estimate(est) se(se) true(true)
+{err}variable {bf}true{sf} already defined
+{txt}{search r(110), local:r(110);}
+
+{com}. siman setup, rep(rep) dgm(dgm) target(beta gamma) method(method) estimate(est) se(se) true(true)
+{err}Data are already in siman format
+{txt}{search r(459), local:r(459);}
+
+{com}. siman zip
+{err}siman_setup needs to be run first.
+{txt}{search r(498), local:r(498);}
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}N:\Home\Analysis\Simulations\siman\siman20231025/error2.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}25 Oct 2023, 09:59:05
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
