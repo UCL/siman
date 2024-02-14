@@ -390,10 +390,8 @@ siman analyse
 * DGM missing
 ************** 
 use $testpath/data/simlongESTPM_longM_wideE2.dta, clear
+drop if dgm==2
 drop dgm
-bysort rep method: gen n = _n
-drop if n==2
-drop n
 siman setup, rep(rep) est(est) se(se) method(method) target(1 2) true(true)
 siman analyse
 
