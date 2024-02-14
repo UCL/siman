@@ -9,7 +9,7 @@ C:\ian\git\siman\siman_describe.ado
 C:\ian\git\siman\siman_analyse.ado
 *! version 0.6.11 19dec2023
 C:\ian\git\siman\siman_table.ado
-*! version 0.8.1   25oct2023
+*! version 0.8.2   20dec2023
 C:\ian\git\siman\siman_reshape.ado
 *!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
@@ -115,6 +115,9 @@ beta                 |
                 bias | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
@@ -155,6 +158,9 @@ gamma                |
                      | 
                 bias |  .0005151   .0056354
                      |  .0025476   .0035789
+                     | 
+             pctbias |                     
+                     |                     
                      | 
                 mean |  .0005151   .0056354
                      |  .0025476   .0035789
@@ -197,6 +203,9 @@ beta                 |
                 bias | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
@@ -238,6 +247,9 @@ gamma                |
                 bias |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
@@ -268,9 +280,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * DGM numeric with string labels, 1 var
@@ -350,6 +361,9 @@ beta                 |
                 bias | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
@@ -390,6 +404,9 @@ gamma                |
                      | 
                 bias |  .0005151   .0056354
                      |  .0025476   .0035789
+                     | 
+             pctbias |                     
+                     |                     
                      | 
                 mean |  .0005151   .0056354
                      |  .0025476   .0035789
@@ -432,6 +449,9 @@ beta                 |
                 bias | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
@@ -473,6 +493,9 @@ gamma                |
                 bias |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
@@ -503,9 +526,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 .  
 . 
@@ -697,9 +719,8 @@ performance measure  |         A          B
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 .  
@@ -708,30 +729,26 @@ performance measure  |         A          B
 . * Target numeric, method missing, true > 1 level (different true values per target)
 . use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
-. replace true=0.5 if estimand=="beta"
+. replace true=0.5 if estimand=="beta" // the wrong true value, done only to test
 (4,000 real changes made)
+
+. keep if method==1 & dgm==1
+(6,000 observations deleted)
 
 . drop dgm method
 
 . gen estimand_num = .
-(8,000 missing values generated)
+(2,000 missing values generated)
 
 . replace estimand_num = 1 if estimand == "beta"
-(4,000 real changes made)
+(1,000 real changes made)
 
 . replace estimand_num = 2 if estimand == "gamma"
-(4,000 real changes made)
+(1,000 real changes made)
 
 . drop estimand
 
 . rename estimand_num estimand
-
-. bysort rep estimand: gen repitionindi=_n
-
-. drop if repitionindi>1
-(6,000 observations deleted)
-
-. drop repitionindi
 
 . siman setup, rep(rep) target(estimand) estimate(est) se(se) true(true)
 Warning: no method specified. siman will proceed assuming there is only one method. If this is a
@@ -777,55 +794,53 @@ performance measure  |         1          2
               sesims |      1000       1000
                      |                     
                      | 
-                bias | -.5040227   .0042429
-                     |  .0032266   .0033406
+                bias | -.5043991   .0005151
+                     |  .0024993   .0025476
                      | 
-                mean | -.0040226   .0042429
-                     |  .0032266   .0033406
+             pctbias | -100.8798           
+                     |  .4998524           
                      | 
-               empse |  .1020338   .1056387
-                     |  .0022827   .0023633
+                mean | -.0043991   .0005151
+                     |  .0024993   .0025476
+                     | 
+               empse |  .0790336   .0805615
+                     |  .0017681   .0018023
                      | 
              relprec |                     
                      |                     
                      | 
-                 mse |  .2644393   .0111664
-                     |  .0032304   .0004751
+                 mse |  .2606585   .0064839
+                     |  .0025083   .0002847
                      | 
-                rmse |  .5142366    .105671
-                     |   .003141    .002248
+                rmse |  .5105473   .0805229
+                     |  .0024565   .0017676
                      | 
-             modelse |   .105591   .1055474
-                     |  .0007164   .0006796
+             modelse |  .0787452   .0788425
+                     |  .0001572   .0001466
                      | 
-             ciwidth |  .4048171   .4053953
-                     |  .0027297   .0026155
+             ciwidth |  .3080681   .3085282
+                     |  .0006123   .0005716
                      | 
-            relerror |  3.486285  -.0863979
-                     |  2.419303   2.325979
+            relerror | -.3649609  -2.133844
+                     |  2.237882   2.196998
                      | 
-               cover |       1.3       95.3
-                     |  .3582039   .6692606
+               cover |         0       94.5
+                     |         0   .7209369
                      | 
-               power |       3.8        4.7
-                     |  .6046156   .6692608
+               power |       5.3        5.5
+                     |  .7084561   .7209369
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * missing target
 . use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
-. drop estimand
-
-. bysort rep dgm method: gen repitionindi=_n
-
-. drop if repitionindi == 2
+. keep if estimand=="beta"
 (4,000 observations deleted)
 
-. drop repitionindi
+. drop estimand
 
 . siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
 
@@ -869,38 +884,41 @@ measure              |         1          2
               sesims |      1000       1000
                      |                     
                      | 
-                bias | -.0021433   .0023125
-                     |  .0024843    .003527
+                bias | -.0043991  -.0025973
+                     |  .0024993   .0035644
                      | 
-                mean | -.0021433   .0023125
-                     |  .0024843    .003527
+             pctbias |                     
+                     |                     
                      | 
-               empse |  .0785619   .1115339
-                     |  .0017576   .0024952
+                mean | -.0043991  -.0025973
+                     |  .0024993   .0035644
                      | 
-             relprec |            -50.38539
-                     |             2.964279
+               empse |  .0790336   .1127159
+                     |  .0017681   .0025217
                      | 
-                 mse |  .0061704   .0124327
-                     |  .0002773   .0005206
+             relprec |             -50.8353
+                     |              2.28676
                      | 
-                rmse |  .0785518   .1115021
-                     |  .0017648   .0023346
+                 mse |  .0062594   .0126989
+                     |  .0002881   .0006187
                      | 
-             modelse |  .0787551   .1140614
-                     |  .0001509   .0003491
+                rmse |  .0791165   .1126895
+                     |  .0018209   .0027454
                      | 
-             ciwidth |  .3081554   .4450708
-                     |  .0005876   .0013503
+             modelse |  .0787452   .1136343
+                     |  .0001572   .0003405
                      | 
-            relerror |  .2460074   2.266077
-                     |  2.250905   2.309193
+             ciwidth |  .3080681   .4434751
+                     |  .0006123   .0013217
                      | 
-               cover |      94.6       96.3
-                     |  .7147308   .5969169
+            relerror | -.3649609   .8147949
+                     |  2.237882   2.275551
                      | 
-               power |       5.4        3.7
-                     |  .7147307   .5969171
+               cover |      94.7       95.7
+                     |  .7084563   .6414907
+                     | 
+               power |       5.3        4.3
+                     |  .7084561   .6414905
 ---------------------+---------------------
 2                    |
                bsims |      1000       1000
@@ -909,42 +927,44 @@ measure              |         1          2
               sesims |      1000       1000
                      |                     
                      | 
-                bias | -.0049365  -.0038094
-                     |  .0029339   .0041336
+                bias | -.0046965  -.0058509
+                     |  .0028908   .0039932
                      | 
-                mean | -.0049365  -.0038094
-                     |  .0029339   .0041336
+             pctbias |                     
+                     |                     
                      | 
-               empse |  .0927795   .1307158
-                     |  .0020756   .0029244
+                mean | -.0046965  -.0058509
+                     |  .0028908   .0039932
                      | 
-             relprec |            -49.62126
-                     |             3.122976
+               empse |  .0914144   .1262755
+                     |  .0020451    .002825
                      | 
-                 mse |  .0086238   .0170841
-                     |  .0003949   .0007403
+             relprec |            -47.59274
+                     |             2.430245
                      | 
-                rmse |  .0928644    .130706
-                     |  .0021263   .0028321
+                 mse |  .0083703   .0159638
+                     |  .0003797   .0007445
                      | 
-             modelse |  .0911612   .1313498
-                     |  .0001762   .0003885
+                rmse |  .0914893   .1263479
+                     |  .0020748   .0029462
                      | 
-             ciwidth |  .3566849   .5127006
-                     |  .0006871   .0014979
+             modelse |  .0910296   .1313619
+                     |  .0001752   .0003826
                      | 
-            relerror | -1.744151   .4850442
-                     |  2.206359   2.267597
+             ciwidth |   .356176   .5127883
+                     |   .000683   .0014841
                      | 
-               cover |        94       95.5
-                     |  .7509993   .6555532
+            relerror |  -.420924   4.028049
+                     |  2.236001   2.346937
                      | 
-               power |         6        4.5
-                     |  .7509993   .6555532
+               cover |        95       95.6
+                     |  .6892024   .6485677
+                     | 
+               power |         5        4.4
+                     |  .6892024   .6485677
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . 
@@ -2121,9 +2141,8 @@ mean1                |
                power |       100        100        100
                      |         0          0          0
 ------------------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . *************************************************************************
@@ -2183,6 +2202,9 @@ beta                 |
                 bias | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
@@ -2223,6 +2245,9 @@ gamma                |
                      | 
                 bias |  .0005151   .0056354
                      |  .0025476   .0035789
+                     | 
+             pctbias |                     
+                     |                     
                      | 
                 mean |  .0005151   .0056354
                      |  .0025476   .0035789
@@ -2265,6 +2290,9 @@ beta                 |
                 bias | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
@@ -2306,6 +2334,9 @@ gamma                |
                 bias |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
@@ -2336,9 +2367,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * DGM numeric with string labels, 1 var
@@ -2511,9 +2541,8 @@ MNAR                 |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . 
@@ -2587,6 +2616,9 @@ beta                 |
                 bias | -.5043991  -.5025973
                      |  .0024993   .0035644
                      | 
+             pctbias | -100.8798  -100.5195
+                     |  .4998524   .7128779
+                     | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
@@ -2627,6 +2659,9 @@ gamma                |
                      | 
                 bias | -.4994849  -.4943646
                      |  .0025476   .0035789
+                     | 
+             pctbias | -99.89697  -98.87292
+                     |  .5095158   .7157892
                      | 
                 mean |  .0005151   .0056354
                      |  .0025476   .0035789
@@ -2669,6 +2704,9 @@ beta                 |
                 bias | -.5046965  -.5058509
                      |  .0028908   .0039932
                      | 
+             pctbias | -100.9393  -101.1702
+                     |  .5781556   .7986361
+                     | 
                 mean | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
@@ -2710,6 +2748,9 @@ gamma                |
                 bias | -.4994052  -.4934928
                      |  .0029417   .0041326
                      | 
+             pctbias | -99.88103  -98.69856
+                     |  .5883382   .8265222
+                     | 
                 mean |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
@@ -2740,9 +2781,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * DGM missing
@@ -2750,21 +2790,17 @@ gamma                |
 . * true variable with >1 level, method missing
 . use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
 
+. drop if dgm==2
+(2,000 observations deleted)
+
 . drop dgm est_2 se_2
 
 . replace true = 0.5 if estimand == "gamma"
-(2,000 real changes made)
+(1,000 real changes made)
 
 . rename est_1 est
 
 . rename se_1 se
-
-. bysort rep estimand: gen n = _n
-
-. drop if n==2
-(2,000 observations deleted)
-
-. drop n
 
 . siman setup, rep(rep) est(est) se(se) target(estimand) true(true)
 Warning: no method specified. siman will proceed assuming there is only one method. If this is a
@@ -2810,55 +2846,54 @@ performance measure  |      beta      gamma
               sesims |      1000       1000
                      |                     
                      | 
-                bias | -.0042181   -.499386
-                     |  .0027446   .0027525
+                bias | -.0043991  -.4994849
+                     |  .0024993   .0025476
                      | 
-                mean | -.0042181    .000614
-                     |  .0027446   .0027525
+             pctbias |            -99.89697
+                     |             .5095158
                      | 
-               empse |  .0867923   .0870415
-                     |  .0019417   .0019473
+                mean | -.0043991   .0005151
+                     |  .0024993   .0025476
+                     | 
+               empse |  .0790336   .0805615
+                     |  .0017681   .0018023
                      | 
              relprec |                     
                      |                     
                      | 
-                 mse |  .0075432    .256955
-                     |  .0003361   .0027533
+                 mse |  .0062594   .2559688
+                     |  .0002881    .002549
                      | 
-                rmse |  .0868514   .5069073
-                     |  .0019351   .0027158
+                rmse |  .0791165   .5059336
+                     |  .0018209   .0025191
                      | 
-             modelse |   .085623   .0851842
-                     |  .0002612    .000249
+             modelse |  .0787452   .0788425
+                     |  .0001572   .0001466
                      | 
-             ciwidth |  .3340808   .3325102
-                     |  .0010211   .0009683
+             ciwidth |  .3080681   .3085282
+                     |  .0006123   .0005716
                      | 
-            relerror |  -1.34725  -2.133856
-                     |  2.227463   2.208064
+            relerror | -.3649609  -2.133844
+                     |  2.237882   2.196998
                      | 
-               cover |      94.3          0
-                     |  .7331505          0
+               cover |      94.7          0
+                     |  .7084563          0
                      | 
-               power |       5.7        5.5
-                     |  .7331507   .7209369
+               power |       5.3        5.5
+                     |  .7084561   .7209369
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
-. * missing target
+. * Target missing
+. ****************
 . use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
 
-. drop estimand
-
-. bysort rep dgm: gen n = _n
-
-. drop if n==2
+. drop if estimand == "gamma"
 (2,000 observations deleted)
 
-. drop n
+. drop estimand
 
 . siman setup, rep(rep) dgm(dgm) est(est) se(se) method(_1 _2) true(true)
 
@@ -2905,6 +2940,9 @@ measure              |        _1         _2
                 bias | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
@@ -2945,6 +2983,9 @@ measure              |        _1         _2
                 bias | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
@@ -2975,9 +3016,8 @@ measure              |        _1         _2
                power |         5        4.4
                      |  .6892024   .6485677
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
@@ -4167,9 +4207,8 @@ mean1                |
                power |       100        100        100
                      |         0          0          0
 ------------------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . *************************************************************************
@@ -4383,9 +4422,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * DGM string, 1 var
@@ -4455,6 +4493,9 @@ beta                 |
                 bias | -.5043991  -.5025973
                      |  .0024993   .0035644
                      | 
+             pctbias | -100.8798  -100.5195
+                     |  .4998524   .7128779
+                     | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
@@ -4495,6 +4536,9 @@ gamma                |
                      | 
                 bias | -.4994849  -.4943646
                      |  .0025476   .0035789
+                     | 
+             pctbias | -99.89697  -98.87292
+                     |  .5095158   .7157892
                      | 
                 mean |  .0005151   .0056354
                      |  .0025476   .0035789
@@ -4537,6 +4581,9 @@ beta                 |
                 bias | -.5046965  -.5058509
                      |  .0028908   .0039932
                      | 
+             pctbias | -100.9393  -101.1702
+                     |  .5781556   .7986361
+                     | 
                 mean | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
@@ -4578,6 +4625,9 @@ gamma                |
                 bias | -.4994052  -.4934928
                      |  .0029417   .0041326
                      | 
+             pctbias | -99.88103  -98.69856
+                     |  .5883382   .8265222
+                     | 
                 mean |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
@@ -4608,9 +4658,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * DGM missing
@@ -4673,6 +4722,9 @@ beta                 |
                 bias | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
@@ -4713,6 +4765,9 @@ gamma                |
                 bias |  .0005151   .0056354
                      |  .0025476   .0035789
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean |  .0005151   .0056354
                      |  .0025476   .0035789
                      | 
@@ -4743,9 +4798,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
@@ -5952,9 +6006,8 @@ mean1                |
                power |       100        100        100
                      |         0          0          0
 ------------------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . *************************************************************************
@@ -6016,6 +6069,9 @@ beta                 |
                 bias | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
@@ -6056,6 +6112,9 @@ gamma                |
                      | 
                 bias |  .0005151   .0056354
                      |  .0025476   .0035789
+                     | 
+             pctbias |                     
+                     |                     
                      | 
                 mean |  .0005151   .0056354
                      |  .0025476   .0035789
@@ -6098,6 +6157,9 @@ beta                 |
                 bias | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
@@ -6139,6 +6201,9 @@ gamma                |
                 bias |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
@@ -6169,9 +6234,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * DGM numeric with string labels, 1 var
@@ -6342,9 +6406,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * DGM string, 1 var
@@ -6414,6 +6477,9 @@ beta                 |
                 bias | -.5043991  -.5025973
                      |  .0024993   .0035644
                      | 
+             pctbias | -100.8798  -100.5195
+                     |  .4998524   .7128779
+                     | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
@@ -6454,6 +6520,9 @@ gamma                |
                      | 
                 bias | -.4994849  -.4943646
                      |  .0025476   .0035789
+                     | 
+             pctbias | -99.89697  -98.87292
+                     |  .5095158   .7157892
                      | 
                 mean |  .0005151   .0056354
                      |  .0025476   .0035789
@@ -6496,6 +6565,9 @@ beta                 |
                 bias | -.5046965  -.5058509
                      |  .0028908   .0039932
                      | 
+             pctbias | -100.9393  -101.1702
+                     |  .5781556   .7986361
+                     | 
                 mean | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
@@ -6537,6 +6609,9 @@ gamma                |
                 bias | -.4994052  -.4934928
                      |  .0029417   .0041326
                      | 
+             pctbias | -99.88103  -98.69856
+                     |  .5883382   .8265222
+                     | 
                 mean |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
@@ -6567,9 +6642,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * DGM missing
@@ -6631,6 +6705,9 @@ beta                 |
                 bias | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
@@ -6671,6 +6748,9 @@ gamma                |
                 bias |  .0005151   .0056354
                      |  .0025476   .0035789
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean |  .0005151   .0056354
                      |  .0025476   .0035789
                      | 
@@ -6701,9 +6781,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
@@ -7910,9 +7989,8 @@ mean1                |
                power |       100        100        100
                      |         0          0          0
 ------------------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . *************************************************************************
@@ -7973,6 +8051,9 @@ _beta                |
                 bias | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
@@ -8013,6 +8094,9 @@ _gamma               |
                      | 
                 bias |  .0005151   .0056354
                      |  .0025476   .0035789
+                     | 
+             pctbias |                     
+                     |                     
                      | 
                 mean |  .0005151   .0056354
                      |  .0025476   .0035789
@@ -8055,6 +8139,9 @@ _beta                |
                 bias | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
@@ -8096,6 +8183,9 @@ _gamma               |
                 bias |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
@@ -8126,9 +8216,8 @@ _gamma               |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * DGM numeric with string labels, 1 var
@@ -8301,9 +8390,8 @@ _gamma               |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . 
@@ -8378,6 +8466,9 @@ beta                 |
                 bias | -.5043991  -.5025973
                      |  .0024993   .0035644
                      | 
+             pctbias | -100.8798  -100.5195
+                     |  .4998524   .7128779
+                     | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
                      | 
@@ -8418,6 +8509,9 @@ gamma                |
                      | 
                 bias | -.4994849  -.4943646
                      |  .0025476   .0035789
+                     | 
+             pctbias | -99.89697  -98.87292
+                     |  .5095158   .7157892
                      | 
                 mean |  .0005151   .0056354
                      |  .0025476   .0035789
@@ -8460,6 +8554,9 @@ beta                 |
                 bias | -.5046965  -.5058509
                      |  .0028908   .0039932
                      | 
+             pctbias | -100.9393  -101.1702
+                     |  .5781556   .7986361
+                     | 
                 mean | -.0046965  -.0058509
                      |  .0028908   .0039932
                      | 
@@ -8501,6 +8598,9 @@ gamma                |
                 bias | -.4994052  -.4934928
                      |  .0029417   .0041326
                      | 
+             pctbias | -99.88103  -98.69856
+                     |  .5883382   .8265222
+                     | 
                 mean |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
@@ -8531,9 +8631,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . 
@@ -8541,14 +8640,10 @@ gamma                |
 . ************** 
 . use $testpath/data/simlongESTPM_longM_wideE2.dta, clear
 
-. drop dgm
-
-. bysort rep method: gen n = _n
-
-. drop if n==2
+. drop if dgm==2
 (2,000 observations deleted)
 
-. drop n
+. drop dgm
 
 . siman setup, rep(rep) est(est) se(se) method(method) target(1 2) true(true)
 note: converting to long-wide format, creating variable target
@@ -8593,38 +8688,41 @@ performance measure  |         A          B
               sesims |      1000       1000
                      |                     
                      | 
-                bias | -.0040697   -.005047
-                     |  .0026996    .003831
+                bias | -.0043991  -.0025973
+                     |  .0024993   .0035644
                      | 
-                mean | -.0040697   -.005047
-                     |  .0026996    .003831
+             pctbias |                     
+                     |                     
                      | 
-               empse |  .0853689   .1211473
-                     |  .0019099   .0027103
+                mean | -.0043991  -.0025973
+                     |  .0024993   .0035644
                      | 
-             relprec |            -50.34398
-                     |             2.394067
+               empse |  .0790336   .1127159
+                     |  .0017681   .0025217
                      | 
-                 mse |  .0072971   .0146875
-                     |  .0003439   .0006922
+             relprec |             -50.8353
+                     |              2.28676
                      | 
-                rmse |  .0854232   .1211919
-                     |  .0020132   .0028556
+                 mse |  .0062594   .0126989
+                     |  .0002881   .0006187
                      | 
-             modelse |  .0852107   .1229575
-                     |  .0002597   .0004543
+                rmse |  .0791165   .1126895
+                     |  .0018209   .0027454
                      | 
-             ciwidth |  .3324786   .4787512
-                     |  .0010141   .0017633
+             modelse |  .0787452   .1136343
+                     |  .0001572   .0003405
                      | 
-            relerror | -.1853286   1.494146
-                     |  2.253662   2.301365
+             ciwidth |  .3080681   .4434751
+                     |  .0006123   .0013217
                      | 
-               cover |      95.1       95.3
-                     |  .6826347   .6692606
+            relerror | -.3649609   .8147949
+                     |  2.237882   2.275551
                      | 
-               power |       4.9        4.7
-                     |  .6826346   .6692608
+               cover |      94.7       95.7
+                     |  .7084563   .6414907
+                     | 
+               power |       5.3        4.3
+                     |  .7084561   .6414905
 ---------------------+---------------------
 2                    |
                bsims |      1000       1000
@@ -8633,32 +8731,35 @@ performance measure  |         A          B
               sesims |      1000       1000
                      |                     
                      | 
-                bias |  .0004269   .0062918
-                     |  .0027602   .0038816
+                bias |  .0005151   .0056354
+                     |  .0025476   .0035789
                      | 
-                mean |  .0004269   .0062918
-                     |  .0027602   .0038816
+             pctbias |                     
+                     |                     
                      | 
-               empse |  .0872865   .1227455
-                     |  .0019528    .002746
+                mean |  .0005151   .0056354
+                     |  .0025476   .0035789
                      | 
-             relprec |            -49.43116
-                     |              2.31863
+               empse |  .0805615   .1131762
+                     |  .0018023    .002532
                      | 
-                 mse |  .0076115    .015091
-                     |  .0003418   .0006508
+             relprec |            -49.33068
+                     |             2.314097
                      | 
-                rmse |  .0872439   .1228454
-                     |  .0019586   .0026489
+                 mse |  .0064839   .0128278
+                     |  .0002847   .0005329
                      | 
-             modelse |  .0852255   .1232152
-                     |   .000248   .0004608
+                rmse |  .0805229   .1132599
+                     |  .0017676   .0023524
                      | 
-             ciwidth |  .3326684   .4797108
-                     |  .0009699   .0017789
+             modelse |  .0788425   .1140264
+                     |  .0001466   .0003426
                      | 
-            relerror | -2.361175   .3826309
-                     |  2.202758   2.276912
+             ciwidth |  .3085282   .4450112
+                     |  .0005716   .0013243
+                     | 
+            relerror | -2.133844   .7512448
+                     |  2.196998   2.274225
                      | 
                cover |      94.5       96.4
                      |  .7209369   .5891009
@@ -8666,9 +8767,8 @@ performance measure  |         A          B
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * missing method
@@ -8732,6 +8832,9 @@ performance measure  |      beta      gamma
                 bias | -.0043991   .0005151
                      |  .0024993   .0025476
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0043991   .0005151
                      |  .0024993   .0025476
                      | 
@@ -8773,6 +8876,9 @@ performance measure  |      beta      gamma
                 bias | -.0046965   .0005948
                      |  .0028908   .0029417
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean | -.0046965   .0005948
                      |  .0028908   .0029417
                      | 
@@ -8803,9 +8909,8 @@ performance measure  |      beta      gamma
                power |         5        5.5
                      |  .6892024   .7209369
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
@@ -9995,9 +10100,8 @@ mean1                |
                power |       100        100        100
                      |         0          0          0
 ------------------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"

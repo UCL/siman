@@ -2,6 +2,7 @@
 Testing siman setup and analyse for all different permutation of the data (>100 combinations)
 NOTE: to be run in "Ella_testing" folder
 Ella 14novar2023
+14Feb2024 IW Remove arbitrary selection of records from the tests with DGM/Target missing, to avoid unnecessary flagging of changes with previous 
 ************************************************************************************************/
 
 local filename testing_graphs_matrix
@@ -101,25 +102,21 @@ siman analyse
 ************** 
 * Target numeric, method missing, true > 1 level (different true values per target)
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
-replace true=0.5 if estimand=="beta"
+replace true=0.5 if estimand=="beta" // the wrong true value, done only to test
+keep if method==1 & dgm==1
 drop dgm method
 gen estimand_num = .
 replace estimand_num = 1 if estimand == "beta"
 replace estimand_num = 2 if estimand == "gamma"
 drop estimand
 rename estimand_num estimand
-bysort rep estimand: gen repitionindi=_n
-drop if repitionindi>1
-drop repitionindi
 siman setup, rep(rep) target(estimand) estimate(est) se(se) true(true)
 siman analyse
 
 * missing target
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
+keep if estimand=="beta"
 drop estimand
-bysort rep dgm method: gen repitionindi=_n
-drop if repitionindi == 2
-drop repitionindi
 siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
 siman analyse 
 
@@ -185,22 +182,19 @@ siman analyse
 ************** 
 * true variable with >1 level, method missing
 use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
+drop if dgm==2
 drop dgm est_2 se_2
 replace true = 0.5 if estimand == "gamma"
 rename est_1 est
 rename se_1 se
-bysort rep estimand: gen n = _n
-drop if n==2
-drop n
 siman setup, rep(rep) est(est) se(se) target(estimand) true(true)
 siman analyse
 
-* missing target
+* Target missing
+****************
 use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
+drop if estimand == "gamma"
 drop estimand
-bysort rep dgm: gen n = _n
-drop if n==2
-drop n
 siman setup, rep(rep) dgm(dgm) est(est) se(se) method(_1 _2) true(true)
 siman analyse
 
@@ -396,10 +390,8 @@ siman analyse
 * DGM missing
 ************** 
 use $testpath/data/simlongESTPM_longM_wideE2.dta, clear
+drop if dgm==2
 drop dgm
-bysort rep method: gen n = _n
-drop if n==2
-drop n
 siman setup, rep(rep) est(est) se(se) method(method) target(1 2) true(true)
 siman analyse
 

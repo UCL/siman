@@ -9,7 +9,7 @@ C:\ian\git\siman\siman_describe.ado
 C:\ian\git\siman\siman_analyse.ado
 *! version 0.6.11 19dec2023
 C:\ian\git\siman\siman_table.ado
-*! version 0.8.1   25oct2023
+*! version 0.8.2   20dec2023
 C:\ian\git\siman\siman_reshape.ado
 *!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
@@ -95,6 +95,9 @@ inter                |
                 bias |  .0059115   .0015333   .0052478   .0059115
                      |  .0030291    .002069   .0030113   .0030291
                      | 
+             pctbias |  1.970502   .5110834   1.749251   1.970502
+                     |  1.009701   .6896664   1.003759   1.009701
+                     | 
                 mean |  .3059115   .3015333   .3052478   .3059115
                      |  .0030291    .002069   .0030113   .0030291
                      | 
@@ -135,6 +138,9 @@ main                 |
                 bias | -.0014899  -.0024519  -.0031501  -.0027479
                      |  .0029408   .0020147   .0020848    .002135
                      | 
+             pctbias |                                           
+                     |                                           
+                     | 
                 mean | -.0014899  -.0024519  -.0031501  -.0027479
                      |  .0029408   .0020147   .0020848    .002135
                      | 
@@ -165,9 +171,8 @@ main                 |
                power |      5.91        5.4       5.52       5.61
                      |  .2358118   .2260177   .2283702   .2301147
 -----------------------------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . * check get error if true is not constant across methods
