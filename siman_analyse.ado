@@ -1,4 +1,5 @@
-*! version 0.6.11 19dec2023
+*! version 0.6.12 14feb2024
+* version 0.6.12 14feb2024    IW pass df to simsum (previously ignored in computing PMs)
 * version 0.6.11 19dec2023    IW bug fix in method values for reshape
 * version 0.6.10  13nov2023   EMZ bug fix: labelling mcse vars when method a numeric labelled string variable - use values not labels
 * version 0.6.9   07nov2023   EMZ bug fix: restoring lost method labels issue for when method has been created by siman (i.e. _methodvar = 1)
@@ -194,7 +195,7 @@ if `nformat'==1 {
 		exit 498
 		}
 
-	qui simsum `estsimsum' `if', true(`true') se(`sesimsum') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
+	qui simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
 
 	* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
 	if `methodlabels' == 0 local methodloop `valmethod'
@@ -256,7 +257,7 @@ foreach v in `methodloop' {
 *if "`ntruevalue'"=="multiple" local estlist `estlist' `true' 
 
 
-qui simsum `estlist' `if', true(`true') se(`selist') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
+qui simsum `estlist' `if', true(`true') se(`selist') df(`df') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
 
 
 foreach v in `methodloop' {
