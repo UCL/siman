@@ -64,8 +64,9 @@ siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test1
 
 siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test1", replace)) 
 
-siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
-coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test1", replace)
+siman zipplot, legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ylab(70 95 100) noncoveroptions(pstyle(p3)) ///
+    coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) ///
+    bygr(cols(4)) name("zipplot_test1", replace)
 
 siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test1", replace) 
 

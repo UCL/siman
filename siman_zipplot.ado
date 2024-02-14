@@ -28,9 +28,9 @@ capture program drop siman_zipplot
 program define siman_zipplot, rclass
 version 15
 
-syntax [if][in] [,* BY(varlist) ///
-                    NONCOVeroptions(string) COVeroptions(string) SCAtteroptions(string) TRUEGRaphoptions(string) BYGRaphoptions(string) ///
-					SCHeme(string)]
+syntax [if][in] [, * BY(varlist) ///
+                     NONCOVeroptions(string) COVeroptions(string) SCAtteroptions(string) ///
+					 TRUEGRaphoptions(string) BYGRaphoptions(string) SCHeme(string) ymin(integer 0) ]
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -123,13 +123,13 @@ else if mi("`by'") {
 
 capture confirm variable _lci
 if _rc {
-		qui gen float _lci = `estimate' + (`se'*invnorm(.025))
-		local lci _lci
+	qui gen float _lci = `estimate' + (`se'*invnorm(.025))
+	local lci _lci
 }
 capture confirm variable _uci
 if _rc {
-		qui gen float _uci = `estimate' + (`se'*invnorm(.975))
-		local uci _uci
+	qui gen float _uci = `estimate' + (`se'*invnorm(.975))
+	local uci _uci
 }
 
 if "`method'"!="" {
@@ -420,12 +420,12 @@ qui save `graphdata'
 
 if `ntrue' == 1 {
 		#delimit ;
-				twoway (rspike _lpoint _rpoint _covlb, hor lw(thin) pstyle(p5)) // MC 
+			twoway (rspike _lpoint _rpoint _covlb, hor lw(thin) pstyle(p5)) // MC 
 				(rspike _lpoint _rpoint _covub, hor lw(thin) pstyle(p5))
-				(rspike `lci' `uci' _p`estimate'rank if _covers, hor lw(medium) pstyle(p1) lcol(%30) `coveroptions')
-				(rspike `lci' `uci' _p`estimate'rank if !_covers, hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions')	
-				(scatter _p`estimate'rank `estimate', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
-				(pci 0 `truevalue' 100 `truevalue', pstyle(p5) lw(thin) `truegraphoptions')
+				(rspike `lci' `uci' _p`estimate'rank if _covers & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions')
+				(rspike `lci' `uci' _p`estimate'rank if !_covers & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions')	
+				(scatter _p`estimate'rank `estimate' if _p`estimate'rank>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
+				(pci `ymin' `truevalue' 100 `truevalue', pstyle(p5) lw(thin) `truegraphoptions')
 			, 
 			xtitle("95% confidence intervals")
 			ytitle("Centile")
@@ -450,10 +450,10 @@ else if `ntrue'>1 {
 		#delimit ;
 			twoway (rspike _lpoint _rpoint _covlb, hor lw(thin) pstyle(p5)) // MC 
 			   (rspike _lpoint _rpoint _covub, hor lw(thin) pstyle(p5))
-			   (rspike `lci' `uci' _p`estimate'rank if _covers & `true'calc == `k', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions')
-			   (rspike `lci' `uci' _p`estimate'rank if !_covers & `true'calc == `k', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions')
-			   (scatter _p`estimate'rank `estimate' if `true'calc == `k', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
-			   (pci 0 ``true'label`k'' 100 ``true'label`k'', pstyle(p5) lw(thin) `truegraphoptions')
+			   (rspike `lci' `uci' _p`estimate'rank if _covers & `true'calc == `k' & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions')
+			   (rspike `lci' `uci' _p`estimate'rank if !_covers & `true'calc == `k' & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions')
+			   (scatter _p`estimate'rank `estimate' if `true'calc == `k' & _p`estimate'rank>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
+			   (pci `ymin' ``true'label`k'' 100 ``true'label`k'', pstyle(p5) lw(thin) `truegraphoptions')
 				,
 				`name'
 				xtitle("95% confidence intervals")
