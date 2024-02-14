@@ -427,8 +427,8 @@ if `ntrue' == 1 {
 				(scatter _p`estimate'rank `estimate', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
 				(pci 0 `truevalue' 100 `truevalue', pstyle(p5) lw(thin) `truegraphoptions')
 			, 
-			xtit("95% confidence intervals")
-			ytit("Centile of ranked p-values for null: θ=`truevalue'")  
+			xtitle("95% confidence intervals")
+			ytitle("Centile")
 			ylab(5 50 95)
 			by(`byvar', ixaxes noxrescale iscale(*.8) `bygraphoptions') scale(.8)
 			legend(order(3 "Coverers" 4 "Non-coverers"))
@@ -456,8 +456,8 @@ else if `ntrue'>1 {
 			   (pci 0 ``true'label`k'' 100 ``true'label`k'', pstyle(p5) lw(thin) `truegraphoptions')
 				,
 				`name'
-				xtit("95% confidence intervals")
-				ytit("Centile of ranked p-values for null: θ=``true'label`k''") 
+				xtitle("95% confidence intervals")
+				ytitle("Centile") 
 				ylab(5 50 95)
 				by(`byvar', ixaxes noxrescale iscale(*.8) `bygraphoptions' note("Graphs by `byvar', true=``true'label`k''")) scale(.8)
 				legend(order(3 "Coverers" 4 "Non-coverers"))
