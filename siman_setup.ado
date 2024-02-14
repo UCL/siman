@@ -1,4 +1,5 @@
-*!   version 0.8.7  27nov2023
+*!    version 0.8.8  14feb2024    
+*    version 0.8.8  14feb2024    IW reformat long messages; don't create _methodvar until end of program
 *    version 0.8.7  27nov2023    EMZ add check and error if true is not constant across methods
 *    version 0.8.6  20nov2023    EMZ minor bug fix for when dgm is missing, count of variables specified in setup vs dataset mis-macth as dgm is a tempvar.
 *    version 0.8.5  13nov2023    EMZ create a true variable if true is put in to the syntax as numeric e.g. true(0.5), for use by other siman programs
@@ -48,7 +49,7 @@ cap local simansetuprun : char _dta[siman_simansetuprun]
 
 if !mi("`simansetuprun'") {
 	if `simansetuprun' == 1 {
-		di as error "siman setup has already been run on the dataset held in memory; siman setup should be run on the 'raw' estimates dataset produced by your simulation study."
+		di as error "{p 0 2}siman setup has already been run on the dataset held in memory; siman setup should be run on the 'raw' estimates dataset produced by your simulation study.{p_end}"
 	exit 498
 	}
 }
@@ -57,25 +58,25 @@ local simansetuprun 0
 
 capture confirm variable _perfmeascode
 if !_rc {
-    di as error "siman would like to name a variable '_perfmeascode', but that name already exists in your data." _n "Please rename your variable _perfmeascode as something else."
+    di as error "{p 0 2}siman would like to name a variable '_perfmeascode', but that name already exists in your data. Please rename your variable _perfmeascode as something else.{p_end}"
     exit 498
 }
 		
 capture confirm variable _pm
 if !_rc {
-    di as error "siman would like to name a variable '_pm', but that name already exists in your data." _n "Please rename your variable _pm as something else."
+    di as error "{p 0 2}siman would like to name a variable '_pm', but that name already exists in your data. Please rename your variable _pm as something else.{p_end}"
     exit 498
 }		
 		
 capture confirm variable _dataset
 if !_rc {
-    di as error "siman would like to name a variable '_dataset', but that name already exists in your data." _n "Please rename your variable _dataset as something else."
+    di as error "{p 0 2}siman would like to name a variable '_dataset', but that name already exists in your data. Please rename your variable _dataset as something else.{p_end}"
     exit 498
 }
 		
 capture confirm variable _scenario
 if !_rc {
-    di as error "siman would like to name a variable '_scenario', but that name already exists in your data." _n "Please rename your variable _scenario as something else."
+    di as error "{p 0 2}siman would like to name a variable '_scenario', but that name already exists in your data. Please rename your variable _scenario as something else.{p_end}"
     exit 498
 }
 
@@ -83,7 +84,7 @@ cap confirm number `true'
 if !_rc {
 	capture confirm variable _true
 	if !_rc {
-		di as error "siman would like to name a variable '_true', but that name already exists in your data." _n "Please rename your variable _true as something else."
+		di as error "{p 0 2}siman would like to name a variable '_true', but that name already exists in your data. Please rename your variable _true as something else.{p_end}"
 		exit 498
 	}
 gen _true = `true'
@@ -96,7 +97,7 @@ foreach singlevar in "`rep'" "`estimate'" "`se'" "`df'" "`lci'" "`uci'" "`p'" "`
 	* entered est(est se) se(se) then the loop will just take each of the following separately: est then se then se.
 	tokenize `singlevar'
 	if "`2'"!="" {
-		di as error "only one variable name is allowed where `singlevar' have been entered in siman setup."
+		di as error "{p 0 2}only one variable name is allowed where `singlevar' have been entered in siman setup.{p_end}"
         exit 498
     }
 	local 2
@@ -105,26 +106,31 @@ foreach singlevar in "`rep'" "`estimate'" "`se'" "`df'" "`lci'" "`uci'" "`p'" "`
 
 * produce error message if no est, se, or ci contained in dataset
 if mi("`estimate'") &  mi("`se'") & mi("`lci'") & mi("`uci'") {
-	 di as error "no estimates, SEs, or confidence intervals specified.  Need to specify at least one for siman to run."
+	 di as error "{p 0 2}no estimates, SEs, or confidence intervals specified.  Need to specify at least one for siman to run.{p_end}"
     exit 498
 }
 
 * produce a warning message if no est and no se contained in dataset
 if mi("`estimate'") &  mi("`se'") {
-	 di as smcl as text "{p 0 2}Warning: no estimates or SEs, siman's output will be limited."
+	 di as text "{p 0 2}Warning: no estimates or SEs, siman's output will be limited.{p_end}"
 }
 
 if mi("`estimate'") | mi("`se'") {
-	di as smcl as text "{p 0 2}Warning: siman analyse will require est() and se() to be specified in set-up"
+	di as text "{p 0 2}Warning: siman analyse will require est() and se() to be specified in set-up.{p_end}"
 }
 
 * produce a warning message if no method contained in dataset, and create a constant
 local methodcreated = 0
 if mi("`method'") {
-	 di as smcl as text "{p 0 2}Warning: no method specified. siman will proceed assuming there is only one method. If this is a mistake, enter method() option in -siman setup-."
-	 qui gen _methodvar = 1
-	 local method "_methodvar"
+	 di as text "{p 0 2}Warning: no method specified. siman will proceed assuming there is only one method. If this is a mistake, enter method() option in -siman setup-.{p_end}"
+	 tempvar method
+	 gen `method' = 1
 	 local methodcreated = 1
+}
+
+if `methodcreated' == 1 {
+	rename `method' _methodvar
+	local method _methodvar
 }
 
 
@@ -138,11 +144,11 @@ if !mi("`dgm'") {
             drop `var'
             rename `t`var'' `var'
             compress `var'
-            di as smcl as text "{p 0 2}Warning: variable `var', which appears in dgm(), was stored as a string. It has been encoded as numeric so that subsequent siman commands will work. If you require a different order, encode `var' as numeric before running -siman setup-."
+            di as text "{p 0 2}Warning: variable `var', which appears in dgm(), was stored as a string. It has been encoded as numeric so that subsequent siman commands will work. If you require a different order, encode `var' as numeric before running -siman setup-.{p_end}"
         }
 		qui count if missing(`var')
 		cap assert r(N)==0
-		if _rc di as smcl as text "{p 0 2}Warning: variable `var' should not contain missing values.  Consider combining dgms."
+		if _rc di as text "{p 0 2}Warning: variable `var' should not contain missing values.  Consider combining dgms.{p_end}"
     }
 }
 
@@ -151,7 +157,7 @@ if !mi("`dgm'") {
     foreach var of varlist `dgm' {
 		cap assert `var' == round(`var', 0.1)
 		if _rc {
-				 di as error "Non-integer values of dgm are not permitted by siman: variable `var'."
+				 di as error "{p 0 2}Non-integer values of dgm are not permitted by siman: variable `var'.{p_end}"
 			exit 498
 		}
 	}
@@ -175,7 +181,7 @@ if ("`if'" != "" | "`in'" != "") & "`clear'"== "clear" {
 	keep if `touse' 
 }
 else if ("`if'" != "" | "`in'" != "") & "`clear'" != "clear" {
-	di as error "You have specified an if/in condition, meaning that data will be deleted by siman setup," _n "please use the 'clear' option to confirm."
+	di as error "{p 0 2}You have specified an if/in condition, meaning that data will be deleted by siman setup. Please use the 'clear' option to confirm.{p_end}"
 	exit 498
 }
 * e.g. siman_setup in 1/100, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) clear
@@ -218,7 +224,7 @@ else local nmethod 0
 if `nmethod' == 1 {
 	qui count if missing(`method')
 	cap assert r(N)==0
-	if _rc di as smcl as text "{p 0 2}Warning: variable `method' should not contain missing values."
+	if _rc di as text "{p 0 2}Warning: variable `method' should not contain missing values.{p_end}"
 }
 
 
@@ -227,8 +233,8 @@ if `ntarget'==1 {
     cap confirm variable `target'
     if _rc {
 		cap confirm new variable `target'
-        if _rc==0 di as error "target(`target'): variable `target' not found"
-        else di as error "Please either put the target variable name in siman_setup target() for long format, or the target values for wide format"
+        if _rc==0 di as error "{p 0 2}target(`target'): variable `target' not found.{p_end}"
+        else di as error "{p 0 2}Please either put the target variable name in siman_setup target() for long format, or the target values for wide format.{p_end}"
         exit 498
     }
 	unab target : `target'
@@ -238,8 +244,8 @@ if `nmethod'==1 {
     cap confirm variable `method'
     if _rc {
 		cap confirm new variable `method'
-		if _rc==0 di as error "method(`method'): variable `method' not found"
-        else di as error "Please either put the method variable name in siman_setup method() for long format, or the method values for wide format"
+		if _rc==0 di as error "{p 0 2}method(`method'): variable `method' not found.{p_end}"
+        else di as error "{p 0 2}Please either put the method variable name in siman_setup method() for long format, or the method values for wide format.{p_end}"
         exit 498
     }
 	unab method : `method'
@@ -247,7 +253,7 @@ if `nmethod'==1 {
 		
 * need either a method or target otherwise siman setup will not be able to determine the data format (longlong/widewide/longwide are based on target/method combinations).
 if "`target'"=="" & "`method'"=="" {
-	di as error "Need either target or method variable/values specified otherwise siman setup can not determine the data format."
+	di as error "{p 0 2}Need either target or method variable/values specified otherwise siman setup can not determine the data format.{p_end}"
 	exit 498
 }
 
@@ -259,7 +265,7 @@ forvalues i=1/`nmethod' {
 		if "`estimate'"!="" {
 			cap confirm variable `estimate'`m`i''
 			if !_rc {
-                di as error "Both variables `m`i'' and `estimate'`m`i'' are contained in the dataset. Please take care when specifying the method and estimate variables in the siman setup syntax"
+                di as error "{p 0 2}Both variables `m`i'' and `estimate'`m`i'' are contained in the dataset. Please take care when specifying the method and estimate variables in the siman setup syntax.{p_end}"
 				exit 498
                 /// TPM Is this really an `I'll proceed but think there might be a problem' warning, or should it error out?
 				/// EMZ: needs to error out to use unab later
@@ -274,7 +280,7 @@ if "`target'"!="" & `ntarget'==1 & "`method'"=="" & "`dgm'"=="" {
     sort `rep' `target'
     capture by `rep' `target': assert `rep'!=`rep'[_n-1] if _n>1
 	if _rc {
-        di as error "Multiple records per rep.  Please specify method/dgm values."
+        di as error "{p 0 2}Multiple records per rep.  Please specify method/dgm values.{p_end}"
         exit 498
 	}
 }
@@ -282,7 +288,7 @@ else if "`target'"!="" & `ntarget'==1 & "`method'"=="" & "`dgm'"!="" {
     sort `rep' `dgm' `target'
     capture by `rep' `dgm' `target': assert `rep'!=`rep'[_n-1] if _n>1
 	if _rc {
-        di as error "Multiple records per rep.  Please specify method values."
+        di as error "{p 0 2}Multiple records per rep.  Please specify method values.{p_end}"
         exit 498
 	}
 }
@@ -290,7 +296,7 @@ else if "`target'"!="" & `ntarget'>1 & "`method'"=="" & "`dgm'"=="" {
     sort `rep' 
     capture by `rep': assert `rep'!=`rep'[_n-1] if _n>1
 	if _rc {
-        di as error "Multiple records per rep.  Please specify method/dgm values."
+        di as error "{p 0 2}Multiple records per rep.  Please specify method/dgm values.{p_end}"
         exit 498
 	}
 }
@@ -298,7 +304,7 @@ else if "`target'"!="" & `ntarget'>1 & "`method'"=="" & "`dgm'"!="" {
     sort `rep' `dgm' 
     capture by `rep' `dgm': assert `rep'!=`rep'[_n-1] if _n>1
 	if _rc {
-        di as error "Multiple records per rep.  Please specify method values."
+        di as error "{p 0 2}Multiple records per rep.  Please specify method values.{p_end}"
         exit 498
 	}
 }
@@ -306,7 +312,7 @@ else if "`method'"!="" & `nmethod'==1 & "`target'"=="" & "`dgm'"=="" {
     sort `rep' `method'
     capture by `rep' `method': assert `rep'!=`rep'[_n-1] if _n>1
 	if _rc {
-        di as error "Multiple records per rep.  Please specify target/dgm values."
+        di as error "{p 0 2}Multiple records per rep.  Please specify target/dgm values.{p_end}"
         exit 498
 	}
 }
@@ -314,7 +320,7 @@ else if "`method'"!="" & `nmethod'==1 & "`target'"=="" & "`dgm'"!="" {
     sort `rep' `dgm' `method'
     capture by `rep' `dgm' `method': assert `rep'!=`rep'[_n-1] if _n>1
 	if _rc {
-        di as error "Multiple records per rep.  Please specify target values."
+        di as error "{p 0 2}Multiple records per rep.  Please specify target values.{p_end}"
         exit 498
 	}
 }
@@ -322,7 +328,7 @@ else if "`method'"!="" & `nmethod'>1 & "`target'"=="" & "`dgm'"=="" {
     sort `rep' 
     capture by `rep': assert `rep'!=`rep'[_n-1] if _n>1
 	if _rc {
-        di as error "Multiple records per rep.  Please specify target/dgm values."
+        di as error "{p 0 2}Multiple records per rep.  Please specify target/dgm values.{p_end}"
         exit 498
 	}
 }
@@ -333,7 +339,7 @@ else if "`method'"!="" & `nmethod'>1 & "`target'"=="" & "`dgm'"!="" {
     sort `rep' `dgm'
     capture by `rep' `dgm': assert `rep'!=`rep'[_n-1] if _n>1
 	if _rc {
-        di as error "Multiple records per rep.  Please specify target values."
+        di as error "{p 0 2}Multiple records per rep.  Please specify target values.{p_end}"
         exit 498
 	}
 }
@@ -356,7 +362,7 @@ if !_rc {
 *	    }
 *	    else {
         if _rc {
-            di as error "If there is more than 1 dgm, the main numerical dgm needs to be placed first in the siman setup dgm varlist.  Please re-run siman_setup accordingly."
+            di as error "{p 0 2}If there is more than 1 dgm, the main numerical dgm needs to be placed first in the siman setup dgm varlist.  Please re-run siman_setup accordingly.{p_end}"
             exit 498
         }
     }
@@ -387,7 +393,7 @@ if `nmethod'!=1 & `ntarget'!=1 {
 				local ntruestub = 1
 				capture confirm numeric variable `true'`t`j''`m`i'' 
 					if _rc {
-						di as error "true must be a numeric variable/value in siman."
+						di as error "{p 0 2}true must be a numeric variable/value in siman.{p_end}"
 						exit 498
 					}
 			}
@@ -404,7 +410,7 @@ if `ntarget'!=1 & `nmethod'!=1 {
 			local ntruestub = 1
 			capture confirm numeric variable `true'`m`i''`t`j''
 					if _rc {
-						di as error "true must be a numeric variable/value in siman."
+						di as error "{p 0 2}true must be a numeric variable/value in siman.{p_end}"
 						exit 498
 					}
 			}
@@ -420,7 +426,7 @@ if `nmethod'!=1 {
 			local ntruestub = 1
 			capture confirm numeric variable `true'`m`i''
 					if _rc {
-						di as error "true must be a numeric variable/value in siman."
+						di as error "{p 0 2}true must be a numeric variable/value in siman.{p_end}"
 						exit 498
 					}
 		}
@@ -435,7 +441,7 @@ if `ntarget'!=1 {
 			local ntruestub = 1
 			capture confirm numeric variable `true'`t`j''
 					if _rc {
-						di as error "true must be a numeric variable/value in siman."
+						di as error "{p 0 2}true must be a numeric variable/value in siman.{p_end}"
 						exit 498
 					}
 		}
@@ -448,7 +454,7 @@ if !mi("`true'") & "`ntrue'" != "2" {
 		if _rc {
 			capture confirm numeric variable `true' 
 				if _rc {
-					di as error "true must be a numeric variable/value in siman."
+					di as error "{p 0 2}true must be a numeric variable/value in siman.{p_end}"
 					exit 498
 				}
 	
@@ -517,7 +523,7 @@ else if `nmethod'==0 & `ntarget'<=1 | `ntarget'==0  & `nmethod'<=1 {
 
 * If in wide-wide format and order is missing, exit with an error:
 if `nformat'==2 & "`order'"=="" {
-	di as error "Input data is in wide-wide format but order() has not been specified.  Please specify order: either order(method) or order(target) in the syntax."
+	di as error "{p 0 2}Input data is in wide-wide format but order() has not been specified.  Please specify order: either order(method) or order(target) in the syntax.{p_end}"
 	exit 498
 }
 
@@ -622,11 +628,11 @@ local datasetvars: list uniq datasetvarswithtrue
 
 		if `countdatasetvars' > `countsimanvarswithtrue' {
 			local wrongvars : list datasetvars - simanvarswithtrue
-			di as error "Additional variables found in dataset other than those specified in siman setup.  Please remove extra variables from data set and re-run siman.  Note that if your data is in wide-wide format and your variable names contain underscores, these will need to be included in the setup syntax.  See {help siman_setup:siman setup} for further details."
-			di as error "Unwanted variables are: `wrongvars'"
+			di as error "{p 0 2}Additional variables found in dataset other than those specified in siman setup.  Please remove extra variables from data set and re-run siman.  Note that if your data is in wide-wide format and your variable names contain underscores, these will need to be included in the setup syntax.  See {help siman_setup:siman setup} for further details.{p_end}"
+			di as error "{p 0 2}Unwanted variables are: `wrongvars'.{p_end}"
 			exit 498
 		}
-		else di as error "There are variables specified in siman setup that are not in your dataset.  Note that if your data is in wide-wide format and your variable names contain underscores, these will need to be included in the setup syntax.  See {help siman_setup:siman setup} for further details."
+		else di as error "{p 0 2}There are variables specified in siman setup that are not in your dataset.  Note that if your data is in wide-wide format and your variable names contain underscores, these will need to be included in the setup syntax.  See {help siman_setup:siman setup} for further details.{p_end}"
 		exit 498
 	}
 	
@@ -637,7 +643,7 @@ if !mi("`truevariables'") & (`nformat' == 1 | `nformat' == 3 & (`nmethod'==1 | `
 	foreach truevar of varlist `truevariables' {
 		cap bysort `dgm' `target' : assert `truevar' == `truevar'[1]
 		if _rc {
-			di as error "`true' needs to be constant across methods.  Please make `true' constant across methods and then run -siman setup- again."
+			di as error "{p 0 2}`true' needs to be constant across methods.  Please make `true' constant across methods and then run -siman setup- again.{p_end}"
 			exit 498
 		}
 	}
@@ -974,7 +980,7 @@ else if `nformat'==3 & `nmethod'==1 {
                 rename targetnumerical target
                 }
             else {
-            di as error "siman would like to rename a variable 'targetnumerical', but that name already exists in your dataset.  Please rename your variable targetnumerical as something else."
+            di as error "{p 0 2}siman would like to rename a variable 'targetnumerical', but that name already exists in your dataset.  Please rename your variable targetnumerical as something else.{p_end}"
             exit 498
             }		
                 
@@ -1037,7 +1043,6 @@ else if `nformat'==3 & `nmethod'==1 {
     }	
 
     char _dta[siman_valmethod] `methlist'
-    char _dta[siman_nmethod] `nmethodlabels'
     char _dta[siman_nummethod] `nmethodlabels'
 
 }
@@ -1052,6 +1057,7 @@ if (`nmethod'==0 & `ntarget'>1 ) {
         local `thing' : char _dta[siman_`thing']
     }
 }
+
 
 
 * SUMMARY OF IMPORT
