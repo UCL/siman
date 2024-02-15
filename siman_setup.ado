@@ -1,5 +1,5 @@
 *!    version 0.8.8  14feb2024    
-*    version 0.8.8  14feb2024    IW reformat long messages; don't create _methodvar until end of program
+*    version 0.8.8  14feb2024    IW reformat long messages
 *    version 0.8.7  27nov2023    EMZ add check and error if true is not constant across methods
 *    version 0.8.6  20nov2023    EMZ minor bug fix for when dgm is missing, count of variables specified in setup vs dataset mis-macth as dgm is a tempvar.
 *    version 0.8.5  13nov2023    EMZ create a true variable if true is put in to the syntax as numeric e.g. true(0.5), for use by other siman programs
