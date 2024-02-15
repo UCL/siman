@@ -104,7 +104,7 @@ siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test2
 
 siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test2", replace)) 
 
-siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+siman zipplot, legend(order(1 "Stalk" 2 "Carrot")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test2", replace)
 
 siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test2", replace) 
@@ -137,7 +137,7 @@ siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test3
 
 siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test3", replace)) 
 
-cap siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+cap siman zipplot, legend(order(1 "Stalk" 2 "Carrot")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test3", replace)
 assert _rc == 498
 * siman zipplot can not be run w/o true value as required
@@ -175,7 +175,7 @@ cap siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name
 assert _rc == 498
 * siman swarm can not be run without method as required
 
-siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+siman zipplot, legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test4", replace)    
 
 cap siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test4", replace) 
@@ -201,7 +201,7 @@ siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test5
 
 siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test5", replace)) 
 
-siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+siman zipplot, legend(order(1 "Stalk" 2 "Carrot")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test5", replace)
 
 siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test5", replace) 
@@ -284,7 +284,7 @@ siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test7
 
 siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test7", replace)) 
 
-siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+siman zipplot, legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test7", replace)
 
 serset clear
