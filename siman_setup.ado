@@ -123,16 +123,10 @@ if mi("`estimate'") | mi("`se'") {
 local methodcreated = 0
 if mi("`method'") {
 	 di as text "{p 0 2}Warning: no method specified. siman will proceed assuming there is only one method. If this is a mistake, enter method() option in -siman setup-.{p_end}"
-	 tempvar method
-	 gen `method' = 1
+	 qui gen _methodvar = 1
+	 local method "_methodvar"
 	 local methodcreated = 1
 }
-
-if `methodcreated' == 1 {
-	rename `method' _methodvar
-	local method _methodvar
-}
-
 
 * check that dgm takes numerical values; if not, encode and replace so that siman can do its things.
 if !mi("`dgm'") {
@@ -1043,6 +1037,7 @@ else if `nformat'==3 & `nmethod'==1 {
     }	
 
     char _dta[siman_valmethod] `methlist'
+	char _dta[siman_nmethod] `nmethodlabels'
     char _dta[siman_nummethod] `nmethodlabels'
 
 }
