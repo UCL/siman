@@ -424,9 +424,6 @@ if `numtruecheck' > 1 di as txt "Drawing `numtruecheck' graphs (1 per true value
 * blue intervals cover, purple do not
 * scatter plot (white dots) are point estimates - probably unnecessary
 
-codebook `byvar'
-describe `byvar'
-
 tempfile graphdata
 qui save `graphdata'
 
