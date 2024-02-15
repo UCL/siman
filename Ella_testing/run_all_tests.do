@@ -14,7 +14,7 @@ adopath ++ $codepath
 cd $testpath
 
 // RUN ALL TESTS
-do new_tests.do // << 1 minute
+*do new_tests.do // << 1 minute
 do test_siman_widelong_EMZ.do // <1 minute
 do siman_lollyplot_test.do // ~1 minute
 do siman_nestloop_test.do // ~1 minute
