@@ -129,11 +129,15 @@ if _rc {
 	capture confirm variable df
 	if !_rc {
 		qui gen float _lci = `estimate' + (`se'*invttail(`df', .025))
+			local lci _lci
 		qui gen float _uci = `estimate' + (`se'*invttail(`df', .975))
+			local uci _uci
 	}
 	else {
 		qui gen float _lci = `estimate' + (`se'*invnorm(.025))
+			local lci _lci
 		qui gen float _uci = `estimate' + (`se'*invnorm(.975))
+			local uci _uci
 	}
 }
 
@@ -338,14 +342,14 @@ qui drop _merge lb ub
 qui bysort `byvar': replace _covlb = . if _n>1
 qui bysort `byvar': replace _covub = . if _n>1
 
-capture confirm variable _lpoint
-	if _rc {
-	qui egen _lpoint = min(`lci') if !missing(_covlb), by(`byvar' `true') 
-}
-capture confirm variable _rpoint
-	if _rc {
-	qui egen _rpoint = max(`uci') if !missing(_covlb), by(`byvar' `true') 
-}
+//capture confirm variable _lpoint
+//	if _rc {
+	qui egen _lpoint = min(_lci) , by(`byvar' `true') 
+//}
+//capture confirm variable _rpoint
+//	if _rc {
+	qui egen _rpoint = max(_uci) , by(`byvar' `true') 
+//}
 
 * Can't tokenize/substr as many "" in the string
 if !mi(`"`options'"') {
@@ -412,68 +416,73 @@ if `graphnumcheck' > 15 {
 	di as smcl as text "{p 0 2}Warning: `numtruecheck' graphs each of `graphnumcheck' panels will be created: consider using 'if' condition or 'by' option as detailed in {help siman_zipplot:siman zipplot}"
 }
 
-di as txt "Drawing `numtruecheck' graphs (1 per true value)..."
-	
+if `numtruecheck' > 1 di as txt "Drawing `numtruecheck' graphs (1 per true value)"
+
 * Plot of confidence interval coverage:
 * First two rspike plots: Monte Carlo confidence interval for percent coverage
 * second two rspike plots: confidence intervals for individual reps
 * blue intervals cover, purple do not
 * scatter plot (white dots) are point estimates - probably unnecessary
 
+codebook `byvar'
+describe `byvar'
+
 tempfile graphdata
 qui save `graphdata'
 
 if `ntrue' == 1 {
-		#delimit ;
-			twoway (rspike _lpoint _rpoint _covlb, hor lw(thin) pstyle(p5)) // MC 
-				(rspike _lpoint _rpoint _covub, hor lw(thin) pstyle(p5))
-				(rspike `lci' `uci' _p`estimate'rank if _covers & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions')
-				(rspike `lci' `uci' _p`estimate'rank if !_covers & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions')	
-				(scatter _p`estimate'rank `estimate' if _p`estimate'rank>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
-				(pci `ymin' `truevalue' 100 `truevalue', pstyle(p5) lw(thin) `truegraphoptions')
-			, 
-			xtitle("95% confidence intervals")
-			ytitle("Centile")
-			ylab(5 50 95)
-			by(`byvar', ixaxes noxrescale iscale(*.8) `bygraphoptions') scale(.8)
-			legend(order(3 "Coverers" 4 "Non-coverers"))
-			`scheme'
-			`options'
-			`name'
-			;
-		#delimit cr
+	#delimit ;
+	twoway
+		(rspike `lci' `uci' _p`estimate'rank if !_covers & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions')	
+		(rspike `lci' `uci' _p`estimate'rank if  _covers & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions')
+		(scatter _p`estimate'rank `estimate' if _p`estimate'rank>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
+		(pci `ymin' `truevalue' 100 `truevalue', pstyle(p5) lw(thin) `truegraphoptions')
+		(rspike _lpoint _rpoint _covlb, hor lw(thin) pstyle(p5)) // MC 
+		(rspike _lpoint _rpoint _covub, hor lw(thin) pstyle(p5))
+		, 
+		xtitle("95% confidence intervals")
+		ytitle("Centile")
+		ylab(5 50 95)
+		by(`byvar', ixaxes noxrescale iscale(*.9) `bygraphoptions')
+		legend(order(1  "Non-coverers" 2 "Coverers"))
+		`scheme'
+		`options'
+		`name'
+	;
+	#delimit cr
 }
 else if `ntrue'>1 {
 * note have to use true_`j' in name to get true_1 etc, not value as will error out if e.g. have 0.25 in the name                           
-	forvalues k = 1/`ntrue' {
-		qui keep if `true'calc == `k'
+forvalues k = 1/`ntrue' {
+	qui keep if `true'calc == `k'
 * have to create local noname for the loop (to re-set name later, so that each graph is named)
-        local noname 0
-		if mi("`name'") local noname = 1
-		if `noname'==1 local name "name(simanzip_true_`k', replace)"
-		else local name "name(`namestub'_`k', replace)"
-		#delimit ;
-			twoway (rspike _lpoint _rpoint _covlb, hor lw(thin) pstyle(p5)) // MC 
-			   (rspike _lpoint _rpoint _covub, hor lw(thin) pstyle(p5))
-			   (rspike `lci' `uci' _p`estimate'rank if _covers & `true'calc == `k' & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions')
-			   (rspike `lci' `uci' _p`estimate'rank if !_covers & `true'calc == `k' & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions')
-			   (scatter _p`estimate'rank `estimate' if `true'calc == `k' & _p`estimate'rank>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
-			   (pci `ymin' ``true'label`k'' 100 ``true'label`k'', pstyle(p5) lw(thin) `truegraphoptions')
-				,
-				`name'
-				xtitle("95% confidence intervals")
-				ytitle("Centile") 
-				ylab(5 50 95)
-				by(`byvar', ixaxes noxrescale iscale(*.8) `bygraphoptions' note("Graphs by `byvar', true=``true'label`k''")) scale(.8)
-				legend(order(3 "Coverers" 4 "Non-coverers"))
-				`scheme'
-				`options'
-				;
-		#delimit cr
-		use `graphdata', clear
-		* have to re-set otherwise name will not be updated
-		if `noname' == 1 local name ""
-	}
+	local noname 0
+	if mi("`name'") local noname = 1
+	if `noname'==1 local name "name(simanzip_true_`k', replace)"
+	else local name "name(`namestub'_`k', replace)"
+	#delimit ;
+	twoway 
+		(rspike `lci' `uci' _p`estimate'rank if !_covers & `true'calc == `k' & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions')
+		(rspike `lci' `uci' _p`estimate'rank if  _covers & `true'calc == `k' & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions')
+		(scatter _p`estimate'rank `estimate' if `true'calc == `k' & _p`estimate'rank>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
+		(pci `ymin' ``true'label`k'' 100 ``true'label`k'', pstyle(p5) lw(thin) `truegraphoptions')
+		(rspike _lpoint _rpoint _covlb, hor lw(thin) pstyle(p5)) // MC 
+		(rspike _lpoint _rpoint _covub, hor lw(thin) pstyle(p5))
+		,
+		xtitle("95% confidence intervals")
+		ytitle("Centile") 
+		ylab(5 50 95)
+		by(`byvar', ixaxes noxrescale iscale(*.9) note("Graphs by `byvar', true=``true'label`k''") `bygraphoptions' ) 
+		legend(order(1  "Non-coverers" 2 "Coverers"))
+		`scheme'
+		`options'
+		`name'
+	;
+	#delimit cr
+	use `graphdata', clear
+	* have to re-set otherwise name will not be updated
+	if `noname' == 1 local name ""
+}
 }
 
 restore
