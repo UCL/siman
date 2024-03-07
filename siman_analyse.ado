@@ -1,4 +1,5 @@
-*! version 0.6.12 14feb2024
+*! version 0.6.13 07mar2024
+* version 0.6.13 07mar2024    IW allow any simsum options
 * version 0.6.12 14feb2024    IW pass df to simsum (previously ignored in computing PMs)
 * version 0.6.11 19dec2023    IW bug fix in method values for reshape
 * version 0.6.10  13nov2023   EMZ bug fix: labelling mcse vars when method a numeric labelled string variable - use values not labels
@@ -23,8 +24,9 @@ capture program drop siman_analyse
 program define siman_analyse, rclass
 version 15
 
-syntax [anything] [if], [PERFONLY replace noTABle force debug]
-
+syntax [anything] [if], [PERFONLY replace noTABle force debug *]
+local simsumoptions `options'
+if "`debug'"!="" di as input `"Options to pass to simsum: `options'"'
 if "`debug'"=="" local qui qui
 
 capture which simsum.ado
@@ -195,7 +197,7 @@ if `nformat'==1 {
 		exit 498
 		}
 
-	qui simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
+	qui simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions'
 
 	* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
 	if `methodlabels' == 0 local methodloop `valmethod'
@@ -257,7 +259,7 @@ foreach v in `methodloop' {
 *if "`ntruevalue'"=="multiple" local estlist `estlist' `true' 
 
 
-qui simsum `estlist' `if', true(`true') se(`selist') df(`df') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
+qui simsum `estlist' `if', true(`true') se(`selist') df(`df') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions'
 
 
 foreach v in `methodloop' {
