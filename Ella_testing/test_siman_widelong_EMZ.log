@@ -7,7 +7,7 @@ C:\ian\git\siman\siman_setup.ado
 C:\ian\git\siman\siman_describe.ado
 *! version 0.5   17oct2022  
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.6.12 14feb2024
+*! version 0.6.14 12mar2024
 C:\ian\git\siman\siman_table.ado
 *! version 0.8.2   20dec2023
 C:\ian\git\siman\siman_reshape.ado
@@ -77,18 +77,308 @@ The true variable is:             true
 _____________________________________________________
 
 . 
-. * analyse works ok
-. siman analyse
-variable method not found
-r(111);
+. * analyse works ok with ref and replace
+. siman analyse, ref(CC)
+siman analyse has run successfully
 
-end of do-file
+-----------------------------------------------------------------
+target and           |                   method                  
+performance measure  |        CC    FULLDAT     IMPALL     IMPBYZ
+---------------------+-------------------------------------------
+inter                |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias |  .0059115   .0015333   .0052478   .0059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+             pctbias |  1.970502   .5110834   1.749251   1.970502
+                     |  1.009701   .6896664   1.003759   1.009701
+                     | 
+                mean |  .3059115   .3015333   .3052478   .3059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+               empse |  .3029104   .2068999   .3011278   .3029104
+                     |   .002142   .0014631   .0021294    .002142
+                     | 
+             relprec |             114.3421   1.187411          0
+                     |             3.189075   .2449551   5.16e-08
+                     | 
+                 mse |  .0917805   .0428056   .0906964   .0917805
+                     |  .0013657   .0006159   .0013496   .0013657
+                     | 
+                rmse |  .3029529   .2068953   .3011585   .3029529
+                     |   .002254   .0014884   .0022407    .002254
+                     | 
+             modelse |  .3048548   .2058274   .3062941   .3085094
+                     |   .000532   .0002157   .0004706   .0004811
+                     | 
+             ciwidth |  1.178335    .802491   1.187637   1.195883
+                     |  .0019894   .0008355   .0017631   .0017988
+                     | 
+            relerror |  .6419234  -.5184007   1.715628   1.848428
+                     |  .7330312    .711162   .7360551   .7375182
+                     | 
+               cover |     94.31      94.66      94.83       94.9
+                     |  .2316515   .2248297   .2214206   .2199977
+                     | 
+               power |     18.62      31.41      17.67      17.59
+                     |   .389268   .4641564   .3814146   .3807351
+---------------------+-------------------------------------------
+main                 |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+             pctbias |                                           
+                     |                                           
+                     | 
+                mean | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+               empse |  .2940812    .201468    .208478   .2134977
+                     |  .0020796   .0014247   .0014742   .0015097
+                     | 
+             relprec |               113.07   98.98207   89.73528
+                     |              3.04416   2.833241   2.675898
+                     | 
+                 mse |  .0864773   .0405913   .0434687   .0455843
+                     |  .0012391   .0005911   .0006277   .0006603
+                     | 
+                rmse |  .2940703   .2014729   .2084914   .2135047
+                     |  .0021068    .001467   .0015053   .0015464
+                     | 
+             modelse |  .2922305   .2019903   .2079367    .211888
+                     |  .0003659   .0001489   .0001678   .0001907
+                     | 
+             ciwidth |  1.136844   .7896402   .8125015   .8273879
+                     |  .0014074   .0005827     .00065   .0007282
+                     | 
+            relerror | -.6293141   .2592178  -.2596578   -.753965
+                     |  .7136225   .7128181   .7098851   .7074718
+                     | 
+               cover |     94.09       94.6      94.48      94.39
+                     |  .2358118   .2260177   .2283702   .2301147
+                     | 
+               power |      5.91        5.4       5.52       5.61
+                     |  .2358118   .2260177   .2283702   .2301147
+-----------------------------------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
-r(111);
+. siman analyse, ref(FULLDAT) replace 
+siman analyse has run successfully
 
-. do "C:\Users\rmjwiww\AppData\Local\Temp\STD51d4_000000.tmp"
+-----------------------------------------------------------------
+target and           |                   method                  
+performance measure  |        CC    FULLDAT     IMPALL     IMPBYZ
+---------------------+-------------------------------------------
+inter                |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias |  .0059115   .0015333   .0052478   .0059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+             pctbias |  1.970502   .5110834   1.749251   1.970502
+                     |  1.009701   .6896664   1.003759   1.009701
+                     | 
+                mean |  .3059115   .3015333   .3052478   .3059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+               empse |  .3029104   .2068999   .3011278   .3029104
+                     |   .002142   .0014631   .0021294    .002142
+                     | 
+             relprec | -53.34562             -52.79164  -53.34562
+                     |  .6941441              .6991529   .6941441
+                     | 
+                 mse |  .0917805   .0428056   .0906964   .0917805
+                     |  .0013657   .0006159   .0013496   .0013657
+                     | 
+                rmse |  .3029529   .2068953   .3011585   .3029529
+                     |   .002254   .0014884   .0022407    .002254
+                     | 
+             modelse |  .3048548   .2058274   .3062941   .3085094
+                     |   .000532   .0002157   .0004706   .0004811
+                     | 
+             ciwidth |  1.178335    .802491   1.187637   1.195883
+                     |  .0019894   .0008355   .0017631   .0017988
+                     | 
+            relerror |  .6419234  -.5184007   1.715628   1.848428
+                     |  .7330312    .711162   .7360551   .7375182
+                     | 
+               cover |     94.31      94.66      94.83       94.9
+                     |  .2316515   .2248297   .2214206   .2199977
+                     | 
+               power |     18.62      31.41      17.67      17.59
+                     |   .389268   .4641564   .3814146   .3807351
+---------------------+-------------------------------------------
+main                 |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+             pctbias |                                           
+                     |                                           
+                     | 
+                mean | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+               empse |  .2940812    .201468    .208478   .2134977
+                     |  .0020796   .0014247   .0014742   .0015097
+                     | 
+             relprec | -53.06707             -6.611879  -10.95167
+                     |  .6705371              .5173771   .5893332
+                     | 
+                 mse |  .0864773   .0405913   .0434687   .0455843
+                     |  .0012391   .0005911   .0006277   .0006603
+                     | 
+                rmse |  .2940703   .2014729   .2084914   .2135047
+                     |  .0021068    .001467   .0015053   .0015464
+                     | 
+             modelse |  .2922305   .2019903   .2079367    .211888
+                     |  .0003659   .0001489   .0001678   .0001907
+                     | 
+             ciwidth |  1.136844   .7896402   .8125015   .8273879
+                     |  .0014074   .0005827     .00065   .0007282
+                     | 
+            relerror | -.6293141   .2592178  -.2596578   -.753965
+                     |  .7136225   .7128181   .7098851   .7074718
+                     | 
+               cover |     94.09       94.6      94.48      94.39
+                     |  .2358118   .2260177   .2283702   .2301147
+                     | 
+               power |      5.91        5.4       5.52       5.61
+                     |  .2358118   .2260177   .2283702   .2301147
+-----------------------------------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
-. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
+. siman reshape, longlong
+
+. siman analyse, ref(IMPALL) replace 
+siman analyse has run successfully
+
+-----------------------------------------------------------------
+target and           |                   method                  
+performance measure  |        CC    FULLDAT     IMPALL     IMPBYZ
+---------------------+-------------------------------------------
+inter                |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias |  .0059115   .0015333   .0052478   .0059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+             pctbias |  1.970502   .5110834   1.749251   1.970502
+                     |  1.009701   .6896664   1.003759   1.009701
+                     | 
+                mean |  .3059115   .3015333   .3052478   .3059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+               empse |  .3029104   .2068999   .3011278   .3029104
+                     |   .002142   .0014631   .0021294    .002142
+                     | 
+             relprec | -1.173477   111.8269             -1.173477
+                     |  .2392399   3.137143              .2392399
+                     | 
+                 mse |  .0917805   .0428056   .0906964   .0917805
+                     |  .0013657   .0006159   .0013496   .0013657
+                     | 
+                rmse |  .3029529   .2068953   .3011585   .3029529
+                     |   .002254   .0014884   .0022407    .002254
+                     | 
+             modelse |  .3048548   .2058274   .3062941   .3085094
+                     |   .000532   .0002157   .0004706   .0004811
+                     | 
+             ciwidth |  1.178335    .802491   1.187637   1.195883
+                     |  .0019894   .0008355   .0017631   .0017988
+                     | 
+            relerror |  .6419234  -.5184007   1.715628   1.848428
+                     |  .7330312    .711162   .7360551   .7375182
+                     | 
+               cover |     94.31      94.66      94.83       94.9
+                     |  .2316515   .2248297   .2214206   .2199977
+                     | 
+               power |     18.62      31.41      17.67      17.59
+                     |   .389268   .4641564   .3814146   .3807351
+---------------------+-------------------------------------------
+main                 |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+             pctbias |                                           
+                     |                                           
+                     | 
+                mean | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+               empse |  .2940812    .201468    .208478   .2134977
+                     |  .0020796   .0014247   .0014742   .0015097
+                     | 
+             relprec | -49.74422       7.08             -4.647047
+                     |  .7155758   .5932311                .30209
+                     | 
+                 mse |  .0864773   .0405913   .0434687   .0455843
+                     |  .0012391   .0005911   .0006277   .0006603
+                     | 
+                rmse |  .2940703   .2014729   .2084914   .2135047
+                     |  .0021068    .001467   .0015053   .0015464
+                     | 
+             modelse |  .2922305   .2019903   .2079367    .211888
+                     |  .0003659   .0001489   .0001678   .0001907
+                     | 
+             ciwidth |  1.136844   .7896402   .8125015   .8273879
+                     |  .0014074   .0005827     .00065   .0007282
+                     | 
+            relerror | -.6293141   .2592178  -.2596578   -.753965
+                     |  .7136225   .7128181   .7098851   .7074718
+                     | 
+               cover |     94.09       94.6      94.48      94.39
+                     |  .2358118   .2260177   .2283702   .2301147
+                     | 
+               power |      5.91        5.4       5.52       5.61
+                     |  .2358118   .2260177   .2283702   .2301147
+-----------------------------------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. 
+. /* this one fails
+> siman reshape, longwide
+> siman analyse, ref(FULLDAT) replace
+> */
+. 
+. * check get error if true is not constant across methods
+. clear all
+
+. 
+. use $testpath/data/msgbsl_inter_try_postfile.dta
 
 . 
 . * targets are wide, methods are long 
@@ -104,6 +394,16 @@ r(111);
 . gen trueinter=.3
 
 . gen truemain=0
+
+. 
+. replace trueinter = 0.5 in 2
+(1 real change made)
+
+. replace trueinter = 0.8 in 3
+(1 real change made)
+
+. replace truemain = 0.2 in 2
+(1 real change made)
 
 . 
 . * set up
@@ -137,1752 +437,8 @@ The true variable is:             true
 _____________________________________________________
 
 . 
-. * analyse works ok
-. siman analyse
-variable method not found
-r(111);
-
-end of do-file
-
-r(111);
-
-. siman analyse
-Variable _perfmeasnum and/or _perfmeascode already exists. This is probably because the current data
-are -simsum- output. If this is what you want, use the gen() option.
-r(498);
-
-. do "C:\Users\rmjwiww\AppData\Local\Temp\STD51d4_000000.tmp"
+. di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
+*** SIMAN HAS PASSED ALL THE TESTS IN test_siman_widelong_EMZ.do ***
 
 . 
-. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
-
-. 
-. * targets are wide, methods are long 
-. * so data are in wide-long format (format 4)
-. 
-. * need estimates to be stub + target
-. rename inter binter
-
-. rename main bmain
-
-. 
-. * set up true value variables
-. gen trueinter=.3
-
-. gen truemain=0
-
-. 
-. * set up
-. siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
-note: converting to long-wide format, creating variable target
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            inter main
-
-The number of methods is:         4
-The method values are:            CC FULLDAT IMPALL IMPBYZ
-
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     parm1 (1) 
-
-Estimates are contained in the dataset
-
-The estimates stub is:            b
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             true
-_____________________________________________________
-
-. 
-end of do-file
-
-. siman analyse
-variable method not found
-r(111);
-
-. siman analyse
-Variable _perfmeasnum and/or _perfmeascode already exists. This is probably because the current data
-are -simsum- output. If this is what you want, use the gen() option.
-r(498);
-
-. do "C:\Users\rmjwiww\AppData\Local\Temp\STD51d4_000000.tmp"
-
-. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
-
-. 
-. * targets are wide, methods are long 
-. * so data are in wide-long format (format 4)
-. 
-. * need estimates to be stub + target
-. rename inter binter
-
-. rename main bmain
-
-. 
-. * set up true value variables
-. gen trueinter=.3
-
-. gen truemain=0
-
-. 
-. * set up
-. siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
-note: converting to long-wide format, creating variable target
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            inter main
-
-The number of methods is:         4
-The method values are:            CC FULLDAT IMPALL IMPBYZ
-
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     parm1 (1) 
-
-Estimates are contained in the dataset
-
-The estimates stub is:            b
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             true
-_____________________________________________________
-
-. 
-. * analyse works ok
-. tr 2: siman analyse
-    - `macval(cmdline)'
-    =  siman analyse
-      ------------------------------------------------------------------------------ begin siman ---
-      - version 13
-      - syntax [anything] [if] [in], [which *]
-      - if "`anything'"=="cms" local anything comparemethodsscatter
-      = if "analyse"=="cms" local anything comparemethodsscatter
-      - foreach thing in `_dta[siman_allthings]' {
-      = foreach thing in allthings rep dgm target method estimate se df ci p true order lci uci ifse
-> tup insetup format targetformat methodformat nformat ntarget ndgm nmethod numtarget valtarget numm
-> ethod valmethod ntrue ntruevalue dgmvar numdgm dgmcreated targetlabels methodcreated methodlabels 
-> methodvalues ntruestub descriptiontype cidescriptiontype truedescriptiontype estvars sevars dfvars
->  civars pvars truevars simansetuprun m1 t1 t2 {
-      - local `thing' : char _dta[siman_`thing']
-      = local allthings : char _dta[siman_allthings]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local rep : char _dta[siman_rep]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local dgm : char _dta[siman_dgm]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local target : char _dta[siman_target]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local method : char _dta[siman_method]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local estimate : char _dta[siman_estimate]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local se : char _dta[siman_se]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local df : char _dta[siman_df]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local ci : char _dta[siman_ci]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local p : char _dta[siman_p]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local true : char _dta[siman_true]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local order : char _dta[siman_order]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local lci : char _dta[siman_lci]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local uci : char _dta[siman_uci]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local ifsetup : char _dta[siman_ifsetup]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local insetup : char _dta[siman_insetup]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local format : char _dta[siman_format]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local targetformat : char _dta[siman_targetformat]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local methodformat : char _dta[siman_methodformat]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local nformat : char _dta[siman_nformat]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local ntarget : char _dta[siman_ntarget]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local ndgm : char _dta[siman_ndgm]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local nmethod : char _dta[siman_nmethod]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local numtarget : char _dta[siman_numtarget]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local valtarget : char _dta[siman_valtarget]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local nummethod : char _dta[siman_nummethod]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local valmethod : char _dta[siman_valmethod]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local ntrue : char _dta[siman_ntrue]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local ntruevalue : char _dta[siman_ntruevalue]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local dgmvar : char _dta[siman_dgmvar]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local numdgm : char _dta[siman_numdgm]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local dgmcreated : char _dta[siman_dgmcreated]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local targetlabels : char _dta[siman_targetlabels]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local methodcreated : char _dta[siman_methodcreated]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local methodlabels : char _dta[siman_methodlabels]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local methodvalues : char _dta[siman_methodvalues]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local ntruestub : char _dta[siman_ntruestub]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local descriptiontype : char _dta[siman_descriptiontype]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local cidescriptiontype : char _dta[siman_cidescriptiontype]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local truedescriptiontype : char _dta[siman_truedescriptiontype]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local estvars : char _dta[siman_estvars]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local sevars : char _dta[siman_sevars]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local dfvars : char _dta[siman_dfvars]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local civars : char _dta[siman_civars]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local pvars : char _dta[siman_pvars]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local truevars : char _dta[siman_truevars]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local simansetuprun : char _dta[siman_simansetuprun]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local m1 : char _dta[siman_m1]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local t1 : char _dta[siman_t1]
-      - }
-      - local `thing' : char _dta[siman_`thing']
-      = local t2 : char _dta[siman_t2]
-      - }
-      - local subcmds0 setup
-      - local subcmds1 describe analyse analyze table reshape lollyplot zipplot comparemethodsscatte
-> r blandaltman swarm scatter nestloop
-      - local subcmds2
-      - local subcmds `subcmds0' `subcmds1' `subcmds'
-      = local subcmds setup describe analyse analyze table reshape lollyplot zipplot comparemethodss
-> catter blandaltman swarm scatter nestloop 
-      - if mi("`anything'") {
-      = if mi("analyse") {
-        di as error "Syntax: siman <subcommand>"
-        exit 198
-        }
-      - if inlist("`anything'", "which", "whic", "whi") {
-      = if inlist("analyse", "which", "whic", "whi") {
-        which siman
-        foreach subcmd of local subcmds {
-        if "`subcmd'"=="analyze" continue
-        cap noi which siman_`subcmd'
-        }
-        exit
-        }
-      - gettoken subcmd rest : anything
-      - if length("`subcmd'")>=3 {
-      = if length("analyse")>=3 {
-      - foreach thing in `subcmds' {
-      = foreach thing in setup describe analyse analyze table reshape lollyplot zipplot comparemetho
-> dsscatter blandaltman swarm scatter nestloop {
-      - if strpos("`thing'","`subcmd'")==1 {
-      = if strpos("setup","analyse")==1 {
-        local subcmd `thing'
-        local knowncmd 1
-        }
-      - }
-      - if strpos("`thing'","`subcmd'")==1 {
-      = if strpos("describe","analyse")==1 {
-        local subcmd `thing'
-        local knowncmd 1
-        }
-      - }
-      - if strpos("`thing'","`subcmd'")==1 {
-      = if strpos("analyse","analyse")==1 {
-      - local subcmd `thing'
-      = local subcmd analyse
-      - local knowncmd 1
-      - }
-      - }
-      - if strpos("`thing'","`subcmd'")==1 {
-      = if strpos("analyze","analyse")==1 {
-        local subcmd `thing'
-        local knowncmd 1
-        }
-      - }
-      - if strpos("`thing'","`subcmd'")==1 {
-      = if strpos("table","analyse")==1 {
-        local subcmd `thing'
-        local knowncmd 1
-        }
-      - }
-      - if strpos("`thing'","`subcmd'")==1 {
-      = if strpos("reshape","analyse")==1 {
-        local subcmd `thing'
-        local knowncmd 1
-        }
-      - }
-      - if strpos("`thing'","`subcmd'")==1 {
-      = if strpos("lollyplot","analyse")==1 {
-        local subcmd `thing'
-        local knowncmd 1
-        }
-      - }
-      - if strpos("`thing'","`subcmd'")==1 {
-      = if strpos("zipplot","analyse")==1 {
-        local subcmd `thing'
-        local knowncmd 1
-        }
-      - }
-      - if strpos("`thing'","`subcmd'")==1 {
-      = if strpos("comparemethodsscatter","analyse")==1 {
-        local subcmd `thing'
-        local knowncmd 1
-        }
-      - }
-      - if strpos("`thing'","`subcmd'")==1 {
-      = if strpos("blandaltman","analyse")==1 {
-        local subcmd `thing'
-        local knowncmd 1
-        }
-      - }
-      - if strpos("`thing'","`subcmd'")==1 {
-      = if strpos("swarm","analyse")==1 {
-        local subcmd `thing'
-        local knowncmd 1
-        }
-      - }
-      - if strpos("`thing'","`subcmd'")==1 {
-      = if strpos("scatter","analyse")==1 {
-        local subcmd `thing'
-        local knowncmd 1
-        }
-      - }
-      - if strpos("`thing'","`subcmd'")==1 {
-      = if strpos("nestloop","analyse")==1 {
-        local subcmd `thing'
-        local knowncmd 1
-        }
-      - }
-      - }
-      - if "`subcmd'" == "analyze" local subcmd "analyse"
-      = if "analyse" == "analyze" local subcmd "analyse"
-      - cap which siman_`subcmd'
-      = cap which siman_analyse
-      - if _rc {
-        di as error "`subcmd' is not a valid siman subcommand"
-        if length("`subcmd'")<3 di as error "Minimum abbreviation length is 3"
-        exit 198
-        }
-      - local type0 : list subcmd in subcmds0
-      - if `type0' & !mi("`allthings'") {
-      = if 0 & !mi("allthings rep dgm target method estimate se df ci p true order lci uci ifsetup i
-> nsetup format targetformat methodformat nformat ntarget ndgm nmethod numtarget valtarget nummethod
->  valmethod ntrue ntruevalue dgmvar numdgm dgmcreated targetlabels methodcreated methodlabels metho
-> dvalues ntruestub descriptiontype cidescriptiontype truedescriptiontype estvars sevars dfvars civa
-> rs pvars truevars simansetuprun m1 t1 t2") {
-        di as error "Data are already in siman format"
-        exit 459
-        }
-      - local type1 : list subcmd in subcmds1
-      - if `type1' & mi("`allthings'") {
-      = if 1 & mi("allthings rep dgm target method estimate se df ci p true order lci uci ifsetup in
-> setup format targetformat methodformat nformat ntarget ndgm nmethod numtarget valtarget nummethod 
-> valmethod ntrue ntruevalue dgmvar numdgm dgmcreated targetlabels methodcreated methodlabels method
-> values ntruestub descriptiontype cidescriptiontype truedescriptiontype estvars sevars dfvars civar
-> s pvars truevars simansetuprun m1 t1 t2") {
-        di as error "Data are not in siman format: use siman setup"
-        exit 459
-        }
-      - if mi(`"`options'"') siman_`subcmd' `rest' `if' `in'
-      = if mi(`""') siman_analyse   
-        -------------------------------------------------------------------- begin siman_analyse ---
-        - version 15
-        - syntax [anything] [if], [PERFONLY replace noTABle force debug]
-        - if "`debug'"=="" local qui qui
-        = if ""=="" local qui qui
-        - capture which simsum.ado
-        - if _rc == 111 {
-          di as error "simsum needs to be installed to run siman analyse. Please use {stata: ssc ins
-> tall simsum}"
-          exit 498
-          }
-        - vercheck simsum, vermin(2.0.3) quietly
-        - foreach thing in `_dta[siman_allthings]' {
-        = foreach thing in allthings rep dgm target method estimate se df ci p true order lci uci if
-> setup insetup format targetformat methodformat nformat ntarget ndgm nmethod numtarget valtarget nu
-> mmethod valmethod ntrue ntruevalue dgmvar numdgm dgmcreated targetlabels methodcreated methodlabel
-> s methodvalues ntruestub descriptiontype cidescriptiontype truedescriptiontype estvars sevars dfva
-> rs civars pvars truevars simansetuprun m1 t1 t2 {
-        - local `thing' : char _dta[siman_`thing']
-        = local allthings : char _dta[siman_allthings]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local rep : char _dta[siman_rep]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local dgm : char _dta[siman_dgm]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local target : char _dta[siman_target]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local method : char _dta[siman_method]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local estimate : char _dta[siman_estimate]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local se : char _dta[siman_se]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local df : char _dta[siman_df]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local ci : char _dta[siman_ci]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local p : char _dta[siman_p]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local true : char _dta[siman_true]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local order : char _dta[siman_order]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local lci : char _dta[siman_lci]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local uci : char _dta[siman_uci]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local ifsetup : char _dta[siman_ifsetup]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local insetup : char _dta[siman_insetup]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local format : char _dta[siman_format]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local targetformat : char _dta[siman_targetformat]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local methodformat : char _dta[siman_methodformat]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local nformat : char _dta[siman_nformat]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local ntarget : char _dta[siman_ntarget]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local ndgm : char _dta[siman_ndgm]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local nmethod : char _dta[siman_nmethod]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local numtarget : char _dta[siman_numtarget]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local valtarget : char _dta[siman_valtarget]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local nummethod : char _dta[siman_nummethod]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local valmethod : char _dta[siman_valmethod]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local ntrue : char _dta[siman_ntrue]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local ntruevalue : char _dta[siman_ntruevalue]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local dgmvar : char _dta[siman_dgmvar]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local numdgm : char _dta[siman_numdgm]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local dgmcreated : char _dta[siman_dgmcreated]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local targetlabels : char _dta[siman_targetlabels]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local methodcreated : char _dta[siman_methodcreated]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local methodlabels : char _dta[siman_methodlabels]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local methodvalues : char _dta[siman_methodvalues]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local ntruestub : char _dta[siman_ntruestub]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local descriptiontype : char _dta[siman_descriptiontype]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local cidescriptiontype : char _dta[siman_cidescriptiontype]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local truedescriptiontype : char _dta[siman_truedescriptiontype]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local estvars : char _dta[siman_estvars]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local sevars : char _dta[siman_sevars]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local dfvars : char _dta[siman_dfvars]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local civars : char _dta[siman_civars]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local pvars : char _dta[siman_pvars]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local truevars : char _dta[siman_truevars]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local simansetuprun : char _dta[siman_simansetuprun]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local m1 : char _dta[siman_m1]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local t1 : char _dta[siman_t1]
-        - }
-        - local `thing' : char _dta[siman_`thing']
-        = local t2 : char _dta[siman_t2]
-        - }
-        - if "`method'"=="" {
-        = if "method"=="" {
-          di as error "The variable 'method' is missing so siman analyse can not be run.  Please cre
-> ate a variable in your dataset called method containing the method value(s)."
-          exit 498
-          }
-        - if "`simananalyserun'"=="1" & "`replace'" == "" {
-        = if ""=="1" & "" == "" {
-          di as error "There are already performance measures in the dataset.  If you would like to 
-> replace these, please use the 'replace' option"
-          exit 498
-          }
-        - if mi("`estimate'") | mi("`se'") {
-        = if mi("b") | mi("se") {
-          di as error "siman analyse requires est() and se() to be specified in set-up"
-          exit 498
-          }
-        - local estimatesindi = (`rep'[_N]>0)
-        = local estimatesindi = (i[_N]>0)
-        - if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==1 {
-        = if ""=="1" & "" == "replace" & 1==1 {
-          qui drop if `rep'<0
-          qui drop _perfmeascode
-          qui drop _dataset
-          }
-        - else if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==0 {
-        = else if ""=="1" & "" == "replace" & 1==0 {
-          di as error "There are no estimates data in the data set.  Please re-load data and use sim
-> an setup to import data."
-          exit 498
-          }
-        - local simananalyserun = 0
-        - if "`simansetuprun'"=="0" | "`simansetuprun'"=="" {
-        = if "1"=="0" | "1"=="" {
-          di as error "siman setup has not been run.  Please use siman setup first before siman anal
-> yse."
-          exit 498
-          }
-        - cap confirm variable `true'
-        = cap confirm variable true
-        - if _rc==0 {
-        - local extratrue : list true - dgm
-        - if !mi("`extratrue'") local truevariable `true'
-        = if !mi("true") local truevariable true
-        - }
-        - if ("`if'"=="" & "`ifsetup'"!="") local ifanalyse = `"`ifsetup'"'
-        = if (""=="" & ""!="") local ifanalyse = `""'
-        - else local ifanalyse = `"`if'"'
-        = else local ifanalyse = `""'
-        - qui tempvar touse
-        - qui generate `touse' = 0
-        = qui generate __000000 = 0
-        - qui replace `touse' = 1 `ifanalyse'
-        = qui replace __000000 = 1 
-        - preserve
-        - if `nformat'!=1 {
-        = if 3!=1 {
-        - qui siman_reshape, longlong
-        - if `methodcreated' == 0 local method method
-        = if 0 == 0 local method method
-        - else local method `method'
-        = else local method method
-        - }
-        - qui sort `dgm' `target' `method' `touse'
-        = qui sort parm1 target method __000000
-        - capture by `dgm' `target' `method': assert `touse'==`touse'[_n-1] if _n>1
-        = capture by parm1 target method: assert __000000==__000000[_n-1] if _n>1
-        - if _rc == 9 {
-          di as error "The 'if' condition can not be applied to 'rep' in siman analyse."
-          exit 498
-          }
-        - restore
-        - qui keep if `touse'
-        = qui keep if __000000
-        - qui unab allnames : *
-        - tempfile estimatesdata
-        - qui save `estimatesdata'
-        = qui save C:\Users\rmjwiww\AppData\Local\Temp\ST_51d4_000002.tmp
-        - qui drop if `rep'<0
-        = qui drop if i<0
-        - local methodstringindi = 0
-        - capture confirm string variable `method'
-        = capture confirm string variable method
-        - if !_rc local methodstringindi = 1
-        - local optionlist `estimate' `se'
-        = local optionlist b se
-        - foreach u of var * {
-        - if substr("`u'",strlen("`u'"),1)=="_" {
-        = if substr("i",strlen("i"),1)=="_" {
-          local U = substr("`u'", 1, index("`u'","_") - 1)
-          if "`U'" != "" {
-          capture rename `u' `U'
-          if _rc di as txt "problem with `u'"
-          }
-          }
-        - }
-        - if substr("`u'",strlen("`u'"),1)=="_" {
-        = if substr("parm1",strlen("parm1"),1)=="_" {
-          local U = substr("`u'", 1, index("`u'","_") - 1)
-          if "`U'" != "" {
-          capture rename `u' `U'
-          if _rc di as txt "problem with `u'"
-          }
-          }
-        - }
-        - if substr("`u'",strlen("`u'"),1)=="_" {
-        = if substr("target",strlen("target"),1)=="_" {
-          local U = substr("`u'", 1, index("`u'","_") - 1)
-          if "`U'" != "" {
-          capture rename `u' `U'
-          if _rc di as txt "problem with `u'"
-          }
-          }
-        - }
-        - if substr("`u'",strlen("`u'"),1)=="_" {
-        = if substr("true",strlen("true"),1)=="_" {
-          local U = substr("`u'", 1, index("`u'","_") - 1)
-          if "`U'" != "" {
-          capture rename `u' `U'
-          if _rc di as txt "problem with `u'"
-          }
-          }
-        - }
-        - if substr("`u'",strlen("`u'"),1)=="_" {
-        = if substr("bCC",strlen("bCC"),1)=="_" {
-          local U = substr("`u'", 1, index("`u'","_") - 1)
-          if "`U'" != "" {
-          capture rename `u' `U'
-          if _rc di as txt "problem with `u'"
-          }
-          }
-        - }
-        - if substr("`u'",strlen("`u'"),1)=="_" {
-        = if substr("seCC",strlen("seCC"),1)=="_" {
-          local U = substr("`u'", 1, index("`u'","_") - 1)
-          if "`U'" != "" {
-          capture rename `u' `U'
-          if _rc di as txt "problem with `u'"
-          }
-          }
-        - }
-        - if substr("`u'",strlen("`u'"),1)=="_" {
-        = if substr("bFULLDAT",strlen("bFULLDAT"),1)=="_" {
-          local U = substr("`u'", 1, index("`u'","_") - 1)
-          if "`U'" != "" {
-          capture rename `u' `U'
-          if _rc di as txt "problem with `u'"
-          }
-          }
-        - }
-        - if substr("`u'",strlen("`u'"),1)=="_" {
-        = if substr("seFULLDAT",strlen("seFULLDAT"),1)=="_" {
-          local U = substr("`u'", 1, index("`u'","_") - 1)
-          if "`U'" != "" {
-          capture rename `u' `U'
-          if _rc di as txt "problem with `u'"
-          }
-          }
-        - }
-        - if substr("`u'",strlen("`u'"),1)=="_" {
-        = if substr("bIMPALL",strlen("bIMPALL"),1)=="_" {
-          local U = substr("`u'", 1, index("`u'","_") - 1)
-          if "`U'" != "" {
-          capture rename `u' `U'
-          if _rc di as txt "problem with `u'"
-          }
-          }
-        - }
-        - if substr("`u'",strlen("`u'"),1)=="_" {
-        = if substr("seIMPALL",strlen("seIMPALL"),1)=="_" {
-          local U = substr("`u'", 1, index("`u'","_") - 1)
-          if "`U'" != "" {
-          capture rename `u' `U'
-          if _rc di as txt "problem with `u'"
-          }
-          }
-        - }
-        - if substr("`u'",strlen("`u'"),1)=="_" {
-        = if substr("bIMPBYZ",strlen("bIMPBYZ"),1)=="_" {
-          local U = substr("`u'", 1, index("`u'","_") - 1)
-          if "`U'" != "" {
-          capture rename `u' `U'
-          if _rc di as txt "problem with `u'"
-          }
-          }
-        - }
-        - if substr("`u'",strlen("`u'"),1)=="_" {
-        = if substr("seIMPBYZ",strlen("seIMPBYZ"),1)=="_" {
-          local U = substr("`u'", 1, index("`u'","_") - 1)
-          if "`U'" != "" {
-          capture rename `u' `U'
-          if _rc di as txt "problem with `u'"
-          }
-          }
-        - }
-        - if substr("`u'",strlen("`u'"),1)=="_" {
-        = if substr("__000000",strlen("__000000"),1)=="_" {
-          local U = substr("`u'", 1, index("`u'","_") - 1)
-          if "`U'" != "" {
-          capture rename `u' `U'
-          if _rc di as txt "problem with `u'"
-          }
-          }
-        - }
-        - local estchange = 0
-        - if substr("`estimate'",strlen("`estimate'"),1)=="_" {
-        = if substr("b",strlen("b"),1)=="_" {
-          local estimate = substr("`estimate'", 1, index("`estimate'","_") - 1)
-          local estchange = 1
-          }
-        - local sechange = 0
-        - if substr("`se'",strlen("`se'"),1)=="_" {
-        = if substr("se",strlen("se"),1)=="_" {
-          local se = substr("`se'", 1, index("`se'","_") - 1)
-          local sechange = 1
-          }
-        - local optionlist `estimate' `se'
-        = local optionlist b se
-        - if `nformat'==1 {
-        = if 3==1 {
-          local methodformat : value label `method'
-          qui order `rep' `dgm' `target' `method'
-          qui sort `rep' `dgm' `target' `method'
-          qui tab `method'
-          local nmethodlabels = `r(r)'
-          qui levels `method', local(levels)
-          tokenize `"`levels'"'
-          forvalues f = 1/`nmethodlabels' {
-          if `methodstringindi' == 0 & `methodlabels'!=1 local ff = "`f'"
-          else local ff = "``f''"
-          if substr("`ff'",strlen("`ff'"),1)=="_" local ff = substr("`ff'", 1, index("`ff'","_") - 1
-> )
-          local methodlabel`f' `ff'
-          local methodlist `methodlist' `methodlabel`f''
-          }
-          local valmethod `methodlist'
-          local estsimsum = "`estimate'"
-          local sesimsum = "`se'"
-          capture confirm variable _perfmeascode
-          if !_rc {
-          di as error "siman would like to name a variable '_perfmeascode', but that name already ex
-> ists in your dataset.  Please rename your variable _perfmeascode as something else."
-          exit 498
-          }
-          capture confirm variable _dataset
-          if !_rc {
-          di as error "siman would like to name a variable '_dataset', but that name already exists 
-> in your data.  Please rename your variable _dataset as something else."
-          exit 498
-          }
-          qui simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') method(`method') id(`rep
-> ') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
-          if `methodlabels' == 0 local methodloop `valmethod'
-          else local methodloop `methodvalues'
-          foreach v in `methodloop' {
-          if !mi("`se'") {
-          if substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse `
-> se'`v'
-          else qui rename `estimate'`v'_mcse `se'`v'
-          }
-          else if substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'm
-> cse se`v'
-          else qui rename `estimate'`v'_mcse se`v'
-          }
-          local optionlistreshape `optionlist'
-          local exclude "`true'"
-          local optionlistreshape: list optionlistreshape - exclude
-          if !mi("`metlist'") local methodreshape `metlist'
-          else local methodreshape `valmethod'
-          if `methodstringindi'==1 {
-          `qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`method
-> reshape'") string
-          }
-          else if `methodstringindi'==0 & `methodlabels' == 0 {
-          `qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`method
-> reshape'")
-          label value `method' `methodformat'
-          }
-          else if `methodstringindi'==0 & `methodlabels' == 1 {
-          `qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`method
-> values'")
-          label value `method' `methodformat'
-          }
-          }
-        - else if `nformat'==3 {
-        = else if 3==3 {
-        - qui order `rep' `dgm' `target'
-        = qui order i parm1 target
-        - qui sort `rep' `dgm' `target'
-        = qui sort i parm1 target
-        - if `methodstringindi' == 0 & "`methodlabels'" == "1" local methodloop `methodvalues'
-        = if 0 == 0 & "0" == "1" local methodloop 
-        - else local methodloop `valmethod'
-        = else local methodloop CC FULLDAT IMPALL IMPBYZ
-        - foreach v in `methodloop' {
-        = foreach v in CC FULLDAT IMPALL IMPBYZ {
-        - if substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
-        = if substr("CC",strlen("CC"),1)=="_" local v = substr("CC", 1, index("CC","_") - 1)
-        - local estlist`v' `estvars'`v'
-        = local estlistCC bCC
-        - local estlist `estlist' `estlist`v''
-        = local estlist  bCC
-        - local selist`v' `sevars'`v'
-        = local selistCC seCC
-        - local selist `selist' `selist`v''
-        = local selist  seCC
-        - }
-        - if substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
-        = if substr("FULLDAT",strlen("FULLDAT"),1)=="_" local v = substr("FULLDAT", 1, index("FULLDA
-> T","_") - 1)
-        - local estlist`v' `estvars'`v'
-        = local estlistFULLDAT bFULLDAT
-        - local estlist `estlist' `estlist`v''
-        = local estlist bCC bFULLDAT
-        - local selist`v' `sevars'`v'
-        = local selistFULLDAT seFULLDAT
-        - local selist `selist' `selist`v''
-        = local selist seCC seFULLDAT
-        - }
-        - if substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
-        = if substr("IMPALL",strlen("IMPALL"),1)=="_" local v = substr("IMPALL", 1, index("IMPALL","
-> _") - 1)
-        - local estlist`v' `estvars'`v'
-        = local estlistIMPALL bIMPALL
-        - local estlist `estlist' `estlist`v''
-        = local estlist bCC bFULLDAT bIMPALL
-        - local selist`v' `sevars'`v'
-        = local selistIMPALL seIMPALL
-        - local selist `selist' `selist`v''
-        = local selist seCC seFULLDAT seIMPALL
-        - }
-        - if substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
-        = if substr("IMPBYZ",strlen("IMPBYZ"),1)=="_" local v = substr("IMPBYZ", 1, index("IMPBYZ","
-> _") - 1)
-        - local estlist`v' `estvars'`v'
-        = local estlistIMPBYZ bIMPBYZ
-        - local estlist `estlist' `estlist`v''
-        = local estlist bCC bFULLDAT bIMPALL bIMPBYZ
-        - local selist`v' `sevars'`v'
-        = local selistIMPBYZ seIMPBYZ
-        - local selist `selist' `selist`v''
-        = local selist seCC seFULLDAT seIMPALL seIMPBYZ
-        - }
-        - qui simsum `estlist' `if', true(`true') se(`selist') df(`df') id(`rep') by(`truevariable' 
-> `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
-        = qui simsum bCC bFULLDAT bIMPALL bIMPBYZ , true(true) se(seCC seFULLDAT seIMPALL seIMPBYZ) 
-> df() id(i) by(true parm1 target) max(20)  clear mcse gen(_perfmeas) 
-        - foreach v in `methodloop' {
-        = foreach v in CC FULLDAT IMPALL IMPBYZ {
-        - if substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
-        = if substr("CC",strlen("CC"),1)=="_" local v = substr("CC", 1, index("CC","_") - 1)
-        - if `estchange' == 1 {
-        = if 0 == 1 {
-          qui rename `estimate'_`v'_mcse `se'`v'
-          }
-        - else {
-        - if substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse `
-> se'`v'
-        = if substr(" bCC",strlen(" bCC"),1)=="_" qui rename bCCmcse seCC
-        - else qui rename `estimate'`v'_mcse `se'`v'
-        = else qui rename bCC_mcse seCC
-        - }
-        - if `sechange' == 1 qui rename `se'`v' `se'_`v'
-        = if 0 == 1 qui rename seCC se_CC
-        - }
-        - if substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
-        = if substr("FULLDAT",strlen("FULLDAT"),1)=="_" local v = substr("FULLDAT", 1, index("FULLDA
-> T","_") - 1)
-        - if `estchange' == 1 {
-        = if 0 == 1 {
-          qui rename `estimate'_`v'_mcse `se'`v'
-          }
-        - else {
-        - if substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse `
-> se'`v'
-        = if substr(" bFULLDAT",strlen(" bFULLDAT"),1)=="_" qui rename bFULLDATmcse seFULLDAT
-        - else qui rename `estimate'`v'_mcse `se'`v'
-        = else qui rename bFULLDAT_mcse seFULLDAT
-        - }
-        - if `sechange' == 1 qui rename `se'`v' `se'_`v'
-        = if 0 == 1 qui rename seFULLDAT se_FULLDAT
-        - }
-        - if substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
-        = if substr("IMPALL",strlen("IMPALL"),1)=="_" local v = substr("IMPALL", 1, index("IMPALL","
-> _") - 1)
-        - if `estchange' == 1 {
-        = if 0 == 1 {
-          qui rename `estimate'_`v'_mcse `se'`v'
-          }
-        - else {
-        - if substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse `
-> se'`v'
-        = if substr(" bIMPALL",strlen(" bIMPALL"),1)=="_" qui rename bIMPALLmcse seIMPALL
-        - else qui rename `estimate'`v'_mcse `se'`v'
-        = else qui rename bIMPALL_mcse seIMPALL
-        - }
-        - if `sechange' == 1 qui rename `se'`v' `se'_`v'
-        = if 0 == 1 qui rename seIMPALL se_IMPALL
-        - }
-        - if substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
-        = if substr("IMPBYZ",strlen("IMPBYZ"),1)=="_" local v = substr("IMPBYZ", 1, index("IMPBYZ","
-> _") - 1)
-        - if `estchange' == 1 {
-        = if 0 == 1 {
-          qui rename `estimate'_`v'_mcse `se'`v'
-          }
-        - else {
-        - if substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse `
-> se'`v'
-        = if substr(" bIMPBYZ",strlen(" bIMPBYZ"),1)=="_" qui rename bIMPBYZmcse seIMPBYZ
-        - else qui rename `estimate'`v'_mcse `se'`v'
-        = else qui rename bIMPBYZ_mcse seIMPBYZ
-        - }
-        - if `sechange' == 1 qui rename `se'`v' `se'_`v'
-        = if 0 == 1 qui rename seIMPBYZ se_IMPBYZ
-        - }
-        - }
-        - qui gen indi = -_perfmeasnum
-        - qui levelsof _perfmeasnum, local(lablevels)
-        - foreach lablevel of local lablevels {
-        - local labvalue : label (_perfmeasnum) `lablevel'
-        = local labvalue : label (_perfmeasnum) 1
-        - label define indilab -`lablevel' "`labvalue'", modify
-        = label define indilab -1 "Non-missing point estimates", modify
-        - }
-        - local labvalue : label (_perfmeasnum) `lablevel'
-        = local labvalue : label (_perfmeasnum) 2
-        - label define indilab -`lablevel' "`labvalue'", modify
-        = label define indilab -2 "Non-missing standard errors", modify
-        - }
-        - local labvalue : label (_perfmeasnum) `lablevel'
-        = local labvalue : label (_perfmeasnum) 3
-        - label define indilab -`lablevel' "`labvalue'", modify
-        = label define indilab -3 "Bias in point estimate", modify
-        - }
-        - local labvalue : label (_perfmeasnum) `lablevel'
-        = local labvalue : label (_perfmeasnum) 4
-        - label define indilab -`lablevel' "`labvalue'", modify
-        = label define indilab -4 "Mean of point estimate", modify
-        - }
-        - local labvalue : label (_perfmeasnum) `lablevel'
-        = local labvalue : label (_perfmeasnum) 5
-        - label define indilab -`lablevel' "`labvalue'", modify
-        = label define indilab -5 "Empirical standard error", modify
-        - }
-        - local labvalue : label (_perfmeasnum) `lablevel'
-        = local labvalue : label (_perfmeasnum) 6
-        - label define indilab -`lablevel' "`labvalue'", modify
-        = label define indilab -6 "% precision gain relative to method CC b", modify
-        - }
-        - local labvalue : label (_perfmeasnum) `lablevel'
-        = local labvalue : label (_perfmeasnum) 7
-        - label define indilab -`lablevel' "`labvalue'", modify
-        = label define indilab -7 "Mean squared error", modify
-        - }
-        - local labvalue : label (_perfmeasnum) `lablevel'
-        = local labvalue : label (_perfmeasnum) 8
-        - label define indilab -`lablevel' "`labvalue'", modify
-        = label define indilab -8 "Root mean squared error", modify
-        - }
-        - local labvalue : label (_perfmeasnum) `lablevel'
-        = local labvalue : label (_perfmeasnum) 9
-        - label define indilab -`lablevel' "`labvalue'", modify
-        = label define indilab -9 "RMS model-based standard error", modify
-        - }
-        - local labvalue : label (_perfmeasnum) `lablevel'
-        = local labvalue : label (_perfmeasnum) 10
-        - label define indilab -`lablevel' "`labvalue'", modify
-        = label define indilab -10 "Mean conf. interval width", modify
-        - }
-        - local labvalue : label (_perfmeasnum) `lablevel'
-        = local labvalue : label (_perfmeasnum) 11
-        - label define indilab -`lablevel' "`labvalue'", modify
-        = label define indilab -11 "Relative % error in standard error", modify
-        - }
-        - local labvalue : label (_perfmeasnum) `lablevel'
-        = local labvalue : label (_perfmeasnum) 12
-        - label define indilab -`lablevel' "`labvalue'", modify
-        = label define indilab -12 "% coverage of nominal 95% conf. interval", modify
-        - }
-        - local labvalue : label (_perfmeasnum) `lablevel'
-        = local labvalue : label (_perfmeasnum) 13
-        - label define indilab -`lablevel' "`labvalue'", modify
-        = label define indilab -13 "% power of 5% level test", modify
-        - }
-        - label values indi indilab
-        - qui drop _perfmeasnum
-        - if `methodstringindi'==1 {
-        = if 0==1 {
-          capture quietly tostring `method', replace
-          }
-        - qui append using `estimatesdata'
-        = qui append using C:\Users\rmjwiww\AppData\Local\Temp\ST_51d4_000002.tmp
-        - qui replace indi = `rep' if `rep'>0 & `rep'!=.
-        = qui replace indi = i if i>0 & i!=.
-        - qui drop `rep'
-        = qui drop i
-        - qui rename indi `rep'
-        = qui rename indi i
-        - qui gen byte _dataset = `rep'>0 if `rep'!=.
-        = qui gen byte _dataset = i>0 if i!=.
-        - label define estimatesperformancelab 0 "Performance" 1 "Estimates"
-        - label values _dataset estimatesperformancelab
-        - if "`perfonly'"!="" qui drop if `rep'>0 & `rep'!=.
-        = if ""!="" qui drop if i>0 & i!=.
-        - qui order `allnames'
-        = qui order i parm1 target true bCC seCC bFULLDAT seFULLDAT bIMPALL seIMPALL bIMPBYZ seIMPBY
-> Z __000000
-        - if `methodcreated'!=1 {
-        = if 0!=1 {
-        - cap confirm numeric variable `method'
-        = cap confirm numeric variable method
-        - if _rc local methodstringindi = 1
-        - else local methodstringindi = 0
-        - local methodlabelsn = 0
-        - if `nformat'==1 | (`nformat'==3 & `nmethod'==1) {
-        = if 3==1 | (3==3 & 1==1) {
-        - if `nmethod'!=0 {
-        = if 1!=0 {
-        - qui tab `method',m
-        = qui tab method,m
-variable method not found
-          local nmethodlabels = `r(r)'
-          cap qui labelsof `method'
-          cap qui ret list
-          if `"`r(labels)'"'!="" {
-          local 0 = `"`r(labels)'"'
-          forvalues i = 1/`nmethodlabels' {
-          gettoken `method'label`i' 0 : 0, parse(": ")
-          local methlist `methlist' ``method'label`i''
-          local methodlabelsn = 1
-          }
-          }
-          else {
-          qui levels `method', local(levels)
-          tokenize `"`levels'"'
-          if `methodstringindi' == 0 {
-          forvalues i = 1/`nmethodlabels' {
-          local `method'label`i' `i'
-          local methlist `methlist' ``method'label`i''
-          }
-          }
-          else forvalues i = 1/`nmethodlabels' {
-          local `method'label`i' ``i''
-          local methlist `methlist' ``method'label`i''
-          }
-          }
-          }
-          }
-          else local methlist `valmethod'
-          if `nformat'==1 {
-          local valmethod = "`methlist'"
-          }
-          else if `nformat'==2 {
-          local valmethod = "`method'"
-          }
-          else if `nformat'==3 {
-          if `nmethod'==1 {
-          local valmethod = "`methlist'"
-          }
-          else if `nmethod'>=1 & `nmethod'!=. {
-          local valmethod = "`methlist'"
-          }
-          }
-          }
-        ---------------------------------------------------------------------- end siman_analyse ---
-      -------------------------------------------------------------------------------- end siman ---
-r(111);
-
-end of do-file
-
-r(111);
-
-. tab target
-
-     target |      Freq.     Percent        Cum.
-------------+-----------------------------------
-      inter |     10,013       50.00       50.00
-       main |     10,013       50.00      100.00
-------------+-----------------------------------
-      Total |     20,026      100.00
-
-. tab target,m
-
-     target |      Freq.     Percent        Cum.
-------------+-----------------------------------
-      inter |     10,013       50.00       50.00
-       main |     10,013       50.00      100.00
-------------+-----------------------------------
-      Total |     20,026      100.00
-
-. do "C:\Users\rmjwiww\AppData\Local\Temp\STD51d4_000000.tmp"
-
-. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
-
-. 
-. * targets are wide, methods are long 
-. * so data are in wide-long format (format 4)
-. 
-. * need estimates to be stub + target
-. rename inter binter
-
-. rename main bmain
-
-. 
-. * set up true value variables
-. gen trueinter=.3
-
-. gen truemain=0
-
-. 
-. * set up
-. siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
-note: converting to long-wide format, creating variable target
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            inter main
-
-The number of methods is:         4
-The method values are:            CC FULLDAT IMPALL IMPBYZ
-
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     parm1 (1) 
-
-Estimates are contained in the dataset
-
-The estimates stub is:            b
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             true
-_____________________________________________________
-
-. 
-end of do-file
-
-. do "C:\Users\rmjwiww\AppData\Local\Temp\STD51d4_000000.tmp"
-
-. pda
-
-. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
-
-. 
-. * targets are wide, methods are long 
-. * so data are in wide-long format (format 4)
-. 
-. * need estimates to be stub + target
-. rename inter binter
-
-. rename main bmain
-
-. 
-. * set up true value variables
-. gen trueinter=.3
-
-. gen truemain=0
-
-. 
-. * set up
-. siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
-note: converting to long-wide format, creating variable target
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            inter main
-
-The number of methods is:         4
-The method values are:            CC FULLDAT IMPALL IMPBYZ
-
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     parm1 (1) 
-
-Estimates are contained in the dataset
-
-The estimates stub is:            b
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             true
-_____________________________________________________
-
-. 
-. * analyse works ok
-. siman analyse
-variable method not found
-r(111);
-
-end of do-file
-
-r(111);
-
-. do "C:\Users\rmjwiww\AppData\Local\Temp\STD51d4_000000.tmp"
-
-. pda
-
-. pause on
-
-. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
-
-. 
-. * targets are wide, methods are long 
-. * so data are in wide-long format (format 4)
-. 
-. * need estimates to be stub + target
-. rename inter binter
-
-. rename main bmain
-
-. 
-. * set up true value variables
-. gen trueinter=.3
-
-. gen truemain=0
-
-. 
-. * set up
-. siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
-note: converting to long-wide format, creating variable target
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            inter main
-
-The number of methods is:         4
-The method values are:            CC FULLDAT IMPALL IMPBYZ
-
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     parm1 (1) 
-
-Estimates are contained in the dataset
-
-The estimates stub is:            b
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             true
-_____________________________________________________
-
-. 
-. * analyse works ok
-. siman analyse
-pause:  qui tab method,m
--> . siman des
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            inter main
-
-The number of methods is:         4
-The method values are:            CC FULLDAT IMPALL IMPBYZ
-
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     parm1 (1) 
-
-Estimates are contained in the dataset
-
-The estimates stub is:            b
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             true
-_____________________________________________________
--> . do "C:\Users\rmjwiww\AppData\Local\Temp\STD51d4_000000.tmp"
-
-. pda
-
-. pause on
-
-. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
-
-. 
-. * targets are wide, methods are long 
-. * so data are in wide-long format (format 4)
-. 
-. * need estimates to be stub + target
-. rename inter binter
-
-. rename main bmain
-
-. 
-. * set up true value variables
-. gen trueinter=.3
-
-. gen truemain=0
-
-. 
-. * set up
-. siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
-note: converting to long-wide format, creating variable target
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            inter main
-
-The number of methods is:         4
-The method values are:            CC FULLDAT IMPALL IMPBYZ
-
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     parm1 (1) 
-
-Estimates are contained in the dataset
-
-The estimates stub is:            b
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             true
-_____________________________________________________
-
-. 
-. * analyse works ok
-. siman analyse
-pause:  qui tab method,m
--> . exit
-variable method not found
-r(111);
-
-end of do-file
-r(111);
--> . do "C:\Users\rmjwiww\AppData\Local\Temp\STD51d4_000000.tmp"
-
-. pda
-
-. pause on
-
-. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
-
-. 
-. * targets are wide, methods are long 
-. * so data are in wide-long format (format 4)
-. 
-. * need estimates to be stub + target
-. rename inter binter
-
-. rename main bmain
-
-. 
-. * set up true value variables
-. gen trueinter=.3
-
-. gen truemain=0
-
-. 
-. * set up
-. siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
-note: converting to long-wide format, creating variable target
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            inter main
-
-The number of methods is:         4
-The method values are:            CC FULLDAT IMPALL IMPBYZ
-
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     parm1 (1) 
-
-Estimates are contained in the dataset
-
-The estimates stub is:            b
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             true
-_____________________________________________________
-
-. 
-. * analyse works ok
-. siman analyse
-pause:  qui tab method,m
--> . exit
-variable method not found
-r(111);
-
-end of do-file
-r(111);
--> . exit
-variable method not found
-r(111);
-
-end of do-file
-
-r(111);
-
-. do "C:\Users\rmjwiww\AppData\Local\Temp\STD51d4_000000.tmp"
-
-. pda
-
-. pause off
-
-. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
-
-. 
-. * targets are wide, methods are long 
-. * so data are in wide-long format (format 4)
-. 
-. * need estimates to be stub + target
-. rename inter binter
-
-. rename main bmain
-
-. 
-. * set up true value variables
-. gen trueinter=.3
-
-. gen truemain=0
-
-. 
-. * set up
-. siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
-note: converting to long-wide format, creating variable target
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            inter main
-
-The number of methods is:         4
-The method values are:            CC FULLDAT IMPALL IMPBYZ
-
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     parm1 (1) 
-
-Estimates are contained in the dataset
-
-The estimates stub is:            b
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             true
-_____________________________________________________
-
-. 
-. * analyse works ok
-. siman analyse
-variable method not found
-r(111);
-
-end of do-file
-
-r(111);
-
-. do "C:\Users\rmjwiww\AppData\Local\Temp\STD51d4_000000.tmp"
-
-. pda
-
-. pause off
-
-. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
-
-. 
-. * targets are wide, methods are long 
-. * so data are in wide-long format (format 4)
-. 
-. * need estimates to be stub + target
-. rename inter binter
-
-. rename main bmain
-
-. 
-. * set up true value variables
-. gen trueinter=.3
-
-. gen truemain=0
-
-. 
-. * set up
-. siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
-note: converting to long-wide format, creating variable target
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            inter main
-
-The number of methods is:         4
-The method values are:            CC FULLDAT IMPALL IMPBYZ
-
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     parm1 (1) 
-
-Estimates are contained in the dataset
-
-The estimates stub is:            b
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             true
-_____________________________________________________
-
-. 
-. * analyse works ok
-. siman analyse
-variable method not found
-r(111);
-
-end of do-file
-
-r(111);
-
-. siman des
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            inter main
-
-The number of methods is:         4
-The method values are:            CC FULLDAT IMPALL IMPBYZ
-
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     parm1 (1) 
-
-Estimates are contained in the dataset
-
-The estimates stub is:            b
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             true
-_____________________________________________________
-
-. char dir
-  _dta[ReS_jv]:               CC FULLDAT IMPALL IMPBYZ
-  _dta[siman_simansetuprun]:  1
-  _dta[siman_2]:              2
-  _dta[siman_1]:              1
-  _dta[siman_target]:         target
-  _dta[siman_ntruestub]:      0
-  _dta[siman_truedescriptiontype]:
-                              variable
-  _dta[ReS_Xij_n]:            2
-  _dta[ReS_Xij_long2]:        se
-  _dta[ReS_Xij_wide2]:        seCC seFULLDAT seIMPALL seIMPBYZ
-  _dta[ReS_Xij_long1]:        b
-  _dta[ReS_Xij_wide1]:        bCC bFULLDAT bIMPALL bIMPBYZ
-  _dta[siman_allthings]:      allthings rep dgm target method estimate se df ci p true order lci ..
-  _dta[siman_rep]:            i
-  _dta[siman_dgm]:            parm1
-  _dta[siman_method]:         method
-  _dta[siman_estimate]:       b
-  _dta[siman_se]:             se
-  _dta[siman_true]:           true
-  _dta[siman_format]:         format 3: long-wide
-  _dta[siman_targetformat]:   long
-  _dta[siman_methodformat]:   wide
-  _dta[siman_nformat]:        3
-  _dta[siman_ntarget]:        2
-  _dta[siman_ndgm]:           1
-  _dta[siman_nmethod]:        1
-  _dta[siman_numtarget]:      2
-  _dta[siman_valtarget]:      inter main
-  _dta[siman_nummethod]:      4
-  _dta[siman_valmethod]:      CC FULLDAT IMPALL IMPBYZ
-  _dta[siman_ntrue]:          2
-  _dta[siman_ntruevalue]:     multiple
-  _dta[siman_dgmvar]:         parm1
-  _dta[siman_numdgm]:         1
-  _dta[siman_dgmcreated]:     0
-  _dta[siman_targetlabels]:   0
-  _dta[siman_methodcreated]:  0
-  _dta[siman_methodlabels]:   0
-  _dta[siman_descriptiontype]:
-                              stub
-  _dta[siman_cidescriptiontype]:
-                              stubs
-  _dta[siman_estvars]:        b
-  _dta[siman_sevars]:         se
-  _dta[siman_dfvars]:         N/A
-  _dta[siman_civars]:         N/A
-  _dta[siman_pvars]:          N/A
-  _dta[siman_truevars]:       true
-  _dta[siman_t1]:             inter
-  _dta[siman_t2]:             main
-  _dta[ReS_i]:                true parm1 target _perfmeasnum
-  _dta[ReS_ver]:              v.2
-  _dta[ReS_j]:                mcse
-  _dta[ReS_str]:              0
-  _dta[ReS_Xij]:              method1_ method2_ method3_ method4_
-  bCC[varname]:               CC b
-  seCC[varname]:              (MCse)
-  bFULLDAT[varname]:          FULLDAT b
-  seFULLDAT[varname]:         (MCse)
-  bIMPALL[varname]:           IMPALL b
-  seIMPALL[varname]:          (MCse)
-  bIMPBYZ[varname]:           IMPBYZ b
-  seIMPBYZ[varname]:          (MCse)
-
-. exit, clear
+. log close

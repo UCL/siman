@@ -1,4 +1,5 @@
-*! version 0.6.13 07mar2024
+*! version 0.6.14 12mar2024
+* version 0.6.14 12mar2024    IW make ref() option work in longwide; add undocumented pause option 
 * version 0.6.13 07mar2024    IW allow any simsum options
 * version 0.6.12 14feb2024    IW pass df to simsum (previously ignored in computing PMs)
 * version 0.6.11 19dec2023    IW bug fix in method values for reshape
@@ -24,7 +25,10 @@ capture program drop siman_analyse
 program define siman_analyse, rclass
 version 15
 
-syntax [anything] [if], [PERFONLY replace noTABle force debug *]
+syntax [anything] [if], [PERFONLY replace /// documented options
+	ref(string) * /// simsum options
+	noTABle force debug pause /// undocumented options
+	]
 local simsumoptions `options'
 if "`debug'"!="" di as input `"Options to pass to simsum: `options'"'
 if "`debug'"=="" local qui qui
@@ -197,7 +201,14 @@ if `nformat'==1 {
 		exit 498
 		}
 
-	qui simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions'
+	if !mi("`ref'") {
+		local refopt ref(`ref')
+	}
+	if !mi("`pause'") {
+		global F9 simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
+		pause
+	}
+	qui simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
 
 	* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
 	if `methodlabels' == 0 local methodloop `valmethod'
@@ -258,8 +269,16 @@ foreach v in `methodloop' {
 * add in true if applicable
 *if "`ntruevalue'"=="multiple" local estlist `estlist' `true' 
 
-
-qui simsum `estlist' `if', true(`true') se(`selist') df(`df') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions'
+if !mi("`ref'") {
+	cap confirm var `estimate'`ref'
+	if _rc di as error "siman analyse has failed to parse the ref(`ref') option so has ignored it"
+	else local refopt ref(`estimate'`ref')
+}
+if !mi("`pause'") {
+	global F9 simsum `estlist' `if', true(`true') se(`selist') df(`df') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
+	pause
+}
+qui simsum `estlist' `if', true(`true') se(`selist') df(`df') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
 
 
 foreach v in `methodloop' {

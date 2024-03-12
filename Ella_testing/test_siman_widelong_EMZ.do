@@ -3,6 +3,7 @@ IW quick sim on missing baseline 30/10/2023
 was N:\Home\missing\Missing baselines\interactions\msgbsl_inter_try.do
 Used to test siman
 EMZ 06/11/2023
+IW added tests of siman analyse, ref() replace 12/3/2024
 */
 
 local filename test_siman_widelong_EMZ
@@ -32,8 +33,16 @@ gen truemain=0
 * set up
 siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
 
-* analyse works ok
-siman analyse
+* analyse works ok with ref and replace
+siman analyse, ref(CC)
+siman analyse, ref(FULLDAT) replace 
+siman reshape, longlong
+siman analyse, ref(IMPALL) replace 
+
+/* this one fails
+siman reshape, longwide
+siman analyse, ref(FULLDAT) replace
+*/
 
 * check get error if true is not constant across methods
 clear all
@@ -58,6 +67,6 @@ replace truemain = 0.2 in 2
 * set up
 siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
 
-di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
+di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 
 log close
