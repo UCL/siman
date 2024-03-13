@@ -38,7 +38,7 @@ if _rc == 111 {
 	di as error "simsum needs to be installed to run siman analyse. Please use {stata: ssc install simsum}"  
 	exit 498
 	}
-vercheck simsum, vermin(2.0.3) quietly
+vercheck simsum, vermin(2.1.2) quietly
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
