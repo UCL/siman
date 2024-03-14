@@ -1,4 +1,5 @@
-*! version 0.6.14 12mar2024
+*! version 0.6.15 14mar2024
+* version 0.6.15 14mar2024    IW respect lci, uci and p from setup
 * version 0.6.14 12mar2024    IW make ref() option work in longwide; add undocumented pause option 
 * version 0.6.13 07mar2024    IW allow any simsum options
 * version 0.6.12 14feb2024    IW pass df to simsum (previously ignored in computing PMs)
@@ -204,11 +205,16 @@ if `nformat'==1 {
 	if !mi("`ref'") {
 		local refopt ref(`ref')
 	}
+	
+	* RUN SIMSUM (LONG DATA)
+	local simsumcmd simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') lci(`lci') uci(`uci') p(`p') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
 	if !mi("`pause'") {
-		global F9 simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
+		global F9 `simsumcmd'
 		pause
 	}
-	qui simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
+	if !mi("`debug'") noi di as input "Running: `simsumcmd'"
+	qui `simsumcmd'
+
 
 	* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
 	if `methodlabels' == 0 local methodloop `valmethod'
@@ -274,12 +280,15 @@ if !mi("`ref'") {
 	if _rc di as error "siman analyse has failed to parse the ref(`ref') option so has ignored it"
 	else local refopt ref(`estimate'`ref')
 }
+
+* RUN SIMSUM (WIDE DATA)
+local simsumcmd simsum `estlist' `if', true(`true') se(`selist') df(`df') lci(`lci') uci(`uci') p(`p') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
 if !mi("`pause'") {
-	global F9 simsum `estlist' `if', true(`true') se(`selist') df(`df') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
+	global F9 `simsumcmd'
 	pause
 }
-qui simsum `estlist' `if', true(`true') se(`selist') df(`df') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
-
+if !mi("`debug'") noi di as input "Running: `simsumcmd'"
+qui `simsumcmd'
 
 foreach v in `methodloop' {
 			if  substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
