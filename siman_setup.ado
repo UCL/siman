@@ -1012,7 +1012,7 @@ else if `nformat'==3 & `nmethod'==1 {
             }
             else if `targetstringindi' == 1 {
                 local targetlabel = substr("``t''", 1, index("``t''","_") - 1)
-                replace target = "`targetlabel'" if target == "``t''"
+                qui replace target = "`targetlabel'" if target == "``t''"
             }
         }
     }
