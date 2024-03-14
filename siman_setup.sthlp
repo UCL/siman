@@ -65,6 +65,7 @@ Options for data in long-long input format (data format 1):
 {opt df(varname)}
 {opt lci(varname)}
 {opt uci(varname)}
+{opt p(varname)}
 {opt true(#|varname)}
 clear
 
@@ -80,6 +81,7 @@ Options for data in wide-wide input format (data format 2):
 {opt df(stub_varname)}
 {opt lci(stub_varname)}
 {opt uci(stub_varname)}
+{opt p(stub_varname)}
 {opt true(#|stub_varname)}
 {opt ord:er(varname)}
 clear
@@ -96,6 +98,7 @@ Options for data in long-wide input format (data format 3):
 {opt df(stub_varname)}
 {opt lci(stub_varname)}
 {opt uci(stub_varname)}
+{opt p(stub_varname)}
 {opt true(#|stub_varname)}
 clear
 
@@ -111,6 +114,7 @@ Options for data in wide-long input format (data format 4):
 {opt df(stub_varname)}
 {opt lci(stub_varname)}
 {opt uci(stub_varname)}
+{opt p(stub_varname)}
 {opt true(#|stub_varname)}
 clear
  
@@ -127,10 +131,11 @@ clear
 {synopt:{opt df(varname|stub_varname)}}the degrees of freedom variable name or the name of its stub if in wide format.{p_end}
 {synopt:{opt lci(varname|stub_varname)}}the lower confidence interval variable name or the name of its stub if in wide format.{p_end}
 {synopt:{opt uci(varname|stub_varname)}}the upper confidence interval variable name or the name of its stub if in wide format.{p_end}
-{synopt:{opt true(#|varname|stub_varname)}}the true value, or variable name or the name of its stub if in wide format. A number/numeric variable only that has to be constant across method.{p_end}
+{synopt:{opt p(varname|stub_varname)}}the P-value variable name or the name of its stub if in wide format.{p_end}
+{synopt:{opt true(#|varname|stub_varname)}}the true value, or variable name or the name of its stub if in wide format. Must be constant across methods.{p_end}
 {synopt:{opt ord:er(varname)}}if in wide-wide format, this must be either {it:target} or {it:method}, 
 denoting that either the target stub is first or the method stub is first in the variable names.{p_end}
-{synopt:{opt clear}}to clear the existing data held in memory.{p_end}
+{synopt:{opt clear}}to clear the existing data held in memory: only needed with {cmd:if} or {cmd:in} conditions.{p_end}
 
 
 {marker description}{...}
