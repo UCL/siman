@@ -79,6 +79,8 @@ This calculation is slow: omitting it can reduce run time by up to 90%.
 {synopt:{opt replace} } if {cmd:siman analyse} has already been run and the user specifies it again then they must use the replace option, 
 to replace the existing performance measures in the data set.
 
+{synopt:{it:simsum_options}}Any options for {help simsum}.
+
 {synoptline}
 {p2colreset}{...}
 {p 4 6 2}

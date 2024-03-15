@@ -3,11 +3,11 @@
 C:\ian\git\siman\siman.ado
 *!version 0.3  08aug2023
 C:\ian\git\siman\siman_setup.ado
-*!   version 0.8.7  27nov2023
+*!    version 0.8.8  14feb2024    
 C:\ian\git\siman\siman_describe.ado
-*! version 0.5   17oct2022  
+*! version 0.5.1   13mar2024
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.6.11 19dec2023
+*! version 0.6.14 12mar2024
 C:\ian\git\siman\siman_table.ado
 *! version 0.8.2   20dec2023
 C:\ian\git\siman\siman_reshape.ado
@@ -77,8 +77,8 @@ The true variable is:             true
 _____________________________________________________
 
 . 
-. * analyse works ok
-. siman analyse
+. * analyse works ok with ref and replace
+. siman analyse, ref(CC)
 siman analyse has run successfully
 
 -----------------------------------------------------------------
@@ -105,7 +105,7 @@ inter                |
                      |   .002142   .0014631   .0021294    .002142
                      | 
              relprec |             114.3421   1.187411          0
-                     |             3.189075   .2449551           
+                     |             3.189075   .2449551   1.12e-07
                      | 
                  mse |  .0917805   .0428056   .0906964   .0917805
                      |  .0013657   .0006159   .0013496   .0013657
@@ -174,6 +174,205 @@ main                 |
 NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
   second entry is its Monte Carlo error.
 
+. siman analyse, ref(FULLDAT) replace 
+siman analyse has run successfully
+
+-----------------------------------------------------------------
+target and           |                   method                  
+performance measure  |        CC    FULLDAT     IMPALL     IMPBYZ
+---------------------+-------------------------------------------
+inter                |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias |  .0059115   .0015333   .0052478   .0059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+             pctbias |  1.970502   .5110834   1.749251   1.970502
+                     |  1.009701   .6896664   1.003759   1.009701
+                     | 
+                mean |  .3059115   .3015333   .3052478   .3059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+               empse |  .3029104   .2068999   .3011278   .3029104
+                     |   .002142   .0014631   .0021294    .002142
+                     | 
+             relprec | -53.34562             -52.79164  -53.34562
+                     |  .6941441              .6991529   .6941441
+                     | 
+                 mse |  .0917805   .0428056   .0906964   .0917805
+                     |  .0013657   .0006159   .0013496   .0013657
+                     | 
+                rmse |  .3029529   .2068953   .3011585   .3029529
+                     |   .002254   .0014884   .0022407    .002254
+                     | 
+             modelse |  .3048548   .2058274   .3062941   .3085094
+                     |   .000532   .0002157   .0004706   .0004811
+                     | 
+             ciwidth |  1.178335    .802491   1.187637   1.195883
+                     |  .0019894   .0008355   .0017631   .0017988
+                     | 
+            relerror |  .6419234  -.5184007   1.715628   1.848428
+                     |  .7330312    .711162   .7360551   .7375182
+                     | 
+               cover |     94.31      94.66      94.83       94.9
+                     |  .2316515   .2248297   .2214206   .2199977
+                     | 
+               power |     18.62      31.41      17.67      17.59
+                     |   .389268   .4641564   .3814146   .3807351
+---------------------+-------------------------------------------
+main                 |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+             pctbias |                                           
+                     |                                           
+                     | 
+                mean | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+               empse |  .2940812    .201468    .208478   .2134977
+                     |  .0020796   .0014247   .0014742   .0015097
+                     | 
+             relprec | -53.06707             -6.611879  -10.95167
+                     |  .6705371              .5173771   .5893332
+                     | 
+                 mse |  .0864773   .0405913   .0434687   .0455843
+                     |  .0012391   .0005911   .0006277   .0006603
+                     | 
+                rmse |  .2940703   .2014729   .2084914   .2135047
+                     |  .0021068    .001467   .0015053   .0015464
+                     | 
+             modelse |  .2922305   .2019903   .2079367    .211888
+                     |  .0003659   .0001489   .0001678   .0001907
+                     | 
+             ciwidth |  1.136844   .7896402   .8125015   .8273879
+                     |  .0014074   .0005827     .00065   .0007282
+                     | 
+            relerror | -.6293141   .2592178  -.2596578   -.753965
+                     |  .7136225   .7128181   .7098851   .7074718
+                     | 
+               cover |     94.09       94.6      94.48      94.39
+                     |  .2358118   .2260177   .2283702   .2301147
+                     | 
+               power |      5.91        5.4       5.52       5.61
+                     |  .2358118   .2260177   .2283702   .2301147
+-----------------------------------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. siman reshape, longlong
+
+. siman analyse, ref(IMPALL) replace 
+siman analyse has run successfully
+
+-----------------------------------------------------------------
+target and           |                   method                  
+performance measure  |        CC    FULLDAT     IMPALL     IMPBYZ
+---------------------+-------------------------------------------
+inter                |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias |  .0059115   .0015333   .0052478   .0059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+             pctbias |  1.970502   .5110834   1.749251   1.970502
+                     |  1.009701   .6896664   1.003759   1.009701
+                     | 
+                mean |  .3059115   .3015333   .3052478   .3059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+               empse |  .3029104   .2068999   .3011278   .3029104
+                     |   .002142   .0014631   .0021294    .002142
+                     | 
+             relprec | -1.173477   111.8269             -1.173477
+                     |  .2392399   3.137143              .2392399
+                     | 
+                 mse |  .0917805   .0428056   .0906964   .0917805
+                     |  .0013657   .0006159   .0013496   .0013657
+                     | 
+                rmse |  .3029529   .2068953   .3011585   .3029529
+                     |   .002254   .0014884   .0022407    .002254
+                     | 
+             modelse |  .3048548   .2058274   .3062941   .3085094
+                     |   .000532   .0002157   .0004706   .0004811
+                     | 
+             ciwidth |  1.178335    .802491   1.187637   1.195883
+                     |  .0019894   .0008355   .0017631   .0017988
+                     | 
+            relerror |  .6419234  -.5184007   1.715628   1.848428
+                     |  .7330312    .711162   .7360551   .7375182
+                     | 
+               cover |     94.31      94.66      94.83       94.9
+                     |  .2316515   .2248297   .2214206   .2199977
+                     | 
+               power |     18.62      31.41      17.67      17.59
+                     |   .389268   .4641564   .3814146   .3807351
+---------------------+-------------------------------------------
+main                 |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+             pctbias |                                           
+                     |                                           
+                     | 
+                mean | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+               empse |  .2940812    .201468    .208478   .2134977
+                     |  .0020796   .0014247   .0014742   .0015097
+                     | 
+             relprec | -49.74422       7.08             -4.647047
+                     |  .7155758   .5932311                .30209
+                     | 
+                 mse |  .0864773   .0405913   .0434687   .0455843
+                     |  .0012391   .0005911   .0006277   .0006603
+                     | 
+                rmse |  .2940703   .2014729   .2084914   .2135047
+                     |  .0021068    .001467   .0015053   .0015464
+                     | 
+             modelse |  .2922305   .2019903   .2079367    .211888
+                     |  .0003659   .0001489   .0001678   .0001907
+                     | 
+             ciwidth |  1.136844   .7896402   .8125015   .8273879
+                     |  .0014074   .0005827     .00065   .0007282
+                     | 
+            relerror | -.6293141   .2592178  -.2596578   -.753965
+                     |  .7136225   .7128181   .7098851   .7074718
+                     | 
+               cover |     94.09       94.6      94.48      94.39
+                     |  .2358118   .2260177   .2283702   .2301147
+                     | 
+               power |      5.91        5.4       5.52       5.61
+                     |  .2358118   .2260177   .2283702   .2301147
+-----------------------------------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. 
+. /* this one fails
+> siman reshape, longwide
+> siman analyse, ref(FULLDAT) replace
+> */
 . 
 . * check get error if true is not constant across methods
 . clear all
@@ -238,8 +437,500 @@ The true variable is:             true
 _____________________________________________________
 
 . 
-. di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
-*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN test_siman_widelong_EMZ.do ***
+. 
+. /*
+> TEST LCI, UCI, P OPTIONS
+>         use long-long data 
+>         use non-default cilevel as tougher test
+> */
+. 
+. * using SE: store results as comparators
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman analyse ciwidth cover power, level(80) debug
+Options to pass to simsum: level(80)
+Running: simsum est , true(true) se(se) df() lci() uci() p() method(method) id(rep) by(true dgm esti
+> mand) max(20) ciwidth cover power clear mcse gen(_perfmeas)  level(80)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations               12   ->   24          
+Number of variables                   9   ->   8           
+j variable (2 values)                     ->   method
+xij variables:
+                              est1 est2   ->   est
+                                se1 se2   ->   se
+-----------------------------------------------------------------------------
+siman analyse has run successfully
+
+-----------------------------------------
+dgm, estimand and    |       method      
+performance measure  |        1         2
+---------------------+-------------------
+1                    |
+beta                 |
+             ciwidth | .2014349  .2899728
+                     | .0004004  .0008642
+                     | 
+               cover |     80.1      81.5
+                     | 1.262533  1.227905
+                     | 
+               power |     19.9      18.5
+                     | 1.262533  1.227905
+---------------------+-------------------
+1                    |
+gamma                |
+             ciwidth | .2017357  .2909772
+                     | .0003738  .0008659
+                     | 
+               cover |     79.5      78.5
+                     | 1.276617  1.299134
+                     | 
+               power |     20.5      21.5
+                     | 1.276617  1.299134
+---------------------+-------------------
+2                    |
+beta                 |
+             ciwidth | .2328909  .3352942
+                     | .0004466  .0009704
+                     | 
+               cover |     80.3      83.3
+                     |  1.25774  1.179453
+                     | 
+               power |     19.7      16.7
+                     |  1.25774  1.179453
+---------------------+-------------------
+2                    |
+gamma                |
+             ciwidth | .2329444  .3359915
+                     | .0004316  .0009999
+                     | 
+               cover |     79.5      78.5
+                     | 1.276617  1.299134
+                     | 
+               power |     20.5      21.5
+                     | 1.276617  1.299134
+-----------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. summ est if _perfmeascode=="ciwidth"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8    .2651552    .0552666   .2014349   .3359915
+
+. local ciwidthref = r(mean)
+
+. summ est if _perfmeascode=="cover"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8       80.15    1.606239       78.5       83.3
+
+. local coverref = r(mean)
+
+. summ est if _perfmeascode=="power"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8       19.85    1.606238       16.7       21.5
+
+. local powerref = r(mean)
+
+. 
+. * using LCI and UCI: compare ciwidth, coverage and power
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+
+. gen lower = est - invnorm(.9)*se
+
+. gen upper = est + invnorm(.9)*se
+
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) lci
+> (lower) uci(upper)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             lower upper
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman analyse ciwidth cover power, debug
+Options to pass to simsum: 
+Running: simsum est , true(true) se(se) df() lci(lower) uci(upper) p() method(method) id(rep) by(tru
+> e dgm estimand) max(20) ciwidth cover power clear mcse gen(_perfmeas)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations               12   ->   24          
+Number of variables                   9   ->   8           
+j variable (2 values)                     ->   method
+xij variables:
+                              est1 est2   ->   est
+                                se1 se2   ->   se
+-----------------------------------------------------------------------------
+siman analyse has run successfully
+
+-----------------------------------------
+dgm, estimand and    |       method      
+performance measure  |        1         2
+---------------------+-------------------
+1                    |
+beta                 |
+             ciwidth | .2014349  .2899728
+                     | .0004004  .0008642
+                     | 
+               cover |     80.1      81.5
+                     | 1.262533  1.227905
+                     | 
+               power |     19.9      18.5
+                     | 1.262533  1.227905
+---------------------+-------------------
+1                    |
+gamma                |
+             ciwidth | .2017357  .2909772
+                     | .0003738  .0008659
+                     | 
+               cover |     79.5      78.5
+                     | 1.276617  1.299134
+                     | 
+               power |     20.5      21.5
+                     | 1.276617  1.299134
+---------------------+-------------------
+2                    |
+beta                 |
+             ciwidth | .2328909  .3352942
+                     | .0004466  .0009704
+                     | 
+               cover |     80.3      83.3
+                     |  1.25774  1.179453
+                     | 
+               power |     19.7      16.7
+                     |  1.25774  1.179453
+---------------------+-------------------
+2                    |
+gamma                |
+             ciwidth | .2329444  .3359915
+                     | .0004316  .0009999
+                     | 
+               cover |     79.5      78.5
+                     | 1.276617  1.299134
+                     | 
+               power |     20.5      21.5
+                     | 1.276617  1.299134
+-----------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. summ est if _perfmeascode=="ciwidth"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8    .2651552    .0552666   .2014349   .3359915
+
+. di `ciwidthref', r(mean),reldif(`ciwidthref', r(mean))
+.26515521 .2651552 7.361e-09
+
+. assert reldif(`ciwidthref', r(mean))<1E-8
+
+. summ est if _perfmeascode=="cover"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8       80.15    1.606239       78.5       83.3
+
+. di `coverref', r(mean),reldif(`coverref', r(mean))
+80.150001 80.150001 0
+
+. assert reldif(`coverref', r(mean))<1E-8
+
+. summ est if _perfmeascode=="power"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8       19.85    1.606238       16.7       21.5
+
+. di `powerref', r(mean),reldif(`powerref', r(mean))
+19.85 19.85 1.704e-16
+
+. assert reldif(`powerref', r(mean))<1E-8
+
+. 
+. * using P: compare ciwidth and power
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+
+. gen pvalue = 2*normprob(-abs(est)/se)
+
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) p(p
+> value)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                pvalue
+The true variable is:             true
+_____________________________________________________
+
+. siman analyse ciwidth power, level(80) debug
+Options to pass to simsum: level(80)
+Running: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(rep) by(true dg
+> m estimand) max(20) ciwidth power clear mcse gen(_perfmeas)  level(80)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations                8   ->   16          
+Number of variables                   9   ->   8           
+j variable (2 values)                     ->   method
+xij variables:
+                              est1 est2   ->   est
+                                se1 se2   ->   se
+-----------------------------------------------------------------------------
+siman analyse has run successfully
+
+-----------------------------------------
+dgm, estimand and    |       method      
+performance measure  |        1         2
+---------------------+-------------------
+1                    |
+beta                 |
+             ciwidth | .2014349  .2899728
+                     | .0004004  .0008642
+                     | 
+               power |     19.9      18.5
+                     | 1.262533  1.227905
+---------------------+-------------------
+1                    |
+gamma                |
+             ciwidth | .2017357  .2909772
+                     | .0003738  .0008659
+                     | 
+               power |     20.5      21.5
+                     | 1.276617  1.299134
+---------------------+-------------------
+2                    |
+beta                 |
+             ciwidth | .2328909  .3352942
+                     | .0004466  .0009704
+                     | 
+               power |     19.7      16.7
+                     |  1.25774  1.179453
+---------------------+-------------------
+2                    |
+gamma                |
+             ciwidth | .2329444  .3359915
+                     | .0004316  .0009999
+                     | 
+               power |     20.5      21.5
+                     | 1.276617  1.299134
+-----------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. summ est if _perfmeascode=="ciwidth"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8    .2651552    .0552666   .2014349   .3359915
+
+. di `ciwidthref', r(mean),reldif(`ciwidthref', r(mean))
+.26515521 .26515521 0
+
+. assert reldif(`ciwidthref', r(mean))<1E-8
+
+. summ est if _perfmeascode=="power"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8       19.85    1.606238       16.7       21.5
+
+. di `powerref', r(mean),reldif(`powerref', r(mean))
+19.85 19.85 1.704e-16
+
+. assert reldif(`powerref', r(mean))<1E-8
+
+. 
+. * using P wrongly: compare ciwidth and power
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+
+. gen pvalue = 2*normprob(-abs(est)/se)
+
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) p(p
+> value)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                pvalue
+The true variable is:             true
+_____________________________________________________
+
+. siman analyse ciwidth power, debug // NB default level
+Options to pass to simsum: 
+Running: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(rep) by(true dg
+> m estimand) max(20) ciwidth power clear mcse gen(_perfmeas)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations                8   ->   16          
+Number of variables                   9   ->   8           
+j variable (2 values)                     ->   method
+xij variables:
+                              est1 est2   ->   est
+                                se1 se2   ->   se
+-----------------------------------------------------------------------------
+siman analyse has run successfully
+
+-----------------------------------------
+dgm, estimand and    |       method      
+performance measure  |        1         2
+---------------------+-------------------
+1                    |
+beta                 |
+             ciwidth | .3080681  .4434751
+                     | .0006123  .0013217
+                     | 
+               power |      5.3       4.3
+                     | .7084561  .6414905
+---------------------+-------------------
+1                    |
+gamma                |
+             ciwidth | .3085282  .4450112
+                     | .0005716  .0013243
+                     | 
+               power |      5.5       3.6
+                     | .7209369   .589101
+---------------------+-------------------
+2                    |
+beta                 |
+             ciwidth |  .356176  .5127883
+                     |  .000683  .0014841
+                     | 
+               power |        5       4.4
+                     | .6892024  .6485677
+---------------------+-------------------
+2                    |
+gamma                |
+             ciwidth | .3562577  .5138547
+                     | .0006601  .0015292
+                     | 
+               power |      5.5       3.6
+                     | .7209369   .589101
+-----------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. summ est if _perfmeascode=="ciwidth"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8    .4055199     .084523   .3080681   .5138547
+
+. di `ciwidthref', r(mean),reldif(`ciwidthref', r(mean))
+.26515521 .40551991 .09986674
+
+. assert reldif(`ciwidthref', r(mean))>1E-2
+
+. summ est if _perfmeascode=="power"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8        4.65    .7910211        3.6        5.5
+
+. di `powerref', r(mean),reldif(`powerref', r(mean))
+19.85 4.65 2.6902655
+
+. assert reldif(`powerref', r(mean))>1E-2
+
+. 
+. 
+. di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
+*** SIMAN HAS PASSED ALL THE TESTS IN test_siman_widelong_EMZ.do ***
 
 . 
 . log close
