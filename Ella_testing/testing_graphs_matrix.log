@@ -3,11 +3,11 @@
 C:\ian\git\siman\siman.ado
 *!version 0.3  08aug2023
 C:\ian\git\siman\siman_setup.ado
-*!   version 0.8.7  27nov2023
+*!    version 0.8.8  14feb2024    
 C:\ian\git\siman\siman_describe.ado
-*! version 0.5   17oct2022  
+*! version 0.5.1   13mar2024
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.6.12 14feb2024
+*! version 0.6.15 14mar2024
 C:\ian\git\siman\siman_table.ado
 *! version 0.8.2   20dec2023
 C:\ian\git\siman\siman_reshape.ado
@@ -4446,8 +4446,8 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
   (6,000 bytes saved)
 Warning: variable dgm, which appears in dgm(), was stored as a string. It has been encoded as
   numeric so that subsequent siman commands will work. If you require a different order, encode dgm
-  as numeric before running -siman setup-.  note: converting to long-wide format, creating variable
-  target
+  as numeric before running -siman setup-.
+note: converting to long-wide format, creating variable target
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -4853,8 +4853,8 @@ xij variables:
   (36,000 bytes saved)
 Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
   numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.  note: converting to long-wide format, creating variable
-  target
+  as numeric before running -siman setup-.
+note: converting to long-wide format, creating variable target
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -6430,8 +6430,8 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
   (6,000 bytes saved)
 Warning: variable dgm, which appears in dgm(), was stored as a string. It has been encoded as
   numeric so that subsequent siman commands will work. If you require a different order, encode dgm
-  as numeric before running -siman setup-.  note: converting to long-wide format, creating variable
-  target
+  as numeric before running -siman setup-.
+note: converting to long-wide format, creating variable target
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -6836,8 +6836,8 @@ xij variables:
   (36,000 bytes saved)
 Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
   numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.  note: converting to long-wide format, creating variable
-  target
+  as numeric before running -siman setup-.
+note: converting to long-wide format, creating variable target
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -8419,8 +8419,8 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
   (12,000 bytes saved)
 Warning: variable dgm, which appears in dgm(), was stored as a string. It has been encoded as
   numeric so that subsequent siman commands will work. If you require a different order, encode dgm
-  as numeric before running -siman setup-.  note: converting to long-wide format, creating variable
-  target (2,000 real changes made) (2,000 real changes made)
+  as numeric before running -siman setup-.
+note: converting to long-wide format, creating variable target
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -8785,8 +8785,8 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 
 . siman setup, rep(rep) dgm(dgm) est(est) se(se) target(beta_ gamma_) true(true)
 Warning: no method specified. siman will proceed assuming there is only one method. If this is a
-  mistake, enter method() option in -siman setup-.  note: converting to long-wide format, creating
-  variable target (2,000 real changes made) (2,000 real changes made)
+  mistake, enter method() option in -siman setup-.
+note: converting to long-wide format, creating variable target
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -8947,8 +8947,8 @@ xij variables:
   (108,000 bytes saved)
 Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
   numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.  note: converting to long-wide format, creating variable
-  target
+  as numeric before running -siman setup-.
+note: converting to long-wide format, creating variable target
 
                    SUMMARY OF DATA
 _____________________________________________________

@@ -7,7 +7,7 @@ C:\ian\git\siman\siman_setup.ado
 C:\ian\git\siman\siman_describe.ado
 *! version 0.5.1   13mar2024
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.6.14 12mar2024
+*! version 0.6.15 14mar2024
 C:\ian\git\siman\siman_table.ado
 *! version 0.8.2   20dec2023
 C:\ian\git\siman\siman_reshape.ado
@@ -105,7 +105,7 @@ inter                |
                      |   .002142   .0014631   .0021294    .002142
                      | 
              relprec |             114.3421   1.187411          0
-                     |             3.189075   .2449551   1.12e-07
+                     |             3.189075   .2449551           
                      | 
                  mse |  .0917805   .0428056   .0906964   .0917805
                      |  .0013657   .0006159   .0013496   .0013657
