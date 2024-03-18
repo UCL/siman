@@ -11,8 +11,10 @@ global codepath C:\ian\git\siman
 // SETUP FOR ALL USERS
 global testpath $codepath\Ella_testing\
 adopath ++ $codepath
+cd $testpath
 
 // RUN ALL TESTS
+*do new_tests.do // << 1 minute
 do test_siman_widelong_EMZ.do // <1 minute
 do siman_lollyplot_test.do // ~1 minute
 do siman_nestloop_test.do // ~1 minute

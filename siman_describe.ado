@@ -1,4 +1,5 @@
-*! version 0.5   17oct2022  
+*! version 0.5.1   13mar2024
+*  version 0.5.1 13mar2024     IW new undocumented sort option 
 *  version 0.5   17oct2022     EMZ minor change to table for when method values have a mix of undersocres after them e.g. X Y_
 *  version 0.4   21july2022    EMZ change how dgms are displayed in the table
 *  version 0.3   30 june2022   EMZ minor formatting changes from IW/TM testing
@@ -11,10 +12,12 @@ prog define siman_describe, rclass
 version 15
 
 * siman_describe only describes the data set, it does not change it.  So it should not have it's own [if] and [in] options.
-syntax, [Chars]
+syntax, [Chars Sort]
 
 if !mi("`chars'") {
-	foreach thing in `_dta[siman_allthings]' {
+	local allthings : char _dta[siman_allthings]
+	if !mi("`sort'") local allthings : list sort allthings
+	foreach thing of local allthings {
 		char l _dta[siman_`thing']
 	}
 	exit

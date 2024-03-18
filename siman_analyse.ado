@@ -1,4 +1,8 @@
-*! version 0.6.11 19dec2023
+*! version 0.6.15 14mar2024
+* version 0.6.15 14mar2024    IW respect lci, uci and p from setup
+* version 0.6.14 12mar2024    IW make ref() option work in longwide; add undocumented pause option 
+* version 0.6.13 07mar2024    IW allow any simsum options
+* version 0.6.12 14feb2024    IW pass df to simsum (previously ignored in computing PMs)
 * version 0.6.11 19dec2023    IW bug fix in method values for reshape
 * version 0.6.10  13nov2023   EMZ bug fix: labelling mcse vars when method a numeric labelled string variable - use values not labels
 * version 0.6.9   07nov2023   EMZ bug fix: restoring lost method labels issue for when method has been created by siman (i.e. _methodvar = 1)
@@ -22,8 +26,12 @@ capture program drop siman_analyse
 program define siman_analyse, rclass
 version 15
 
-syntax [anything] [if], [PERFONLY replace noTABle force debug]
-
+syntax [anything] [if], [PERFONLY replace /// documented options
+	ref(string) * /// simsum options
+	noTABle force debug pause /// undocumented options
+	]
+local simsumoptions `options'
+if "`debug'"!="" di as input `"Options to pass to simsum: `options'"'
 if "`debug'"=="" local qui qui
 
 capture which simsum.ado
@@ -31,7 +39,7 @@ if _rc == 111 {
 	di as error "simsum needs to be installed to run siman analyse. Please use {stata: ssc install simsum}"  
 	exit 498
 	}
-vercheck simsum, vermin(2.0.3) quietly
+vercheck simsum, vermin(2.1.2) quietly
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -194,7 +202,19 @@ if `nformat'==1 {
 		exit 498
 		}
 
-	qui simsum `estsimsum' `if', true(`true') se(`sesimsum') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
+	if !mi("`ref'") {
+		local refopt ref(`ref')
+	}
+	
+	* RUN SIMSUM (LONG DATA)
+	local simsumcmd simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') lci(`lci') uci(`uci') p(`p') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
+	if !mi("`pause'") {
+		global F9 `simsumcmd'
+		pause
+	}
+	if !mi("`debug'") noi di as input "Running: `simsumcmd'"
+	qui `simsumcmd'
+
 
 	* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
 	if `methodlabels' == 0 local methodloop `valmethod'
@@ -255,9 +275,20 @@ foreach v in `methodloop' {
 * add in true if applicable
 *if "`ntruevalue'"=="multiple" local estlist `estlist' `true' 
 
+if !mi("`ref'") {
+	cap confirm var `estimate'`ref'
+	if _rc di as error "siman analyse has failed to parse the ref(`ref') option so has ignored it"
+	else local refopt ref(`estimate'`ref')
+}
 
-qui simsum `estlist' `if', true(`true') se(`selist') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force'
-
+* RUN SIMSUM (WIDE DATA)
+local simsumcmd simsum `estlist' `if', true(`true') se(`selist') df(`df') lci(`lci') uci(`uci') p(`p') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
+if !mi("`pause'") {
+	global F9 `simsumcmd'
+	pause
+}
+if !mi("`debug'") noi di as input "Running: `simsumcmd'"
+qui `simsumcmd'
 
 foreach v in `methodloop' {
 			if  substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
