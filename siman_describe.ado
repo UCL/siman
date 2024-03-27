@@ -12,13 +12,31 @@ prog define siman_describe, rclass
 version 15
 
 * siman_describe only describes the data set, it does not change it.  So it should not have it's own [if] and [in] options.
-syntax, [Chars Sort]
+syntax, [Chars Sort SAVing(string)]
 
 if !mi("`chars'") {
 	local allthings : char _dta[siman_allthings]
 	if !mi("`sort'") local allthings : list sort allthings
 	foreach thing of local allthings {
 		char l _dta[siman_`thing']
+	}
+	if !mi("`saving'") {
+		tempname post
+		cap postclose `post'
+		local maxl1 0
+		local maxl2 0
+		foreach thing of local allthings {
+			if "`thing'"=="allthings" continue
+			local maxl1 = max(`maxl1',length("siman_`thing'"))
+			local maxl2 = max(`maxl2',length("`: char _dta[siman_`thing']'"))
+		}
+		postfile `post' str`maxl1' char str`maxl2' value using `saving'
+		foreach thing of local allthings {
+			if "`thing'"=="allthings" continue
+			post `post' ("siman_`thing'") ("`: char _dta[siman_`thing']'")
+		}
+		postclose `post'
+		di as text `"Chars written to `saving'"'
 	}
 	exit
 }
