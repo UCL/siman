@@ -1,4 +1,5 @@
-*! version 1.9.7 03oct2023
+*! version 1.9.8 27mar2024
+* version 1.9.8 27mar2024	IW comment out lines creating ndgm, seems unused
 *  version 1.9.7 03oct2023    EMZ update to warning message when if/by conditions used
 *  version 1.9.6 19sep2023    EMZ accounting for lost labels on method numeric labelled string durng multiple reshapes
 *  version 1.9.5 12sep2023    EMZ slight change to error message condition when no method variable
@@ -103,9 +104,9 @@ qui keep if `tousein'
 local numberdgms: word count `dgm'
 if `numberdgms'==1 {
 	qui tab `dgm'
-	local ndgm = `r(r)'
+	*local ndgm = `r(r)'
 }
-if `numberdgms'!=1 local ndgm = `numberdgms'
+*if `numberdgms'!=1 local ndgm = `numberdgms'
 
 
 * check number of methods (for example if the 'if' syntax has been used)
@@ -217,7 +218,7 @@ forvalues g = 1/`nummethodnew' {
 
 * For the purposes of the graphs below, if dgm is missing in the dataset then set
 * the number of dgms to be 1.
-if "`dgm'"=="" local ndgm=1
+*if "`dgm'"=="" local ndgm=1
 
 * check if many graphs will be created - if so warn the user
 local dgmcount: word count `dgm'

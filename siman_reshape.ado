@@ -43,7 +43,7 @@ if `dgmcreated' == 1 {
 	if _rc {
 		qui gen dgm = 1
 		local dgm dgm
-		local ndgm = 1
+		local ndgmvars = 1
 	}
 }
 

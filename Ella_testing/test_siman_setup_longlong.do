@@ -15,6 +15,7 @@ set linesize 100
 log using `filename', replace text nomsg
 siman which
 
+// TEST SETUP AND ANALYSE WHEN TRUE DEPENDS ON TARGET 
 use $testpath/data/msgbsl_inter_try_postfile.dta, clear
 rename inter binter
 rename main bmain
@@ -24,10 +25,7 @@ reshape long b se mytrue, i(parm1 i method) j(estim) string
 
 * set up
 siman setup, rep(i) target(estim) method(method) est(b) se(se) true(mytrue) dgm(parm1)
-
 siman des, char sort saving(c:\temp\char, replace)
-exit 1
-
 
 * analyse works ok with ref and replace
 siman analyse, ref(CC)
@@ -35,15 +33,23 @@ siman analyse, ref(FULLDAT) replace
 siman reshape, longlong
 siman analyse, ref(IMPALL) replace 
 
-/* this one fails
+/* ERROR: this one fails
 siman reshape, longwide
 siman analyse, ref(FULLDAT) replace
 */
 
-* check get error if true is not constant across methods
-clear all
 
-use $testpath/data/msgbsl_inter_try_postfile.dta
+// SIMILAR
+use $testpath/data/extendedtestdata2, clear
+gen df = 5
+gen lci = b - invt(df,.975)*se
+gen uci = b + invt(df,.975)*se
+gen p = 2*ttail(df,abs(b)/se)
+siman setup, rep(rep) dgm(beta pmiss mech) target(estimand) method(method) true(true) est(b) se(se) lci(lci) uci(uci) p(p) df(df)
+siman des, char sort saving(c:\temp\char3, replace)
+
+// CHECK GET ERROR IF TRUE IS NOT CONSTANT ACROSS METHODS
+use $testpath/data/msgbsl_inter_try_postfile.dta, clear
 
 * targets are wide, methods are long 
 * so data are in wide-long format (format 4)
@@ -62,13 +68,12 @@ replace truemain = 0.2 in 2
 
 * set up
 siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
+* ERROR: this one SHOULD have failed
 
 
-/*
-TEST LCI, UCI, P OPTIONS
-	use long-long data 
-	use non-default cilevel as tougher test
-*/
+// TEST LCI, UCI, P OPTIONS
+*	use long-long data 
+*	use non-default cilevel as tougher test
 
 * using SE: store results as comparators
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
@@ -120,6 +125,33 @@ assert reldif(`ciwidthref', r(mean))>1E-2
 summ est if _perfmeascode=="power"
 di `powerref', r(mean),reldif(`powerref', r(mean))
 assert reldif(`powerref', r(mean))>1E-2
+
+
+
+// Quick graphs: approx 12 s
+use $testpath/data/extendedtestdata2, clear
+gen df = 5
+gen lci = b - invt(df,.975)*se
+gen uci = b + invt(df,.975)*se
+gen p = 2*ttail(df,abs(b)/se)
+siman setup, rep(rep) dgm(beta pmiss mech) target(estimand) method(method) true(true) est(b) se(se) lci(lci) uci(uci) p(p) df(df)
+siman desc
+
+gen touse = estimand=="effect" & beta==1 & pmiss==2 & mech==2
+siman blandaltman if touse
+siman scatter if touse
+siman cms if touse
+siman swarm if touse
+siman zip if touse
+
+siman analyse
+siman table
+
+siman loll if estimand=="effect" & beta==1
+siman nest bias if estimand=="effect"
+
+siman reshape, longwide
+
 
 
 di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"

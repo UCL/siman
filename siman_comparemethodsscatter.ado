@@ -119,7 +119,7 @@ cap confirm variable `dgm'
 			if `"`r(labels)'"' != "" {
 			local 0 = `"`r(labels)'"'
 
-				forvalues i = 1/`ndgm' {
+				forvalues i = 1/`ndgmvars' {
 					gettoken `dgm'dlabel`i' 0 : 0, parse(": ")
 					local dgmlabels = 1
 				}

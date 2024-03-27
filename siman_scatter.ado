@@ -110,7 +110,7 @@ else foreach thing of local anything {
 if `dgmcreated' == 1 {
     qui gen dgm = 1
 	local dgm "dgm"
-	local ndgm=1
+	local ndgmvars=1
 }
 
 local numberdgms: word count `dgm'

@@ -42,7 +42,7 @@ if "`dgm'"=="" {
 	}
 	
 * If only 1 dgm in the dataset, produce error message as nothing will be graphed
-if `ndgm'==1 {
+if `ndgmvars'==1 {
 	di as error "Only 1 dgm in the dataset, nothing to graph."
 	exit 498
 }
@@ -148,7 +148,7 @@ if !mi("`dgmorder'") {
 		exit 498
 	}
 	if !mi("`dgmmissing'") {
-		di as error "dgmvars missing from dgmorder(): `dgmmissing'"
+		di as error "dgm missing from dgmorder(): `dgmmissing'"
 		exit 498
 	}
 	local dgm `dgmnew'

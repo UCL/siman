@@ -296,16 +296,16 @@ lab var mean "Mean"
 if `dgmcreated' == 1 {
     qui gen dgm = 1
 	local dgm "dgm"
-	local ndgm=1
+	local ndgmvars=1
 }
 
 * Need to know number of dgms for later on
 local numberdgms: word count `dgm'
 if `numberdgms'==1 {
 	qui tab `dgm'
-	local ndgm = `r(r)'
+	local ndgmvars = `r(r)'
 }
-if `numberdgms'!=1 local ndgm = `numberdgms'
+if `numberdgms'!=1 local ndgmvars = `numberdgms'
 
 if `numberdgms'==1 {
 	* Need to know what format dgm is in (string or numeric) for the below code

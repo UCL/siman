@@ -346,13 +346,13 @@ cap confirm variable `dgm'
 if !_rc {
     local ndescdgm: word count `dgm'
     if `ndescdgm'!=1 {
-        local ndgm = `ndescdgm'
+        local ndgmvars = `ndescdgm'
         tokenize `dgm'
         cap confirm numeric variable `1'
 *	    if !_rc {
 *		    qui tab `1'
-*		    local ndgm = r(r)
-*		    di "`ndgm'"
+*		    local ndgmvars = r(r)
+*		    di "`ndgmvars'"
 *	    }
 *	    else {
         if _rc {
@@ -362,7 +362,7 @@ if !_rc {
     }
     else if `ndescdgm'==1 {
         qui tab `dgm'
-        local ndgm = r(r)
+        local ndgmvars = r(r)
     }
 }
 
@@ -499,13 +499,13 @@ else if `nmethod'==0 & `ntarget'<=1 | `ntarget'==0  & `nmethod'<=1 {
 		local count`k' = r(r)
     }
     if `nmethod'==0 & `ntarget'!=0 {
-        local compare = `maxrep' * `ndgm' * `count`target''  /* previously used countdgm but didn't work for multiple dgms with descriptors.  Same for other 2 lines below */
+        local compare = `maxrep' * `ndgmvars' * `count`target''  /* previously used countdgm but didn't work for multiple dgms with descriptors.  Same for other 2 lines below */
     }
     else if `ntarget'==0 & `nmethod'!=0 {
-        local compare = `maxrep' * `ndgm' * `count`method'' 
+        local compare = `maxrep' * `ndgmvars' * `count`method'' 
     }
     else if `nmethod'==0 & `ntarget'==0 {
-        local compare = `maxrep' * `ndgm' 
+        local compare = `maxrep' * `ndgmvars' 
     }
 	if `compare' == `maxnumdata' {
         local nformat= 1
@@ -811,16 +811,13 @@ if `nmethod'==0 {
 
 * Declaring the dgm variables
 if "`dgm'"!="" {
-    local dgmvar = "`dgm'"  
-    local numdgm = "`ndgm'"
+    local dgm = "`dgm'"  
     if `dgmcreated' ==1 {
-        local dgmvar "not in dataset"
-        local numdgm "N/A"
+        local dgm "not in dataset"
     }
 }
 else {
-    local dgmvar = "N/A"	
-    local numdgm = "N/A"
+    local dgm = "N/A"	
 }
 
 * Declaring the estimate variables	
@@ -878,7 +875,7 @@ if "`methodlabels'" == "1" {
 * siman reshape won't recognise any of the variables/macros.
 
 local allthings allthings rep dgm target method estimate se df ci p true order lci uci ifsetup insetup
-local allthings `allthings' format targetformat methodformat nformat ntarget ndgm nmethod numtarget valtarget nummethod valmethod ntrue ntruevalue dgmvar numdgm dgmcreated targetlabels methodcreated methodlabels methodvalues ntruestub
+local allthings `allthings' format targetformat methodformat nformat ntarget ndgmvars nmethod numtarget valtarget nummethod valmethod ntrue ntruevalue dgmcreated targetlabels methodcreated methodlabels methodvalues ntruestub
 local allthings `allthings' descriptiontype cidescriptiontype truedescriptiontype estvars sevars dfvars civars pvars truevars simansetuprun
 * need m1, m2 etc t1, t2 etc for siman_reshape
 forvalues me = 1/`nmethod' {

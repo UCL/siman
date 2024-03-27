@@ -98,18 +98,18 @@ if "`sevars'" == "N/A" local sevars
 
 
 * sort out numbers of variables to be tabulated, and their levels
-if `dgmcreated' local dgmvar
-* identify non-varying dgmvars
-foreach onedgmvar in `dgmvar' {
+if `dgmcreated' local dgm
+* identify non-varying dgm
+foreach onedgmvar in `dgm' {
 	summ `onedgmvar' `if', meanonly
 	if r(min)<r(max) local newdgmvar `newdgmvar' `onedgmvar'
 	else if !mi("`debug'") di as error "Ignoring non-varying dgmvar: `onedgmvar'"
 	}
-local dgmvar `newdgmvar'
-local myfactors _perfmeascode `dgmvar' `target' `method'
+local dgm `newdgmvar'
+local myfactors _perfmeascode `dgm' `target' `method'
 if !mi("`debug'") di as input "Factors to display: `myfactors'"
 tempvar group
-foreach thing in dgmvar target method {
+foreach thing in dgm target method {
 	local n`thing'vars = wordcount("``thing''")
 	if !mi("`thing'") {
 		egen `group' = group(``thing'')
@@ -126,7 +126,7 @@ foreach thing in dgmvar target method {
 if "`column'"=="" { 
 	if `nmethodlevels'>1 local column `method'
 	else if `ntargetlevels'>1 local column `target'
-	else local column : word 1 of `dgmvar'
+	else local column : word 1 of `dgm'
 }
 local myfactors : list myfactors - column
 if "`row'"=="" {
@@ -135,7 +135,7 @@ if "`row'"=="" {
 }
 local by : list myfactors - row
 if wordcount("`by'")>4 {
-	di as error "There are too many factors to display. Consider using an if condition for your dgmvars."
+	di as error "There are too many factors to display. Consider using an if condition for your dgm."
 	
 }
 
