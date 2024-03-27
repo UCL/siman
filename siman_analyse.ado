@@ -162,7 +162,7 @@ local optionlist `estimate' `se'
 if `nformat'==1 {
 
 	* save number format for method
-	local methodformat : value label `method'
+	local methodvallabel : value label `method'
 
 	* final agreed order/sort
 	qui order `rep' `dgm' `target' `method'
@@ -243,12 +243,12 @@ if `nformat'==1 {
 	else if `methodstringindi'==0 & `methodlabels' == 0 {
 		`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'")
 		* restore number format to method
-		label value `method' `methodformat'
+		label value `method' `methodvallabel'
 		}
 	else if `methodstringindi'==0 & `methodlabels' == 1 {
 		`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodvalues'")
 		* restore number format to method
-		label value `method' `methodformat'
+		label value `method' `methodvallabel'
 		}
 
 }
