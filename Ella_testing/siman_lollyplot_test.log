@@ -21,7 +21,7 @@ C:\ian\git\siman\siman_comparemethodsscatter.ado
 C:\ian\git\siman\siman_blandaltman.ado
 *! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.9.7 03oct2023
+*! version 1.9.8 27mar2024
 C:\ian\git\siman\siman_scatter.ado
 *! version 1.6.7 03oct2023
 C:\ian\git\siman\siman_nestloop.ado

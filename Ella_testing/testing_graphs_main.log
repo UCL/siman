@@ -3,13 +3,13 @@
 C:\ian\git\siman\siman.ado
 *!version 0.3  08aug2023
 C:\ian\git\siman\siman_setup.ado
-*!   version 0.8.7  27nov2023
+*!    version 0.8.8  14feb2024    
 C:\ian\git\siman\siman_describe.ado
-*! version 0.5   17oct2022  
+*! version 0.5.1   13mar2024
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.6.11 19dec2023
+*! version 0.6.15 14mar2024
 C:\ian\git\siman\siman_table.ado
-*! version 0.8.1   25oct2023
+*! version 0.8.2   20dec2023
 C:\ian\git\siman\siman_reshape.ado
 *!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
@@ -21,7 +21,7 @@ C:\ian\git\siman\siman_comparemethodsscatter.ado
 C:\ian\git\siman\siman_blandaltman.ado
 *! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.9.7 03oct2023
+*! version 1.9.8 27mar2024
 C:\ian\git\siman\siman_scatter.ado
 *! version 1.6.7 03oct2023
 C:\ian\git\siman\siman_nestloop.ado
@@ -105,11 +105,12 @@ working.....
 working.....
 
 . 
-. siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y
-> -title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
-> coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_
-> test1", replace)
-Drawing 1 graphs (1 per true value)...
+. siman zipplot, bygr(cols(4))
+
+. siman zipplot, legend(order(1 "Stalk" 2 "Carrot")) xtit("x-title") ylab(95) noncoveroptions(pstyle
+> (p3)) ///
+>     coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) ///
+>     bygr(cols(4)) name("zipplot_test1", replace) ymin(60)
 
 . 
 . siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test1", replace)
@@ -138,6 +139,9 @@ beta                 |
                      | 
                 bias | -.0043991  -.0025973
                      |  .0024993   .0035644
+                     | 
+             pctbias |                     
+                     |                     
                      | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
@@ -180,6 +184,9 @@ gamma                |
                 bias |  .0005151   .0056354
                      |  .0025476   .0035789
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean |  .0005151   .0056354
                      |  .0025476   .0035789
                      | 
@@ -220,6 +227,9 @@ beta                 |
                      | 
                 bias | -.0046965  -.0058509
                      |  .0028908   .0039932
+                     | 
+             pctbias |                     
+                     |                     
                      | 
                 mean | -.0046965  -.0058509
                      |  .0028908   .0039932
@@ -262,6 +272,9 @@ gamma                |
                 bias |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
@@ -292,9 +305,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test1", replace)
@@ -403,11 +415,10 @@ working.....
 working.....
 
 . 
-. siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y
-> -title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+. siman zipplot, legend(order(1 "Stalk" 2 "Carrot")) xtit("x-title") ytit("y-title") ylab(0 40 100) 
+> noncoveroptions(pstyle(p3)) ///
 > coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_
 > test2", replace)
-Drawing 1 graphs (1 per true value)...
 
 . 
 . siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test2", replace)
@@ -436,6 +447,9 @@ D1                   |
                      | 
                 bias | -.0043991  -.0025973
                      |  .0024993   .0035644
+                     | 
+             pctbias |                     
+                     |                     
                      | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
@@ -478,6 +492,9 @@ D1                   |
                 bias |  .0005151   .0056354
                      |  .0025476   .0035789
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean |  .0005151   .0056354
                      |  .0025476   .0035789
                      | 
@@ -518,6 +535,9 @@ D2                   |
                      | 
                 bias | -.0046965  -.0058509
                      |  .0028908   .0039932
+                     | 
+             pctbias |                     
+                     |                     
                      | 
                 mean | -.0046965  -.0058509
                      |  .0028908   .0039932
@@ -560,6 +580,9 @@ D2                   |
                 bias |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
@@ -590,9 +613,8 @@ D2                   |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test2", replace)
@@ -673,8 +695,8 @@ working.....
 working.....
 
 . 
-. cap siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") yti
-> t("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+. cap siman zipplot, legend(order(1 "Stalk" 2 "Carrot")) xtit("x-title") ytit("y-title") ylab(0 40 1
+> 00) noncoveroptions(pstyle(p3)) ///
 > coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_
 > test3", replace)
 
@@ -814,9 +836,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test3", replace)
@@ -833,28 +854,27 @@ Drawing 2 graphs (one per target)...
 . replace true=0.5 if estimand=="beta"
 (4,000 real changes made)
 
+. keep if dgm==1 & method==1 // new 20dec2023 - reproducibly selects records
+(6,000 observations deleted)
+
 . drop dgm method
 
 . gen estimand_num = .
-(8,000 missing values generated)
+(2,000 missing values generated)
 
 . replace estimand_num = 1 if estimand == "beta"
-(4,000 real changes made)
+(1,000 real changes made)
 
 . replace estimand_num = 2 if estimand == "gamma"
-(4,000 real changes made)
+(1,000 real changes made)
 
 . drop estimand
 
 . rename estimand_num estimand
 
-. bysort rep estimand: gen repitionindi=_n
-
-. drop if repitionindi>1
-(6,000 observations deleted)
-
-. drop repitionindi
-
+. *bysort rep estimand: gen repitionindi=_n
+. *drop if repitionindi>1 // pre 20dec2023 non-reproducibly selects records
+. *drop repitionindi
 . siman setup, rep(rep) target(estimand) estimate(est) se(se) true(true)
 Warning: no method specified. siman will proceed assuming there is only one method. If this is a
   mistake, enter method() option in -siman setup-.
@@ -872,8 +892,8 @@ The number of methods is:         1
 The method values are:            1
 
 Data generating mechanism (dgm)
-The total number of dgms is:      0
-The dgm variables (# levels):     none
+The total number of dgms is:      1
+The dgm variables (# levels):     N/A
 
 Estimates are contained in the dataset
 
@@ -898,11 +918,11 @@ working.....
 
 . * siman swarm can not be run without method as required
 . 
-. siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y
-> -title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+. siman zipplot, legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") noncoveroptions
+> (pstyle(p3)) ///
 > coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_
 > test4", replace)    
-Drawing 2 graphs (1 per true value)...
+Drawing 2 graphs (1 per true value)
 
 . 
 . cap siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test4", repl
@@ -922,15 +942,14 @@ Drawing 2 graphs (1 per true value)...
 . * now try with missing target
 . use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
-. drop estimand
-
-. bysort rep dgm method: gen repitionindi=_n
-
-. drop if repitionindi == 2
+. keep if estimand=="beta" // new 20dec2023 - reproducibly selects records
 (4,000 observations deleted)
 
-. drop repitionindi
+. drop estimand
 
+. *bysort rep dgm method: gen repitionindi=_n
+. *drop if repitionindi == 2 // pre 20dec2023 non-reproducibly selects records
+. *drop repitionindi
 . siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
 
                    SUMMARY OF DATA
@@ -970,11 +989,10 @@ working.....
 working.....
 
 . 
-. siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y
-> -title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+. siman zipplot, legend(order(1 "Stalk" 2 "Carrot")) xtit("x-title") ytit("y-title") ylab(0 40 100) 
+> noncoveroptions(pstyle(p3)) ///
 > coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_
 > test5", replace)
-Drawing 1 graphs (1 per true value)...
 
 . 
 . siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test5", replace)
@@ -1000,38 +1018,41 @@ measure              |         1          2
               sesims |      1000       1000
                      |                     
                      | 
-                bias | -.0010838  -.0006846
-                     |  .0025577   .0036142
+                bias | -.0043991  -.0025973
+                     |  .0024993   .0035644
                      | 
-                mean | -.0010838  -.0006846
-                     |  .0025577   .0036142
+             pctbias |                     
+                     |                     
                      | 
-               empse |  .0808809   .1142897
-                     |  .0018095   .0025569
+                mean | -.0043991  -.0025973
+                     |  .0024993   .0035644
                      | 
-             relprec |            -49.91848
-                     |             2.922204
+               empse |  .0790336   .1127159
+                     |  .0017681   .0025217
                      | 
-                 mse |  .0065363   .0130495
-                     |  .0002894   .0005647
+             relprec |             -50.8353
+                     |              2.28676
                      | 
-                rmse |  .0808477   .1142346
-                     |    .00179   .0024716
+                 mse |  .0062594   .0126989
+                     |  .0002881   .0006187
                      | 
-             modelse |  .0786397   .1138376
-                     |  .0001536   .0003436
+                rmse |  .0791165   .1126895
+                     |  .0018209   .0027454
                      | 
-             ciwidth |  .3076773   .4442327
-                     |  .0006004   .0013361
+             modelse |  .0787452   .1136343
+                     |  .0001572   .0003405
                      | 
-            relerror | -2.770945  -.3955422
-                     |   2.18347   2.248524
+             ciwidth |  .3080681   .4434751
+                     |  .0006123   .0013217
                      | 
-               cover |      94.6       96.3
-                     |  .7147308   .5969169
+            relerror | -.3649609   .8147949
+                     |  2.237882   2.275551
                      | 
-               power |       5.4        3.7
-                     |  .7147307   .5969171
+               cover |      94.7       95.7
+                     |  .7084563   .6414907
+                     | 
+               power |       5.3        4.3
+                     |  .7084561   .6414905
 ---------------------+---------------------
 2                    |
                bsims |      1000       1000
@@ -1040,42 +1061,44 @@ measure              |         1          2
               sesims |      1000       1000
                      |                     
                      | 
-                bias | -.0030457   -.004772
-                     |  .0029377   .0040574
+                bias | -.0046965  -.0058509
+                     |  .0028908   .0039932
                      | 
-                mean | -.0030457   -.004772
-                     |  .0029377   .0040574
+             pctbias |                     
+                     |                     
                      | 
-               empse |  .0928973   .1283069
-                     |  .0020783   .0028705
+                mean | -.0046965  -.0058509
+                     |  .0028908   .0039932
                      | 
-             relprec |            -47.57888
-                     |             3.277269
+               empse |  .0914144   .1262755
+                     |  .0020451    .002825
                      | 
-                 mse |  .0086306    .016469
-                     |  .0003842   .0006663
+             relprec |            -47.59274
+                     |             2.430245
                      | 
-                rmse |  .0929008   .1283315
-                     |   .002068   .0025961
+                 mse |  .0083703   .0159638
+                     |  .0003797   .0007445
                      | 
-             modelse |   .090986   .1317344
-                     |  .0001739   .0003982
+                rmse |  .0914893   .1263479
+                     |  .0020748   .0029462
                      | 
-             ciwidth |  .3560112   .5141054
-                     |  .0006797    .001535
+             modelse |  .0910296   .1313619
+                     |  .0001752   .0003826
                      | 
-            relerror | -2.057446   2.671321
-                     |  2.199142   2.317817
+             ciwidth |   .356176   .5127883
+                     |   .000683   .0014841
                      | 
-               cover |      94.8       96.5
-                     |  .7021109   .5811626
+            relerror |  -.420924   4.028049
+                     |  2.236001   2.346937
                      | 
-               power |       5.2        3.5
-                     |  .7021111   .5811626
+               cover |        95       95.6
+                     |  .6892024   .6485677
+                     | 
+               power |         5        4.4
+                     |  .6892024   .6485677
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test5")
@@ -1174,18 +1197,17 @@ The p variable is:                N/A
 The true variable is:             N/A
 _____________________________________________________
 
-. siman comparemethodsscatter, methlist(3 7) name("cms_test6", replace) 
+. siman comparemethodsscatter if target=="beta" & dgm==1, methlist(3 7) name("cms_test6", replace) 
 Working.....
 
-. siman comparemethodsscatter, methlist(3 5 7) name("cms_test6a", replace) 
+. siman comparemethodsscatter if target=="beta" & dgm==1, methlist(3 5 7) name("cms_test6a", replace
+> ) 
 Working.....
 
 . siman comparemethodsscatter if target=="beta" & dgm==1
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
-  and b are the methods you are particularly interested to compare.  Working.....
-
-. siman comparemethodsscatter if target=="beta" & dgm==1, methlist(1 2 3) 
+  and b are the methods you are particularly interested to compare.
 Working.....
 
 . siman_blandaltman, methlist(3 7) name("ba_test6", replace)
@@ -1303,38 +1325,33 @@ _____________________________________________________
 
 . 
 . * graphs
-. siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test7", replace) 
-working.....
-Warning: 384 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+. local useit4 theta==1 & rho==1 & k==5 // flags just 4 dgms
 
-. 
-. siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test7", replac
-> e)) 
+. local useit1 theta==1 & rho==1 & pc==1 & k==5 // flags just 1 dgm
+
+. siman scatter if `useit4', ytitle("test y-title") xtitle("test x-title") name("scatter_test7", rep
+> lace) 
 working.....
 
 . 
-. siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y
-> -title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
-> coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_
-> test7", replace)
-Warning: 4 graphs each of 24 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 4 graphs (1 per true value)...
+. siman swarm if `useit4', graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_te
+> st7", replace)) 
+working.....
 
+. 
+. * siman zipplot is not appropriate for these data
 . 
 . serset clear
 
-. if ${detail} == 1 siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cm
-> s_test7", replace) 
+. if ${detail} == 1 siman comparemethodsscatter if `useit1', title("testtitle") subgr(xtit("testaxis
+> ")) name("cms_test7", replace) 
 Working.....
-Warning: 192 graphs will be created: consider using 'if' condition as detailed in siman
-  comparemethodsscatter
 
+. * this sometimes fails with error 111 "series 0 not found" from -graph combine-
 . 
-. if ${detail} == 1 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test7"
-> , replace) 
+. if ${detail} == 1 siman blandaltman if `useit1', ytitle("test y-title") xtitle("test x-title") nam
+> e("ba_test7", replace) 
 working....
-Warning: 192 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
 
 . 
 . siman analyse
@@ -1359,6 +1376,9 @@ no                   |
                      | 
                 bias | -.4643499  -.4813579
                      |  .0029602   .0017132
+                     | 
+             pctbias | -46.43499  -48.13579
+                     |  .2960206   .1713248
                      | 
                 mean |  .5356501   .5186421
                      |  .0029602   .0017132
@@ -1403,6 +1423,9 @@ no                   |
                 bias | -.4572181  -.4780437
                      |  .0082138   .0029959
                      | 
+             pctbias | -45.72181  -47.80437
+                     |  .8213788   .2995899
+                     | 
                 mean |  .5427819   .5219563
                      |  .0082138   .0029959
                      | 
@@ -1445,6 +1468,9 @@ no                   |
                      | 
                 bias | -.4647811  -.4826229
                      |   .004866   .0015395
+                     | 
+             pctbias | -46.47811  -48.26229
+                     |  .4865955   .1539475
                      | 
                 mean |   .535219   .5173771
                      |   .004866   .0015395
@@ -1489,6 +1515,9 @@ no                   |
                 bias | -.4734905  -.4841036
                      |  .0056954   .0022717
                      | 
+             pctbias | -47.34905  -48.41036
+                     |  .5695374   .2271715
+                     | 
                 mean |  .5265095   .5158964
                      |  .0056954   .0022717
                      | 
@@ -1531,6 +1560,9 @@ no                   |
                      | 
                 bias |  -.478941  -.4860802
                      |  .0050433   .0022495
+                     | 
+             pctbias |  -47.8941  -48.60802
+                     |  .5043265   .2249503
                      | 
                 mean |   .521059   .5139198
                      |  .0050433   .0022495
@@ -1575,6 +1607,9 @@ no                   |
                 bias | -.4780828  -.4858313
                      |  .0065649   .0022549
                      | 
+             pctbias | -47.80828  -48.58313
+                     |  .6564872    .225491
+                     | 
                 mean |  .5219172   .5141687
                      |  .0065649   .0022549
                      | 
@@ -1617,6 +1652,9 @@ no                   |
                      | 
                 bias | -.4850892   -.487618
                      |  .0049631   .0032873
+                     | 
+             pctbias | -48.50892   -48.7618
+                     |   .496313   .3287267
                      | 
                 mean |  .5149108    .512382
                      |  .0049631   .0032873
@@ -1661,6 +1699,9 @@ no                   |
                 bias | -.4799979   -.487983
                      |  .0082179    .002586
                      | 
+             pctbias | -47.99979   -48.7983
+                     |  .8217899   .2585992
+                     | 
                 mean |  .5200021    .512017
                      |  .0082179    .002586
                      | 
@@ -1703,6 +1744,9 @@ no                   |
                      | 
                 bias | -.4829315  -.4885505
                      |  .0045096   .0018006
+                     | 
+             pctbias | -48.29315  -48.85505
+                     |  .4509607   .1800631
                      | 
                 mean |  .5170685   .5114495
                      |  .0045096   .0018006
@@ -1747,6 +1791,9 @@ no                   |
                 bias |  -.424663  -.4754655
                      |  .0139085    .002777
                      | 
+             pctbias |  -42.4663  -47.54655
+                     |  1.390847   .2776969
+                     | 
                 mean |  .5753371   .5245345
                      |  .0139085    .002777
                      | 
@@ -1789,6 +1836,9 @@ no                   |
                      | 
                 bias | -.4379249  -.4792095
                      |  .0018035   .0014731
+                     | 
+             pctbias | -43.79249  -47.92095
+                     |  .1803455   .1473138
                      | 
                 mean |  .5620751   .5207905
                      |  .0018035   .0014731
@@ -1833,6 +1883,9 @@ no                   |
                 bias | -.4344948  -.4781458
                      |  .0026277   .0010144
                      | 
+             pctbias | -43.44948  -47.81458
+                     |  .2627734   .1014395
+                     | 
                 mean |  .5655052   .5218542
                      |  .0026277   .0010144
                      | 
@@ -1875,6 +1928,9 @@ weak                 |
                      | 
                 bias | -.4760354  -.5957175
                      |  .0022257   .0024809
+                     | 
+             pctbias | -47.60354  -59.57175
+                     |  .2225703   .2480934
                      | 
                 mean |  .5239646   .4042824
                      |  .0022257   .0024809
@@ -1919,6 +1975,9 @@ weak                 |
                 bias | -.4776012  -.5898465
                      |  .0047255   .0026699
                      | 
+             pctbias | -47.76012  -58.98465
+                     |  .4725489   .2669865
+                     | 
                 mean |  .5223988   .4101535
                      |  .0047255   .0026699
                      | 
@@ -1961,6 +2020,9 @@ weak                 |
                      | 
                 bias | -.4782957  -.5860621
                      |  .0078181   .0022046
+                     | 
+             pctbias | -47.82957  -58.60621
+                     |  .7818078   .2204584
                      | 
                 mean |  .5217043    .413938
                      |  .0078181   .0022046
@@ -2005,6 +2067,9 @@ weak                 |
                 bias | -.4883158  -.5601118
                      |   .001881   .0016745
                      | 
+             pctbias | -48.83158  -56.01118
+                     |  .1881028   .1674453
+                     | 
                 mean |  .5116842   .4398882
                      |   .001881   .0016745
                      | 
@@ -2047,6 +2112,9 @@ weak                 |
                      | 
                 bias | -.4837807  -.5559196
                      |  .0044277   .0014168
+                     | 
+             pctbias | -48.37807  -55.59196
+                     |  .4427745   .1416845
                      | 
                 mean |  .5162193   .4440804
                      |  .0044277   .0014169
@@ -2091,6 +2159,9 @@ weak                 |
                 bias | -.4796865  -.5522388
                      |  .0059188    .002268
                      | 
+             pctbias | -47.96865  -55.22388
+                     |  .5918785   .2268003
+                     | 
                 mean |  .5203135   .4477612
                      |  .0059188    .002268
                      | 
@@ -2133,6 +2204,9 @@ weak                 |
                      | 
                 bias | -.4854645  -.5452206
                      |  .0055431   .0024779
+                     | 
+             pctbias | -48.54644  -54.52206
+                     |  .5543094   .2477935
                      | 
                 mean |  .5145355   .4547794
                      |  .0055431   .0024779
@@ -2177,6 +2251,9 @@ weak                 |
                 bias | -.4844402  -.5421999
                      |  .0029889   .0016028
                      | 
+             pctbias | -48.44402  -54.21999
+                     |  .2988868   .1602813
+                     | 
                 mean |  .5155598   .4578002
                      |  .0029889   .0016028
                      | 
@@ -2219,6 +2296,9 @@ weak                 |
                      | 
                 bias | -.4790042  -.5406324
                      |  .0057535   .0022588
+                     | 
+             pctbias | -47.90042  -54.06324
+                     |  .5753531   .2258805
                      | 
                 mean |  .5209958   .4593676
                      |  .0057535   .0022588
@@ -2263,6 +2343,9 @@ weak                 |
                 bias | -.4602343   -.645303
                      |  .0034419   .0030538
                      | 
+             pctbias | -46.02343   -64.5303
+                     |   .344187   .3053811
+                     | 
                 mean |  .5397657    .354697
                      |  .0034419   .0030538
                      | 
@@ -2305,6 +2388,9 @@ weak                 |
                      | 
                 bias | -.4556693  -.6380908
                      |  .0068427   .0026766
+                     | 
+             pctbias | -45.56693  -63.80909
+                     |  .6842731   .2676575
                      | 
                 mean |  .5443307   .3619091
                      |  .0068427   .0026766
@@ -2349,6 +2435,9 @@ weak                 |
                 bias | -.4581563  -.6349556
                      |   .005762   .0025771
                      | 
+             pctbias | -45.81563  -63.49556
+                     |  .5761967   .2577078
+                     | 
                 mean |  .5418437   .3650444
                      |   .005762   .0025771
                      | 
@@ -2391,6 +2480,9 @@ moderate             |
                      | 
                 bias | -.4929633  -.6274161
                      |   .005833   .0027373
+                     | 
+             pctbias | -49.29633  -62.74162
+                     |   .583296   .2737308
                      | 
                 mean |  .5070367   .3725839
                      |   .005833   .0027373
@@ -2435,6 +2527,9 @@ moderate             |
                 bias | -.4921265  -.6203096
                      |  .0063073   .0020008
                      | 
+             pctbias | -49.21265  -62.03096
+                     |  .6307307   .2000777
+                     | 
                 mean |  .5078735   .3796904
                      |  .0063073   .0020008
                      | 
@@ -2477,6 +2572,9 @@ moderate             |
                      | 
                 bias | -.4926615  -.6168349
                      |  .0085658   .0016399
+                     | 
+             pctbias | -49.26615  -61.68349
+                     |  .8565845   .1639865
                      | 
                 mean |  .5073385   .3831651
                      |  .0085658   .0016399
@@ -2521,6 +2619,9 @@ moderate             |
                 bias | -.4864031  -.5809035
                      |  .0049251   .0026367
                      | 
+             pctbias | -48.64031  -58.09035
+                     |  .4925139     .26367
+                     | 
                 mean |  .5135969   .4190966
                      |  .0049251   .0026367
                      | 
@@ -2563,6 +2664,9 @@ moderate             |
                      | 
                 bias | -.4847491  -.5761355
                      |  .0049559   .0018101
+                     | 
+             pctbias | -48.47491  -57.61355
+                     |  .4955908   .1810078
                      | 
                 mean |  .5152509   .4238645
                      |  .0049559   .0018101
@@ -2607,6 +2711,9 @@ moderate             |
                 bias | -.4825303  -.5730578
                      |    .00708   .0016799
                      | 
+             pctbias | -48.25303  -57.30578
+                     |  .7079971   .1679915
+                     | 
                 mean |  .5174696   .4269423
                      |    .00708   .0016799
                      | 
@@ -2649,6 +2756,9 @@ moderate             |
                      | 
                 bias | -.4806031  -.5619662
                      |  .0052151   .0025259
+                     | 
+             pctbias | -48.06031  -56.19662
+                     |  .5215095   .2525892
                      | 
                 mean |  .5193969   .4380339
                      |  .0052151   .0025259
@@ -2693,6 +2803,9 @@ moderate             |
                 bias | -.4786374  -.5595371
                      |  .0069993   .0021053
                      | 
+             pctbias | -47.86374  -55.95371
+                     |  .6999311   .2105263
+                     | 
                 mean |  .5213627   .4404629
                      |  .0069993   .0021053
                      | 
@@ -2735,6 +2848,9 @@ moderate             |
                      | 
                 bias | -.4787755  -.5562698
                      |  .0062807   .0018965
+                     | 
+             pctbias | -47.87755  -55.62698
+                     |   .628071   .1896495
                      | 
                 mean |  .5212245   .4437301
                      |  .0062807   .0018965
@@ -2779,6 +2895,9 @@ moderate             |
                 bias | -.4925407  -.6843244
                      |  .0012277   .0035919
                      | 
+             pctbias | -49.25407  -68.43244
+                     |  .1227654   .3591925
+                     | 
                 mean |  .5074593   .3156756
                      |  .0012277   .0035919
                      | 
@@ -2821,6 +2940,9 @@ moderate             |
                      | 
                 bias | -.4937834  -.6778726
                      |   .003892   .0025177
+                     | 
+             pctbias | -49.37834  -67.78726
+                     |  .3891964    .251765
                      | 
                 mean |  .5062166   .3221274
                      |   .003892   .0025176
@@ -2865,6 +2987,9 @@ moderate             |
                 bias | -.4892971  -.6732162
                      |  .0051559   .0023345
                      | 
+             pctbias | -48.92971  -67.32162
+                     |  .5155933   .2334529
+                     | 
                 mean |  .5107028   .3267838
                      |  .0051559   .0023345
                      | 
@@ -2907,6 +3032,9 @@ strong               |
                      | 
                 bias | -.5110092  -.6540691
                      |  .0047823   .0017148
+                     | 
+             pctbias | -51.10091  -65.40691
+                     |  .4782293   .1714805
                      | 
                 mean |  .4889908   .3459309
                      |  .0047823   .0017148
@@ -2951,6 +3079,9 @@ strong               |
                 bias | -.5068632   -.645451
                      |  .0051832   .0017377
                      | 
+             pctbias | -50.68633   -64.5451
+                     |  .5183233   .1737703
+                     | 
                 mean |  .4931367    .354549
                      |  .0051832   .0017377
                      | 
@@ -2993,6 +3124,9 @@ strong               |
                      | 
                 bias | -.5100375  -.6413911
                      |  .0076818   .0012253
+                     | 
+             pctbias | -51.00375  -64.13911
+                     |   .768182   .1225323
                      | 
                 mean |  .4899625   .3586089
                      |  .0076818   .0012253
@@ -3037,6 +3171,9 @@ strong               |
                 bias | -.4943407  -.6027567
                      |  .0083902   .0025153
                      | 
+             pctbias | -49.43407  -60.27567
+                     |   .839016   .2515272
+                     | 
                 mean |  .5056593   .3972432
                      |  .0083902   .0025153
                      | 
@@ -3079,6 +3216,9 @@ strong               |
                      | 
                 bias | -.4867315  -.5946037
                      |  .0073706   .0017068
+                     | 
+             pctbias | -48.67315  -59.46037
+                     |  .7370579   .1706805
                      | 
                 mean |  .5132685   .4053964
                      |  .0073706   .0017068
@@ -3123,6 +3263,9 @@ strong               |
                 bias | -.4878126  -.5925548
                      |  .0101622   .0015251
                      | 
+             pctbias | -48.78126  -59.25548
+                     |  1.016216   .1525055
+                     | 
                 mean |  .5121874   .4074452
                      |  .0101622   .0015251
                      | 
@@ -3165,6 +3308,9 @@ strong               |
                      | 
                 bias | -.4872657  -.5815987
                      |  .0094856   .0014659
+                     | 
+             pctbias | -48.72657  -58.15987
+                     |  .9485642   .1465905
                      | 
                 mean |  .5127343   .4184013
                      |  .0094856   .0014659
@@ -3209,6 +3355,9 @@ strong               |
                 bias | -.4825913  -.5761374
                      |  .0091077   .0016066
                      | 
+             pctbias | -48.25913  -57.61374
+                     |  .9107723   .1606587
+                     | 
                 mean |  .5174087   .4238626
                      |  .0091077   .0016066
                      | 
@@ -3251,6 +3400,9 @@ strong               |
                      | 
                 bias | -.4800228  -.5726527
                      |   .008474   .0015871
+                     | 
+             pctbias | -48.00228  -57.26527
+                     |  .8473998   .1587076
                      | 
                 mean |  .5199772   .4273473
                      |   .008474   .0015871
@@ -3295,6 +3447,9 @@ strong               |
                 bias | -.5493135  -.7166597
                      |  .0006823   .0019751
                      | 
+             pctbias | -54.93135  -71.66597
+                     |  .0682317   .1975053
+                     | 
                 mean |  .4506865   .2833404
                      |  .0006823    .001975
                      | 
@@ -3337,6 +3492,9 @@ strong               |
                      | 
                 bias | -.5327445  -.7097985
                      |  .0024078   .0014303
+                     | 
+             pctbias | -53.27445  -70.97984
+                     |  .2407844   .1430308
                      | 
                 mean |  .4672555   .2902015
                      |  .0024078   .0014303
@@ -3381,6 +3539,9 @@ strong               |
                 bias | -.5266696  -.7035869
                      |  .0013512   .0011961
                      | 
+             pctbias | -52.66696  -70.35869
+                     |  .1351187   .1196069
+                     | 
                 mean |  .4733304   .2964131
                      |  .0013512   .0011961
                      | 
@@ -3423,6 +3584,9 @@ no                   |
                      | 
                 bias | -1.307797  -1.326471
                      |  .0061806   .0023825
+                     | 
+             pctbias | -65.38986  -66.32354
+                     |  .3090319   .1191227
                      | 
                 mean |  .6922027   .6735292
                      |  .0061806   .0023824
@@ -3467,6 +3631,9 @@ no                   |
                 bias | -1.302571  -1.322404
                      |  .0055271   .0022077
                      | 
+             pctbias | -65.12856  -66.12019
+                     |  .2763571   .1103851
+                     | 
                 mean |  .6974287   .6775963
                      |  .0055271   .0022077
                      | 
@@ -3509,6 +3676,9 @@ no                   |
                      | 
                 bias | -1.306469  -1.323747
                      |   .008333   .0032677
+                     | 
+             pctbias | -65.32345  -66.18737
+                     |  .4166502   .1633848
                      | 
                 mean |   .693531   .6762527
                      |   .008333   .0032677
@@ -3553,6 +3723,9 @@ no                   |
                 bias | -1.316856  -1.326636
                      |  .0067318   .0011335
                      | 
+             pctbias |  -65.8428   -66.3318
+                     |  .3365891    .056676
+                     | 
                 mean |  .6831438   .6733639
                      |  .0067318   .0011335
                      | 
@@ -3595,6 +3768,9 @@ no                   |
                      | 
                 bias | -1.319055  -1.325349
                      |  .0061702   .0029695
+                     | 
+             pctbias | -65.95273  -66.26744
+                     |  .3085124   .1484758
                      | 
                 mean |  .6809454   .6746511
                      |  .0061702   .0029695
@@ -3639,6 +3815,9 @@ no                   |
                 bias | -1.316775  -1.326936
                      |  .0051833   .0009191
                      | 
+             pctbias | -65.83877  -66.34681
+                     |  .2591626   .0459528
+                     | 
                 mean |  .6832246   .6730638
                      |  .0051833    .000919
                      | 
@@ -3681,6 +3860,9 @@ no                   |
                      | 
                 bias | -1.318063  -1.325043
                      |  .0050072   .0025058
+                     | 
+             pctbias | -65.90316  -66.25215
+                     |  .2503625   .1252886
                      | 
                 mean |  .6819367   .6749571
                      |  .0050073   .0025058
@@ -3725,6 +3907,9 @@ no                   |
                 bias |  -1.32307  -1.327968
                      |  .0070301   .0029846
                      | 
+             pctbias | -66.15351  -66.39841
+                     |  .3515066   .1492279
+                     | 
                 mean |  .6769298   .6720319
                      |  .0070301   .0029845
                      | 
@@ -3767,6 +3952,9 @@ no                   |
                      | 
                 bias | -1.316539  -1.326821
                      |  .0069543   .0021496
+                     | 
+             pctbias | -65.82695  -66.34106
+                     |  .3477126   .1074821
                      | 
                 mean |   .683461   .6731789
                      |  .0069543   .0021497
@@ -3811,6 +3999,9 @@ no                   |
                 bias | -1.279253  -1.319123
                      |  .0061127   .0041479
                      | 
+             pctbias | -63.96267  -65.95617
+                     |  .3056365    .207393
+                     | 
                 mean |  .7207466   .6808766
                      |  .0061127   .0041479
                      | 
@@ -3853,6 +4044,9 @@ no                   |
                      | 
                 bias | -1.290381  -1.324175
                      |  .0059598   .0014897
+                     | 
+             pctbias | -64.51904  -66.20874
+                     |  .2979884   .0744854
                      | 
                 mean |  .7096192    .675825
                      |  .0059598   .0014897
@@ -3897,6 +4091,9 @@ no                   |
                 bias | -1.295571  -1.324551
                      |  .0022705    .001978
                      | 
+             pctbias | -64.77856  -66.22754
+                     |  .1135266   .0988987
+                     | 
                 mean |  .7044287   .6754493
                      |  .0022705    .001978
                      | 
@@ -3939,6 +4136,9 @@ weak                 |
                      | 
                 bias | -1.322612  -1.464344
                      |  .0083422   .0005186
+                     | 
+             pctbias |  -66.1306  -73.21719
+                     |  .4171105    .025932
                      | 
                 mean |   .677388   .5356563
                      |  .0083422   .0005186
@@ -3983,6 +4183,9 @@ weak                 |
                 bias |  -1.31763  -1.458816
                      |  .0084582   .0021574
                      | 
+             pctbias | -65.88152  -72.94081
+                     |  .4229113   .1078697
+                     | 
                 mean |  .6823696   .5411837
                      |  .0084582   .0021574
                      | 
@@ -4025,6 +4228,9 @@ weak                 |
                      | 
                 bias |  -1.31851  -1.453566
                      |  .0096718   .0020515
+                     | 
+             pctbias | -65.92551  -72.67828
+                     |  .4835917    .102575
                      | 
                 mean |  .6814897   .5464345
                      |  .0096718   .0020515
@@ -4069,6 +4275,9 @@ weak                 |
                 bias | -1.310477  -1.412313
                      |  .0122318   .0056929
                      | 
+             pctbias | -65.52384  -70.61568
+                     |  .6115909   .2846427
+                     | 
                 mean |  .6895231   .5876865
                      |  .0122318   .0056928
                      | 
@@ -4111,6 +4320,9 @@ weak                 |
                      | 
                 bias | -1.321604  -1.413733
                      |  .0079814   .0018621
+                     | 
+             pctbias | -66.08022  -70.68668
+                     |  .3990709   .0931063
                      | 
                 mean |  .6783956   .5862665
                      |  .0079814   .0018621
@@ -4155,6 +4367,9 @@ weak                 |
                 bias | -1.318235  -1.411376
                      |   .007356   .0014086
                      | 
+             pctbias | -65.91174  -70.56878
+                     |  .3678021   .0704278
+                     | 
                 mean |  .6817653   .5886245
                      |   .007356   .0014086
                      | 
@@ -4197,6 +4412,9 @@ weak                 |
                      | 
                 bias | -1.319415  -1.400135
                      |   .003471   .0017714
+                     | 
+             pctbias | -65.97076  -70.00674
+                     |  .1735487   .0885685
                      | 
                 mean |  .6805848   .5998653
                      |   .003471   .0017713
@@ -4241,6 +4459,9 @@ weak                 |
                 bias | -1.313372  -1.393573
                      |  .0071191   .0028635
                      | 
+             pctbias | -65.66858  -69.67865
+                     |  .3559549   .1431772
+                     | 
                 mean |  .6866285    .606427
                      |  .0071191   .0028635
                      | 
@@ -4283,6 +4504,9 @@ weak                 |
                      | 
                 bias | -1.314858  -1.392893
                      |  .0083999   .0025808
+                     | 
+             pctbias |  -65.7429  -69.64465
+                     |   .419993   .1290381
                      | 
                 mean |   .685142   .6071069
                      |  .0083999   .0025808
@@ -4327,6 +4551,9 @@ weak                 |
                 bias | -1.303792  -1.535749
                      |   .008946   .0027332
                      | 
+             pctbias | -65.18959  -76.78747
+                     |  .4472979    .136662
+                     | 
                 mean |  .6962081   .4642507
                      |  .0089459   .0027332
                      | 
@@ -4369,6 +4596,9 @@ weak                 |
                      | 
                 bias |  -1.31017  -1.523499
                      |  .0113827   .0015594
+                     | 
+             pctbias | -65.50849  -76.17494
+                     |  .5691334   .0779686
                      | 
                 mean |  .6898302   .4765011
                      |  .0113827   .0015594
@@ -4413,6 +4643,9 @@ weak                 |
                 bias | -1.304921  -1.517664
                      |  .0120814   .0029386
                      | 
+             pctbias | -65.24603  -75.88319
+                     |  .6040701   .1469286
+                     | 
                 mean |  .6950794   .4823362
                      |  .0120814   .0029386
                      | 
@@ -4455,6 +4688,9 @@ moderate             |
                      | 
                 bias | -1.335768  -1.505411
                      |  .0076055   .0027565
+                     | 
+             pctbias |  -66.7884  -75.27057
+                     |  .3802755    .137827
                      | 
                 mean |  .6642321   .4945886
                      |  .0076055   .0027565
@@ -4499,6 +4735,9 @@ moderate             |
                 bias | -1.330543  -1.497439
                      |  .0107511   .0019617
                      | 
+             pctbias | -66.52716  -74.87193
+                     |  .5375557   .0980844
+                     | 
                 mean |  .6694567   .5025613
                      |  .0107511   .0019617
                      | 
@@ -4541,6 +4780,9 @@ moderate             |
                      | 
                 bias | -1.330167   -1.49135
                      |  .0128763   .0014059
+                     | 
+             pctbias | -66.50837   -74.5675
+                     |  .6438169   .0702932
                      | 
                 mean |  .6698326   .5086501
                      |  .0128763   .0014059
@@ -4585,6 +4827,9 @@ moderate             |
                 bias | -1.323576  -1.445715
                      |  .0085734   .0018728
                      | 
+             pctbias |  -66.1788  -72.28573
+                     |  .4286719   .0936387
+                     | 
                 mean |  .6764238   .5542854
                      |  .0085734   .0018728
                      | 
@@ -4627,6 +4872,9 @@ moderate             |
                      | 
                 bias | -1.318332  -1.438148
                      |  .0078557   .0016633
+                     | 
+             pctbias | -65.91662  -71.90739
+                     |   .392784   .0831625
                      | 
                 mean |  .6816677   .5618522
                      |  .0078557   .0016633
@@ -4671,6 +4919,9 @@ moderate             |
                 bias | -1.315917  -1.434783
                      |   .009949   .0022675
                      | 
+             pctbias | -65.79584  -71.73917
+                     |  .4974522   .1133733
+                     | 
                 mean |  .6840832   .5652167
                      |  .0099491   .0022675
                      | 
@@ -4713,6 +4964,9 @@ moderate             |
                      | 
                 bias | -1.319614  -1.422726
                      |  .0073946    .001668
+                     | 
+             pctbias | -65.98072   -71.1363
+                     |  .3697288   .0834012
                      | 
                 mean |  .6803856    .577274
                      |  .0073946    .001668
@@ -4757,6 +5011,9 @@ moderate             |
                 bias | -1.311115  -1.415575
                      |   .008456   .0021711
                      | 
+             pctbias | -65.55575  -70.77874
+                     |  .4227991   .1085549
+                     | 
                 mean |  .6888851   .5844252
                      |   .008456   .0021711
                      | 
@@ -4799,6 +5056,9 @@ moderate             |
                      | 
                 bias | -1.313955  -1.413535
                      |  .0097463   .0014303
+                     | 
+             pctbias | -65.69776  -70.67677
+                     |  .4873137   .0715153
                      | 
                 mean |  .6860448   .5864645
                      |  .0097463   .0014303
@@ -4843,6 +5103,9 @@ moderate             |
                 bias | -1.337845  -1.584004
                      |  .0064772   .0027025
                      | 
+             pctbias | -66.89227  -79.20022
+                     |  .3238582   .1351274
+                     | 
                 mean |  .6621546   .4159955
                      |  .0064772   .0027025
                      | 
@@ -4885,6 +5148,9 @@ moderate             |
                      | 
                 bias | -1.334315  -1.574284
                      |  .0092651   .0029027
+                     | 
+             pctbias | -66.71574   -78.7142
+                     |  .4632539   .1451338
                      | 
                 mean |  .6656853    .425716
                      |  .0092651   .0029027
@@ -4929,6 +5195,9 @@ moderate             |
                 bias | -1.332132  -1.567755
                      |  .0112369    .003054
                      | 
+             pctbias | -66.60661  -78.38773
+                     |  .5618471    .152699
+                     | 
                 mean |  .6678677   .4322456
                      |  .0112369    .003054
                      | 
@@ -4971,6 +5240,9 @@ strong               |
                      | 
                 bias | -1.346992  -1.540549
                      |  .0096389   .0025089
+                     | 
+             pctbias | -67.34959  -77.02745
+                     |  .4819444   .1254445
                      | 
                 mean |  .6530082    .459451
                      |  .0096389   .0025089
@@ -5015,6 +5287,9 @@ strong               |
                 bias |  -1.34503  -1.530939
                      |  .0124883   .0017897
                      | 
+             pctbias |  -67.2515  -76.54697
+                     |  .6244155   .0894827
+                     | 
                 mean |    .65497   .4690607
                      |  .0124883   .0017897
                      | 
@@ -5057,6 +5332,9 @@ strong               |
                      | 
                 bias | -1.342437  -1.524728
                      |  .0137875    .001306
+                     | 
+             pctbias | -67.12183  -76.23639
+                     |  .6893764   .0653024
                      | 
                 mean |  .6575634   .4752722
                      |  .0137875   .0013061
@@ -5101,6 +5379,9 @@ strong               |
                 bias | -1.326409  -1.473115
                      |  .0121115   .0038339
                      | 
+             pctbias | -66.32046  -73.65574
+                     |  .6055744   .1916933
+                     | 
                 mean |  .6735908   .5268852
                      |  .0121115   .0038339
                      | 
@@ -5143,6 +5424,9 @@ strong               |
                      | 
                 bias | -1.320677  -1.464485
                      |  .0129522   .0021427
+                     | 
+             pctbias | -66.03386  -73.22427
+                     |  .6476111   .1071329
                      | 
                 mean |  .6793229   .5355146
                      |  .0129522   .0021427
@@ -5187,6 +5471,9 @@ strong               |
                 bias | -1.321249  -1.461507
                      |  .0146235   .0007733
                      | 
+             pctbias | -66.06242  -73.07533
+                     |  .7311737   .0386653
+                     | 
                 mean |  .6787515   .5384933
                      |  .0146235   .0007733
                      | 
@@ -5229,6 +5516,9 @@ strong               |
                      | 
                 bias | -1.317039   -1.44319
                      |  .0110862   .0033553
+                     | 
+             pctbias | -65.85195  -72.15952
+                     |  .5543083   .1677626
                      | 
                 mean |   .682961   .5568095
                      |  .0110861   .0033553
@@ -5273,6 +5563,9 @@ strong               |
                 bias | -1.308761  -1.436584
                      |   .013178   .0029443
                      | 
+             pctbias | -65.43804  -71.82918
+                     |  .6589005   .1472143
+                     | 
                 mean |  .6912392   .5634166
                      |   .013178   .0029443
                      | 
@@ -5315,6 +5608,9 @@ strong               |
                      | 
                 bias | -1.312228  -1.433862
                      |  .0145424   .0015023
+                     | 
+             pctbias |  -65.6114  -71.69309
+                     |  .7271221   .0751161
                      | 
                 mean |  .6877719   .5661381
                      |  .0145424   .0015023
@@ -5359,6 +5655,9 @@ strong               |
                 bias | -1.387593  -1.629363
                      |  .0037779   .0024111
                      | 
+             pctbias | -69.37964  -81.46813
+                     |  .1888929   .1205569
+                     | 
                 mean |  .6124072   .3706375
                      |  .0037779   .0024111
                      | 
@@ -5401,6 +5700,9 @@ strong               |
                      | 
                 bias | -1.371233   -1.61694
                      |  .0046516    .001737
+                     | 
+             pctbias | -68.56164  -80.84698
+                     |  .2325777   .0868511
                      | 
                 mean |  .6287673   .3830604
                      |  .0046515    .001737
@@ -5445,6 +5747,9 @@ strong               |
                 bias | -1.367252  -1.609501
                      |  .0096495   .0014294
                      | 
+             pctbias | -68.36262  -80.47506
+                     |  .4824731   .0714677
+                     | 
                 mean |  .6327477   .3904988
                      |  .0096494   .0014294
                      | 
@@ -5487,6 +5792,9 @@ no                   |
                      | 
                 bias | -2.232929  -2.245385
                      |  .0051654   .0024822
+                     | 
+             pctbias | -74.43095  -74.84615
+                     |  .1721793   .0827387
                      | 
                 mean |  .7670715   .7546154
                      |  .0051654   .0024822
@@ -5531,6 +5839,9 @@ no                   |
                 bias | -2.231122  -2.246655
                      |   .003995   .0007711
                      | 
+             pctbias | -74.37073  -74.88848
+                     |  .1331678   .0257043
+                     | 
                 mean |  .7688783   .7533455
                      |   .003995   .0007711
                      | 
@@ -5573,6 +5884,9 @@ no                   |
                      | 
                 bias | -2.230956  -2.243401
                      |  .0025895    .001471
+                     | 
+             pctbias | -74.36519  -74.78004
+                     |  .0863168   .0490324
                      | 
                 mean |  .7690443    .756599
                      |  .0025895   .0014709
@@ -5617,6 +5931,9 @@ no                   |
                 bias | -2.234753  -2.245992
                      |  .0033831    .002718
                      | 
+             pctbias | -74.49175   -74.8664
+                     |  .1127708   .0905996
+                     | 
                 mean |  .7652475   .7540081
                      |  .0033831    .002718
                      | 
@@ -5659,6 +5976,9 @@ no                   |
                      | 
                 bias |  -2.23736  -2.245711
                      |  .0021565   .0015276
+                     | 
+             pctbias | -74.57866  -74.85703
+                     |   .071882    .050921
                      | 
                 mean |  .7626403   .7542891
                      |  .0021564   .0015276
@@ -5703,6 +6023,9 @@ no                   |
                 bias | -2.240013  -2.247705
                      |  .0025425   .0009066
                      | 
+             pctbias |  -74.6671  -74.92348
+                     |  .0847483   .0302211
+                     | 
                 mean |  .7599871   .7522954
                      |  .0025424   .0009067
                      | 
@@ -5745,6 +6068,9 @@ no                   |
                      | 
                 bias | -2.238239  -2.242858
                      |  .0035051   .0025372
+                     | 
+             pctbias | -74.60796  -74.76192
+                     |  .1168378   .0845717
                      | 
                 mean |  .7617615   .7571423
                      |  .0035051   .0025371
@@ -5789,6 +6115,9 @@ no                   |
                 bias | -2.241478    -2.2468
                      |  .0024975   .0006771
                      | 
+             pctbias | -74.71595  -74.89335
+                     |  .0832509   .0225715
+                     | 
                 mean |  .7585217   .7531995
                      |  .0024975   .0006771
                      | 
@@ -5831,6 +6160,9 @@ no                   |
                      | 
                 bias |   -2.2421  -2.247514
                      |   .003669     .00129
+                     | 
+             pctbias | -74.73666  -74.91713
+                     |  .1222986   .0429987
                      | 
                 mean |  .7579004   .7524861
                      |  .0036689     .00129
@@ -5875,6 +6207,9 @@ no                   |
                 bias | -2.214927  -2.242032
                      |  .0068736   .0020908
                      | 
+             pctbias | -73.83089  -74.73441
+                     |  .2291184   .0696945
+                     | 
                 mean |  .7850732   .7579681
                      |  .0068735   .0020908
                      | 
@@ -5917,6 +6252,9 @@ no                   |
                      | 
                 bias | -2.219182  -2.243489
                      |  .0064163   .0022797
+                     | 
+             pctbias | -73.97272  -74.78296
+                     |  .2138773   .0759892
                      | 
                 mean |  .7808182   .7565112
                      |  .0064163   .0022797
@@ -5961,6 +6299,9 @@ no                   |
                 bias | -2.218931  -2.242794
                      |  .0034149   .0008912
                      | 
+             pctbias | -73.96437   -74.7598
+                     |  .1138309   .0297073
+                     | 
                 mean |  .7810687   .7572058
                      |   .003415   .0008913
                      | 
@@ -6003,6 +6344,9 @@ weak                 |
                      | 
                 bias | -2.248282  -2.399629
                      |  .0086557   .0034221
+                     | 
+             pctbias | -74.94273  -79.98764
+                     |  .2885249   .1140687
                      | 
                 mean |  .7517182   .6003708
                      |  .0086557   .0034221
@@ -6047,6 +6391,9 @@ weak                 |
                 bias | -2.238935  -2.388066
                      |  .0095935   .0026686
                      | 
+             pctbias | -74.63118  -79.60221
+                     |  .3197824    .088955
+                     | 
                 mean |  .7610644   .6119337
                      |  .0095935   .0026687
                      | 
@@ -6089,6 +6436,9 @@ weak                 |
                      | 
                 bias | -2.237282  -2.383771
                      |  .0122407   .0023669
+                     | 
+             pctbias | -74.57607  -79.45904
+                     |  .4080241    .078897
                      | 
                 mean |   .762718   .6162288
                      |  .0122407   .0023669
@@ -6133,6 +6483,9 @@ weak                 |
                 bias |  -2.24159  -2.344385
                      |  .0092378   .0021701
                      | 
+             pctbias | -74.71966  -78.14617
+                     |  .3079251   .0723373
+                     | 
                 mean |  .7584102   .6556148
                      |  .0092377   .0021701
                      | 
@@ -6175,6 +6528,9 @@ weak                 |
                      | 
                 bias | -2.243223  -2.341583
                      |  .0102291   .0016383
+                     | 
+             pctbias | -74.77409  -78.05277
+                     |  .3409696   .0546099
                      | 
                 mean |  .7567774   .6584167
                      |  .0102291   .0016383
@@ -6219,6 +6575,9 @@ weak                 |
                 bias | -2.232298  -2.335013
                      |  .0084814    .002012
                      | 
+             pctbias | -74.40993  -77.83376
+                     |  .2827117    .067065
+                     | 
                 mean |  .7677021   .6649874
                      |  .0084814    .002012
                      | 
@@ -6261,6 +6620,9 @@ weak                 |
                      | 
                 bias | -2.240288   -2.32569
                      |  .0069784   .0011123
+                     | 
+             pctbias | -74.67628    -77.523
+                     |  .2326119   .0370758
                      | 
                 mean |  .7597117     .67431
                      |  .0069783   .0011122
@@ -6305,6 +6667,9 @@ weak                 |
                 bias | -2.235368  -2.321266
                      |  .0074865   .0014906
                      | 
+             pctbias | -74.51228  -77.37554
+                     |  .2495512   .0496869
+                     | 
                 mean |  .7646317   .6787337
                      |  .0074866   .0014906
                      | 
@@ -6347,6 +6712,9 @@ weak                 |
                      | 
                 bias | -2.233274   -2.31738
                      |   .007493   .0014249
+                     | 
+             pctbias | -74.44246  -77.24599
+                     |  .2497654   .0474974
                      | 
                 mean |  .7667262   .6826202
                      |   .007493   .0014249
@@ -6391,6 +6759,9 @@ weak                 |
                 bias | -2.226623  -2.470659
                      |   .004482   .0041815
                      | 
+             pctbias | -74.22075  -82.35531
+                     |  .1493998   .1393845
+                     | 
                 mean |  .7733774   .5293407
                      |   .004482   .0041815
                      | 
@@ -6433,6 +6804,9 @@ weak                 |
                      | 
                 bias | -2.231151  -2.461983
                      |  .0117968   .0030571
+                     | 
+             pctbias | -74.37169  -82.06612
+                     |  .3932269   .1019023
                      | 
                 mean |  .7688493   .5380166
                      |  .0117968   .0030571
@@ -6477,6 +6851,9 @@ weak                 |
                 bias | -2.228713  -2.455407
                      |  .0158392   .0016359
                      | 
+             pctbias | -74.29042  -81.84689
+                     |  .5279743   .0545313
+                     | 
                 mean |  .7712873   .5445932
                      |  .0158392    .001636
                      | 
@@ -6519,6 +6896,9 @@ moderate             |
                      | 
                 bias | -2.247947  -2.440362
                      |  .0105104   .0029538
+                     | 
+             pctbias | -74.93157  -81.34539
+                     |  .3503464    .098459
                      | 
                 mean |  .7520528   .5596382
                      |  .0105104   .0029537
@@ -6563,6 +6943,9 @@ moderate             |
                 bias | -2.249758  -2.430328
                      |   .012098   .0017425
                      | 
+             pctbias | -74.99195  -81.01095
+                     |  .4032675   .0580848
+                     | 
                 mean |  .7502415   .5696718
                      |   .012098   .0017426
                      | 
@@ -6605,6 +6988,9 @@ moderate             |
                      | 
                 bias | -2.245427   -2.42547
                      |  .0146995   .0021324
+                     | 
+             pctbias | -74.84756  -80.84901
+                     |  .4899818   .0710796
                      | 
                 mean |  .7545733   .5745297
                      |  .0146994   .0021324
@@ -6649,6 +7035,9 @@ moderate             |
                 bias | -2.239079  -2.374092
                      |  .0111316   .0033454
                      | 
+             pctbias | -74.63599   -79.1364
+                     |  .3710549   .1115125
+                     | 
                 mean |  .7609205    .625908
                      |  .0111316   .0033454
                      | 
@@ -6691,6 +7080,9 @@ moderate             |
                      | 
                 bias | -2.241221  -2.368948
                      |  .0114628   .0017511
+                     | 
+             pctbias | -74.70738  -78.96492
+                     |   .382093    .058371
                      | 
                 mean |  .7587786   .6310526
                      |  .0114628   .0017511
@@ -6735,6 +7127,9 @@ moderate             |
                 bias | -2.231988   -2.36334
                      |    .01146   .0022229
                      | 
+             pctbias | -74.39959  -78.77801
+                     |  .3819999   .0740973
+                     | 
                 mean |  .7680123   .6366599
                      |    .01146   .0022229
                      | 
@@ -6777,6 +7172,9 @@ moderate             |
                      | 
                 bias | -2.230862  -2.346169
                      |  .0056264   .0051033
+                     | 
+             pctbias | -74.36205  -78.20565
+                     |  .1875469   .1701092
                      | 
                 mean |  .7691385   .6538303
                      |  .0056264   .0051033
@@ -6821,6 +7219,9 @@ moderate             |
                 bias | -2.237885  -2.345692
                      |  .0137902   .0011885
                      | 
+             pctbias | -74.59615  -78.18974
+                     |  .4596735   .0396179
+                     | 
                 mean |  .7621155   .6543077
                      |  .0137902   .0011886
                      | 
@@ -6863,6 +7264,9 @@ moderate             |
                      | 
                 bias | -2.231634  -2.342683
                      |  .0111877   .0009688
+                     | 
+             pctbias | -74.38779  -78.08943
+                     |  .3729241   .0322934
                      | 
                 mean |  .7683662    .657317
                      |  .0111877   .0009688
@@ -6907,6 +7311,9 @@ moderate             |
                 bias | -2.263521  -2.530488
                      |   .011056   .0028382
                      | 
+             pctbias | -75.45069   -84.3496
+                     |  .3685326   .0946076
+                     | 
                 mean |  .7364794    .469512
                      |   .011056   .0028382
                      | 
@@ -6949,6 +7356,9 @@ moderate             |
                      | 
                 bias | -2.253247  -2.519275
                      |  .0082502   .0033181
+                     | 
+             pctbias | -75.10825  -83.97584
+                     |  .2750061    .110604
                      | 
                 mean |  .7467527   .4807248
                      |  .0082502   .0033181
@@ -6993,6 +7403,9 @@ moderate             |
                 bias | -2.256226  -2.511199
                      |  .0160305   .0019544
                      | 
+             pctbias | -75.20752  -83.70662
+                     |  .5343491   .0651481
+                     | 
                 mean |  .7437745   .4888015
                      |  .0160305   .0019545
                      | 
@@ -7035,6 +7448,9 @@ strong               |
                      | 
                 bias | -2.268098  -2.481844
                      |  .0121745   .0016024
+                     | 
+             pctbias | -75.60328  -82.72814
+                     |  .4058162   .0534122
                      | 
                 mean |  .7319016   .5181559
                      |  .0121745   .0016023
@@ -7079,6 +7495,9 @@ strong               |
                 bias | -2.258989  -2.468607
                      |  .0131977   .0015061
                      | 
+             pctbias | -75.29964   -82.2869
+                     |  .4399232   .0502046
+                     | 
                 mean |  .7410106   .5313929
                      |  .0131977   .0015062
                      | 
@@ -7121,6 +7540,9 @@ strong               |
                      | 
                 bias | -2.264643  -2.464252
                      |  .0192464   .0004797
+                     | 
+             pctbias | -75.48811  -82.14173
+                     |  .6415457   .0159896
                      | 
                 mean |  .7353569    .535748
                      |  .0192464   .0004797
@@ -7165,6 +7587,9 @@ strong               |
                 bias | -2.240554  -2.404206
                      |   .014336   .0020096
                      | 
+             pctbias | -74.68513  -80.14019
+                     |  .4778678   .0669872
+                     | 
                 mean |  .7594461   .5957942
                      |   .014336   .0020096
                      | 
@@ -7207,6 +7632,9 @@ strong               |
                      | 
                 bias | -2.238555  -2.396704
                      |  .0168086   .0010253
+                     | 
+             pctbias | -74.61851  -79.89012
+                     |  .5602869   .0341753
                      | 
                 mean |  .7614448   .6032964
                      |  .0168086   .0010253
@@ -7251,6 +7679,9 @@ strong               |
                 bias | -2.234794  -2.389558
                      |  .0162109   .0020158
                      | 
+             pctbias | -74.49312  -79.65194
+                     |  .5403647   .0671927
+                     | 
                 mean |  .7652063   .6104419
                      |  .0162109   .0020158
                      | 
@@ -7293,6 +7724,9 @@ strong               |
                      | 
                 bias | -2.229048   -2.37057
                      |  .0130975   .0026068
+                     | 
+             pctbias |  -74.3016  -79.01901
+                     |  .4365839   .0868922
                      | 
                 mean |   .770952   .6294295
                      |  .0130975   .0026067
@@ -7337,6 +7771,9 @@ strong               |
                 bias | -2.235387  -2.367372
                      |   .015648   .0016501
                      | 
+             pctbias |  -74.5129  -78.91238
+                     |  .5215988   .0550038
+                     | 
                 mean |  .7646129   .6326286
                      |   .015648   .0016501
                      | 
@@ -7379,6 +7816,9 @@ strong               |
                      | 
                 bias | -2.230681  -2.363108
                      |  .0167315   .0011557
+                     | 
+             pctbias | -74.35603  -78.77026
+                     |   .557716    .038524
                      | 
                 mean |  .7693194   .6368921
                      |  .0167315   .0011557
@@ -7423,6 +7863,9 @@ strong               |
                 bias | -2.300397  -2.582924
                      |  .0072999   .0023149
                      | 
+             pctbias |  -76.6799  -86.09748
+                     |   .243329   .0771629
+                     | 
                 mean |   .699603   .4170755
                      |  .0072999   .0023149
                      | 
@@ -7465,6 +7908,9 @@ strong               |
                      | 
                 bias |  -2.29162  -2.568453
                      |  .0091314   .0016841
+                     | 
+             pctbias | -76.38734   -85.6151
+                     |  .3043816   .0561369
                      | 
                 mean |  .7083798   .4315469
                      |  .0091314   .0016841
@@ -7509,6 +7955,9 @@ strong               |
                 bias | -2.290514  -2.558377
                      |  .0120249   .0016146
                      | 
+             pctbias | -76.35046  -85.27923
+                     |  .4008304   .0538185
+                     | 
                 mean |  .7094861   .4416232
                      |   .012025   .0016146
                      | 
@@ -7551,6 +8000,9 @@ no                   |
                      | 
                 bias | -2.994629  -3.000415
                      |  .0107607   .0024163
+                     | 
+             pctbias | -74.86574  -75.01038
+                     |  .2690175   .0604083
                      | 
                 mean |   1.00537   .9995849
                      |  .0107607   .0024163
@@ -7595,6 +8047,9 @@ no                   |
                 bias | -2.999596  -3.004155
                      |  .0048037   .0025184
                      | 
+             pctbias | -74.98991  -75.10388
+                     |  .1200915   .0629605
+                     | 
                 mean |  1.000404    .995845
                      |  .0048037   .0025184
                      | 
@@ -7637,6 +8092,9 @@ no                   |
                      | 
                 bias | -3.001429  -3.002868
                      |  .0029755   .0018082
+                     | 
+             pctbias | -75.03574   -75.0717
+                     |  .0743882   .0452059
                      | 
                 mean |  .9985707   .9971318
                      |  .0029755   .0018083
@@ -7681,6 +8139,9 @@ no                   |
                 bias | -3.004084  -2.997569
                      |  .0070999   .0024528
                      | 
+             pctbias | -75.10211  -74.93923
+                     |  .1774963   .0613205
+                     | 
                 mean |  .9959156   1.002431
                      |  .0070999   .0024528
                      | 
@@ -7723,6 +8184,9 @@ no                   |
                      | 
                 bias |  -3.00392  -3.001103
                      |  .0032317   .0012501
+                     | 
+             pctbias |   -75.098  -75.02757
+                     |  .0807913   .0312537
                      | 
                 mean |  .9960799   .9988972
                      |  .0032316   .0012501
@@ -7767,6 +8231,9 @@ no                   |
                 bias | -2.997728  -2.998016
                      |  .0012267   .0015055
                      | 
+             pctbias | -74.94321  -74.95039
+                     |  .0306682   .0376387
+                     | 
                 mean |  1.002272   1.001984
                      |  .0012267   .0015055
                      | 
@@ -7809,6 +8276,9 @@ no                   |
                      | 
                 bias | -2.995962  -3.002784
                      |   .002032    .001401
+                     | 
+             pctbias | -74.89906  -75.06959
+                     |   .050799   .0350248
                      | 
                 mean |  1.004038   .9972164
                      |   .002032    .001401
@@ -7853,6 +8323,9 @@ no                   |
                 bias | -2.998585  -2.997779
                      |  .0035577   .0009639
                      | 
+             pctbias | -74.96461  -74.94447
+                     |  .0889418   .0240963
+                     | 
                 mean |  1.001415   1.002221
                      |  .0035577   .0009638
                      | 
@@ -7895,6 +8368,9 @@ no                   |
                      | 
                 bias | -3.001679  -3.002001
                      |  .0030035   .0020055
+                     | 
+             pctbias | -75.04198  -75.05003
+                     |  .0750866   .0501378
                      | 
                 mean |  .9983205   .9979988
                      |  .0030035   .0020055
@@ -7939,6 +8415,9 @@ no                   |
                 bias | -2.995999  -2.996582
                      |  .0066571   .0021117
                      | 
+             pctbias | -74.89996  -74.91454
+                     |  .1664268   .0527913
+                     | 
                 mean |  1.004001   1.003418
                      |  .0066571   .0021116
                      | 
@@ -7981,6 +8460,9 @@ no                   |
                      | 
                 bias | -3.000171  -3.001427
                      |  .0059851    .001714
+                     | 
+             pctbias | -75.00426  -75.03568
+                     |  .1496276   .0428493
                      | 
                 mean |  .9998292   .9985731
                      |  .0059851    .001714
@@ -8025,6 +8507,9 @@ no                   |
                 bias | -3.002478  -3.000446
                      |  .0055087   .0027096
                      | 
+             pctbias | -75.06194  -75.01115
+                     |  .1377181   .0677401
+                     | 
                 mean |  .9975224   .9995539
                      |  .0055087   .0027096
                      | 
@@ -8067,6 +8552,9 @@ weak                 |
                      | 
                 bias | -3.002171  -3.185722
                      |  .0113746   .0036406
+                     | 
+             pctbias | -75.05426  -79.64306
+                     |  .2843658   .0910157
                      | 
                 mean |  .9978294   .8142775
                      |  .0113746   .0036406
@@ -8111,6 +8599,9 @@ weak                 |
                 bias | -3.011764  -3.177345
                      |  .0188567   .0032035
                      | 
+             pctbias | -75.29411  -79.43362
+                     |  .4714178   .0800869
+                     | 
                 mean |  .9882358    .822655
                      |  .0188567   .0032035
                      | 
@@ -8153,6 +8644,9 @@ weak                 |
                      | 
                 bias | -3.011817  -3.175154
                      |  .0175251   .0008869
+                     | 
+             pctbias | -75.29543  -79.37885
+                     |  .4381279   .0221715
                      | 
                 mean |  .9881829   .8248463
                      |  .0175252   .0008868
@@ -8197,6 +8691,9 @@ weak                 |
                 bias | -3.016521  -3.128675
                      |  .0186222   .0044846
                      | 
+             pctbias | -75.41303  -78.21687
+                     |   .465556   .1121151
+                     | 
                 mean |  .9834788   .8713255
                      |  .0186222   .0044846
                      | 
@@ -8239,6 +8736,9 @@ weak                 |
                      | 
                 bias | -3.002004   -3.11986
                      |  .0166096   .0029594
+                     | 
+             pctbias | -75.05009  -77.99651
+                     |  .4152388   .0739848
                      | 
                 mean |  .9979962   .8801398
                      |  .0166095   .0029594
@@ -8283,6 +8783,9 @@ weak                 |
                 bias | -2.999089  -3.113776
                      |  .0184658   .0005924
                      | 
+             pctbias | -74.97723  -77.84441
+                     |  .4616447   .0148112
+                     | 
                 mean |  1.000911   .8862236
                      |  .0184657   .0005925
                      | 
@@ -8325,6 +8828,9 @@ weak                 |
                      | 
                 bias | -2.983202  -3.095103
                      |  .0045645   .0016494
+                     | 
+             pctbias | -74.58004  -77.37757
+                     |  .1141134    .041236
                      | 
                 mean |  1.016798   .9048972
                      |  .0045645   .0016495
@@ -8369,6 +8875,9 @@ weak                 |
                 bias | -2.987766  -3.091867
                      |  .0085424    .001212
                      | 
+             pctbias | -74.69415  -77.29668
+                     |  .2135611   .0303007
+                     | 
                 mean |  1.012234   .9081327
                      |  .0085424    .001212
                      | 
@@ -8411,6 +8920,9 @@ weak                 |
                      | 
                 bias | -2.990165  -3.089739
                      |  .0117867   .0010523
+                     | 
+             pctbias | -74.75413  -77.24347
+                     |  .2946675   .0263083
                      | 
                 mean |  1.009835   .9102612
                      |  .0117867   .0010523
@@ -8455,6 +8967,9 @@ weak                 |
                 bias | -3.010471  -3.285554
                      |  .0105235   .0018183
                      | 
+             pctbias | -75.26177  -82.13885
+                     |  .2630874   .0454571
+                     | 
                 mean |  .9895291   .7144461
                      |  .0105235   .0018183
                      | 
@@ -8497,6 +9012,9 @@ weak                 |
                      | 
                 bias |  -3.00299  -3.270803
                      |  .0151019   .0036735
+                     | 
+             pctbias | -75.07474  -81.77007
+                     |  .3775463   .0918365
                      | 
                 mean |  .9970105   .7291971
                      |  .0151019   .0036735
@@ -8541,6 +9059,9 @@ weak                 |
                 bias | -3.002946  -3.261291
                      |  .0247665   .0009058
                      | 
+             pctbias | -75.07365  -81.53228
+                     |   .619162   .0226462
+                     | 
                 mean |  .9970539   .7387089
                      |  .0247665   .0009058
                      | 
@@ -8583,6 +9104,9 @@ moderate             |
                      | 
                 bias | -3.013647  -3.245251
                      |  .0192346   .0025051
+                     | 
+             pctbias | -75.34116  -81.13128
+                     |  .4808648   .0626282
                      | 
                 mean |  .9863533   .7547489
                      |  .0192346   .0025051
@@ -8627,6 +9151,9 @@ moderate             |
                 bias | -3.012673  -3.231163
                      |  .0211378   .0019764
                      | 
+             pctbias | -75.31683  -80.77908
+                     |  .5284449   .0494107
+                     | 
                 mean |  .9873266   .7688366
                      |  .0211378   .0019764
                      | 
@@ -8669,6 +9196,9 @@ moderate             |
                      | 
                 bias | -3.005552  -3.223433
                      |  .0231768   .0010593
+                     | 
+             pctbias |  -75.1388  -80.58582
+                     |  .5794202   .0264823
                      | 
                 mean |  .9944479   .7765676
                      |  .0231768   .0010593
@@ -8713,6 +9243,9 @@ moderate             |
                 bias | -2.994348  -3.160841
                      |  .0149806   .0021303
                      | 
+             pctbias |  -74.8587  -79.02103
+                     |  .3745158   .0532573
+                     | 
                 mean |  1.005652   .8391588
                      |  .0149806   .0021303
                      | 
@@ -8755,6 +9288,9 @@ moderate             |
                      | 
                 bias | -2.997223   -3.15397
                      |  .0190882   .0023353
+                     | 
+             pctbias | -74.93057  -78.84926
+                     |  .4772043   .0583836
                      | 
                 mean |  1.002777   .8460299
                      |  .0190882   .0023353
@@ -8799,6 +9335,9 @@ moderate             |
                 bias |  -2.99038  -3.145649
                      |  .0201023   .0013029
                      | 
+             pctbias |  -74.7595  -78.64123
+                     |  .5025578   .0325715
+                     | 
                 mean |   1.00962   .8543508
                      |  .0201023   .0013029
                      | 
@@ -8841,6 +9380,9 @@ moderate             |
                      | 
                 bias | -2.992055   -3.13024
                      |  .0161362   .0036257
+                     | 
+             pctbias | -74.80138    -78.256
+                     |  .4034058   .0906414
                      | 
                 mean |  1.007944   .8697602
                      |  .0161362   .0036257
@@ -8885,6 +9427,9 @@ moderate             |
                 bias | -2.998073  -3.126206
                      |  .0208639   .0022687
                      | 
+             pctbias | -74.95183  -78.15515
+                     |  .5215967   .0567181
+                     | 
                 mean |  1.001927   .8737941
                      |  .0208638   .0022687
                      | 
@@ -8927,6 +9472,9 @@ moderate             |
                      | 
                 bias | -2.989707  -3.120793
                      |  .0191421   .0011073
+                     | 
+             pctbias | -74.74266  -78.01981
+                     |  .4785528   .0276833
                      | 
                 mean |  1.010293   .8792073
                      |  .0191421   .0011073
@@ -8971,6 +9519,9 @@ moderate             |
                 bias |  -3.02962  -3.359543
                      |  .0217692   .0020539
                      | 
+             pctbias |  -75.7405  -83.98858
+                     |  .5442307   .0513482
+                     | 
                 mean |  .9703802   .6404569
                      |  .0217692   .0020539
                      | 
@@ -9013,6 +9564,9 @@ moderate             |
                      | 
                 bias | -3.019276  -3.337311
                      |  .0166041   .0031311
+                     | 
+             pctbias | -75.48191  -83.43276
+                     |  .4151013   .0782778
                      | 
                 mean |  .9807236   .6626894
                      |  .0166041   .0031311
@@ -9057,6 +9611,9 @@ moderate             |
                 bias | -3.019835  -3.330678
                      |  .0246767    .001249
                      | 
+             pctbias | -75.49588  -83.26695
+                     |  .6169165   .0312252
+                     | 
                 mean |  .9801647   .6693217
                      |  .0246767    .001249
                      | 
@@ -9099,6 +9656,9 @@ strong               |
                      | 
                 bias | -3.024464  -3.296904
                      |  .0267434   .0012912
+                     | 
+             pctbias |  -75.6116   -82.4226
+                     |  .6685856     .03228
                      | 
                 mean |  .9755358   .7030959
                      |  .0267434   .0012912
@@ -9143,6 +9703,9 @@ strong               |
                 bias | -3.018974  -3.281265
                      |   .027235   .0019939
                      | 
+             pctbias | -75.47436  -82.03162
+                     |  .6808759   .0498482
+                     | 
                 mean |  .9810258   .7187353
                      |   .027235   .0019939
                      | 
@@ -9185,6 +9748,9 @@ strong               |
                      | 
                 bias | -3.015851  -3.269592
                      |  .0290547   .0016741
+                     | 
+             pctbias | -75.39626  -81.73979
+                     |  .7263665   .0418521
                      | 
                 mean |  .9841494   .7304083
                      |  .0290547   .0016741
@@ -9229,6 +9795,9 @@ strong               |
                 bias | -2.998842  -3.200364
                      |  .0212808    .001765
                      | 
+             pctbias | -74.97104   -80.0091
+                     |  .5320209   .0441261
+                     | 
                 mean |  1.001158    .799636
                      |  .0212808   .0017651
                      | 
@@ -9271,6 +9840,9 @@ strong               |
                      | 
                 bias |  -2.99646  -3.189072
                      |  .0266249    .002001
+                     | 
+             pctbias | -74.91151  -79.72681
+                     |   .665622   .0500246
                      | 
                 mean |   1.00354    .810928
                      |  .0266249    .002001
@@ -9315,6 +9887,9 @@ strong               |
                 bias |   -2.9924  -3.182039
                      |  .0263996   .0010592
                      | 
+             pctbias | -74.81001  -79.55097
+                     |  .6599911   .0264793
+                     | 
                 mean |    1.0076   .8179612
                      |  .0263996   .0010592
                      | 
@@ -9357,6 +9932,9 @@ strong               |
                      | 
                 bias | -2.981823  -3.158879
                      |  .0240243    .002951
+                     | 
+             pctbias | -74.54557  -78.97198
+                     |  .6006085   .0737744
                      | 
                 mean |  1.018177   .8411211
                      |  .0240243    .002951
@@ -9401,6 +9979,9 @@ strong               |
                 bias | -2.986196  -3.152813
                      |   .025138   .0019745
                      | 
+             pctbias |  -74.6549  -78.82034
+                     |  .6284502   .0493626
+                     | 
                 mean |  1.013804   .8471864
                      |   .025138   .0019745
                      | 
@@ -9443,6 +10024,9 @@ strong               |
                      | 
                 bias | -2.974632  -3.145827
                      |  .0235786   .0006123
+                     | 
+             pctbias | -74.36581  -78.64567
+                     |  .5894657   .0153068
                      | 
                 mean |  1.025368   .8541731
                      |  .0235786   .0006123
@@ -9487,6 +10071,9 @@ strong               |
                 bias | -3.055623  -3.425369
                      |  .0090367   .0020396
                      | 
+             pctbias | -76.39056  -85.63422
+                     |  .2259172   .0509895
+                     | 
                 mean |  .9443774   .5746312
                      |  .0090367   .0020396
                      | 
@@ -9529,6 +10116,9 @@ strong               |
                      | 
                 bias | -3.047292  -3.402767
                      |  .0183362   .0022123
+                     | 
+             pctbias |  -76.1823  -85.06918
+                     |  .4584053   .0553068
                      | 
                 mean |   .952708   .5972326
                      |  .0183362   .0022123
@@ -9573,6 +10163,9 @@ strong               |
                 bias | -3.055875  -3.393809
                      |  .0253625   .0005315
                      | 
+             pctbias | -76.39688  -84.84521
+                     |  .6340632   .0132884
+                     | 
                 mean |  .9441248   .6061915
                      |  .0253625   .0005315
                      | 
@@ -9603,16 +10196,13 @@ strong               |
                power |       100        100
                      |         0          0
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
-. siman lollyplot if k==5, xtitle("test x-title") name("lollyplot_test7", replace)
+. siman lollyplot if `useit4', xtitle("test x-title") name("lollyplot_test7", replace)
 Performance measures not specified: defaulting to bias empse cover
 Drawing graph...
-Warning: graph will have 64 columns of panels: consider using 'if' condition as detailed in siman
-  lollyplot
 
 . * without -if k==5- you get "too many sersets" error
 . 
@@ -9622,186 +10212,80 @@ Drawing graph...
 
 . 
 . 
-. * Won't work as true not constant accross methods
-. if ${detail} == 1 {
-. 
-. * Testing warning messages correspond to the number of panels/graphs that will be printed
-. 
-. clear all
-. prog drop _all
-. use $testpath/data/extendedtestdata.dta, clear
-. 
-. * remove non-integer values
-. gen betatrue=beta
-. foreach var in beta pmiss {
-  2.         gen `var'char = strofreal(`var')
-  3.         drop `var'
-  4.         sencode `var'char, gen(`var')
-  5.         drop `var'char
-  6. }
-. order beta pmiss
-. 
-. * create a string dgm var as well for testing
-. gen betastring = "0"
-. replace betastring = "0.25" if beta == 2
-variable betastring was str1 now str4
-(36,000 real changes made)
-. replace betastring = "0.5" if beta == 3
-(36,000 real changes made)
-. drop beta
-. rename betastring beta
-. 
-. siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(beta
+. /*
+> * Testing warning messages correspond to the number of panels/graphs that will be printed
+> * VERY LONG
+> 
+> clear all
+> prog drop _all
+> use $testpath/data/extendedtestdata.dta, clear
+> 
+> * remove non-integer values
+> gen betatrue=beta
+> foreach var in beta pmiss {
+>         gen `var'char = strofreal(`var')
+>         drop `var'
+>         sencode `var'char, gen(`var')
+>         drop `var'char
+> }
+> order beta pmiss
+> 
+> * create a string dgm var as well for testing
+> gen betastring = "0"
+> replace betastring = "0.25" if beta == 2
+> replace betastring = "0.5" if beta == 3
+> drop beta
+> rename betastring beta
+> 
+> siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(beta
 > true)
-  variable beta was long now byte
-  (324,000 bytes saved)
-Warning: variable beta, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode beta
-  as numeric before running -siman setup-.
-
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         3
-The target values are:            effect mean0 mean1
-
-The number of methods is:         3
-The method values are:            CCA MeanImp Noadj
-
-Data generating mechanism (dgm)
-The total number of dgms is:      12
-The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
-
-Estimates are contained in the dataset
-
-The estimates variable is:        b
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             betatrue
-_____________________________________________________
+> 
+> * scatter
+> siman scatter
+> siman scatter if method == "CCA"
+> siman scatter if estimand == "effect"
+> siman scatter if mech =="MCAR": mech
+>         * this means the value whose label is "MCAR" in the value label mech
+> 
+> siman scatter, by(pmiss)
+> siman scatter, by(estimand)
+> siman scatter, by(method)
+> 
+> * swarm, requires 2 methods
+> siman swarm
+> siman swarm if (method == "CCA" | method == "MeanImp")
+> siman swarm if estimand == "effect"
+> siman swarm if mech =="MCAR": mech
+> 
+> siman swarm, by(pmiss)
+> siman swarm, by(estimand)
+> 
+> * blandaltman
+> siman blandaltman
+> siman blandaltman if estimand == "effect"
+> siman blandaltman if mech =="MCAR": mech
+> 
+> siman blandaltman, by(pmiss)
+> 
+> siman blandaltman, methlist(Noadj MeanImp)
+> 
+> * comparemethodsscatter
+> siman comparemethodsscatter
+> siman comparemethodsscatter if estimand == "effect"
+> siman comparemethodsscatter if mech =="MCAR": mech
+> 
+> siman comparemethodsscatter, methlist(Noadj MeanImp)
+> 
+> * zipplot
+> siman zipplot
+> siman zipplot if method == "CCA" 
+> siman zipplot if estimand == "effect"
+> siman zipplot if mech =="MCAR": mech
+> 
+> siman zipplot, by(pmiss)
+> siman zipplot, by(method)
+> */
 . 
-. * scatter
-. siman scatter
-working.....
-Warning: 108 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
-
-. siman scatter if method == "CCA"
-working.....
-Warning: 36 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
-
-. siman scatter if estimand == "effect"
-working.....
-Warning: 36 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
-
-. siman scatter if mech =="MCAR": mech
-working.....
-Warning: 54 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
-
-.         * this means the value whose label is "MCAR" in the value label mech
-. 
-. siman scatter, by(pmiss)
-working.....
-. siman scatter, by(estimand)
-working.....
-. siman scatter, by(method)
-working.....
-. 
-. * swarm, requires 2 methods
-. siman swarm
-working.....
-Warning: 36 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
-
-. siman swarm if (method == "CCA" | method == "MeanImp")
-working.....
-Warning: 36 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
-
-. siman swarm if estimand == "effect"
-working.....
-. siman swarm if mech =="MCAR": mech
-working.....
-Warning: 18 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
-
-. 
-. siman swarm, by(pmiss)
-working.....
-. siman swarm, by(estimand)
-working.....
-. 
-. * blandaltman
-. siman blandaltman
-working....
-Warning: 36 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
-
-. siman blandaltman if estimand == "effect"
-working....
-. siman blandaltman if mech =="MCAR": mech
-working....
-Warning: 18 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
-
-. 
-. siman blandaltman, by(pmiss)
-working....
-. 
-. siman blandaltman, methlist(Noadj MeanImp)
-working....
-Warning: 36 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
-
-. 
-. * comparemethodsscatter
-. siman comparemethodsscatter
-Working.....
-Warning: 36 graphs will be created: consider using 'if' condition as detailed in siman
-  comparemethodsscatter
-
-. siman comparemethodsscatter if estimand == "effect"
-Working.....
-. siman comparemethodsscatter if mech =="MCAR": mech
-Working.....
-Warning: 18 graphs will be created: consider using 'if' condition as detailed in siman
-  comparemethodsscatter
-
-. 
-. siman comparemethodsscatter, methlist(Noadj MeanImp)
-Working.....
-Warning: 36 graphs will be created: consider using 'if' condition as detailed in siman
-  comparemethodsscatter
-
-. 
-. * zipplot
-. siman zipplot
-Warning: 3 graphs each of 36 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 3 graphs (1 per true value)...
-
-. siman zipplot if method == "CCA" 
-Drawing 3 graphs (1 per true value)...
-. siman zipplot if estimand == "effect"
-Drawing 3 graphs (1 per true value)...
-. siman zipplot if mech =="MCAR": mech
-Warning: 3 graphs each of 18 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 3 graphs (1 per true value)...
-
-. 
-. siman zipplot, by(pmiss)
-Drawing 3 graphs (1 per true value)...
-. siman zipplot, by(method)
-Drawing 3 graphs (1 per true value)...
-. }
-
 . 
 . di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 *** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN testing_graphs_main.do ***

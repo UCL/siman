@@ -21,7 +21,7 @@ C:\ian\git\siman\siman_comparemethodsscatter.ado
 C:\ian\git\siman\siman_blandaltman.ado
 *! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.9.7 03oct2023
+*! version 1.9.8 27mar2024
 C:\ian\git\siman\siman_scatter.ado
 *! version 1.6.7 03oct2023
 C:\ian\git\siman\siman_nestloop.ado
@@ -767,8 +767,8 @@ The number of methods is:         1
 The method values are:            1
 
 Data generating mechanism (dgm)
-The total number of dgms is:      0
-The dgm variables (# levels):     none
+The total number of dgms is:      1
+The dgm variables (# levels):     N/A
 
 Estimates are contained in the dataset
 
@@ -2819,8 +2819,8 @@ The number of methods is:         1
 The method values are:            1
 
 Data generating mechanism (dgm)
-The total number of dgms is:      0
-The dgm variables (# levels):     none
+The total number of dgms is:      1
+The dgm variables (# levels):     N/A
 
 Estimates are contained in the dataset
 
@@ -4692,8 +4692,8 @@ The number of methods is:         2
 The method values are:            1 2
 
 Data generating mechanism (dgm)
-The total number of dgms is:      0
-The dgm variables (# levels):     none
+The total number of dgms is:      1
+The dgm variables (# levels):     N/A
 
 Estimates are contained in the dataset
 
@@ -6675,8 +6675,8 @@ The number of methods is:         2
 The method values are:            1 2
 
 Data generating mechanism (dgm)
-The total number of dgms is:      0
-The dgm variables (# levels):     none
+The total number of dgms is:      1
+The dgm variables (# levels):     N/A
 
 Estimates are contained in the dataset
 
@@ -8661,8 +8661,8 @@ The number of methods is:         2
 The method values are:            A B
 
 Data generating mechanism (dgm)
-The total number of dgms is:      0
-The dgm variables (# levels):     none
+The total number of dgms is:      1
+The dgm variables (# levels):     N/A
 
 Estimates are contained in the dataset
 

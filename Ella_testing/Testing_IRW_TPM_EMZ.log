@@ -21,7 +21,7 @@ C:\ian\git\siman\siman_comparemethodsscatter.ado
 C:\ian\git\siman\siman_blandaltman.ado
 *! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.9.7 03oct2023
+*! version 1.9.8 27mar2024
 C:\ian\git\siman\siman_scatter.ado
 *! version 1.6.7 03oct2023
 C:\ian\git\siman\siman_nestloop.ado
@@ -435,21 +435,16 @@ The true variable is:             betatrue
 _____________________________________________________
 
 . 
-. siman scatter
+. siman scatter if beta==1 & pmiss==1 & mech==1
 working.....
-Warning: 108 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
 
 . * 1 panel per dgm, target and method 
-. if ${detail} == 1 siman scatter if method == "CCA"
+. if ${detail} == 1 siman scatter if beta==1 & pmiss==1 & mech==1 & method == "CCA"
 working.....
-Warning: 36 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
 
 . 
-. siman swarm
+. siman swarm if beta==1 & pmiss==1 & mech==1
 working.....
-Warning: 36 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
 
 . * 1 panel per dgm level(s) and target, method on y-axis
 . * for the first panel in the all-graph display (beta level 1, pmiss level 1, mech level 1, estiman
@@ -467,7 +462,7 @@ working.....
 
 . * siman comparemethodsscatter
 . * one graph per dgm and target combination, comparing methods - too slow
-. siman comparemethodsscatter if beta == 1 & pmiss == 1 & mech == 2 
+. siman comparemethodsscatter if beta == 1 & pmiss == 1 & mech == 2 & estimand=="effect"
 Working.....
 
 . * one graph per target, comparing methods
@@ -477,9 +472,8 @@ working....
 
 . * 1 graph per combination of dgm levels and target, by method difference
 . 
-. siman zipplot
-Warning: 6 graphs each of 18 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 6 graphs (1 per true value)
+. siman zipplot if beta == 1 & pmiss == 2 & mech == 2
+Drawing 2 graphs (1 per true value)
 
 . * 1 panel per dgm, target and method combination, 1 graph per beta (as defines y-axis)
 . 
@@ -2152,11 +2146,11 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
   second entry is its Monte Carlo error.
 
 . 
-. siman lollyplot
+. siman lollyplot if mech==2 & estimand=="effect"
 Performance measures not specified: defaulting to bias empse cover
-Drawing 3 graphs (one per target)...
-Warning: each graph will have 12 columns of panels: consider using 'if' condition as detailed in 
-  siman lollyplot
+Drawing graph...
+Warning: graph will have 6 columns of panels: consider using 'if' condition as detailed in siman
+  lollyplot
 
 . 
 . siman nestloop
@@ -2208,7 +2202,7 @@ working.....
 working.....
 
 . 
-. siman comparemethodsscatter 
+. siman comparemethodsscatter if dgm==1
 Working.....
 
 . 
