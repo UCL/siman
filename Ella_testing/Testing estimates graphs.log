@@ -3,13 +3,13 @@
 C:\ian\git\siman\siman.ado
 *!version 0.3  08aug2023
 C:\ian\git\siman\siman_setup.ado
-*!    version 0.8.8  14feb2024    
+*!    version 0.9  3apr2024    
 C:\ian\git\siman\siman_describe.ado
 *! version 0.5.1   13mar2024
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.6.15 14mar2024
+*! version 0.7     3apr2024
 C:\ian\git\siman\siman_table.ado
-*! version 0.8.2   20dec2023
+*! version 0.8.3   3apr2024
 C:\ian\git\siman\siman_reshape.ado
 *!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
@@ -617,32 +617,2767 @@ Warning: with 10 methods compared, this plot may be too dense to read.  If you f
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
   and b are the methods you are particularly interested to compare.
 Working.....
---Break--
-r(1);
 
-end of do-file
---Break--
-r(1);
+. siman_comparemethodsscatter, by(target)  
+Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
+  you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
+  and b are the methods you are particularly interested to compare.
+Working.....
 
-end of do-file
+. siman_blandaltman est se
+working....
 
---Break--
-r(1);
+. siman_blandaltman, by(dgm)   
+working....
 
-. do new_tests.do
+. siman blandaltman if target == "gamma"                     
+working....
 
-. /* 
-> new_tests.do
-> new tests 14feb2024
-> */
+. siman_blandaltman, bygraphoptions(norescale)
+working....
+
+. siman_blandaltman, methlist(2 8)
+working....
+
+. siman_blandaltman, methlist(3 7) by(dgm)  
+working....
+
+. siman_blandaltman, methlist(10 4 8)
+working....
+
+. siman_blandaltman, methlist(2 9 3)                
+working....
+
+. siman_blandaltman
+working....
+
+. siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("yabberdabberdoo", replace) 
+working....
+
+. siman_blandaltman, ytitle("test y-title") xtitle("test x-title")
+working....
+
 . 
-. 
-. local filename new_tests
+. clear all
 
-. 
 . prog drop _all
 
-. cd $testpath
-C:\ian\git\siman\Ella_testing
+. use $testpath/data/bvsim_all_out.dta, clear
 
-. cap log close
+. rename _dnum dnum
+
+. drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
+
+. drop if _n>100
+(17,900 observations deleted)
+
+. reshape long beta_ sebeta_ gamma_ segamma_, i(dnum) j(method)
+(j = 1 2 3 4 5 6 7 8 9 10)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations              100   ->   1,000       
+Number of variables                  41   ->   6           
+j variable (10 values)                    ->   method
+xij variables:
+              beta_1 beta_2 ... beta_10   ->   beta_
+        sebeta_1 sebeta_2 ... sebeta_10   ->   sebeta_
+           gamma_1 gamma_2 ... gamma_10   ->   gamma_
+     segamma_1 segamma_2 ... segamma_10   ->   segamma_
+-----------------------------------------------------------------------------
+
+. rename beta_ estbeta
+
+. rename sebeta_ sebeta
+
+. rename gamma_ estgamma
+
+. rename segamma_ segamma
+
+. reshape long est se, i(dnum method) j(target "beta" "gamma")
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations            1,000   ->   2,000       
+Number of variables                   6   ->   5           
+j variable (2 values)                     ->   target
+xij variables:
+                       estbeta estgamma   ->   est
+                         sebeta segamma   ->   se
+-----------------------------------------------------------------------------
+
+. gen dgm=1
+
+. expand 2, gen(dupindicator)
+(2,000 observations created)
+
+. replace dgm=2 if dupindicator==1
+(2,000 real changes made)
+
+. drop dupindicator
+
+. *drop if method>4
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         10
+The method values are:            1 2 3 4 5 6 7 8 9 10
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             N/A
+_____________________________________________________
+
+. siman_comparemethodsscatter
+Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
+  you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
+  and b are the methods you are particularly interested to compare.
+Working.....
+
+. siman_comparemethodsscatter se                             
+Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
+  you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
+  and b are the methods you are particularly interested to compare.
+Working.....
+
+. siman_comparemethodsscatter est
+Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
+  you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
+  and b are the methods you are particularly interested to compare.
+Working.....
+
+. siman_comparemethodsscatter, methlist(3 8) 
+Working.....
+
+. siman_comparemethodsscatter, methlist(1 3 8)                      
+Working.....
+
+. siman_comparemethodsscatter se, methlist(1 3 8 9) 
+Working.....
+
+. siman_comparemethodsscatter, methlist(1 3 8)                      
+Working.....
+
+. siman_comparemethodsscatter se, methlist(1 3 8 9) 
+Working.....
+
+. 
+. * method numeric labelled string variable
+. clear all
+
+. prog drop _all
+
+. use $testpath/data/bvsim_all_out.dta, clear
+
+. rename _dnum dnum
+
+. drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
+
+. drop if _n>100
+(17,900 observations deleted)
+
+. reshape long beta_ sebeta_ gamma_ segamma_, i(dnum) j(method)
+(j = 1 2 3 4 5 6 7 8 9 10)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations              100   ->   1,000       
+Number of variables                  41   ->   6           
+j variable (10 values)                    ->   method
+xij variables:
+              beta_1 beta_2 ... beta_10   ->   beta_
+        sebeta_1 sebeta_2 ... sebeta_10   ->   sebeta_
+           gamma_1 gamma_2 ... gamma_10   ->   gamma_
+     segamma_1 segamma_2 ... segamma_10   ->   segamma_
+-----------------------------------------------------------------------------
+
+. rename beta_ estbeta
+
+. rename sebeta_ sebeta
+
+. rename gamma_ estgamma
+
+. rename segamma_ segamma
+
+. reshape long est se, i(dnum method) j(target "beta" "gamma")
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations            1,000   ->   2,000       
+Number of variables                   6   ->   5           
+j variable (2 values)                     ->   target
+xij variables:
+                       estbeta estgamma   ->   est
+                         sebeta segamma   ->   se
+-----------------------------------------------------------------------------
+
+. gen dgm = 1
+
+. expand 2, gen(dupindicator)
+(2,000 observations created)
+
+. replace dgm=2 if dupindicator==1
+(2,000 real changes made)
+
+. drop dupindicator
+
+. label define methodl 1 "A" 2 "B" 3 "C" 4 "D" 5 "E" 6 "F" 7 "G" 8 "H" 9 "I" 10 "J"
+
+. label values method methodl
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         10
+The method values are:            A B C D E F G H I J
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             N/A
+_____________________________________________________
+
+. siman_blandaltman, methlist(10 4 8)
+working....
+
+. siman_blandaltman, methlist(2 9 3)
+working....
+
+. 
+. * String variable method
+. use $testpath/data/simlongESTPM_wideE_wideM4.dta, clear
+
+. siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) or
+> der(method)
+note: converting to long-wide format, creating variable target
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 3: long-wide
+The format for targets is:        long
+The format for methods is:        wide
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            A B
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates stub is:            est
+The se stub is:                   se
+The df stub is:                   N/A
+The ci stubs are:                 N/A
+The p stub is:                    N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman_comparemethodsscatter 
+Working.....
+
+. siman_blandaltman
+working....
+
+. siman_blandaltman est se
+working....
+
+. siman_blandaltman, by(dgm)                                                                        
+>         
+working....
+
+. * To test methlist subset, create a dataset with more than 3 string method variables
+. clear all
+
+. use $testpath/data/bvsim_all_out.dta, clear
+
+. rename _dnum dnum
+
+. drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
+
+. drop if _n>100
+(17,900 observations deleted)
+
+. reshape long beta_ sebeta_ gamma_ segamma_, i(dnum) j(method)
+(j = 1 2 3 4 5 6 7 8 9 10)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations              100   ->   1,000       
+Number of variables                  41   ->   6           
+j variable (10 values)                    ->   method
+xij variables:
+              beta_1 beta_2 ... beta_10   ->   beta_
+        sebeta_1 sebeta_2 ... sebeta_10   ->   sebeta_
+           gamma_1 gamma_2 ... gamma_10   ->   gamma_
+     segamma_1 segamma_2 ... segamma_10   ->   segamma_
+-----------------------------------------------------------------------------
+
+. rename beta_ estbeta
+
+. rename sebeta_ sebeta
+
+. rename gamma_ estgamma
+
+. rename segamma_ segamma
+
+. reshape long est se, i(dnum method) j(target "beta" "gamma")
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations            1,000   ->   2,000       
+Number of variables                   6   ->   5           
+j variable (2 values)                     ->   target
+xij variables:
+                       estbeta estgamma   ->   est
+                         sebeta segamma   ->   se
+-----------------------------------------------------------------------------
+
+. gen dgm=1
+
+. expand 2, gen(dupindicator)
+(2,000 observations created)
+
+. replace dgm=2 if dupindicator==1
+(2,000 real changes made)
+
+. drop dupindicator
+
+. drop if method>4
+(2,400 observations deleted)
+
+. gen method_string = "A"
+
+. replace method_string = "B" if method == 2
+(400 real changes made)
+
+. replace method_string = "C" if method == 3
+(400 real changes made)
+
+. replace method_string = "D" if method == 4
+(400 real changes made)
+
+. drop method
+
+. rename method_string method
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         4
+The method values are:            A B C D
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             N/A
+_____________________________________________________
+
+. siman_comparemethodsscatter
+Working.....
+
+. siman_comparemethodsscatter, methlist(A C)                       
+Working.....
+
+. siman_comparemethodsscatter, methlist(B C D) 
+Working.....
+
+. siman_comparemethodsscatter, methlist(B C D)                       
+Working.....
+
+. siman_blandaltman       
+working....
+
+. siman_blandaltman, methlist(B A C)  
+working....
+
+. 
+. clear all
+
+. prog drop _all
+
+. use $testpath/data/estimates.dta, clear
+
+. gen dgmnew = 0
+
+. replace dgmnew = 1 if dgm==2
+(4,800 real changes made)
+
+. label define dgmlabelvalues 0 "y = 1" 1 "y = 1.5"
+
+. label values dgmnew dgmlabelvalues
+
+. drop dgm conv error
+
+. rename dgmnew dgm
+
+. siman setup, rep(idrep) dgm(dgm) method(method) est(theta) se(se)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         N/A
+The target values are:            N/A
+
+The number of methods is:         3
+The method values are:            Exponential Weibull Cox
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        theta
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             N/A
+_____________________________________________________
+
+. siman swarm                                                         
+working.....
+
+. 
+. * Combinations of #methods and #targets for testing matrix
+. ************************************************************
+. 
+. * Numeric methods
+. *******************
+. use $testpath/data/bvsim_all_out.dta, clear
+
+. rename _dnum dnum
+
+. drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
+
+. drop if _n>100
+(17,900 observations deleted)
+
+. reshape long beta_ sebeta_ gamma_ segamma_, i(dnum) j(method)
+(j = 1 2 3 4 5 6 7 8 9 10)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations              100   ->   1,000       
+Number of variables                  41   ->   6           
+j variable (10 values)                    ->   method
+xij variables:
+              beta_1 beta_2 ... beta_10   ->   beta_
+        sebeta_1 sebeta_2 ... sebeta_10   ->   sebeta_
+           gamma_1 gamma_2 ... gamma_10   ->   gamma_
+     segamma_1 segamma_2 ... segamma_10   ->   segamma_
+-----------------------------------------------------------------------------
+
+. rename beta_ estbeta
+
+. rename sebeta_ sebeta
+
+. rename gamma_ estgamma
+
+. rename segamma_ segamma
+
+. reshape long est se, i(dnum method) j(target "beta" "gamma")
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations            1,000   ->   2,000       
+Number of variables                   6   ->   5           
+j variable (2 values)                     ->   target
+xij variables:
+                       estbeta estgamma   ->   est
+                         sebeta segamma   ->   se
+-----------------------------------------------------------------------------
+
+. gen dgm = 1
+
+. expand 2, gen(dupindicator)
+(2,000 observations created)
+
+. replace dgm=2 if dupindicator==1
+(2,000 real changes made)
+
+. drop dupindicator
+
+. tempfile origdata
+
+. save `origdata', replace
+(file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000001.tmp not found)
+file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000001.tmp saved as .dta format
+
+. global origdata `origdata'
+
+. 
+. * 2 methods, true variable
+. drop if method>2
+(3,200 observations deleted)
+
+. gen true = 0.5
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * 3 methods, true variable
+. use ${origdata}, clear
+
+. 
+. drop if method>3
+(2,800 observations deleted)
+
+. gen true = 0.5
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         3
+The method values are:            1 2 3
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * > 3 methods, true variable
+. use ${origdata}, clear
+
+. gen true = 0.5
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         10
+The method values are:            1 2 3 4 5 6 7 8 9 10
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman scatter
+working.....
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
+  siman scatter
+
+. siman scatter se est
+working.....
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
+  siman scatter
+
+. siman comparemethodsscatter
+Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
+  you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
+  and b are the methods you are particularly interested to compare.
+Working.....
+
+. siman comparemethodsscatter se
+Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
+  you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
+  and b are the methods you are particularly interested to compare.
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
+  detailed in siman zipplot
+
+. siman swarm
+working.....
+
+. 
+. * 2 methods, true value
+. use ${origdata}, clear
+
+. drop if method>2
+(3,200 observations deleted)
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             _true
+_____________________________________________________
+
+. 
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. 
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * 3 methods, true value
+. use ${origdata}, clear
+
+. drop if method>3
+(2,800 observations deleted)
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         3
+The method values are:            1 2 3
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             _true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * > 3 methods, true value
+. use ${origdata}, clear
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         10
+The method values are:            1 2 3 4 5 6 7 8 9 10
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             _true
+_____________________________________________________
+
+. siman scatter
+working.....
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
+  siman scatter
+
+. siman scatter se est
+working.....
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
+  siman scatter
+
+. siman comparemethodsscatter
+Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
+  you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
+  and b are the methods you are particularly interested to compare.
+Working.....
+
+. siman comparemethodsscatter se
+Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
+  you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
+  and b are the methods you are particularly interested to compare.
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
+  detailed in siman zipplot
+
+. siman swarm
+working.....
+
+. 
+. 
+. * String methods
+. *******************
+. clear all
+
+. use $testpath/data/bvsim_all_out.dta, clear
+
+. rename _dnum dnum
+
+. drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
+
+. drop if _n>100
+(17,900 observations deleted)
+
+. reshape long beta_ sebeta_ gamma_ segamma_, i(dnum) j(method)
+(j = 1 2 3 4 5 6 7 8 9 10)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations              100   ->   1,000       
+Number of variables                  41   ->   6           
+j variable (10 values)                    ->   method
+xij variables:
+              beta_1 beta_2 ... beta_10   ->   beta_
+        sebeta_1 sebeta_2 ... sebeta_10   ->   sebeta_
+           gamma_1 gamma_2 ... gamma_10   ->   gamma_
+     segamma_1 segamma_2 ... segamma_10   ->   segamma_
+-----------------------------------------------------------------------------
+
+. rename beta_ estbeta
+
+. rename sebeta_ sebeta
+
+. rename gamma_ estgamma
+
+. rename segamma_ segamma
+
+. reshape long est se, i(dnum method) j(target "beta" "gamma")
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations            1,000   ->   2,000       
+Number of variables                   6   ->   5           
+j variable (2 values)                     ->   target
+xij variables:
+                       estbeta estgamma   ->   est
+                         sebeta segamma   ->   se
+-----------------------------------------------------------------------------
+
+. gen dgm=1
+
+. expand 2, gen(dupindicator)
+(2,000 observations created)
+
+. replace dgm=2 if dupindicator==1
+(2,000 real changes made)
+
+. drop dupindicator
+
+. drop if method>4
+(2,400 observations deleted)
+
+. gen method_string = "A"
+
+. replace method_string = "B" if method == 2
+(400 real changes made)
+
+. replace method_string = "C" if method == 3
+(400 real changes made)
+
+. replace method_string = "D" if method == 4
+(400 real changes made)
+
+. drop method
+
+. rename method_string method
+
+. tempfile origdata
+
+. save ${origdata}, replace
+file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000001.tmp saved as .dta format
+
+. * 2 methods, true variable
+. drop if method == "C" | method == "D"
+(800 observations deleted)
+
+. gen true = 0.5
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            A B
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot                                                   
+
+. siman swarm
+working.....
+
+. * 3 methods, true variable
+. use ${origdata}, clear
+
+. drop if  method == "D"
+(400 observations deleted)
+
+. gen true = 0.5
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         3
+The method values are:            A B C
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * > 3 methods, true variable
+. use ${origdata}, clear
+
+. gen true = 0.5
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         4
+The method values are:            A B C D
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman scatter
+working.....
+Warning: 16 panels will be created: consider using 'if' condition or 'by' option as detailed in
+  siman scatter
+
+. siman scatter se est
+working.....
+Warning: 16 panels will be created: consider using 'if' condition or 'by' option as detailed in
+  siman scatter
+
+. siman comparemethodsscatter
+Working.....
+
+. siman comparemethodsscatter se
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+Warning: 1 graphs each of 16 panels will be created: consider using 'if' condition or 'by' option as
+  detailed in siman zipplot
+
+. siman swarm
+working.....
+
+. * 2 methods, true value
+. use ${origdata}, clear
+
+. drop if method == "C" | method == "D"
+(800 observations deleted)
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            A B
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             _true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * 3 methods, true value
+. use ${origdata}, clear
+
+. drop if  method == "D"
+(400 observations deleted)
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         3
+The method values are:            A B C
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             _true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * > 3 methods, true value
+. use ${origdata}, clear
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         4
+The method values are:            A B C D
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             _true
+_____________________________________________________
+
+. siman scatter
+working.....
+Warning: 16 panels will be created: consider using 'if' condition or 'by' option as detailed in
+  siman scatter
+
+. siman scatter se est
+working.....
+Warning: 16 panels will be created: consider using 'if' condition or 'by' option as detailed in
+  siman scatter
+
+. siman comparemethodsscatter
+Working.....
+
+. siman comparemethodsscatter se
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+Warning: 1 graphs each of 16 panels will be created: consider using 'if' condition or 'by' option as
+  detailed in siman zipplot
+
+. siman swarm
+working.....
+
+. 
+. 
+. * Numeric targets
+. *******************
+. use $testpath/data/bvsim_all_out.dta, clear
+
+. rename _dnum dnum
+
+. drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
+
+. drop if _n>100
+(17,900 observations deleted)
+
+. reshape long beta_ sebeta_ gamma_ segamma_, i(dnum) j(method)
+(j = 1 2 3 4 5 6 7 8 9 10)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations              100   ->   1,000       
+Number of variables                  41   ->   6           
+j variable (10 values)                    ->   method
+xij variables:
+              beta_1 beta_2 ... beta_10   ->   beta_
+        sebeta_1 sebeta_2 ... sebeta_10   ->   sebeta_
+           gamma_1 gamma_2 ... gamma_10   ->   gamma_
+     segamma_1 segamma_2 ... segamma_10   ->   segamma_
+-----------------------------------------------------------------------------
+
+. rename beta_ estbeta
+
+. rename sebeta_ sebeta
+
+. rename gamma_ estgamma
+
+. rename segamma_ segamma
+
+. reshape long est se, i(dnum method) j(target "beta" "gamma")
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations            1,000   ->   2,000       
+Number of variables                   6   ->   5           
+j variable (2 values)                     ->   target
+xij variables:
+                       estbeta estgamma   ->   est
+                         sebeta segamma   ->   se
+-----------------------------------------------------------------------------
+
+. gen dgm = 1
+
+. expand 2, gen(dupindicator)
+(2,000 observations created)
+
+. replace dgm=2 if dupindicator==1
+(2,000 real changes made)
+
+. drop dupindicator
+
+. gen method_new = "A" if target == "beta"
+(2,000 missing values generated)
+
+. replace method_new = "B" if target == "gamma"
+(2,000 real changes made)
+
+. drop target 
+
+. rename method target
+
+. rename method_new method
+
+. tempfile origdata
+
+. save `origdata', replace
+(file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000003.tmp not found)
+file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000003.tmp saved as .dta format
+
+. global origdata `origdata'
+
+. * 2 targets, true variable
+. use ${origdata}, clear
+
+. drop if  target > 2
+(3,200 observations deleted)
+
+. gen true = 0.5
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            1 2
+
+The number of methods is:         2
+The method values are:            A B
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * 3 targets, true variable
+. use ${origdata}, clear
+
+. drop if target > 3
+(2,800 observations deleted)
+
+. gen true = 0.5
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            1 2 3
+
+The number of methods is:         2
+The method values are:            A B
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * > 3 targets, true variable
+. use ${origdata}, clear
+
+. gen true = 0.5
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         10
+The target values are:            1 2 3 4 5 6 7 8 9 10
+
+The number of methods is:         2
+The method values are:            A B
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman scatter
+working.....
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
+  siman scatter
+
+. siman scatter se est
+working.....
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
+  siman scatter
+
+. siman comparemethodsscatter
+Working.....
+
+. siman comparemethodsscatter se
+Working.....
+
+. siman blandaltman
+working....
+Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+
+. siman blandaltman est se
+working....
+Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+
+. siman zipplot
+Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
+  detailed in siman zipplot
+
+. siman swarm
+working.....
+Warning: 20 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
+
+. * 2 targets, true value
+. use ${origdata}, clear
+
+. drop if  target > 2
+(3,200 observations deleted)
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            1 2
+
+The number of methods is:         2
+The method values are:            A B
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             _true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * 3 targets, true value
+. use ${origdata}, clear
+
+. drop if target > 3
+(2,800 observations deleted)
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            1 2 3
+
+The number of methods is:         2
+The method values are:            A B
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             _true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * > 3 targets, true value
+. use ${origdata}, clear
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         10
+The target values are:            1 2 3 4 5 6 7 8 9 10
+
+The number of methods is:         2
+The method values are:            A B
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             _true
+_____________________________________________________
+
+. siman scatter
+working.....
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
+  siman scatter
+
+. siman scatter se est
+working.....
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
+  siman scatter
+
+. siman comparemethodsscatter
+Working.....
+
+. siman comparemethodsscatter se
+Working.....
+
+. siman blandaltman
+working....
+Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+
+. siman blandaltman est se
+working....
+Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+
+. siman zipplot
+Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
+  detailed in siman zipplot
+
+. siman swarm
+working.....
+Warning: 20 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
+
+. 
+.   
+. * String targets
+. *******************
+. use $testpath/data/bvsim_all_out.dta, clear
+
+. rename _dnum dnum
+
+. drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
+
+. drop if _n>100
+(17,900 observations deleted)
+
+. reshape long beta_ sebeta_ gamma_ segamma_, i(dnum) j(method)
+(j = 1 2 3 4 5 6 7 8 9 10)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations              100   ->   1,000       
+Number of variables                  41   ->   6           
+j variable (10 values)                    ->   method
+xij variables:
+              beta_1 beta_2 ... beta_10   ->   beta_
+        sebeta_1 sebeta_2 ... sebeta_10   ->   sebeta_
+           gamma_1 gamma_2 ... gamma_10   ->   gamma_
+     segamma_1 segamma_2 ... segamma_10   ->   segamma_
+-----------------------------------------------------------------------------
+
+. rename beta_ estbeta
+
+. rename sebeta_ sebeta
+
+. rename gamma_ estgamma
+
+. rename segamma_ segamma
+
+. reshape long est se, i(dnum method) j(target "beta" "gamma")
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations            1,000   ->   2,000       
+Number of variables                   6   ->   5           
+j variable (2 values)                     ->   target
+xij variables:
+                       estbeta estgamma   ->   est
+                         sebeta segamma   ->   se
+-----------------------------------------------------------------------------
+
+. gen dgm = 1
+
+. expand 2, gen(dupindicator)
+(2,000 observations created)
+
+. replace dgm=2 if dupindicator==1
+(2,000 real changes made)
+
+. drop dupindicator
+
+. gen targetnew="A" if method ==1
+(3,600 missing values generated)
+
+. replace targetnew="B" if method ==2
+(400 real changes made)
+
+. replace targetnew="C" if method ==3
+(400 real changes made)
+
+. replace targetnew="D" if method ==4
+(400 real changes made)
+
+. replace targetnew="E" if method ==5
+(400 real changes made)
+
+. replace targetnew="F" if method ==6
+(400 real changes made)
+
+. replace targetnew="G" if method ==7
+(400 real changes made)
+
+. replace targetnew="H" if method ==8
+(400 real changes made)
+
+. replace targetnew="I" if method ==9
+(400 real changes made)
+
+. replace targetnew="J" if method ==10
+(400 real changes made)
+
+. gen methodnew= 1 if target == "beta"
+(2,000 missing values generated)
+
+. replace methodnew=2 if target == "gamma"
+(2,000 real changes made)
+
+. drop method target
+
+. rename methodnew method
+
+. rename targetnew target
+
+. tempfile origdata
+
+. save `origdata', replace
+(file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000004.tmp not found)
+file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000004.tmp saved as .dta format
+
+. global origdata `origdata'
+
+. * 2 targets, true variable
+. use ${origdata}, clear
+
+. drop if  target == "C" | target == "D" | target == "E" | target == "F" | target == "G" | target ==
+>  "H" | target == "I" | target == "J"
+(3,200 observations deleted)
+
+. gen true = 0.5
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            A B
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * 3 targets, true variable
+. use ${origdata}, clear
+
+. drop if target == "D" | target == "E" | target == "F" | target == "G" | target == "H" | target == 
+> "I" | target == "J"
+(2,800 observations deleted)
+
+. gen true = 0.5
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            A B C
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * > 3 targets, true variable
+. use ${origdata}, clear
+
+. gen true = 0.5
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         10
+The target values are:            A B C D E F G H I J
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman scatter
+working.....
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
+  scatter
+
+. siman scatter se est
+working.....
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
+  scatter
+
+. siman comparemethodsscatter
+Working.....
+
+. siman comparemethodsscatter se
+Working.....
+
+. siman blandaltman
+working....
+Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+
+. siman blandaltman est se
+working....
+Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+
+. siman zipplot
+Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
+  detailed in siman zipplot
+
+. siman swarm
+working.....
+Warning: 20 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
+
+. * 2 targets, true value
+. use ${origdata}, clear
+
+. drop if  target == "C" | target == "D" | target == "E" | target == "F" | target == "G" | target == "H" 
+> | target == "I" | target == "J"
+(3,200 observations deleted)
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            A B
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             _true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * 3 targets, true value
+. use ${origdata}, clear
+
+. drop if target == "D" | target == "E" | target == "F" | target == "G" | target == "H" | target == "I" |
+>  target == "J"
+(2,800 observations deleted)
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            A B C
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             _true
+_____________________________________________________
+
+. siman scatter
+working.....
+
+. siman scatter se est
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman blandaltman
+working....
+
+. siman blandaltman est se
+working....
+
+. siman zipplot
+
+. siman swarm
+working.....
+
+. * > 3 targets, true value
+. use ${origdata}, clear
+
+. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         10
+The target values are:            A B C D E F G H I J
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             _true
+_____________________________________________________
+
+. siman scatter
+working.....
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
+  scatter
+
+. siman scatter se est
+working.....
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
+  scatter
+
+. siman comparemethodsscatter
+Working.....
+
+. siman comparemethodsscatter se
+Working.....
+
+. siman blandaltman
+working....
+Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+
+. siman blandaltman est se
+working....
+Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+
+. siman zipplot
+Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
+  detailed in siman zipplot
+
+. siman swarm
+working.....
+Warning: 20 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
+
+. 
+. * missing target
+. * creating a data set that has long method and missing target
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+
+. drop estimand
+
+. bysort rep dgm method: gen repitionindi=_n
+
+. drop if repitionindi==2
+(4,000 observations deleted)
+
+. drop repitionindi
+
+. siman_setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         N/A
+The target values are:            N/A
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. * > 1 DGM 
+. siman scatter
+working.....
+
+. siman swarm
+working.....
+
+. siman blandaltman
+working....
+
+. siman zipplot
+
+. siman_comparemethodsscatter
+Working.....
+
+. * 1 DGM
+. drop if dgm == 2
+(2,000 observations deleted)
+
+. siman scatter
+working.....
+
+. siman swarm
+working.....
+
+. siman blandaltman
+working....
+
+. siman zipplot
+
+. siman_comparemethodsscatter
+Working.....
+
+. 
+. * missing method
+. * creating a data set that has long target and missing method
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+
+. drop method
+
+. bysort rep dgm estimand: gen repitionindi=_n
+
+. drop if repitionindi==2
+(4,000 observations deleted)
+
+. drop repitionindi
+
+. siman_setup, rep(rep) dgm(dgm) target(estimand) estimate(est) se(se) true(true)
+Warning: no method specified. siman will proceed assuming there is only one method. If this is a mistake,
+  enter method() option in -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         1
+The method values are:            1
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. * > 1 DGM 
+. siman scatter
+working.....
+
+. *siman swarm
+. * error message as required
+. * siman blandaltman
+. * error message as required
+. siman zipplot
+
+. * siman_comparemethodsscatter
+. * error message as required
+. * 1 DGM
+. drop if dgm == 2
+(2,000 observations deleted)
+
+. siman scatter
+working.....
+
+. * siman swarm
+. * error message as required
+. * siman blandaltman
+. * error message as required
+. siman zipplot
+
+. * siman_comparemethodsscatter
+. * error message as required
+. 
+. * Testing siman scatter.  Check if have 2 dgms, A (0/1) and B(0/1).  Then siman scatter, by A B if A==0
+>  should be same as siman scatter, by B.
+. clear all
+
+. prog drop _all
+
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+
+. replace dgm = 0 if dgm==2
+(4,000 real changes made)
+
+. rename dgm dgmA
+
+. egen dgmB = fill(1 1 0 0 1 1 0 0)
+
+. egen dgmC = fill(1 0 1 0 1 0 1 0)
+
+. order rep dgmA dgmB dgmC
+
+. *append using long_long_formats\simlongESTPM_longE_longM.dta
+. siman setup, rep(rep) dgm(dgmA dgmB dgmC) target(estimand) method(method) est(est) se(se) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      8
+The dgm variables (# levels):     dgmA (2) dgmB (2) dgmC (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman scatter if dgmA==0, by(dgmA dgmB)
+working.....
+
+. *should be same as 
+. siman scatter, by(dgmB)
+working.....
+
+. * it is!
+. 
+. clear all
+
+. prog drop _all
+
+. * Ian's testing Bland-Altman
+. use http://www.homepages.ucl.ac.uk/~rmjwiww/stata/misc/MIsim, clear
+(simsum example: data from a simulation study comparing 3 ways to handle missing )
+
+. cap noi siman setup, rep(dataset) method(method)
+no estimates, SEs, or confidence intervals specified.  Need to specify at least one for siman to run.
+
+. cap noi siman blandaltman                                               
+Data are not in siman format: use siman setup
+
+. 
+. use http://www.homepages.ucl.ac.uk/~rmjwiww/stata/misc/MIsim, clear
+(simsum example: data from a simulation study comparing 3 ways to handle missing )
+
+. siman setup, rep(dataset) method(method) est(b) se(se)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         N/A
+The target values are:            N/A
+
+The number of methods is:         3
+The method values are:            CC MI_LOGT MI_T
+
+Data generating mechanism (dgm)
+The total number of dgms is:      1
+The dgm variables (# levels):     N/A
+
+Estimates are contained in the dataset
+
+The estimates variable is:        b
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             N/A
+_____________________________________________________
+
+. siman blandaltman // note implicit norescale: scales are same in the two graphs
+working....
+
+. siman blandaltman, bygraphoptions(yrescale) // yrescale works
+working....
+
+. 
+. 
+. **********************************************************
+. * DGM defined by multiple variables with multiple levels
+. **********************************************************
+. 
+. * Testing siman scatter
+. *************************
+. clear all
+
+. prog drop _all
+
+. clear all
+
+. prog drop _all
+
+. use $testpath/data/extendedtestdata.dta, clear
+
+. 
+. * remove non-integer values
+. gen betatrue=beta
+
+. foreach var in beta pmiss {
+  2.         gen `var'char = strofreal(`var')
+  3.         drop `var'
+  4.         sencode `var'char, gen(`var')
+  5.         drop `var'char
+  6. }
+
+. order beta pmiss
+
+. 
+. * create a string dgm var as well for testing
+. gen betastring = "0"
+
+. replace betastring = "0.25" if beta == 2
+variable betastring was str1 now str4
+(36,000 real changes made)
+
+. replace betastring = "0.5" if beta == 3
+(36,000 real changes made)
+
+. drop beta
+
+. rename betastring beta
+
+. 
+. siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(betatrue)
+  variable beta was long now byte
+  (324,000 bytes saved)
+Warning: variable beta, which appears in dgm(), was stored as a string. It has been encoded as numeric so
+  that subsequent siman commands will work. If you require a different order, encode beta as numeric
+  before running -siman setup-.
+  variable mech was long now byte
+  (324,000 bytes saved)
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as numeric so
+  that subsequent siman commands will work. If you require a different order, encode mech as numeric
+  before running -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            effect mean0 mean1
+
+The number of methods is:         3
+The method values are:            CCA MeanImp Noadj
+
+Data generating mechanism (dgm)
+The total number of dgms is:      12
+The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        b
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             betatrue
+_____________________________________________________
+
+. 
+. siman_scatter
+working.....
+Warning: 108 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
+  scatter
+
+. siman scatter, by(beta)
+working.....
+
+. siman_reshape, longlong
+
+. siman scatter, by(method)
+working.....
+
+. siman scatter if method == "CCA", name("simanscatter_CCA", replace)
+working.....
+Warning: 36 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
+  scatter
+
+. 
+. 
+. * Testing siman swarm
+. *************************
+. 
+. siman_swarm                                                          
+working.....
+Warning: 36 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
+
+. siman swarm, by(pmiss)              
+working.....
+
+. siman swarm, by(mech)
+working.....
+
+. siman_reshape, longlong
+
+. siman swarm if method == "Noadj" | method == "MeanImp"   
+working.....
+Warning: 36 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
+
+. siman swarm if (method == "Noadj" | method == "MeanImp"), by(beta) graphoptions(name("simanswarm_beta",
+>  replace))                  
+working.....
+
+. siman swarm if (method == "Noadj" | method == "MeanImp"), by(pmiss)
+working.....
+
+. 
+. * Testing siman blandaltman
+. ****************************
+. 
+. siman blandaltman
+working....
+Warning: 36 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+
+. siman blandaltman, by(beta)              
+working....
+
+. siman blandaltman, by(mech)
+working....
+
+. siman reshape, longlong
+
+. siman blandaltman if method == "Noadj" | method == "CCA"  
+working....
+Warning: 36 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+
+. siman blandaltman if (method == "Noadj" | method == "MeanImp"), by(pmiss) 
+working....
+
+. siman blandaltman if (method == "CCA" | method == "MeanImp"), by(beta) name("simanba_new", replace)    
+>               
+working....
+
+. 
+. * Testing siman comparemethodsscatter
+. **************************************
+. serset clear
+
+. siman comparemethodsscatter
+Working.....
+Warning: 36 graphs will be created: consider using 'if' condition as detailed in siman
+  comparemethodsscatter
+
+. siman comparemethodsscatter, methlist("CCA" "MeanImp") 
+Working.....
+Warning: 36 graphs will be created: consider using 'if' condition as detailed in siman
+  comparemethodsscatter
+
+. siman comparemethodsscatter, methlist("Noadj" "MeanImp") name("simancms_new", replace) 
+Working.....
+Warning: 36 graphs will be created: consider using 'if' condition as detailed in siman
+  comparemethodsscatter
+
+. siman comparemethodsscatter if beta == 1  
+Working.....
+
+. siman comparemethodsscatter if mech == 2, name("simancmsmech", replace)                                
+>    
+Working.....
+Warning: 18 graphs will be created: consider using 'if' condition as detailed in siman
+  comparemethodsscatter
+
+. 
+. 
+. * Testing siman zipplot
+. ************************
+. 
+. siman_zipplot  
+Warning: 3 graphs each of 36 panels will be created: consider using 'if' condition or 'by' option as
+  detailed in siman zipplot
+Drawing 3 graphs (1 per true value)
+
+. siman zipplot, by(mech)       
+Drawing 3 graphs (1 per true value)
+
+. siman reshape, longlong 
+
+. siman zipplot if (method == "Noadj" | method == "MeanImp"), name("simanzip_new", replace) 
+Warning: 3 graphs each of 24 panels will be created: consider using 'if' condition or 'by' option as
+  detailed in siman zipplot
+Drawing 3 graphs (1 per true value)
+
+. siman zipplot, by(method pmiss)
+Warning: 3 graphs each of 36 panels will be created: consider using 'if' condition or 'by' option as
+  detailed in siman zipplot
+Drawing 3 graphs (1 per true value)
+
+. siman zipplot if (method == "CCA" | method == "MeanImp"), by(method mech) 
+Warning: 3 graphs each of 24 panels will be created: consider using 'if' condition or 'by' option as
+  detailed in siman zipplot
+Drawing 3 graphs (1 per true value)
+
+. siman zipplot if beta == 1  
+Warning: 1 graphs each of 36 panels will be created: consider using 'if' condition or 'by' option as
+  detailed in siman zipplot
+
+. 
+. 
+. * Testing string dgm input (auto encoded to numeric with Tim's code)
+. clear all
+
+. prog drop _all
+
+. which siman_setup
+C:\ian\git\siman\siman_setup.ado
+*!    version 0.9  3apr2024    
+
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+
+. gen dgm_string = "1"
+
+. replace dgm_string = "2" if dgm == 2
+(4,000 real changes made)
+
+. drop dgm
+
+. siman_setup, rep(rep) dgm(dgm_string) target(estimand) method(method) estimate(est) se(se) true(true)
+  variable dgm_string was long now byte
+  (24,000 bytes saved)
+Warning: variable dgm_string, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode
+  dgm_string as numeric before running -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm_string (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. 
+. siman scatter
+working.....
+
+. siman comparemethodsscatter
+Working.....
+
+. siman swarm
+working.....
+
+. siman zipplot
+
+. siman blandaltman
+working....
+
+. 
+. di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
+*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN Testing estimates graphs.do ***
+
+. 
+. log close

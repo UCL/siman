@@ -1,7 +1,5 @@
 /* 
-IW quick sim on missing baseline 30/10/2023
-was N:\Home\missing\Missing baselines\interactions\msgbsl_inter_try.do
-Used to test siman
+Test reading in from wide-long format, and statistics options
 EMZ 06/11/2023
 IW added tests of siman analyse, ref() replace 12/3/2024
 */
@@ -77,13 +75,11 @@ TEST LCI, UCI, P OPTIONS
 * using SE: store results as comparators
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
-siman analyse ciwidth cover power, level(80) debug
-summ est if _perfmeascode=="ciwidth"
-local ciwidthref = r(mean)
-summ est if _perfmeascode=="cover"
-local coverref = r(mean)
-summ est if _perfmeascode=="power"
-local powerref = r(mean)
+siman analyse bias ciwidth cover power, level(80) debug
+foreach pm in bias ciwidth cover power {
+	summ est if _perfmeascode=="`pm'"
+	local `pm'ref = r(mean)
+}
 
 * using LCI and UCI: compare ciwidth, coverage and power
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
@@ -124,6 +120,15 @@ assert reldif(`ciwidthref', r(mean))>1E-2
 summ est if _perfmeascode=="power"
 di `powerref', r(mean),reldif(`powerref', r(mean))
 assert reldif(`powerref', r(mean))>1E-2
+
+* test with no se: compare bias
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
+drop se
+siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) true(true)
+siman analyse bias
+summ est if _perfmeascode=="bias"
+di `biasref', r(mean),reldif(`biasref', r(mean))
+assert reldif(`biasref', r(mean))<1E-8
 
 
 di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"

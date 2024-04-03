@@ -75,6 +75,23 @@ serset clear
 siman nestloop
 
 
+* testing setup and reshape via the chars (could be expanded)
+
+* setup data in LW - this is known to be correct (makes other programs work)
+use $testpath/data/extendedtestdata2.dta, clear
+reshape wide b se true, i(rep beta pmiss mech estimand) j(method) string
+siman setup, rep(rep) dgm(beta pmiss mech) method(CCA MeanImp Noadj) target(estimand) est(b) se(se) true(true)
+assert "`: char _dta[siman_nmethod]'" == "3"
+assert "`: char _dta[siman_method]'" == "CCA MeanImp Noadj"
+
+* setup data in LL and reshape to LW
+use $testpath/data/extendedtestdata2.dta, clear
+siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
+siman reshape, longwide
+assert "`: char _dta[siman_nmethod]'" == "3"
+assert "`: char _dta[siman_method]'" == "CCA MeanImp Noadj"
+
+
 * dgm defined by >1 variable
 use $testpath/data/extendedtestdata.dta, clear
 

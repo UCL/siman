@@ -56,8 +56,13 @@ siman which
 *********************
 * target long and string, method long and numeric, true variable 1 level
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
+* check that failed -siman setup- with no method() option doesn't leave unwanted _methodvar in data 
+cap noi siman setup, rep(rep) dgm(dgm) target(estimand) est(est) se(se) true(true)
+confirm new var _methodvar
+* and do the correct setup
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman analyse
+
 
 * DGM numeric with string labels, 1 var
 *****************************************
@@ -420,6 +425,7 @@ order beta pmiss
 reshape wide b se, i(rep mech pmiss beta method) j(estimand "effect" "mean0" "mean1") string
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(effect mean0 mean1) est(b) se(se) 
 siman analyse
+
 
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 

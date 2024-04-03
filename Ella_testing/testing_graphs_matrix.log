@@ -3,13 +3,13 @@
 C:\ian\git\siman\siman.ado
 *!version 0.3  08aug2023
 C:\ian\git\siman\siman_setup.ado
-*!    version 0.8.8  14feb2024    
+*!    version 0.9  3apr2024    
 C:\ian\git\siman\siman_describe.ado
 *! version 0.5.1   13mar2024
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.6.15 14mar2024
+*! version 0.7     3apr2024
 C:\ian\git\siman\siman_table.ado
-*! version 0.8.2   20dec2023
+*! version 0.8.3   3apr2024
 C:\ian\git\siman\siman_reshape.ado
 *!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
@@ -69,6 +69,20 @@ C:\ian\git\siman\siman_nestloop.ado
 . * target long and string, method long and numeric, true variable 1 level
 . use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
+. * check that failed -siman setup- with no method() option doesn't leave unwanted _methodvar in dat
+> a 
+. cap noi siman setup, rep(rep) dgm(dgm) target(estimand) est(est) se(se) true(true)
+Warning: no method specified. siman will proceed assuming there is only one method. If this is a
+  mistake, enter method() option in -siman setup-.
+Additional variables found in dataset other than those specified in siman setup.  Please remove
+  extra variables from data set and re-run siman.  Note that if your data is in wide-wide format and
+  your variable names contain underscores, these will need to be included in the setup syntax.  See
+  siman setup for further details.
+Unwanted variables are: method.
+
+. confirm new var _methodvar
+
+. * and do the correct setup
 . siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
                    SUMMARY OF DATA
@@ -283,6 +297,7 @@ gamma                |
 NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
   second entry is its Monte Carlo error.
 
+. 
 . 
 . * DGM numeric with string labels, 1 var
 . *****************************************
@@ -784,10 +799,9 @@ _____________________________________________________
 siman analyse has run successfully
 
 -------------------------------------------
-_methodvar and       |       estimand      
-performance measure  |         1          2
+                     |       estimand      
+ performance measure |         1          2
 ---------------------+---------------------
-1                    |
                bsims |      1000       1000
                      |                     
                      | 
@@ -2836,10 +2850,9 @@ _____________________________________________________
 siman analyse has run successfully
 
 -------------------------------------------
-_methodvar and       |       estimand      
-performance measure  |      beta      gamma
+                     |       estimand      
+ performance measure |      beta      gamma
 ---------------------+---------------------
-1                    |
                bsims |      1000       1000
                      |                     
                      | 
@@ -8818,10 +8831,9 @@ _____________________________________________________
 siman analyse has run successfully
 
 -------------------------------------------
-dgm, method and      |        target       
-performance measure  |      beta      gamma
+dgm and performance  |        target       
+measure              |      beta      gamma
 ---------------------+---------------------
-1                    |
 1                    |
                bsims |      1000       1000
                      |                     
@@ -8866,7 +8878,6 @@ performance measure  |      beta      gamma
                      |  .7084561   .7209369
 ---------------------+---------------------
 2                    |
-1                    |
                bsims |      1000       1000
                      |                     
                      | 
@@ -10103,6 +10114,7 @@ mean1                |
 NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
   second entry is its Monte Carlo error.
 
+. 
 . 
 . di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 *** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN testing_graphs_matrix.do ***
