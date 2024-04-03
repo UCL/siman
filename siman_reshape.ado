@@ -290,18 +290,14 @@ else if `nformat'==1 & `nmethod'!=0 {
 		
 					
 *       redefine characteristics:
-		
+
 		char _dta[siman_format] "format 3: long-wide"
-		char _dta[siman_targetformat] "long"
-		char _dta[siman_methodformat] "wide"
 		char _dta[siman_nformat] 3
 		
 		forvalues i=1/`nummethod' {
 			char _dta[siman_m`i'] `i'
-			
-				if `i'==1 local siman_method `i'
-				else if `i'>=2 local siman_method `siman_method' `i'
-				
+			if `i'==1 local siman_method `i'
+			else if `i'>=2 local siman_method `siman_method' `i'
 		}
 		
 		char _dta[siman_estimate] `estimate'
@@ -310,7 +306,8 @@ else if `nformat'==1 & `nmethod'!=0 {
 		char _dta[siman_p] `p'
 		char _dta[siman_true] `true'
 		
-		char _dta[siman_method] "`siman_valmethod'"
+		char _dta[siman_nmethod] `nummethod'
+		char _dta[siman_method] "`valmethod'"
 		char _dta[siman_descriptiontype] "stub"
 		if "`ntruevalue'"=="single" char _dta[siman_truedescriptiontype] "variable"
 		if "`ntruevalue'"=="multiple" char _dta[siman_truedescriptiontype] "stub"
