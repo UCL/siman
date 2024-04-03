@@ -205,12 +205,13 @@ foreach u of var * {
 if  substr("`estimate'",strlen("`estimate'"),1)=="_" local estimate = substr("`estimate'", 1, index("`estimate'","_") - 1)
 if  substr("`se'",strlen("`se'"),1)=="_" local se = substr("`se'", 1, index("`se'","_") - 1)
 if  substr("`df'",strlen("`df'"),1)=="_" local df = substr("`df'", 1, index("`df'","_") - 1)
-if  substr("`ci'",strlen("`ci'"),1)=="_" local ci = substr("`ci'", 1, index("`ci'","_") - 1)
+if  substr("`lci'",strlen("`lci'"),1)=="_" local lci = substr("`lci'", 1, index("`lci'","_") - 1)
+if  substr("`uci'",strlen("`uci'"),1)=="_" local uci = substr("`uci'", 1, index("`uci'","_") - 1)
 if  substr("`p'",strlen("`p'"),1)=="_" local p = substr("`p'", 1, index("`p'","_") - 1)
 if  substr("`true'",strlen("`true'"),1)=="_" local true = substr("`true'", 1, index("`true'","_") - 1)
 
 * drop variables that we're not going to use
-qui drop `se' `df' `ci' `p' 
+qui drop `se' `df' `lci' `uci' `p' 
 
 * Process methods
 * If method is a string variable, encode it to numeric format

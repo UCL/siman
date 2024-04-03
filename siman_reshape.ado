@@ -28,8 +28,8 @@ if mi("`estimate'") & mi("`se'") {
 * make a list of the optional elements that have been entered by the user, that would be stubs in the reshape
 
 
-if "`ntruevalue'"=="single" | "`ntruestub'" != "1" local optionlist `estimate' `se' `df' `ci' `p'  
-else if "`ntruevalue'"=="multiple" local optionlist `estimate' `se' `df' `ci' `p' `true' 	
+if "`ntruevalue'"=="single" | "`ntruestub'" != "1" local optionlist `estimate' `se' `df' `lci' `uci' `p'  
+else if "`ntruevalue'"=="multiple" local optionlist `estimate' `se' `df' `lci' `uci' `p' `true' 	
 *di "`optionlist'"
 
 * create an identifier if true has been entered as a number, as reshape option list will need to be changed accordigly (can't reshape on a number)
@@ -205,11 +205,6 @@ if `nformat'==2 {
 		if "`ntruevalue'"=="multiple" & `ntruestub'== 1 char _dta[siman_truedescriptiontype] "stub"
 		char _dta[siman_cidescriptiontype] "stubs"
 		
-		if "`truevaluecreated'" == "1" {
-			local truevars `trueuser'
-			char _dta[siman_[siman_truevars] "`trueuser'"
-		}
-		
 		if mi("`describe") siman_describe
 
 		}
@@ -226,13 +221,13 @@ else if `nformat'==1 & `nmethod'!=0 {
 	if  substr("`true'",strlen("`true'"),1)=="_" local true = substr("`true'", 1, index("`true'","_") - 1)
 
 	
-	if "`ntruevalue'"=="single" local optionlist `estimate' `se' `df' `ci' `p'  
-	else if "`ntruevalue'"=="multiple" local optionlist `estimate' `se' `df' `ci' `p' `true' 
+	if "`ntruevalue'"=="single" local optionlist `estimate' `se' `df' `lci' `uci' `p'  
+	else if "`ntruevalue'"=="multiple" local optionlist `estimate' `se' `df' `lci' `uci' `p' `true' 
 	
 	* if dgm is defined by multiple variables, and the true value is included in dgm() as well as true() [e.g. for siman trellis and nestloop]
 	* then only include true in the dgm value for the reshape (-reshape- will not accept it twice)
 	local numberdgms: word count `dgm'
-	if `numberdgms'!=1 local optionlist `estimate' `se' `df' `ci' `p'
+	if `numberdgms'!=1 local optionlist `estimate' `se' `df' `lci' `uci' `p'
 
 
 	* Take out underscores at the end of method value labels if there are any.  
@@ -314,17 +309,8 @@ else if `nformat'==1 & `nmethod'!=0 {
 		char _dta[siman_estimate] `estimate'
 		char _dta[siman_se] `se'
 		char _dta[siman_df] `df'
-		char _dta[siman_ci] `ci'
 		char _dta[siman_p] `p'
 		char _dta[siman_true] `true'
-		
-		if "`estimate'"!="" char _dta[siman_estvars]   `estimate'
-		if "`se'"!="" char  _dta[siman_sevars]   `se'
-		if "`df'"!="" char  _dta[siman_dfvars]   `df'
-		if "`ci'"!="" char  _dta[siman_civars]   `ci'
-		if "`p'"!="" char  _dta[siman_pvars]    `p'
-		if "`true'"!="" char  _dta[siman_truevars] `true'
-			
 		
 		char _dta[siman_method] "`siman_valmethod'"
 		char _dta[siman_descriptiontype] "stub"
@@ -380,13 +366,13 @@ if "`longlong'"!="" {
 	}
 
 	* if underscores were removed in siman_analyse need to put them back for reshape to work
-	if "`estchange'" == "1" local estimateunderscore = "`estvars'"
-	if "`sechange'" == "1" local seunderscore = "`sevars'"
+	if "`estchange'" == "1" local estimateunderscore = "`estimate'"
+	if "`sechange'" == "1" local seunderscore = "`se'"
 	
-	if ("`estchange'" != "1" & "`sechange'" != "1") local optionlist `estimate' `se' `df' `ci' `p'
-	if ("`estchange'" == "1" & "`sechange'" != "1") local optionlist `estimateunderscore' `se' `df' `ci' `p'
-	if ("`estchange'" != "1" & "`sechange'" == "1") local optionlist `estimate' `seunderscore' `df' `ci' `p'
-	if ("`estchange'" == "1" & "`sechange'" == "1") local optionlist `estimateunderscore' `seunderscore' `df' `ci' `p'
+	if ("`estchange'" != "1" & "`sechange'" != "1") local optionlist `estimate' `se' `df' `lci' `uci' `p'
+	if ("`estchange'" == "1" & "`sechange'" != "1") local optionlist `estimateunderscore' `se' `df' `lci' `uci' `p'
+	if ("`estchange'" != "1" & "`sechange'" == "1") local optionlist `estimate' `seunderscore' `df' `lci' `uci' `p'
+	if ("`estchange'" == "1" & "`sechange'" == "1") local optionlist `estimateunderscore' `seunderscore' `df' `lci' `uci' `p'
 	
 	   	
 	* reshape according to whether true is a long variable or a stub
@@ -480,8 +466,6 @@ if "`longlong'"!="" {
 	
 	char _dta[siman_estimate] `estimate'
 	char _dta[siman_se] `se'
-	if "`estimate'"!="" char _dta[siman_estvars]   `estimate'
-	if "`se'"!="" char  _dta[siman_sevars]   `se'
 
 	* if siman_analyse has been run, make sure order or performance measures is as required
 	* put non-missing point estimates at the top 

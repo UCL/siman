@@ -36,7 +36,7 @@ foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
 
-if "`simansetuprun'"!="1" {
+if "`setuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
 }

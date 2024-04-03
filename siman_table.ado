@@ -41,7 +41,7 @@ if `nformat'!=1 {
 	}
 
 * remove underscores from variables est_ and se_ for long-long format
-foreach val in `estvars' `sevars' {
+foreach val in `estimate' `se' {
    if strpos("`val'","_")!=0 {
 	   if substr("`val'",strlen("`val'"),1)=="_" {
 		   local l = substr("`val'", 1,strlen("`val'","_") - 1)    
@@ -94,7 +94,6 @@ label values _perfmeascodeorder perfl
 label variable _perfmeascodeorder "performance measure"
 drop _perfmeascode
 rename _perfmeascodeorder _perfmeascode
-if "`sevars'" == "N/A" local sevars
 
 
 * sort out numbers of variables to be tabulated, and their levels
@@ -141,7 +140,7 @@ if wordcount("`by'")>4 {
 
 
 * display the table
-local tablecommand tabdisp `row' `column' `if', by(`by') c(`estvars' `sevars') stubwidth(20)
+local tablecommand tabdisp `row' `column' `if', by(`by') c(`estimate' `se') stubwidth(20)
 if !mi("`debug'") {
 	di "Table column: `column'"
 	di "Table row: `row'"
@@ -152,7 +151,7 @@ if !mi("`debug'") {
 
 
 * if mcses are reported, print the following note
-cap assert missing(`sevars')  
+cap assert missing(`se')  
 if _rc {
 	di as smcl as text "{p 0 2}{it: NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the second entry is its Monte Carlo error.}{p_end}"
 }

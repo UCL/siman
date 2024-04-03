@@ -77,7 +77,7 @@ else if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==0
 local simananalyserun = 0
 
 * check if siman setup has been run, if not produce an error message
-if "`simansetuprun'"=="0" | "`simansetuprun'"=="" {
+if "`setuprun'"=="0" | "`setuprun'"=="" {
 	di as error "siman setup has not been run.  Please use siman setup first before siman analyse."
 	exit 498
 	}
@@ -265,15 +265,16 @@ if `methodstringindi' == 0 & "`methodlabels'" == "1" local methodloop `methodval
 else local methodloop `valmethod'
 
 foreach v in `methodloop' {
-				if  substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
-				local estlist`v' `estvars'`v' 
-				local estlist `estlist' `estlist`v''
-				local selist`v' `sevars'`v' 
-				local selist `selist' `selist`v''
-				}
+	if  substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
+	foreach stat in estimate se df lci uci p {
+		if mi("``stat''") continue 
+		local `stat'list`v' ``stat''`v' 
+		local `stat'list ``stat'list' ``stat'list`v''
+	}
+}
 
 * add in true if applicable
-*if "`ntruevalue'"=="multiple" local estlist `estlist' `true' 
+*if "`ntruevalue'"=="multiple" local estimatelist `estimatelist' `true' 
 
 if !mi("`ref'") {
 	cap confirm var `estimate'`ref'
@@ -282,7 +283,7 @@ if !mi("`ref'") {
 }
 
 * RUN SIMSUM (WIDE DATA)
-local simsumcmd simsum `estlist' `if', true(`true') se(`selist') df(`df') lci(`lci') uci(`uci') p(`p') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
+local simsumcmd simsum `estimatelist' `if', true(`true') se(`selist') df(`dflist') lci(`lcilist') uci(`ucilist') p(`plist') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
 if !mi("`pause'") {
 	global F9 `simsumcmd'
 	pause

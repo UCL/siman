@@ -44,17 +44,17 @@ If method() contains more than one entry and target() contains one entry only th
 Please note that if method() contains one entry and target() contains more than one entry (wide-long) format then this will be auto-reshaped to long-wide (format 3).
 */
 
-* load simansetuprun indicator if present
-cap local simansetuprun : char _dta[siman_simansetuprun]
+* load setuprun indicator if present
+cap local setuprun : char _dta[siman_setuprun]
 
-if !mi("`simansetuprun'") {
-	if `simansetuprun' == 1 {
+if !mi("`setuprun'") {
+	if `setuprun' == 1 {
 		di as error "{p 0 2}siman setup has already been run on the dataset held in memory; siman setup should be run on the 'raw' estimates dataset produced by your simulation study.{p_end}"
 	exit 498
 	}
 }
 
-local simansetuprun 0
+local setuprun 0
 
 capture confirm variable _perfmeascode
 if !_rc {
@@ -822,30 +822,6 @@ else {
 }
 */
 
-* Declaring the estimate variables	
-if "`estimate'"!="" local estvars = "`estimate'"  	
-else local estvars = "N/A"  
-	
-* Declaring the se variables	
-if "`se'"!="" local sevars = "`se'"  	
-else local sevars = "N/A"  
-	
-* Declaring the df variables	
-if "`df'"!="" local dfvars = "`df'"  
-else local dfvars = "N/A"
-	
-* Declaring the ci variables	
-if "`ci'"!="" local civars = "`ci'"  
-else local civars = "N/A"
-	
-* Declaring the p variables	
-if "`p'"!="" local pvars = "`p'"  
-else local pvars = "N/A"
-
-
-* Declaring the true variables	
-if "`true'"!="" local truevars = "`true'"  
-else local truevars = "N/A"
 
 * define whether stub or variable
 if "`ntruevalue'"=="single" local truedescriptiontype = "variable"
@@ -857,7 +833,7 @@ if `nformat'==3 & `ntarget'==1 local truedescriptiontype = "variable"
 /*
 NB. Can't loop as if variable is not present, then it will be blank so it will not be in the varlist, so it gets ignored completely
 * Declaring the est, se, df, ci, p and true variables in the dataset for the summary output
-foreach summary of varlist `estimate' `se' `df' `ci' `p' `true' {
+foreach summary of varlist `estimate' `se' `df' `lci' `uci' `p' `true' {
 
 		if "`summary'"!="" local `summary'vars = "`summary'"  	
 		else local `summary'vars = "N/A"  
@@ -876,9 +852,9 @@ if "`methodlabels'" == "1" {
 * NB Have to do this before reshape otherwise there will be no macros to transfer over to siman reshape - so
 * siman reshape won't recognise any of the variables/macros.
 
-local allthings allthings rep dgm target method estimate se df ci p true order lci uci ifsetup insetup
+local allthings allthings rep dgm target method estimate se df p true order lci uci ifsetup insetup
 local allthings `allthings' format targetformat methodformat nformat ntarget ndgmvars nmethod numtarget valtarget nummethod valmethod ntrue ntruevalue dgmcreated targetlabels methodcreated methodlabels methodvalues ntruestub
-local allthings `allthings' descriptiontype cidescriptiontype truedescriptiontype estvars sevars dfvars civars pvars truevars simansetuprun
+local allthings `allthings' descriptiontype cidescriptiontype truedescriptiontype setuprun
 * need m1, m2 etc t1, t2 etc for siman_reshape
 forvalues me = 1/`nmethod' {
 	local allthings `allthings' m`me'
@@ -919,8 +895,8 @@ else if `nformat'==3 & `nmethod'==1 {
 	di as txt "note: converting to long-wide format, creating variable target"
 	
     * need the est stub to be est`target1' est`target2' etc so create a macro list.  
-   if "`ntruevalue'"=="single" local optionlist `estimate' `se' `df' `ci' `p'  
-  else if "`ntruevalue'"=="multiple" local optionlist `estimate' `se' `df' `ci' `p' `true' 
+   if "`ntruevalue'"=="single" local optionlist `estimate' `se' `df' `lci' `uci' `p'  
+  else if "`ntruevalue'"=="multiple" local optionlist `estimate' `se' `df' `lci' `uci' `p' `true' 
     forvalues j = 1/`ntarget' {
         foreach option in `optionlist' {
             local `option'stubreshape`t`j'' = "`option'`t`j''"
@@ -1061,8 +1037,8 @@ if (`nmethod'==0 & `ntarget'>1 ) {
 siman_describe
 
 * Set indicator so that user can determine if siman setup has been run already
-local simansetuprun 1 
-char _dta[siman_simansetuprun] `simansetuprun'
+local setuprun 1 
+char _dta[siman_setuprun] `setuprun'
 
 /*
 * Note can't do the following as it doesn't work for 1st example in wide-wide data.  Variables est1_ etc are not recognised by Stata as meeting the criteria variable *_

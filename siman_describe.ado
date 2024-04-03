@@ -78,7 +78,7 @@ if strpos("`valtarget'","_")!=0 {
 * remove underscores from variables (e.g. est_ se_) if long-long format
 if `nformat'==1 {
 
-    foreach val in `estvars' `sevars' `dfvars' `civars' `pvars' `truevars' {
+    foreach val in `estimate' `se' `df' `lci' `uci' `p' `true' {
 
         if strpos("`val'","_")!=0 {
                 if substr("`val'",strlen("`val'"),1)=="_" {
@@ -91,8 +91,6 @@ if `nformat'==1 {
 
 	char _dta[siman_estimate] `estimate'
 	char _dta[siman_se] `se'
-	if "`estimate'"!="" char _dta[siman_estvars]   `estimate'
-	if "`se'"!="" char  _dta[siman_sevars]   `se'
 	
 * determine if true variable is numeric or string, for output table text
 cap confirm number `true' 
@@ -154,15 +152,16 @@ else if `dgmcreated' == 1 {
     di as text "The dgm variables (# levels): " as result _col(`colwidth') `"`dgmvarsandlevels'"' _newline
 	if "`estimate'"!="" di as result "Estimates are contained in the dataset"
 	else if "`estimate'"=="" di as result "Estimates are not contained in the dataset"
-    di as text _newline "The estimates `descriptiontype' " "is:" as result _col(`colwidth') "`estvars'"
-    di as text "The se `descriptiontype' is:" as result _col(`colwidth') "`sevars'"
-    di as text "The df `descriptiontype' is:" as result _col(`colwidth') "`dfvars'"
-    di as text "The ci `cidescriptiontype' are:" as result _col(`colwidth') "`civars'"
-    di as text "The p `descriptiontype' is:" as result _col(`colwidth') "`pvars'"
+	di
+    di as text "The estimates `descriptiontype' " "is:" as result _col(`colwidth') cond( !mi("`estimate'"), "`estimate'", "N/A")
+    di as text "The se `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`se'"), "`se'", "N/A")
+    di as text "The df `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`df'"), "`df'", "N/A")
+    di as text "The ci `cidescriptiontype' are:" as result _col(`colwidth') cond( !mi("`lci'"), "`lci'", "N/A") " " cond( !mi("`uci'"), "`uci'", cond( !mi("`lci'"), "N/A", ""))
+    di as text "The p `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`p'"), "`p'", "N/A")
 	if "`truetype'" == "string" {
-		di as text "The true variable is:" as result _col(`colwidth') "`truevars'"
+		di as text "The true variable is:" as result _col(`colwidth') "`true'"
 	}
-	else di as text "The true value is:" as result _col(`colwidth') "`truevars'"
+	else di as text "The true value is:" as result _col(`colwidth') "`true'"
     di as text "_____________________________________________________"
 
 
