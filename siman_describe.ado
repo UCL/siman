@@ -112,8 +112,8 @@ if `dgmcreated' == 0 {
 	}
 }
 else if `dgmcreated' == 1 {
-	local totaldgmnum = 0
-	local dgmvarsandlevels "none"
+	local totaldgmnum 1
+	local dgmvarsandlevels N/A
 }
 
     di as text _newline _col(`titlewidth') "SUMMARY OF DATA"

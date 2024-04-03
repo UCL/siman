@@ -506,7 +506,7 @@ else {
 					local byvarlist = `"`group'==`d'"'
 					local byname = `d'
 				}	
-				if `ndgm' > 1 {
+				if `ndgmvars' > 1 {
 					#delimit ;
 					twoway (scatter diff mean if strthing == "`el'" & `byvarlist', `options')
 					,

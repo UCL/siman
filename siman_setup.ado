@@ -810,6 +810,7 @@ if `nmethod'==0 {
 }
 
 * Declaring the dgm variables
+/* Commented out IW 3/4/2024: dgm should be empty
 if "`dgm'"!="" {
     local dgm = "`dgm'"  
     if `dgmcreated' ==1 {
@@ -819,6 +820,7 @@ if "`dgm'"!="" {
 else {
     local dgm = "N/A"	
 }
+*/
 
 * Declaring the estimate variables	
 if "`estimate'"!="" local estvars = "`estimate'"  	
