@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.6.5 27nov2023}{...}
+{* *! version 0.7 3apr2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Input data formats" "siman_setup##data"}{...}
@@ -8,6 +8,7 @@
 {viewerjumpto "Output data format" "siman_setup##outputdata"}{...}
 {viewerjumpto "Troubleshooting and limitations" "siman_setup##limitations"}{...}
 {viewerjumpto "Examples" "siman_setup##examples"}{...}
+{viewerjumpto "Characteristics stored" "siman_setup##chars"}{...}
 {viewerjumpto "Authors" "siman_setup##authors"}{...}
 
 {title:Title}
@@ -186,8 +187,8 @@ estimate and {it:method} denotes the method used to produce the estimates.
         {c |}   1    2   beta    B     .1543   .1400   {c |}
         {c |}   1    2   gamma   A     .0597   .0935   {c |}
         {c |}   1    2   gamma   B     .1588   .1347   {c |}
-	{c |}   2    1   beta    A     .1509   .0768   {c |}
-        {c |}   2    1   beta    B     .0784   .1087   {c |}	
+        {c |}   2    1   beta    A     .1509   .0768   {c |}
+        {c |}   2    1   beta    B     .0784   .1087   {c |} 
         {c |}   2    1   gamma   A     .0297   .0738   {c |}
         {c |}   2    1   gamma   B     .1310   .1116   {c |}
         {c |}   2    2   beta    A     .1337   .0928   {c |}
@@ -204,7 +205,7 @@ estimate and {it:method} denotes the method used to produce the estimates.
         {c |}   1    1   gamma   .0517    .0810   .1375  .1167    {c |}
         {c |}   1    2   beta    .1135    .0946   .1543  .1400    {c |}
         {c |}   1    2   gamma   .0597    .0935   .1588  .1347    {c |}
-	{c |}   2    1   beta    .1509    .0768   .0784  .1087    {c |}
+        {c |}   2    1   beta    .1509    .0768   .0784  .1087    {c |}
         {c |}   2    1   gamma   .0297    .0738   .1310  .1116    {c |}
         {c |}   2    2   beta    .1337    .0928   .1541  .1324    {c |}
         {c |}   2    2   gamma   .0343    .0852   .1513  .1289    {c |}
@@ -335,6 +336,61 @@ will be reshaped before {cmd: siman setup} is run.
 {phang}Note this dataset is auto-reshaped to long-wide format by {cmd: siman setup}. 
 
 {phang}Also note that the session has to be cleared before each new dataset is loaded, to remove the previous characteristics created by {cmd: siman setup}.
+
+
+
+{marker chars}{...}
+{title:Characteristics stored by siman setup}
+
+{p2colset 4 25 25 0}
+{p2col:{ul:Characteristic}}{ul:Definition and values}
+
+DGMs
+ {p2col: dgm }Variables defining the DGM, or "not in dataset". Values: varlist or empty.{p_end}
+ {p2col: dgmcreated }Dummy for dgm being a created variable. Values: 0/1.{p_end}
+ {p2col: ndgmvars }Number of dgm vars: except with 1 dgmvar it's #dgms (possible error). Values: integers.{p_end}
+
+Targets
+ {p2col: ntarget }? {p_end}
+ {p2col: numtarget }Number of targets. Values: integer {p_end}
+ {p2col: t1 (etc.)}Name of 1st target (etc.), but only in some formats. Values:  {p_end}
+ {p2col: target }Variable name or stub for targets. Values: varname {p_end}
+ {p2col: targetlabels }? Values: integer {p_end}
+ {p2col: valtarget }Names of targets. {p_end}
+
+Methods
+ {p2col: m1 etc. }Name of method 1 etc.{p_end}
+ {p2col: method }Method variable name (longlong format) or method values (longwide format).{p_end}
+ {p2col: methodcreated }Dummy for method being a variable _methodvar created by siman setup. Values: 0/1 {p_end}
+ {p2col: methodlabels }Dummy for method being value-labelled. Values: 0/1 {p_end}
+ {p2col: methodvalues }? {p_end}
+ {p2col: nmethod }1 for long method and #methods for wide method. Values: integer.{p_end}
+ {p2col: nummethod }Number of methods. Values: integer. {p_end}
+ {p2col: valmethod }Names of methods. {p_end}
+
+Estimates
+ {p2col: descriptiontype }Whether statistics are variables or stubs. Values: "variable" if nformat=1, else "stub" {p_end}
+ {p2col: df }df: variable or number  {p_end}
+ {p2col: estimate }variable or stub containing estimate. {p_end}
+ {p2col: lci }variable or stub containing lower confidence limit. {p_end}
+ {p2col: p }variable or stub containing p-value. {p_end}
+ {p2col: rep }variable containing the replicate identifier. {p_end}
+ {p2col: se }variable or stub containing standard error. {p_end}
+ {p2col: uci }variable or stub containing upper confidence limit. {p_end}
+
+True values
+ {p2col: ntruestub }whether true is a stub. Values: 0/1 {p_end}
+ {p2col: ntruevalue }whether true is a single or multiple values. Values: "single", "multiple" {p_end}
+ {p2col: true }variable name or stub for true values. Values: varname {p_end}
+ {p2col: truedescriptiontype }whether true is a variable name or a stub. Values: "stub", "variable" {p_end}
+
+Data formats
+ {p2col: format }current data format, in words. {p_end}
+ {p2col: ifsetup }if condition from siman setup.{p_end}
+ {p2col: insetup }in condition from siman setup.{p_end}
+ {p2col: nformat }current data format, coded 1 (long-long) or 3 (wide-long).{p_end}
+ {p2col: setuprun }is set to 1 when siman setup is run. Values: always 1 {p_end}
+
 
 {marker authors}{...}
 {title:Authors}
