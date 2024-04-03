@@ -159,9 +159,9 @@ else if `dgmcreated' == 1 {
     di as text "The ci `descriptiontype's are:" as result _col(`colwidth') cond( !mi("`lci'"), "`lci'", "N/A") cond( !mi("`uci'"), " `uci'", cond( !mi("`lci'"), " N/A", ""))
     di as text "The p `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`p'"), "`p'", "N/A")
 	if "`truetype'" == "string" {
-		di as text "The true variable is:" as result _col(`colwidth') "`true'"
+		di as text "The true variable is:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
 	}
-	else di as text "The true value is:" as result _col(`colwidth') "`true'"
+	else di as text "The true value is:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
     di as text "_____________________________________________________"
 
 
