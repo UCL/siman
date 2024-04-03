@@ -117,8 +117,8 @@ else if `dgmcreated' == 1 {
     di as text _newline _col(`titlewidth') "SUMMARY OF DATA"
     di as text "_____________________________________________________" _newline
     di as text "The siman format is:" as result _col(`colwidth') "`format'" 
-	di as text "The format for targets is:" as result _col(`colwidth') "`targetformat'"
-	di as text "The format for methods is:" as result _col(`colwidth') "`methodformat'"
+	di as text "The format for targets is:" as result _col(`colwidth') cond(inlist(`nformat',1,3),"long","wide")
+	di as text "The format for methods is:" as result _col(`colwidth') cond(inlist(`nformat',1,4),"long","wide")
     di as text "The number of targets is:" as result _col(`colwidth') "`numtarget'"
 
     if (`nformat'==1 & `ntarget'==0 & `nmethod'==0 ) {
@@ -156,7 +156,7 @@ else if `dgmcreated' == 1 {
     di as text "The estimates `descriptiontype' " "is:" as result _col(`colwidth') cond( !mi("`estimate'"), "`estimate'", "N/A")
     di as text "The se `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`se'"), "`se'", "N/A")
     di as text "The df `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`df'"), "`df'", "N/A")
-    di as text "The ci `cidescriptiontype' are:" as result _col(`colwidth') cond( !mi("`lci'"), "`lci'", "N/A") " " cond( !mi("`uci'"), "`uci'", cond( !mi("`lci'"), "N/A", ""))
+    di as text "The ci `descriptiontype's are:" as result _col(`colwidth') cond( !mi("`lci'"), "`lci'", "N/A") cond( !mi("`uci'"), " `uci'", cond( !mi("`lci'"), " N/A", ""))
     di as text "The p `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`p'"), "`p'", "N/A")
 	if "`truetype'" == "string" {
 		di as text "The true variable is:" as result _col(`colwidth') "`true'"

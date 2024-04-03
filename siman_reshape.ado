@@ -152,7 +152,6 @@ if `nformat'==2 {
 		char _dta[siman_descriptiontype] "stub"
 		if "`ntruevalue'"=="single" char _dta[siman_truedescriptiontype] "variable"
 		if "`ntruevalue'"=="multiple" & `ntruestub'==1 char _dta[siman_truedescriptiontype] "stub"
-		char _dta[siman_cidescriptiontype] "stubs"
 		
 		if mi("`describe") siman_describe
 		
@@ -203,7 +202,6 @@ if `nformat'==2 {
 		char _dta[siman_order]: method
 		if ("`ntruevalue'"=="single" | `ntruestub'== 0) char _dta[siman_truedescriptiontype] "variable"
 		if "`ntruevalue'"=="multiple" & `ntruestub'== 1 char _dta[siman_truedescriptiontype] "stub"
-		char _dta[siman_cidescriptiontype] "stubs"
 		
 		if mi("`describe") siman_describe
 
@@ -316,7 +314,6 @@ else if `nformat'==1 & `nmethod'!=0 {
 		char _dta[siman_descriptiontype] "stub"
 		if "`ntruevalue'"=="single" char _dta[siman_truedescriptiontype] "variable"
 		if "`ntruevalue'"=="multiple" char _dta[siman_truedescriptiontype] "stub"
-		char _dta[siman_cidescriptiontype] "stubs"
 		
 		
 		if mi("`describe") siman_describe
@@ -462,7 +459,6 @@ if "`longlong'"!="" {
 	if `nmethod'!=0 char _dta[siman_nmethod] 1
 	char _dta[siman_descriptiontype] "variable"
 	char _dta[siman_truedescriptiontype] "variable"
-	char _dta[siman_cidescriptiontype] "variables"
 	
 	char _dta[siman_estimate] `estimate'
 	char _dta[siman_se] `se'

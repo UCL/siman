@@ -753,7 +753,6 @@ if `nformat'==1 {
 	local valtarget = "`tarlist'"
 	* define whether stub or variable
 	local descriptiontype = "variable"	
-	local cidescriptiontype = "variables"	
 }
 
 else if `nformat'==2 {
@@ -766,7 +765,6 @@ else if `nformat'==2 {
 	local valtarget = "`target'"
     * define whether stub or variable
 	local descriptiontype = "stub"
-	local cidescriptiontype = "stubs"
 }
 else if `nformat'==3 {
     * For format 3, long-wide format
@@ -793,7 +791,6 @@ else if `nformat'==3 {
 	}
     * define whether stub or variable
 	local descriptiontype = "stub"
-	local cidescriptiontype = "stubs"
 }	
 	
 * The below are the same for all formats:
@@ -853,8 +850,8 @@ if "`methodlabels'" == "1" {
 * siman reshape won't recognise any of the variables/macros.
 
 local allthings allthings rep dgm target method estimate se df p true order lci uci ifsetup insetup
-local allthings `allthings' format targetformat methodformat nformat ntarget ndgmvars nmethod numtarget valtarget nummethod valmethod ntrue ntruevalue dgmcreated targetlabels methodcreated methodlabels methodvalues ntruestub
-local allthings `allthings' descriptiontype cidescriptiontype truedescriptiontype setuprun
+local allthings `allthings' format targetformat methodformat nformat ntarget ndgmvars nmethod numtarget valtarget nummethod valmethod ntruevalue dgmcreated targetlabels methodcreated methodlabels methodvalues ntruestub
+local allthings `allthings' descriptiontype truedescriptiontype setuprun
 * need m1, m2 etc t1, t2 etc for siman_reshape
 forvalues me = 1/`nmethod' {
 	local allthings `allthings' m`me'
@@ -1022,7 +1019,7 @@ else if `nformat'==3 & `nmethod'==1 {
 * If method is missing and target is wide, siman setup will auto reshape this to long-long format (instead of reading in the data as it is and calling it format 3).
 if (`nmethod'==0 & `ntarget'>1 ) {
 	di as txt "note: converting to long-long format, creating variable target"
-    qui siman reshape, longlong
+    qui siman_reshape, longlong
     foreach thing in `_dta[siman_allthings]' {
         local `thing' : char _dta[siman_`thing']
     }
@@ -1039,6 +1036,9 @@ siman_describe
 * Set indicator so that user can determine if siman setup has been run already
 local setuprun 1 
 char _dta[siman_setuprun] `setuprun'
+
+* Drop char order
+char _dta[siman_order]
 
 /*
 * Note can't do the following as it doesn't work for 1st example in wide-wide data.  Variables est1_ etc are not recognised by Stata as meeting the criteria variable *_
