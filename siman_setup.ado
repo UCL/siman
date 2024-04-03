@@ -1,4 +1,5 @@
-*!    version 0.8.8  14feb2024    
+*!    version 0.9  3apr2024    
+*    version 0.9  3apr2024       IW _methodvar not created till end, so not left on crash
 *    version 0.8.8  14feb2024    IW reformat long messages
 *    version 0.8.7  27nov2023    EMZ add check and error if true is not constant across methods
 *    version 0.8.6  20nov2023    EMZ minor bug fix for when dgm is missing, count of variables specified in setup vs dataset mis-macth as dgm is a tempvar.
@@ -123,8 +124,8 @@ if mi("`estimate'") | mi("`se'") {
 local methodcreated = 0
 if mi("`method'") {
 	 di as text "{p 0 2}Warning: no method specified. siman will proceed assuming there is only one method. If this is a mistake, enter method() option in -siman setup-.{p_end}"
-	 qui gen _methodvar = 1
-	 local method "_methodvar"
+	 tempvar method
+	 qui gen `method' = 1
 	 local methodcreated = 1
 }
 
@@ -541,8 +542,10 @@ local datasetvars: list uniq datasetvarswithtrue
 	if `nformat' == 1 {
 		* not including true as it can be a number e.g. true(0)
 		* also do not include dgm if it has been created
-		if `dgmcreated' == 0 unab simanvars : `rep' `dgm' `method' `target' `estimate' `se' `df' `lci' `uci' `p' 
-		else unab simanvars : `rep' `method' `target' `estimate' `se' `df' `lci' `uci' `p' 
+		local simanvars0 `rep' `target' `estimate' `se' `df' `lci' `uci' `p' 
+		if `dgmcreated' == 0 local simanvars0 `simanvars0' `dgm'
+		if `methodcreated' == 0 local simanvars0 `simanvars0' `method'
+		unab simanvars : `simanvars0'
 		local simanvarswithtrue0 `simanvars' `true'
 		* for cases where true is in dgm() and true(), only include once
 		local simanvarswithtrue: list uniq simanvarswithtrue0
@@ -600,19 +603,19 @@ local datasetvars: list uniq datasetvarswithtrue
 	}
 	* long method, wide target
 	else if (`nmethod'==1 | `nmethod' == 0) & `ntarget'> 1 {
-			foreach j in `tlist' {
-				if !mi("`estimate'") local estimatevariables `estimatevariables' `estimate'`j'
-				if !mi("`se'") local sevariables `sevariables' `se'`j'
-				if !mi("`df'") local dfvariables `dfvariables' `df'`j'
-				if !mi("`lci'") local lcivariables `lcivariables' `lci'`j'
-				if !mi("`uci'") local ucivariables `ucivariables' `uci'`j'
-				if !mi("`p'") local pvariables `pvariables' `p'`j'
-				if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
-				else local truevariables `truevariables' `true'`j'
-				
-	if `dgmcreated'!=1 local simanvarswithtrue `rep' `dgm' `method' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
-	else local simanvarswithtrue `rep' `method' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
-			}	
+		foreach j in `tlist' {
+			if !mi("`estimate'") local estimatevariables `estimatevariables' `estimate'`j'
+			if !mi("`se'") local sevariables `sevariables' `se'`j'
+			if !mi("`df'") local dfvariables `dfvariables' `df'`j'
+			if !mi("`lci'") local lcivariables `lcivariables' `lci'`j'
+			if !mi("`uci'") local ucivariables `ucivariables' `uci'`j'
+			if !mi("`p'") local pvariables `pvariables' `p'`j'
+			if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
+			else local truevariables `truevariables' `true'`j'
+		}
+		local simanvarswithtrue `rep' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+		if `dgmcreated'!=1 local simanvarswithtrue `simanvarswithtrue' `dgm'
+		if `methodcreated'!=1 local simanvarswithtrue `simanvarswithtrue' `method'
 	}
 	* test for equivalence
 	local testothervars: list simanvarswithtrue === datasetvars
@@ -626,8 +629,12 @@ local datasetvars: list uniq datasetvarswithtrue
 			di as error "{p 0 2}Unwanted variables are: `wrongvars'.{p_end}"
 			exit 498
 		}
-		else di as error "{p 0 2}There are variables specified in siman setup that are not in your dataset.  Note that if your data is in wide-wide format and your variable names contain underscores, these will need to be included in the setup syntax.  See {help siman_setup:siman setup} for further details.{p_end}"
-		exit 498
+		else {
+			local wrongvars : list simanvarswithtrue - datasetvars 
+			di as error "{p 0 2}There are variables specified in siman setup that are not in your dataset.  Note that if your data is in wide-wide format and your variable names contain underscores, these will need to be included in the setup syntax.  See {help siman_setup:siman setup} for further details.{p_end}"
+			di as error "{p 0 2}Unfound variables are: `wrongvars'.{p_end}"
+			exit 498
+		}
 	}
 	
 /*
@@ -806,18 +813,9 @@ if `nmethod'==0 {
     local valmethod = "N/A"
 }
 
-* Declaring the dgm variables
-/* Commented out IW 3/4/2024: dgm should be empty
-if "`dgm'"!="" {
-    local dgm = "`dgm'"  
-    if `dgmcreated' ==1 {
-        local dgm "not in dataset"
-    }
+if `dgmcreated' ==1 {
+	local dgm 
 }
-else {
-    local dgm = "N/A"	
-}
-*/
 
 
 * define whether stub or variable
@@ -842,6 +840,10 @@ foreach summary of varlist `estimate' `se' `df' `lci' `uci' `p' `true' {
 if "`methodlabels'" == "1" {
      qui labelsof `method'
 	local methodvalues `r(values)'
+}
+if `methodcreated' == 1 {
+	rename `method' _methodvar
+	local method _methodvar
 }
 
 * Assigning characteristics

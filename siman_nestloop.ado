@@ -211,7 +211,7 @@ if  substr("`p'",strlen("`p'"),1)=="_" local p = substr("`p'", 1, index("`p'","_
 if  substr("`true'",strlen("`true'"),1)=="_" local true = substr("`true'", 1, index("`true'","_") - 1)
 
 * drop variables that we're not going to use
-qui drop `se' `df' `lci' `uci' `p' 
+if !mi("`se'`df'`lci'`uci'`p'") qui drop `se' `df' `lci' `uci' `p' 
 
 * Process methods
 * If method is a string variable, encode it to numeric format

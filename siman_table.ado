@@ -1,5 +1,6 @@
-* 14feb2024 IW allow new perfromance measure (pctbias) from simsum
-*! version 0.8.2   20dec2023
+*! version 0.8.3   3apr2024
+*  version 0.8.3    3apr2024 IW ignore method if methodcreated
+*                  14feb2024 IW allow new performance measure (pctbias) from simsum
 *  version 0.8.2   20dec2023   IW add row() option (undocumented at present)
 *  version 0.8.1 25oct2023     IW put PMs in same order as in simsum
 *  version 0.8   23dec2022     IW major rewrite: never pools over dgms, targets or methods
@@ -98,6 +99,7 @@ rename _perfmeascodeorder _perfmeascode
 
 * sort out numbers of variables to be tabulated, and their levels
 if `dgmcreated' local dgm
+if `methodcreated' local method
 * identify non-varying dgm
 foreach onedgmvar in `dgm' {
 	summ `onedgmvar' `if', meanonly

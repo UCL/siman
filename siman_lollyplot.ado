@@ -107,6 +107,12 @@ else if "`methlegend'"!="" {
 	exit 198
 }
 
+* require est() and se()
+if mi("`estimate'","`se'") {
+	di as error "siman lollyplot requires both estimate and se"
+	exit 498
+}
+
 *** END OF PARSING ***
 
 preserve   
