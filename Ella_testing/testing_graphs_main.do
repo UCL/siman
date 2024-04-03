@@ -5,6 +5,8 @@ Ella 21mar2023
 Latest update Ian 22aug2023
 23aug2023 temporarily commented out all -siman cms- (slow and failing)
 20dec2023 removed 2 instances of non-reproducible record selection
+3apr2024  removed tests with excessive numbers of graphs and panels: 
+			reduced from 40 to 2 minutes
 *****************************************************************/
 
 * switch on detail if want to run all graphs
@@ -234,10 +236,9 @@ replace dgm=2 if dupindicator==1
 drop dupindicator
 
 siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
-siman comparemethodsscatter, methlist(3 7) name("cms_test6", replace) 
-siman comparemethodsscatter, methlist(3 5 7) name("cms_test6a", replace) 
+siman comparemethodsscatter if target=="beta" & dgm==1, methlist(3 7) name("cms_test6", replace) 
+siman comparemethodsscatter if target=="beta" & dgm==1, methlist(3 5 7) name("cms_test6a", replace) 
 siman comparemethodsscatter if target=="beta" & dgm==1
-siman comparemethodsscatter if target=="beta" & dgm==1, methlist(1 2 3) 
 siman_blandaltman, methlist(3 7) name("ba_test6", replace)
 
 * check error messages
@@ -280,30 +281,31 @@ rename pc_str pc
 siman setup, rep(v1) dgm(theta rho pc k) method(peto g2) estimate(exp) se(var2) true(theta)
 
 * graphs
-siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test7", replace) 
+local useit4 theta==1 & rho==1 & k==5 // flags just 4 dgms
+local useit1 theta==1 & rho==1 & pc==1 & k==5 // flags just 1 dgm
+siman scatter if `useit4', ytitle("test y-title") xtitle("test x-title") name("scatter_test7", replace) 
 
-siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test7", replace)) 
+siman swarm if `useit4', graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test7", replace)) 
 
-siman zipplot, legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
-coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test7", replace)
+* siman zipplot is not appropriate for these data
 
 serset clear
-if ${detail} == 1 siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test7", replace) 
+if ${detail} == 1 siman comparemethodsscatter if `useit1', title("testtitle") subgr(xtit("testaxis")) name("cms_test7", replace) 
+* this sometimes fails with error 111 "series 0 not found" from -graph combine-
 
-if ${detail} == 1 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test7", replace) 
+if ${detail} == 1 siman blandaltman if `useit1', ytitle("test y-title") xtitle("test x-title") name("ba_test7", replace) 
 
 siman analyse
 
-siman lollyplot if k==5, xtitle("test x-title") name("lollyplot_test7", replace)
+siman lollyplot if `useit4', xtitle("test x-title") name("lollyplot_test7", replace)
 * without -if k==5- you get "too many sersets" error
 
 siman nestloop mean, dgmorder(-theta rho -pc -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") name("nestloop_test7", replace)
 
 
-* Won't work as true not constant accross methods
-if ${detail} == 1 {
-
+/*
 * Testing warning messages correspond to the number of panels/graphs that will be printed
+* VERY LONG
 
 clear all
 prog drop _all
@@ -372,7 +374,8 @@ siman zipplot if mech =="MCAR": mech
 
 siman zipplot, by(pmiss)
 siman zipplot, by(method)
-}
+*/
+
 
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 
