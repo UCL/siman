@@ -295,8 +295,8 @@ if `ntargetlevels'>1 {
 	local each "each "
 }
 else di as text "Drawing graph..."
-if `npms'>5  di as smcl as text "{p 0 2}Warning: `each'graph will have `npms' rows of panels: consider using fewer performance measures"
-if `ndgmlevels'>5 di as smcl as text "{p 0 2}Warning: `each'graph will have `ndgmlevels' columns of panels: consider using 'if' condition as detailed in {help siman lollyplot}"
+if `npms'>5  di as smcl as text "{p 0 2}Warning: `each'graph will have `npms' rows of panels: consider using fewer performance measures{p_end}"
+if `ndgmlevels'>5 di as smcl as text "{p 0 2}Warning: `each'graph will have `ndgmlevels' columns of panels: consider using 'if' condition as detailed in {help siman lollyplot}{p_end}"
 
 * create graph
 foreach thistarget of local targetlevels {
@@ -357,7 +357,7 @@ end
 Create a string variable with values "varname=value", for graphs
 IW 5may2023
 */
-prog def maketitlevar, rclass
+program define maketitlevar, rclass
 syntax varlist, [suffix(string) novarname]
 if mi("`suffix'") local suffix title
 foreach var of local varlist {
@@ -388,7 +388,7 @@ end
 
 ******************* START OF PROGRAM PADDING ************************
 * separate out the given words to create a title of given width
-prog def padding, sclass
+program define padding, sclass
 syntax anything, width(int) [reverse debug]
 local ndgm 0
 local spacel : _length " "

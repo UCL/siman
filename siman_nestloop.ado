@@ -315,7 +315,7 @@ foreach thispm of local pmlist { // loop over PMs
 		}
 		else local nmethods2 = `nmethods'
 		if `max'<=`min' {
-			di as smcl as text "{p 0 2}Warning: `thispm' does not vary for `target' `thistarget'"
+			di as smcl as text "{p 0 2}Warning: `thispm' does not vary for `target' `thistarget'{p_end}"
 			local min = `min'-1
 			local max = `max'+1
 		}
@@ -341,7 +341,7 @@ foreach thispm of local pmlist { // loop over PMs
 				}
 				summ `var', meanonly
 				if r(max)==r(min) {
-					if !mi("`debug'") di as smcl as text "{p 0 2}Warning: no variation for descriptor `var'"
+					if !mi("`debug'") di as smcl as text "{p 0 2}Warning: no variation for descriptor `var'{p_end}"
 					continue
 				}
 				local ++j

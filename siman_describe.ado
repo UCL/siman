@@ -8,7 +8,7 @@
 //  Some edits from Tim Morris to draft version 06oct2019
 
 capture program drop siman_describe
-prog define siman_describe, rclass
+program define siman_describe, rclass
 version 15
 
 * siman_describe only describes the data set, it does not change it.  So it should not have it's own [if] and [in] options.

@@ -248,7 +248,7 @@ if !mi("`by'") & strpos("`dgm'", "`by'")>0 {
 
 local graphnumcheck = `totaldgmnum' * `numtargetcheck'
 if `graphnumcheck' > 15 {
-	di as smcl as text "{p 0 2}Warning: `graphnumcheck' panels will be created: consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}"
+	di as smcl as text "{p 0 2}Warning: `graphnumcheck' panels will be created: consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}{p_end}"
 }
 
 * defining 'by'

@@ -191,7 +191,7 @@ if !mi("`by'") & "`by'" == "`method'" {
 
 local graphnumcheck = `totaldgmnum' * `nummethodcheck' * `numtargetcheck'
 if `graphnumcheck' > 15 {
-	di as smcl as text "{p 0 2}Warning: `graphnumcheck' panels will be created: consider using 'if' condition or 'by' option as detailed in {help siman_scatter:siman scatter}"
+	di as smcl as text "{p 0 2}Warning: `graphnumcheck' panels will be created: consider using 'if' condition or 'by' option as detailed in {help siman_scatter:siman scatter}{p_end}"
 }
 
 * if dgm is defined by multiple variables, default is to plot scatter graphs for each dgm variable, split out by each level

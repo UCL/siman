@@ -2,7 +2,7 @@
 * version 0.3  08aug2023  EMZ allow analyze spelling
 * version 0.2  27mar2023
 * version 0.1  28nov2022
-prog def siman
+program define siman
 /*
 adapted from network.ado
 IW 17sep2019

@@ -12,7 +12,7 @@
 *  version 0.1   08June2020    Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
 
 capture program drop siman_table
-prog define siman_table, rclass
+program define siman_table, rclass
 version 15
 syntax [anything] [if], [Column(varlist) Row(varlist) debug]
 
@@ -72,7 +72,7 @@ if "`anything'"!="" {
 	gen `keep' = 0
 	foreach thing of local anything {
 		qui count if _perfmeascode == "`thing'" 
-		if r(N)==0 di as smcl as text "{p 0 2}Warning: performance measure not found: `thing'"
+		if r(N)==0 di as smcl as text "{p 0 2}Warning: performance measure not found: `thing'{p_end}"
 		qui replace `keep' = 1 if _perfmeascode == "`thing'" 
 		}
 	qui keep if `keep'
@@ -154,7 +154,7 @@ if !mi("`debug'") {
 * if mcses are reported, print the following note
 cap assert missing(`sevars')  
 if _rc {
-	di as smcl as text "{p 0 2}{it: NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the second entry is its Monte Carlo error.}"
+	di as smcl as text "{p 0 2}{it: NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the second entry is its Monte Carlo error.}{p_end}"
 }
 
 restore
