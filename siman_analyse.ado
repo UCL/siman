@@ -103,7 +103,7 @@ if _rc == 9 {
 	exit 498
 	}
 restore
-qui keep if `touse'
+keep if `touse'
 
 
 * put all variables in their original order in local allnames
