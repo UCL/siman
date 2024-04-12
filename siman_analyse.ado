@@ -40,7 +40,7 @@ if _rc == 111 {
 	di as error "simsum needs to be installed to run siman analyse. Please use {stata: ssc install simsum}"  
 	exit 498
 	}
-vercheck simsum, vermin(2.1.2) quietly
+vercheck simsum, vermin(2.1.2) quietly message(`"{p 0 2}You can install the latest simsum using {stata "net from https://raw.githubusercontent.com/UCL/simsum/main/package/"}{p_end}"')
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -462,7 +462,7 @@ program define vercheck, sclass
 11mar2015 - bug fix - didn't search beyond first line
 */
 version 9.2
-syntax name, [vermin(string) nofatal file ereturn return quietly]
+syntax name, [vermin(string) nofatal file ereturn return quietly message(string)]
 // Parsing
 local progname `namelist'
 if mi("`progname'") {
@@ -554,10 +554,12 @@ if "`vermin'" != "" {
 	}
 	if "`match'"=="old" {
 		di as error `"`filename' is version `vernum' which is older than target `vermin'"'
+		if !mi(`"`message'"') di `"`message'"'
 		exit `exitcode'
 	}
 	if "`match'"=="nover" {
 		di as error `"`filename' has no version number found"'
+		if !mi(`"`message'"') di `"`message'"'
 		exit `exitcode'
 	}
 	if "`match'"=="new" {
