@@ -11,7 +11,6 @@ capture program drop siman_describe
 program define siman_describe, rclass
 version 15
 
-* siman_describe only describes the data set, it does not change it.  So it should not have it's own [if] and [in] options.
 syntax, [Chars Sort SAVing(string)]
 
 if !mi("`chars'") {
@@ -116,52 +115,54 @@ else if `dgmcreated' == 1 {
 
     di as text _newline _col(`titlewidth') "SUMMARY OF DATA"
     di as text "_____________________________________________________" _newline
-    di as text "The siman format is:" as result _col(`colwidth') "`format'" 
-	di as text "The format for targets is:" as result _col(`colwidth') cond(inlist(`nformat',1,3),"long","wide")
-	di as text "The format for methods is:" as result _col(`colwidth') cond(inlist(`nformat',1,4),"long","wide")
-    di as text "The number of targets is:" as result _col(`colwidth') "`numtarget'"
-
+//  di as text "The siman format is:" as result _col(`colwidth') "`format'" 
+    di as text "Targets"
+//  di as text "The format for targets is:" as result _col(`colwidth') cond(inlist(`nformat',1,3),"long","wide")
+    di as text "  Variables containing targets:" as result _col(`colwidth') "`target'"
+    di as text "  Number of targets:" as result _col(`colwidth') "`numtarget'"
     if (`nformat'==1 & `ntarget'==0 & `nmethod'==0 ) {
-        di as text "The target values are:" as result _col(`colwidth') "`valtarget'"
+        di as text "  Target values:" as result _col(`colwidth') "`valtarget'" _newline
     }
-    else
-    if (`nformat'==1 & `ntarget'==0 & `nmethod'!=0) | (`nformat'==2) {
-        di as text "The target values are:" as result _col(`colwidth') `"`valtarget'"'
+    else if (`nformat'==1 & `ntarget'==0 & `nmethod'!=0) | (`nformat'==2) {
+        di as text "  Target values:" as result _col(`colwidth') `"`valtarget'"' _newline
     }
     else if (`nformat'==1 & `ntarget'!=0 & `nmethod'!=0) | (`nformat'==3) | (`nformat'==1 & `ntarget'!=0 & `nmethod'==0) {
-         di as text "The target values are:" as result _col(`colwidth') "`valtarget'"
+        di as text "  Target values:" as result _col(`colwidth') "`valtarget'" _newline
     }
-    di as text _newline "The number of methods is:" as result _col(`colwidth') "`nummethod'"
+    
+    di as text "Methods"
+//	di as text "The format for methods is:" as result _col(`colwidth') cond(inlist(`nformat',1,4),"long","wide")
+    di as text "  Variables containing methods:" as result _col(`colwidth') "`method'"
+    di as text "  Number of methods:" as result _col(`colwidth') "`nummethod'"
 
     if (`nformat'==1 & `ntarget'==0 & `nmethod'==0) {
-        di as text "The method values are:" as result _col(`colwidth') "`valmethod'"
+        di as text "  The method values are:" as result _col(`colwidth') "`valmethod'"
     }
-
-	else
-	if (`nformat'==1 & `ntarget'!=0 & `nmethod'!=0) | (`nformat'==1 & `ntarget'==0 & `nmethod'!=0) | (`nformat'==3) | (`nformat'==2) {
-		di as text "The method values are:" as result _col(`colwidth') "`valmethod'"
+	else if (`nformat'==1 & `ntarget'!=0 & `nmethod'!=0) | (`nformat'==1 & `ntarget'==0 & `nmethod'!=0) | (`nformat'==3) | (`nformat'==2) {
+		di as text "  The method values are:" as result _col(`colwidth') "`valmethod'"
 	}
 	else if (`nformat'==1 & `ntarget'!=0 & `nmethod'==0)  {
-		di as text "The method values are:" as result _col(`colwidth') `"`valmethod'"'
+		di as text "  The method values are:" as result _col(`colwidth') `"`valmethod'"'
 	}
 
-    di as result _newline "Data generating mechanism (dgm)
-*	if `dgmcount' == 1 di as text "The total number of dgms is: " as result _col(`colwidth') "`totaldgmnum'" 
-*	else di as text "The total number of dgm vars is: " as result _col(`colwidth') "`totaldgmnum'"
-    di as text "The total number of dgms is: " as result _col(`colwidth') "`totaldgmnum'" 
-    di as text "The dgm variables (# levels): " as result _col(`colwidth') `"`dgmvarsandlevels'"' _newline
-	if "`estimate'"!="" di as result "Estimates are contained in the dataset"
-	else if "`estimate'"=="" di as result "Estimates are not contained in the dataset"
-	di
-    di as text "The estimates `descriptiontype' " "is:" as result _col(`colwidth') cond( !mi("`estimate'"), "`estimate'", "N/A")
-    di as text "The se `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`se'"), "`se'", "N/A")
-    di as text "The df `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`df'"), "`df'", "N/A")
-    di as text "The ci `descriptiontype's are:" as result _col(`colwidth') cond( !mi("`lci'"), "`lci'", "N/A") cond( !mi("`uci'"), " `uci'", cond( !mi("`lci'"), " N/A", ""))
-    di as text "The p `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`p'"), "`p'", "N/A")
+    di as text _newline "Data-generating mechanism (DGM)"
+//	if `dgmcount' == 1 di as text "The total number of dgms is: " as result _col(`colwidth') "`totaldgmnum'" 
+//	else di as text "The total number of dgm vars is: " as result _col(`colwidth') "`totaldgmnum'"
+    di as text "  Total number of DGMs is: " as result _col(`colwidth') "`totaldgmnum'" 
+    di as text "  DGM variables (# levels): " as result _col(`colwidth') `"`dgmvarsandlevels'"'
+
+    di as text _newline "Repetition-level output"
+//	if "`estimate'"!="" di as result "Estimates are contained in the dataset"
+//	else if "`estimate'"=="" di as result "Estimates are not contained in the dataset"
+    di as text "  Point estimate `descriptiontype':" as result _col(`colwidth') cond( !mi("`estimate'"), "`estimate'", "N/A")
+    di as text "  SE `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`se'"), "`se'", "N/A")
+    di as text "  df `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`df'"), "`df'", "N/A")
+    di as text "  Conf. limit `descriptiontype's are:" as result _col(`colwidth') cond( !mi("`lci'"), "`lci'", "N/A") cond( !mi("`uci'"), " `uci'", cond( !mi("`lci'"), " N/A", ""))
+    di as text "  p-value `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`p'"), "`p'", "N/A")
 	if "`truetype'" == "string" {
-		di as text "The true variable is:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
+		di as text "  True  value variable:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
 	}
-	else di as text "The true value is:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
+	else di as text "  True value:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
     di as text "_____________________________________________________"
 
 
