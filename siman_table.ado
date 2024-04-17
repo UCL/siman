@@ -1,5 +1,6 @@
-* 14feb2024 IW allow new perfromance measure (pctbias) from simsum
-*! version 0.8.2   20dec2023
+*! version 0.8.3   3apr2024
+*  version 0.8.3    3apr2024 IW ignore method if methodcreated
+*                  14feb2024 IW allow new performance measure (pctbias) from simsum
 *  version 0.8.2   20dec2023   IW add row() option (undocumented at present)
 *  version 0.8.1 25oct2023     IW put PMs in same order as in simsum
 *  version 0.8   23dec2022     IW major rewrite: never pools over dgms, targets or methods
@@ -12,7 +13,7 @@
 *  version 0.1   08June2020    Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
 
 capture program drop siman_table
-prog define siman_table, rclass
+program define siman_table, rclass
 version 15
 syntax [anything] [if], [Column(varlist) Row(varlist) debug]
 
@@ -41,7 +42,7 @@ if `nformat'!=1 {
 	}
 
 * remove underscores from variables est_ and se_ for long-long format
-foreach val in `estvars' `sevars' {
+foreach val in `estimate' `se' {
    if strpos("`val'","_")!=0 {
 	   if substr("`val'",strlen("`val'"),1)=="_" {
 		   local l = substr("`val'", 1,strlen("`val'","_") - 1)    
@@ -72,7 +73,7 @@ if "`anything'"!="" {
 	gen `keep' = 0
 	foreach thing of local anything {
 		qui count if _perfmeascode == "`thing'" 
-		if r(N)==0 di as smcl as text "{p 0 2}Warning: performance measure not found: `thing'"
+		if r(N)==0 di as smcl as text "{p 0 2}Warning: performance measure not found: `thing'{p_end}"
 		qui replace `keep' = 1 if _perfmeascode == "`thing'" 
 		}
 	qui keep if `keep'
@@ -94,22 +95,22 @@ label values _perfmeascodeorder perfl
 label variable _perfmeascodeorder "performance measure"
 drop _perfmeascode
 rename _perfmeascodeorder _perfmeascode
-if "`sevars'" == "N/A" local sevars
 
 
 * sort out numbers of variables to be tabulated, and their levels
-if `dgmcreated' local dgmvar
-* identify non-varying dgmvars
-foreach onedgmvar in `dgmvar' {
+if `dgmcreated' local dgm
+if `methodcreated' local method
+* identify non-varying dgm
+foreach onedgmvar in `dgm' {
 	summ `onedgmvar' `if', meanonly
 	if r(min)<r(max) local newdgmvar `newdgmvar' `onedgmvar'
 	else if !mi("`debug'") di as error "Ignoring non-varying dgmvar: `onedgmvar'"
 	}
-local dgmvar `newdgmvar'
-local myfactors _perfmeascode `dgmvar' `target' `method'
+local dgm `newdgmvar'
+local myfactors _perfmeascode `dgm' `target' `method'
 if !mi("`debug'") di as input "Factors to display: `myfactors'"
 tempvar group
-foreach thing in dgmvar target method {
+foreach thing in dgm target method {
 	local n`thing'vars = wordcount("``thing''")
 	if !mi("`thing'") {
 		egen `group' = group(``thing'')
@@ -126,7 +127,7 @@ foreach thing in dgmvar target method {
 if "`column'"=="" { 
 	if `nmethodlevels'>1 local column `method'
 	else if `ntargetlevels'>1 local column `target'
-	else local column : word 1 of `dgmvar'
+	else local column : word 1 of `dgm'
 }
 local myfactors : list myfactors - column
 if "`row'"=="" {
@@ -135,13 +136,13 @@ if "`row'"=="" {
 }
 local by : list myfactors - row
 if wordcount("`by'")>4 {
-	di as error "There are too many factors to display. Consider using an if condition for your dgmvars."
+	di as error "There are too many factors to display. Consider using an if condition for your dgm."
 	
 }
 
 
 * display the table
-local tablecommand tabdisp `row' `column' `if', by(`by') c(`estvars' `sevars') stubwidth(20)
+local tablecommand tabdisp `row' `column' `if', by(`by') c(`estimate' `se') stubwidth(20)
 if !mi("`debug'") {
 	di "Table column: `column'"
 	di "Table row: `row'"
@@ -152,9 +153,9 @@ if !mi("`debug'") {
 
 
 * if mcses are reported, print the following note
-cap assert missing(`sevars')  
+cap assert missing(`se')  
 if _rc {
-	di as smcl as text "{p 0 2}{it: NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the second entry is its Monte Carlo error.}"
+	di as smcl as text "{p 0 2}{it: NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the second entry is its Monte Carlo error.}{p_end}"
 }
 
 restore

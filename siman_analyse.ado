@@ -1,4 +1,5 @@
-*! version 0.6.15 14mar2024
+*! version 0.7     3apr2024
+* version 0.7     3apr2024    IW make it work with missing se()
 * version 0.6.15 14mar2024    IW respect lci, uci and p from setup
 * version 0.6.14 12mar2024    IW make ref() option work in longwide; add undocumented pause option 
 * version 0.6.13 07mar2024    IW allow any simsum options
@@ -39,7 +40,7 @@ if _rc == 111 {
 	di as error "simsum needs to be installed to run siman analyse. Please use {stata: ssc install simsum}"  
 	exit 498
 	}
-vercheck simsum, vermin(2.1.2) quietly
+vercheck simsum, vermin(2.1.2) quietly message(`"{p 0 2}You can install the latest simsum using {stata "net from https://raw.githubusercontent.com/UCL/simsum/main/package/"}{p_end}"')
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -55,13 +56,6 @@ if "`simananalyserun'"=="1" & "`replace'" == "" {
 	exit 498
 	}
 
-
-if mi("`estimate'") | mi("`se'") {
-	di as error "siman analyse requires est() and se() to be specified in set-up"
-	* otherwise pf graphs won't run later
-	exit 498
-	}
-	
 local estimatesindi = (`rep'[_N]>0)
 	
 if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==1 {
@@ -77,7 +71,7 @@ else if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==0
 local simananalyserun = 0
 
 * check if siman setup has been run, if not produce an error message
-if "`simansetuprun'"=="0" | "`simansetuprun'"=="" {
+if "`setuprun'"=="0" | "`setuprun'"=="" {
 	di as error "siman setup has not been run.  Please use siman setup first before siman analyse."
 	exit 498
 	}
@@ -109,7 +103,7 @@ if _rc == 9 {
 	exit 498
 	}
 restore
-qui keep if `touse'
+keep if `touse'
 
 
 * put all variables in their original order in local allnames
@@ -128,6 +122,19 @@ qui drop if  `rep'<0
 local methodstringindi = 0
 capture confirm string variable `method'
 if !_rc local methodstringindi = 1
+
+* create se variable if missing: it will hold the MCSE
+if mi("`se'") {
+	cap confirm new variable _se
+	if _rc {
+		di as error "{p 0 2}siman analyse wants to create a new variable _se, but it alredy exists.{p_end}"
+		exit 498
+	}
+	local se _se
+	qui gen _se = .
+	local secreated 1
+}
+else local secreated 0
 
 * make a list of the optional elements that have been entered by the user, that would be stubs in the reshape
 *if "`ntruevalue'"=="single" local optionlist `estimate' `se' 
@@ -162,7 +169,7 @@ local optionlist `estimate' `se'
 if `nformat'==1 {
 
 	* save number format for method
-	local methodformat : value label `method'
+	local methodvallabel : value label `method'
 
 	* final agreed order/sort
 	qui order `rep' `dgm' `target' `method'
@@ -187,7 +194,7 @@ if `nformat'==1 {
 		
 	* simsum doesn't like to parse "`estimate'" etc so define a macro for simsum for estimate and se
 	local estsimsum = "`estimate'"
-	local sesimsum = "`se'"
+	if !`secreated' local sesimsum = "`se'"
 
 
 	capture confirm variable _perfmeascode
@@ -243,12 +250,12 @@ if `nformat'==1 {
 	else if `methodstringindi'==0 & `methodlabels' == 0 {
 		`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'")
 		* restore number format to method
-		label value `method' `methodformat'
+		label value `method' `methodvallabel'
 		}
 	else if `methodstringindi'==0 & `methodlabels' == 1 {
 		`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodvalues'")
 		* restore number format to method
-		label value `method' `methodformat'
+		label value `method' `methodvallabel'
 		}
 
 }
@@ -265,15 +272,16 @@ if `methodstringindi' == 0 & "`methodlabels'" == "1" local methodloop `methodval
 else local methodloop `valmethod'
 
 foreach v in `methodloop' {
-				if  substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
-				local estlist`v' `estvars'`v' 
-				local estlist `estlist' `estlist`v''
-				local selist`v' `sevars'`v' 
-				local selist `selist' `selist`v''
-				}
+	if  substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
+	foreach stat in estimate se df lci uci p {
+		if mi("``stat''") continue 
+		local `stat'list`v' ``stat''`v' 
+		local `stat'list ``stat'list' ``stat'list`v''
+	}
+}
 
 * add in true if applicable
-*if "`ntruevalue'"=="multiple" local estlist `estlist' `true' 
+*if "`ntruevalue'"=="multiple" local estimatelist `estimatelist' `true' 
 
 if !mi("`ref'") {
 	cap confirm var `estimate'`ref'
@@ -282,7 +290,7 @@ if !mi("`ref'") {
 }
 
 * RUN SIMSUM (WIDE DATA)
-local simsumcmd simsum `estlist' `if', true(`true') se(`selist') df(`df') lci(`lci') uci(`uci') p(`p') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
+local simsumcmd simsum `estimatelist' `if', true(`true') se(`selist') df(`dflist') lci(`lcilist') uci(`ucilist') p(`plist') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
 if !mi("`pause'") {
 	global F9 `simsumcmd'
 	pause
@@ -421,6 +429,8 @@ foreach thing in `allthings' {
     char _dta[siman_`thing'] ``thing''
 }
 
+if `secreated' di as text "siman analyse has created variable _se to hold the MCSE"
+
 di as text "siman analyse has run successfully"
 
 if "`table'"!="notable" {
@@ -452,7 +462,7 @@ program define vercheck, sclass
 11mar2015 - bug fix - didn't search beyond first line
 */
 version 9.2
-syntax name, [vermin(string) nofatal file ereturn return quietly]
+syntax name, [vermin(string) nofatal file ereturn return quietly message(string)]
 // Parsing
 local progname `namelist'
 if mi("`progname'") {
@@ -544,10 +554,12 @@ if "`vermin'" != "" {
 	}
 	if "`match'"=="old" {
 		di as error `"`filename' is version `vernum' which is older than target `vermin'"'
+		if !mi(`"`message'"') di `"`message'"'
 		exit `exitcode'
 	}
 	if "`match'"=="nover" {
 		di as error `"`filename' has no version number found"'
+		if !mi(`"`message'"') di `"`message'"'
 		exit `exitcode'
 	}
 	if "`match'"=="new" {

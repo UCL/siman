@@ -8,17 +8,35 @@
 //  Some edits from Tim Morris to draft version 06oct2019
 
 capture program drop siman_describe
-prog define siman_describe, rclass
+program define siman_describe, rclass
 version 15
 
 * siman_describe only describes the data set, it does not change it.  So it should not have it's own [if] and [in] options.
-syntax, [Chars Sort]
+syntax, [Chars Sort SAVing(string)]
 
 if !mi("`chars'") {
 	local allthings : char _dta[siman_allthings]
 	if !mi("`sort'") local allthings : list sort allthings
 	foreach thing of local allthings {
 		char l _dta[siman_`thing']
+	}
+	if !mi("`saving'") {
+		tempname post
+		cap postclose `post'
+		local maxl1 0
+		local maxl2 0
+		foreach thing of local allthings {
+			if "`thing'"=="allthings" continue
+			local maxl1 = max(`maxl1',length("siman_`thing'"))
+			local maxl2 = max(`maxl2',length("`: char _dta[siman_`thing']'"))
+		}
+		postfile `post' str`maxl1' char str`maxl2' value using `saving'
+		foreach thing of local allthings {
+			if "`thing'"=="allthings" continue
+			post `post' ("siman_`thing'") ("`: char _dta[siman_`thing']'")
+		}
+		postclose `post'
+		di as text `"Chars written to `saving'"'
 	}
 	exit
 }
@@ -60,7 +78,7 @@ if strpos("`valtarget'","_")!=0 {
 * remove underscores from variables (e.g. est_ se_) if long-long format
 if `nformat'==1 {
 
-    foreach val in `estvars' `sevars' `dfvars' `civars' `pvars' `truevars' {
+    foreach val in `estimate' `se' `df' `lci' `uci' `p' `true' {
 
         if strpos("`val'","_")!=0 {
                 if substr("`val'",strlen("`val'"),1)=="_" {
@@ -73,8 +91,6 @@ if `nformat'==1 {
 
 	char _dta[siman_estimate] `estimate'
 	char _dta[siman_se] `se'
-	if "`estimate'"!="" char _dta[siman_estvars]   `estimate'
-	if "`se'"!="" char  _dta[siman_sevars]   `se'
 	
 * determine if true variable is numeric or string, for output table text
 cap confirm number `true' 
@@ -94,15 +110,15 @@ if `dgmcreated' == 0 {
 	}
 }
 else if `dgmcreated' == 1 {
-	local totaldgmnum = 0
-	local dgmvarsandlevels "none"
+	local totaldgmnum 1
+	local dgmvarsandlevels N/A
 }
 
     di as text _newline _col(`titlewidth') "SUMMARY OF DATA"
     di as text "_____________________________________________________" _newline
     di as text "The siman format is:" as result _col(`colwidth') "`format'" 
-	di as text "The format for targets is:" as result _col(`colwidth') "`targetformat'"
-	di as text "The format for methods is:" as result _col(`colwidth') "`methodformat'"
+	di as text "The format for targets is:" as result _col(`colwidth') cond(inlist(`nformat',1,3),"long","wide")
+	di as text "The format for methods is:" as result _col(`colwidth') cond(inlist(`nformat',1,4),"long","wide")
     di as text "The number of targets is:" as result _col(`colwidth') "`numtarget'"
 
     if (`nformat'==1 & `ntarget'==0 & `nmethod'==0 ) {
@@ -136,15 +152,16 @@ else if `dgmcreated' == 1 {
     di as text "The dgm variables (# levels): " as result _col(`colwidth') `"`dgmvarsandlevels'"' _newline
 	if "`estimate'"!="" di as result "Estimates are contained in the dataset"
 	else if "`estimate'"=="" di as result "Estimates are not contained in the dataset"
-    di as text _newline "The estimates `descriptiontype' " "is:" as result _col(`colwidth') "`estvars'"
-    di as text "The se `descriptiontype' is:" as result _col(`colwidth') "`sevars'"
-    di as text "The df `descriptiontype' is:" as result _col(`colwidth') "`dfvars'"
-    di as text "The ci `cidescriptiontype' are:" as result _col(`colwidth') "`civars'"
-    di as text "The p `descriptiontype' is:" as result _col(`colwidth') "`pvars'"
+	di
+    di as text "The estimates `descriptiontype' " "is:" as result _col(`colwidth') cond( !mi("`estimate'"), "`estimate'", "N/A")
+    di as text "The se `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`se'"), "`se'", "N/A")
+    di as text "The df `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`df'"), "`df'", "N/A")
+    di as text "The ci `descriptiontype's are:" as result _col(`colwidth') cond( !mi("`lci'"), "`lci'", "N/A") cond( !mi("`uci'"), " `uci'", cond( !mi("`lci'"), " N/A", ""))
+    di as text "The p `descriptiontype' is:" as result _col(`colwidth') cond( !mi("`p'"), "`p'", "N/A")
 	if "`truetype'" == "string" {
-		di as text "The true variable is:" as result _col(`colwidth') "`truevars'"
+		di as text "The true variable is:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
 	}
-	else di as text "The true value is:" as result _col(`colwidth') "`truevars'"
+	else di as text "The true value is:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
     di as text "_____________________________________________________"
 
 

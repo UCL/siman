@@ -3,13 +3,13 @@
 C:\ian\git\siman\siman.ado
 *!version 0.3  08aug2023
 C:\ian\git\siman\siman_setup.ado
-*!    version 0.8.8  14feb2024    
+*!    version 0.9  3apr2024    
 C:\ian\git\siman\siman_describe.ado
 *! version 0.5.1   13mar2024
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.6.15 14mar2024
+*! version 0.7     3apr2024
 C:\ian\git\siman\siman_table.ado
-*! version 0.8.2   20dec2023
+*! version 0.8.3   3apr2024
 C:\ian\git\siman\siman_reshape.ado
 *!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
@@ -21,7 +21,7 @@ C:\ian\git\siman\siman_comparemethodsscatter.ado
 C:\ian\git\siman\siman_blandaltman.ado
 *! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.9.7 03oct2023
+*! version 1.9.8 27mar2024
 C:\ian\git\siman\siman_scatter.ado
 *! version 1.6.7 03oct2023
 C:\ian\git\siman\siman_nestloop.ado
@@ -543,7 +543,7 @@ Drawing graph...
 . 
 . * incomplete dgmorder
 . cap noi siman nestloop bias if estimand=="mean0", dgmorder(pmiss beta) 
-dgmvars missing from dgmorder(): mech
+dgm missing from dgmorder(): mech
 
 . assert _rc == 498
 

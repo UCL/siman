@@ -1,0 +1,4531 @@
+
+. siman which
+C:\ian\git\siman\siman.ado
+*!version 0.3  08aug2023
+C:\ian\git\siman\siman_setup.ado
+*!    version 0.8.8  14feb2024    
+C:\ian\git\siman\siman_describe.ado
+*! version 0.5.1   13mar2024
+C:\ian\git\siman\siman_analyse.ado
+*! version 0.6.15 14mar2024
+C:\ian\git\siman\siman_table.ado
+*! version 0.8.2   20dec2023
+C:\ian\git\siman\siman_reshape.ado
+*!  version 0.3.4   06nov2023
+C:\ian\git\siman\siman_lollyplot.ado
+*! version 1.13.2  15dec2023
+C:\ian\git\siman\siman_zipplot.ado
+*! version 1.8.12 25oct2023
+C:\ian\git\siman\siman_comparemethodsscatter.ado
+*! version 1.9.18 25oct2023
+C:\ian\git\siman\siman_blandaltman.ado
+*! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
+C:\ian\git\siman\siman_swarm.ado
+*! version 1.9.8 27mar2024
+C:\ian\git\siman\siman_scatter.ado
+*! version 1.6.7 03oct2023
+C:\ian\git\siman\siman_nestloop.ado
+*! version 1.8.2   17aug2023
+
+. 
+. // TEST SETUP AND ANALYSE WHEN TRUE DEPENDS ON TARGET 
+. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
+
+. rename inter binter
+
+. rename main bmain
+
+. gen mytrueinter=.3
+
+. gen mytruemain=0
+
+. reshape long b se mytrue, i(parm1 i method) j(estim) string
+(j = inter main)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations           40,000   ->   80,000      
+Number of variables                   9   ->   7           
+j variable (2 values)                     ->   estim
+xij variables:
+                           binter bmain   ->   b
+                         seinter semain   ->   se
+                 mytrueinter mytruemain   ->   mytrue
+-----------------------------------------------------------------------------
+
+. 
+. * set up
+. siman setup, rep(i) target(estim) method(method) est(b) se(se) true(mytrue) dgm(parm1)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            inter main
+
+The number of methods is:         4
+The method values are:            CC FULLDAT IMPALL IMPBYZ
+
+Data generating mechanism (dgm)
+The total number of dgms is:      1
+The dgm variables (# levels):     parm1 (1) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        b
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             mytrue
+_____________________________________________________
+
+. siman des, char sort saving(c:\temp\char, replace)
+  _dta[siman_allthings]:      allthings rep dgm target method estimate se df ci p true order lci ..
+  _dta[siman_ci]:             
+  _dta[siman_cidescriptiontype]:
+                              variables
+  _dta[siman_civars]:         N/A
+  _dta[siman_descriptiontype]:
+                              variable
+  _dta[siman_df]:             
+  _dta[siman_dfvars]:         N/A
+  _dta[siman_dgm]:            parm1
+  _dta[siman_dgmcreated]:     0
+  _dta[siman_estimate]:       b
+  _dta[siman_estvars]:        b
+  _dta[siman_format]:         format 1: long-long
+  _dta[siman_ifsetup]:        
+  _dta[siman_insetup]:        
+  _dta[siman_lci]:            
+  _dta[siman_m1]:             
+  _dta[siman_method]:         method
+  _dta[siman_methodcreated]:  0
+  _dta[siman_methodformat]:   long
+  _dta[siman_methodlabels]:   0
+  _dta[siman_methodvalues]:   
+  _dta[siman_ndgmvars]:       1
+  _dta[siman_nformat]:        1
+  _dta[siman_nmethod]:        1
+  _dta[siman_ntarget]:        1
+  _dta[siman_ntrue]:          2
+  _dta[siman_ntruestub]:      0
+  _dta[siman_ntruevalue]:     multiple
+  _dta[siman_nummethod]:      4
+  _dta[siman_numtarget]:      2
+  _dta[siman_order]:          
+  _dta[siman_p]:              
+  _dta[siman_pvars]:          N/A
+  _dta[siman_rep]:            i
+  _dta[siman_se]:             se
+  _dta[siman_sevars]:         se
+  _dta[siman_simansetuprun]:  1
+  _dta[siman_t1]:             
+  _dta[siman_target]:         estim
+  _dta[siman_targetformat]:   long
+  _dta[siman_targetlabels]:   0
+  _dta[siman_true]:           mytrue
+  _dta[siman_truedescriptiontype]:
+                              variable
+  _dta[siman_truevars]:       mytrue
+  _dta[siman_uci]:            
+  _dta[siman_valmethod]:      CC FULLDAT IMPALL IMPBYZ
+  _dta[siman_valtarget]:      inter main
+Chars written to c:\temp\char, replace
+
+. 
+. * analyse works ok with ref and replace
+. siman analyse, ref(CC)
+siman analyse has run successfully
+
+-----------------------------------------------------------------
+estim and            |                   method                  
+performance measure  |        CC    FULLDAT     IMPALL     IMPBYZ
+---------------------+-------------------------------------------
+inter                |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias |  .0059115   .0015333   .0052478   .0059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+             pctbias |  1.970502   .5110834   1.749251   1.970502
+                     |  1.009701   .6896664   1.003759   1.009701
+                     | 
+                mean |  .3059115   .3015333   .3052478   .3059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+               empse |  .3029104   .2068999   .3011278   .3029104
+                     |   .002142   .0014631   .0021294    .002142
+                     | 
+             relprec |             114.3421   1.187411          0
+                     |             3.189075   .2449551           
+                     | 
+                 mse |  .0917805   .0428056   .0906964   .0917805
+                     |  .0013657   .0006159   .0013496   .0013657
+                     | 
+                rmse |  .3029529   .2068953   .3011585   .3029529
+                     |   .002254   .0014884   .0022407    .002254
+                     | 
+             modelse |  .3048548   .2058274   .3062941   .3085094
+                     |   .000532   .0002157   .0004706   .0004811
+                     | 
+             ciwidth |  1.178335    .802491   1.187637   1.195883
+                     |  .0019894   .0008355   .0017631   .0017988
+                     | 
+            relerror |  .6419234  -.5184007   1.715628   1.848428
+                     |  .7330312    .711162   .7360551   .7375182
+                     | 
+               cover |     94.31      94.66      94.83       94.9
+                     |  .2316515   .2248297   .2214206   .2199977
+                     | 
+               power |     18.62      31.41      17.67      17.59
+                     |   .389268   .4641564   .3814146   .3807351
+---------------------+-------------------------------------------
+main                 |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+             pctbias |                                           
+                     |                                           
+                     | 
+                mean | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+               empse |  .2940812    .201468    .208478   .2134977
+                     |  .0020796   .0014247   .0014742   .0015097
+                     | 
+             relprec |               113.07   98.98207   89.73528
+                     |              3.04416   2.833241   2.675898
+                     | 
+                 mse |  .0864773   .0405913   .0434687   .0455843
+                     |  .0012391   .0005911   .0006277   .0006603
+                     | 
+                rmse |  .2940703   .2014729   .2084914   .2135047
+                     |  .0021068    .001467   .0015053   .0015464
+                     | 
+             modelse |  .2922305   .2019903   .2079367    .211888
+                     |  .0003659   .0001489   .0001678   .0001907
+                     | 
+             ciwidth |  1.136844   .7896402   .8125015   .8273879
+                     |  .0014074   .0005827     .00065   .0007282
+                     | 
+            relerror | -.6293141   .2592178  -.2596578   -.753965
+                     |  .7136225   .7128181   .7098851   .7074718
+                     | 
+               cover |     94.09       94.6      94.48      94.39
+                     |  .2358118   .2260177   .2283702   .2301147
+                     | 
+               power |      5.91        5.4       5.52       5.61
+                     |  .2358118   .2260177   .2283702   .2301147
+-----------------------------------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. siman analyse, ref(FULLDAT) replace 
+siman analyse has run successfully
+
+-----------------------------------------------------------------
+estim and            |                   method                  
+performance measure  |        CC    FULLDAT     IMPALL     IMPBYZ
+---------------------+-------------------------------------------
+inter                |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias |  .0059115   .0015333   .0052478   .0059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+             pctbias |  1.970502   .5110834   1.749251   1.970502
+                     |  1.009701   .6896664   1.003759   1.009701
+                     | 
+                mean |  .3059115   .3015333   .3052478   .3059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+               empse |  .3029104   .2068999   .3011278   .3029104
+                     |   .002142   .0014631   .0021294    .002142
+                     | 
+             relprec | -53.34562             -52.79164  -53.34562
+                     |  .6941441              .6991529   .6941441
+                     | 
+                 mse |  .0917805   .0428056   .0906964   .0917805
+                     |  .0013657   .0006159   .0013496   .0013657
+                     | 
+                rmse |  .3029529   .2068953   .3011585   .3029529
+                     |   .002254   .0014884   .0022407    .002254
+                     | 
+             modelse |  .3048548   .2058274   .3062941   .3085094
+                     |   .000532   .0002157   .0004706   .0004811
+                     | 
+             ciwidth |  1.178335    .802491   1.187637   1.195883
+                     |  .0019894   .0008355   .0017631   .0017988
+                     | 
+            relerror |  .6419234  -.5184007   1.715628   1.848428
+                     |  .7330312    .711162   .7360551   .7375182
+                     | 
+               cover |     94.31      94.66      94.83       94.9
+                     |  .2316515   .2248297   .2214206   .2199977
+                     | 
+               power |     18.62      31.41      17.67      17.59
+                     |   .389268   .4641564   .3814146   .3807351
+---------------------+-------------------------------------------
+main                 |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+             pctbias |                                           
+                     |                                           
+                     | 
+                mean | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+               empse |  .2940812    .201468    .208478   .2134977
+                     |  .0020796   .0014247   .0014742   .0015097
+                     | 
+             relprec | -53.06707             -6.611879  -10.95167
+                     |  .6705371              .5173771   .5893332
+                     | 
+                 mse |  .0864773   .0405913   .0434687   .0455843
+                     |  .0012391   .0005911   .0006277   .0006603
+                     | 
+                rmse |  .2940703   .2014729   .2084914   .2135047
+                     |  .0021068    .001467   .0015053   .0015464
+                     | 
+             modelse |  .2922305   .2019903   .2079367    .211888
+                     |  .0003659   .0001489   .0001678   .0001907
+                     | 
+             ciwidth |  1.136844   .7896402   .8125015   .8273879
+                     |  .0014074   .0005827     .00065   .0007282
+                     | 
+            relerror | -.6293141   .2592178  -.2596578   -.753965
+                     |  .7136225   .7128181   .7098851   .7074718
+                     | 
+               cover |     94.09       94.6      94.48      94.39
+                     |  .2358118   .2260177   .2283702   .2301147
+                     | 
+               power |      5.91        5.4       5.52       5.61
+                     |  .2358118   .2260177   .2283702   .2301147
+-----------------------------------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. siman reshape, longlong
+
+. siman analyse, ref(IMPALL) replace 
+siman analyse has run successfully
+
+-----------------------------------------------------------------
+estim and            |                   method                  
+performance measure  |        CC    FULLDAT     IMPALL     IMPBYZ
+---------------------+-------------------------------------------
+inter                |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias |  .0059115   .0015333   .0052478   .0059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+             pctbias |  1.970502   .5110834   1.749251   1.970502
+                     |  1.009701   .6896664   1.003759   1.009701
+                     | 
+                mean |  .3059115   .3015333   .3052478   .3059115
+                     |  .0030291    .002069   .0030113   .0030291
+                     | 
+               empse |  .3029104   .2068999   .3011278   .3029104
+                     |   .002142   .0014631   .0021294    .002142
+                     | 
+             relprec | -1.173477   111.8269             -1.173477
+                     |  .2392399   3.137143              .2392399
+                     | 
+                 mse |  .0917805   .0428056   .0906964   .0917805
+                     |  .0013657   .0006159   .0013496   .0013657
+                     | 
+                rmse |  .3029529   .2068953   .3011585   .3029529
+                     |   .002254   .0014884   .0022407    .002254
+                     | 
+             modelse |  .3048548   .2058274   .3062941   .3085094
+                     |   .000532   .0002157   .0004706   .0004811
+                     | 
+             ciwidth |  1.178335    .802491   1.187637   1.195883
+                     |  .0019894   .0008355   .0017631   .0017988
+                     | 
+            relerror |  .6419234  -.5184007   1.715628   1.848428
+                     |  .7330312    .711162   .7360551   .7375182
+                     | 
+               cover |     94.31      94.66      94.83       94.9
+                     |  .2316515   .2248297   .2214206   .2199977
+                     | 
+               power |     18.62      31.41      17.67      17.59
+                     |   .389268   .4641564   .3814146   .3807351
+---------------------+-------------------------------------------
+main                 |
+               bsims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+              sesims |     10000      10000      10000      10000
+                     |                                           
+                     | 
+                bias | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+             pctbias |                                           
+                     |                                           
+                     | 
+                mean | -.0014899  -.0024519  -.0031501  -.0027479
+                     |  .0029408   .0020147   .0020848    .002135
+                     | 
+               empse |  .2940812    .201468    .208478   .2134977
+                     |  .0020796   .0014247   .0014742   .0015097
+                     | 
+             relprec | -49.74422       7.08             -4.647047
+                     |  .7155758   .5932311                .30209
+                     | 
+                 mse |  .0864773   .0405913   .0434687   .0455843
+                     |  .0012391   .0005911   .0006277   .0006603
+                     | 
+                rmse |  .2940703   .2014729   .2084914   .2135047
+                     |  .0021068    .001467   .0015053   .0015464
+                     | 
+             modelse |  .2922305   .2019903   .2079367    .211888
+                     |  .0003659   .0001489   .0001678   .0001907
+                     | 
+             ciwidth |  1.136844   .7896402   .8125015   .8273879
+                     |  .0014074   .0005827     .00065   .0007282
+                     | 
+            relerror | -.6293141   .2592178  -.2596578   -.753965
+                     |  .7136225   .7128181   .7098851   .7074718
+                     | 
+               cover |     94.09       94.6      94.48      94.39
+                     |  .2358118   .2260177   .2283702   .2301147
+                     | 
+               power |      5.91        5.4       5.52       5.61
+                     |  .2358118   .2260177   .2283702   .2301147
+-----------------------------------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. 
+. /* ERROR: this one fails
+> siman reshape, longwide
+> siman analyse, ref(FULLDAT) replace
+> */
+. 
+. 
+. // SIMILAR
+. use $testpath/data/extendedtestdata2, clear
+
+. gen df = 5
+
+. gen lci = b - invt(df,.975)*se
+
+. gen uci = b + invt(df,.975)*se
+
+. gen p = 2*ttail(df,abs(b)/se)
+
+. siman setup, rep(rep) dgm(beta pmiss mech) target(estimand) method(method) true(true) est(b) se(se
+> ) lci(lci) uci(uci) p(p) df(df)
+  variable mech was long now byte
+  (324,000 bytes saved)
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            effect mean0 mean1
+
+The number of methods is:         3
+The method values are:            CCA MeanImp Noadj
+
+Data generating mechanism (dgm)
+The total number of dgms is:      12
+The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        b
+The se variable is:               se
+The df variable is:               df
+The ci variables are:             lci uci
+The p variable is:                p
+The true variable is:             true
+_____________________________________________________
+
+. siman des, char sort saving(c:\temp\char3, replace)
+  _dta[siman_allthings]:      allthings rep dgm target method estimate se df ci p true order lci ..
+  _dta[siman_ci]:             lci uci
+  _dta[siman_cidescriptiontype]:
+                              variables
+  _dta[siman_civars]:         lci uci
+  _dta[siman_descriptiontype]:
+                              variable
+  _dta[siman_df]:             df
+  _dta[siman_dfvars]:         df
+  _dta[siman_dgm]:            beta pmiss mech
+  _dta[siman_dgmcreated]:     0
+  _dta[siman_estimate]:       b
+  _dta[siman_estvars]:        b
+  _dta[siman_format]:         format 1: long-long
+  _dta[siman_ifsetup]:        
+  _dta[siman_insetup]:        
+  _dta[siman_lci]:            lci
+  _dta[siman_m1]:             
+  _dta[siman_method]:         method
+  _dta[siman_methodcreated]:  0
+  _dta[siman_methodformat]:   long
+  _dta[siman_methodlabels]:   0
+  _dta[siman_methodvalues]:   
+  _dta[siman_ndgmvars]:       3
+  _dta[siman_nformat]:        1
+  _dta[siman_nmethod]:        1
+  _dta[siman_ntarget]:        1
+  _dta[siman_ntrue]:          6
+  _dta[siman_ntruestub]:      0
+  _dta[siman_ntruevalue]:     multiple
+  _dta[siman_nummethod]:      3
+  _dta[siman_numtarget]:      3
+  _dta[siman_order]:          
+  _dta[siman_p]:              p
+  _dta[siman_pvars]:          p
+  _dta[siman_rep]:            rep
+  _dta[siman_se]:             se
+  _dta[siman_sevars]:         se
+  _dta[siman_simansetuprun]:  1
+  _dta[siman_t1]:             
+  _dta[siman_target]:         estimand
+  _dta[siman_targetformat]:   long
+  _dta[siman_targetlabels]:   0
+  _dta[siman_true]:           true
+  _dta[siman_truedescriptiontype]:
+                              variable
+  _dta[siman_truevars]:       true
+  _dta[siman_uci]:            uci
+  _dta[siman_valmethod]:      CCA MeanImp Noadj
+  _dta[siman_valtarget]:      effect mean0 mean1
+Chars written to c:\temp\char3, replace
+
+. 
+. // CHECK GET ERROR IF TRUE IS NOT CONSTANT ACROSS METHODS
+. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
+
+. 
+. * targets are wide, methods are long 
+. * so data are in wide-long format (format 4)
+. 
+. * need estimates to be stub + target
+. rename inter binter
+
+. rename main bmain
+
+. 
+. * set up true value variables
+. gen trueinter=.3
+
+. gen truemain=0
+
+. 
+. replace trueinter = 0.5 in 2
+(1 real change made)
+
+. replace trueinter = 0.8 in 3
+(1 real change made)
+
+. replace truemain = 0.2 in 2
+(1 real change made)
+
+. 
+. * set up
+. siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
+note: converting to long-wide format, creating variable target
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 3: long-wide
+The format for targets is:        long
+The format for methods is:        wide
+The number of targets is:         2
+The target values are:            inter main
+
+The number of methods is:         4
+The method values are:            CC FULLDAT IMPALL IMPBYZ
+
+Data generating mechanism (dgm)
+The total number of dgms is:      1
+The dgm variables (# levels):     parm1 (1) 
+
+Estimates are contained in the dataset
+
+The estimates stub is:            b
+The se stub is:                   se
+The df stub is:                   N/A
+The ci stubs are:                 N/A
+The p stub is:                    N/A
+The true variable is:             true
+_____________________________________________________
+
+. * ERROR: this one SHOULD have failed
+. 
+. 
+. // TEST LCI, UCI, P OPTIONS
+. *       use long-long data 
+. *       use non-default cilevel as tougher test
+. 
+. * using SE: store results as comparators
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman analyse ciwidth cover power, level(80) debug
+Options to pass to simsum: level(80)
+Running: simsum est , true(true) se(se) df() lci() uci() p() method(method) id(rep) by(true dgm esti
+> mand) max(20) ciwidth cover power clear mcse gen(_perfmeas)  level(80)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations               12   ->   24          
+Number of variables                   9   ->   8           
+j variable (2 values)                     ->   method
+xij variables:
+                              est1 est2   ->   est
+                                se1 se2   ->   se
+-----------------------------------------------------------------------------
+siman analyse has run successfully
+
+-----------------------------------------
+dgm, estimand and    |       method      
+performance measure  |        1         2
+---------------------+-------------------
+1                    |
+beta                 |
+             ciwidth | .2014349  .2899728
+                     | .0004004  .0008642
+                     | 
+               cover |     80.1      81.5
+                     | 1.262533  1.227905
+                     | 
+               power |     19.9      18.5
+                     | 1.262533  1.227905
+---------------------+-------------------
+1                    |
+gamma                |
+             ciwidth | .2017357  .2909772
+                     | .0003738  .0008659
+                     | 
+               cover |     79.5      78.5
+                     | 1.276617  1.299134
+                     | 
+               power |     20.5      21.5
+                     | 1.276617  1.299134
+---------------------+-------------------
+2                    |
+beta                 |
+             ciwidth | .2328909  .3352942
+                     | .0004466  .0009704
+                     | 
+               cover |     80.3      83.3
+                     |  1.25774  1.179453
+                     | 
+               power |     19.7      16.7
+                     |  1.25774  1.179453
+---------------------+-------------------
+2                    |
+gamma                |
+             ciwidth | .2329444  .3359915
+                     | .0004316  .0009999
+                     | 
+               cover |     79.5      78.5
+                     | 1.276617  1.299134
+                     | 
+               power |     20.5      21.5
+                     | 1.276617  1.299134
+-----------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. summ est if _perfmeascode=="ciwidth"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8    .2651552    .0552666   .2014349   .3359915
+
+. local ciwidthref = r(mean)
+
+. summ est if _perfmeascode=="cover"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8       80.15    1.606239       78.5       83.3
+
+. local coverref = r(mean)
+
+. summ est if _perfmeascode=="power"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8       19.85    1.606238       16.7       21.5
+
+. local powerref = r(mean)
+
+. 
+. * using LCI and UCI: compare ciwidth, coverage and power
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+
+. gen lower = est - invnorm(.9)*se
+
+. gen upper = est + invnorm(.9)*se
+
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) lci
+> (lower) uci(upper)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             lower upper
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman analyse ciwidth cover power, debug
+Options to pass to simsum: 
+Running: simsum est , true(true) se(se) df() lci(lower) uci(upper) p() method(method) id(rep) by(tru
+> e dgm estimand) max(20) ciwidth cover power clear mcse gen(_perfmeas)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations               12   ->   24          
+Number of variables                   9   ->   8           
+j variable (2 values)                     ->   method
+xij variables:
+                              est1 est2   ->   est
+                                se1 se2   ->   se
+-----------------------------------------------------------------------------
+siman analyse has run successfully
+
+-----------------------------------------
+dgm, estimand and    |       method      
+performance measure  |        1         2
+---------------------+-------------------
+1                    |
+beta                 |
+             ciwidth | .2014349  .2899728
+                     | .0004004  .0008642
+                     | 
+               cover |     80.1      81.5
+                     | 1.262533  1.227905
+                     | 
+               power |     19.9      18.5
+                     | 1.262533  1.227905
+---------------------+-------------------
+1                    |
+gamma                |
+             ciwidth | .2017357  .2909772
+                     | .0003738  .0008659
+                     | 
+               cover |     79.5      78.5
+                     | 1.276617  1.299134
+                     | 
+               power |     20.5      21.5
+                     | 1.276617  1.299134
+---------------------+-------------------
+2                    |
+beta                 |
+             ciwidth | .2328909  .3352942
+                     | .0004466  .0009704
+                     | 
+               cover |     80.3      83.3
+                     |  1.25774  1.179453
+                     | 
+               power |     19.7      16.7
+                     |  1.25774  1.179453
+---------------------+-------------------
+2                    |
+gamma                |
+             ciwidth | .2329444  .3359915
+                     | .0004316  .0009999
+                     | 
+               cover |     79.5      78.5
+                     | 1.276617  1.299134
+                     | 
+               power |     20.5      21.5
+                     | 1.276617  1.299134
+-----------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. summ est if _perfmeascode=="ciwidth"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8    .2651552    .0552666   .2014349   .3359915
+
+. di `ciwidthref', r(mean),reldif(`ciwidthref', r(mean))
+.26515521 .2651552 7.361e-09
+
+. assert reldif(`ciwidthref', r(mean))<1E-8
+
+. summ est if _perfmeascode=="cover"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8       80.15    1.606239       78.5       83.3
+
+. di `coverref', r(mean),reldif(`coverref', r(mean))
+80.150001 80.150001 0
+
+. assert reldif(`coverref', r(mean))<1E-8
+
+. summ est if _perfmeascode=="power"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8       19.85    1.606238       16.7       21.5
+
+. di `powerref', r(mean),reldif(`powerref', r(mean))
+19.85 19.85 1.704e-16
+
+. assert reldif(`powerref', r(mean))<1E-8
+
+. 
+. * using P: compare ciwidth and power
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+
+. gen pvalue = 2*normprob(-abs(est)/se)
+
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) p(p
+> value)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                pvalue
+The true variable is:             true
+_____________________________________________________
+
+. siman analyse ciwidth power, level(80) debug
+Options to pass to simsum: level(80)
+Running: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(rep) by(true dg
+> m estimand) max(20) ciwidth power clear mcse gen(_perfmeas)  level(80)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations                8   ->   16          
+Number of variables                   9   ->   8           
+j variable (2 values)                     ->   method
+xij variables:
+                              est1 est2   ->   est
+                                se1 se2   ->   se
+-----------------------------------------------------------------------------
+siman analyse has run successfully
+
+-----------------------------------------
+dgm, estimand and    |       method      
+performance measure  |        1         2
+---------------------+-------------------
+1                    |
+beta                 |
+             ciwidth | .2014349  .2899728
+                     | .0004004  .0008642
+                     | 
+               power |     19.9      18.5
+                     | 1.262533  1.227905
+---------------------+-------------------
+1                    |
+gamma                |
+             ciwidth | .2017357  .2909772
+                     | .0003738  .0008659
+                     | 
+               power |     20.5      21.5
+                     | 1.276617  1.299134
+---------------------+-------------------
+2                    |
+beta                 |
+             ciwidth | .2328909  .3352942
+                     | .0004466  .0009704
+                     | 
+               power |     19.7      16.7
+                     |  1.25774  1.179453
+---------------------+-------------------
+2                    |
+gamma                |
+             ciwidth | .2329444  .3359915
+                     | .0004316  .0009999
+                     | 
+               power |     20.5      21.5
+                     | 1.276617  1.299134
+-----------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. summ est if _perfmeascode=="ciwidth"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8    .2651552    .0552666   .2014349   .3359915
+
+. di `ciwidthref', r(mean),reldif(`ciwidthref', r(mean))
+.26515521 .26515521 0
+
+. assert reldif(`ciwidthref', r(mean))<1E-8
+
+. summ est if _perfmeascode=="power"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8       19.85    1.606238       16.7       21.5
+
+. di `powerref', r(mean),reldif(`powerref', r(mean))
+19.85 19.85 1.704e-16
+
+. assert reldif(`powerref', r(mean))<1E-8
+
+. 
+. * using P wrongly: compare ciwidth and power
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+
+. gen pvalue = 2*normprob(-abs(est)/se)
+
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) p(p
+> value)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         2
+The target values are:            beta gamma
+
+The number of methods is:         2
+The method values are:            1 2
+
+Data generating mechanism (dgm)
+The total number of dgms is:      2
+The dgm variables (# levels):     dgm (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        est
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                pvalue
+The true variable is:             true
+_____________________________________________________
+
+. siman analyse ciwidth power, debug // NB default level
+Options to pass to simsum: 
+Running: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(rep) by(true dg
+> m estimand) max(20) ciwidth power clear mcse gen(_perfmeas)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations                8   ->   16          
+Number of variables                   9   ->   8           
+j variable (2 values)                     ->   method
+xij variables:
+                              est1 est2   ->   est
+                                se1 se2   ->   se
+-----------------------------------------------------------------------------
+siman analyse has run successfully
+
+-----------------------------------------
+dgm, estimand and    |       method      
+performance measure  |        1         2
+---------------------+-------------------
+1                    |
+beta                 |
+             ciwidth | .3080681  .4434751
+                     | .0006123  .0013217
+                     | 
+               power |      5.3       4.3
+                     | .7084561  .6414905
+---------------------+-------------------
+1                    |
+gamma                |
+             ciwidth | .3085282  .4450112
+                     | .0005716  .0013243
+                     | 
+               power |      5.5       3.6
+                     | .7209369   .589101
+---------------------+-------------------
+2                    |
+beta                 |
+             ciwidth |  .356176  .5127883
+                     |  .000683  .0014841
+                     | 
+               power |        5       4.4
+                     | .6892024  .6485677
+---------------------+-------------------
+2                    |
+gamma                |
+             ciwidth | .3562577  .5138547
+                     | .0006601  .0015292
+                     | 
+               power |      5.5       3.6
+                     | .7209369   .589101
+-----------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. summ est if _perfmeascode=="ciwidth"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8    .4055199     .084523   .3080681   .5138547
+
+. di `ciwidthref', r(mean),reldif(`ciwidthref', r(mean))
+.26515521 .40551991 .09986674
+
+. assert reldif(`ciwidthref', r(mean))>1E-2
+
+. summ est if _perfmeascode=="power"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |          8        4.65    .7910211        3.6        5.5
+
+. di `powerref', r(mean),reldif(`powerref', r(mean))
+19.85 4.65 2.6902655
+
+. assert reldif(`powerref', r(mean))>1E-2
+
+. 
+. 
+. 
+. // Quick graphs: approx 12 s
+. use $testpath/data/extendedtestdata2, clear
+
+. gen df = 5
+
+. gen lci = b - invt(df,.975)*se
+
+. gen uci = b + invt(df,.975)*se
+
+. gen p = 2*ttail(df,abs(b)/se)
+
+. siman setup, rep(rep) dgm(beta pmiss mech) target(estimand) method(method) true(true) est(b) se(se
+> ) lci(lci) uci(uci) p(p) df(df)
+  variable mech was long now byte
+  (324,000 bytes saved)
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            effect mean0 mean1
+
+The number of methods is:         3
+The method values are:            CCA MeanImp Noadj
+
+Data generating mechanism (dgm)
+The total number of dgms is:      12
+The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        b
+The se variable is:               se
+The df variable is:               df
+The ci variables are:             lci uci
+The p variable is:                p
+The true variable is:             true
+_____________________________________________________
+
+. siman desc
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            effect mean0 mean1
+
+The number of methods is:         3
+The method values are:            CCA MeanImp Noadj
+
+Data generating mechanism (dgm)
+The total number of dgms is:      12
+The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        b
+The se variable is:               se
+The df variable is:               df
+The ci variables are:             lci uci
+The p variable is:                p
+The true variable is:             true
+_____________________________________________________
+
+. 
+. gen touse = estimand=="effect" & beta==1 & pmiss==2 & mech==2
+
+. siman blandaltman if touse
+working....
+
+. siman scatter if touse
+working.....
+
+. siman cms if touse
+Working.....
+
+. siman swarm if touse
+working.....
+
+. siman zip if touse
+
+. 
+. siman analyse
+siman analyse has run successfully
+
+------------------------------------------------------
+beta, pmiss, mech,   |
+estimand and         |             method             
+performance measure  |       CCA    MeanImp      Noadj
+---------------------+--------------------------------
+0                    |
+.2                   |
+MCAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0025341   .0021761  -.0034964
+                     |  .0050018   .0048248   .0060434
+                     | 
+             pctbias |                                
+                     |                                
+                     | 
+                mean |  .0025341   .0021761  -.0034964
+                     |  .0050018   .0048248   .0060434
+                     | 
+               empse |  .1581701   .1525731   .1911095
+                     |  .0035386   .0034133   .0042755
+                     | 
+             relprec |             7.471377    -31.501
+                     |             3.958131   3.397247
+                     | 
+                 mse |  .0249992     .02326   .0364985
+                     |  .0010772   .0009486   .0015959
+                     | 
+                rmse |  .1581113   .1525123   .1910459
+                     |  .0034066     .00311   .0041767
+                     | 
+             modelse |  .1590372   .1556693   .2002325
+                     |  .0003068   .0002637   .0003076
+                     | 
+             ciwidth |  .8161248   .7991775   1.028224
+                     |  .0015724   .0013532   .0015748
+                     | 
+            relerror |  .5482441   2.029298   4.773726
+                     |  2.257802    2.28912   2.349504
+                     | 
+               cover |      99.3       99.3       99.2
+                     |  .2636469   .2636469   .2817096
+                     | 
+               power |        .7         .7         .8
+                     |  .2636475   .2636475   .2817091
+---------------------+--------------------------------
+0                    |
+.2                   |
+MCAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0043802  -.0038922  -.0010559
+                     |  .0034357   .0039994   .0044315
+                     | 
+             pctbias | -.4380242  -.3892164  -.1055921
+                     |  .3435739   .3999397   .4431542
+                     | 
+                mean |  .9956198   .9961078   .9989441
+                     |  .0034357   .0039994   .0044315
+                     | 
+               empse |  .1086476    .126472   .1401377
+                     |  .0024306   .0028294   .0031351
+                     | 
+             relprec |            -26.20087  -39.89225
+                     |             3.405392   2.978411
+                     | 
+                 mse |  .0118117   .0159943     .01962
+                     |  .0005087   .0007259   .0008612
+                     | 
+                rmse |  .1086816   .1264687   .1400715
+                     |  .0023403     .00287   .0030742
+                     | 
+             modelse |  .1124467   .1099436   .1415858
+                     |  .0002233   .0001861   .0002175
+                     | 
+             ciwidth |  .5769752   .5644317   .7270643
+                     |  .0011438   .0009548   .0011135
+                     | 
+            relerror |  3.496694  -13.06887   1.033348
+                     |  2.324521   1.950369   2.265628
+                     | 
+               cover |      99.2       97.3         99
+                     |  .2817096   .5125521   .3146427
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+0                    |
+.2                   |
+MCAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0018461   -.001716  -.0045523
+                     |  .0036401   .0040642   .0044155
+                     | 
+             pctbias | -.1846102  -.1716031  -.4552272
+                     |  .3640138   .4064189   .4415471
+                     | 
+                mean |  .9981539    .998284   .9954478
+                     |  .0036401   .0040642   .0044155
+                     | 
+               empse |  .1151113    .128521   .1396295
+                     |  .0025753   .0028753   .0031238
+                     | 
+             relprec |            -19.77907   -32.0356
+                     |             3.561042   3.356048
+                     | 
+                 mse |  .0132408   .0165041   .0194976
+                     |  .0005738   .0007252   .0009102
+                     | 
+                rmse |  .1150685   .1284681   .1396338
+                     |  .0024935   .0028225   .0032592
+                     | 
+             modelse |  .1124886   .1099436   .1415858
+                     |  .0002289   .0001861   .0002175
+                     | 
+             ciwidth |  .5771348   .5644317   .7270643
+                     |  .0011719   .0009548   .0011135
+                     | 
+            relerror | -2.278399  -14.45476   1.401075
+                     |  2.195239   1.919276   2.273874
+                     | 
+               cover |      98.3       97.7       99.1
+                     |  .4087905   .4740362   .2986472
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+0                    |
+.2                   |
+MNAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0051652   .0069042   .0063999
+                     |  .0050357   .0049677   .0062144
+                     | 
+             pctbias |                                
+                     |                                
+                     | 
+                mean |  .0051652   .0069042   .0063999
+                     |  .0050357   .0049677   .0062144
+                     | 
+               empse |  .1592432   .1570932   .1965152
+                     |  .0035626   .0035145   .0043964
+                     | 
+             relprec |             2.755958  -34.33562
+                     |              3.92513   3.254202
+                     | 
+                 mse |  .0253597   .0247013   .0386206
+                     |  .0011447   .0010991   .0017162
+                     | 
+                rmse |  .1592474   .1571664   .1965211
+                     |  .0035942   .0034967   .0043665
+                     | 
+             modelse |  .1586639   .1575551   .1997631
+                     |  .0002984   .0002747   .0003192
+                     | 
+             ciwidth |  .8142831   .8087946   1.025716
+                     |  .0015297   .0014073   .0016337
+                     | 
+            relerror | -.3638003   .2940331   1.652786
+                     |  2.236912   2.250566   2.279957
+                     | 
+               cover |        99       99.2         99
+                     |  .3146427   .2817096   .3146427
+                     | 
+               power |         1         .8          1
+                     |  .3146427   .2817091   .3146427
+---------------------+--------------------------------
+0                    |
+.2                   |
+MNAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0002823  -.0030683  -.0028161
+                     |  .0035256   .0039993   .0043733
+                     | 
+             pctbias |  .0282293  -.3068284  -.2816139
+                     |  .3525591   .3999281   .4373308
+                     | 
+                mean |  1.000282   .9969317   .9971839
+                     |  .0035256   .0039993   .0043733
+                     | 
+               empse |   .111489   .1264684   .1382961
+                     |  .0024942   .0028293   .0030939
+                     | 
+             relprec |            -22.28588  -35.01042
+                     |             3.553124    3.21204
+                     | 
+                 mse |  .0124174   .0159877   .0191146
+                     |  .0005255   .0006866   .0008108
+                     | 
+                rmse |  .1114336   .1264424   .1382557
+                     |  .0023581    .002715   .0029322
+                     | 
+             modelse |  .1133514   .1112796   .1412539
+                     |  .0002246   .0001941   .0002257
+                     | 
+             ciwidth |  .5816218   .5712426   .7252908
+                     |  .0011508   .0009944   .0011552
+                     | 
+            relerror |  1.670485  -12.00996   2.138705
+                     |  2.283466   1.974473   2.290856
+                     | 
+               cover |      99.1       97.6       99.1
+                     |  .2986472   .4839836   .2986472
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+0                    |
+.2                   |
+MNAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0054474   .0038359   .0035837
+                     |  .0036017    .004159   .0045974
+                     | 
+             pctbias |  .5447446   .3835891   .3583745
+                     |   .360167   .4158996   .4597352
+                     | 
+                mean |  1.005447   1.003836   1.003584
+                     |  .0036017    .004159   .0045974
+                     | 
+               empse |  .1138948    .131519    .145381
+                     |   .002548   .0029423   .0032524
+                     | 
+             relprec |            -25.00526  -38.62488
+                     |             3.301581   2.976425
+                     | 
+                 mse |  .0129887   .0172947   .0211274
+                     |   .000604   .0007995   .0009803
+                     | 
+                rmse |  .1139681   .1315092   .1453525
+                     |  .0026499   .0030398   .0033721
+                     | 
+             modelse |   .113427   .1112796   .1412539
+                     |  .0002256   .0001941   .0002257
+                     | 
+             ciwidth |  .5820001   .5712426   .7252908
+                     |  .0011563   .0009944   .0011552
+                     | 
+            relerror | -.4107688  -15.38898  -2.838857
+                     |  2.236787   1.898649   2.179215
+                     | 
+               cover |      99.2       96.5         98
+                     |  .2817096   .5811626   .4427189
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+0                    |
+.4                   |
+MCAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0040346  -.0106284  -.0075639
+                     |  .0058504   .0054603   .0064138
+                     | 
+             pctbias |                                
+                     |                                
+                     | 
+                mean | -.0040346  -.0106284  -.0075639
+                     |  .0058504   .0054603   .0064138
+                     | 
+               empse |  .1850048   .1726695   .2028226
+                     |  .0041389   .0038629   .0045375
+                     | 
+             relprec |             14.79805  -16.79807
+                     |             5.443054   4.371892
+                     | 
+                 mse |  .0342088   .0298979   .0411531
+                     |  .0014917   .0013962   .0018602
+                     | 
+                rmse |  .1849563   .1729101   .2028622
+                     |  .0040326   .0040372    .004585
+                     | 
+             modelse |  .1843259   .1682872   .2005376
+                     |  .0004201   .0002874   .0003196
+                     | 
+             ciwidth |  .9452376   .8639439   1.029696
+                     |  .0021378   .0014699   .0016379
+                     | 
+            relerror | -.3669457  -2.537951   -1.12658
+                     |  2.240513   2.186753   2.217587
+                     | 
+               cover |      99.3       97.9       98.5
+                     |  .2636469   .4534202   .3843826
+                     | 
+               power |        .7        2.1        1.5
+                     |  .2636475   .4534203   .3843826
+---------------------+--------------------------------
+0                    |
+.4                   |
+MCAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |   .000462   .0008812   -.000651
+                     |  .0041282   .0042365    .004576
+                     | 
+             pctbias |  .0462043   .0881226  -.0651027
+                     |  .4128213   .4236481   .4575971
+                     | 
+                mean |  1.000462   1.000881    .999349
+                     |  .0041282   .0042365    .004576
+                     | 
+               empse |  .1305456   .1339693   .1447049
+                     |  .0029205   .0029971   .0032373
+                     | 
+             relprec |            -5.045934  -18.61251
+                     |             4.802574   4.287085
+                     | 
+                 mse |  .0170253   .0179306    .020919
+                     |  .0007045   .0007746   .0008935
+                     | 
+                rmse |  .1304811   .1339052    .144634
+                     |  .0026998   .0028925   .0030887
+                     | 
+             modelse |  .1305939   .1188526   .1418015
+                     |  .0003286   .0002027    .000226
+                     | 
+             ciwidth |  .6693458    .610162    .728105
+                     |  .0016623   .0010365   .0011582
+                     | 
+            relerror |  .0370401  -11.28368   -2.00644
+                     |  2.252127   1.990506   2.197853
+                     | 
+               cover |      99.2       97.1         99
+                     |  .2817096   .5306507   .3146427
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+0                    |
+.4                   |
+MCAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0035725  -.0097472  -.0082149
+                     |  .0040727   .0041946   .0045016
+                     | 
+             pctbias | -.3572548  -.9747202  -.8214949
+                     |  .4072705   .4194598   .4501559
+                     | 
+                mean |  .9964275   .9902528    .991785
+                     |  .0040727   .0041946   .0045016
+                     | 
+               empse |  .1287902   .1326448   .1423518
+                     |  .0028813   .0029675   .0031847
+                     | 
+             relprec |            -5.727448  -18.14595
+                     |             4.702864   4.260022
+                     | 
+                 mse |  .0165831   .0176721   .0203112
+                     |  .0007359   .0008387   .0009525
+                     | 
+                rmse |  .1287754   .1329363   .1425175
+                     |  .0028572   .0031544   .0033416
+                     | 
+             modelse |  .1300832   .1188526   .1418015
+                     |  .0003176   .0002027    .000226
+                     | 
+             ciwidth |  .6668221    .610162    .728105
+                     |  .0016175   .0010365   .0011582
+                     | 
+            relerror |  1.003914  -10.39784   -.386567
+                     |  2.273066   2.010381   2.234185
+                     | 
+               cover |      98.9       97.3       98.5
+                     |  .3298331   .5125521   .3843826
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+0                    |
+.4                   |
+MNAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |   -.00534   .0017957   .0038512
+                     |  .0058944   .0057885   .0063535
+                     | 
+             pctbias |                                
+                     |                                
+                     | 
+                mean |   -.00534   .0017957   .0038512
+                     |  .0058944   .0057885   .0063535
+                     | 
+               empse |  .1863973   .1830487   .2009145
+                     |  .0041701   .0040951   .0044948
+                     | 
+             relprec |             3.692184  -13.92896
+                     |             5.141973   4.535763
+                     | 
+                 mse |  .0347377   .0334766   .0403411
+                     |  .0016028   .0014745   .0017617
+                     | 
+                rmse |  .1863806    .182966   .2008509
+                     |  .0042998   .0040294   .0043855
+                     | 
+             modelse |  .1830743   .1775443   .1997327
+                     |  .0004151   .0003043   .0003129
+                     | 
+             ciwidth |   .938821   .9114453   1.025597
+                     |  .0021227   .0015638   .0016099
+                     | 
+            relerror | -1.782753  -3.007068  -.5881864
+                     |   2.20856    2.17627   2.229474
+                     | 
+               cover |      98.3       98.9       99.1
+                     |  .4087905   .3298331   .2986472
+                     | 
+               power |       1.7        1.1         .9
+                     |  .4087909   .3298333    .298647
+---------------------+--------------------------------
+0                    |
+.4                   |
+MNAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0009617  -.0026523  -.0036801
+                     |  .0045246   .0041852   .0043757
+                     | 
+             pctbias | -.0961663   -.265235  -.3680087
+                     |  .4524592   .4185209   .4375716
+                     | 
+                mean |  .9990383   .9973477   .9963199
+                     |  .0045246   .0041852   .0043757
+                     | 
+               empse |  .1430802   .1323479   .1383723
+                     |   .003201   .0029609   .0030956
+                     | 
+             relprec |             16.87576   6.920382
+                     |             6.429841   6.006739
+                     | 
+                 mse |  .0204524   .0175055   .0191413
+                     |  .0009372    .000719   .0007879
+                     | 
+                rmse |  .1430118   .1323083   .1383521
+                     |  .0032765   .0027172   .0028474
+                     | 
+             modelse |  .1421672   .1253868   .1412324
+                     |  .0003872   .0002146   .0002212
+                     | 
+             ciwidth |  .7282708   .6436912   .7252066
+                     |  .0019616   .0011027   .0011384
+                     | 
+            relerror | -.6380477  -5.259725   2.066927
+                     |  2.239327   2.125709   2.289019
+                     | 
+               cover |      98.6       98.8       99.4
+                     |  .3715375    .344325   .2442127
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+0                    |
+.4                   |
+MNAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0063016  -.0008566   .0001711
+                     |  .0045477   .0043392   .0045417
+                     | 
+             pctbias | -.6301643  -.0856612   .0171126
+                     |  .4547732   .4339167   .4541733
+                     | 
+                mean |  .9936984   .9991434   1.000171
+                     |  .0045477   .0043392   .0045417
+                     | 
+               empse |  .1438119   .1372165   .1436222
+                     |  .0032173   .0030698   .0032131
+                     | 
+             relprec |             9.844188   .2643282
+                     |             5.858572     5.4393
+                     | 
+                 mse |  .0207009   .0188103   .0206067
+                     |  .0009174   .0008312   .0009067
+                     | 
+                rmse |  .1438781   .1371505   .1435505
+                     |   .003188   .0030302   .0031581
+                     | 
+             modelse |  .1422711   .1253868   .1412324
+                     |  .0004004   .0002146   .0002212
+                     | 
+             ciwidth |  .7286018   .6436912   .7252066
+                     |  .0020363   .0011027   .0011384
+                     | 
+            relerror | -1.071406  -8.621186  -1.663993
+                     |  2.230659   2.050287   2.205347
+                     | 
+               cover |        99       98.1       98.4
+                     |  .3146427   .4317293   .3967869
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.2                   |
+MCAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0027473   .0005009  -.0015566
+                     |  .0050655   .0049291   .0063368
+                     | 
+             pctbias |  1.098923   .2003606  -.6226373
+                     |  2.026209   1.971655   2.534731
+                     | 
+                mean |  .2527473   .2505009   .2484434
+                     |  .0050655   .0049291   .0063368
+                     | 
+               empse |  .1601859    .155873   .2003881
+                     |  .0035837   .0034872   .0044831
+                     | 
+             relprec |             5.610406   -36.0994
+                     |             3.822774   3.145098
+                     | 
+                 mse |  .0256414   .0242724   .0401176
+                     |  .0011251   .0011662    .001826
+                     | 
+                rmse |  .1601294   .1557959   .2002939
+                     |  .0035131   .0037426   .0045584
+                     | 
+             modelse |   .158477   .1553216   .1998129
+                     |  .0002866   .0002626   .0003235
+                     | 
+             ciwidth |  .8134275   .7973934   1.025926
+                     |  .0014717   .0013498   .0016625
+                     | 
+            relerror |  -1.06681  -.3537511   -.287028
+                     |  2.220538   2.235628   2.236598
+                     | 
+               cover |      98.5       98.5       98.7
+                     |  .3843826   .3843826   .3582043
+                     | 
+               power |      17.2       16.9        9.5
+                     |  1.193382    1.18507    .927227
+---------------------+--------------------------------
+.25                  |
+.2                   |
+MCAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0046613  -.0053978   -.004369
+                     |  .0036465   .0041445   .0045289
+                     | 
+             pctbias |  -.466126   -.539777  -.4369023
+                     |  .3646494   .4144524   .4528905
+                     | 
+                mean |  .9953387   .9946022    .995631
+                     |  .0036465   .0041445   .0045289
+                     | 
+               empse |  .1153123   .1310613   .1432165
+                     |  .0025798   .0029321    .003204
+                     | 
+             relprec |            -22.58915  -35.17168
+                     |             3.372301   3.178906
+                     | 
+                 mse |  .0133054    .017189   .0205096
+                     |  .0005851   .0007573   .0009268
+                     | 
+                rmse |  .1153488    .131107   .1432116
+                     |  .0025361   .0028879   .0032359
+                     | 
+             modelse |  .1120492   .1096937   .1412891
+                     |   .000209   .0001854   .0002287
+                     | 
+             ciwidth |   .575068    .563148   .7254392
+                     |  .0010709    .000953   .0011756
+                     | 
+            relerror | -2.829776  -16.30358   -1.34585
+                     |  2.181421   1.877781   2.212848
+                     | 
+               cover |      98.7       97.2       98.8
+                     |  .3582043   .5216898    .344325
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.2                   |
+MCAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  -.001914  -.0048969  -.0059256
+                     |  .0034785   .0039931   .0045322
+                     | 
+             pctbias |  -.153116  -.3917496  -.4740491
+                     |  .2782773   .3194476   .3625721
+                     | 
+                mean |  1.248086   1.245103   1.244074
+                     |  .0034785   .0039931   .0045322
+                     | 
+               empse |  .1099988   .1262728   .1433192
+                     |  .0024609    .002825   .0032063
+                     | 
+             relprec |            -24.11494  -41.09301
+                     |              3.44376   2.871909
+                     | 
+                 mse |  .0120913   .0159528    .020555
+                     |  .0005686   .0007398    .000982
+                     | 
+                rmse |  .1099604   .1263046   .1433701
+                     |  .0025856   .0029287   .0034247
+                     | 
+             modelse |  .1120856   .1096937   .1412891
+                     |  .0002164   .0001854   .0002287
+                     | 
+             ciwidth |  .5751794    .563148   .7254392
+                     |   .001111    .000953   .0011756
+                     | 
+            relerror |  1.897122   -13.1296  -1.416533
+                     |  2.288101   1.948991   2.211263
+                     | 
+               cover |      98.5       96.8       98.4
+                     |  .3843826   .5565606   .3967869
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.2                   |
+MNAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0021697  -.0030478  -.0032598
+                     |  .0050535   .0049456   .0066448
+                     | 
+             pctbias |  .8678741  -1.219111  -1.303923
+                     |    2.0214   1.978232   2.657936
+                     | 
+                mean |  .2521697   .2469522   .2467402
+                     |  .0050535   .0049456   .0066448
+                     | 
+               empse |  .1598057    .156393   .2101283
+                     |  .0035752   .0034988    .004701
+                     | 
+             relprec |             4.411891  -42.16171
+                     |             3.964161     2.7453
+                     | 
+                 mse |   .025517   .0244436   .0441204
+                     |  .0011012   .0010917   .0021423
+                     | 
+                rmse |  .1597405   .1563445   .2100485
+                     |  .0034469   .0034913   .0050996
+                     | 
+             modelse |  .1595675   .1578927   .2002832
+                     |  .0003036   .0002745   .0003213
+                     | 
+             ciwidth |   .818885   .8105373   1.028363
+                     |  .0015572   .0014047   .0016528
+                     | 
+            relerror |  -.149025   .9589576  -4.685263
+                     |  2.241916   2.265448   2.137843
+                     | 
+               cover |      99.1       99.1       98.6
+                     |  .2986472   .2986472   .3715375
+                     | 
+               power |      16.4       16.5        9.7
+                     |  1.170914   1.173776   .9359006
+---------------------+--------------------------------
+.25                  |
+.2                   |
+MNAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0049183  -.0060418  -.0059357
+                     |   .003674   .0040392   .0046376
+                     | 
+             pctbias | -.4918334  -.6041759  -.5935745
+                     |  .3674032   .4039218   .4637622
+                     | 
+                mean |  .9950817   .9939582   .9940643
+                     |   .003674   .0040392   .0046376
+                     | 
+               empse |  .1161831   .1277313   .1466545
+                     |  .0025992   .0028576   .0032809
+                     | 
+             relprec |            -17.26461  -37.23823
+                     |             3.746284   2.994491
+                     | 
+                 mse |  .0135092   .0163355   .0215213
+                     |  .0005784   .0007132   .0009818
+                     | 
+                rmse |  .1162291   .1278103   .1467013
+                     |  .0024882   .0027901   .0033462
+                     | 
+             modelse |  .1140788   .1115027   .1416216
+                     |  .0002309   .0001935   .0002272
+                     | 
+             ciwidth |  .5853088    .572399   .7271622
+                     |  .0011808   .0009901   .0011687
+                     | 
+            relerror | -1.811223  -12.70522  -3.431776
+                     |  2.205637   1.958812   2.165958
+                     | 
+               cover |      99.1       97.6       98.3
+                     |  .2986472   .4839836   .4087905
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.2                   |
+MNAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0027486  -.0090895  -.0091956
+                     |  .0034781   .0038531    .004416
+                     | 
+             pctbias | -.2198919  -.7271631  -.7356442
+                     |  .2782505   .3082445   .3532827
+                     | 
+                mean |  1.247251    1.24091   1.240804
+                     |  .0034781   .0038531    .004416
+                     | 
+               empse |  .1099882   .1218443   .1396472
+                     |  .0024606   .0027259   .0031242
+                     | 
+             relprec |            -18.51431  -37.96635
+                     |             3.940328   3.194757
+                     | 
+                 mse |  .0120929   .0149138   .0195664
+                     |  .0005401   .0006959   .0008664
+                     | 
+                rmse |  .1099675   .1221221     .13988
+                     |  .0024558   .0028494   .0030971
+                     | 
+             modelse |  .1139007   .1115027   .1416216
+                     |  .0002256   .0001935   .0002272
+                     | 
+             ciwidth |  .5844441    .572399   .7271622
+                     |  .0011545   .0009901   .0011687
+                     | 
+            relerror |  3.557214  -8.487556    1.41383
+                     |  2.325831   2.053452   2.274642
+                     | 
+               cover |      99.3       98.3       99.1
+                     |  .2636469   .4087905   .2986472
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.4                   |
+MCAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0034342   .0005849   .0049402
+                     |  .0060214   .0052363   .0063101
+                     | 
+             pctbias | -1.373691   .2339707    1.97607
+                     |  2.408547   2.094518   2.524044
+                     | 
+                mean |  .2465658   .2505849   .2549402
+                     |  .0060214   .0052363   .0063101
+                     | 
+               empse |  .1904123   .1655862   .1995432
+                     |  .0042599   .0037045   .0044642
+                     | 
+             relprec |             32.23362  -8.942381
+                     |             6.214656   4.843795
+                     | 
+                 mse |  .0362324   .0273917   .0398021
+                     |  .0017131   .0012575   .0016522
+                     | 
+                rmse |  .1903481   .1655044   .1995046
+                     |  .0044999   .0037991   .0041407
+                     | 
+             modelse |  .1835962    .167694    .199773
+                     |  .0004158    .000289   .0003116
+                     | 
+             ciwidth |   .941511   .8608739   1.025822
+                     |  .0021226   .0014789   .0015986
+                     | 
+            relerror |  -3.57967   1.272905    .115136
+                     |  2.168128   2.272378     2.2452
+                     | 
+               cover |      98.1         99       99.6
+                     |  .4317293   .3146427      .1996
+                     | 
+               power |      12.1       13.3        9.7
+                     |  1.031305    1.07383   .9359006
+---------------------+--------------------------------
+.25                  |
+.4                   |
+MCAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |   .004279   .0017235  -.0004541
+                     |  .0041273   .0040722   .0043798
+                     | 
+             pctbias |  .4278979   .1723482  -.0454142
+                     |  .4127342    .407225   .4379788
+                     | 
+                mean |  1.004279   1.001724   .9995459
+                     |  .0041273   .0040722   .0043798
+                     | 
+               empse |   .130518   .1287758    .138501
+                     |  .0029199    .002881   .0030985
+                     | 
+             relprec |             2.724042  -11.19553
+                     |             5.187405   4.708285
+                     | 
+                 mse |  .0170362   .0165696   .0191636
+                     |  .0008437   .0006861   .0008152
+                     | 
+                rmse |  .1305229    .128723   .1384325
+                     |  .0032322   .0026649   .0029445
+                     | 
+             modelse |  .1298397   .1184202   .1412608
+                     |  .0003154   .0002035   .0002203
+                     | 
+             ciwidth |  .6655896   .6079264   .7253656
+                     |   .001608   .0010418   .0011304
+                     | 
+            relerror | -.5197104  -8.041621   1.992588
+                     |   2.23864   2.063343   2.287304
+                     | 
+               cover |      98.7       98.6       98.7
+                     |  .3582043   .3715375   .3582043
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.4                   |
+MCAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0008448   .0023084    .004486
+                     |  .0040974   .0041912   .0046007
+                     | 
+             pctbias |  .0675802   .1846726   .3588827
+                     |  .3277934   .3352997   .3680572
+                     | 
+                mean |  1.250845   1.252308   1.254486
+                     |  .0040974   .0041912   .0046007
+                     | 
+               empse |  .1295717   .1325389   .1454874
+                     |  .0028988   .0029651   .0032548
+                     | 
+             relprec |            -4.427241  -20.68234
+                     |             4.850225   4.212103
+                     | 
+                 mse |  .0167728   .0175543   .0211655
+                     |  .0007355   .0007671     .00089
+                     | 
+                rmse |  .1295097   .1324927   .1454838
+                     |  .0028397    .002895   .0030588
+                     | 
+             modelse |  .1297947   .1184202   .1412608
+                     |  .0003172   .0002035   .0002203
+                     | 
+             ciwidth |  .6653336   .6079264   .7253656
+                     |  .0016179   .0010418   .0011304
+                     | 
+            relerror |  .1721137  -10.65248  -2.905118
+                     |  2.254367   2.004761   2.177467
+                     | 
+               cover |      99.1       97.5         99
+                     |  .2986472   .4937104   .3146427
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.4                   |
+MNAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |   .003941  -.0028574   -.005644
+                     |  .0059101   .0058369   .0065405
+                     | 
+             pctbias |  1.576388  -1.142965  -2.257613
+                     |  2.364043   2.334766   2.616184
+                     | 
+                mean |   .253941   .2471426    .244356
+                     |  .0059101   .0058369   .0065405
+                     | 
+               empse |   .186894   .1845794   .2068275
+                     |  .0041812   .0041294   .0046271
+                     | 
+             relprec |             2.523628  -18.34663
+                     |              4.99531   4.235552
+                     | 
+                 mse |    .03491   .0340437   .0427667
+                     |  .0015901    .001559   .0019589
+                     | 
+                rmse |  .1868421   .1845092   .2068011
+                     |  .0042551   .0042247   .0047362
+                     | 
+             modelse |  .1842587   .1780058   .2000978
+                     |  .0004117   .0002979   .0003147
+                     | 
+             ciwidth |  .9449714   .9138712   1.027461
+                     |   .002102   .0015342   .0016199
+                     | 
+            relerror | -1.410059  -3.561427  -3.253749
+                     |  2.216616   2.163541   2.169735
+                     | 
+               cover |      98.9       98.7       98.5
+                     |  .3298331   .3582043   .3843826
+                     | 
+               power |      13.4       12.7        9.8
+                     |  1.077237   1.052953   .9401915
+---------------------+--------------------------------
+.25                  |
+.4                   |
+MNAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0064733  -.0015826  -.0001893
+                     |  .0045101   .0042524   .0045012
+                     | 
+             pctbias | -.6473321   -.158258   -.018927
+                     |  .4510087   .4252355   .4501229
+                     | 
+                mean |  .9935267   .9984174   .9998108
+                     |  .0045101   .0042524   .0045012
+                     | 
+               empse |  .1426215   .1344713   .1423413
+                     |  .0031907   .0030084   .0031844
+                     | 
+             relprec |             12.48923   .3940071
+                     |             6.118313   5.592515
+                     | 
+                 mse |  .0203624   .0180669   .0202408
+                     |  .0009043   .0008215   .0009234
+                     | 
+                rmse |  .1426971   .1344133   .1422703
+                     |  .0031685    .003056   .0032453
+                     | 
+             modelse |  .1430059   .1257121   .1414905
+                     |  .0003851     .00021   .0002225
+                     | 
+             ciwidth |  .7326045   .6454021   .7265245
+                     |  .0019591   .0010815   .0011455
+                     | 
+            relerror |  .2695387  -6.513753  -.5977263
+                     |  2.259407   2.097287   2.229302
+                     | 
+               cover |      98.9       98.3       98.6
+                     |  .3298331   .4087905   .3715375
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.4                   |
+MNAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0025324    -.00444  -.0058333
+                     |  .0046609   .0042129   .0044636
+                     | 
+             pctbias | -.2025881  -.3551992  -.4666643
+                     |  .3728699   .3370284   .3570871
+                     | 
+                mean |  1.247468    1.24556   1.244167
+                     |  .0046609   .0042129   .0044636
+                     | 
+               empse |  .1473898   .1332222   .1411511
+                     |  .0032974   .0029804   .0031578
+                     | 
+             relprec |             22.40011   9.035122
+                     |             6.657785   6.000536
+                     | 
+                 mse |  .0217084   .0177501   .0199377
+                     |  .0010044   .0008242   .0009239
+                     | 
+                rmse |  .1473378   .1332295    .141201
+                     |  .0034086   .0030931   .0032716
+                     | 
+             modelse |  .1433395   .1257121   .1414905
+                     |  .0003901     .00021   .0002225
+                     | 
+             ciwidth |  .7342792   .6454021   .7265245
+                     |  .0019764   .0010815   .0011455
+                     | 
+            relerror | -2.748019  -5.637216   .2404965
+                     |  2.191748   2.116951     2.2481
+                     | 
+               cover |      98.5       98.2       98.4
+                     |  .3843826   .4204287   .3967869
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.5                   |
+.2                   |
+MCAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  -.003586  -.0019055  -.0040095
+                     |  .0049575   .0048105   .0065433
+                     | 
+             pctbias |  -.717203   -.381095  -.8019052
+                     |  .9914938   .9621063   1.308655
+                     | 
+                mean |   .496414   .4980945   .4959905
+                     |  .0049575   .0048105   .0065433
+                     | 
+               empse |  .1567689   .1521224   .2069165
+                     |  .0035072   .0034033   .0046291
+                     | 
+             relprec |             6.202289  -42.59763
+                     |             4.026737   2.862491
+                     | 
+                 mse |  .0245648   .0231217   .0427877
+                     |  .0010558   .0009687   .0019013
+                     | 
+                rmse |  .1567316   .1520582   .2068519
+                     |  .0033682   .0031851   .0045957
+                     | 
+             modelse |  .1589754   .1557034   .1997051
+                     |  .0002998     .00027   .0003102
+                     | 
+             ciwidth |  .8158727   .7993048   1.025478
+                     |  .0015373   .0013813   .0015951
+                     | 
+            relerror |  1.407441   2.354018  -3.485154
+                     |  2.276719    2.29672   2.164417
+                     | 
+               cover |      99.5       99.4       98.6
+                     |  .2230471   .2442127   .3715375
+                     | 
+               power |      70.9       73.1       48.7
+                     |  1.436381    1.40228   1.580604
+---------------------+--------------------------------
+.5                   |
+.2                   |
+MCAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0012828  -.0023641  -.0013121
+                     |  .0035545   .0038132   .0043888
+                     | 
+             pctbias | -.1282813  -.2364119  -.1312095
+                     |  .3554459   .3813201   .4388826
+                     | 
+                mean |  .9987172   .9976359   .9986879
+                     |  .0035545   .0038132   .0043888
+                     | 
+               empse |  .1124019    .120584   .1387869
+                     |  .0025146   .0026977   .0031049
+                     | 
+             relprec |            -13.11044  -34.40808
+                     |              3.89834   3.265604
+                     | 
+                 mse |  .0126232   .0145316   .0192443
+                     |  .0005259   .0006566     .00082
+                     | 
+                rmse |   .112353   .1205469   .1387237
+                     |  .0023402   .0027236   .0029556
+                     | 
+             modelse |  .1124665   .1099383   .1412129
+                     |   .000223   .0001902   .0002194
+                     | 
+             ciwidth |  .5770773   .5643729   .7251226
+                     |   .001144   .0009735   .0011279
+                     | 
+            relerror |  .0575289  -8.828434   1.747992
+                     |  2.247252   2.045771   2.281774
+                     | 
+               cover |      99.4       97.7       99.4
+                     |  .2442127   .4740362   .2442127
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.5                   |
+.2                   |
+MCAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0048688  -.0042696  -.0053216
+                     |  .0035244   .0039181    .004524
+                     | 
+             pctbias | -.3245885  -.2846395  -.3547747
+                     |  .2349589   .2612065   .3016017
+                     | 
+                mean |  1.495131    1.49573   1.494678
+                     |  .0035244   .0039181    .004524
+                     | 
+               empse |  .1114508   .1239011   .1430622
+                     |  .0024934   .0027719   .0032006
+                     | 
+             relprec |            -19.08746  -39.31012
+                     |              3.81138   3.068431
+                     | 
+                 mse |  .0124326   .0153544   .0204747
+                     |  .0005433   .0006378   .0008719
+                     | 
+                rmse |  .1115014   .1239127   .1430897
+                     |  .0024363   .0025736   .0030467
+                     | 
+             modelse |  .1123107   .1099383   .1412129
+                     |  .0002198   .0001902   .0002194
+                     | 
+             ciwidth |  .5763128   .5643729   .7251226
+                     |  .0011245   .0009735   .0011279
+                     | 
+            relerror |  .7715725  -11.26929  -1.292712
+                     |  2.263057   1.991001   2.213584
+                     | 
+               cover |        99       97.8         99
+                     |  .3146427   .4638531   .3146427
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.5                   |
+.2                   |
+MNAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0062239   -.000872  -.0051354
+                     |  .0049747   .0050995   .0066234
+                     | 
+             pctbias | -1.244777  -.1743976  -1.027078
+                     |  .9949353   1.019894   1.324672
+                     | 
+                mean |  .4937761    .499128   .4948646
+                     |  .0049747   .0050995   .0066234
+                     | 
+               empse |  .1573131   .1612593   .2094489
+                     |  .0035194   .0036077   .0046858
+                     | 
+             relprec |            -4.834381  -43.58776
+                     |              3.65376   2.785994
+                     | 
+                 mse |  .0247614   .0259793   .0438514
+                     |  .0011348   .0011562   .0019782
+                     | 
+                rmse |  .1573576    .161181   .2094072
+                     |  .0036058   .0035868   .0047234
+                     | 
+             modelse |  .1586881   .1570945   .1993961
+                     |  .0002964   .0002771   .0003162
+                     | 
+             ciwidth |  .8144222   .8063933   1.023824
+                     |  .0015218   .0014241   .0016351
+                     | 
+            relerror |  .8740371  -2.582691  -4.799671
+                     |  2.264594   2.186172   2.135153
+                     | 
+               cover |      98.8       98.7       98.4
+                     |   .344325   .3582043   .3967869
+                     | 
+               power |      71.4       71.5       47.7
+                     |     1.429   1.427498   1.579465
+---------------------+--------------------------------
+.5                   |
+.2                   |
+MNAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0022508  -.0014848   .0006469
+                     |  .0036447   .0041133   .0046357
+                     | 
+             pctbias |  .2250815  -.1484761   .0646943
+                     |   .364466   .4113289   .4635696
+                     | 
+                mean |  1.002251   .9985152   1.000647
+                     |  .0036447   .0041133   .0046357
+                     | 
+               empse |  .1152543   .1300736   .1465936
+                     |  .0025785     .00291   .0032796
+                     | 
+             relprec |            -21.48809  -38.18638
+                     |             3.474391   3.002674
+                     | 
+                 mse |  .0132753   .0169044   .0214686
+                     |  .0006154   .0007466   .0009522
+                     | 
+                rmse |  .1152186   .1300171   .1465217
+                     |  .0026705   .0028712   .0032493
+                     | 
+             modelse |  .1134385    .110935   .1409943
+                     |   .000226   .0001955   .0002236
+                     | 
+             ciwidth |  .5820597   .5694501   .7239532
+                     |  .0011562   .0010048   .0011562
+                     | 
+            relerror | -1.575469  -14.71369  -3.819581
+                     |  2.210655   1.913925   2.157135
+                     | 
+               cover |        99       97.5       98.5
+                     |  .3146427   .4937104   .3843826
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.5                   |
+.2                   |
+MNAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0039731  -.0023567  -.0044885
+                     |  .0035517   .0041173   .0046167
+                     | 
+             pctbias | -.2648714  -.1571165    -.29923
+                     |  .2367772   .2744879     .30778
+                     | 
+                mean |  1.496027   1.497643   1.495512
+                     |  .0035517   .0041173   .0046167
+                     | 
+               empse |  .1123133    .130201   .1459929
+                     |  .0025127   .0029128   .0032661
+                     | 
+             relprec |             -25.5896  -40.81672
+                     |             3.301878    2.87058
+                     | 
+                 mse |  .0126174   .0169409   .0213128
+                     |  .0005855   .0007378   .0009074
+                     | 
+                rmse |  .1123274   .1301572   .1459889
+                     |   .002606   .0028343   .0031079
+                     | 
+             modelse |  .1133144    .110935   .1409943
+                     |  .0002247   .0001955   .0002236
+                     | 
+             ciwidth |  .5814329   .5694501   .7239532
+                     |  .0011501   .0010048   .0011562
+                     | 
+            relerror |  .8913633  -14.79714  -3.423841
+                     |  2.265977   1.912052    2.16601
+                     | 
+               cover |      98.7       97.6         99
+                     |  .3582043   .4839836   .3146427
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.5                   |
+.4                   |
+MCAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0038328  -.0003171   .0025005
+                     |  .0058314   .0053224   .0061952
+                     | 
+             pctbias | -.7665548   -.063415   .5000941
+                     |   1.16629   1.064481   1.239045
+                     | 
+                mean |  .4961672   .4996829   .5025005
+                     |  .0058314   .0053224   .0061952
+                     | 
+               empse |  .1844066   .1683093   .1959102
+                     |  .0041255   .0037654   .0043829
+                     | 
+             relprec |             20.04303  -11.39891
+                     |             5.738354   4.584891
+                     | 
+                 mse |  .0339865   .0282998   .0383487
+                     |  .0014887   .0012391   .0016748
+                     | 
+                rmse |  .1843542   .1682254   .1958281
+                     |  .0040375   .0036828   .0042762
+                     | 
+             modelse |   .183931   .1683373   .2002281
+                     |  .0004252   .0002925   .0003172
+                     | 
+             ciwidth |  .9431263   .8641409    1.02811
+                     |  .0021711   .0015051   .0016331
+                     | 
+            relerror | -.2579166   .0166356   2.204033
+                     |  2.243296   2.244297   2.292222
+                     | 
+               cover |      98.9       99.2       99.3
+                     |  .3298331   .2817096   .2636469
+                     | 
+               power |      54.6       65.2       48.9
+                     |  1.574433   1.506307   1.580756
+---------------------+--------------------------------
+.5                   |
+.4                   |
+MCAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0013829  -.0023255  -.0037343
+                     |  .0040298   .0040163   .0043476
+                     | 
+             pctbias |  -.138286  -.2325508   -.373428
+                     |  .4029827   .4016278   .4347562
+                     | 
+                mean |  .9986171   .9976745   .9962657
+                     |  .0040298   .0040163   .0043476
+                     | 
+               empse |  .1274343   .1270059    .137482
+                     |  .0028509   .0028414   .0030757
+                     | 
+             relprec |             .6758362  -14.08257
+                     |              5.21626    4.57631
+                     | 
+                 mse |  .0162252   .0161198   .0188963
+                     |  .0007514   .0007493   .0008695
+                     | 
+                rmse |  .1273781   .1269636    .137464
+                     |  .0029495   .0029507   .0031627
+                     | 
+             modelse |  .1301364   .1188966   .1415826
+                     |  .0003241   .0002064   .0002243
+                     | 
+             ciwidth |  .6670116    .610344   .7269838
+                     |  .0016521   .0010623   .0011548
+                     | 
+            relerror |  2.120365  -6.384953   2.982693
+                     |  2.298739   2.100641   2.309685
+                     | 
+               cover |      98.7       98.2       98.8
+                     |  .3582043   .4204287    .344325
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.5                   |
+.4                   |
+MCAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0052156  -.0026426  -.0012338
+                     |  .0042386   .0042832   .0045389
+                     | 
+             pctbias | -.3477089  -.1761721   -.082254
+                     |  .2825763   .2855477   .3025927
+                     | 
+                mean |  1.494784   1.497357   1.498766
+                     |  .0042386   .0042832   .0045389
+                     | 
+               empse |  .1340377   .1354472   .1435323
+                     |  .0029987   .0030302   .0032111
+                     | 
+             relprec |            -2.070426   -12.7924
+                     |             4.834758   4.441568
+                     | 
+                 mse |  .0179753   .0183346   .0205825
+                     |  .0008045   .0008314    .000925
+                     | 
+                rmse |  .1340721   .1354052   .1434659
+                     |  .0030004   .0030701   .0032239
+                     | 
+             modelse |  .1300619   .1188966   .1415826
+                     |  .0003222   .0002064   .0002243
+                     | 
+             ciwidth |  .6666586    .610344   .7269838
+                     |  .0016396   .0010623   .0011548
+                     | 
+            relerror | -2.966143  -12.21922  -1.358368
+                     |  2.184098   1.969725   2.212324
+                     | 
+               cover |      98.3       97.2       98.6
+                     |  .4087905   .5216898   .3715375
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.5                   |
+.4                   |
+MNAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0029705  -.0054573  -.0062674
+                     |  .0059098   .0057716   .0064853
+                     | 
+             pctbias | -.5940987  -1.091464  -1.253487
+                     |  1.181958   1.154313   1.297068
+                     | 
+                mean |  .4970295   .4945427   .4937326
+                     |  .0059098   .0057716   .0064853
+                     | 
+               empse |   .186884   .1825129   .2050845
+                     |  .0041809   .0040832   .0045881
+                     | 
+             relprec |             4.847274  -16.96164
+                     |             5.283276   4.412323
+                     | 
+                 mse |  .0348995   .0333074   .0420569
+                     |  .0016159   .0014769   .0018584
+                     | 
+                rmse |  .1868142   .1825032   .2050777
+                     |   .004325   .0040461   .0045309
+                     | 
+             modelse |  .1846398   .1781741   .2005397
+                     |  .0004248   .0002976   .0003082
+                     | 
+             ciwidth |  .9467798    .914737   1.029788
+                     |   .002171   .0015347   .0015861
+                     | 
+            relerror | -1.200878  -2.377249  -2.216031
+                     |  2.221978   2.190083   2.192766
+                     | 
+               cover |      98.2       98.7       98.7
+                     |  .4204287   .3582043   .3582043
+                     | 
+               power |      54.7       57.9         46
+                     |  1.574138   1.561278   1.576071
+---------------------+--------------------------------
+.5                   |
+.4                   |
+MNAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0049292  -.0045021  -.0040971
+                     |  .0046364   .0043276   .0045824
+                     | 
+             pctbias | -.4929183  -.4502139   -.409708
+                     |  .4636404   .4327626   .4582449
+                     | 
+                mean |  .9950708   .9954979   .9959029
+                     |  .0046364   .0043276   .0045824
+                     | 
+               empse |   .146616   .1368515   .1449098
+                     |  .0032801   .0030616   .0032419
+                     | 
+             relprec |             14.77918   2.368726
+                     |             6.094008   5.510614
+                     | 
+                 mse |   .021499   .0187299   .0209946
+                     |  .0010073   .0008145   .0009085
+                     | 
+                rmse |  .1466255   .1368572   .1448952
+                     |  .0034351   .0029757   .0031351
+                     | 
+             modelse |  .1432406   .1258355    .141803
+                     |  .0004015   .0002094   .0002179
+                     | 
+             ciwidth |  .7336492   .6460391     .72817
+                     |  .0020205   .0010803   .0011216
+                     | 
+            relerror | -2.302162  -8.049639  -2.143926
+                     |  2.202773   2.062787   2.194383
+                     | 
+               cover |      98.4       98.6       98.8
+                     |  .3967869   .3715375    .344325
+                     | 
+               power |      99.9        100        100
+                     |  .0999492          0          0
+---------------------+--------------------------------
+.5                   |
+.4                   |
+MNAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0078997  -.0099595  -.0103645
+                     |  .0044765   .0041298   .0043771
+                     | 
+             pctbias | -.5266451  -.6639639  -.6909679
+                     |  .2984332   .2753192   .2918066
+                     | 
+                mean |    1.4921   1.490041   1.489635
+                     |  .0044765   .0041298   .0043771
+                     | 
+               empse |  .1415593   .1305953    .138416
+                     |  .0031669   .0029217   .0030966
+                     | 
+             relprec |             17.49554   4.593358
+                     |             6.484474   5.899247
+                     | 
+                 mse |  .0200814   .0171373   .0192473
+                     |  .0009067   .0007285   .0008286
+                     | 
+                rmse |  .1417088   .1309094   .1387345
+                     |  .0031992   .0027823   .0029861
+                     | 
+             modelse |  .1432662   .1258355    .141803
+                     |  .0003876   .0002094   .0002179
+                     | 
+             ciwidth |  .7339242   .6460391     .72817
+                     |  .0019678   .0010803   .0011216
+                     | 
+            relerror |  1.205773   -3.64473   2.446964
+                     |  2.280658   2.161605   2.297332
+                     | 
+               cover |      98.8       98.6       99.2
+                     |   .344325   .3715375   .2817096
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+------------------------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. siman table
+
+------------------------------------------------------
+beta, pmiss, mech,   |
+estimand and         |             method             
+performance measure  |       CCA    MeanImp      Noadj
+---------------------+--------------------------------
+0                    |
+.2                   |
+MCAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0025341   .0021761  -.0034964
+                     |  .0050018   .0048248   .0060434
+                     | 
+             pctbias |                                
+                     |                                
+                     | 
+                mean |  .0025341   .0021761  -.0034964
+                     |  .0050018   .0048248   .0060434
+                     | 
+               empse |  .1581701   .1525731   .1911095
+                     |  .0035386   .0034133   .0042755
+                     | 
+             relprec |             7.471377    -31.501
+                     |             3.958131   3.397247
+                     | 
+                 mse |  .0249992     .02326   .0364985
+                     |  .0010772   .0009486   .0015959
+                     | 
+                rmse |  .1581113   .1525123   .1910459
+                     |  .0034066     .00311   .0041767
+                     | 
+             modelse |  .1590372   .1556693   .2002325
+                     |  .0003068   .0002637   .0003076
+                     | 
+             ciwidth |  .8161248   .7991775   1.028224
+                     |  .0015724   .0013532   .0015748
+                     | 
+            relerror |  .5482441   2.029298   4.773726
+                     |  2.257802    2.28912   2.349504
+                     | 
+               cover |      99.3       99.3       99.2
+                     |  .2636469   .2636469   .2817096
+                     | 
+               power |        .7         .7         .8
+                     |  .2636475   .2636475   .2817091
+---------------------+--------------------------------
+0                    |
+.2                   |
+MCAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0043802  -.0038922  -.0010559
+                     |  .0034357   .0039994   .0044315
+                     | 
+             pctbias | -.4380242  -.3892164  -.1055921
+                     |  .3435739   .3999397   .4431542
+                     | 
+                mean |  .9956198   .9961078   .9989441
+                     |  .0034357   .0039994   .0044315
+                     | 
+               empse |  .1086476    .126472   .1401377
+                     |  .0024306   .0028294   .0031351
+                     | 
+             relprec |            -26.20087  -39.89225
+                     |             3.405392   2.978411
+                     | 
+                 mse |  .0118117   .0159943     .01962
+                     |  .0005087   .0007259   .0008612
+                     | 
+                rmse |  .1086816   .1264687   .1400715
+                     |  .0023403     .00287   .0030742
+                     | 
+             modelse |  .1124467   .1099436   .1415858
+                     |  .0002233   .0001861   .0002175
+                     | 
+             ciwidth |  .5769752   .5644317   .7270643
+                     |  .0011438   .0009548   .0011135
+                     | 
+            relerror |  3.496694  -13.06887   1.033348
+                     |  2.324521   1.950369   2.265628
+                     | 
+               cover |      99.2       97.3         99
+                     |  .2817096   .5125521   .3146427
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+0                    |
+.2                   |
+MCAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0018461   -.001716  -.0045523
+                     |  .0036401   .0040642   .0044155
+                     | 
+             pctbias | -.1846102  -.1716031  -.4552272
+                     |  .3640138   .4064189   .4415471
+                     | 
+                mean |  .9981539    .998284   .9954478
+                     |  .0036401   .0040642   .0044155
+                     | 
+               empse |  .1151113    .128521   .1396295
+                     |  .0025753   .0028753   .0031238
+                     | 
+             relprec |            -19.77907   -32.0356
+                     |             3.561042   3.356048
+                     | 
+                 mse |  .0132408   .0165041   .0194976
+                     |  .0005738   .0007252   .0009102
+                     | 
+                rmse |  .1150685   .1284681   .1396338
+                     |  .0024935   .0028225   .0032592
+                     | 
+             modelse |  .1124886   .1099436   .1415858
+                     |  .0002289   .0001861   .0002175
+                     | 
+             ciwidth |  .5771348   .5644317   .7270643
+                     |  .0011719   .0009548   .0011135
+                     | 
+            relerror | -2.278399  -14.45476   1.401075
+                     |  2.195239   1.919276   2.273874
+                     | 
+               cover |      98.3       97.7       99.1
+                     |  .4087905   .4740362   .2986472
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+0                    |
+.2                   |
+MNAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0051652   .0069042   .0063999
+                     |  .0050357   .0049677   .0062144
+                     | 
+             pctbias |                                
+                     |                                
+                     | 
+                mean |  .0051652   .0069042   .0063999
+                     |  .0050357   .0049677   .0062144
+                     | 
+               empse |  .1592432   .1570932   .1965152
+                     |  .0035626   .0035145   .0043964
+                     | 
+             relprec |             2.755958  -34.33562
+                     |              3.92513   3.254202
+                     | 
+                 mse |  .0253597   .0247013   .0386206
+                     |  .0011447   .0010991   .0017162
+                     | 
+                rmse |  .1592474   .1571664   .1965211
+                     |  .0035942   .0034967   .0043665
+                     | 
+             modelse |  .1586639   .1575551   .1997631
+                     |  .0002984   .0002747   .0003192
+                     | 
+             ciwidth |  .8142831   .8087946   1.025716
+                     |  .0015297   .0014073   .0016337
+                     | 
+            relerror | -.3638003   .2940331   1.652786
+                     |  2.236912   2.250566   2.279957
+                     | 
+               cover |        99       99.2         99
+                     |  .3146427   .2817096   .3146427
+                     | 
+               power |         1         .8          1
+                     |  .3146427   .2817091   .3146427
+---------------------+--------------------------------
+0                    |
+.2                   |
+MNAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0002823  -.0030683  -.0028161
+                     |  .0035256   .0039993   .0043733
+                     | 
+             pctbias |  .0282293  -.3068284  -.2816139
+                     |  .3525591   .3999281   .4373308
+                     | 
+                mean |  1.000282   .9969317   .9971839
+                     |  .0035256   .0039993   .0043733
+                     | 
+               empse |   .111489   .1264684   .1382961
+                     |  .0024942   .0028293   .0030939
+                     | 
+             relprec |            -22.28588  -35.01042
+                     |             3.553124    3.21204
+                     | 
+                 mse |  .0124174   .0159877   .0191146
+                     |  .0005255   .0006866   .0008108
+                     | 
+                rmse |  .1114336   .1264424   .1382557
+                     |  .0023581    .002715   .0029322
+                     | 
+             modelse |  .1133514   .1112796   .1412539
+                     |  .0002246   .0001941   .0002257
+                     | 
+             ciwidth |  .5816218   .5712426   .7252908
+                     |  .0011508   .0009944   .0011552
+                     | 
+            relerror |  1.670485  -12.00996   2.138705
+                     |  2.283466   1.974473   2.290856
+                     | 
+               cover |      99.1       97.6       99.1
+                     |  .2986472   .4839836   .2986472
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+0                    |
+.2                   |
+MNAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0054474   .0038359   .0035837
+                     |  .0036017    .004159   .0045974
+                     | 
+             pctbias |  .5447446   .3835891   .3583745
+                     |   .360167   .4158996   .4597352
+                     | 
+                mean |  1.005447   1.003836   1.003584
+                     |  .0036017    .004159   .0045974
+                     | 
+               empse |  .1138948    .131519    .145381
+                     |   .002548   .0029423   .0032524
+                     | 
+             relprec |            -25.00526  -38.62488
+                     |             3.301581   2.976425
+                     | 
+                 mse |  .0129887   .0172947   .0211274
+                     |   .000604   .0007995   .0009803
+                     | 
+                rmse |  .1139681   .1315092   .1453525
+                     |  .0026499   .0030398   .0033721
+                     | 
+             modelse |   .113427   .1112796   .1412539
+                     |  .0002256   .0001941   .0002257
+                     | 
+             ciwidth |  .5820001   .5712426   .7252908
+                     |  .0011563   .0009944   .0011552
+                     | 
+            relerror | -.4107688  -15.38898  -2.838857
+                     |  2.236787   1.898649   2.179215
+                     | 
+               cover |      99.2       96.5         98
+                     |  .2817096   .5811626   .4427189
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+0                    |
+.4                   |
+MCAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0040346  -.0106284  -.0075639
+                     |  .0058504   .0054603   .0064138
+                     | 
+             pctbias |                                
+                     |                                
+                     | 
+                mean | -.0040346  -.0106284  -.0075639
+                     |  .0058504   .0054603   .0064138
+                     | 
+               empse |  .1850048   .1726695   .2028226
+                     |  .0041389   .0038629   .0045375
+                     | 
+             relprec |             14.79805  -16.79807
+                     |             5.443054   4.371892
+                     | 
+                 mse |  .0342088   .0298979   .0411531
+                     |  .0014917   .0013962   .0018602
+                     | 
+                rmse |  .1849563   .1729101   .2028622
+                     |  .0040326   .0040372    .004585
+                     | 
+             modelse |  .1843259   .1682872   .2005376
+                     |  .0004201   .0002874   .0003196
+                     | 
+             ciwidth |  .9452376   .8639439   1.029696
+                     |  .0021378   .0014699   .0016379
+                     | 
+            relerror | -.3669457  -2.537951   -1.12658
+                     |  2.240513   2.186753   2.217587
+                     | 
+               cover |      99.3       97.9       98.5
+                     |  .2636469   .4534202   .3843826
+                     | 
+               power |        .7        2.1        1.5
+                     |  .2636475   .4534203   .3843826
+---------------------+--------------------------------
+0                    |
+.4                   |
+MCAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |   .000462   .0008812   -.000651
+                     |  .0041282   .0042365    .004576
+                     | 
+             pctbias |  .0462043   .0881226  -.0651027
+                     |  .4128213   .4236481   .4575971
+                     | 
+                mean |  1.000462   1.000881    .999349
+                     |  .0041282   .0042365    .004576
+                     | 
+               empse |  .1305456   .1339693   .1447049
+                     |  .0029205   .0029971   .0032373
+                     | 
+             relprec |            -5.045934  -18.61251
+                     |             4.802574   4.287085
+                     | 
+                 mse |  .0170253   .0179306    .020919
+                     |  .0007045   .0007746   .0008935
+                     | 
+                rmse |  .1304811   .1339052    .144634
+                     |  .0026998   .0028925   .0030887
+                     | 
+             modelse |  .1305939   .1188526   .1418015
+                     |  .0003286   .0002027    .000226
+                     | 
+             ciwidth |  .6693458    .610162    .728105
+                     |  .0016623   .0010365   .0011582
+                     | 
+            relerror |  .0370401  -11.28368   -2.00644
+                     |  2.252127   1.990506   2.197853
+                     | 
+               cover |      99.2       97.1         99
+                     |  .2817096   .5306507   .3146427
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+0                    |
+.4                   |
+MCAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0035725  -.0097472  -.0082149
+                     |  .0040727   .0041946   .0045016
+                     | 
+             pctbias | -.3572548  -.9747202  -.8214949
+                     |  .4072705   .4194598   .4501559
+                     | 
+                mean |  .9964275   .9902528    .991785
+                     |  .0040727   .0041946   .0045016
+                     | 
+               empse |  .1287902   .1326448   .1423518
+                     |  .0028813   .0029675   .0031847
+                     | 
+             relprec |            -5.727448  -18.14595
+                     |             4.702864   4.260022
+                     | 
+                 mse |  .0165831   .0176721   .0203112
+                     |  .0007359   .0008387   .0009525
+                     | 
+                rmse |  .1287754   .1329363   .1425175
+                     |  .0028572   .0031544   .0033416
+                     | 
+             modelse |  .1300832   .1188526   .1418015
+                     |  .0003176   .0002027    .000226
+                     | 
+             ciwidth |  .6668221    .610162    .728105
+                     |  .0016175   .0010365   .0011582
+                     | 
+            relerror |  1.003914  -10.39784   -.386567
+                     |  2.273066   2.010381   2.234185
+                     | 
+               cover |      98.9       97.3       98.5
+                     |  .3298331   .5125521   .3843826
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+0                    |
+.4                   |
+MNAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |   -.00534   .0017957   .0038512
+                     |  .0058944   .0057885   .0063535
+                     | 
+             pctbias |                                
+                     |                                
+                     | 
+                mean |   -.00534   .0017957   .0038512
+                     |  .0058944   .0057885   .0063535
+                     | 
+               empse |  .1863973   .1830487   .2009145
+                     |  .0041701   .0040951   .0044948
+                     | 
+             relprec |             3.692184  -13.92896
+                     |             5.141973   4.535763
+                     | 
+                 mse |  .0347377   .0334766   .0403411
+                     |  .0016028   .0014745   .0017617
+                     | 
+                rmse |  .1863806    .182966   .2008509
+                     |  .0042998   .0040294   .0043855
+                     | 
+             modelse |  .1830743   .1775443   .1997327
+                     |  .0004151   .0003043   .0003129
+                     | 
+             ciwidth |   .938821   .9114453   1.025597
+                     |  .0021227   .0015638   .0016099
+                     | 
+            relerror | -1.782753  -3.007068  -.5881864
+                     |   2.20856    2.17627   2.229474
+                     | 
+               cover |      98.3       98.9       99.1
+                     |  .4087905   .3298331   .2986472
+                     | 
+               power |       1.7        1.1         .9
+                     |  .4087909   .3298333    .298647
+---------------------+--------------------------------
+0                    |
+.4                   |
+MNAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0009617  -.0026523  -.0036801
+                     |  .0045246   .0041852   .0043757
+                     | 
+             pctbias | -.0961663   -.265235  -.3680087
+                     |  .4524592   .4185209   .4375716
+                     | 
+                mean |  .9990383   .9973477   .9963199
+                     |  .0045246   .0041852   .0043757
+                     | 
+               empse |  .1430802   .1323479   .1383723
+                     |   .003201   .0029609   .0030956
+                     | 
+             relprec |             16.87576   6.920382
+                     |             6.429841   6.006739
+                     | 
+                 mse |  .0204524   .0175055   .0191413
+                     |  .0009372    .000719   .0007879
+                     | 
+                rmse |  .1430118   .1323083   .1383521
+                     |  .0032765   .0027172   .0028474
+                     | 
+             modelse |  .1421672   .1253868   .1412324
+                     |  .0003872   .0002146   .0002212
+                     | 
+             ciwidth |  .7282708   .6436912   .7252066
+                     |  .0019616   .0011027   .0011384
+                     | 
+            relerror | -.6380477  -5.259725   2.066927
+                     |  2.239327   2.125709   2.289019
+                     | 
+               cover |      98.6       98.8       99.4
+                     |  .3715375    .344325   .2442127
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+0                    |
+.4                   |
+MNAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0063016  -.0008566   .0001711
+                     |  .0045477   .0043392   .0045417
+                     | 
+             pctbias | -.6301643  -.0856612   .0171126
+                     |  .4547732   .4339167   .4541733
+                     | 
+                mean |  .9936984   .9991434   1.000171
+                     |  .0045477   .0043392   .0045417
+                     | 
+               empse |  .1438119   .1372165   .1436222
+                     |  .0032173   .0030698   .0032131
+                     | 
+             relprec |             9.844188   .2643282
+                     |             5.858572     5.4393
+                     | 
+                 mse |  .0207009   .0188103   .0206067
+                     |  .0009174   .0008312   .0009067
+                     | 
+                rmse |  .1438781   .1371505   .1435505
+                     |   .003188   .0030302   .0031581
+                     | 
+             modelse |  .1422711   .1253868   .1412324
+                     |  .0004004   .0002146   .0002212
+                     | 
+             ciwidth |  .7286018   .6436912   .7252066
+                     |  .0020363   .0011027   .0011384
+                     | 
+            relerror | -1.071406  -8.621186  -1.663993
+                     |  2.230659   2.050287   2.205347
+                     | 
+               cover |        99       98.1       98.4
+                     |  .3146427   .4317293   .3967869
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.2                   |
+MCAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0027473   .0005009  -.0015566
+                     |  .0050655   .0049291   .0063368
+                     | 
+             pctbias |  1.098923   .2003606  -.6226373
+                     |  2.026209   1.971655   2.534731
+                     | 
+                mean |  .2527473   .2505009   .2484434
+                     |  .0050655   .0049291   .0063368
+                     | 
+               empse |  .1601859    .155873   .2003881
+                     |  .0035837   .0034872   .0044831
+                     | 
+             relprec |             5.610406   -36.0994
+                     |             3.822774   3.145098
+                     | 
+                 mse |  .0256414   .0242724   .0401176
+                     |  .0011251   .0011662    .001826
+                     | 
+                rmse |  .1601294   .1557959   .2002939
+                     |  .0035131   .0037426   .0045584
+                     | 
+             modelse |   .158477   .1553216   .1998129
+                     |  .0002866   .0002626   .0003235
+                     | 
+             ciwidth |  .8134275   .7973934   1.025926
+                     |  .0014717   .0013498   .0016625
+                     | 
+            relerror |  -1.06681  -.3537511   -.287028
+                     |  2.220538   2.235628   2.236598
+                     | 
+               cover |      98.5       98.5       98.7
+                     |  .3843826   .3843826   .3582043
+                     | 
+               power |      17.2       16.9        9.5
+                     |  1.193382    1.18507    .927227
+---------------------+--------------------------------
+.25                  |
+.2                   |
+MCAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0046613  -.0053978   -.004369
+                     |  .0036465   .0041445   .0045289
+                     | 
+             pctbias |  -.466126   -.539777  -.4369023
+                     |  .3646494   .4144524   .4528905
+                     | 
+                mean |  .9953387   .9946022    .995631
+                     |  .0036465   .0041445   .0045289
+                     | 
+               empse |  .1153123   .1310613   .1432165
+                     |  .0025798   .0029321    .003204
+                     | 
+             relprec |            -22.58915  -35.17168
+                     |             3.372301   3.178906
+                     | 
+                 mse |  .0133054    .017189   .0205096
+                     |  .0005851   .0007573   .0009268
+                     | 
+                rmse |  .1153488    .131107   .1432116
+                     |  .0025361   .0028879   .0032359
+                     | 
+             modelse |  .1120492   .1096937   .1412891
+                     |   .000209   .0001854   .0002287
+                     | 
+             ciwidth |   .575068    .563148   .7254392
+                     |  .0010709    .000953   .0011756
+                     | 
+            relerror | -2.829776  -16.30358   -1.34585
+                     |  2.181421   1.877781   2.212848
+                     | 
+               cover |      98.7       97.2       98.8
+                     |  .3582043   .5216898    .344325
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.2                   |
+MCAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  -.001914  -.0048969  -.0059256
+                     |  .0034785   .0039931   .0045322
+                     | 
+             pctbias |  -.153116  -.3917496  -.4740491
+                     |  .2782773   .3194476   .3625721
+                     | 
+                mean |  1.248086   1.245103   1.244074
+                     |  .0034785   .0039931   .0045322
+                     | 
+               empse |  .1099988   .1262728   .1433192
+                     |  .0024609    .002825   .0032063
+                     | 
+             relprec |            -24.11494  -41.09301
+                     |              3.44376   2.871909
+                     | 
+                 mse |  .0120913   .0159528    .020555
+                     |  .0005686   .0007398    .000982
+                     | 
+                rmse |  .1099604   .1263046   .1433701
+                     |  .0025856   .0029287   .0034247
+                     | 
+             modelse |  .1120856   .1096937   .1412891
+                     |  .0002164   .0001854   .0002287
+                     | 
+             ciwidth |  .5751794    .563148   .7254392
+                     |   .001111    .000953   .0011756
+                     | 
+            relerror |  1.897122   -13.1296  -1.416533
+                     |  2.288101   1.948991   2.211263
+                     | 
+               cover |      98.5       96.8       98.4
+                     |  .3843826   .5565606   .3967869
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.2                   |
+MNAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0021697  -.0030478  -.0032598
+                     |  .0050535   .0049456   .0066448
+                     | 
+             pctbias |  .8678741  -1.219111  -1.303923
+                     |    2.0214   1.978232   2.657936
+                     | 
+                mean |  .2521697   .2469522   .2467402
+                     |  .0050535   .0049456   .0066448
+                     | 
+               empse |  .1598057    .156393   .2101283
+                     |  .0035752   .0034988    .004701
+                     | 
+             relprec |             4.411891  -42.16171
+                     |             3.964161     2.7453
+                     | 
+                 mse |   .025517   .0244436   .0441204
+                     |  .0011012   .0010917   .0021423
+                     | 
+                rmse |  .1597405   .1563445   .2100485
+                     |  .0034469   .0034913   .0050996
+                     | 
+             modelse |  .1595675   .1578927   .2002832
+                     |  .0003036   .0002745   .0003213
+                     | 
+             ciwidth |   .818885   .8105373   1.028363
+                     |  .0015572   .0014047   .0016528
+                     | 
+            relerror |  -.149025   .9589576  -4.685263
+                     |  2.241916   2.265448   2.137843
+                     | 
+               cover |      99.1       99.1       98.6
+                     |  .2986472   .2986472   .3715375
+                     | 
+               power |      16.4       16.5        9.7
+                     |  1.170914   1.173776   .9359006
+---------------------+--------------------------------
+.25                  |
+.2                   |
+MNAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0049183  -.0060418  -.0059357
+                     |   .003674   .0040392   .0046376
+                     | 
+             pctbias | -.4918334  -.6041759  -.5935745
+                     |  .3674032   .4039218   .4637622
+                     | 
+                mean |  .9950817   .9939582   .9940643
+                     |   .003674   .0040392   .0046376
+                     | 
+               empse |  .1161831   .1277313   .1466545
+                     |  .0025992   .0028576   .0032809
+                     | 
+             relprec |            -17.26461  -37.23823
+                     |             3.746284   2.994491
+                     | 
+                 mse |  .0135092   .0163355   .0215213
+                     |  .0005784   .0007132   .0009818
+                     | 
+                rmse |  .1162291   .1278103   .1467013
+                     |  .0024882   .0027901   .0033462
+                     | 
+             modelse |  .1140788   .1115027   .1416216
+                     |  .0002309   .0001935   .0002272
+                     | 
+             ciwidth |  .5853088    .572399   .7271622
+                     |  .0011808   .0009901   .0011687
+                     | 
+            relerror | -1.811223  -12.70522  -3.431776
+                     |  2.205637   1.958812   2.165958
+                     | 
+               cover |      99.1       97.6       98.3
+                     |  .2986472   .4839836   .4087905
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.2                   |
+MNAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0027486  -.0090895  -.0091956
+                     |  .0034781   .0038531    .004416
+                     | 
+             pctbias | -.2198919  -.7271631  -.7356442
+                     |  .2782505   .3082445   .3532827
+                     | 
+                mean |  1.247251    1.24091   1.240804
+                     |  .0034781   .0038531    .004416
+                     | 
+               empse |  .1099882   .1218443   .1396472
+                     |  .0024606   .0027259   .0031242
+                     | 
+             relprec |            -18.51431  -37.96635
+                     |             3.940328   3.194757
+                     | 
+                 mse |  .0120929   .0149138   .0195664
+                     |  .0005401   .0006959   .0008664
+                     | 
+                rmse |  .1099675   .1221221     .13988
+                     |  .0024558   .0028494   .0030971
+                     | 
+             modelse |  .1139007   .1115027   .1416216
+                     |  .0002256   .0001935   .0002272
+                     | 
+             ciwidth |  .5844441    .572399   .7271622
+                     |  .0011545   .0009901   .0011687
+                     | 
+            relerror |  3.557214  -8.487556    1.41383
+                     |  2.325831   2.053452   2.274642
+                     | 
+               cover |      99.3       98.3       99.1
+                     |  .2636469   .4087905   .2986472
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.4                   |
+MCAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0034342   .0005849   .0049402
+                     |  .0060214   .0052363   .0063101
+                     | 
+             pctbias | -1.373691   .2339707    1.97607
+                     |  2.408547   2.094518   2.524044
+                     | 
+                mean |  .2465658   .2505849   .2549402
+                     |  .0060214   .0052363   .0063101
+                     | 
+               empse |  .1904123   .1655862   .1995432
+                     |  .0042599   .0037045   .0044642
+                     | 
+             relprec |             32.23362  -8.942381
+                     |             6.214656   4.843795
+                     | 
+                 mse |  .0362324   .0273917   .0398021
+                     |  .0017131   .0012575   .0016522
+                     | 
+                rmse |  .1903481   .1655044   .1995046
+                     |  .0044999   .0037991   .0041407
+                     | 
+             modelse |  .1835962    .167694    .199773
+                     |  .0004158    .000289   .0003116
+                     | 
+             ciwidth |   .941511   .8608739   1.025822
+                     |  .0021226   .0014789   .0015986
+                     | 
+            relerror |  -3.57967   1.272905    .115136
+                     |  2.168128   2.272378     2.2452
+                     | 
+               cover |      98.1         99       99.6
+                     |  .4317293   .3146427      .1996
+                     | 
+               power |      12.1       13.3        9.7
+                     |  1.031305    1.07383   .9359006
+---------------------+--------------------------------
+.25                  |
+.4                   |
+MCAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |   .004279   .0017235  -.0004541
+                     |  .0041273   .0040722   .0043798
+                     | 
+             pctbias |  .4278979   .1723482  -.0454142
+                     |  .4127342    .407225   .4379788
+                     | 
+                mean |  1.004279   1.001724   .9995459
+                     |  .0041273   .0040722   .0043798
+                     | 
+               empse |   .130518   .1287758    .138501
+                     |  .0029199    .002881   .0030985
+                     | 
+             relprec |             2.724042  -11.19553
+                     |             5.187405   4.708285
+                     | 
+                 mse |  .0170362   .0165696   .0191636
+                     |  .0008437   .0006861   .0008152
+                     | 
+                rmse |  .1305229    .128723   .1384325
+                     |  .0032322   .0026649   .0029445
+                     | 
+             modelse |  .1298397   .1184202   .1412608
+                     |  .0003154   .0002035   .0002203
+                     | 
+             ciwidth |  .6655896   .6079264   .7253656
+                     |   .001608   .0010418   .0011304
+                     | 
+            relerror | -.5197104  -8.041621   1.992588
+                     |   2.23864   2.063343   2.287304
+                     | 
+               cover |      98.7       98.6       98.7
+                     |  .3582043   .3715375   .3582043
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.4                   |
+MCAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0008448   .0023084    .004486
+                     |  .0040974   .0041912   .0046007
+                     | 
+             pctbias |  .0675802   .1846726   .3588827
+                     |  .3277934   .3352997   .3680572
+                     | 
+                mean |  1.250845   1.252308   1.254486
+                     |  .0040974   .0041912   .0046007
+                     | 
+               empse |  .1295717   .1325389   .1454874
+                     |  .0028988   .0029651   .0032548
+                     | 
+             relprec |            -4.427241  -20.68234
+                     |             4.850225   4.212103
+                     | 
+                 mse |  .0167728   .0175543   .0211655
+                     |  .0007355   .0007671     .00089
+                     | 
+                rmse |  .1295097   .1324927   .1454838
+                     |  .0028397    .002895   .0030588
+                     | 
+             modelse |  .1297947   .1184202   .1412608
+                     |  .0003172   .0002035   .0002203
+                     | 
+             ciwidth |  .6653336   .6079264   .7253656
+                     |  .0016179   .0010418   .0011304
+                     | 
+            relerror |  .1721137  -10.65248  -2.905118
+                     |  2.254367   2.004761   2.177467
+                     | 
+               cover |      99.1       97.5         99
+                     |  .2986472   .4937104   .3146427
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.4                   |
+MNAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |   .003941  -.0028574   -.005644
+                     |  .0059101   .0058369   .0065405
+                     | 
+             pctbias |  1.576388  -1.142965  -2.257613
+                     |  2.364043   2.334766   2.616184
+                     | 
+                mean |   .253941   .2471426    .244356
+                     |  .0059101   .0058369   .0065405
+                     | 
+               empse |   .186894   .1845794   .2068275
+                     |  .0041812   .0041294   .0046271
+                     | 
+             relprec |             2.523628  -18.34663
+                     |              4.99531   4.235552
+                     | 
+                 mse |    .03491   .0340437   .0427667
+                     |  .0015901    .001559   .0019589
+                     | 
+                rmse |  .1868421   .1845092   .2068011
+                     |  .0042551   .0042247   .0047362
+                     | 
+             modelse |  .1842587   .1780058   .2000978
+                     |  .0004117   .0002979   .0003147
+                     | 
+             ciwidth |  .9449714   .9138712   1.027461
+                     |   .002102   .0015342   .0016199
+                     | 
+            relerror | -1.410059  -3.561427  -3.253749
+                     |  2.216616   2.163541   2.169735
+                     | 
+               cover |      98.9       98.7       98.5
+                     |  .3298331   .3582043   .3843826
+                     | 
+               power |      13.4       12.7        9.8
+                     |  1.077237   1.052953   .9401915
+---------------------+--------------------------------
+.25                  |
+.4                   |
+MNAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0064733  -.0015826  -.0001893
+                     |  .0045101   .0042524   .0045012
+                     | 
+             pctbias | -.6473321   -.158258   -.018927
+                     |  .4510087   .4252355   .4501229
+                     | 
+                mean |  .9935267   .9984174   .9998108
+                     |  .0045101   .0042524   .0045012
+                     | 
+               empse |  .1426215   .1344713   .1423413
+                     |  .0031907   .0030084   .0031844
+                     | 
+             relprec |             12.48923   .3940071
+                     |             6.118313   5.592515
+                     | 
+                 mse |  .0203624   .0180669   .0202408
+                     |  .0009043   .0008215   .0009234
+                     | 
+                rmse |  .1426971   .1344133   .1422703
+                     |  .0031685    .003056   .0032453
+                     | 
+             modelse |  .1430059   .1257121   .1414905
+                     |  .0003851     .00021   .0002225
+                     | 
+             ciwidth |  .7326045   .6454021   .7265245
+                     |  .0019591   .0010815   .0011455
+                     | 
+            relerror |  .2695387  -6.513753  -.5977263
+                     |  2.259407   2.097287   2.229302
+                     | 
+               cover |      98.9       98.3       98.6
+                     |  .3298331   .4087905   .3715375
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.25                  |
+.4                   |
+MNAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0025324    -.00444  -.0058333
+                     |  .0046609   .0042129   .0044636
+                     | 
+             pctbias | -.2025881  -.3551992  -.4666643
+                     |  .3728699   .3370284   .3570871
+                     | 
+                mean |  1.247468    1.24556   1.244167
+                     |  .0046609   .0042129   .0044636
+                     | 
+               empse |  .1473898   .1332222   .1411511
+                     |  .0032974   .0029804   .0031578
+                     | 
+             relprec |             22.40011   9.035122
+                     |             6.657785   6.000536
+                     | 
+                 mse |  .0217084   .0177501   .0199377
+                     |  .0010044   .0008242   .0009239
+                     | 
+                rmse |  .1473378   .1332295    .141201
+                     |  .0034086   .0030931   .0032716
+                     | 
+             modelse |  .1433395   .1257121   .1414905
+                     |  .0003901     .00021   .0002225
+                     | 
+             ciwidth |  .7342792   .6454021   .7265245
+                     |  .0019764   .0010815   .0011455
+                     | 
+            relerror | -2.748019  -5.637216   .2404965
+                     |  2.191748   2.116951     2.2481
+                     | 
+               cover |      98.5       98.2       98.4
+                     |  .3843826   .4204287   .3967869
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.5                   |
+.2                   |
+MCAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  -.003586  -.0019055  -.0040095
+                     |  .0049575   .0048105   .0065433
+                     | 
+             pctbias |  -.717203   -.381095  -.8019052
+                     |  .9914938   .9621063   1.308655
+                     | 
+                mean |   .496414   .4980945   .4959905
+                     |  .0049575   .0048105   .0065433
+                     | 
+               empse |  .1567689   .1521224   .2069165
+                     |  .0035072   .0034033   .0046291
+                     | 
+             relprec |             6.202289  -42.59763
+                     |             4.026737   2.862491
+                     | 
+                 mse |  .0245648   .0231217   .0427877
+                     |  .0010558   .0009687   .0019013
+                     | 
+                rmse |  .1567316   .1520582   .2068519
+                     |  .0033682   .0031851   .0045957
+                     | 
+             modelse |  .1589754   .1557034   .1997051
+                     |  .0002998     .00027   .0003102
+                     | 
+             ciwidth |  .8158727   .7993048   1.025478
+                     |  .0015373   .0013813   .0015951
+                     | 
+            relerror |  1.407441   2.354018  -3.485154
+                     |  2.276719    2.29672   2.164417
+                     | 
+               cover |      99.5       99.4       98.6
+                     |  .2230471   .2442127   .3715375
+                     | 
+               power |      70.9       73.1       48.7
+                     |  1.436381    1.40228   1.580604
+---------------------+--------------------------------
+.5                   |
+.2                   |
+MCAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0012828  -.0023641  -.0013121
+                     |  .0035545   .0038132   .0043888
+                     | 
+             pctbias | -.1282813  -.2364119  -.1312095
+                     |  .3554459   .3813201   .4388826
+                     | 
+                mean |  .9987172   .9976359   .9986879
+                     |  .0035545   .0038132   .0043888
+                     | 
+               empse |  .1124019    .120584   .1387869
+                     |  .0025146   .0026977   .0031049
+                     | 
+             relprec |            -13.11044  -34.40808
+                     |              3.89834   3.265604
+                     | 
+                 mse |  .0126232   .0145316   .0192443
+                     |  .0005259   .0006566     .00082
+                     | 
+                rmse |   .112353   .1205469   .1387237
+                     |  .0023402   .0027236   .0029556
+                     | 
+             modelse |  .1124665   .1099383   .1412129
+                     |   .000223   .0001902   .0002194
+                     | 
+             ciwidth |  .5770773   .5643729   .7251226
+                     |   .001144   .0009735   .0011279
+                     | 
+            relerror |  .0575289  -8.828434   1.747992
+                     |  2.247252   2.045771   2.281774
+                     | 
+               cover |      99.4       97.7       99.4
+                     |  .2442127   .4740362   .2442127
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.5                   |
+.2                   |
+MCAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0048688  -.0042696  -.0053216
+                     |  .0035244   .0039181    .004524
+                     | 
+             pctbias | -.3245885  -.2846395  -.3547747
+                     |  .2349589   .2612065   .3016017
+                     | 
+                mean |  1.495131    1.49573   1.494678
+                     |  .0035244   .0039181    .004524
+                     | 
+               empse |  .1114508   .1239011   .1430622
+                     |  .0024934   .0027719   .0032006
+                     | 
+             relprec |            -19.08746  -39.31012
+                     |              3.81138   3.068431
+                     | 
+                 mse |  .0124326   .0153544   .0204747
+                     |  .0005433   .0006378   .0008719
+                     | 
+                rmse |  .1115014   .1239127   .1430897
+                     |  .0024363   .0025736   .0030467
+                     | 
+             modelse |  .1123107   .1099383   .1412129
+                     |  .0002198   .0001902   .0002194
+                     | 
+             ciwidth |  .5763128   .5643729   .7251226
+                     |  .0011245   .0009735   .0011279
+                     | 
+            relerror |  .7715725  -11.26929  -1.292712
+                     |  2.263057   1.991001   2.213584
+                     | 
+               cover |        99       97.8         99
+                     |  .3146427   .4638531   .3146427
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.5                   |
+.2                   |
+MNAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0062239   -.000872  -.0051354
+                     |  .0049747   .0050995   .0066234
+                     | 
+             pctbias | -1.244777  -.1743976  -1.027078
+                     |  .9949353   1.019894   1.324672
+                     | 
+                mean |  .4937761    .499128   .4948646
+                     |  .0049747   .0050995   .0066234
+                     | 
+               empse |  .1573131   .1612593   .2094489
+                     |  .0035194   .0036077   .0046858
+                     | 
+             relprec |            -4.834381  -43.58776
+                     |              3.65376   2.785994
+                     | 
+                 mse |  .0247614   .0259793   .0438514
+                     |  .0011348   .0011562   .0019782
+                     | 
+                rmse |  .1573576    .161181   .2094072
+                     |  .0036058   .0035868   .0047234
+                     | 
+             modelse |  .1586881   .1570945   .1993961
+                     |  .0002964   .0002771   .0003162
+                     | 
+             ciwidth |  .8144222   .8063933   1.023824
+                     |  .0015218   .0014241   .0016351
+                     | 
+            relerror |  .8740371  -2.582691  -4.799671
+                     |  2.264594   2.186172   2.135153
+                     | 
+               cover |      98.8       98.7       98.4
+                     |   .344325   .3582043   .3967869
+                     | 
+               power |      71.4       71.5       47.7
+                     |     1.429   1.427498   1.579465
+---------------------+--------------------------------
+.5                   |
+.2                   |
+MNAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0022508  -.0014848   .0006469
+                     |  .0036447   .0041133   .0046357
+                     | 
+             pctbias |  .2250815  -.1484761   .0646943
+                     |   .364466   .4113289   .4635696
+                     | 
+                mean |  1.002251   .9985152   1.000647
+                     |  .0036447   .0041133   .0046357
+                     | 
+               empse |  .1152543   .1300736   .1465936
+                     |  .0025785     .00291   .0032796
+                     | 
+             relprec |            -21.48809  -38.18638
+                     |             3.474391   3.002674
+                     | 
+                 mse |  .0132753   .0169044   .0214686
+                     |  .0006154   .0007466   .0009522
+                     | 
+                rmse |  .1152186   .1300171   .1465217
+                     |  .0026705   .0028712   .0032493
+                     | 
+             modelse |  .1134385    .110935   .1409943
+                     |   .000226   .0001955   .0002236
+                     | 
+             ciwidth |  .5820597   .5694501   .7239532
+                     |  .0011562   .0010048   .0011562
+                     | 
+            relerror | -1.575469  -14.71369  -3.819581
+                     |  2.210655   1.913925   2.157135
+                     | 
+               cover |        99       97.5       98.5
+                     |  .3146427   .4937104   .3843826
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.5                   |
+.2                   |
+MNAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0039731  -.0023567  -.0044885
+                     |  .0035517   .0041173   .0046167
+                     | 
+             pctbias | -.2648714  -.1571165    -.29923
+                     |  .2367772   .2744879     .30778
+                     | 
+                mean |  1.496027   1.497643   1.495512
+                     |  .0035517   .0041173   .0046167
+                     | 
+               empse |  .1123133    .130201   .1459929
+                     |  .0025127   .0029128   .0032661
+                     | 
+             relprec |             -25.5896  -40.81672
+                     |             3.301878    2.87058
+                     | 
+                 mse |  .0126174   .0169409   .0213128
+                     |  .0005855   .0007378   .0009074
+                     | 
+                rmse |  .1123274   .1301572   .1459889
+                     |   .002606   .0028343   .0031079
+                     | 
+             modelse |  .1133144    .110935   .1409943
+                     |  .0002247   .0001955   .0002236
+                     | 
+             ciwidth |  .5814329   .5694501   .7239532
+                     |  .0011501   .0010048   .0011562
+                     | 
+            relerror |  .8913633  -14.79714  -3.423841
+                     |  2.265977   1.912052    2.16601
+                     | 
+               cover |      98.7       97.6         99
+                     |  .3582043   .4839836   .3146427
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.5                   |
+.4                   |
+MCAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0038328  -.0003171   .0025005
+                     |  .0058314   .0053224   .0061952
+                     | 
+             pctbias | -.7665548   -.063415   .5000941
+                     |   1.16629   1.064481   1.239045
+                     | 
+                mean |  .4961672   .4996829   .5025005
+                     |  .0058314   .0053224   .0061952
+                     | 
+               empse |  .1844066   .1683093   .1959102
+                     |  .0041255   .0037654   .0043829
+                     | 
+             relprec |             20.04303  -11.39891
+                     |             5.738354   4.584891
+                     | 
+                 mse |  .0339865   .0282998   .0383487
+                     |  .0014887   .0012391   .0016748
+                     | 
+                rmse |  .1843542   .1682254   .1958281
+                     |  .0040375   .0036828   .0042762
+                     | 
+             modelse |   .183931   .1683373   .2002281
+                     |  .0004252   .0002925   .0003172
+                     | 
+             ciwidth |  .9431263   .8641409    1.02811
+                     |  .0021711   .0015051   .0016331
+                     | 
+            relerror | -.2579166   .0166356   2.204033
+                     |  2.243296   2.244297   2.292222
+                     | 
+               cover |      98.9       99.2       99.3
+                     |  .3298331   .2817096   .2636469
+                     | 
+               power |      54.6       65.2       48.9
+                     |  1.574433   1.506307   1.580756
+---------------------+--------------------------------
+.5                   |
+.4                   |
+MCAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0013829  -.0023255  -.0037343
+                     |  .0040298   .0040163   .0043476
+                     | 
+             pctbias |  -.138286  -.2325508   -.373428
+                     |  .4029827   .4016278   .4347562
+                     | 
+                mean |  .9986171   .9976745   .9962657
+                     |  .0040298   .0040163   .0043476
+                     | 
+               empse |  .1274343   .1270059    .137482
+                     |  .0028509   .0028414   .0030757
+                     | 
+             relprec |             .6758362  -14.08257
+                     |              5.21626    4.57631
+                     | 
+                 mse |  .0162252   .0161198   .0188963
+                     |  .0007514   .0007493   .0008695
+                     | 
+                rmse |  .1273781   .1269636    .137464
+                     |  .0029495   .0029507   .0031627
+                     | 
+             modelse |  .1301364   .1188966   .1415826
+                     |  .0003241   .0002064   .0002243
+                     | 
+             ciwidth |  .6670116    .610344   .7269838
+                     |  .0016521   .0010623   .0011548
+                     | 
+            relerror |  2.120365  -6.384953   2.982693
+                     |  2.298739   2.100641   2.309685
+                     | 
+               cover |      98.7       98.2       98.8
+                     |  .3582043   .4204287    .344325
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.5                   |
+.4                   |
+MCAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0052156  -.0026426  -.0012338
+                     |  .0042386   .0042832   .0045389
+                     | 
+             pctbias | -.3477089  -.1761721   -.082254
+                     |  .2825763   .2855477   .3025927
+                     | 
+                mean |  1.494784   1.497357   1.498766
+                     |  .0042386   .0042832   .0045389
+                     | 
+               empse |  .1340377   .1354472   .1435323
+                     |  .0029987   .0030302   .0032111
+                     | 
+             relprec |            -2.070426   -12.7924
+                     |             4.834758   4.441568
+                     | 
+                 mse |  .0179753   .0183346   .0205825
+                     |  .0008045   .0008314    .000925
+                     | 
+                rmse |  .1340721   .1354052   .1434659
+                     |  .0030004   .0030701   .0032239
+                     | 
+             modelse |  .1300619   .1188966   .1415826
+                     |  .0003222   .0002064   .0002243
+                     | 
+             ciwidth |  .6666586    .610344   .7269838
+                     |  .0016396   .0010623   .0011548
+                     | 
+            relerror | -2.966143  -12.21922  -1.358368
+                     |  2.184098   1.969725   2.212324
+                     | 
+               cover |      98.3       97.2       98.6
+                     |  .4087905   .5216898   .3715375
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+---------------------+--------------------------------
+.5                   |
+.4                   |
+MNAR                 |
+effect               |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0029705  -.0054573  -.0062674
+                     |  .0059098   .0057716   .0064853
+                     | 
+             pctbias | -.5940987  -1.091464  -1.253487
+                     |  1.181958   1.154313   1.297068
+                     | 
+                mean |  .4970295   .4945427   .4937326
+                     |  .0059098   .0057716   .0064853
+                     | 
+               empse |   .186884   .1825129   .2050845
+                     |  .0041809   .0040832   .0045881
+                     | 
+             relprec |             4.847274  -16.96164
+                     |             5.283276   4.412323
+                     | 
+                 mse |  .0348995   .0333074   .0420569
+                     |  .0016159   .0014769   .0018584
+                     | 
+                rmse |  .1868142   .1825032   .2050777
+                     |   .004325   .0040461   .0045309
+                     | 
+             modelse |  .1846398   .1781741   .2005397
+                     |  .0004248   .0002976   .0003082
+                     | 
+             ciwidth |  .9467798    .914737   1.029788
+                     |   .002171   .0015347   .0015861
+                     | 
+            relerror | -1.200878  -2.377249  -2.216031
+                     |  2.221978   2.190083   2.192766
+                     | 
+               cover |      98.2       98.7       98.7
+                     |  .4204287   .3582043   .3582043
+                     | 
+               power |      54.7       57.9         46
+                     |  1.574138   1.561278   1.576071
+---------------------+--------------------------------
+.5                   |
+.4                   |
+MNAR                 |
+mean0                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0049292  -.0045021  -.0040971
+                     |  .0046364   .0043276   .0045824
+                     | 
+             pctbias | -.4929183  -.4502139   -.409708
+                     |  .4636404   .4327626   .4582449
+                     | 
+                mean |  .9950708   .9954979   .9959029
+                     |  .0046364   .0043276   .0045824
+                     | 
+               empse |   .146616   .1368515   .1449098
+                     |  .0032801   .0030616   .0032419
+                     | 
+             relprec |             14.77918   2.368726
+                     |             6.094008   5.510614
+                     | 
+                 mse |   .021499   .0187299   .0209946
+                     |  .0010073   .0008145   .0009085
+                     | 
+                rmse |  .1466255   .1368572   .1448952
+                     |  .0034351   .0029757   .0031351
+                     | 
+             modelse |  .1432406   .1258355    .141803
+                     |  .0004015   .0002094   .0002179
+                     | 
+             ciwidth |  .7336492   .6460391     .72817
+                     |  .0020205   .0010803   .0011216
+                     | 
+            relerror | -2.302162  -8.049639  -2.143926
+                     |  2.202773   2.062787   2.194383
+                     | 
+               cover |      98.4       98.6       98.8
+                     |  .3967869   .3715375    .344325
+                     | 
+               power |      99.9        100        100
+                     |  .0999492          0          0
+---------------------+--------------------------------
+.5                   |
+.4                   |
+MNAR                 |
+mean1                |
+               bsims |      1000       1000       1000
+                     |                                
+                     | 
+              sesims |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0078997  -.0099595  -.0103645
+                     |  .0044765   .0041298   .0043771
+                     | 
+             pctbias | -.5266451  -.6639639  -.6909679
+                     |  .2984332   .2753192   .2918066
+                     | 
+                mean |    1.4921   1.490041   1.489635
+                     |  .0044765   .0041298   .0043771
+                     | 
+               empse |  .1415593   .1305953    .138416
+                     |  .0031669   .0029217   .0030966
+                     | 
+             relprec |             17.49554   4.593358
+                     |             6.484474   5.899247
+                     | 
+                 mse |  .0200814   .0171373   .0192473
+                     |  .0009067   .0007285   .0008286
+                     | 
+                rmse |  .1417088   .1309094   .1387345
+                     |  .0031992   .0027823   .0029861
+                     | 
+             modelse |  .1432662   .1258355    .141803
+                     |  .0003876   .0002094   .0002179
+                     | 
+             ciwidth |  .7339242   .6460391     .72817
+                     |  .0019678   .0010803   .0011216
+                     | 
+            relerror |  1.205773   -3.64473   2.446964
+                     |  2.280658   2.161605   2.297332
+                     | 
+               cover |      98.8       98.6       99.2
+                     |   .344325   .3715375   .2817096
+                     | 
+               power |       100        100        100
+                     |         0          0          0
+------------------------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. 
+. siman loll if estimand=="effect" & beta==1
+Performance measures not specified: defaulting to bias empse cover
+Drawing graph...
+
+. siman nest bias if estimand=="effect"
+Drawing graph...
+
+. 
+. siman reshape, longwide
+
+. 
+. 
+. 
+. di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
+*** SIMAN HAS PASSED ALL THE TESTS IN test_siman_setup_longlong.do ***
+
+. 
+. log close

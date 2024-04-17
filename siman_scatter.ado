@@ -26,7 +26,7 @@ foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
 
-if "`simansetuprun'"!="1" {
+if "`setuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
 }
@@ -110,7 +110,7 @@ else foreach thing of local anything {
 if `dgmcreated' == 1 {
     qui gen dgm = 1
 	local dgm "dgm"
-	local ndgm=1
+	local ndgmvars=1
 }
 
 local numberdgms: word count `dgm'
@@ -191,7 +191,7 @@ if !mi("`by'") & "`by'" == "`method'" {
 
 local graphnumcheck = `totaldgmnum' * `nummethodcheck' * `numtargetcheck'
 if `graphnumcheck' > 15 {
-	di as smcl as text "{p 0 2}Warning: `graphnumcheck' panels will be created: consider using 'if' condition or 'by' option as detailed in {help siman_scatter:siman scatter}"
+	di as smcl as text "{p 0 2}Warning: `graphnumcheck' panels will be created: consider using 'if' condition or 'by' option as detailed in {help siman_scatter:siman scatter}{p_end}"
 }
 
 * if dgm is defined by multiple variables, default is to plot scatter graphs for each dgm variable, split out by each level

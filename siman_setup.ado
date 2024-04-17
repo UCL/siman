@@ -1,4 +1,5 @@
-*!    version 0.8.8  14feb2024    
+*!    version 0.9  3apr2024    
+*    version 0.9  3apr2024       IW _methodvar not created till end, so not left on crash
 *    version 0.8.8  14feb2024    IW reformat long messages
 *    version 0.8.7  27nov2023    EMZ add check and error if true is not constant across methods
 *    version 0.8.6  20nov2023    EMZ minor bug fix for when dgm is missing, count of variables specified in setup vs dataset mis-macth as dgm is a tempvar.
@@ -44,17 +45,17 @@ If method() contains more than one entry and target() contains one entry only th
 Please note that if method() contains one entry and target() contains more than one entry (wide-long) format then this will be auto-reshaped to long-wide (format 3).
 */
 
-* load simansetuprun indicator if present
-cap local simansetuprun : char _dta[siman_simansetuprun]
+* load setuprun indicator if present
+cap local setuprun : char _dta[siman_setuprun]
 
-if !mi("`simansetuprun'") {
-	if `simansetuprun' == 1 {
+if !mi("`setuprun'") {
+	if `setuprun' == 1 {
 		di as error "{p 0 2}siman setup has already been run on the dataset held in memory; siman setup should be run on the 'raw' estimates dataset produced by your simulation study.{p_end}"
 	exit 498
 	}
 }
 
-local simansetuprun 0
+local setuprun 0
 
 capture confirm variable _perfmeascode
 if !_rc {
@@ -123,8 +124,8 @@ if mi("`estimate'") | mi("`se'") {
 local methodcreated = 0
 if mi("`method'") {
 	 di as text "{p 0 2}Warning: no method specified. siman will proceed assuming there is only one method. If this is a mistake, enter method() option in -siman setup-.{p_end}"
-	 qui gen _methodvar = 1
-	 local method "_methodvar"
+	 tempvar method
+	 qui gen `method' = 1
 	 local methodcreated = 1
 }
 
@@ -346,13 +347,13 @@ cap confirm variable `dgm'
 if !_rc {
     local ndescdgm: word count `dgm'
     if `ndescdgm'!=1 {
-        local ndgm = `ndescdgm'
+        local ndgmvars = `ndescdgm'
         tokenize `dgm'
         cap confirm numeric variable `1'
 *	    if !_rc {
 *		    qui tab `1'
-*		    local ndgm = r(r)
-*		    di "`ndgm'"
+*		    local ndgmvars = r(r)
+*		    di "`ndgmvars'"
 *	    }
 *	    else {
         if _rc {
@@ -362,7 +363,7 @@ if !_rc {
     }
     else if `ndescdgm'==1 {
         qui tab `dgm'
-        local ndgm = r(r)
+        local ndgmvars = r(r)
     }
 }
 
@@ -499,13 +500,13 @@ else if `nmethod'==0 & `ntarget'<=1 | `ntarget'==0  & `nmethod'<=1 {
 		local count`k' = r(r)
     }
     if `nmethod'==0 & `ntarget'!=0 {
-        local compare = `maxrep' * `ndgm' * `count`target''  /* previously used countdgm but didn't work for multiple dgms with descriptors.  Same for other 2 lines below */
+        local compare = `maxrep' * `ndgmvars' * `count`target''  /* previously used countdgm but didn't work for multiple dgms with descriptors.  Same for other 2 lines below */
     }
     else if `ntarget'==0 & `nmethod'!=0 {
-        local compare = `maxrep' * `ndgm' * `count`method'' 
+        local compare = `maxrep' * `ndgmvars' * `count`method'' 
     }
     else if `nmethod'==0 & `ntarget'==0 {
-        local compare = `maxrep' * `ndgm' 
+        local compare = `maxrep' * `ndgmvars' 
     }
 	if `compare' == `maxnumdata' {
         local nformat= 1
@@ -541,8 +542,10 @@ local datasetvars: list uniq datasetvarswithtrue
 	if `nformat' == 1 {
 		* not including true as it can be a number e.g. true(0)
 		* also do not include dgm if it has been created
-		if `dgmcreated' == 0 unab simanvars : `rep' `dgm' `method' `target' `estimate' `se' `df' `lci' `uci' `p' 
-		else unab simanvars : `rep' `method' `target' `estimate' `se' `df' `lci' `uci' `p' 
+		local simanvars0 `rep' `target' `estimate' `se' `df' `lci' `uci' `p' 
+		if `dgmcreated' == 0 local simanvars0 `simanvars0' `dgm'
+		if `methodcreated' == 0 local simanvars0 `simanvars0' `method'
+		unab simanvars : `simanvars0'
 		local simanvarswithtrue0 `simanvars' `true'
 		* for cases where true is in dgm() and true(), only include once
 		local simanvarswithtrue: list uniq simanvarswithtrue0
@@ -600,19 +603,19 @@ local datasetvars: list uniq datasetvarswithtrue
 	}
 	* long method, wide target
 	else if (`nmethod'==1 | `nmethod' == 0) & `ntarget'> 1 {
-			foreach j in `tlist' {
-				if !mi("`estimate'") local estimatevariables `estimatevariables' `estimate'`j'
-				if !mi("`se'") local sevariables `sevariables' `se'`j'
-				if !mi("`df'") local dfvariables `dfvariables' `df'`j'
-				if !mi("`lci'") local lcivariables `lcivariables' `lci'`j'
-				if !mi("`uci'") local ucivariables `ucivariables' `uci'`j'
-				if !mi("`p'") local pvariables `pvariables' `p'`j'
-				if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
-				else local truevariables `truevariables' `true'`j'
-				
-	if `dgmcreated'!=1 local simanvarswithtrue `rep' `dgm' `method' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
-	else local simanvarswithtrue `rep' `method' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
-			}	
+		foreach j in `tlist' {
+			if !mi("`estimate'") local estimatevariables `estimatevariables' `estimate'`j'
+			if !mi("`se'") local sevariables `sevariables' `se'`j'
+			if !mi("`df'") local dfvariables `dfvariables' `df'`j'
+			if !mi("`lci'") local lcivariables `lcivariables' `lci'`j'
+			if !mi("`uci'") local ucivariables `ucivariables' `uci'`j'
+			if !mi("`p'") local pvariables `pvariables' `p'`j'
+			if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
+			else local truevariables `truevariables' `true'`j'
+		}
+		local simanvarswithtrue `rep' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
+		if `dgmcreated'!=1 local simanvarswithtrue `simanvarswithtrue' `dgm'
+		if `methodcreated'!=1 local simanvarswithtrue `simanvarswithtrue' `method'
 	}
 	* test for equivalence
 	local testothervars: list simanvarswithtrue === datasetvars
@@ -626,8 +629,12 @@ local datasetvars: list uniq datasetvarswithtrue
 			di as error "{p 0 2}Unwanted variables are: `wrongvars'.{p_end}"
 			exit 498
 		}
-		else di as error "{p 0 2}There are variables specified in siman setup that are not in your dataset.  Note that if your data is in wide-wide format and your variable names contain underscores, these will need to be included in the setup syntax.  See {help siman_setup:siman setup} for further details.{p_end}"
-		exit 498
+		else {
+			local wrongvars : list simanvarswithtrue - datasetvars 
+			di as error "{p 0 2}There are variables specified in siman setup that are not in your dataset.  Note that if your data is in wide-wide format and your variable names contain underscores, these will need to be included in the setup syntax.  See {help siman_setup:siman setup} for further details.{p_end}"
+			di as error "{p 0 2}Unfound variables are: `wrongvars'.{p_end}"
+			exit 498
+		}
 	}
 	
 /*
@@ -753,7 +760,6 @@ if `nformat'==1 {
 	local valtarget = "`tarlist'"
 	* define whether stub or variable
 	local descriptiontype = "variable"	
-	local cidescriptiontype = "variables"	
 }
 
 else if `nformat'==2 {
@@ -766,7 +772,6 @@ else if `nformat'==2 {
 	local valtarget = "`target'"
     * define whether stub or variable
 	local descriptiontype = "stub"
-	local cidescriptiontype = "stubs"
 }
 else if `nformat'==3 {
     * For format 3, long-wide format
@@ -793,7 +798,6 @@ else if `nformat'==3 {
 	}
     * define whether stub or variable
 	local descriptiontype = "stub"
-	local cidescriptiontype = "stubs"
 }	
 	
 * The below are the same for all formats:
@@ -809,44 +813,10 @@ if `nmethod'==0 {
     local valmethod = "N/A"
 }
 
-* Declaring the dgm variables
-if "`dgm'"!="" {
-    local dgmvar = "`dgm'"  
-    local numdgm = "`ndgm'"
-    if `dgmcreated' ==1 {
-        local dgmvar "not in dataset"
-        local numdgm "N/A"
-    }
-}
-else {
-    local dgmvar = "N/A"	
-    local numdgm = "N/A"
+if `dgmcreated' ==1 {
+	local dgm 
 }
 
-* Declaring the estimate variables	
-if "`estimate'"!="" local estvars = "`estimate'"  	
-else local estvars = "N/A"  
-	
-* Declaring the se variables	
-if "`se'"!="" local sevars = "`se'"  	
-else local sevars = "N/A"  
-	
-* Declaring the df variables	
-if "`df'"!="" local dfvars = "`df'"  
-else local dfvars = "N/A"
-	
-* Declaring the ci variables	
-if "`ci'"!="" local civars = "`ci'"  
-else local civars = "N/A"
-	
-* Declaring the p variables	
-if "`p'"!="" local pvars = "`p'"  
-else local pvars = "N/A"
-
-
-* Declaring the true variables	
-if "`true'"!="" local truevars = "`true'"  
-else local truevars = "N/A"
 
 * define whether stub or variable
 if "`ntruevalue'"=="single" local truedescriptiontype = "variable"
@@ -858,7 +828,7 @@ if `nformat'==3 & `ntarget'==1 local truedescriptiontype = "variable"
 /*
 NB. Can't loop as if variable is not present, then it will be blank so it will not be in the varlist, so it gets ignored completely
 * Declaring the est, se, df, ci, p and true variables in the dataset for the summary output
-foreach summary of varlist `estimate' `se' `df' `ci' `p' `true' {
+foreach summary of varlist `estimate' `se' `df' `lci' `uci' `p' `true' {
 
 		if "`summary'"!="" local `summary'vars = "`summary'"  	
 		else local `summary'vars = "N/A"  
@@ -871,15 +841,19 @@ if "`methodlabels'" == "1" {
      qui labelsof `method'
 	local methodvalues `r(values)'
 }
+if `methodcreated' == 1 {
+	rename `method' _methodvar
+	local method _methodvar
+}
 
 * Assigning characteristics
 ******************************
 * NB Have to do this before reshape otherwise there will be no macros to transfer over to siman reshape - so
 * siman reshape won't recognise any of the variables/macros.
 
-local allthings allthings rep dgm target method estimate se df ci p true order lci uci ifsetup insetup
-local allthings `allthings' format targetformat methodformat nformat ntarget ndgm nmethod numtarget valtarget nummethod valmethod ntrue ntruevalue dgmvar numdgm dgmcreated targetlabels methodcreated methodlabels methodvalues ntruestub
-local allthings `allthings' descriptiontype cidescriptiontype truedescriptiontype estvars sevars dfvars civars pvars truevars simansetuprun
+local allthings allthings rep dgm target method estimate se df p true order lci uci ifsetup insetup
+local allthings `allthings' format targetformat methodformat nformat ntarget ndgmvars nmethod numtarget valtarget nummethod valmethod ntruevalue dgmcreated targetlabels methodcreated methodlabels methodvalues ntruestub
+local allthings `allthings' descriptiontype truedescriptiontype setuprun
 * need m1, m2 etc t1, t2 etc for siman_reshape
 forvalues me = 1/`nmethod' {
 	local allthings `allthings' m`me'
@@ -920,8 +894,8 @@ else if `nformat'==3 & `nmethod'==1 {
 	di as txt "note: converting to long-wide format, creating variable target"
 	
     * need the est stub to be est`target1' est`target2' etc so create a macro list.  
-   if "`ntruevalue'"=="single" local optionlist `estimate' `se' `df' `ci' `p'  
-  else if "`ntruevalue'"=="multiple" local optionlist `estimate' `se' `df' `ci' `p' `true' 
+   if "`ntruevalue'"=="single" local optionlist `estimate' `se' `df' `lci' `uci' `p'  
+  else if "`ntruevalue'"=="multiple" local optionlist `estimate' `se' `df' `lci' `uci' `p' `true' 
     forvalues j = 1/`ntarget' {
         foreach option in `optionlist' {
             local `option'stubreshape`t`j'' = "`option'`t`j''"
@@ -1047,7 +1021,7 @@ else if `nformat'==3 & `nmethod'==1 {
 * If method is missing and target is wide, siman setup will auto reshape this to long-long format (instead of reading in the data as it is and calling it format 3).
 if (`nmethod'==0 & `ntarget'>1 ) {
 	di as txt "note: converting to long-long format, creating variable target"
-    qui siman reshape, longlong
+    qui siman_reshape, longlong
     foreach thing in `_dta[siman_allthings]' {
         local `thing' : char _dta[siman_`thing']
     }
@@ -1062,8 +1036,11 @@ if (`nmethod'==0 & `ntarget'>1 ) {
 siman_describe
 
 * Set indicator so that user can determine if siman setup has been run already
-local simansetuprun 1 
-char _dta[siman_simansetuprun] `simansetuprun'
+local setuprun 1 
+char _dta[siman_setuprun] `setuprun'
+
+* Drop char order
+char _dta[siman_order]
 
 /*
 * Note can't do the following as it doesn't work for 1st example in wide-wide data.  Variables est1_ etc are not recognised by Stata as meeting the criteria variable *_

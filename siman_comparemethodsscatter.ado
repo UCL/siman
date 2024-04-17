@@ -47,7 +47,7 @@ foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
 
-if "`simansetuprun'"!="1" {
+if "`setuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
 }
@@ -100,7 +100,7 @@ capture confirm string variable `method'
 if !_rc local methodstringindi = 1
 
 if mi("`methlist'") & `nummethod' > 5 {
-    di as smcl as text "{p 0 2}Warning: with `nummethod' methods compared, this plot may be too dense to read.  If you find it unreadable, you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a and b are the methods you are particularly interested to compare."
+    di as smcl as text "{p 0 2}Warning: with `nummethod' methods compared, this plot may be too dense to read.  If you find it unreadable, you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a and b are the methods you are particularly interested to compare.{p_end}"
 }
 
 cap confirm variable `dgm'
@@ -119,7 +119,7 @@ cap confirm variable `dgm'
 			if `"`r(labels)'"' != "" {
 			local 0 = `"`r(labels)'"'
 
-				forvalues i = 1/`ndgm' {
+				forvalues i = 1/`ndgmvars' {
 					gettoken `dgm'dlabel`i' 0 : 0, parse(": ")
 					local dgmlabels = 1
 				}
@@ -648,7 +648,7 @@ else if `numberdgms' != 1 {
 
 			local graphnumcheck = `totalgroupnum' * `numtargetcheck'
 			if `graphnumcheck' > 15 {
-				di as smcl as text "{p 0 2}Warning: `graphnumcheck' graphs will be created: consider using 'if' condition as detailed in {help siman_comparemethodsscatter:siman comparemethodsscatter}"
+				di as smcl as text "{p 0 2}Warning: `graphnumcheck' graphs will be created: consider using 'if' condition as detailed in {help siman_comparemethodsscatter:siman comparemethodsscatter}{p_end}"
 			}
 
 
@@ -788,7 +788,7 @@ qui use `origdata', clear
 end
 
 
-prog def dicmd
+program define dicmd
 noi di as input `"`0'"'
 `0'
 end

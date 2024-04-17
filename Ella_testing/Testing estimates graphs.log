@@ -3,13 +3,13 @@
 C:\ian\git\siman\siman.ado
 *!version 0.3  08aug2023
 C:\ian\git\siman\siman_setup.ado
-*!   version 0.8.7  27nov2023
+*!    version 0.9  3apr2024    
 C:\ian\git\siman\siman_describe.ado
-*! version 0.5   17oct2022  
+*! version 0.5.1   13mar2024
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.6.11 19dec2023
+*! version 0.7     3apr2024
 C:\ian\git\siman\siman_table.ado
-*! version 0.8.1   25oct2023
+*! version 0.8.3   3apr2024
 C:\ian\git\siman\siman_reshape.ado
 *!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
@@ -21,7 +21,7 @@ C:\ian\git\siman\siman_comparemethodsscatter.ado
 C:\ian\git\siman\siman_blandaltman.ado
 *! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.9.7 03oct2023
+*! version 1.9.8 27mar2024
 C:\ian\git\siman\siman_scatter.ado
 *! version 1.6.7 03oct2023
 C:\ian\git\siman\siman_nestloop.ado
@@ -95,22 +95,18 @@ working.....
 . 
 . *siman_zipplot
 . siman_zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman_zipplot, by(dgm estimand method)
-Drawing 1 graphs (1 per true value)...
 
 . 
 . siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y
 > -title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 > coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) 
-Drawing 1 graphs (1 per true value)...
 
 . siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y
 > -title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 > coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("carrot",
 >  replace)
-Drawing 1 graphs (1 per true value)...
 
 . 
 . use $testpath/data/simlongESTPM_longE_longM.dta, clear
@@ -148,7 +144,6 @@ The true variable is:             true
 _____________________________________________________
 
 . siman_zipplot
-Drawing 1 graphs (1 per true value)...
 
 . 
 . 
@@ -199,7 +194,6 @@ _____________________________________________________
 working.....
 
 . siman zipplot                  
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm                   
 working.....
@@ -228,6 +222,9 @@ beta                 |
                      | 
                 bias | -.0043991  -.0025973
                      |  .0024993   .0035644
+                     | 
+             pctbias |                     
+                     |                     
                      | 
                 mean | -.0043991  -.0025973
                      |  .0024993   .0035644
@@ -270,6 +267,9 @@ gamma                |
                 bias |  .0005151   .0056354
                      |  .0025476   .0035789
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean |  .0005151   .0056354
                      |  .0025476   .0035789
                      | 
@@ -310,6 +310,9 @@ beta                 |
                      | 
                 bias | -.0046965  -.0058509
                      |  .0028908   .0039932
+                     | 
+             pctbias |                     
+                     |                     
                      | 
                 mean | -.0046965  -.0058509
                      |  .0028908   .0039932
@@ -352,6 +355,9 @@ gamma                |
                 bias |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
+             pctbias |                     
+                     |                     
+                     | 
                 mean |  .0005948   .0065072
                      |  .0029417   .0041326
                      | 
@@ -382,9 +388,8 @@ gamma                |
                power |       5.5        3.6
                      |  .7209369    .589101
 -------------------------------------------
- NOTE: Where there are 2 entries in the table, 
- the first entry is the performance measure and 
- the second entry is its Monte Carlo error.
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
 
 . 
 . 
@@ -423,13 +428,13 @@ The true variable is:             true
 _____________________________________________________
 
 . siman_zipplot  
-Drawing 2 graphs (1 per true value)...
+Drawing 2 graphs (1 per true value)
 
 . siman_zipplot, scheme(scheme(economist)) legend(order(4 "Covering" 3 "Not covering")) xtit("x-titl
 > e") ytit("y-title") ylab(0 40 100) ///
 > noncoveroptions(pstyle(p3)) coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoption
 > s(pstyle(p6))
-Drawing 2 graphs (1 per true value)...
+Drawing 2 graphs (1 per true value)
 (note:  named style grey not found in class color, default attributes used)
 (note:  named style grey not found in class color, default attributes used)
 (note:  named style grey not found in class color, default attributes used)
@@ -610,12 +615,14 @@ _____________________________________________________
 . siman_comparemethodsscatter
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
-  and b are the methods you are particularly interested to compare.  Working.....
+  and b are the methods you are particularly interested to compare.
+Working.....
 
 . siman_comparemethodsscatter, by(target)  
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
-  and b are the methods you are particularly interested to compare.  Working.....
+  and b are the methods you are particularly interested to compare.
+Working.....
 
 . siman_blandaltman est se
 working....
@@ -741,17 +748,20 @@ _____________________________________________________
 . siman_comparemethodsscatter
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
-  and b are the methods you are particularly interested to compare.  Working.....
+  and b are the methods you are particularly interested to compare.
+Working.....
 
 . siman_comparemethodsscatter se                             
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
-  and b are the methods you are particularly interested to compare.  Working.....
+  and b are the methods you are particularly interested to compare.
+Working.....
 
 . siman_comparemethodsscatter est
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
-  and b are the methods you are particularly interested to compare.  Working.....
+  and b are the methods you are particularly interested to compare.
+Working.....
 
 . siman_comparemethodsscatter, methlist(3 8) 
 Working.....
@@ -1148,8 +1158,8 @@ xij variables:
 . tempfile origdata
 
 . save `origdata', replace
-(file C:\Users\rmjwiww\AppData\Local\Temp\ST_3738_000001.tmp not found)
-file C:\Users\rmjwiww\AppData\Local\Temp\ST_3738_000001.tmp saved as .dta format
+(file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000001.tmp not found)
+file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000001.tmp saved as .dta format
 
 . global origdata `origdata'
 
@@ -1204,7 +1214,6 @@ working....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -1262,7 +1271,6 @@ working....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -1313,12 +1321,14 @@ Warning: 40 panels will be created: consider using 'if' condition or 'by' option
 . siman comparemethodsscatter
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
-  and b are the methods you are particularly interested to compare.  Working.....
+  and b are the methods you are particularly interested to compare.
+Working.....
 
 . siman comparemethodsscatter se
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
-  and b are the methods you are particularly interested to compare.  Working.....
+  and b are the methods you are particularly interested to compare.
+Working.....
 
 . siman blandaltman
 working....
@@ -1328,7 +1338,7 @@ working....
 
 . siman zipplot
 Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 1 graphs (1 per true value)...
+  detailed in siman zipplot
 
 . siman swarm
 working.....
@@ -1386,7 +1396,6 @@ working....
 
 . 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -1441,7 +1450,6 @@ working....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -1490,12 +1498,14 @@ Warning: 40 panels will be created: consider using 'if' condition or 'by' option
 . siman comparemethodsscatter
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
-  and b are the methods you are particularly interested to compare.  Working.....
+  and b are the methods you are particularly interested to compare.
+Working.....
 
 . siman comparemethodsscatter se
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
-  and b are the methods you are particularly interested to compare.  Working.....
+  and b are the methods you are particularly interested to compare.
+Working.....
 
 . siman blandaltman
 working....
@@ -1505,7 +1515,7 @@ working....
 
 . siman zipplot
 Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 1 graphs (1 per true value)...
+  detailed in siman zipplot
 
 . siman swarm
 working.....
@@ -1591,7 +1601,7 @@ xij variables:
 . tempfile origdata
 
 . save ${origdata}, replace
-file C:\Users\rmjwiww\AppData\Local\Temp\ST_3738_000001.tmp saved as .dta format
+file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000001.tmp saved as .dta format
 
 . * 2 methods, true variable
 . drop if method == "C" | method == "D"
@@ -1643,7 +1653,6 @@ working....
 working....
 
 . siman zipplot                                                   
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -1700,7 +1709,6 @@ working....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -1762,7 +1770,7 @@ working....
 
 . siman zipplot
 Warning: 1 graphs each of 16 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 1 graphs (1 per true value)...
+  detailed in siman zipplot
 
 . siman swarm
 working.....
@@ -1817,7 +1825,6 @@ working....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -1872,7 +1879,6 @@ working....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -1932,7 +1938,7 @@ working....
 
 . siman zipplot
 Warning: 1 graphs each of 16 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 1 graphs (1 per true value)...
+  detailed in siman zipplot
 
 . siman swarm
 working.....
@@ -2010,8 +2016,8 @@ xij variables:
 . tempfile origdata
 
 . save `origdata', replace
-(file C:\Users\rmjwiww\AppData\Local\Temp\ST_3738_000003.tmp not found)
-file C:\Users\rmjwiww\AppData\Local\Temp\ST_3738_000003.tmp saved as .dta format
+(file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000003.tmp not found)
+file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000003.tmp saved as .dta format
 
 . global origdata `origdata'
 
@@ -2067,7 +2073,6 @@ working....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -2124,7 +2129,6 @@ working....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -2188,7 +2192,7 @@ Warning: 20 graphs will be created: consider using 'if' condition as detailed in
 
 . siman zipplot
 Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 1 graphs (1 per true value)...
+  detailed in siman zipplot
 
 . siman swarm
 working.....
@@ -2244,7 +2248,6 @@ working....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -2299,7 +2302,6 @@ working....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -2361,7 +2363,7 @@ Warning: 20 graphs will be created: consider using 'if' condition as detailed in
 
 . siman zipplot
 Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 1 graphs (1 per true value)...
+  detailed in siman zipplot
 
 . siman swarm
 working.....
@@ -2470,8 +2472,8 @@ xij variables:
 . tempfile origdata
 
 . save `origdata', replace
-(file C:\Users\rmjwiww\AppData\Local\Temp\ST_3738_000004.tmp not found)
-file C:\Users\rmjwiww\AppData\Local\Temp\ST_3738_000004.tmp saved as .dta format
+(file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000004.tmp not found)
+file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000004.tmp saved as .dta format
 
 . global origdata `origdata'
 
@@ -2528,7 +2530,6 @@ working....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -2586,7 +2587,6 @@ working....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -2626,13 +2626,13 @@ _____________________________________________________
 
 . siman scatter
 working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
+  scatter
 
 . siman scatter se est
 working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
+  scatter
 
 . siman comparemethodsscatter
 Working.....
@@ -2650,7 +2650,7 @@ Warning: 20 graphs will be created: consider using 'if' condition as detailed in
 
 . siman zipplot
 Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 1 graphs (1 per true value)...
+  detailed in siman zipplot
 
 . siman swarm
 working.....
@@ -2659,8 +2659,8 @@ Warning: 20 panels will be created: consider using 'if' or 'by' options as detai
 . * 2 targets, true value
 . use ${origdata}, clear
 
-. drop if  target == "C" | target == "D" | target == "E" | target == "F" | target == "G" | target ==
->  "H" | target == "I" | target == "J"
+. drop if  target == "C" | target == "D" | target == "E" | target == "F" | target == "G" | target == "H" 
+> | target == "I" | target == "J"
 (3,200 observations deleted)
 
 . siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
@@ -2707,7 +2707,6 @@ working....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -2715,8 +2714,8 @@ working.....
 . * 3 targets, true value
 . use ${origdata}, clear
 
-. drop if target == "D" | target == "E" | target == "F" | target == "G" | target == "H" | target == 
-> "I" | target == "J"
+. drop if target == "D" | target == "E" | target == "F" | target == "G" | target == "H" | target == "I" |
+>  target == "J"
 (2,800 observations deleted)
 
 . siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
@@ -2763,7 +2762,6 @@ working....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman swarm
 working.....
@@ -2801,13 +2799,13 @@ _____________________________________________________
 
 . siman scatter
 working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
+  scatter
 
 . siman scatter se est
 working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
+  scatter
 
 . siman comparemethodsscatter
 Working.....
@@ -2825,7 +2823,7 @@ Warning: 20 graphs will be created: consider using 'if' condition as detailed in
 
 . siman zipplot
 Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 1 graphs (1 per true value)...
+  detailed in siman zipplot
 
 . siman swarm
 working.....
@@ -2884,7 +2882,6 @@ working.....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman_comparemethodsscatter
 Working.....
@@ -2903,7 +2900,6 @@ working.....
 working....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman_comparemethodsscatter
 Working.....
@@ -2923,8 +2919,8 @@ Working.....
 . drop repitionindi
 
 . siman_setup, rep(rep) dgm(dgm) target(estimand) estimate(est) se(se) true(true)
-Warning: no method specified. siman will proceed assuming there is only one method. If this is a
-  mistake, enter method() option in -siman setup-.
+Warning: no method specified. siman will proceed assuming there is only one method. If this is a mistake,
+  enter method() option in -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -2961,7 +2957,6 @@ working.....
 . * siman blandaltman
 . * error message as required
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . * siman_comparemethodsscatter
 . * error message as required
@@ -2977,13 +2972,12 @@ working.....
 . * siman blandaltman
 . * error message as required
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . * siman_comparemethodsscatter
 . * error message as required
 . 
-. * Testing siman scatter.  Check if have 2 dgms, A (0/1) and B(0/1).  Then siman scatter, by A B if
->  A==0 should be same as siman scatter, by B.
+. * Testing siman scatter.  Check if have 2 dgms, A (0/1) and B(0/1).  Then siman scatter, by A B if A==0
+>  should be same as siman scatter, by B.
 . clear all
 
 . prog drop _all
@@ -3002,8 +2996,7 @@ Drawing 1 graphs (1 per true value)...
 . order rep dgmA dgmB dgmC
 
 . *append using long_long_formats\simlongESTPM_longE_longM.dta
-. siman setup, rep(rep) dgm(dgmA dgmB dgmC) target(estimand) method(method) est(est) se(se) true(tru
-> e)
+. siman setup, rep(rep) dgm(dgmA dgmB dgmC) target(estimand) method(method) est(est) se(se) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -3049,8 +3042,7 @@ working.....
 (simsum example: data from a simulation study comparing 3 ways to handle missing )
 
 . cap noi siman setup, rep(dataset) method(method)
-no estimates, SEs, or confidence intervals specified.  Need to specify at least one for siman to run
-> .
+no estimates, SEs, or confidence intervals specified.  Need to specify at least one for siman to run.
 
 . cap noi siman blandaltman                                               
 Data are not in siman format: use siman setup
@@ -3074,8 +3066,8 @@ The number of methods is:         3
 The method values are:            CC MI_LOGT MI_T
 
 Data generating mechanism (dgm)
-The total number of dgms is:      0
-The dgm variables (# levels):     none
+The total number of dgms is:      1
+The dgm variables (# levels):     N/A
 
 Estimates are contained in the dataset
 
@@ -3140,19 +3132,17 @@ variable betastring was str1 now str4
 . rename betastring beta
 
 . 
-. siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(beta
-> true)
+. siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(betatrue)
   variable beta was long now byte
   (324,000 bytes saved)
-Warning: variable beta, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode beta
-  as numeric before running -siman setup-.
-
+Warning: variable beta, which appears in dgm(), was stored as a string. It has been encoded as numeric so
+  that subsequent siman commands will work. If you require a different order, encode beta as numeric
+  before running -siman setup-.
   variable mech was long now byte
   (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as numeric so
+  that subsequent siman commands will work. If you require a different order, encode mech as numeric
+  before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -3183,8 +3173,8 @@ _____________________________________________________
 . 
 . siman_scatter
 working.....
-Warning: 108 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+Warning: 108 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
+  scatter
 
 . siman scatter, by(beta)
 working.....
@@ -3196,8 +3186,8 @@ working.....
 
 . siman scatter if method == "CCA", name("simanscatter_CCA", replace)
 working.....
-Warning: 36 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+Warning: 36 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
+  scatter
 
 . 
 . 
@@ -3220,8 +3210,8 @@ working.....
 working.....
 Warning: 36 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
 
-. siman swarm if (method == "Noadj" | method == "MeanImp"), by(beta) graphoptions(name("simanswarm_b
-> eta", replace))                  
+. siman swarm if (method == "Noadj" | method == "MeanImp"), by(beta) graphoptions(name("simanswarm_beta",
+>  replace))                  
 working.....
 
 . siman swarm if (method == "Noadj" | method == "MeanImp"), by(pmiss)
@@ -3250,8 +3240,8 @@ Warning: 36 graphs will be created: consider using 'if' condition as detailed in
 . siman blandaltman if (method == "Noadj" | method == "MeanImp"), by(pmiss) 
 working....
 
-. siman blandaltman if (method == "CCA" | method == "MeanImp"), by(beta) name("simanba_new", replace
-> )                  
+. siman blandaltman if (method == "CCA" | method == "MeanImp"), by(beta) name("simanba_new", replace)    
+>               
 working....
 
 . 
@@ -3277,8 +3267,8 @@ Warning: 36 graphs will be created: consider using 'if' condition as detailed in
 . siman comparemethodsscatter if beta == 1  
 Working.....
 
-. siman comparemethodsscatter if mech == 2, name("simancmsmech", replace)                           
->         
+. siman comparemethodsscatter if mech == 2, name("simancmsmech", replace)                                
+>    
 Working.....
 Warning: 18 graphs will be created: consider using 'if' condition as detailed in siman
   comparemethodsscatter
@@ -3290,28 +3280,32 @@ Warning: 18 graphs will be created: consider using 'if' condition as detailed in
 . 
 . siman_zipplot  
 Warning: 3 graphs each of 36 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 3 graphs (1 per true value)...
+  detailed in siman zipplot
+Drawing 3 graphs (1 per true value)
 
 . siman zipplot, by(mech)       
-Drawing 3 graphs (1 per true value)...
+Drawing 3 graphs (1 per true value)
 
 . siman reshape, longlong 
 
 . siman zipplot if (method == "Noadj" | method == "MeanImp"), name("simanzip_new", replace) 
 Warning: 3 graphs each of 24 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 3 graphs (1 per true value)...
+  detailed in siman zipplot
+Drawing 3 graphs (1 per true value)
 
 . siman zipplot, by(method pmiss)
 Warning: 3 graphs each of 36 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 3 graphs (1 per true value)...
+  detailed in siman zipplot
+Drawing 3 graphs (1 per true value)
 
 . siman zipplot if (method == "CCA" | method == "MeanImp"), by(method mech) 
 Warning: 3 graphs each of 24 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 3 graphs (1 per true value)...
+  detailed in siman zipplot
+Drawing 3 graphs (1 per true value)
 
 . siman zipplot if beta == 1  
 Warning: 1 graphs each of 36 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 1 graphs (1 per true value)...
+  detailed in siman zipplot
 
 . 
 . 
@@ -3322,7 +3316,7 @@ Warning: 1 graphs each of 36 panels will be created: consider using 'if' conditi
 
 . which siman_setup
 C:\ian\git\siman\siman_setup.ado
-*!   version 0.8.7  27nov2023
+*!    version 0.9  3apr2024    
 
 . use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
@@ -3333,8 +3327,7 @@ C:\ian\git\siman\siman_setup.ado
 
 . drop dgm
 
-. siman_setup, rep(rep) dgm(dgm_string) target(estimand) method(method) estimate(est) se(se) true(tr
-> ue)
+. siman_setup, rep(rep) dgm(dgm_string) target(estimand) method(method) estimate(est) se(se) true(true)
   variable dgm_string was long now byte
   (24,000 bytes saved)
 Warning: variable dgm_string, which appears in dgm(), was stored as a string. It has been encoded as
@@ -3378,7 +3371,6 @@ Working.....
 working.....
 
 . siman zipplot
-Drawing 1 graphs (1 per true value)...
 
 . siman blandaltman
 working....

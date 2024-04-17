@@ -5,7 +5,7 @@
 * version 1.12.3  22aug2023   IW bug fix with name("n")
 * version 1.12.2  22aug2023   IW handles target = numeric or string 
 * version 1.12.1  17aug2023   IW 
-* version 1.12    14aug2023   IW changed to fast graph without graph combine; works for one or multiple dgmvars. NB gr() no longer valid.
+* version 1.12    14aug2023   IW changed to fast graph without graph combine; works for one or multiple dgm. NB gr() no longer valid.
 * version 1.11    05may2023   IW add "DGM=" to subtitles and "method" as legend title
 * version 1.10    08mar2023    
 *							added warning if multiple targets overlaid
@@ -105,6 +105,12 @@ else if "`methlegend'"=="title" local methlegtitle title(`method')
 else if "`methlegend'"!="" {
 	di as error "Syntax: methlegend(item|title)"
 	exit 198
+}
+
+* require est() and se()
+if mi("`estimate'","`se'") {
+	di as error "siman lollyplot requires both estimate and se"
+	exit 498
 }
 
 *** END OF PARSING ***
@@ -214,7 +220,7 @@ local nmethods = r(r)
 if `dgmcreated' == 1 {
     qui gen dgm = 1
 	local dgm "dgm"
-	local ndgm=1
+	local ndgmvars=1
 }
 
 * only keep the performance measures that the user has specified (or keep all if the user has not specified any) and only create lollyplot graphs for these.
@@ -271,7 +277,7 @@ else {
 }
 
 * handle DGMs
-local ndgmvars : word count `dgm'
+*local ndgmvars : word count `dgm'
 if `ndgmvars'>1 {
 	tempvar dgmgroup 
 	egen `dgmgroup' = group(`dgm'), label
@@ -295,8 +301,8 @@ if `ntargetlevels'>1 {
 	local each "each "
 }
 else di as text "Drawing graph..."
-if `npms'>5  di as smcl as text "{p 0 2}Warning: `each'graph will have `npms' rows of panels: consider using fewer performance measures"
-if `ndgmlevels'>5 di as smcl as text "{p 0 2}Warning: `each'graph will have `ndgmlevels' columns of panels: consider using 'if' condition as detailed in {help siman lollyplot}"
+if `npms'>5  di as smcl as text "{p 0 2}Warning: `each'graph will have `npms' rows of panels: consider using fewer performance measures{p_end}"
+if `ndgmlevels'>5 di as smcl as text "{p 0 2}Warning: `each'graph will have `ndgmlevels' columns of panels: consider using 'if' condition as detailed in {help siman lollyplot}{p_end}"
 
 * create graph
 foreach thistarget of local targetlevels {
@@ -357,7 +363,7 @@ end
 Create a string variable with values "varname=value", for graphs
 IW 5may2023
 */
-prog def maketitlevar, rclass
+program define maketitlevar, rclass
 syntax varlist, [suffix(string) novarname]
 if mi("`suffix'") local suffix title
 foreach var of local varlist {
@@ -388,7 +394,7 @@ end
 
 ******************* START OF PROGRAM PADDING ************************
 * separate out the given words to create a title of given width
-prog def padding, sclass
+program define padding, sclass
 syntax anything, width(int) [reverse debug]
 local ndgm 0
 local spacel : _length " "

@@ -33,7 +33,7 @@ foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
 
-if "`simansetuprun'"!="1" {
+if "`setuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
 }
@@ -297,16 +297,16 @@ lab var mean "Mean"
 if `dgmcreated' == 1 {
     qui gen dgm = 1
 	local dgm "dgm"
-	local ndgm=1
+	local ndgmvars=1
 }
 
 * Need to know number of dgms for later on
 local numberdgms: word count `dgm'
 if `numberdgms'==1 {
 	qui tab `dgm'
-	local ndgm = `r(r)'
+	local ndgmvars = `r(r)'
 }
-if `numberdgms'!=1 local ndgm = `numberdgms'
+if `numberdgms'!=1 local ndgmvars = `numberdgms'
 
 if `numberdgms'==1 {
 	* Need to know what format dgm is in (string or numeric) for the below code
@@ -409,7 +409,7 @@ else local totalgroupnum = `groupnum'
 
 local graphnumcheck = `totalgroupnum' * `numtargetcheck'
 if `graphnumcheck' > 15 {
-di as smcl as text "{p 0 2}Warning: `graphnumcheck' graphs will be created: consider using 'if' condition as detailed in {help siman_blandaltman:siman blandaltman}"
+di as smcl as text "{p 0 2}Warning: `graphnumcheck' graphs will be created: consider using 'if' condition as detailed in {help siman_blandaltman:siman blandaltman}{p_end}"
 }
 
 
@@ -507,7 +507,7 @@ else {
 					local byvarlist = `"`group'==`d'"'
 					local byname = `d'
 				}	
-				if `ndgm' > 1 {
+				if `ndgmvars' > 1 {
 					#delimit ;
 					twoway (scatter diff mean if strthing == "`el'" & `byvarlist', `options')
 					,

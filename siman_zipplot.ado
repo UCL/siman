@@ -36,7 +36,7 @@ foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
 
-if "`simansetuprun'"!="1" {
+if "`setuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
 }
@@ -413,7 +413,7 @@ if !mi("`ntrue'") local numtruecheck `ntrue'
 
 local graphnumcheck = (`totaldgmnum' * `nummethodcheck' * `numtargetcheck')/`numtruecheck'
 if `graphnumcheck' > 15 {
-	di as smcl as text "{p 0 2}Warning: `numtruecheck' graphs each of `graphnumcheck' panels will be created: consider using 'if' condition or 'by' option as detailed in {help siman_zipplot:siman zipplot}"
+	di as smcl as text "{p 0 2}Warning: `numtruecheck' graphs each of `graphnumcheck' panels will be created: consider using 'if' condition or 'by' option as detailed in {help siman_zipplot:siman zipplot}{p_end}"
 }
 
 if `numtruecheck' > 1 di as txt "Drawing `numtruecheck' graphs (1 per true value)"

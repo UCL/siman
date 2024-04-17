@@ -1,4 +1,5 @@
-*! version 1.9.7 03oct2023
+*! version 1.9.8 27mar2024
+* version 1.9.8 27mar2024	IW comment out lines creating ndgm, seems unused
 *  version 1.9.7 03oct2023    EMZ update to warning message when if/by conditions used
 *  version 1.9.6 19sep2023    EMZ accounting for lost labels on method numeric labelled string durng multiple reshapes
 *  version 1.9.5 12sep2023    EMZ slight change to error message condition when no method variable
@@ -31,14 +32,14 @@ foreach thing in `_dta[siman_allthings]' {
 }
 
 
-if "`simansetuprun'"!="1" {
+if "`setuprun'"!="1" {
 	di as error "siman_setup needs to be run first."
 	exit 498
 }
 
 * if the data is read in long-long format, then reshaped to longwide, then there will be no method variable (only
 * method values), so base the error message on number of methods
-if (`nmethod'<1 | `nummethod'<1) & "`simansetuprun'"=="1" {
+if (`nmethod'<1 | `nummethod'<1) & "`setuprun'"=="1" {
 	di as error "The variable 'method' is missing so siman swarm can not be created.  Please create a variable in your dataset called method containing the method value(s)."
 	exit 498
 }
@@ -103,9 +104,9 @@ qui keep if `tousein'
 local numberdgms: word count `dgm'
 if `numberdgms'==1 {
 	qui tab `dgm'
-	local ndgm = `r(r)'
+	*local ndgm = `r(r)'
 }
-if `numberdgms'!=1 local ndgm = `numberdgms'
+*if `numberdgms'!=1 local ndgm = `numberdgms'
 
 
 * check number of methods (for example if the 'if' syntax has been used)
@@ -217,7 +218,7 @@ forvalues g = 1/`nummethodnew' {
 
 * For the purposes of the graphs below, if dgm is missing in the dataset then set
 * the number of dgms to be 1.
-if "`dgm'"=="" local ndgm=1
+*if "`dgm'"=="" local ndgm=1
 
 * check if many graphs will be created - if so warn the user
 local dgmcount: word count `dgm'
@@ -247,7 +248,7 @@ if !mi("`by'") & strpos("`dgm'", "`by'")>0 {
 
 local graphnumcheck = `totaldgmnum' * `numtargetcheck'
 if `graphnumcheck' > 15 {
-	di as smcl as text "{p 0 2}Warning: `graphnumcheck' panels will be created: consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}"
+	di as smcl as text "{p 0 2}Warning: `graphnumcheck' panels will be created: consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}{p_end}"
 }
 
 * defining 'by'

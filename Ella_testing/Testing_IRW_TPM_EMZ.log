@@ -3,13 +3,13 @@
 C:\ian\git\siman\siman.ado
 *!version 0.3  08aug2023
 C:\ian\git\siman\siman_setup.ado
-*!    version 0.8.8  14feb2024    
+*!    version 0.9  3apr2024    
 C:\ian\git\siman\siman_describe.ado
 *! version 0.5.1   13mar2024
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.6.15 14mar2024
+*! version 0.7     3apr2024
 C:\ian\git\siman\siman_table.ado
-*! version 0.8.2   20dec2023
+*! version 0.8.3   3apr2024
 C:\ian\git\siman\siman_reshape.ado
 *!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
@@ -21,7 +21,7 @@ C:\ian\git\siman\siman_comparemethodsscatter.ado
 C:\ian\git\siman\siman_blandaltman.ado
 *! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.9.7 03oct2023
+*! version 1.9.8 27mar2024
 C:\ian\git\siman\siman_scatter.ado
 *! version 1.6.7 03oct2023
 C:\ian\git\siman\siman_nestloop.ado
@@ -354,6 +354,109 @@ Drawing 6 graphs (2 targets * 3 performance measures)...
 
 . 
 . 
+. * testing setup and reshape via the chars (could be expanded)
+. 
+. * setup data in LW - this is known to be correct (makes other programs work)
+. use $testpath/data/extendedtestdata2.dta, clear
+
+. reshape wide b se true, i(rep beta pmiss mech estimand) j(method) string
+(j = CCA MeanImp Noadj)
+
+Data                               Long   ->   Wide
+-----------------------------------------------------------------------------
+Number of observations          108,000   ->   36,000      
+Number of variables                   9   ->   14          
+j variable (3 values)            method   ->   (dropped)
+xij variables:
+                                      b   ->   bCCA bMeanImp bNoadj
+                                     se   ->   seCCA seMeanImp seNoadj
+                                   true   ->   trueCCA trueMeanImp trueNoadj
+-----------------------------------------------------------------------------
+
+. siman setup, rep(rep) dgm(beta pmiss mech) method(CCA MeanImp Noadj) target(estimand) est(b) se(se
+> ) true(true)
+  variable mech was long now byte
+  (108,000 bytes saved)
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 3: long-wide
+The format for targets is:        long
+The format for methods is:        wide
+The number of targets is:         3
+The target values are:            effect mean0 mean1
+
+The number of methods is:         3
+The method values are:            CCA MeanImp Noadj
+
+Data generating mechanism (dgm)
+The total number of dgms is:      12
+The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
+
+Estimates are contained in the dataset
+
+The estimates stub is:            b
+The se stub is:                   se
+The df stub is:                   N/A
+The ci stubs are:                 N/A
+The p stub is:                    N/A
+The true variable is:             true
+_____________________________________________________
+
+. assert "`: char _dta[siman_nmethod]'" == "3"
+
+. assert "`: char _dta[siman_method]'" == "CCA MeanImp Noadj"
+
+. 
+. * setup data in LL and reshape to LW
+. use $testpath/data/extendedtestdata2.dta, clear
+
+. siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
+> )
+  variable mech was long now byte
+  (324,000 bytes saved)
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+The siman format is:              format 1: long-long
+The format for targets is:        long
+The format for methods is:        long
+The number of targets is:         3
+The target values are:            effect mean0 mean1
+
+The number of methods is:         3
+The method values are:            CCA MeanImp Noadj
+
+Data generating mechanism (dgm)
+The total number of dgms is:      12
+The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
+
+Estimates are contained in the dataset
+
+The estimates variable is:        b
+The se variable is:               se
+The df variable is:               N/A
+The ci variables are:             N/A
+The p variable is:                N/A
+The true variable is:             true
+_____________________________________________________
+
+. siman reshape, longwide
+
+. assert "`: char _dta[siman_nmethod]'" == "3"
+
+. assert "`: char _dta[siman_method]'" == "CCA MeanImp Noadj"
+
+. 
+. 
 . * dgm defined by >1 variable
 . use $testpath/data/extendedtestdata.dta, clear
 
@@ -435,21 +538,16 @@ The true variable is:             betatrue
 _____________________________________________________
 
 . 
-. siman scatter
+. siman scatter if beta==1 & pmiss==1 & mech==1
 working.....
-Warning: 108 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
 
 . * 1 panel per dgm, target and method 
-. if ${detail} == 1 siman scatter if method == "CCA"
+. if ${detail} == 1 siman scatter if beta==1 & pmiss==1 & mech==1 & method == "CCA"
 working.....
-Warning: 36 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
 
 . 
-. siman swarm
+. siman swarm if beta==1 & pmiss==1 & mech==1
 working.....
-Warning: 36 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
 
 . * 1 panel per dgm level(s) and target, method on y-axis
 . * for the first panel in the all-graph display (beta level 1, pmiss level 1, mech level 1, estiman
@@ -467,7 +565,7 @@ working.....
 
 . * siman comparemethodsscatter
 . * one graph per dgm and target combination, comparing methods - too slow
-. siman comparemethodsscatter if beta == 1 & pmiss == 1 & mech == 2 
+. siman comparemethodsscatter if beta == 1 & pmiss == 1 & mech == 2 & estimand=="effect"
 Working.....
 
 . * one graph per target, comparing methods
@@ -477,9 +575,8 @@ working....
 
 . * 1 graph per combination of dgm levels and target, by method difference
 . 
-. siman zipplot
-Warning: 6 graphs each of 18 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot Drawing 6 graphs (1 per true value)
+. siman zipplot if beta == 1 & pmiss == 2 & mech == 2
+Drawing 2 graphs (1 per true value)
 
 . * 1 panel per dgm, target and method combination, 1 graph per beta (as defines y-axis)
 . 
@@ -2152,11 +2249,11 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
   second entry is its Monte Carlo error.
 
 . 
-. siman lollyplot
+. siman lollyplot if mech==2 & estimand=="effect"
 Performance measures not specified: defaulting to bias empse cover
-Drawing 3 graphs (one per target)...
-Warning: each graph will have 12 columns of panels: consider using 'if' condition as detailed in 
-  siman lollyplot
+Drawing graph...
+Warning: graph will have 6 columns of panels: consider using 'if' condition as detailed in siman
+  lollyplot
 
 . 
 . siman nestloop
@@ -2208,7 +2305,7 @@ working.....
 working.....
 
 . 
-. siman comparemethodsscatter 
+. siman comparemethodsscatter if dgm==1
 Working.....
 
 . 
