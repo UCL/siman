@@ -56,8 +56,6 @@
 
 {p}Utilities
 
-{p2col:{bf:{help siman_reshape:siman reshape}}}convert dataset held in memory from any format in to long-long or long-wide format (i.e. long target-wide method)
-
 {p2col:{bf:siman which}}report the version number and date for each siman subcommand
 
 {p}Subcommands may be abbreviated to 3 or more characters, and {cmd:comparemethodsscatter} may be abbreviated to {cmd:cms}.
@@ -83,8 +81,6 @@ confidence intervals, an indicator of rejection of a hypothesis, and more.
 {pstd}{bf:Performance measures data set.}
 Produced by {bf:{help siman_analyse:siman analyse}}  which calculates performance measures including Monte Carlo error, 
 for use with {bf:{help siman_lollyplot:siman lollyplot}} and {bf:{help siman_nestloop:siman nestloop}}.  Please note, this will usually be appended to the estimates data set.
-
-{pstd}Data held in memory from {bf:{help siman_setup:siman setup}} can be reshaped in to either long-long format or long-wide format using {bf:{help siman_reshape:siman reshape}}.
 
 {pstd}For troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
 
