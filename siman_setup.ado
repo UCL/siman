@@ -1,4 +1,4 @@
-*!    version 0.9  3apr2024    
+*!    version 0.9.1 12apr2024    remove chars ifsetup, insetup
 *    version 0.9  3apr2024       IW _methodvar not created till end, so not left on crash
 *    version 0.8.8  14feb2024    IW reformat long messages
 *    version 0.8.7  27nov2023    EMZ add check and error if true is not constant across methods
@@ -851,7 +851,7 @@ if `methodcreated' == 1 {
 * NB Have to do this before reshape otherwise there will be no macros to transfer over to siman reshape - so
 * siman reshape won't recognise any of the variables/macros.
 
-local allthings allthings rep dgm target method estimate se df p true order lci uci ifsetup insetup
+local allthings allthings rep dgm target method estimate se df p true order lci uci 
 local allthings `allthings' format targetformat methodformat nformat ntarget ndgmvars nmethod numtarget valtarget nummethod valmethod ntruevalue dgmcreated targetlabels methodcreated methodlabels methodvalues ntruestub
 local allthings `allthings' descriptiontype truedescriptiontype setuprun
 * need m1, m2 etc t1, t2 etc for siman_reshape
