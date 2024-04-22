@@ -3,7 +3,7 @@
 C:\ian\git\siman\siman.ado
 *!version 0.3  08aug2023
 C:\ian\git\siman\siman_setup.ado
-*!    version 0.9  3apr2024    
+*!    version 0.9.1 12apr2024    remove chars ifsetup, insetup
 C:\ian\git\siman\siman_describe.ado
 *! version 0.5.1   13mar2024
 C:\ian\git\siman\siman_analyse.ado
@@ -15,15 +15,15 @@ C:\ian\git\siman\siman_reshape.ado
 C:\ian\git\siman\siman_lollyplot.ado
 *! version 1.13.2  15dec2023
 C:\ian\git\siman\siman_zipplot.ado
-*! version 1.8.12 25oct2023
+*!  version 1.9 22apr2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
 *! version 1.9.18 25oct2023
 C:\ian\git\siman\siman_blandaltman.ado
-*! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
+*!  version 1.7 22apr2024
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.9.8 27mar2024
+*! version 1.10 22apr2024
 C:\ian\git\siman\siman_scatter.ado
-*! version 1.6.7 03oct2023
+*! version 1.7 22apr2024
 C:\ian\git\siman\siman_nestloop.ado
 *! version 1.8.2   17aug2023
 

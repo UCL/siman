@@ -7,7 +7,10 @@ updated 3apr2024 - runs in 5 minutes!
 
 // USER-SPECIFIC SETUP
 global codepath C:\git\siman 
-global codepath C:\ian\git\siman 
+if "$user"=="Ian" {
+	global codepath C:\ian\git\siman 
+	myadopath simsum
+}
 
 // SETUP FOR ALL USERS
 global testpath $codepath\Ella_testing\
@@ -15,11 +18,13 @@ adopath ++ $codepath
 cd $testpath
 
 // RUN ALL TESTS
-do test_siman_widelong_EMZ.do // quick test from wide-long: <1 minute
+* test setup and analyse 
+do test_siman_widelong_EMZ.do // from wide-long: <1 minute
+do testing_graphs_matrix.do   // from all formats and var types: ~1 minute
+* test graphs
+do Testing_IRW_TPM_EMZ.do     // various graph tests: 2 minutes
 do siman_lollyplot_test.do    // test lollyplot: ~1 minute
 do siman_nestloop_test.do     // test nestloop: ~1 minute
-do testing_graphs_matrix.do   // test setup from all formats and var types: ~1 minute
-do Testing_IRW_TPM_EMZ.do     // various graph tests: 2 minutes
 do testing_graphs_main.do     // test graphs from all formats and var types: 2 minutes
 * do "Testing estimates graphs.do" // 50 minutes
 
