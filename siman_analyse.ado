@@ -23,7 +23,6 @@
 * version 0.1  08june2020     Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
 * Uses Ian's new simsumv2
 
-capture program drop siman_analyse
 program define siman_analyse, rclass
 version 15
 
@@ -103,7 +102,8 @@ if _rc == 9 {
 	exit 498
 	}
 restore
-keep if `touse'
+cap assert `touse'
+if _rc keep if `touse'
 
 
 * put all variables in their original order in local allnames

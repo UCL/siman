@@ -36,9 +36,6 @@ Ella's notes:
 Not sure how to make it faster with -graph, by()- than with -graph combine-, have tried but not managed to get it to work as yet.
 */
 
-
-
-capture program drop siman_lollyplot
 program define siman_lollyplot, rclass
 version 15
 

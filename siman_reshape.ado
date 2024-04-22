@@ -9,7 +9,6 @@
 *   version 0.2   05sep2022     EMZ added additional error messages
 *   version 0.1   08june2020    Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
 
-capture program drop siman_reshape
 program define siman_reshape, rclass
 version 15
 

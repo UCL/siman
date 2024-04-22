@@ -14,7 +14,6 @@
 *                             siman_setup does not need to be re-run if the user would like to change the order of the dgms.
 *  version 1.1   02Dec2021    Ella Marley-Zagar, MRC Clinical Trials Unit at UCL. Based on Ian White's nplot.ado
 
-capture program drop siman_nestloop
 program define siman_nestloop, rclass
 version 15
 

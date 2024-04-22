@@ -1,4 +1,5 @@
-*! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
+*!  version 1.7 22apr2024
+*  version 1.7 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
 *  version 1.6.11 16oct2023  EMZ update to warning message when if condition used
 *  version 1.6.10 03oct2023  EMZ update to warning message when if condition used
 *  version 1.6.9 02oct2023   EMZ bug fix when dgm defined >1 variable, by() option now working again
@@ -22,7 +23,6 @@
 * Last update 29/09/2021
 ******************************************************************************************************************************************************
 
-capture program drop siman_blandaltman
 program define siman_blandaltman, rclass
 version 15
 
@@ -48,9 +48,10 @@ if mi("`estimate'") | mi("`se'") {
 	exit 498
 }
 
-tempfile origdata
-qui save `origdata'
-	
+* mark sample (needs to be before reshape)
+marksample touse, novarlist
+tempvar meantouse
+
 * If data is not in long-long format, then reshape to get method labels
 if `nformat'!=1 {
 	qui siman reshape, longlong
@@ -67,32 +68,6 @@ else foreach thing of local anything {
 }
 	
 	
-* if the user has not specified 'if' in the siman blandaltman syntax, but there is one from siman setup then use that 'if'
-if ("`if'"=="" & "`ifsetup'"!="") local ifba = `"`ifsetup'"'
-else local ifba = `"`if'"'
-tempvar touseif
-qui generate `touseif' = 0
-qui replace `touseif' = 1 `ifba' 
-preserve
-sort `dgm' `target' `method' `touseif'
-* The 'if' condition will only apply to dgm, target and method.  The 'if' condition is not allowed to be used on rep and an error message will be issued if the user tries to do so
-capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
-if _rc == 9 {
-	di as error "The 'if' condition can not be applied to 'rep' in siman blandaltman.  If you have not specified an 'if' in siman blandaltman, but you specified one in siman setup, then that 'if' will have been applied to siman blandaltman."  
-	exit 498
-}
-restore
-qui keep if `touseif'
-
-* if the user has not specified 'in' in the siman blandaltman syntax, but there is one from siman setup then use that 'in'
-if ("`in'"=="" & "`insetup'"!="") local inba = `"`insetup'"'
-else local inba = `"`in'"'
-tempvar tousein
-generate `tousein' = 0
-qui replace `tousein' = 1 `inba' 
-qui keep if `tousein'
-	
-
 * check number of methods (for example if the 'if' syntax has been used)
 qui tab `method'
 local nummethodnew = `r(r)'
@@ -165,8 +140,21 @@ tokenize `"`levels'"'
 }
 
 preserve     
+
+* check if/in conditions
+egen `meantouse' = mean(`touse'), by(`dgm' `target' `method')
+cap assert inlist(`meantouse',0,1)
+if _rc {
+	di as error "The 'if' and 'in' conditions can only be applied to dgm, target and method variables"
+	exit 498
+}
+drop `meantouse'	
+
+qui keep if `touse'
 * keeps estimates data only
 qui drop if `rep'<0
+
+if _N==0 error 2000
 
 * take out underscores at the end of variable names if there are any
 		foreach u of var * {
@@ -530,11 +518,6 @@ else {
 			} 
 		}   
 }
-
-
-restore 
-
-qui use `origdata', clear  
 
 end
 

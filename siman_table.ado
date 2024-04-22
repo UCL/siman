@@ -12,7 +12,6 @@
 *  version 0.2   11June2020    IW  changes to output format
 *  version 0.1   08June2020    Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
 
-capture program drop siman_table
 program define siman_table, rclass
 version 15
 syntax [anything] [if], [Column(varlist) Row(varlist) debug]

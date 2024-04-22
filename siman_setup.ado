@@ -31,7 +31,6 @@
 
 * For history, see end of file
 
-capture program drop siman_setup
 program define siman_setup, rclass
 version 15
 
@@ -180,10 +179,6 @@ else if ("`if'" != "" | "`in'" != "") & "`clear'" != "clear" {
 	exit 498
 }
 * e.g. siman_setup in 1/100, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) clear
-
-* store setup if and in for use in other siman progs
-local ifsetup = `"`if'"'
-local insetup = `"`in'"'
 
 
 * obtain target elements

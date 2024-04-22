@@ -1,4 +1,5 @@
-*! version 1.8.12 25oct2023
+*!  version 1.9 22apr2024
+*  version 1.9 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
 *  version 1.8.12 25oct2023  IW Added true value to note
 *  version 1.8.11 16oct2023  EMZ minor update to warning message (# graphs each of # panels)
 *  version 1.8.10 03oct2023  EMZ update to warning message when if/by conditions used
@@ -24,7 +25,6 @@
 * File to produce the zip plot
 *******************************************************************************************************************************************************
 
-capture program drop siman_zipplot
 program define siman_zipplot, rclass
 version 15
 
@@ -56,8 +56,9 @@ if "`true'"=="" {
 	exit 498
 }
 
-tempfile origdata
-qui save `origdata'
+* mark sample (needs to be before reshape)
+marksample touse, novarlist
+tempvar meantouse
 
 * If data is not in long-long format, then reshape
 if `nformat'!=1 {
@@ -67,35 +68,22 @@ if `nformat'!=1 {
 		}
 }
 
-* if the user has not specified 'if' in the siman zipplot syntax, but there is one from siman setup then use that 'if'
-if ("`if'"=="" & "`ifsetup'"!="") local ifzipplot = `"`ifsetup'"'
-else local ifzipplot = `"`if'"'
-qui tempvar touseif
-qui generate `touseif' = 0
-qui replace `touseif' = 1 `ifzipplot' 
 preserve
-qui sort `dgm' `target' `method' `touseif'
-* The 'if' condition will only apply to dgm, target and method.  The 'if' condition is not allowed to be used on rep and an error message will be issued if the user tries to do so
-capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
-if _rc == 9 {
-	di as error "The 'if' condition can not be applied to 'rep' in siman zipplot. If you have not specified an 'if' in siman zipplot, but you specified one in siman setup, then that 'if' will have been applied to siman zipplot."  
+
+* check if/in conditions
+egen `meantouse' = mean(`touse'), by(`dgm' `target' `method')
+cap assert inlist(`meantouse',0,1)
+if _rc {
+	di as error "The 'if' and 'in' conditions can only be applied to dgm, target and method variables"
 	exit 498
 }
-restore
-qui keep if `touseif'
+drop `meantouse'	
 
-* if the user has not specified 'in' in the siman zipplot syntax, but there is one from siman setup then use that 'in'
-if ("`in'"=="" & "`insetup'"!="") local inzipplot = `"`insetup'"'
-else local inzipplot = `"`in'"'
-qui tempvar tousein
-qui generate `tousein' = 0
-qui replace `tousein' = 1 `inzipplot' 
-qui keep if `tousein'
+qui keep if `touse'
 
-
-preserve
 * keep estimates data only
 qui drop if `rep'<0
+if _N==0 error 2000
 
 * take out underscores at the end of variable names if there are any
 foreach u of var * {
@@ -481,12 +469,6 @@ forvalues k = 1/`ntrue' {
 	if `noname' == 1 local name ""
 }
 }
-
-restore
-
-local dgm = "`dgmorig'"
-
-qui use `origdata', clear 
 
 end
 

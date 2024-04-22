@@ -1,5 +1,6 @@
-*! version 1.9.8 27mar2024
-* version 1.9.8 27mar2024	IW comment out lines creating ndgm, seems unused
+*! version 1.10 22apr2024
+*  version 1.10 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
+*  version 1.9.8 27mar2024	  IW comment out lines creating ndgm, seems unused
 *  version 1.9.7 03oct2023    EMZ update to warning message when if/by conditions used
 *  version 1.9.6 19sep2023    EMZ accounting for lost labels on method numeric labelled string durng multiple reshapes
 *  version 1.9.5 12sep2023    EMZ slight change to error message condition when no method variable
@@ -21,7 +22,6 @@
 ******************************************************************************************************************************************************
 
 
-capture program drop siman_swarm
 program define siman_swarm, rclass
 version 16
 
@@ -50,8 +50,9 @@ if mi("`estimate'") & mi("`se'") {
 	exit 498
 }
 
-tempfile origdata
-qui save `origdata'
+* mark sample (needs to be before reshape)
+marksample touse, novarlist
+tempvar meantouse
 
 * If data is not in long-long format, then reshape to get method labels
 if `nformat'!=1 {
@@ -75,30 +76,18 @@ else foreach thing of local anything {
 	local varlist `varlist' `varelement'
 }
 
-* if the user has not specified 'if' in the siman swarm syntax, but there is one from siman setup then use that 'if'
-if ("`if'"=="" & "`ifsetup'"!="") local ifswarm = `"`ifsetup'"'
-else local ifswarm = `"`if'"'
-tempvar touseif
-qui generate `touseif' = 0
-qui replace `touseif' = 1 `ifswarm' 
 preserve
-sort `dgm' `target' `method' `touseif'
-* The 'if' condition will only apply to dgm, target and method.  The 'if' condition is not allowed to be used on rep and an error message will be issued if the user tries to do so
-capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
-if _rc == 9 {
-	di as error "The 'if' condition can not be applied to 'rep' in siman swarm.  If you have not specified an 'if' in siman swarm, but you specified one in siman setup, then that 'if' will have been applied to siman swarm."  
+
+* check if/in conditions
+egen `meantouse' = mean(`touse'), by(`dgm' `target' `method')
+cap assert inlist(`meantouse',0,1)
+if _rc {
+	di as error "The 'if' and 'in' conditions can only be applied to dgm, target and method variables"
 	exit 498
 }
-restore
-qui keep if `touseif'
+drop `meantouse'	
+qui keep if `touse'
 
-* if the user has not specified 'in' in the siman swarm syntax, but there is one from siman setup then use that 'in'
-if ("`in'"=="" & "`insetup'"!="") local inswarm = `"`insetup'"'
-else local inswarm = `"`in'"'
-tempvar tousein
-qui gen `tousein' = 0
-qui replace `tousein' = 1 `inswarm' 
-qui keep if `tousein'
 
 * Need to know number of dgms for later on
 local numberdgms: word count `dgm'
@@ -115,7 +104,7 @@ local nummethodnew = `r(r)'
 
 
 if `nummethodnew' < 2 {
-	di as error "There are not enough methods to compare, siman swarm requires at least 2 methods."
+	di as error "There are not enough methods to compare: siman swarm requires at least 2 methods."
 	exit 498
 }
 	
@@ -128,7 +117,7 @@ if !_rc local methodstringindi = 1
 * Need labelsof package installed to extract method labels
 qui capture which labelsof
 if _rc {
-	di as smcl  "labelsof package required, please kindly install by clicking: "  `"{stata ssc install labelsof}"'
+	di as smcl  "labelsof package required, please install by clicking: "  `"{stata ssc install labelsof}"'
 	exit
 } 
 
@@ -169,7 +158,6 @@ tokenize `"`levels'"'
 	}
 }
 
-preserve
 * keeps estimates data only
 qui drop if `rep'<0
 
@@ -298,10 +286,6 @@ foreach el in `varlist' {
 
 qui `cmd'
 	
-restore
-
-qui use `origdata', clear
-
 end
 
 

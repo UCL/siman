@@ -37,7 +37,6 @@
 * to only plot est or se (default is both).
 ******************************************************************************************************************************************************
 
-capture program drop siman_comparemethodsscatter
 program define siman_comparemethodsscatter, rclass
 version 16
 

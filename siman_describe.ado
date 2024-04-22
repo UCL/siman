@@ -7,7 +7,6 @@
 *  version 0.1   04June2020    Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
 //  Some edits from Tim Morris to draft version 06oct2019
 
-capture program drop siman_describe
 program define siman_describe, rclass
 version 15
 
