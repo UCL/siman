@@ -102,8 +102,7 @@ if _rc == 9 {
 	exit 498
 	}
 restore
-cap assert `touse'
-if _rc keep if `touse'
+qui keep if `touse'
 
 
 * put all variables in their original order in local allnames
