@@ -7,10 +7,10 @@ updated 3apr2024 - runs in 5 minutes!
 
 // USER-SPECIFIC SETUP
 global codepath C:\git\siman 
-global codepath C:\ian\git\siman 
+if "$user" == "tpm" global codepath /Users/timothymorris/Documents/GitHub/siman
 
 // SETUP FOR ALL USERS
-global testpath $codepath\Ella_testing\
+global testpath $codepath/Ella_testing
 adopath ++ $codepath
 cd $testpath
 

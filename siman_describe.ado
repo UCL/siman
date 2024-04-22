@@ -115,6 +115,13 @@ else if `dgmcreated' == 1 {
 
     di as text _newline _col(`titlewidth') "SUMMARY OF DATA"
     di as text "_____________________________________________________" _newline
+
+    di as text "Data-generating mechanism (DGM)"
+//	if `dgmcount' == 1 di as text "The total number of dgms is: " as result _col(`colwidth') "`totaldgmnum'" 
+//	else di as text "The total number of dgm vars is: " as result _col(`colwidth') "`totaldgmnum'"
+    di as text "  DGM variables (# levels): " as result _col(`colwidth') `"`dgmvarsandlevels'"'
+    di as text "  Total number of DGMs: " as result _col(`colwidth') "`totaldgmnum'" _newline
+
 //  di as text "The siman format is:" as result _col(`colwidth') "`format'" 
     di as text "Targets"
 //  di as text "The format for targets is:" as result _col(`colwidth') cond(inlist(`nformat',1,3),"long","wide")
@@ -144,12 +151,6 @@ else if `dgmcreated' == 1 {
 	else if (`nformat'==1 & `ntarget'!=0 & `nmethod'==0)  {
 		di as text "  Method values:" as result _col(`colwidth') `"`valmethod'"'
 	}
-
-    di as text _newline "Data-generating mechanism (DGM)"
-//	if `dgmcount' == 1 di as text "The total number of dgms is: " as result _col(`colwidth') "`totaldgmnum'" 
-//	else di as text "The total number of dgm vars is: " as result _col(`colwidth') "`totaldgmnum'"
-    di as text "  DGM variables (# levels): " as result _col(`colwidth') `"`dgmvarsandlevels'"'
-    di as text "  Total number of DGMs: " as result _col(`colwidth') "`totaldgmnum'" 
 
     di as text _newline "Repetition-level output"
 //	if "`estimate'"!="" di as result "Estimates are contained in the dataset"

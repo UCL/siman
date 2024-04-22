@@ -1,30 +1,30 @@
 
 . siman which
-C:\ian\git\siman\siman.ado
+/Users/timothymorris/Documents/GitHub/siman/siman.ado
 *!version 0.3  08aug2023
-C:\ian\git\siman\siman_setup.ado
+/Users/timothymorris/Documents/GitHub/siman/siman_setup.ado
 *!    version 0.9  3apr2024    
-C:\ian\git\siman\siman_describe.ado
+/Users/timothymorris/Documents/GitHub/siman/siman_describe.ado
 *! version 0.5.1   13mar2024
-C:\ian\git\siman\siman_analyse.ado
+/Users/timothymorris/Documents/GitHub/siman/siman_analyse.ado
 *! version 0.7     3apr2024
-C:\ian\git\siman\siman_table.ado
+/Users/timothymorris/Documents/GitHub/siman/siman_table.ado
 *! version 0.8.3   3apr2024
-C:\ian\git\siman\siman_reshape.ado
+/Users/timothymorris/Documents/GitHub/siman/siman_reshape.ado
 *!  version 0.3.4   06nov2023
-C:\ian\git\siman\siman_lollyplot.ado
+/Users/timothymorris/Documents/GitHub/siman/siman_lollyplot.ado
 *! version 1.13.2  15dec2023
-C:\ian\git\siman\siman_zipplot.ado
+/Users/timothymorris/Documents/GitHub/siman/siman_zipplot.ado
 *! version 1.8.12 25oct2023
-C:\ian\git\siman\siman_comparemethodsscatter.ado
+/Users/timothymorris/Documents/GitHub/siman/siman_comparemethodsscatter.ado
 *! version 1.9.18 25oct2023
-C:\ian\git\siman\siman_blandaltman.ado
-*! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
-C:\ian\git\siman\siman_swarm.ado
+/Users/timothymorris/Documents/GitHub/siman/siman_blandaltman.ado
+*! version 1.6.12 20feb2024  TPM removed xsize(5) as default and added yline(0, ...) to graphs
+/Users/timothymorris/Documents/GitHub/siman/siman_swarm.ado
 *! version 1.9.8 27mar2024
-C:\ian\git\siman\siman_scatter.ado
+/Users/timothymorris/Documents/GitHub/siman/siman_scatter.ado
 *! version 1.6.7 03oct2023
-C:\ian\git\siman\siman_nestloop.ado
+/Users/timothymorris/Documents/GitHub/siman/siman_nestloop.ado
 *! version 1.8.2   17aug2023
 
 . 
@@ -53,32 +53,33 @@ note: converting to long-wide format, creating variable target
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            inter main
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       parm1 (1) 
+  Total number of DGMs:           1
 
-The number of methods is:         4
-The method values are:            CC FULLDAT IMPALL IMPBYZ
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  inter main
 
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     parm1 (1) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              4
+  Method values:                  CC FULLDAT IMPALL IMPBYZ
 
-Estimates are contained in the dataset
-
-The estimates stub is:            b
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate stub:            b
+  SE stub:                        se
+  df stub:                        N/A
+  Conf. limit stubs:              N/A
+  p-value stub:                   N/A
+  True value variable:            true
 _____________________________________________________
 
 . 
 . * analyse works ok with ref and replace
 . siman analyse, ref(CC)
+(0 observations deleted)
 siman analyse has run successfully
 
 -----------------------------------------------------------------
@@ -175,6 +176,7 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
   second entry is its Monte Carlo error.
 
 . siman analyse, ref(FULLDAT) replace 
+(0 observations deleted)
 siman analyse has run successfully
 
 -----------------------------------------------------------------
@@ -273,6 +275,7 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 . siman reshape, longlong
 
 . siman analyse, ref(IMPALL) replace 
+(0 observations deleted)
 siman analyse has run successfully
 
 -----------------------------------------------------------------
@@ -413,27 +416,27 @@ note: converting to long-wide format, creating variable target
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            inter main
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       parm1 (1) 
+  Total number of DGMs:           1
 
-The number of methods is:         4
-The method values are:            CC FULLDAT IMPALL IMPBYZ
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  inter main
 
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     parm1 (1) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              4
+  Method values:                  CC FULLDAT IMPALL IMPBYZ
 
-Estimates are contained in the dataset
-
-The estimates stub is:            b
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate stub:            b
+  SE stub:                        se
+  df stub:                        N/A
+  Conf. limit stubs:              N/A
+  p-value stub:                   N/A
+  True value variable:            true
 _____________________________________________________
 
 . 
@@ -452,31 +455,32 @@ _____________________________________________________
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman analyse bias ciwidth cover power, level(80) debug
 Options to pass to simsum: level(80)
+(0 observations deleted)
 Running: simsum est , true(true) se(se) df() lci() uci() p() method(method) id(rep) by(true dgm esti
 > mand) max(20) bias ciwidth cover power clear mcse gen(_perfmeas)  level(80)
 
@@ -589,31 +593,32 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             lower upper
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          lower upper
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman analyse ciwidth cover power, debug
 Options to pass to simsum: 
+(0 observations deleted)
 Running: simsum est , true(true) se(se) df() lci(lower) uci(upper) p() method(method) id(rep) by(tru
 > e dgm estimand) max(20) ciwidth cover power clear mcse gen(_perfmeas)
 
@@ -724,31 +729,32 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                pvalue
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               pvalue
+  True value variable:            true
 _____________________________________________________
 
 . siman analyse ciwidth power, level(80) debug
 Options to pass to simsum: level(80)
+(0 observations deleted)
 Running: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(rep) by(true dg
 > m estimand) max(20) ciwidth power clear mcse gen(_perfmeas)  level(80)
 
@@ -836,31 +842,32 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                pvalue
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               pvalue
+  True value variable:            true
 _____________________________________________________
 
 . siman analyse ciwidth power, debug // NB default level
 Options to pass to simsum: 
+(0 observations deleted)
 Running: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(rep) by(true dg
 > m estimand) max(20) ciwidth power clear mcse gen(_perfmeas)
 
@@ -948,30 +955,31 @@ Warning: siman analyse will require est() and se() to be specified in set-up.
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               N/A
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    N/A
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman analyse bias
+(0 observations deleted)
 siman analyse has created variable _se to hold the MCSE
 siman analyse has run successfully
 
