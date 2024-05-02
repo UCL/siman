@@ -38,7 +38,7 @@ foreach thing in `_dta[siman_allthings]' {
 if "`dgm'"=="" {
 	di as error "dgm variable is missing: can not run nested loop plot."
 	exit 498
-	}
+}
 	
 * If only 1 dgm in the dataset, produce error message as nothing will be graphed
 if `ndgmvars'==1 {
@@ -50,7 +50,7 @@ if `ndgmvars'==1 {
 if "`simananalyserun'"=="0" | "`simananalyserun'"=="" {
 	di as error "siman analyse has not been run.  Please use siman analyse first before siman nestloop."
 	exit 498
-	}
+}
 
 * check performance measures
 qui levelsof _perfmeascode, local(allpms) clean 
@@ -427,14 +427,14 @@ foreach thispm of local pmlist { // loop over PMs
 		}
 		if !mi("`debug'") & `ngraphs'>1 di as text "Drawing graph for `target'=`thistarget', PM=`thispm'..."
 		local graph_cmd graph twoway 										///
-			`main_graph_cmd'														///
+			`main_graph_cmd'												///
 			`descriptor_graph_cmd'											///
 			,																///
-			legend(order(`legend') `methlegtitle')											///
+			legend(order(`legend') `methlegtitle')							///
 			ytitle("`thispm'") 												///
 			xla(1/`nscenarios') yla(,nogrid) 								///
 			`descriptor_labels_cmd'											///
-			name(`name'`targetname'_`thispm' `nameopts')						///
+			name(`name'`targetname'_`thispm' `nameopts')				    ///
 			`note' `yline'													///
 			`options'
 		global F9 `graph_cmd'

@@ -4,3 +4,8 @@
 ~$*.pptx
 # Stata temporary backups
 ~$*.stswp
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Trashes

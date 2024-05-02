@@ -7,7 +7,7 @@
 {title:Title}
 
 {phang}
-{bf:siman reshape} {hline 2} Reshapes data in the siman suite
+{bf:siman reshape} {hline 2} is an undocumented utility command that reshapes ‘siman set’ data as required for graphs.
 
 {marker syntax}{...}
 {title:Syntax}

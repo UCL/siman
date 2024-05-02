@@ -1,5 +1,7 @@
 *!  version 1.7 22apr2024
 *  version 1.7 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
+*  version 1.6.12 20feb2024  TPM removed xsize(5) as default and added yline(0, ...) to graphs
+*  version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
 *  version 1.6.11 16oct2023  EMZ update to warning message when if condition used
 *  version 1.6.10 03oct2023  EMZ update to warning message when if condition used
 *  version 1.6.9 02oct2023   EMZ bug fix when dgm defined >1 variable, by() option now working again
@@ -400,7 +402,7 @@ di as smcl as text "{p 0 2}Warning: `graphnumcheck' graphs will be created: cons
 }
 
 
-* If target is not missing / 'by' is not by a dgm variable (i.e. not splititng out by target)
+* If target is not missing / 'by' is not by a dgm variable (i.e. not splitting out by target)
 if "`valtarget'" != "N/A" & "`by'"!="`dgmbyvar'" {
 		
 	* check number of targets in case 'if' syntax has been applied
@@ -470,8 +472,8 @@ if "`valtarget'" != "N/A" & "`by'"!="`dgmbyvar'" {
 			#delimit ;
 				twoway (scatter diff mean if strthing == "`el'" & `byvarlist', `options')
 				,
-				xsize(5)
-				by(method, note("Graphs for `eltitle', `bytitle'") iscale(1.1) title("") norescale `bygraphoptions') ///
+				by(method, note("Graphs for `eltitle', `bytitle'") iscale(1.1) title("") norescale `bygraphoptions')
+				yline(0, lp(l) lc(gs8))
 				name( `name'_`byname'`el', replace)
 				;
 			#delimit cr
@@ -498,8 +500,8 @@ else {
 					#delimit ;
 					twoway (scatter diff mean if strthing == "`el'" & `byvarlist', `options')
 					,
-					xsize(5)
-					by(method, note("Graphs for `eltitle', `bytitle'") iscale(1.1) title("") norescale `bygraphoptions') ///
+					by(method, note("Graphs for `eltitle', `bytitle'") iscale(1.1) title("") norescale `bygraphoptions')
+					yline(0, lp(l) lc(gs8))
 					name( `name'_`byname'`el', replace)
 					;
 					#delimit cr
@@ -508,8 +510,8 @@ else {
 					#delimit ;
 					twoway (scatter diff mean if strthing == "`el'", `options')
 					,
-					xsize(5)
-					by(method, note("Graphs for `eltitle'") iscale(1.1) title("") norescale `bygraphoptions') ///
+					by(method, note("Graphs for `eltitle'") iscale(1.1) title("") norescale `bygraphoptions')
+					yline(0, lp(l) lc(gs8))
 					name( `name'_`el', replace)
 					;
 					#delimit cr

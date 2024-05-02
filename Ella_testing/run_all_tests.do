@@ -9,11 +9,14 @@ updated 3apr2024 - runs in 5 minutes!
 global codepath C:\git\siman 
 if "$user"=="Ian" {
 	global codepath C:\ian\git\siman 
-	myadopath simsum
+	adopath ++ c:\ian\git\simsum\package
+}
+if "$user" == "tpm" {
+	global codepath /Users/timothymorris/Documents/GitHub/siman
 }
 
 // SETUP FOR ALL USERS
-global testpath $codepath\Ella_testing\
+global testpath $codepath/Ella_testing
 adopath ++ $codepath
 cd $testpath
 
