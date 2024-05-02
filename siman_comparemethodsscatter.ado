@@ -1,4 +1,5 @@
-*! version 1.9.18 25oct2023
+*! version 1.9.19 2may2024
+*  version 1.9.19 2may2024    IW allowed xsize() to be user-specified (ysize already is)
 *  version 1.9.18 25oct2023   IW removed space before comma in note
 *  version 1.9.17 16oct2023   EMZ produce error message if >=, <= or methlist(x/y) is used.
 *  version 1.9.16 03oct2023   EMZ updates: don't allow 'by' option as will just print blank graphs in the grid (previously only allowed for by(target)). User
@@ -40,7 +41,7 @@
 program define siman_comparemethodsscatter, rclass
 version 16
 
-syntax [anything] [if][in] [,* Methlist(string) SUBGRaphoptions(string) debug]
+syntax [anything] [if][in] [,* Methlist(string) SUBGRaphoptions(string) XSIZe(string) debug]
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -81,6 +82,10 @@ if !mi("`methlist'") {
 	exit 498
 	}
 }
+
+if mi("`xsize'") local xsize 4
+
+*** END OF PARSING ***
 
 tempfile origdata
 qui save `origdata'
@@ -574,7 +579,7 @@ if `numberdgms'==1 {
 				`dicmd' graph combine `mlabelname1' `graphtheta12`m'`t'' ///
 					`graphse12`m'`t'' `mlabelname2' ///
 					, title("") note("Graphs for `dgm': ``dgm'dlabel`m''`targetlab'") cols(2)	///
-					xsize(4)	///
+					xsize(`xsize')	///
 					name(`name'_dgm`m'`tlab', replace) `options'
 			}
 			else if `numbermethod'==3 {
@@ -582,7 +587,7 @@ if `numberdgms'==1 {
 					`graphse12`m'`t'' `mlabelname2' `graphtheta23`m'`t''	///
 					`graphse13`m'`t'' `graphse23`m'`t'' `mlabelname3'	///
 					, title("") note("Graphs for `dgm': ``dgm'dlabel`m''`targetlab'") cols(3)	///
-					xsize(4)	///
+					xsize(`xsize')	///
 					name(`name'_dgm`m'`tlab', replace) `options'
 			}
 			else if `numbermethod'>3 {
@@ -758,14 +763,14 @@ else if `numberdgms' != 1 {
 				if `numbermethod'==2 {
 
 					`dicmd' graph combine `mlabelname1' `graphtheta12`d'`t'' `graphse12`d'`t'' `mlabelname2', ///
-						title("") note("Graphs for `dgmvalues': `dgmlevels`d''`targetlab'") cols(2)	xsize(4) ///
+						title("") note("Graphs for `dgmvalues': `dgmlevels`d''`targetlab'") cols(2)	xsize(`xsize') ///
 						name(`name'_`d'`tlab', replace) `options'
 				}
 				else if `numbermethod'==3 {
 					`dicmd' graph combine `mlabelname1' `graphtheta12`d'`t'' `graphtheta13`d'`t'' ///
 						`graphse12`d'`t'' `mlabelname2' `graphtheta23`d'`t'' ///
 						`graphse13`d'`t'' `graphse23`d'`t'' `mlabelname3', ///
-						title("") note("Graphs for `dgmvalues': `dgmlevels`d''`targetlab'") cols(3)	xsize(4) ///
+						title("") note("Graphs for `dgmvalues': `dgmlevels`d''`targetlab'") cols(3)	xsize(`xsize') ///
 						name(`name'_`d'`tlab', replace) `options'
 				}
 				else if `numbermethod'>3 {
