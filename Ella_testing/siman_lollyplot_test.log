@@ -45,27 +45,27 @@ C:\ian\git\siman\siman_nestloop.ado
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       mydgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    myestimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     mydgm (2) 
+Methods
+  Variable containing methods:    mymethod
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        myest
-The se variable is:               myse
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             mytrue
+Repetition-level output
+  Point estimate variable:        myest
+  SE variable:                    myse
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            mytrue
 _____________________________________________________
 
 . siman analyse, notable
@@ -91,27 +91,27 @@ Drawing graph...
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         N/A
-The target values are:            N/A
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    
+  Number of targets:              N/A
+  Target values:                  N/A
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman analyse, notable
@@ -243,27 +243,27 @@ Warning: variable mech, which appears in dgm(), was stored as a string. It has b
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         3
-The target values are:            effect mean0 mean1
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       beta (3) pmiss (2) mech (2) 
+  Total number of DGMs:           12
 
-The number of methods is:         3
-The method values are:            CCA MeanImp Noadj
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              3
+  Target values:                  effect mean0 mean1
 
-Data generating mechanism (dgm)
-The total number of dgms is:      12
-The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  CCA MeanImp Noadj
 
-Estimates are contained in the dataset
-
-The estimates variable is:        b
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . 

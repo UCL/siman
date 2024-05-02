@@ -1,30 +1,30 @@
 
 . siman which
-/Users/timothymorris/Documents/GitHub/siman/siman.ado
+C:\ian\git\siman\siman.ado
 *!version 0.3  08aug2023
-/Users/timothymorris/Documents/GitHub/siman/siman_setup.ado
-*!    version 0.9  3apr2024    
-/Users/timothymorris/Documents/GitHub/siman/siman_describe.ado
+C:\ian\git\siman\siman_setup.ado
+*!    version 0.9.1 12apr2024    remove chars ifsetup, insetup
+C:\ian\git\siman\siman_describe.ado
 *! version 0.5.1   13mar2024
-/Users/timothymorris/Documents/GitHub/siman/siman_analyse.ado
+C:\ian\git\siman\siman_analyse.ado
 *! version 0.7     3apr2024
-/Users/timothymorris/Documents/GitHub/siman/siman_table.ado
+C:\ian\git\siman\siman_table.ado
 *! version 0.8.3   3apr2024
-/Users/timothymorris/Documents/GitHub/siman/siman_reshape.ado
+C:\ian\git\siman\siman_reshape.ado
 *!  version 0.3.4   06nov2023
-/Users/timothymorris/Documents/GitHub/siman/siman_lollyplot.ado
+C:\ian\git\siman\siman_lollyplot.ado
 *! version 1.13.2  15dec2023
-/Users/timothymorris/Documents/GitHub/siman/siman_zipplot.ado
-*! version 1.8.12 25oct2023
-/Users/timothymorris/Documents/GitHub/siman/siman_comparemethodsscatter.ado
+C:\ian\git\siman\siman_zipplot.ado
+*!  version 1.9 22apr2024
+C:\ian\git\siman\siman_comparemethodsscatter.ado
 *! version 1.9.18 25oct2023
-/Users/timothymorris/Documents/GitHub/siman/siman_blandaltman.ado
-*! version 1.6.12 20feb2024  TPM removed xsize(5) as default and added yline(0, ...) to graphs
-/Users/timothymorris/Documents/GitHub/siman/siman_swarm.ado
-*! version 1.9.8 27mar2024
-/Users/timothymorris/Documents/GitHub/siman/siman_scatter.ado
-*! version 1.6.7 03oct2023
-/Users/timothymorris/Documents/GitHub/siman/siman_nestloop.ado
+C:\ian\git\siman\siman_blandaltman.ado
+*!  version 1.7 22apr2024
+C:\ian\git\siman\siman_swarm.ado
+*! version 1.10 22apr2024
+C:\ian\git\siman\siman_scatter.ado
+*! version 1.7 22apr2024
+C:\ian\git\siman\siman_nestloop.ado
 *! version 1.8.2   17aug2023
 
 . 
@@ -79,7 +79,6 @@ _____________________________________________________
 . 
 . * analyse works ok with ref and replace
 . siman analyse, ref(CC)
-(0 observations deleted)
 siman analyse has run successfully
 
 -----------------------------------------------------------------
@@ -176,7 +175,6 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
   second entry is its Monte Carlo error.
 
 . siman analyse, ref(FULLDAT) replace 
-(0 observations deleted)
 siman analyse has run successfully
 
 -----------------------------------------------------------------
@@ -275,7 +273,6 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 . siman reshape, longlong
 
 . siman analyse, ref(IMPALL) replace 
-(0 observations deleted)
 siman analyse has run successfully
 
 -----------------------------------------------------------------
@@ -480,7 +477,6 @@ _____________________________________________________
 
 . siman analyse bias ciwidth cover power, level(80) debug
 Options to pass to simsum: level(80)
-(0 observations deleted)
 Running: simsum est , true(true) se(se) df() lci() uci() p() method(method) id(rep) by(true dgm esti
 > mand) max(20) bias ciwidth cover power clear mcse gen(_perfmeas)  level(80)
 
@@ -618,7 +614,6 @@ _____________________________________________________
 
 . siman analyse ciwidth cover power, debug
 Options to pass to simsum: 
-(0 observations deleted)
 Running: simsum est , true(true) se(se) df() lci(lower) uci(upper) p() method(method) id(rep) by(tru
 > e dgm estimand) max(20) ciwidth cover power clear mcse gen(_perfmeas)
 
@@ -754,7 +749,6 @@ _____________________________________________________
 
 . siman analyse ciwidth power, level(80) debug
 Options to pass to simsum: level(80)
-(0 observations deleted)
 Running: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(rep) by(true dg
 > m estimand) max(20) ciwidth power clear mcse gen(_perfmeas)  level(80)
 
@@ -867,7 +861,6 @@ _____________________________________________________
 
 . siman analyse ciwidth power, debug // NB default level
 Options to pass to simsum: 
-(0 observations deleted)
 Running: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(rep) by(true dg
 > m estimand) max(20) ciwidth power clear mcse gen(_perfmeas)
 
@@ -979,7 +972,6 @@ Repetition-level output
 _____________________________________________________
 
 . siman analyse bias
-(0 observations deleted)
 siman analyse has created variable _se to hold the MCSE
 siman analyse has run successfully
 

@@ -69,27 +69,27 @@ C:\ian\git\siman\siman_nestloop.ado
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman comparemethodsscatter if estimand=="beta" & dgm==2
@@ -380,27 +380,27 @@ note: converting to long-wide format, creating variable target
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            1 2
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            A B
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  1 2
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    A B
+  Number of methods:              2
+  Method values:                  A B
 
-Estimates are contained in the dataset
-
-The estimates stub is:            est
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             _true
+Repetition-level output
+  Point estimate stub:            est
+  SE stub:                        se
+  df stub:                        N/A
+  Conf. limit stubs:              N/A
+  p-value stub:                   N/A
+  True value variable:            _true
 _____________________________________________________
 
 . * has made target string
@@ -662,27 +662,27 @@ Warning: variable dgm, which appears in dgm(), was stored as a string. It has be
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            A B
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  A B
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             N/A
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            N/A
 _____________________________________________________
 
 . * graphs
@@ -882,27 +882,27 @@ Warning: no method specified. siman will proceed assuming there is only one meth
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            1 2
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       N/A
+  Total number of DGMs:           1
 
-The number of methods is:         1
-The method values are:            1
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  1 2
 
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     N/A
+Methods
+  Variable containing methods:    _methodvar
+  Number of methods:              1
+  Method values:                  1
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . 
@@ -955,27 +955,27 @@ Drawing 2 graphs (1 per true value)
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         N/A
-The target values are:            N/A
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    
+  Number of targets:              N/A
+  Target values:                  N/A
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 .  
@@ -1174,27 +1174,27 @@ xij variables:
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         10
-The method values are:            1 2 3 4 5 6 7 8 9 10
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              10
+  Method values:                  1 2 3 4 5 6 7 8 9 10
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             N/A
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            N/A
 _____________________________________________________
 
 . siman comparemethodsscatter if target=="beta" & dgm==1, methlist(3 7) name("cms_test6", replace) 
@@ -1300,27 +1300,27 @@ Warning: variable pc, which appears in dgm(), was stored as a string. It has bee
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         N/A
-The target values are:            N/A
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       theta (4) rho (4) pc (4) k (3) 
+  Total number of DGMs:           192
 
-The number of methods is:         2
-The method values are:            peto g2
+Targets
+  Variable containing targets:    
+  Number of targets:              N/A
+  Target values:                  N/A
 
-Data generating mechanism (dgm)
-The total number of dgms is:      192
-The dgm variables (# levels):     theta (4) rho (4) pc (4) k (3) 
+Methods
+  Variable containing methods:    peto g2
+  Number of methods:              2
+  Method values:                  peto g2
 
-Estimates are contained in the dataset
-
-The estimates stub is:            exp
-The se stub is:                   var2
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             theta
+Repetition-level output
+  Point estimate stub:            exp
+  SE stub:                        var2
+  df stub:                        N/A
+  Conf. limit stubs:              N/A
+  p-value stub:                   N/A
+  True value variable:            theta
 _____________________________________________________
 
 . 
