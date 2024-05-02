@@ -386,8 +386,6 @@ True values
 
 Data formats
  {p2col: format }current data format, in words. {p_end}
- {p2col: ifsetup }if condition from siman setup.{p_end}
- {p2col: insetup }in condition from siman setup.{p_end}
  {p2col: nformat }current data format, coded 1 (long-long) or 3 (wide-long).{p_end}
  {p2col: setuprun }is set to 1 when siman setup is run. Values: always 1 {p_end}
 
