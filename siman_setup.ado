@@ -1,41 +1,8 @@
-*!    version 0.9.1 12apr2024    remove chars ifsetup, insetup
-*    version 0.9  3apr2024       IW _methodvar not created till end, so not left on crash
-*    version 0.8.8  14feb2024    IW reformat long messages
-*    version 0.8.7  27nov2023    EMZ add check and error if true is not constant across methods
-*    version 0.8.6  20nov2023    EMZ minor bug fix for when dgm is missing, count of variables specified in setup vs dataset mis-macth as dgm is a tempvar.
-*    version 0.8.5  13nov2023    EMZ create a true variable if true is put in to the syntax as numeric e.g. true(0.5), for use by other siman programs
-*    version 0.8.4  06nov2023    EMZ change so that if targets are wide and data is auto-reshaped by siman, then true becomes a long variable (does not 
-*                                remain wide)
-*    version 0.8.3  30oct2023    EMZ: fix for format 4, bug introduced from error checks - now fixed.  Warning if est or se is missing for siman analyse 
-*                                later.  Note added that target variable being created when convert from wide-wide.
-*    version 0.8.2  25sep2023    EMZ: produce warning if dgm variable(s) and/or method variables contain missing values.
-*    version 0.8.1  18sep2023    EMZ: bug fix for when wide-long format and auto-reshpaed, allow for method being a numeric labelled string variable.  *                                Moved true error message to later in the code to account for wide true as well.
-*    version 0.8.0  04july2023   EMZ: true has to be numeric only
-*    version 0.7.9  26june2023   EMZ added methodcreated characteristic
-*    version 0.7.8  06june2023	 EMZ bug fix: numeric target with string labels not displayed in siman describe table (displayed numbers not values)
-*    version 0.7.7  29may2023	 EMZ added option if missing method
-*    version 0.7.6  22may2023	 IW bug fix: label of encoded string dgmvar was lost
-*    version 0.7.5  21march2023  EMZ bug fix: dataset variables not in siman setup
-*    version 0.7.4  06march2023  EMZ added conditions to check dataset for additional variables not included in siman setup syntax
-*    version 0.7.3  02march2023  EMZ bug fixes
-*    version 0.7.2  30jan2023    IW handle abbreviated varnames; better error message for method(wrongvarame) or target(wrongvarname)
-*    version 0.7.1  30jan2023    EMZ added in additional error msgs
-*    version 0.7    23dec2022    IW require rep() to be numeric
-*    version 0.6.1  20dec2023    TPM changed code so that string dgm are allowed, and are encoded to numeric.
-*    version 0.6    12dec2022    Changes from TPM testing
-*    version 0.5    11july2022   EMZ changes to error catching.
-*    version 0.4    05may2022    EMZ changes to wide-long format import, string target variables are not now auto encoded to numeric. Changed defn of ndgm.
-*    version 0.3    06jan2022    EMZ changes from IW testing
-*    version 0.2    23June2020   IW changes
-*    version 0.1    04June2020   Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
-
-* For history, see end of file
-
 program define siman_setup, rclass
 version 15
 
 syntax [if] [in], Rep(varname numeric) [ DGM(varlist) TARget(string) METHod(string)/* define the structure variables
-	*/ ESTimate(string) SE(string) DF(string) LCI(string) UCI(string) P(string) TRUE(string) ORDer(string) CLEAR] 
+	*/ ESTimate(string) SE(string) DF(string) LCI(string) UCI(string) P(string) TRUE(string) ORDer(string) CLEAR debug] 
 
 /*
 if method() contains one entry and target() contains one entry, then the program will assume that those entries are variable names and will select data format 1 (long-long).  
@@ -43,6 +10,13 @@ If method() and target() both contain more than one entry, then the siman progra
 If method() contains more than one entry and target() contains one entry only then data format 3 will be assumed (long-wide).
 Please note that if method() contains one entry and target() contains more than one entry (wide-long) format then this will be auto-reshaped to long-wide (format 3).
 */
+
+/*** START OF PARSING ***/
+if !mi("`debug'") local dicmd `dicmd'
+if !mi("`debug'") local di di
+else local di *
+
+preserve
 
 * load setuprun indicator if present
 cap local setuprun : char _dta[siman_setuprun]
@@ -115,18 +89,32 @@ if mi("`estimate'") &  mi("`se'") {
 	 di as text "{p 0 2}Warning: no estimates or SEs, siman's output will be limited.{p_end}"
 }
 
-if mi("`estimate'") | mi("`se'") {
-	di as text "{p 0 2}Warning: siman analyse will require est() and se() to be specified in set-up.{p_end}"
+* obtain `if' and `in' conditions
+tempvar touse
+generate `touse' = 0
+qui replace `touse' = 1 `if' `in'
+if ("`if'" != "" | "`in'" != "") & "`clear'"== "clear" {
+	keep if `touse' 
 }
+else if ("`if'" != "" | "`in'" != "") & "`clear'" != "clear" {
+	di as error "{p 0 2}You have specified an if/in condition, meaning that data will be deleted by siman setup. Please use the 'clear' option to confirm.{p_end}"
+	exit 498
+}
+* e.g. siman_setup in 1/100, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) clear
 
-* produce a warning message if no method contained in dataset, and create a constant
-local methodcreated = 0
-if mi("`method'") {
-	 di as text "{p 0 2}Warning: no method specified. siman will proceed assuming there is only one method. If this is a mistake, enter method() option in -siman setup-.{p_end}"
-	 tempvar method
-	 qui gen `method' = 1
-	 local methodcreated = 1
-}
+
+/*** START TO UNDERSTAND TARGET, DGM, METHOD ***/
+
+/*** UNDERSTAND STUBS ***/
+
+local stubvars `estimate' `se' `df' `lci' `uci' `p' 
+local simanvars `rep' `order' `true' 
+local ci `lci' `uci'
+
+
+/*** UNDERSTAND DGM ***/
+
+local ndgmvars: word count `dgm'
 
 * check that dgm takes numerical values; if not, encode and replace so that siman can do its things.
 if !mi("`dgm'") {
@@ -151,217 +139,115 @@ if !mi("`dgm'") {
     foreach var of varlist `dgm' {
 		cap assert `var' == round(`var', 0.1)
 		if _rc {
-				 di as error "{p 0 2}Non-integer values of dgm are not permitted by siman: variable `var'.{p_end}"
+			di as error "{p 0 2}Non-integer values of dgm are not permitted by siman: variable `var'.{p_end}"
 			exit 498
 		}
 	}
 }
 
-* if there is no dgm variable listed in the dataset (i.e. there is only 1 dgm so it is not included in the data), then create a temporary variable for dgm * with values of 1.
-local dgmcreated 0
-cap confirm variable `dgm'
-if _rc {
-	tempvar dgm
-	generate `dgm' = 1
-	local dgm `dgm'
-    local dgmcreated 1
+local longvars `longvars' `dgm'
+
+
+/*** UNDERSTAND TARGET ***/
+
+local ntarget: word count `target'
+cap confirm var `target'
+local targetisvar = _rc==0
+if `ntarget'>1 | `targetisvar'==0 {
+	local targetformat wide
+	local targetvalues `target'
+}
+else if `ntarget'==1 & `targetisvar'==1 {
+	local targetformat long
+	levelsof `target', local(targetvalues)
+	local longvars `longvars' `target'
+}
+else {
+	local targetformat none
+	local targetvalues
 }
 
-* obtain `if' and `in' conditions
-tempvar touse
-generate `touse' = 0
-qui replace `touse' = 1 `if' `in'
-if ("`if'" != "" | "`in'" != "") & "`clear'"== "clear" {
-	keep if `touse' 
+
+/*** UNDERSTAND METHOD ***/
+
+local nmethod: word count `method'
+cap confirm var `method'
+local methodisvar = _rc==0
+local methodcreated 0
+if `nmethod'>1 | `methodisvar'==0 {
+	local methodformat wide
+	local methodvalues `method'
 }
-else if ("`if'" != "" | "`in'" != "") & "`clear'" != "clear" {
-	di as error "{p 0 2}You have specified an if/in condition, meaning that data will be deleted by siman setup. Please use the 'clear' option to confirm.{p_end}"
-	exit 498
+else if `nmethod'==1 & `methodisvar'==1 {
+	local methodformat long
+	levelsof `method', local(methodvalues)
+	local longvars `longvars ' `method'
 }
-* e.g. siman_setup in 1/100, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) clear
-
-
-* obtain target elements
-cap confirm existence `target'
-	if !_rc {
-		local ntarget: word count `target'
-		if `ntarget'>1 {
-		    tokenize `target'
-			forvalues j=1/`ntarget' {
-				local t`j' "``j''"
-				local tlist `tlist' `t`j''
-			}
-		}
-	}
-else local ntarget = 0
-
-
-* obtain method elements
-cap confirm existence `method'
-	if !_rc {
-		local nmethod: word count `method'
-		if `nmethod'>1 {
-			tokenize `method'
-			forvalues i = 1/`nmethod' {
-				local m`i' "``i''"
-				local mlist `mlist' `m`i''
-			}
-		}
-	}
-else local nmethod 0
+else {
+	di as text "{p 0 2}Warning: no method specified. siman will proceed assuming there is only one method. If this is a mistake, enter method() option in -siman setup-.{p_end}"
+	tempvar method
+	qui gen `method' = 1
+	local methodcreated 1
+	local methodformat none
+	local methodvalues
+}
 
 * check if method contains missing values
-if `nmethod' == 1 {
-	qui count if missing(`method')
-	cap assert r(N)==0
+if "`methodformat'" == "long" {
+	cap assert !missing(`method')
 	if _rc di as text "{p 0 2}Warning: variable `method' should not contain missing values.{p_end}"
 }
 
-
-* if the user has accidentally put the value of target or method instead of the variable name in long format, issue an error message
-if `ntarget'==1 {
-    cap confirm variable `target'
-    if _rc {
-		cap confirm new variable `target'
-        if _rc==0 di as error "{p 0 2}target(`target'): variable `target' not found.{p_end}"
-        else di as error "{p 0 2}Please either put the target variable name in siman_setup target() for long format, or the target values for wide format.{p_end}"
-        exit 498
-    }
-	unab target : `target'
-}
-
-if `nmethod'==1 {
-    cap confirm variable `method'
-    if _rc {
-		cap confirm new variable `method'
-		if _rc==0 di as error "{p 0 2}method(`method'): variable `method' not found.{p_end}"
-        else di as error "{p 0 2}Please either put the method variable name in siman_setup method() for long format, or the method values for wide format.{p_end}"
-        exit 498
-    }
-	unab method : `method'
-}
-		
-* need either a method or target otherwise siman setup will not be able to determine the data format (longlong/widewide/longwide are based on target/method combinations).
-if "`target'"=="" & "`method'"=="" {
-	di as error "{p 0 2}Need either target or method variable/values specified otherwise siman setup can not determine the data format.{p_end}"
-	exit 498
-}
-
-
-* check that there are no issues with data e.g. if have estcc estmi cc mi all in dataset, need to make sure that the user has entered siman setup syntax correctly
-forvalues i=1/`nmethod' {
-	cap confirm variable `m`i''
-	if !_rc {
-		if "`estimate'"!="" {
-			cap confirm variable `estimate'`m`i''
-			if !_rc {
-                di as error "{p 0 2}Both variables `m`i'' and `estimate'`m`i'' are contained in the dataset. Please take care when specifying the method and estimate variables in the siman setup syntax.{p_end}"
-				exit 498
-                /// TPM Is this really an `I'll proceed but think there might be a problem' warning, or should it error out?
-				/// EMZ: needs to error out to use unab later
+/*** CHECK WIDE VARIABLES EXIST ***/
+if "`methodformat'"=="wide" & "`targetformat'"=="wide" {
+	foreach stubvar of local stubvars {
+		foreach thismethod of local methodvalues {
+			foreach thistarget of local targetvalues {
+				if "`order'"=="target" local confirmvar `stubvar'`thistarget'`thismethod'
+				else local confirmvar `stubvar'`thismethod'`thistarget'
+				cap confirm variable `confirmvar'
+				if _rc di as error "{p 0 2}Variable `confirmvar' was expected but not found{p_end}"
 			}
 		}
 	}
 }
-
-* check that there are not multiple records per rep where possible
-preserve
-if "`target'"!="" & `ntarget'==1 & "`method'"=="" & "`dgm'"=="" {
-    sort `rep' `target'
-    capture by `rep' `target': assert `rep'!=`rep'[_n-1] if _n>1
-	if _rc {
-        di as error "{p 0 2}Multiple records per rep.  Please specify method/dgm values.{p_end}"
-        exit 498
+if "`methodformat'"=="long" & "`targetformat'"=="wide" {
+	foreach stubvar of local stubvars {
+		foreach thistarget of local targetvalues {
+			local confirmvar `stubvar'`thistarget'
+			cap confirm variable `confirmvar'
+			if _rc di as error "{p 0 2}Variable `confirmvar' was expected but not found{p_end}"
+		}
 	}
 }
-else if "`target'"!="" & `ntarget'==1 & "`method'"=="" & "`dgm'"!="" {
-    sort `rep' `dgm' `target'
-    capture by `rep' `dgm' `target': assert `rep'!=`rep'[_n-1] if _n>1
-	if _rc {
-        di as error "{p 0 2}Multiple records per rep.  Please specify method values.{p_end}"
-        exit 498
+if "`methodformat'"=="wide" & "`targetformat'"=="long" {
+	foreach stubvar of local stubvars {
+		foreach thismethod of local methodvalues {
+			local confirmvar `stubvar'`thismethod'
+			cap confirm variable `confirmvar'
+			if _rc di as error "{p 0 2}Variable `confirmvar' was expected but not found{p_end}"
+		}
 	}
-}
-else if "`target'"!="" & `ntarget'>1 & "`method'"=="" & "`dgm'"=="" {
-    sort `rep' 
-    capture by `rep': assert `rep'!=`rep'[_n-1] if _n>1
-	if _rc {
-        di as error "{p 0 2}Multiple records per rep.  Please specify method/dgm values.{p_end}"
-        exit 498
-	}
-}
-else if "`target'"!="" & `ntarget'>1 & "`method'"=="" & "`dgm'"!="" {
-    sort `rep' `dgm' 
-    capture by `rep' `dgm': assert `rep'!=`rep'[_n-1] if _n>1
-	if _rc {
-        di as error "{p 0 2}Multiple records per rep.  Please specify method values.{p_end}"
-        exit 498
-	}
-}
-else if "`method'"!="" & `nmethod'==1 & "`target'"=="" & "`dgm'"=="" {
-    sort `rep' `method'
-    capture by `rep' `method': assert `rep'!=`rep'[_n-1] if _n>1
-	if _rc {
-        di as error "{p 0 2}Multiple records per rep.  Please specify target/dgm values.{p_end}"
-        exit 498
-	}
-}
-else if "`method'"!="" & `nmethod'==1 & "`target'"=="" & "`dgm'"!="" {
-    sort `rep' `dgm' `method'
-    capture by `rep' `dgm' `method': assert `rep'!=`rep'[_n-1] if _n>1
-	if _rc {
-        di as error "{p 0 2}Multiple records per rep.  Please specify target values.{p_end}"
-        exit 498
-	}
-}
-else if "`method'"!="" & `nmethod'>1 & "`target'"=="" & "`dgm'"=="" {
-    sort `rep' 
-    capture by `rep': assert `rep'!=`rep'[_n-1] if _n>1
-	if _rc {
-        di as error "{p 0 2}Multiple records per rep.  Please specify target/dgm values.{p_end}"
-        exit 498
-	}
-}
-else if "`method'"!="" & `nmethod'>1 & "`target'"=="" & "`dgm'"!="" {
-    *tempvar scenario
-    *egen `scenario' = group(`rep' `dgm')
-    *egen scenario = group(`rep' `dgm')
-    sort `rep' `dgm'
-    capture by `rep' `dgm': assert `rep'!=`rep'[_n-1] if _n>1
-	if _rc {
-        di as error "{p 0 2}Multiple records per rep.  Please specify target values.{p_end}"
-        exit 498
-	}
-}
-restore
-
-* If there is more than one dgm listed, the user needs to have put the main dgm variable (containing numerical values) at the start of the varlist for it to work
-* obtain number of dgms
-
-cap confirm variable `dgm'
-if !_rc {
-    local ndescdgm: word count `dgm'
-    if `ndescdgm'!=1 {
-        local ndgmvars = `ndescdgm'
-        tokenize `dgm'
-        cap confirm numeric variable `1'
-*	    if !_rc {
-*		    qui tab `1'
-*		    local ndgmvars = r(r)
-*		    di "`ndgmvars'"
-*	    }
-*	    else {
-        if _rc {
-            di as error "{p 0 2}If there is more than 1 dgm, the main numerical dgm needs to be placed first in the siman setup dgm varlist.  Please re-run siman_setup accordingly.{p_end}"
-            exit 498
-        }
-    }
-    else if `ndescdgm'==1 {
-        qui tab `dgm'
-        local ndgmvars = r(r)
-    }
 }
 
+
+/*** MOVE ON ***/
+
+* If in wide-wide format and order is missing, exit with an error:
+if "`targetformat'"=="wide" & "`methodformat'"=="wide" & "`order'"=="" {
+	di as error "{p 0 2}Input data is in wide-wide format but order() has not been specified.  Please specify order(method) or order(target).{p_end}"
+	exit 498
+}
+
+* check that there are not multiple records per rep
+cap isid `rep' `dgm' `longvars'
+if _rc {
+	di as error "{p 0 2}Multiple records per `rep' `dgm' `longvars'.  Do you need to specify dgm/target/method?{p_end}"
+	exit 498
+}
+
+
+/*** UNDERSTAND TRUE - TO REVISIT ***/
 
 * obtain true elements: determine if there is only one true value or if it varies accross targets etc.  Could be in either long or wide format.
 cap confirm variable `true'
@@ -371,7 +257,7 @@ if !_rc {
 	local ntrue = r(r)
 }
 
-* if true is a stub assume it has different values accross the target/method combinations
+* if true is a stub assume it has different values across the target/method combinations
 local ntruestub 0
 
 if `nmethod'!=1 & `ntarget'!=1 {
@@ -451,202 +337,107 @@ if !mi("`true'") & "`ntrue'" != "2" {
 		}
 }
 
-
-
 if `ntrue'<=1 local ntruevalue = "single"
 else if `ntrue'>1 & `ntrue'!=. local ntruevalue = "multiple"
 
-* If there is one entry in the method() syntax and one entry in the target() syntax then they are variable names and the data is format 1, long-long.
-* If target is missing but method() has one entry, or vice-versa, or both target and method are missing then the data is in long-long format also.
-if (`nmethod'==1 & `ntarget'==1 ) | (`nmethod'==1 & `ntarget'==0 ) | (`nmethod'==0 & `ntarget'==1 ) | (`nmethod'==0 & `ntarget'==0 ) {
-	local nformat= 1 
-	local format = "format 1: long-long"
-	local targetformat = "long"
-	local methodformat = "long"
-}
-else if `nmethod'>1 & `ntarget'>1 & `nmethod'!=0 & `ntarget'!=0 {
-	local nformat= 2
-	local format = "format 2: wide-wide"
-	local targetformat = "wide"
-	local methodformat = "wide"
-}
-* please note that 'wide-long' formats are given nformat=3 as they are auto-reshaped to long-wide format later before siman setup exits
-
-else if (`nmethod'>1 & `ntarget'==1 & `nmethod'!=0) | (`ntarget'>1 & `nmethod'==1 & `ntarget'!=0) | (`nmethod'>1 & `ntarget'==0) | (`ntarget'>1 & `nmethod'==0) {
-
-	local nformat= 3
-	local format = "format 3: long-wide"
-	local targetformat = "long"
-	local methodformat = "wide"
-}
-* Note can only do the below for format 1 as if method was missing from format 3 then data would just in effect be long-long format.  If method
-* and target were missing from format 2 than the data would just in effect be long-long format.
-else if `nmethod'==0 & `ntarget'<=1 | `ntarget'==0  & `nmethod'<=1 {
-    * get number of rows of the data 
-	local maxnumdata _N 
-	
-	* get maximum of rep
-	qui summarize `rep'
-	local maxrep = r(max)
-	
-	* find out how many dgms, targets, methods
-	foreach k in `dgm' `target' `method' {
-		qui tab `k'
-		local count`k' = r(r)
-    }
-    if `nmethod'==0 & `ntarget'!=0 {
-        local compare = `maxrep' * `ndgmvars' * `count`target''  /* previously used countdgm but didn't work for multiple dgms with descriptors.  Same for other 2 lines below */
-    }
-    else if `ntarget'==0 & `nmethod'!=0 {
-        local compare = `maxrep' * `ndgmvars' * `count`method'' 
-    }
-    else if `nmethod'==0 & `ntarget'==0 {
-        local compare = `maxrep' * `ndgmvars' 
-    }
-	if `compare' == `maxnumdata' {
-        local nformat= 1
-        local format = "format 1: long-long"
-	}
-	
-}
-
-
-* If in wide-wide format and order is missing, exit with an error:
-if `nformat'==2 & "`order'"=="" {
-	di as error "{p 0 2}Input data is in wide-wide format but order() has not been specified.  Please specify order: either order(method) or order(target) in the syntax.{p_end}"
-	exit 498
-}
-
-
-* Specify confidence limits
-local ci `lci' `uci'
-
-* produce error message if any other variables contained in the dataset, excluding tempvars
-qui ds __*, not
 * true can be missing, it can be a long variable in the dataset with either single or multiple values, it can be a stub in a wide dataset or it can have a value entered directly in to the siman syntax
 * true might not be a variable in the dataset, it might have just been entered in to the syntax as true(0.5) for example, so add true macro just incase
 * if true is in long format (can not do this if true is in wide format e.g. true1beta)
 cap confirm variable `true'
 if !_rc local truelong = 1
 else local truelong = 0
-if "`ntruevalue'"=="single" local datasetvarswithtrue `r(varlist)' `true'
-else local datasetvarswithtrue `r(varlist)'
-* if true was already in the dataset, only include `true' once
-local datasetvars: list uniq datasetvarswithtrue
-* for long-long format
-	if `nformat' == 1 {
-		* not including true as it can be a number e.g. true(0)
-		* also do not include dgm if it has been created
-		local simanvars0 `rep' `target' `estimate' `se' `df' `lci' `uci' `p' 
-		if `dgmcreated' == 0 local simanvars0 `simanvars0' `dgm'
-		if `methodcreated' == 0 local simanvars0 `simanvars0' `method'
-		unab simanvars : `simanvars0'
-		local simanvarswithtrue0 `simanvars' `true'
-		* for cases where true is in dgm() and true(), only include once
-		local simanvarswithtrue: list uniq simanvarswithtrue0
-		local truevariables `true'
-	}
-	* wide-wide format, order = method
-	else if `nformat' == 2 & "`order'" == "method"{
-		foreach i in `mlist' {
-			foreach j in `tlist' {
-				if !mi("`estimate'") local estimatevariables `estimatevariables' `estimate'`i'`j'
-				if !mi("`se'") local sevariables `sevariables' `se'`i'`j'
-				if !mi("`df'") local dfvariables `dfvariables' `df'`i'`j'
-				if !mi("`lci'") local lcivariables `lcivariables' `lci'`i'`j'
-				if !mi("`uci'") local ucivariables `ucivariables' `uci'`i'`j'
-				if !mi("`p'") local pvariables `pvariables' `p'`i'`j'
-				if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
-				else local truevariables `truevariables' `true'`i'`j'
-			}
-		}
-	if `dgmcreated'!=1 local simanvarswithtrue `rep' `dgm' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
-	else local simanvarswithtrue `rep' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
-	}
-	* wide-wide format, order = target
-	else if `nformat' == 2 & "`order'" == "target"{
-		foreach j in `tlist'  {
-			 foreach i in `mlist' {
-				if !mi("`estimate'") local estimatevariables `estimatevariables' `estimate'`j'`i'
-				if !mi("`se'") local sevariables `sevariables' `se'`j'`i'
-				if !mi("`df'") local dfvariables `dfvariables' `df'`j'`i'
-				if !mi("`lci'") local lcivariables `lcivariables' `lci'`j'`i'
-				if !mi("`uci'") local ucivariables `ucivariables' `uci'`j'`i'
-				if !mi("`p'") local pvariables `pvariables' `p'`j'`i'
-				if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
-				else local truevariables `truevariables' `true'`j'`i'
-			}
-		}
-	if `dgmcreated'!=1 local simanvarswithtrue `rep' `dgm' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
-	else local simanvarswithtrue `rep' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
-	}
-	* long-wide format
-	else if `nformat' == 3 & `nmethod'!=1 & `nmethod'!=0 {
-		foreach i in `mlist' {
-				if !mi("`estimate'") local estimatevariables `estimatevariables' `estimate'`i'
-				if !mi("`se'") local sevariables `sevariables' `se'`i'
-				if !mi("`df'") local dfvariables `dfvariables' `df'`i'
-				if !mi("`lci'") local lcivariables `lcivariables' `lci'`i'
-				if !mi("`uci'") local ucivariables `ucivariables' `uci'`i'
-				if !mi("`p'") local pvariables `pvariables' `p'`i'
-				if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
-				else local truevariables `truevariables' `true'`i'
-		}
-	if `dgmcreated'!=1 local simanvarswithtruenotuniq `rep' `dgm' `target' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
-	else local simanvarswithtruenotuniq `rep' `target' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
-	local simanvarswithtrue: list uniq simanvarswithtruenotuniq
-	}
-	* long method, wide target
-	else if (`nmethod'==1 | `nmethod' == 0) & `ntarget'> 1 {
-		foreach j in `tlist' {
-			if !mi("`estimate'") local estimatevariables `estimatevariables' `estimate'`j'
-			if !mi("`se'") local sevariables `sevariables' `se'`j'
-			if !mi("`df'") local dfvariables `dfvariables' `df'`j'
-			if !mi("`lci'") local lcivariables `lcivariables' `lci'`j'
-			if !mi("`uci'") local ucivariables `ucivariables' `uci'`j'
-			if !mi("`p'") local pvariables `pvariables' `p'`j'
-			if "`ntruevalue'"=="single" | `truelong' == 1 local truevariables `true'
-			else local truevariables `truevariables' `true'`j'
-		}
-		local simanvarswithtrue `rep' `estimatevariables' `sevariables' `dfvariables' `lcivariables' `ucivariables' `pvariables' `truevariables'
-		if `dgmcreated'!=1 local simanvarswithtrue `simanvarswithtrue' `dgm'
-		if `methodcreated'!=1 local simanvarswithtrue `simanvarswithtrue' `method'
-	}
-	* test for equivalence
-	local testothervars: list simanvarswithtrue === datasetvars
-	if `testothervars' == 0 {
-		local countdatasetvars: word count `datasetvars'
-		local countsimanvarswithtrue: word count `simanvarswithtrue'
 
-		if `countdatasetvars' > `countsimanvarswithtrue' {
-			local wrongvars : list datasetvars - simanvarswithtrue
-			di as error "{p 0 2}Additional variables found in dataset other than those specified in siman setup.  Please remove extra variables from data set and re-run siman.  Note that if your data is in wide-wide format and your variable names contain underscores, these will need to be included in the setup syntax.  See {help siman_setup:siman setup} for further details.{p_end}"
-			di as error "{p 0 2}Unwanted variables are: `wrongvars'.{p_end}"
-			exit 498
-		}
-		else {
-			local wrongvars : list simanvarswithtrue - datasetvars 
-			di as error "{p 0 2}There are variables specified in siman setup that are not in your dataset.  Note that if your data is in wide-wide format and your variable names contain underscores, these will need to be included in the setup syntax.  See {help siman_setup:siman setup} for further details.{p_end}"
-			di as error "{p 0 2}Unfound variables are: `wrongvars'.{p_end}"
-			exit 498
-		}
-	}
-	
-/*
-IW code for error capture: does not work for wide targets
-* check that true is constant accross methods.  Can only do this when method is a variable (otherwise `method' will be label values and can not sort)
-if !mi("`truevariables'") & (`nformat' == 1 | `nformat' == 3 & (`nmethod'==1 | `nmethod' == 0)) & `methodcreated' == 0 {
-	foreach truevar of varlist `truevariables' {
-		cap bysort `dgm' `target' : assert `truevar' == `truevar'[1]
-		if _rc {
-			di as error "{p 0 2}`true' needs to be constant across methods.  Please make `true' constant across methods and then run -siman setup- again.{p_end}"
-			exit 498
+
+/*** END OF UNDERSTAND TRUE ***/
+
+
+/*** WE'RE READY TO REFORMAT ***/
+
+if "`targetformat'"=="wide" & "`methodformat'"=="wide" & "`order'"=="method" { 
+	`di' as text "reshaping wide-wide-method first to long-wide"
+	local stubvarsinterim
+	foreach stubvar of local stubvars {
+		foreach methodvalue of local methodvalues {
+			local stubvarsinterim `stubvarsinterim' `stubvar'`methodvalue'
 		}
 	}
+	`dicmd' qui reshape long `stubvarsinterim', i(`rep' `longvars') j(target) string
+	local targetformat long
+	local target target
+	local longvars `longvars' `target'
 }
-*/
 
-	
+if "`targetformat'"=="wide" & "`methodformat'"=="wide" & "`order'"=="target" { 
+	`di' as text "reshaping wide-wide-target first to wide-long - ouch"
+	reshape long 
+}
+
+if "`targetformat'"=="long" & "`methodformat'"=="wide" { 
+	`di' as text "reshaping long-wide to long-long"
+	`dicmd' qui reshape long `stubvars', i(`rep' `longvars') j(method) string
+	local methodformat long
+	local method method
+	local longvars `longvars' `method'
+}
+
+if "`targetformat'"=="wide" & "`methodformat'"=="long" { 
+	`di' as text "reshaping wide-long to long-long"
+	`dicmd' qui reshape long `stubvars', i(`rep' `longvars') j(target) string
+	local targetformat long
+	local target _targetvar
+	local longvars `longvars' `target'
+}
+
+
+* produce error message if any other variables contained in the dataset, excluding tempvars
+* do this later
+
+* Assigning characteristics
+******************************
+
+* DGM
+local dgmcreated 0
+local allthings dgm dgmcreated ndgmvars
+* Target
+if !mi("`target'") {
+	qui levelsof `target', local(valtarget) clean
+	local numtarget : word count `valtarget'
+}
+local allthings `allthings' ntarget numtarget target targetlabels valtarget
+* Method
+if !mi("`method'") {
+	cap confirm numeric variable `method'
+	if _rc local methodlabels 2
+	else local methodlabels = mi("`: value label `method''")
+	qui levelsof `method', local(valmethod) clean
+	local nummethod : word count `valmethod'
+}
+local nmethod 1
+local allthings `allthings' method methodcreated methodlabels methodvalues nmethod nummethod valmethod
+* Estimates
+local descriptiontype variable
+local allthings `allthings' descriptiontype estimate se df p rep lci uci 
+* True values
+local truedescriptiontype variable
+local allthings `allthings' ntruestub ntruevalue true truedescriptiontype
+* Data formats
+local format long-long
+local nformat 1
+local allthings `allthings' format nformat targetformat methodformat 
+* Utilities
+local setuprun 1
+local allthings `allthings' setuprun allthings
+* Store them all
+foreach thing in `allthings' {
+    char _dta[siman_`thing'] ``thing''
+}
+
+siman_describe
+restore, not
+end
+
+
+/*
 * Identifying elements for summary output table   
 ************************************************
 
@@ -860,7 +651,6 @@ foreach thing in `allthings' {
     char _dta[siman_`thing'] ``thing''
 }
 
-
 * Auto reshape wide-wide format in to long-wide
 ****************************************************
 
@@ -1058,3 +848,4 @@ History
 Version 0.1 # Ella Marley-Zagar # 03June2020
 */
 
+*/
