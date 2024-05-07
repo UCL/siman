@@ -342,52 +342,51 @@ will be reshaped before {cmd: siman setup} is run.
 {marker chars}{...}
 {title:Characteristics stored by siman setup}
 
-{p2colset 4 25 25 0}
-{p2col:{ul:Characteristic}}{ul:Definition and values}
-
+{synoptset 20 tabbed}{...}
 DGMs
- {p2col: dgm }Variables defining the DGM, or "not in dataset". Values: varlist or empty.{p_end}
- {p2col: dgmcreated }Dummy for dgm being a created variable. Values: 0/1.{p_end}
- {p2col: ndgmvars }Number of dgm vars: except with 1 dgmvar it's #dgms (possible error). Values: integers.{p_end}
+{synopt:{opt dgm}}Variables defining the DGM, or "not in dataset". Values: varlist or empty.{p_end}
+{synopt:{opt dgmcreated}}Dummy for dgm being a created variable. Values: 0/1.{p_end}
+{synopt:{opt ndgmvars}}Number of dgm vars: except with 1 dgmvar it's #dgms (possible error). Values: integers.{p_end}
 
 Targets
- {p2col: ntarget }? {p_end}
- {p2col: numtarget }Number of targets. Values: integer {p_end}
- {p2col: t1 (etc.)}Name of 1st target (etc.), but only in some formats. Values:  {p_end}
- {p2col: target }Variable name or stub for targets. Values: varname {p_end}
- {p2col: targetlabels }? Values: integer {p_end}
- {p2col: valtarget }Names of targets. {p_end}
+{synopt:{opt ntarget}}? {p_end}
+{synopt:{opt numtarget}}Number of targets. Values: integer {p_end}
+{synopt:{opt t1 (etc.)}}Name of 1st target (etc.), but only in some formats. Values:  {p_end}
+{synopt:{opt target}}Variable name or stub for targets. Values: varname {p_end}
+{synopt:{opt targetlabels}}? Values: integer {p_end}
+{synopt:{opt valtarget}}Names of targets. {p_end}
 
 Methods
- {p2col: m1 etc. }Name of method 1 etc.{p_end}
- {p2col: method }Method variable name (longlong format) or method values (longwide format).{p_end}
- {p2col: methodcreated }Dummy for method being a variable _methodvar created by siman setup. Values: 0/1 {p_end}
- {p2col: methodlabels }Dummy for method being value-labelled. Values: 0/1 {p_end}
- {p2col: methodvalues }? {p_end}
- {p2col: nmethod }1 for long method and #methods for wide method. Values: integer.{p_end}
- {p2col: nummethod }Number of methods. Values: integer. {p_end}
- {p2col: valmethod }Names of methods. {p_end}
+{synopt:{opt m1 etc.}}Name of method 1 etc.{p_end}
+{synopt:{opt method}}Method variable name (longlong format) or method values (longwide format).{p_end}
+{synopt:{opt methodcreated}}Dummy for method being a variable _methodvar created by siman setup. Values: 0/1 {p_end}
+{synopt:{opt methodlabels}}Dummy for method being value-labelled. Values: 0/1 {p_end}
+{synopt:{opt methodvalues}}? {p_end}
+{synopt:{opt nmethod}}1 for long method and #methods for wide method. Values: integer.{p_end}
+{synopt:{opt nummethod}}Number of methods. Values: integer. {p_end}
+{synopt:{opt valmethod}}Names of methods. {p_end}
 
 Estimates
- {p2col: descriptiontype }Whether statistics are variables or stubs. Values: "variable" if nformat=1, else "stub" {p_end}
- {p2col: df }df: variable or number  {p_end}
- {p2col: estimate }variable or stub containing estimate. {p_end}
- {p2col: lci }variable or stub containing lower confidence limit. {p_end}
- {p2col: p }variable or stub containing p-value. {p_end}
- {p2col: rep }variable containing the replicate identifier. {p_end}
- {p2col: se }variable or stub containing standard error. {p_end}
- {p2col: uci }variable or stub containing upper confidence limit. {p_end}
+{synopt:{opt descriptiontype}}Whether statistics are variables or stubs. Values: "variable" if nformat=1, else "stub" {p_end}
+{synopt:{opt df}}df: variable or number  {p_end}
+{synopt:{opt estimate}}variable or stub containing estimate. {p_end}
+{synopt:{opt lci}}variable or stub containing lower confidence limit. {p_end}
+{synopt:{opt p}}variable or stub containing p-value. {p_end}
+{synopt:{opt rep}}variable containing the replicate identifier. {p_end}
+{synopt:{opt se}}variable or stub containing standard error. {p_end}
+{synopt:{opt uci}}variable or stub containing upper confidence limit. {p_end}
 
 True values
- {p2col: ntruestub }whether true is a stub. Values: 0/1 {p_end}
- {p2col: ntruevalue }whether true is a single or multiple values. Values: "single", "multiple" {p_end}
- {p2col: true }variable name or stub for true values. Values: varname {p_end}
- {p2col: truedescriptiontype }whether true is a variable name or a stub. Values: "stub", "variable" {p_end}
+{synopt:{opt ntruestub}}whether true is a stub. Values: 0/1 {p_end}
+{synopt:{opt ntruevalue}}whether true is a single or multiple values. Values: "single", "multiple" {p_end}
+{synopt:{opt true}}variable name or stub for true values. Values: varname {p_end}
+{synopt:{opt truedescriptiontype}}whether true is a variable name or a stub. Values: "stub", "variable" {p_end}
 
 Data formats
- {p2col: format }current data format, in words. {p_end}
- {p2col: nformat }current data format, coded 1 (long-long) or 3 (wide-long).{p_end}
- {p2col: setuprun }is set to 1 when siman setup is run. Values: always 1 {p_end}
+{synopt:{opt format}}current data format, in words. {p_end}
+{synopt:{opt nformat}}current data format, coded 1 (long-long) or 3 (wide-long).{p_end}
+{synopt:{opt setuprun}}is set to 1 when siman setup is run. Values: always 1 {p_end}
+
 
 
 {marker authors}{...}
