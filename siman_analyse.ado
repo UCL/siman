@@ -1,3 +1,4 @@
+*! version 0.8     8may2024	IW no longer remove any underscores
 *! version 0.7     3apr2024
 * version 0.7     3apr2024    IW make it work with missing se()
 * version 0.6.15 14mar2024    IW respect lci, uci and p from setup
@@ -140,17 +141,18 @@ else local secreated 0
 *else if "`ntruevalue'"=="multiple" local optionlist `estimate' `se' `true' 
 local optionlist `estimate' `se' 
 
-
+/*
 * take out underscores at the end of variable names if there are any
-		foreach u of var * {
-			if  substr("`u'",strlen("`u'"),1)=="_" {
-				local U = substr("`u'", 1, index("`u'","_") - 1)
-					if "`U'" != "" {
-					capture rename `u' `U' 
-					if _rc di as txt "problem with `u'"
-				} 
-			}
-		}
+foreach u of var * {
+	if  substr("`u'",strlen("`u'"),1)=="_" {
+		local U = substr("`u'", 1, index("`u'","_") - 1)
+		if "`U'" != "" {
+			di as text "Attempting to rename `u' as `U' ..."
+			capture rename `u' `U' 
+			if _rc di as txt "problem with `u'"
+		} 
+	}
+}
 
 local estchange = 0
 if  substr("`estimate'",strlen("`estimate'"),1)=="_" {
@@ -162,6 +164,7 @@ if  substr("`se'",strlen("`se'"),1)=="_" {
 	local se = substr("`se'", 1, index("`se'","_") - 1) 
 	local sechange = 1
 	}
+*/
 
 local optionlist `estimate' `se' 
 
@@ -184,7 +187,7 @@ if `nformat'==1 {
 	forvalues f = 1/`nmethodlabels' { // edited 19dec2023
 		if `methodstringindi' == 0 & `methodlabels'!=1 local ff = "`f'"
 		else local ff = "``f''"
-		if  substr("`ff'",strlen("`ff'"),1)=="_" local ff = substr("`ff'", 1, index("`ff'","_") - 1)
+*		if  substr("`ff'",strlen("`ff'"),1)=="_" local ff = substr("`ff'", 1, index("`ff'","_") - 1)
 		local methodlabel`f' `ff'
 		local methodlist `methodlist' `methodlabel`f''
 		}
@@ -227,11 +230,11 @@ if `nformat'==1 {
 	else local methodloop `methodvalues' 
 	foreach v in `methodloop'  {
 		if !mi("`se'") {
-			if  substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse `se'`v'
-			else qui rename `estimate'`v'_mcse `se'`v'
+			/*if  substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse `se'`v'
+			else*/ qui rename `estimate'`v'_mcse `se'`v'
 		}
-		else if  substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse se`v'
-		else qui rename `estimate'`v'_mcse se`v'
+		else /*if  substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse se`v'
+		else*/ qui rename `estimate'`v'_mcse se`v'
 	}
 	
 

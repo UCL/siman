@@ -21,15 +21,26 @@ adopath ++ $codepath
 cd $testpath
 
 // RUN ALL TESTS
-* test setup and analyse 
-do test_siman_widelong_EMZ.do // from wide-long: <1 minute
-do testing_graphs_matrix.do   // from all formats and var types: ~1 minute
-* test graphs
-do Testing_IRW_TPM_EMZ.do     // various graph tests: 2 minutes
-do siman_lollyplot_test.do    // test lollyplot: ~1 minute
-do siman_nestloop_test.do     // test nestloop: ~1 minute
-do testing_graphs_main.do     // test graphs from all formats and var types: 2 minutes
-* do "Testing estimates graphs.do" // 50 minutes
+local testfiles ///
+	/// test setup and analyse 
+	test_siman_widelong_EMZ /// from wide-long: <1 minute
+	testing_graphs_matrix   /// from all formats and var types: ~1 minute
+	/// test graphs
+	Testing_IRW_TPM_EMZ     /// various graph tests: 2 minutes
+	siman_lollyplot_test    /// test lollyplot: ~1 minute
+	siman_nestloop_test     /// test nestloop: ~1 minute
+	testing_graphs_main     /// test graphs from all formats and var types: 2 minutes
+
+* "Testing estimates graphs" // 50 minutes
+
+foreach testfile of local testfiles {
+	cap noi do `testfile'.do
+	if _rc {
+		di as error upper("siman failed in program `testfile'.do")
+		cap log close
+		exit 498
+	}
+}
 
 // ALSO 
 // run "Testing error messages.do" by hand to check error messages

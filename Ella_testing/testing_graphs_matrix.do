@@ -57,7 +57,12 @@ siman which
 * target long and string, method long and numeric, true variable 1 level
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
 * check that failed -siman setup- with no method() option doesn't leave unwanted _methodvar in data 
+cap noi siman setup, rep(rep) target(estimand) method(method) est(est) se(se) true(true)
+assert _rc==498
+cap noi siman setup, rep(rep) dgm(dgm) method(method) est(est) se(se) true(true)
+assert _rc==498
 cap noi siman setup, rep(rep) dgm(dgm) target(estimand) est(est) se(se) true(true)
+assert _rc==498
 confirm new var _methodvar
 * and do the correct setup
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
@@ -243,7 +248,8 @@ label values dgm dgmlabel
 bysort rep dgm: gen n = _n
 drop if n==2
 drop n true
-siman setup, rep(rep) dgm(dgm) est(est) se(se) target(beta gamma) method(1_ 2_) order(method)
+rename (*_*) (**)
+siman setup, rep(rep) dgm(dgm) est(est) se(se) target(beta gamma) method(1 2) order(method)
 siman analyse
 
 * DGM string, 1 var

@@ -1,4 +1,5 @@
-*! version 0.5.1   13mar2024
+*! version 0.6   8may2024	IW no longer removes underscores from display
+* version 0.5.1   13mar2024
 *  version 0.5.1 13mar2024     IW new undocumented sort option 
 *  version 0.5   17oct2022     EMZ minor change to table for when method values have a mix of undersocres after them e.g. X Y_
 *  version 0.4   21july2022    EMZ change how dgms are displayed in the table
@@ -45,7 +46,7 @@ foreach thing in `_dta[siman_allthings]' {
 
 local titlewidth 20
 local colwidth 35
-
+/*
 * remove underscores from the end of method and target labels if there are any (for aesthetic purposes in the output table)
 if strpos("`valmethod'","_")!=0 {
     tokenize "`valmethod'"
@@ -86,7 +87,7 @@ if `nformat'==1 {
         }
     }
 }
-
+*/
 	char _dta[siman_estimate] `estimate'
 	char _dta[siman_se] `se'
 	

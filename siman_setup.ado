@@ -47,8 +47,9 @@ Please note that if method() contains one entry and target() contains more than 
 
 /*** START OF PARSING ***/
 
-if !mi("`debug'") local dicmd `dicmd'
-if !mi("`debug'") local di di
+if !mi("`debug'") local dicmd dicmd
+else local dicmd qui
+if !mi("`debug'") local di di as input
 else local di *
 
 * check whether setup already run
@@ -133,25 +134,40 @@ if !mi("`dgm'") {
 
 
 /*** UNDERSTAND TARGET ***/
-
 local ntarget: word count `target'
 cap confirm var `target'
 local targetisvar = _rc==0
-if `ntarget'>1 | `targetisvar'==0 {
+local targetlabels 0
+if `ntarget'>1 | (`ntarget'==1 & `targetisvar'==0) {
 	local targetformat wide
 	local valtarget `target'
 	local numtarget `ntarget'
 }
 else if `ntarget'==1 & `targetisvar'==1 {
 	local targetformat long
-	qui levelsof `target', local(valtarget) clean
+	qui levelsof `target', local(valtargetorig) clean
 	local longvars `longvars' `target'
 	local numtarget = r(r)
+	local targetvallab : value label `target'
+	if !mi("`targetvallab'") {
+		foreach val of local valtargetorig {
+			local thisval : label (`target') `val'
+			local valtarget `valtarget' `thisval'
+		}
+		local targetlabels 1
+		if !mi("`debug'") mac l _valtarget
+		if !mi("`debug'") mac l _valtargetorig
+	}
+	else local valtarget `valtargetorig'
 }
-else {
-	local targetformat none
+else if mi("`target'") {
+	local targetformat long
 	local valtarget
 	local numtarget 1
+}
+else {
+	di as error "Program error: siman setup failed to parse target(`target')"
+	exit 499
 }
 
 /*** UNDERSTAND METHOD ***/
@@ -175,7 +191,7 @@ if `nmethod'>1 | `methodisvar'==0 {
 else if `nmethod'==1 & `methodisvar'==1 {
 	local methodformat long
 	qui levelsof `method', local(methodvalues) clean
-	local longvars `longvars ' `method'
+	local longvars `longvars' `method'
 }
 
 * check if method contains missing values
@@ -185,13 +201,14 @@ if "`methodformat'" == "long" {
 }
 
 /*** UNDERSTAND STUBS ***/
+
 local simanvars `rep'
 local ci `lci' `uci'
 if "`methodformat'"=="wide" | "`targetformat'"=="wide" local stubvars `estimate' `se' `df' `lci' `uci' `p' 
 else local simanvars `simanvars' `estimate' `se' `df' `lci' `uci' `p' 
 
-
 /*** CHECK WIDE VARIABLES EXIST ***/
+
 if "`methodformat'"=="wide" & "`targetformat'"=="wide" {
 	foreach stubvar of local stubvars {
 		foreach thismethod of local methodvalues {
@@ -199,7 +216,10 @@ if "`methodformat'"=="wide" & "`targetformat'"=="wide" {
 				if "`order'"=="target" local widevar `stubvar'`thistarget'`thismethod'
 				else local widevar `stubvar'`thismethod'`thistarget'
 				cap confirm variable `widevar'
-				if _rc di as error "{p 0 2}Variable `widevar' was expected but not found{p_end}"
+				if _rc {
+					di as error "{p 0 2}Variable `widevar' was expected but not found{p_end}"
+					exit 498
+				}
 				local widevars `widevars' `widevar'
 			}
 		}
@@ -210,7 +230,10 @@ if "`methodformat'"=="long" & "`targetformat'"=="wide" {
 		foreach thistarget of local valtarget {
 			local widevar `stubvar'`thistarget'
 			cap confirm variable `widevar'
-			if _rc di as error "{p 0 2}Variable `widevar' was expected but not found{p_end}"
+			if _rc {
+				di as error "{p 0 2}Variable `widevar' was expected but not found{p_end}"
+				exit 498
+			}
 			local widevars `widevars' `widevar'
 		}
 	}
@@ -220,12 +243,14 @@ if "`methodformat'"=="wide" & "`targetformat'"=="long" {
 		foreach thismethod of local methodvalues {
 			local widevar `stubvar'`thismethod'
 			cap confirm variable `widevar'
-			if _rc di as error "{p 0 2}Variable `widevar' was expected but not found{p_end}"
+			if _rc {
+				di as error "{p 0 2}Variable `widevar' was expected but not found{p_end}"
+				exit 498
+			}
 			local widevars `widevars' `widevar'
 		}
 	}
 }
-
 
 /*** MOVE ON ***/
 
@@ -236,9 +261,16 @@ if "`targetformat'"=="wide" & "`methodformat'"=="wide" & "`order'"=="" {
 }
 
 * check that there are not multiple records per rep
-cap isid `rep' `dgm' `longvars'
+local shouldbeid `rep' `longvars'
+local createdvar _method
+local shouldbeid : list shouldbeid - createdvar
+cap isid `shouldbeid'
 if _rc {
-	di as error "{p 0 2}Multiple records per `rep' `dgm' `longvars'.  Do you need to specify dgm/target/method?{p_end}"
+	di as error "{p 0 2}Multiple records per `shouldbeid'."
+	if mi("`dgm'") di "Do you need to specify dgm()?"
+	if mi("`target'") di "Do you need to specify target()?"
+	if `methodcreated' di "Do you need to specify method()?"
+	di "{p_end}"
 	exit 498
 }
 
@@ -269,7 +301,7 @@ if mi("`truetype'") {
 }
 if mi("`truetype'") {
 	cap confirm name `true'
-	if !_rc local truetype name
+	if !_rc local truetype stub
 }
 if mi("`truetype'") {
 	di as error "true(`true') not allowed: must be true(#|var|stub)"
@@ -294,7 +326,10 @@ if "`targetformat'"=="wide" & "`truetype'"=="stub" {
 	foreach thistarget of local valtarget {
 		local truevar `true'`thistarget'
 		cap confirm variable `truevar'
-		if _rc di as error "{p 0 2}Variable `truevar' was expected but not found{p_end}"
+		if _rc {
+			di as error "{p 0 2}Variable `truevar' was expected but not found{p_end}"
+			exit 498
+		}
 		local truevars `truevars' `truevar'
 	}
 }
@@ -304,12 +339,14 @@ if "`targetformat'"=="wide" & "`truetype'"=="stub" {
 
 /*** CHECK THE RIGHT VARIABLES ARE PRESENT ***/
 
-di as text "List of variables:"
-di "Long vars: `longvars'"
-di "Stub vars: `stubvars'"
-di "Siman vars: `simanvars'"
-di "Wide vars: `widevars'"
-di "True vars: `truevars'"
+if !mi("`debug'") {
+	di as input "List of variables:"
+	di "  Long vars:  `longvars'"
+	di "  Stub vars:  `stubvars'"
+	di "  Siman vars: `simanvars'"
+	di "  Wide vars:  `widevars'"
+	di "  True vars:  `truevars'"
+}
 
 cap ds __*, not // picks out everything except tempvars
 if _rc unab allvars : _all
@@ -332,14 +369,14 @@ if !mi("`toofew'") {
 if "`truetype'"=="stub" local truestub `true'
 
 if "`targetformat'"=="wide" & "`methodformat'"=="wide" & "`order'"=="method" { 
-	`di' as text "reshaping wide-wide-method first to long-wide"
+	`di' "reshaping wide-wide (method first) to long-wide"
 	local stubvarsinterim
 	foreach stubvar of local stubvars {
 		foreach methodvalue of local methodvalues {
 			local stubvarsinterim `stubvarsinterim' `stubvar'`methodvalue'
 		}
 	}
-	`dicmd' qui reshape long `stubvarsinterim' `truestub', i(`rep' `longvars') j(target) string
+	`dicmd' reshape long `stubvarsinterim' `truestub', i(`rep' `longvars') j(target `target') string
 	local targetformat long
 	local target target
 	local longvars `longvars' `target'
@@ -351,23 +388,32 @@ if "`targetformat'"=="wide" & "`methodformat'"=="wide" & "`order'"=="method" {
 }
 
 if "`targetformat'"=="wide" & "`methodformat'"=="wide" & "`order'"=="target" { 
-	`di' as text "reshaping wide-wide-target first to wide-long - NOT YET CODED"
-	reshape long XXX
+	`di' "reshaping wide-wide (target first) to wide-long"
+	local stubvarsinterim
+	foreach stubvar of local stubvars {
+		foreach targetvalue of local valtarget {
+			local stubvarsinterim `stubvarsinterim' `stubvar'`targetvalue'
+		}
+	}
+	`dicmd' reshape long `stubvarsinterim' `truestub', i(`rep' `longvars') j(method `method') string
+	local methodformat long
+	local method method
+	local longvars `longvars' `method'
 }
 
 if "`targetformat'"=="long" & "`methodformat'"=="wide" { 
-	`di' as text "reshaping long-wide to long-long"
-	`dicmd' qui reshape long `stubvars', i(`rep' `longvars') j(method) string
+	`di' "reshaping long-wide to long-long"
+	`dicmd' reshape long `stubvars', i(`rep' `longvars') j(method `method') string
 	local methodformat long
 	local method method
 	local longvars `longvars' `method'
 }
 
 if "`targetformat'"=="wide" & "`methodformat'"=="long" { 
-	`di' as text "reshaping wide-long to long-long"
-	`dicmd' qui reshape long `stubvars' `truestub', i(`rep' `longvars') j(target) string
+	`di' "reshaping wide-long to long-long"
+	`dicmd' reshape long `stubvars' `truestub', i(`rep' `longvars') j(target `target') string
 	local targetformat long
-	local target _targetvar
+	local target target
 	local longvars `longvars' `target'
 	if "`truetype'"=="stub" {
 		local truetype variable
@@ -375,7 +421,6 @@ if "`targetformat'"=="wide" & "`methodformat'"=="long" {
 		local longvars `longvars' `true'
 	}
 }
-
 
 * produce error message if any other variables contained in the dataset, excluding tempvars
 * do this later
@@ -387,13 +432,30 @@ if "`targetformat'"=="wide" & "`methodformat'"=="long" {
 local dgmcreated 0
 local allthings dgm dgmcreated ndgmvars
 * Target
+local ntarget 1
 local allthings `allthings' ntarget numtarget target targetlabels valtarget
 * Method
 if !mi("`method'") {
 	cap confirm numeric variable `method'
 	if _rc local methodlabels 2
-	else local methodlabels = mi("`: value label `method''")
-	qui levelsof `method', local(valmethod) clean
+	else {
+		local methodlabelname : value label `method'
+		local methodlabels = !mi("`methodlabelname'")
+	}
+	if `methodlabels'==1 { // numeric labelled
+		qui levelsof `method', local(valmethodorig) clean
+		local valmethod
+		foreach val of local valmethodorig {
+			local thisval : label (`method') `val'
+			local valmethod `valmethod' `thisval'
+		}
+		local methodlabels 1
+		local methodvalues `valmethodorig'
+	}
+	else {
+		qui levelsof `method', local(valmethod) clean
+		local methodvalues `valmethod'
+	}
 	local nummethod : word count `valmethod'
 }
 local nmethod 1

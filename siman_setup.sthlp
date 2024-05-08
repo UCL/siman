@@ -349,22 +349,22 @@ DGMs
 {synopt:{opt ndgmvars}}Number of dgm vars: except with 1 dgmvar it's #dgms (possible error). Values: integers.{p_end}
 
 Targets
-{synopt:{opt ntarget}}? {p_end}
+{synopt:{opt ntarget}}1 for long target (and #targets for wide target). To be deleted. Values: integer.{p_end}
 {synopt:{opt numtarget}}Number of targets. Values: integer {p_end}
-{synopt:{opt t1 (etc.)}}Name of 1st target (etc.), but only in some formats. Values:  {p_end}
+{synopt:{opt t1 etc.}}Name of 1st target (etc.), but only in some formats. Values:  {p_end}
 {synopt:{opt target}}Variable name or stub for targets. Values: varname {p_end}
-{synopt:{opt targetlabels}}? Values: integer {p_end}
-{synopt:{opt valtarget}}Names of targets. {p_end}
+{synopt:{opt targetlabels}}Dummy for target being a variable with value labels. Values: 0/1.{p_end}
+{synopt:{opt valtarget}}Names of targets, using value labels if they exist). {p_end}
 
 Methods
 {synopt:{opt m1 etc.}}Name of method 1 etc.{p_end}
 {synopt:{opt method}}Method variable name (longlong format) or method values (longwide format).{p_end}
 {synopt:{opt methodcreated}}Dummy for method being a variable _methodvar created by siman setup. Values: 0/1 {p_end}
 {synopt:{opt methodlabels}}Dummy for method being value-labelled. Values: 0/1 {p_end}
-{synopt:{opt methodvalues}}? {p_end}
-{synopt:{opt nmethod}}1 for long method and #methods for wide method. Values: integer.{p_end}
-{synopt:{opt nummethod}}Number of methods. Values: integer. {p_end}
-{synopt:{opt valmethod}}Names of methods. {p_end}
+{synopt:{opt methodvalues}}Names of methods, ignoring any value labels.{p_end}
+{synopt:{opt nmethod}}1 for long method (and #methods for wide method). To be deleted. Values: integer.{p_end}
+{synopt:{opt nummethod}}Number of methods. Values: integer.{p_end}
+{synopt:{opt valmethod}}Names of methods, using value labels if they exist.{p_end}
 
 Estimates
 {synopt:{opt descriptiontype}}Whether statistics are variables or stubs. Values: "variable" if nformat=1, else "stub" {p_end}
