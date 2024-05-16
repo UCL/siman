@@ -377,10 +377,10 @@ Estimates
 {synopt:{opt uci}}variable or stub containing upper confidence limit. {p_end}
 
 True values
-{synopt:{opt ntruestub}}whether true is a stub. Values: 0/1 {p_end}
+{synopt:{opt ntruestub}}Whether true is a stub. Values: now always 0.{p_end}
 {synopt:{opt ntruevalue}}whether true is a single or multiple values. Values: "single", "multiple" {p_end}
-{synopt:{opt true}}variable name or stub for true values. Values: varname {p_end}
-{synopt:{opt truedescriptiontype}}whether true is a variable name or a stub. Values: "stub", "variable" {p_end}
+{synopt:{opt true}}Variable name for true values. Values: varname {p_end}
+{synopt:{opt truedescriptiontype}}Whether true is a variable name or a stub. Values: now always "variable".{p_end}
 
 Data formats
 {synopt:{opt format}}current data format, in words. {p_end}

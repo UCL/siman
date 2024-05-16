@@ -35,3 +35,19 @@ drop method
 rename method_str method
 drop true
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(0) debug
+
+
+pda
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
+gen estimand_num = 1 if estimand == "beta"
+replace estimand_num = 2 if estimand == "gamma"
+drop estimand
+rename estimand_num estimand
+label define methodl 1 "A" 2 "B"
+label values method methodl
+gen dgm_str = ""
+replace dgm_str = "1" if dgm == 1
+replace dgm_str = "2" if dgm == 2
+drop dgm true
+rename dgm_str dgm
+siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) debug
