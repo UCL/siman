@@ -48,8 +48,9 @@ As per {help simsum:simsum}.  If none of the following options are specified, th
 
 {marker empse}{synopt:{opt empse} }the empirical standard error -- the standard deviation of the point estimates.
 
-{marker relprec}{synopt:{opt relprec} }the relative precision -- the inverse squared ratio of the empirical standard error
-of this method to the empirical standard error of the reference method.  
+{marker relprec}{synopt:{opt relprec} }the relative precision 
+-- the percentage improvement in precision for this analysis method compared with the reference analysis method.
+Precision is the inverse square of the empirical standard error. 
 This calculation is slow: omitting it can reduce run time by up to 90%.
 
 {marker mse}{synopt:{opt mse} }the mean squared error.
@@ -71,12 +72,12 @@ This calculation is slow: omitting it can reduce run time by up to 90%.
 
 {pstd}
 {p_end}
-{synopt:{opt perfonly} } the program will automatically append the performance measures data to the estimates data, unless the user specifies 
+{synopt:{opt perfonly} }the program will automatically append the performance measures data to the estimates data, unless the user specifies 
 {it:perfonly} for performance measures only.
 
 {pstd}
 {p_end}
-{synopt:{opt replace} } if {cmd:siman analyse} has already been run and the user specifies it again then they must use the replace option, 
+{synopt:{opt replace} }if {cmd:siman analyse} has already been run and the user specifies it again then they must use the replace option, 
 to replace the existing performance measures in the data set.
 
 {synopt:{it:simsum_options}}Any options for {help simsum}.
