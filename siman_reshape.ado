@@ -461,7 +461,7 @@ if "`longlong'"!="" {
 
 	* if siman_analyse has been run, make sure order or performance measures is as required
 	* put non-missing point estimates at the top 
-	if "`simananalyserun'"=="1" {
+	if "`analyserun'"=="1" {
 	preserve
 	qui tempfile sortperf
 	qui drop if `rep'<0 

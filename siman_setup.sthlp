@@ -124,19 +124,19 @@ clear
 {synopthdr}
 {synoptline}
 
-{synopt:{opt dgm(varlist)}}data generating mechanism.{p_end}
-{synopt:{opt tar:get(varname|values)}}the target variable name or values.{p_end}
-{synopt:{opt meth:od(varname|values)}}the method variable name or values.{p_end}
-{synopt:{opt est:imate(varname|stub_varname)}}the estimate variable name or the name of its stub if in wide format.{p_end}
-{synopt:{opt se(varname|stub_varname)}}the standard error variable name or the name of its stub if in wide format.{p_end}
-{synopt:{opt df(varname|stub_varname)}}the degrees of freedom variable name or the name of its stub if in wide format.{p_end}
-{synopt:{opt lci(varname|stub_varname)}}the lower confidence interval variable name or the name of its stub if in wide format.{p_end}
-{synopt:{opt uci(varname|stub_varname)}}the upper confidence interval variable name or the name of its stub if in wide format.{p_end}
-{synopt:{opt p(varname|stub_varname)}}the P-value variable name or the name of its stub if in wide format.{p_end}
-{synopt:{opt true(#|varname|stub_varname)}}the true value, or variable name or the name of its stub if in wide format. Must be constant across methods.{p_end}
+{synopt:{opt dgm(varlist)}}data generating mechanism. {p_end}
+{synopt:{opt tar:get(varname|values)}}the target variable name or values. {p_end}
+{synopt:{opt meth:od(varname|values)}}the method variable name or values. {p_end}
+{synopt:{opt est:imate(varname|stub_varname)}}the estimate variable name or the name of its stub if in wide format. {p_end}
+{synopt:{opt se(varname|stub_varname)}}the standard error variable name or the name of its stub if in wide format. {p_end}
+{synopt:{opt df(varname|stub_varname)}}the degrees of freedom variable name or the name of its stub if in wide format. {p_end}
+{synopt:{opt lci(varname|stub_varname)}}the lower confidence interval variable name or the name of its stub if in wide format. {p_end}
+{synopt:{opt uci(varname|stub_varname)}}the upper confidence interval variable name or the name of its stub if in wide format. {p_end}
+{synopt:{opt p(varname|stub_varname)}}the P-value variable name or the name of its stub if in wide format. {p_end}
+{synopt:{opt true(#|varname|stub_varname)}}the true value, or variable name or the name of its stub if in wide format. Must be constant across methods. {p_end}
 {synopt:{opt ord:er(varname)}}if in wide-wide format, this must be either {it:target} or {it:method}, 
-denoting that either the target stub is first or the method stub is first in the variable names.{p_end}
-{synopt:{opt clear}}to clear the existing data held in memory: only needed with {cmd:if} or {cmd:in} conditions.{p_end}
+denoting that either the target stub is first or the method stub is first in the variable names. {p_end}
+{synopt:{opt clear}}to clear the existing data held in memory: only needed with {cmd:if} or {cmd:in} conditions. {p_end}
 
 
 {marker description}{...}
@@ -344,41 +344,47 @@ will be reshaped before {cmd: siman setup} is run.
 
 {synoptset 20 tabbed}{...}
 DGMs
-{synopt:{opt dgm}}Variables defining the DGM. Values: varlist or empty.{p_end}
-{synopt:{opt dgmcreated}}Dummy for dgm being a created variable. Values: always 0.{p_end}
-{synopt:{opt ndgmvars}}Number of dgm variables. Values: integers.{p_end}
+{synopt:{opt dgm}}Variables defining the DGM. Values: varlist or empty. {p_end}
+{synopt:{opt dgmcreated}}Dummy for dgm being a created variable. Values: always 0. {p_end}
+{synopt:{opt ndgmvars}}Number of dgm variables. Values: integers. {p_end}
 
 Targets
-{synopt:{opt target}}Variable name or stub for targets. Values: varname {p_end}
+{synopt:{opt target}}Variable name or stub for targets. Values: varname. {p_end}
 {synopt:{opt numtarget}}Number of targets. Values: integer {p_end}
-{synopt:{opt targetlabels}}Dummy for target being a variable with value labels. Values: 0/1.{p_end}
+{synopt:{opt targetlabels}}Dummy for target being a variable with value labels. Values: 0/1. {p_end}
 {synopt:{opt valtarget}}Names of targets, using value labels if they exist. {p_end}
 
 Methods
-{synopt:{opt method}}Method variable name (longlong format) or method values (longwide format).{p_end}
-{synopt:{opt methodcreated}}Dummy for method being a variable _methodvar created by siman setup. Values: 0/1 {p_end}
-{synopt:{opt methodlabels}}Dummy for method being value-labelled. Values: 0/1/2 (2=string) {p_end}
-{synopt:{opt methodvalues}}Names of methods, ignoring any value labels.{p_end}
-{synopt:{opt nmethod}}Dummy for long method. Values: always 1.{p_end}
-{synopt:{opt nummethod}}Number of methods. Values: integer.{p_end}
-{synopt:{opt valmethod}}Names of methods, using value labels if they exist.{p_end}
+{synopt:{opt method}}Method variable name (longlong format) or method values (longwide format). {p_end}
+{synopt:{opt methodcreated}}Dummy for method being a variable _methodvar created by siman setup. Values: 0/1. {p_end}
+{synopt:{opt methodlabels}}Dummy for method being value-labelled. Values: 0/1/2 (2=string). {p_end}
+{synopt:{opt methodvalues}}Names of methods, ignoring any value labels. {p_end}
+{synopt:{opt nmethod}}Dummy for long method. Values: always 1. {p_end}
+{synopt:{opt nummethod}}Number of methods. Values: integer. {p_end}
+{synopt:{opt valmethod}}Names of methods, using value labels if they exist. {p_end}
 
 Estimates
 {synopt:{opt estimate}}variable or stub containing estimate. {p_end}
 {synopt:{opt se}}variable or stub containing standard error. {p_end}
-{synopt:{opt df}}df: variable or number. {p_end}
+{synopt:{opt df}}degrees of freedom for the standard error: variable or number. {p_end}
 {synopt:{opt lci}}variable or stub containing lower confidence limit. {p_end}
 {synopt:{opt p}}variable or stub containing p-value. {p_end}
 {synopt:{opt rep}}variable containing the replicate identifier. {p_end}
 {synopt:{opt uci}}variable or stub containing upper confidence limit. {p_end}
 
 True values
-{synopt:{opt true}}Variable name for true values. Values: varname {p_end}
+{synopt:{opt true}}Variable name for true values. Values: varname. {p_end}
 
 Data formats
-{synopt:{opt format}}current data format, in words. Values: always "long-long".{p_end}
-{synopt:{opt nformat}}current data format, coded. Values: always 1.{p_end}
-{synopt:{opt setuprun}}is set to 1 when siman setup is run. Values: always 1.{p_end}
+{synopt:{opt format}}current data format, in words. Values: always "long-long". {p_end}
+{synopt:{opt nformat}}current data format, coded. Values: always 1. {p_end}
+{synopt:{opt setuprun}}is set to 1 when siman setup is run. Values: always 1. {p_end}
+
+Characteristics created by {help siman analyse}
+{synopt:{opt analyserun}}is set to 1 when siman analyse is run. Values: missing or 1. {p_end}
+{synopt:{opt ifanalyse}}is any if condition used in siman analyse. Values: string. {p_end}
+{synopt:{opt secreated}}is a dummy for the SE variable having been created by siman analyse 
+to hold Monte Carlo standard errors. Values: missing or 1. {p_end}
 
 
 

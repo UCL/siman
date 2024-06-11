@@ -1,5 +1,5 @@
-*! version 0.8     8may2024	IW no longer remove any underscores
-*! version 0.7     3apr2024
+*! version 0.9		11jun2024		IW assume data are longlong, don't let 'if' delete data, tidy up chars
+* version 0.8		8may2024		IW no longer remove any underscores
 * version 0.7     3apr2024    IW make it work with missing se()
 * version 0.6.15 14mar2024    IW respect lci, uci and p from setup
 * version 0.6.14 12mar2024    IW make ref() option work in longwide; add undocumented pause option 
@@ -51,24 +51,24 @@ if "`method'"=="" {
 	exit 498
 	}
 
-if "`simananalyserun'"=="1" & "`replace'" == "" {
+if "`analyserun'"=="1" & "`replace'" == "" {
 	di as error "There are already performance measures in the dataset.  If you would like to replace these, please use the 'replace' option"
 	exit 498
 	}
 
 local estimatesindi = (`rep'[_N]>0)
 	
-if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==1 {
+if "`analyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==1 {
 	qui drop if `rep'<0
 	qui drop _perfmeascode
 	qui drop _dataset
 	}
-else if "`simananalyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==0 {
+else if "`analyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==0 {
 	di as error "There are no estimates data in the data set.  Please re-load data and use siman setup to import data."
 	exit 498
 	}
 	
-local simananalyserun = 0
+local analyserun = 0
 
 * check if siman setup has been run, if not produce an error message
 if "`setuprun'"=="0" | "`setuprun'"=="" {
@@ -83,39 +83,41 @@ if _rc==0 {
 	if !mi("`extratrue'") local truevariable `true'
 }
 
-* if the user has not specified 'if' in the siman analyse syntax, but there is one from siman setup then use that 'if'
-if ("`if'"=="" & "`ifsetup'"!="") local ifanalyse = `"`ifsetup'"'
-else local ifanalyse = `"`if'"'
+* if condition
+local ifanalyse `if'
 qui tempvar touse
 qui generate `touse' = 0
 qui replace `touse' = 1 `ifanalyse' 
-preserve
-if `nformat'!=1 {
-	qui siman_reshape, longlong
-	if `methodcreated' == 0 local method method
-	else local method `method'
-	}
-qui sort `dgm' `target' `method' `touse'
-* The 'if' condition will only apply to dgm, target and method.  The 'if' condition is not allowed to be used on rep and an error message will be issued if the user tries to do so
-capture by `dgm' `target' `method': assert `touse'==`touse'[_n-1] if _n>1
-if _rc == 9 {
-	di as error "The 'if' condition can not be applied to 'rep' in siman analyse."  
-	exit 498
-	}
-restore
-qui keep if `touse'
 
+* The 'if' condition will only apply to dgm, target and method.  
+* The 'if' condition is not allowed to be used on rep and an error message will be issued if the user tries to do so
+tempvar min max
+egen `min' = min(`touse'), by(`dgm' `target' `method')
+egen `max' = max(`touse'), by(`dgm' `target' `method')
+cap assert `min'==`max'
+if _rc == 9 {
+	di as error "The 'if' condition can only be applied to 'dgm' `target' `method' in siman analyse."  
+	exit 498
+}
+drop `min' `max'
+
+
+* END OF PARSING
+
+
+
+* START OF ANALYSIS
+preserve
 
 * put all variables in their original order in local allnames
 qui unab allnames : *
 
+* save current data
+tempfile estimatesdata 
+qui save `estimatesdata'
 
-*if "`perfonly'"=="" {
-	tempfile estimatesdata 
-	qui save `estimatesdata'
-*	}
-
-qui drop if  `rep'<0
+* get correct data
+qui keep if `touse' & `rep'>0
 
 
 * if the data has been reshaped, method could be in string format, otherwise numeric.  Need to know what format it is in for the append later
@@ -134,165 +136,58 @@ if mi("`se'") {
 	qui gen _se = .
 	local secreated 1
 }
-else local secreated 0
+else if mi("`secreated'") local secreated 0
 
-* make a list of the optional elements that have been entered by the user, that would be stubs in the reshape
-*if "`ntruevalue'"=="single" local optionlist `estimate' `se' 
-*else if "`ntruevalue'"=="multiple" local optionlist `estimate' `se' `true' 
+* make a list of the stubs in the reshape
 local optionlist `estimate' `se' 
 
-/*
-* take out underscores at the end of variable names if there are any
-foreach u of var * {
-	if  substr("`u'",strlen("`u'"),1)=="_" {
-		local U = substr("`u'", 1, index("`u'","_") - 1)
-		if "`U'" != "" {
-			di as text "Attempting to rename `u' as `U' ..."
-			capture rename `u' `U' 
-			if _rc di as txt "problem with `u'"
-		} 
-	}
-}
 
-local estchange = 0
-if  substr("`estimate'",strlen("`estimate'"),1)=="_" {
-	local estimate = substr("`estimate'", 1, index("`estimate'","_") - 1)
-	local estchange = 1
-	}
-local sechange = 0
-if  substr("`se'",strlen("`se'"),1)=="_" {
-	local se = substr("`se'", 1, index("`se'","_") - 1) 
-	local sechange = 1
-	}
-*/
-
-local optionlist `estimate' `se' 
-
-if `nformat'==1 {
-
-	* save number format for method
-	local methodvallabel : value label `method'
-
-	* final agreed order/sort
-	qui order `rep' `dgm' `target' `method'
-	qui sort `rep' `dgm' `target' `method'
-
-		
-	* for value labels of method
-	qui tab `method'
-	local nmethodlabels = `r(r)'
-		
-	qui levels `method', local(levels)
-	tokenize `"`levels'"'
-	forvalues f = 1/`nmethodlabels' { // edited 19dec2023
-		if `methodstringindi' == 0 & `methodlabels'!=1 local ff = "`f'"
-		else local ff = "``f''"
-*		if  substr("`ff'",strlen("`ff'"),1)=="_" local ff = substr("`ff'", 1, index("`ff'","_") - 1)
-		local methodlabel`f' `ff'
-		local methodlist `methodlist' `methodlabel`f''
-		}
-	local valmethod `methodlist'
-
-		
-	* simsum doesn't like to parse "`estimate'" etc so define a macro for simsum for estimate and se
-	local estsimsum = "`estimate'"
-	if !`secreated' local sesimsum = "`se'"
-
-
-	capture confirm variable _perfmeascode
-	if !_rc {
-		di as error "siman would like to name a variable '_perfmeascode', but that name already exists in your dataset.  Please rename your variable _perfmeascode as something else."
-		exit 498
-		}
-		
-	capture confirm variable _dataset
-	if !_rc {
-		di as error "siman would like to name a variable '_dataset', but that name already exists in your data.  Please rename your variable _dataset as something else."
-		exit 498
-		}
-
-	if !mi("`ref'") {
-		local refopt ref(`ref')
-	}
-	
-	* RUN SIMSUM (LONG DATA)
-	local simsumcmd simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') lci(`lci') uci(`uci') p(`p') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
-	if !mi("`pause'") {
-		global F9 `simsumcmd'
-		pause
-	}
-	if !mi("`debug'") noi di as input "Running: `simsumcmd'"
-	qui `simsumcmd'
-
-
-	* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
-	if `methodlabels' == 0 local methodloop `valmethod'
-	else local methodloop `methodvalues' 
-	foreach v in `methodloop'  {
-		if !mi("`se'") {
-			/*if  substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse `se'`v'
-			else*/ qui rename `estimate'`v'_mcse `se'`v'
-		}
-		else /*if  substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse se`v'
-		else*/ qui rename `estimate'`v'_mcse se`v'
-	}
-	
-
-	* take out true from option list if included for the reshape, otherwise will be included in the optionlist as well as i() and reshape won't work
-	local optionlistreshape `optionlist'
-	local exclude "`true'"
-	local optionlistreshape: list optionlistreshape - exclude
-	
-	if !mi("`metlist'") local methodreshape `metlist'
-	else local methodreshape `valmethod'
-
-	if `methodstringindi'==1  {
-		`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'") string
-		}
-	else if `methodstringindi'==0 & `methodlabels' == 0 {
-		`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'")
-		* restore number format to method
-		label value `method' `methodvallabel'
-		}
-	else if `methodstringindi'==0 & `methodlabels' == 1 {
-		`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodvalues'")
-		* restore number format to method
-		label value `method' `methodvallabel'
-		}
-
-}
-
-else if `nformat'==3 {
+*** PREPARE FOR SIMSUM
+* save number format for method
+local methodvallabel : value label `method'
 
 * final agreed order/sort
-qui order `rep' `dgm' `target'
-qui sort `rep' `dgm' `target'
+qui order `rep' `dgm' `target' `method'
+qui sort `rep' `dgm' `target' `method'
+
+* for value labels of method
+qui tab `method'
+local nmethodlabels = `r(r)'
+	
+qui levels `method', local(levels)
+tokenize `"`levels'"'
+forvalues f = 1/`nmethodlabels' { // edited 19dec2023
+	if `methodstringindi' == 0 & `methodlabels'!=1 local ff = "`f'"
+	else local ff = "``f''"
+	local methodlabel`f' `ff'
+	local methodlist `methodlist' `methodlabel`f''
+}
+local valmethod `methodlist'
 
 
-* if method is numeric labelled string, get numerical labels for reshape
-if `methodstringindi' == 0 & "`methodlabels'" == "1" local methodloop `methodvalues'
-else local methodloop `valmethod'
+* simsum doesn't like to parse "`estimate'" etc so define a macro for simsum for estimate and se
+local estsimsum = "`estimate'"
+if !`secreated' local sesimsum = "`se'"
 
-foreach v in `methodloop' {
-	if  substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
-	foreach stat in estimate se df lci uci p {
-		if mi("``stat''") continue 
-		local `stat'list`v' ``stat''`v' 
-		local `stat'list ``stat'list' ``stat'list`v''
-	}
+
+capture confirm variable _perfmeascode
+if !_rc {
+	di as error "siman would like to name a variable '_perfmeascode', but that name already exists in your dataset.  Please rename your variable _perfmeascode as something else."
+	exit 498
 }
 
-* add in true if applicable
-*if "`ntruevalue'"=="multiple" local estimatelist `estimatelist' `true' 
+capture confirm variable _dataset
+if !_rc {
+	di as error "siman would like to name a variable '_dataset', but that name already exists in your data.  Please rename your variable _dataset as something else."
+	exit 498
+}
 
 if !mi("`ref'") {
-	cap confirm var `estimate'`ref'
-	if _rc di as error "siman analyse has failed to parse the ref(`ref') option so has ignored it"
-	else local refopt ref(`estimate'`ref')
+	local refopt ref(`ref')
 }
 
-* RUN SIMSUM (WIDE DATA)
-local simsumcmd simsum `estimatelist' `if', true(`true') se(`selist') df(`dflist') lci(`lcilist') uci(`ucilist') p(`plist') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
+* RUN SIMSUM (LONG DATA)
+local simsumcmd simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') lci(`lci') uci(`uci') p(`p') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
 if !mi("`pause'") {
 	global F9 `simsumcmd'
 	pause
@@ -300,21 +195,43 @@ if !mi("`pause'") {
 if !mi("`debug'") noi di as input "Running: `simsumcmd'"
 qui `simsumcmd'
 
-foreach v in `methodloop' {
-			if  substr("`v'",strlen("`v'"),1)=="_" local v = substr("`v'", 1, index("`v'","_") - 1)
-			if `estchange' == 1 {
-				* can't use `estimate' on it's own as if the variable was est_1, `estimate' is taken to be est_, the _ is removed above so then
-				* `estimate' becomes est.  Then you are asking to rename est1_mcse when actually the variable is called est_1_mcse
-				qui rename `estimate'_`v'_mcse `se'`v'
-				}
-				else {
-				if  substr(" `estimate'`v'",strlen(" `estimate'`v'"),1)=="_" qui rename `estimate'`v'mcse `se'`v'
-				else qui rename `estimate'`v'_mcse `se'`v'
-				}
-			if `sechange' == 1 qui rename `se'`v' `se'_`v'
-			}
 
+* rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
+if `methodlabels' == 0 local methodloop `valmethod'
+else local methodloop `methodvalues' 
+foreach v in `methodloop'  {
+	cap confirm variable `estimate'`v'_mcse
+	if _rc==111 continue
+	else if _rc di as error "Error in siman analyse"
+	if !mi("`se'") {
+		qui rename `estimate'`v'_mcse `se'`v'
+	}
+	else qui rename `estimate'`v'_mcse se`v'
 }
+
+
+* take out true from option list if included for the reshape, otherwise will be included in the optionlist as well as i() and reshape won't work
+local optionlistreshape `optionlist'
+local exclude "`true'"
+local optionlistreshape: list optionlistreshape - exclude
+
+if !mi("`metlist'") local methodreshape `metlist'
+else local methodreshape `valmethod'
+
+if `methodstringindi'==1  {
+	`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'") string
+}
+else if `methodstringindi'==0 & `methodlabels' == 0 {
+	`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'")
+	* restore number format to method
+	label value `method' `methodvallabel'
+}
+else if `methodstringindi'==0 & `methodlabels' == 1 {
+	`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodvalues'")
+	* restore number format to method
+	label value `method' `methodvallabel'
+}
+
 
 * labelling performance measures
 qui gen indi = -_perfmeasnum
@@ -422,10 +339,13 @@ if `methodcreated'!=1 {
 	}
 }
 
+restore, not
 
 * Set indicator so that user can determine if siman analyse has been run (e.g. for use in siman lollyplot)
-local simananalyserun = 1
-local allthings `allthings' simananalyserun ifanalyse estchange sechange 
+local analyserun = 1
+local allthings `allthings' analyserun ifanalyse secreated
+* de-duplicate
+local allthings : list uniq allthings
 
 foreach thing in `allthings' {
     char _dta[siman_`thing'] ``thing''
