@@ -7,7 +7,16 @@ DATA STRUCTURE
 	M - method (3, string)
 */
 
-pda
+local filename test_setup_dgm
+
+prog drop _all
+cd $testpath
+cap log close
+set linesize 100
+
+// START TESTING
+log using `filename', replace text nomsg
+siman which
 
 forvalues dgmtype = 1/5 {
 	di as input "dgmtype = `dgmtype'"
@@ -55,5 +64,13 @@ forvalues dgmtype = 1/5 {
 			di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
 		}
 	}
+	qui count if method=="CCA"
+	local x = r(N)
+	siman analyse if method=="MeanImp", notable
+	qui count if method=="CCA"
+	assert `x' == r(N)
+	siman analyse if method=="Noadj", notable replace
+	qui count if method=="CCA"
+	assert `x' == r(N)
 }
 

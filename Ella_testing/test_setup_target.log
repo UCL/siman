@@ -1,0 +1,137 @@
+
+. siman which
+C:\ian\git\siman\siman.ado
+*!version 0.3  08aug2023
+C:\ian\git\siman\siman_setup.ado
+*!      version 0.10.1  11jun2024       
+C:\ian\git\siman\siman_describe.ado
+*! version 0.6   8may2024       IW no longer removes underscores from display
+C:\ian\git\siman\siman_analyse.ado
+*! version 0.9          11jun2024               IW assume data are longlong, don't let 'if' delete d
+> ata, tidy up chars
+C:\ian\git\siman\siman_table.ado
+*! version 0.8.3   3apr2024
+C:\ian\git\siman\siman_reshape.ado
+*!  version 0.3.4   06nov2023
+C:\ian\git\siman\siman_lollyplot.ado
+*! version 1.13.2  15dec2023
+C:\ian\git\siman\siman_zipplot.ado
+*!  version 1.9 22apr2024
+C:\ian\git\siman\siman_comparemethodsscatter.ado
+*! version 1.9.19 2may2024
+C:\ian\git\siman\siman_blandaltman.ado
+*!  version 1.7 22apr2024
+C:\ian\git\siman\siman_swarm.ado
+*! version 1.10 22apr2024
+C:\ian\git\siman\siman_scatter.ado
+*! version 1.7 22apr2024
+C:\ian\git\siman\siman_nestloop.ado
+*! version 1.8.2   17aug2023
+
+. 
+. 
+. 
+. forvalues targettype = 1/5 {
+  2.         di as input "targettype = `targettype'"
+  3.         use c:\temp\extendedtestdata, clear
+  4.         if `targettype'==1 { // no target var
+  5.                 keep if estimand=="effect"
+  6.                 drop estimand
+  7.                 local targetopt
+  8.                 local xnumtarget 1
+  9.                 local xtarget
+ 10.                 local xtargetlabels 0
+ 11.                 local xvaltarget
+ 12.         }
+ 13.         if `targettype'==2 { // 1 target
+ 14.                 keep if estimand=="effect"
+ 15.                 local targetopt target(estimand)
+ 16.                 local xnumtarget 1
+ 17.                 local xtarget estimand
+ 18.                 local xtargetlabels 0
+ 19.                 local xvaltarget effect
+ 20.         }
+ 21.         if `targettype'==3 { // 3 targets, string
+ 22.                 local targetopt target(estimand)
+ 23.                 local xnumtarget 3
+ 24.                 local xtarget estimand
+ 25.                 local xtargetlabels 0
+ 26.                 local xvaltarget effect mean0 mean1
+ 27.         }
+ 28.         if `targettype'==4 { // 3 targets, num-labelled
+ 29.                 sencode estimand, replace
+ 30.                 local targetopt target(estimand)
+ 31.                 local xnumtarget 3
+ 32.                 local xtarget estimand
+ 33.                 local xtargetlabels 1
+ 34.                 local xvaltarget effect mean0 mean1
+ 35.         }
+ 36.         if `targettype'==5 { // 3 targets, numeric, wide
+ 37.                 sencode estimand, replace
+ 38.                 qui reshape wide b se truevalue, i(rep beta pmiss mech method) j(estimand)
+ 39.                 local targetopt target(1 2 3)
+ 40.                 local xnumtarget 3
+ 41.                 local xtarget target
+ 42.                 local xtargetlabels 0
+ 43.                 local xvaltarget 1 2 3
+ 44.         }
+ 45.         qui siman setup, rep(re) dgm(beta pmiss mech) `targetopt' method(meth) estimate(b) se(s
+> e) true(truevalue)
+ 46.         foreach thing in numtarget target targetlabels valtarget {
+ 47.                 local xx `: char _dta[siman_`thing']'
+ 48.                 cap assert "`x`thing''" == "`xx'"
+ 49.                 if _rc {
+ 50.                         di as error "Error with targettype = `targettype':"
+ 51.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
+ 52.                 }
+ 53.         }
+ 54.         qui count if beta==3
+ 55.         local x = r(N)
+ 56.         siman analyse if beta==2, notable
+ 57.         qui count if beta==3
+ 58.         assert `x' == r(N)
+ 59.         siman analyse if beta==1, notable replace
+ 60.         qui count if beta==3
+ 61.         assert `x' == r(N)
+ 62. }
+targettype = 1
+(72,000 observations deleted)
+siman analyse has run successfully
+siman analyse has run successfully
+targettype = 2
+(72,000 observations deleted)
+siman analyse has run successfully
+siman analyse has run successfully
+targettype = 3
+siman analyse has run successfully
+siman analyse has run successfully
+targettype = 4
+siman analyse has run successfully
+siman analyse has run successfully
+targettype = 5
+siman analyse has run successfully
+siman analyse has run successfully
+
+. 
+end of do-file
+
+. do "C:\ian\git\siman\Ella_testing\test_setup_dgm.do"
+
+. /* 
+> TEST SIMAN SETUP: DGMs
+> IW 11jun2024
+> DATA STRUCTURE
+>         D = beta (3, integer) pmiss (2, integer) mech (2, string)
+>         E - estimand (3, string)
+>         M - method (3, string)
+> */
+. 
+. local filename test_setup_dgm
+
+. 
+. prog drop _all
+
+. cd $testpath
+C:\ian\git\siman\Ella_testing
+
+. cap log close

@@ -3,6 +3,7 @@ run_all_tests.do
 siman overarching testing program
 IW 19dec2023
 updated 3apr2024 - runs in 5 minutes!
+11jun2024 - new test_setup programs
 */
 
 // USER-SPECIFIC SETUP
@@ -22,9 +23,12 @@ cd $testpath
 
 // RUN ALL TESTS
 local testfiles ///
-	/// test setup and analyse 
-	test_siman_widelong_EMZ /// from wide-long: <1 minute
-	testing_graphs_matrix   /// from all formats and var types: ~1 minute
+	/// test setup and analyse - all <= 1 minute
+	test_setup_dgm			/// test all formats of DGM
+	test_setup_target		/// test all formats of target
+	test_setup_method		/// test all formats of method
+	test_siman_widelong_EMZ /// from wide-long
+	testing_graphs_matrix   /// from all formats and var types
 	/// test graphs
 	Testing_IRW_TPM_EMZ     /// various graph tests: 2 minutes
 	siman_lollyplot_test    /// test lollyplot: ~1 minute

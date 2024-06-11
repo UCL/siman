@@ -7,7 +7,18 @@ DATA STRUCTURE
 	M - method (3, string)
 */
 
-pda
+local filename test_setup_target
+
+prog drop _all
+cd $testpath
+cap log close
+set linesize 100
+
+// START TESTING
+log using `filename', replace text nomsg
+siman which
+
+
 
 forvalues targettype = 1/5 {
 	di as input "targettype = `targettype'"
@@ -62,4 +73,12 @@ forvalues targettype = 1/5 {
 			di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
 		}
 	}
+	qui count if beta==3
+	local x = r(N)
+	siman analyse if beta==2, notable
+	qui count if beta==3
+	assert `x' == r(N)
+	siman analyse if beta==1, notable replace
+	qui count if beta==3
+	assert `x' == r(N)
 }

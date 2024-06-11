@@ -3,11 +3,12 @@
 C:\ian\git\siman\siman.ado
 *!version 0.3  08aug2023
 C:\ian\git\siman\siman_setup.ado
-*!    version 0.9.1 12apr2024    remove chars ifsetup, insetup
+*!      version 0.10.1  11jun2024       
 C:\ian\git\siman\siman_describe.ado
-*! version 0.5.1   13mar2024
+*! version 0.6   8may2024       IW no longer removes underscores from display
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.7     3apr2024
+*! version 0.9          11jun2024               IW assume data are longlong, don't let 'if' delete d
+> ata, tidy up chars
 C:\ian\git\siman\siman_table.ado
 *! version 0.8.3   3apr2024
 C:\ian\git\siman\siman_reshape.ado
@@ -17,7 +18,7 @@ C:\ian\git\siman\siman_lollyplot.ado
 C:\ian\git\siman\siman_zipplot.ado
 *!  version 1.9 22apr2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*! version 1.9.18 25oct2023
+*! version 1.9.19 2may2024
 C:\ian\git\siman\siman_blandaltman.ado
 *!  version 1.7 22apr2024
 C:\ian\git\siman\siman_swarm.ado
@@ -48,7 +49,6 @@ C:\ian\git\siman\siman_nestloop.ado
 . 
 . * set up
 . siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
-note: converting to long-wide format, creating variable target
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -68,11 +68,11 @@ Methods
   Method values:                  CC FULLDAT IMPALL IMPBYZ
 
 Repetition-level output
-  Point estimate stub:            b
-  SE stub:                        se
-  df stub:                        N/A
-  Conf. limit stubs:              N/A
-  p-value stub:                   N/A
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
   True value variable:            true
 _____________________________________________________
 
@@ -270,8 +270,6 @@ main                 |
 NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
   second entry is its Monte Carlo error.
 
-. siman reshape, longlong
-
 . siman analyse, ref(IMPALL) replace 
 siman analyse has run successfully
 
@@ -369,11 +367,6 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
   second entry is its Monte Carlo error.
 
 . 
-. /* this one fails
-> siman reshape, longwide
-> siman analyse, ref(FULLDAT) replace
-> */
-. 
 . * check get error if true is not constant across methods
 . clear all
 
@@ -408,7 +401,6 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 . 
 . * set up
 . siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
-note: converting to long-wide format, creating variable target
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -428,11 +420,11 @@ Methods
   Method values:                  CC FULLDAT IMPALL IMPBYZ
 
 Repetition-level output
-  Point estimate stub:            b
-  SE stub:                        se
-  df stub:                        N/A
-  Conf. limit stubs:              N/A
-  p-value stub:                   N/A
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
   True value variable:            true
 _____________________________________________________
 
@@ -943,7 +935,6 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 . drop se
 
 . siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) true(true)
-Warning: siman analyse will require est() and se() to be specified in set-up.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -1014,6 +1005,73 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 . assert reldif(`biasref', r(mean))<1E-8
 
 . 
+. * test analyse with if
+. siman analyse if dgm==2, replace
+siman analyse has created variable _se to hold the MCSE
+siman analyse has run successfully
+
+-------------------------------------------
+estimand and         |        method       
+performance measure  |         1          2
+---------------------+---------------------
+beta                 |
+               bsims |      1000       1000
+                     |                     
+                     | 
+                bias | -.0046965  -.0058509
+                     |  .0028908   .0039932
+                     | 
+             pctbias |                     
+                     |                     
+                     | 
+                mean | -.0046965  -.0058509
+                     |  .0028908   .0039932
+                     | 
+               empse |  .0914144   .1262755
+                     |  .0020451    .002825
+                     | 
+             relprec |            -47.59274
+                     |             2.430245
+                     | 
+                 mse |  .0083703   .0159638
+                     |  .0003797   .0007445
+                     | 
+                rmse |  .0914893   .1263479
+                     |  .0020748   .0029462
+---------------------+---------------------
+gamma                |
+               bsims |      1000       1000
+                     |                     
+                     | 
+                bias |  .0005948   .0065072
+                     |  .0029417   .0041326
+                     | 
+             pctbias |                     
+                     |                     
+                     | 
+                mean |  .0005948   .0065072
+                     |  .0029417   .0041326
+                     | 
+               empse |  .0930244   .1306846
+                     |  .0020811   .0029237
+                     | 
+             relprec |            -49.33068
+                     |             2.314097
+                     | 
+                 mse |  .0086452   .0171037
+                     |  .0003795   .0007105
+                     | 
+                rmse |  .0929798   .1307813
+                     |   .002041   .0027163
+-------------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. count if dgm==1
+  4,000
+
+. assert r(N)==4000
+
 . 
 . di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 *** SIMAN HAS PASSED ALL THE TESTS IN test_siman_widelong_EMZ.do ***

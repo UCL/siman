@@ -2,6 +2,7 @@
 Test reading in from wide-long format, and statistics options
 EMZ 06/11/2023
 IW added tests of siman analyse, ref() replace 12/3/2024
+IW test siman analyse if but not siman reshape 11/6/2024
 */
 
 local filename test_siman_widelong_EMZ
@@ -34,13 +35,7 @@ siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) d
 * analyse works ok with ref and replace
 siman analyse, ref(CC)
 siman analyse, ref(FULLDAT) replace 
-siman reshape, longlong
 siman analyse, ref(IMPALL) replace 
-
-/* this one fails
-siman reshape, longwide
-siman analyse, ref(FULLDAT) replace
-*/
 
 * check get error if true is not constant across methods
 clear all
@@ -130,6 +125,10 @@ summ est if _perfmeascode=="bias"
 di `biasref', r(mean),reldif(`biasref', r(mean))
 assert reldif(`biasref', r(mean))<1E-8
 
+* test analyse with if
+siman analyse if dgm==2, replace
+count if dgm==1
+assert r(N)==4000
 
 di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 

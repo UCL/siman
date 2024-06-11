@@ -3,12 +3,12 @@
 C:\ian\git\siman\siman.ado
 *!version 0.3  08aug2023
 C:\ian\git\siman\siman_setup.ado
-*!      version 0.10    7may2024        
+*!      version 0.10.1  11jun2024       
 C:\ian\git\siman\siman_describe.ado
 *! version 0.6   8may2024       IW no longer removes underscores from display
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.8     8may2024     IW no longer remove any underscores
-*! version 0.7     3apr2024
+*! version 0.9          11jun2024               IW assume data are longlong, don't let 'if' delete d
+> ata, tidy up chars
 C:\ian\git\siman\siman_table.ado
 *! version 0.8.3   3apr2024
 C:\ian\git\siman\siman_reshape.ado
