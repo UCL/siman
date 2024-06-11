@@ -442,8 +442,7 @@ if "`targetformat'"=="wide" & "`methodformat'"=="long" {
 local dgmcreated 0
 local allthings dgm dgmcreated ndgmvars
 * Target
-local ntarget 1
-local allthings `allthings' ntarget numtarget target targetlabels valtarget
+local allthings `allthings' numtarget target targetlabels valtarget
 * Method
 if !mi("`method'") {
 	cap confirm numeric variable `method'
@@ -471,12 +470,9 @@ if !mi("`method'") {
 local nmethod 1
 local allthings `allthings' method methodcreated methodlabels methodvalues nmethod nummethod valmethod
 * Estimates
-local descriptiontype variable
-local allthings `allthings' descriptiontype estimate se df p rep lci uci 
+local allthings `allthings' estimate se df p rep lci uci 
 * True values
-local truedescriptiontype variable
-local ntruestub 0
-local allthings `allthings' ntruestub ntruevalue true truedescriptiontype
+local allthings `allthings' true 
 * Data formats
 local format long-long
 local nformat 1

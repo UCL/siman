@@ -344,48 +344,41 @@ will be reshaped before {cmd: siman setup} is run.
 
 {synoptset 20 tabbed}{...}
 DGMs
-{synopt:{opt dgm}}Variables defining the DGM, or "not in dataset". Values: varlist or empty.{p_end}
-{synopt:{opt dgmcreated}}Dummy for dgm being a created variable. Values: 0/1.{p_end}
-{synopt:{opt ndgmvars}}Number of dgm vars: except with 1 dgmvar it's #dgms (possible error). Values: integers.{p_end}
+{synopt:{opt dgm}}Variables defining the DGM. Values: varlist or empty.{p_end}
+{synopt:{opt dgmcreated}}Dummy for dgm being a created variable. Values: always 0.{p_end}
+{synopt:{opt ndgmvars}}Number of dgm variables. Values: integers.{p_end}
 
 Targets
-{synopt:{opt ntarget}}1 for long target (and #targets for wide target). To be deleted. Values: integer.{p_end}
-{synopt:{opt numtarget}}Number of targets. Values: integer {p_end}
-{synopt:{opt t1 etc.}}Name of 1st target (etc.), but only in some formats. Values:  {p_end}
 {synopt:{opt target}}Variable name or stub for targets. Values: varname {p_end}
+{synopt:{opt numtarget}}Number of targets. Values: integer {p_end}
 {synopt:{opt targetlabels}}Dummy for target being a variable with value labels. Values: 0/1.{p_end}
-{synopt:{opt valtarget}}Names of targets, using value labels if they exist). {p_end}
+{synopt:{opt valtarget}}Names of targets, using value labels if they exist. {p_end}
 
 Methods
-{synopt:{opt m1 etc.}}Name of method 1 etc.{p_end}
 {synopt:{opt method}}Method variable name (longlong format) or method values (longwide format).{p_end}
 {synopt:{opt methodcreated}}Dummy for method being a variable _methodvar created by siman setup. Values: 0/1 {p_end}
-{synopt:{opt methodlabels}}Dummy for method being value-labelled. Values: 0/1 {p_end}
+{synopt:{opt methodlabels}}Dummy for method being value-labelled. Values: 0/1/2 (2=string) {p_end}
 {synopt:{opt methodvalues}}Names of methods, ignoring any value labels.{p_end}
-{synopt:{opt nmethod}}1 for long method (and #methods for wide method). To be deleted. Values: integer.{p_end}
+{synopt:{opt nmethod}}Dummy for long method. Values: always 1.{p_end}
 {synopt:{opt nummethod}}Number of methods. Values: integer.{p_end}
 {synopt:{opt valmethod}}Names of methods, using value labels if they exist.{p_end}
 
 Estimates
-{synopt:{opt descriptiontype}}Whether statistics are variables or stubs. Values: "variable" if nformat=1, else "stub" {p_end}
-{synopt:{opt df}}df: variable or number  {p_end}
 {synopt:{opt estimate}}variable or stub containing estimate. {p_end}
+{synopt:{opt se}}variable or stub containing standard error. {p_end}
+{synopt:{opt df}}df: variable or number. {p_end}
 {synopt:{opt lci}}variable or stub containing lower confidence limit. {p_end}
 {synopt:{opt p}}variable or stub containing p-value. {p_end}
 {synopt:{opt rep}}variable containing the replicate identifier. {p_end}
-{synopt:{opt se}}variable or stub containing standard error. {p_end}
 {synopt:{opt uci}}variable or stub containing upper confidence limit. {p_end}
 
 True values
-{synopt:{opt ntruestub}}Whether true is a stub. Values: now always 0.{p_end}
-{synopt:{opt ntruevalue}}whether true is a single or multiple values. Values: "single", "multiple" {p_end}
 {synopt:{opt true}}Variable name for true values. Values: varname {p_end}
-{synopt:{opt truedescriptiontype}}Whether true is a variable name or a stub. Values: now always "variable".{p_end}
 
 Data formats
-{synopt:{opt format}}current data format, in words. {p_end}
-{synopt:{opt nformat}}current data format, coded 1 (long-long) or 3 (wide-long).{p_end}
-{synopt:{opt setuprun}}is set to 1 when siman setup is run. Values: always 1 {p_end}
+{synopt:{opt format}}current data format, in words. Values: always "long-long".{p_end}
+{synopt:{opt nformat}}current data format, coded. Values: always 1.{p_end}
+{synopt:{opt setuprun}}is set to 1 when siman setup is run. Values: always 1.{p_end}
 
 
 

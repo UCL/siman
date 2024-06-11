@@ -127,6 +127,7 @@ else if `dgmcreated' == 1 {
 //  di as text "The format for targets is:" as result _col(`colwidth') cond(inlist(`nformat',1,3),"long","wide")
     di as text "  Variable containing targets:" as result _col(`colwidth') "`target'"
     di as text "  Number of targets:" as result _col(`colwidth') "`numtarget'"
+	local ntarget 0 // temporary fix after removing char ntarget from setup 
     if (`nformat'==1 & `ntarget'==0 & `nmethod'==0 ) {
         di as text "  Target values:" as result _col(`colwidth') "`valtarget'" _newline
     }
@@ -155,6 +156,7 @@ else if `dgmcreated' == 1 {
     di as text _newline "Repetition-level output"
 //	if "`estimate'"!="" di as result "Estimates are contained in the dataset"
 //	else if "`estimate'"=="" di as result "Estimates are not contained in the dataset"
+	local descriptiontype variable // fix after removing this char from setup
     di as text "  Point estimate `descriptiontype':" as result _col(`colwidth') cond( !mi("`estimate'"), "`estimate'", "N/A")
     di as text "  SE `descriptiontype':" as result _col(`colwidth') cond( !mi("`se'"), "`se'", "N/A")
     di as text "  df `descriptiontype':" as result _col(`colwidth') cond( !mi("`df'"), "`df'", "N/A")
