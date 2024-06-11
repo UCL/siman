@@ -96,3 +96,7 @@ forvalues methodtype = 1/5 {
 	qui count if beta==3
 	assert `x' == r(N)
 }
+
+di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
+
+log close

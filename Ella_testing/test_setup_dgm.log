@@ -106,6 +106,8 @@ siman analyse has run successfully
 siman analyse has run successfully
 
 . 
-. 
-end of do-file
+. di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
+*** SIMAN HAS PASSED ALL THE TESTS IN test_setup_dgm.do ***
 
+. 
+. log close

@@ -113,25 +113,8 @@ siman analyse has run successfully
 siman analyse has run successfully
 
 . 
-end of do-file
-
-. do "C:\ian\git\siman\Ella_testing\test_setup_dgm.do"
-
-. /* 
-> TEST SIMAN SETUP: DGMs
-> IW 11jun2024
-> DATA STRUCTURE
->         D = beta (3, integer) pmiss (2, integer) mech (2, string)
->         E - estimand (3, string)
->         M - method (3, string)
-> */
-. 
-. local filename test_setup_dgm
+. di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
+*** SIMAN HAS PASSED ALL THE TESTS IN test_setup_target.do ***
 
 . 
-. prog drop _all
-
-. cd $testpath
-C:\ian\git\siman\Ella_testing
-
-. cap log close
+. log close
