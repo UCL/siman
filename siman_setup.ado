@@ -1,5 +1,6 @@
-*!	version 0.10	7may2024	
-*	version 0.10	7may2024	IW major restructure
+*!	version 0.10.1	11jun2024	
+*	version 0.10.1	11jun2024	IW allow variable abbreviations
+*	version 0.10	 7may2024	IW major restructure
 *	version 0.9.1	12apr2024	IW remove chars ifsetup, insetup
 *	version 0.9		03apr2024	IW _methodvar not created till end, so not left on crash
 *	version 0.8.8	14feb2024	IW reformat long messages
@@ -138,6 +139,7 @@ local ntarget: word count `target'
 cap confirm var `target'
 local targetisvar = _rc==0
 local targetlabels 0
+if `targetisvar' unab target : `target'
 if `ntarget'>1 | (`ntarget'==1 & `targetisvar'==0) {
 	local targetformat wide
 	local valtarget `target'
@@ -184,6 +186,7 @@ if mi("`method'") {
 local nmethod: word count `method'
 cap confirm var `method'
 local methodisvar = _rc==0
+if `methodisvar' unab method : `method'
 if `nmethod'>1 | `methodisvar'==0 {
 	local methodformat wide
 	local methodvalues `method'
@@ -204,8 +207,14 @@ if "`methodformat'" == "long" {
 
 local simanvars `rep'
 local ci `lci' `uci'
-if "`methodformat'"=="wide" | "`targetformat'"=="wide" local stubvars `estimate' `se' `df' `lci' `uci' `p' 
-else local simanvars `simanvars' `estimate' `se' `df' `lci' `uci' `p' 
+if "`methodformat'"=="long" & "`targetformat'"=="long" {
+	foreach simanvar in estimate se df lci uci p {
+		if mi("``simanvar''") continue
+		unab `simanvar' : ``simanvar''
+		local simanvars `simanvars' ``simanvar''
+	}
+}
+else local stubvars `estimate' `se' `df' `lci' `uci' `p' 
 
 /*** CHECK WIDE VARIABLES EXIST ***/
 
@@ -307,6 +316,7 @@ if mi("`truetype'") {
 	di as error "true(`true') not allowed: must be true(#|var|stub)"
 	exit 498
 }
+if "`truetype'"=="variable" unab true : `true'
 
 * checks
 if "`truetype'"=="variable" {
