@@ -1,18 +1,15 @@
 
 . siman which
 C:\ian\git\siman\siman.ado
-*!version 0.3  08aug2023
+*!version 0.9  14jun2024
 C:\ian\git\siman\siman_setup.ado
 *!      version 0.10.1  11jun2024       
 C:\ian\git\siman\siman_describe.ado
 *! version 0.6   8may2024       IW no longer removes underscores from display
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.9          11jun2024               IW assume data are longlong, don't let 'if' delete d
-> ata, tidy up chars
+*! version 0.9.1        14jun2024               IW remove code for nformat!=1 and nmethod!=1
 C:\ian\git\siman\siman_table.ado
 *! version 0.8.3   3apr2024
-C:\ian\git\siman\siman_reshape.ado
-*!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
 *! version 1.13.2  15dec2023
 C:\ian\git\siman\siman_zipplot.ado

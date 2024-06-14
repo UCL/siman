@@ -1,18 +1,15 @@
 
 . siman which
 C:\ian\git\siman\siman.ado
-*!version 0.3  08aug2023
+*!version 0.9  14jun2024
 C:\ian\git\siman\siman_setup.ado
 *!      version 0.10.1  11jun2024       
 C:\ian\git\siman\siman_describe.ado
 *! version 0.6   8may2024       IW no longer removes underscores from display
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.9          11jun2024               IW assume data are longlong, don't let 'if' delete d
-> ata, tidy up chars
+*! version 0.9.1        14jun2024               IW remove code for nformat!=1 and nmethod!=1
 C:\ian\git\siman\siman_table.ado
 *! version 0.8.3   3apr2024
-C:\ian\git\siman\siman_reshape.ado
-*!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
 *! version 1.13.2  15dec2023
 C:\ian\git\siman\siman_zipplot.ado
@@ -29,14 +26,14 @@ C:\ian\git\siman\siman_nestloop.ado
 *! version 1.8.2   17aug2023
 
 . 
-. forvalues methodtype = 1/5 {
+. forvalues methodtype = 1/6 {
   2.         di as input "methodtype = `methodtype'"
   3.         use c:\temp\extendedtestdata, clear
   4.         if `methodtype'==1 { // no method var
   5.                 keep if method=="CCA"
   6.                 drop method
   7.                 local methodopt
-  8. 
+  8.                 * x* locals are correct values against which to test chars
 .                 local xmethod _method
   9.                 local xmethodcreated 1
  10.                 local xmethodlabels 0
@@ -79,36 +76,49 @@ C:\ian\git\siman\siman_nestloop.ado
  44.         if `methodtype'==5 { // 3 methods, numeric, wide
  45.                 sencode method, gsort(method) replace
  46.                 qui reshape wide b se, i(rep beta pmiss mech estimand truevalue) j(method)
- 47.                 local methodopt method(1 2 3)
- 48. 
+ 47.                 char _dta[__JValLab] // needed to stop Stata remembering method names
+ 48.                 local methodopt method(1 2 3)
+ 49. 
 .                 local xmethod method
- 49.                 local xmethodcreated 0
- 50.                 local xmethodlabels 2
- 51.                 local xmethodvalues 1 2 3
- 52.                 local xnummethod 3
- 53.                 local xvalmethod 1 2 3
- 54.         }
- 55.         local xnmethod 1
- 56.         qui siman setup, rep(re) dgm(beta pmiss mech) target(estima) `methodopt' estimate(b) se
+ 50.                 local xmethodcreated 0
+ 51.                 local xmethodlabels 0
+ 52.                 local xmethodvalues 1 2 3
+ 53.                 local xnummethod 3
+ 54.                 local xvalmethod 1 2 3
+ 55.         }
+ 56.         if `methodtype'==6 { // 3 methods, string, wide
+ 57.                 qui reshape wide b se, i(rep beta pmiss mech estimand truevalue) j(method) stri
+> ng
+ 58.                 local methodopt method(CCA MeanImp Noadj)
+ 59. 
+.                 local xmethod method
+ 60.                 local xmethodcreated 0
+ 61.                 local xmethodlabels 1
+ 62.                 local xmethodvalues 1 2 3
+ 63.                 local xnummethod 3
+ 64.                 local xvalmethod CCA MeanImp Noadj
+ 65.         }
+ 66.         local xnmethod 1
+ 67.         qui siman setup, rep(re) dgm(beta pmiss mech) target(estima) `methodopt' estimate(b) se
 > (se) true(truevalue)
- 57.         foreach thing in method methodcreated methodlabels methodvalues nmethod nummethod valme
+ 68.         foreach thing in method methodcreated methodlabels methodvalues nmethod nummethod valme
 > thod {
- 58.                 local xx `: char _dta[siman_`thing']'
- 59.                 cap assert "`x`thing''" == "`xx'"
- 60.                 if _rc {
- 61.                         di as error "Error with methodtype = `methodtype':"
- 62.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
- 63.                 }
- 64.         }
- 65.         qui count if beta==3
- 66.         local x = r(N)
- 67.         siman analyse if beta==2, notable
- 68.         qui count if beta==3
- 69.         assert `x' == r(N)
- 70.         siman analyse if beta==1, notable replace
- 71.         qui count if beta==3
- 72.         assert `x' == r(N)
- 73. }
+ 69.                 local xx `: char _dta[siman_`thing']'
+ 70.                 cap assert "`x`thing''" == "`xx'"
+ 71.                 if _rc {
+ 72.                         di as error "Error with methodtype = `methodtype':"
+ 73.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
+ 74.                 }
+ 75.         }
+ 76.         qui count if beta==3
+ 77.         local x = r(N)
+ 78.         siman analyse if beta==2, notable
+ 79.         qui count if beta==3
+ 80.         assert `x' == r(N)
+ 81.         siman analyse if beta==1, notable replace
+ 82.         qui count if beta==3
+ 83.         assert `x' == r(N)
+ 84. }
 methodtype = 1
 (72,000 observations deleted)
 siman analyse has run successfully
@@ -124,6 +134,9 @@ methodtype = 4
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 5
+siman analyse has run successfully
+siman analyse has run successfully
+methodtype = 6
 siman analyse has run successfully
 siman analyse has run successfully
 

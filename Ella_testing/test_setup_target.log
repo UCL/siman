@@ -1,18 +1,15 @@
 
 . siman which
 C:\ian\git\siman\siman.ado
-*!version 0.3  08aug2023
+*!version 0.9  14jun2024
 C:\ian\git\siman\siman_setup.ado
 *!      version 0.10.1  11jun2024       
 C:\ian\git\siman\siman_describe.ado
 *! version 0.6   8may2024       IW no longer removes underscores from display
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.9          11jun2024               IW assume data are longlong, don't let 'if' delete d
-> ata, tidy up chars
+*! version 0.9.1        14jun2024               IW remove code for nformat!=1 and nmethod!=1
 C:\ian\git\siman\siman_table.ado
 *! version 0.8.3   3apr2024
-C:\ian\git\siman\siman_reshape.ado
-*!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
 *! version 1.13.2  15dec2023
 C:\ian\git\siman\siman_zipplot.ado
@@ -31,7 +28,7 @@ C:\ian\git\siman\siman_nestloop.ado
 . 
 . 
 . 
-. forvalues targettype = 1/5 {
+. forvalues targettype = 1/6 {
   2.         di as input "targettype = `targettype'"
   3.         use c:\temp\extendedtestdata, clear
   4.         if `targettype'==1 { // no target var
@@ -40,60 +37,82 @@ C:\ian\git\siman\siman_nestloop.ado
   7.                 local targetopt
   8.                 local xnumtarget 1
   9.                 local xtarget
- 10.                 local xtargetlabels 0
+ 10.                 local xtargetlabels .
  11.                 local xvaltarget
- 12.         }
- 13.         if `targettype'==2 { // 1 target
- 14.                 keep if estimand=="effect"
- 15.                 local targetopt target(estimand)
- 16.                 local xnumtarget 1
- 17.                 local xtarget estimand
- 18.                 local xtargetlabels 0
- 19.                 local xvaltarget effect
- 20.         }
- 21.         if `targettype'==3 { // 3 targets, string
- 22.                 local targetopt target(estimand)
- 23.                 local xnumtarget 3
- 24.                 local xtarget estimand
- 25.                 local xtargetlabels 0
- 26.                 local xvaltarget effect mean0 mean1
- 27.         }
- 28.         if `targettype'==4 { // 3 targets, num-labelled
- 29.                 sencode estimand, replace
- 30.                 local targetopt target(estimand)
- 31.                 local xnumtarget 3
- 32.                 local xtarget estimand
- 33.                 local xtargetlabels 1
- 34.                 local xvaltarget effect mean0 mean1
- 35.         }
- 36.         if `targettype'==5 { // 3 targets, numeric, wide
- 37.                 sencode estimand, replace
- 38.                 qui reshape wide b se truevalue, i(rep beta pmiss mech method) j(estimand)
- 39.                 local targetopt target(1 2 3)
- 40.                 local xnumtarget 3
- 41.                 local xtarget target
- 42.                 local xtargetlabels 0
- 43.                 local xvaltarget 1 2 3
- 44.         }
- 45.         qui siman setup, rep(re) dgm(beta pmiss mech) `targetopt' method(meth) estimate(b) se(s
+ 12.                 local xconfirm new var estimand
+ 13.         }
+ 14.         if `targettype'==2 { // 1 target, string
+ 15.                 keep if estimand=="effect"
+ 16.                 local targetopt target(estimand)
+ 17.                 local xnumtarget 1
+ 18.                 local xtarget estimand
+ 19.                 local xtargetlabels 2
+ 20.                 local xvaltarget effect
+ 21.                 local xconfirm string var estimand
+ 22.         }
+ 23.         if `targettype'==3 { // 3 targets, string
+ 24.                 local targetopt target(estimand)
+ 25.                 local xnumtarget 3
+ 26.                 local xtarget estimand
+ 27.                 local xtargetlabels 2
+ 28.                 local xvaltarget effect mean0 mean1
+ 29.                 local xconfirm string var estimand
+ 30.         }
+ 31.         if `targettype'==4 { // 3 targets, num-labelled
+ 32.                 sencode estimand, replace
+ 33.                 local targetopt target(estimand)
+ 34.                 local xnumtarget 3
+ 35.                 local xtarget estimand
+ 36.                 local xtargetlabels 1
+ 37.                 local xvaltarget effect mean0 mean1
+ 38.                 local xconfirm numeric var estimand
+ 39.         }
+ 40.         if `targettype'==5 { // 3 targets, numeric, wide
+ 41.                 sencode estimand, replace
+ 42.                 qui reshape wide b se truevalue, i(rep beta pmiss mech method) j(estimand)
+ 43.                 local targetopt target(1 2 3)
+ 44.                 local xnumtarget 3
+ 45.                 local xtarget target
+ 46.                 local xtargetlabels 0
+ 47.                 local xvaltarget 1 2 3
+ 48.                 local xconfirm numeric var target
+ 49.         }
+ 50.         if `targettype'==6 { // 3 targets, string, wide
+ 51.                 qui reshape wide b se truevalue, i(rep beta pmiss mech method) j(estimand) stri
+> ng
+ 52.                 local targetopt target(effect mean0 mean1)
+ 53.                 local xnumtarget 3
+ 54.                 local xtarget target
+ 55.                 local xtargetlabels 1
+ 56.                 local xvaltarget effect mean0 mean1
+ 57.                 local xconfirm numeric var target
+ 58.         }
+ 59.         qui siman setup, rep(re) dgm(beta pmiss mech) `targetopt' method(meth) estimate(b) se(s
 > e) true(truevalue)
- 46.         foreach thing in numtarget target targetlabels valtarget {
- 47.                 local xx `: char _dta[siman_`thing']'
- 48.                 cap assert "`x`thing''" == "`xx'"
- 49.                 if _rc {
- 50.                         di as error "Error with targettype = `targettype':"
- 51.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
- 52.                 }
- 53.         }
- 54.         qui count if beta==3
- 55.         local x = r(N)
- 56.         siman analyse if beta==2, notable
- 57.         qui count if beta==3
- 58.         assert `x' == r(N)
- 59.         siman analyse if beta==1, notable replace
- 60.         qui count if beta==3
- 61.         assert `x' == r(N)
- 62. }
+ 60.         
+.         * check chars
+.         foreach thing in numtarget target targetlabels valtarget {
+ 61.                 local xx `: char _dta[siman_`thing']'
+ 62.                 cap assert "`x`thing''" == "`xx'"
+ 63.                 if _rc {
+ 64.                         di as error "Error with targettype = `targettype':"
+ 65.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
+ 66.                 }
+ 67.         }
+ 68.         
+.         * check name and type of target variable
+.         confirm `xconfirm'
+ 69.         
+.         * check analyse with subsets
+.         qui count if beta==3
+ 70.         local x = r(N)
+ 71.         siman analyse if beta==2, notable
+ 72.         qui count if beta==3
+ 73.         assert `x' == r(N)
+ 74.         siman analyse if beta==1, notable replace
+ 75.         qui count if beta==3
+ 76.         assert `x' == r(N)
+ 77. }
 targettype = 1
 (72,000 observations deleted)
 siman analyse has run successfully
@@ -109,6 +128,9 @@ targettype = 4
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 5
+siman analyse has run successfully
+siman analyse has run successfully
+targettype = 6
 siman analyse has run successfully
 siman analyse has run successfully
 

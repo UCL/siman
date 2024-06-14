@@ -20,7 +20,7 @@ siman which
 
 
 
-forvalues targettype = 1/5 {
+forvalues targettype = 1/6 {
 	di as input "targettype = `targettype'"
 	use c:\temp\extendedtestdata, clear
 	if `targettype'==1 { // no target var
@@ -29,23 +29,26 @@ forvalues targettype = 1/5 {
 		local targetopt
 		local xnumtarget 1
 		local xtarget
-		local xtargetlabels 0
+		local xtargetlabels .
 		local xvaltarget
+		local xconfirm new var estimand
 	}
-	if `targettype'==2 { // 1 target
+	if `targettype'==2 { // 1 target, string
 		keep if estimand=="effect"
 		local targetopt target(estimand)
 		local xnumtarget 1
 		local xtarget estimand
-		local xtargetlabels 0
+		local xtargetlabels 2
 		local xvaltarget effect
+		local xconfirm string var estimand
 	}
 	if `targettype'==3 { // 3 targets, string
 		local targetopt target(estimand)
 		local xnumtarget 3
 		local xtarget estimand
-		local xtargetlabels 0
+		local xtargetlabels 2
 		local xvaltarget effect mean0 mean1
+		local xconfirm string var estimand
 	}
 	if `targettype'==4 { // 3 targets, num-labelled
 		sencode estimand, replace
@@ -54,6 +57,7 @@ forvalues targettype = 1/5 {
 		local xtarget estimand
 		local xtargetlabels 1
 		local xvaltarget effect mean0 mean1
+		local xconfirm numeric var estimand
 	}
 	if `targettype'==5 { // 3 targets, numeric, wide
 		sencode estimand, replace
@@ -63,8 +67,20 @@ forvalues targettype = 1/5 {
 		local xtarget target
 		local xtargetlabels 0
 		local xvaltarget 1 2 3
+		local xconfirm numeric var target
+	}
+	if `targettype'==6 { // 3 targets, string, wide
+		qui reshape wide b se truevalue, i(rep beta pmiss mech method) j(estimand) string
+		local targetopt target(effect mean0 mean1)
+		local xnumtarget 3
+		local xtarget target
+		local xtargetlabels 1
+		local xvaltarget effect mean0 mean1
+		local xconfirm numeric var target
 	}
 	qui siman setup, rep(re) dgm(beta pmiss mech) `targetopt' method(meth) estimate(b) se(se) true(truevalue)
+	
+	* check chars
 	foreach thing in numtarget target targetlabels valtarget {
 		local xx `: char _dta[siman_`thing']'
 		cap assert "`x`thing''" == "`xx'"
@@ -73,6 +89,11 @@ forvalues targettype = 1/5 {
 			di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
 		}
 	}
+	
+	* check name and type of target variable
+	confirm `xconfirm'
+	
+	* check analyse with subsets
 	qui count if beta==3
 	local x = r(N)
 	siman analyse if beta==2, notable

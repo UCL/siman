@@ -18,14 +18,14 @@ set linesize 100
 log using `filename', replace text nomsg
 siman which
 
-forvalues methodtype = 1/5 {
+forvalues methodtype = 1/6 {
 	di as input "methodtype = `methodtype'"
 	use c:\temp\extendedtestdata, clear
 	if `methodtype'==1 { // no method var
 		keep if method=="CCA"
 		drop method
 		local methodopt
-
+		* x* locals are correct values against which to test chars
 		local xmethod _method
 		local xmethodcreated 1
 		local xmethodlabels 0
@@ -68,14 +68,26 @@ forvalues methodtype = 1/5 {
 	if `methodtype'==5 { // 3 methods, numeric, wide
 		sencode method, gsort(method) replace
 		qui reshape wide b se, i(rep beta pmiss mech estimand truevalue) j(method)
+		char _dta[__JValLab] // needed to stop Stata remembering method names
 		local methodopt method(1 2 3)
 
 		local xmethod method
 		local xmethodcreated 0
-		local xmethodlabels 2
+		local xmethodlabels 0
 		local xmethodvalues 1 2 3
 		local xnummethod 3
 		local xvalmethod 1 2 3
+	}
+	if `methodtype'==6 { // 3 methods, string, wide
+		qui reshape wide b se, i(rep beta pmiss mech estimand truevalue) j(method) string
+		local methodopt method(CCA MeanImp Noadj)
+
+		local xmethod method
+		local xmethodcreated 0
+		local xmethodlabels 1
+		local xmethodvalues 1 2 3
+		local xnummethod 3
+		local xvalmethod CCA MeanImp Noadj
 	}
 	local xnmethod 1
 	qui siman setup, rep(re) dgm(beta pmiss mech) target(estima) `methodopt' estimate(b) se(se) true(truevalue)
