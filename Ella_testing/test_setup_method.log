@@ -3,7 +3,7 @@
 C:\ian\git\siman\siman.ado
 *!version 0.9  14jun2024
 C:\ian\git\siman\siman_setup.ado
-*!      version 0.10.1  11jun2024       
+*!      version 0.10.2  14jun2024       
 C:\ian\git\siman\siman_describe.ado
 *! version 0.6   8may2024       IW no longer removes underscores from display
 C:\ian\git\siman\siman_analyse.ado
@@ -36,7 +36,7 @@ C:\ian\git\siman\siman_nestloop.ado
   8.                 * x* locals are correct values against which to test chars
 .                 local xmethod _method
   9.                 local xmethodcreated 1
- 10.                 local xmethodlabels 0
+ 10.                 local xmethodnature 0
  11.                 local xmethodvalues 1
  12.                 local xnummethod 1
  13.                 local xvalmethod 1
@@ -47,7 +47,7 @@ C:\ian\git\siman\siman_nestloop.ado
  18. 
 .                 local xmethod method
  19.                 local xmethodcreated 0
- 20.                 local xmethodlabels 2
+ 20.                 local xmethodnature 2
  21.                 local xmethodvalues CCA
  22.                 local xnummethod 1
  23.                 local xvalmethod CCA
@@ -57,7 +57,7 @@ C:\ian\git\siman\siman_nestloop.ado
  27. 
 .                 local xmethod method
  28.                 local xmethodcreated 0
- 29.                 local xmethodlabels 2
+ 29.                 local xmethodnature 2
  30.                 local xmethodvalues CCA MeanImp Noadj
  31.                 local xnummethod 3
  32.                 local xvalmethod CCA MeanImp Noadj
@@ -68,7 +68,7 @@ C:\ian\git\siman\siman_nestloop.ado
  37.         
 .                 local xmethod method
  38.                 local xmethodcreated 0
- 39.                 local xmethodlabels 1
+ 39.                 local xmethodnature 1
  40.                 local xmethodvalues 1 2 3
  41.                 local xnummethod 3
  42.                 local xvalmethod CCA MeanImp Noadj
@@ -81,7 +81,7 @@ C:\ian\git\siman\siman_nestloop.ado
  49. 
 .                 local xmethod method
  50.                 local xmethodcreated 0
- 51.                 local xmethodlabels 0
+ 51.                 local xmethodnature 0
  52.                 local xmethodvalues 1 2 3
  53.                 local xnummethod 3
  54.                 local xvalmethod 1 2 3
@@ -93,32 +93,30 @@ C:\ian\git\siman\siman_nestloop.ado
  59. 
 .                 local xmethod method
  60.                 local xmethodcreated 0
- 61.                 local xmethodlabels 1
+ 61.                 local xmethodnature 1
  62.                 local xmethodvalues 1 2 3
  63.                 local xnummethod 3
  64.                 local xvalmethod CCA MeanImp Noadj
  65.         }
- 66.         local xnmethod 1
- 67.         qui siman setup, rep(re) dgm(beta pmiss mech) target(estima) `methodopt' estimate(b) se
+ 66.         qui siman setup, rep(re) dgm(beta pmiss mech) target(estima) `methodopt' estimate(b) se
 > (se) true(truevalue)
- 68.         foreach thing in method methodcreated methodlabels methodvalues nmethod nummethod valme
-> thod {
- 69.                 local xx `: char _dta[siman_`thing']'
- 70.                 cap assert "`x`thing''" == "`xx'"
- 71.                 if _rc {
- 72.                         di as error "Error with methodtype = `methodtype':"
- 73.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
- 74.                 }
- 75.         }
- 76.         qui count if beta==3
- 77.         local x = r(N)
- 78.         siman analyse if beta==2, notable
- 79.         qui count if beta==3
- 80.         assert `x' == r(N)
- 81.         siman analyse if beta==1, notable replace
- 82.         qui count if beta==3
- 83.         assert `x' == r(N)
- 84. }
+ 67.         foreach thing in method methodcreated methodnature methodvalues nummethod valmethod {
+ 68.                 local xx `: char _dta[siman_`thing']'
+ 69.                 cap assert "`x`thing''" == "`xx'"
+ 70.                 if _rc {
+ 71.                         di as error "Error with methodtype = `methodtype':"
+ 72.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
+ 73.                 }
+ 74.         }
+ 75.         qui count if beta==3
+ 76.         local x = r(N)
+ 77.         siman analyse if beta==2, notable
+ 78.         qui count if beta==3
+ 79.         assert `x' == r(N)
+ 80.         siman analyse if beta==1, notable replace
+ 81.         qui count if beta==3
+ 82.         assert `x' == r(N)
+ 83. }
 methodtype = 1
 (72,000 observations deleted)
 siman analyse has run successfully

@@ -29,7 +29,7 @@ forvalues targettype = 1/6 {
 		local targetopt
 		local xnumtarget 1
 		local xtarget
-		local xtargetlabels .
+		local xtargetnature .
 		local xvaltarget
 		local xconfirm new var estimand
 	}
@@ -38,7 +38,7 @@ forvalues targettype = 1/6 {
 		local targetopt target(estimand)
 		local xnumtarget 1
 		local xtarget estimand
-		local xtargetlabels 2
+		local xtargetnature 2
 		local xvaltarget effect
 		local xconfirm string var estimand
 	}
@@ -46,7 +46,7 @@ forvalues targettype = 1/6 {
 		local targetopt target(estimand)
 		local xnumtarget 3
 		local xtarget estimand
-		local xtargetlabels 2
+		local xtargetnature 2
 		local xvaltarget effect mean0 mean1
 		local xconfirm string var estimand
 	}
@@ -55,7 +55,7 @@ forvalues targettype = 1/6 {
 		local targetopt target(estimand)
 		local xnumtarget 3
 		local xtarget estimand
-		local xtargetlabels 1
+		local xtargetnature 1
 		local xvaltarget effect mean0 mean1
 		local xconfirm numeric var estimand
 	}
@@ -65,7 +65,7 @@ forvalues targettype = 1/6 {
 		local targetopt target(1 2 3)
 		local xnumtarget 3
 		local xtarget target
-		local xtargetlabels 0
+		local xtargetnature 0
 		local xvaltarget 1 2 3
 		local xconfirm numeric var target
 	}
@@ -74,14 +74,14 @@ forvalues targettype = 1/6 {
 		local targetopt target(effect mean0 mean1)
 		local xnumtarget 3
 		local xtarget target
-		local xtargetlabels 1
+		local xtargetnature 1
 		local xvaltarget effect mean0 mean1
 		local xconfirm numeric var target
 	}
 	qui siman setup, rep(re) dgm(beta pmiss mech) `targetopt' method(meth) estimate(b) se(se) true(truevalue)
 	
 	* check chars
-	foreach thing in numtarget target targetlabels valtarget {
+	foreach thing in numtarget target targetnature valtarget {
 		local xx `: char _dta[siman_`thing']'
 		cap assert "`x`thing''" == "`xx'"
 		if _rc {

@@ -28,7 +28,7 @@ forvalues methodtype = 1/6 {
 		* x* locals are correct values against which to test chars
 		local xmethod _method
 		local xmethodcreated 1
-		local xmethodlabels 0
+		local xmethodnature 0
 		local xmethodvalues 1
 		local xnummethod 1
 		local xvalmethod 1
@@ -39,7 +39,7 @@ forvalues methodtype = 1/6 {
 
 		local xmethod method
 		local xmethodcreated 0
-		local xmethodlabels 2
+		local xmethodnature 2
 		local xmethodvalues CCA
 		local xnummethod 1
 		local xvalmethod CCA
@@ -49,7 +49,7 @@ forvalues methodtype = 1/6 {
 
 		local xmethod method
 		local xmethodcreated 0
-		local xmethodlabels 2
+		local xmethodnature 2
 		local xmethodvalues CCA MeanImp Noadj
 		local xnummethod 3
 		local xvalmethod CCA MeanImp Noadj
@@ -60,7 +60,7 @@ forvalues methodtype = 1/6 {
 	
 		local xmethod method
 		local xmethodcreated 0
-		local xmethodlabels 1
+		local xmethodnature 1
 		local xmethodvalues 1 2 3
 		local xnummethod 3
 		local xvalmethod CCA MeanImp Noadj
@@ -73,7 +73,7 @@ forvalues methodtype = 1/6 {
 
 		local xmethod method
 		local xmethodcreated 0
-		local xmethodlabels 0
+		local xmethodnature 0
 		local xmethodvalues 1 2 3
 		local xnummethod 3
 		local xvalmethod 1 2 3
@@ -84,14 +84,13 @@ forvalues methodtype = 1/6 {
 
 		local xmethod method
 		local xmethodcreated 0
-		local xmethodlabels 1
+		local xmethodnature 1
 		local xmethodvalues 1 2 3
 		local xnummethod 3
 		local xvalmethod CCA MeanImp Noadj
 	}
-	local xnmethod 1
 	qui siman setup, rep(re) dgm(beta pmiss mech) target(estima) `methodopt' estimate(b) se(se) true(truevalue)
-	foreach thing in method methodcreated methodlabels methodvalues nmethod nummethod valmethod {
+	foreach thing in method methodcreated methodnature methodvalues nummethod valmethod {
 		local xx `: char _dta[siman_`thing']'
 		cap assert "`x`thing''" == "`xx'"
 		if _rc {

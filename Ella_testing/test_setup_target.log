@@ -3,7 +3,7 @@
 C:\ian\git\siman\siman.ado
 *!version 0.9  14jun2024
 C:\ian\git\siman\siman_setup.ado
-*!      version 0.10.1  11jun2024       
+*!      version 0.10.2  14jun2024       
 C:\ian\git\siman\siman_describe.ado
 *! version 0.6   8may2024       IW no longer removes underscores from display
 C:\ian\git\siman\siman_analyse.ado
@@ -37,7 +37,7 @@ C:\ian\git\siman\siman_nestloop.ado
   7.                 local targetopt
   8.                 local xnumtarget 1
   9.                 local xtarget
- 10.                 local xtargetlabels .
+ 10.                 local xtargetnature .
  11.                 local xvaltarget
  12.                 local xconfirm new var estimand
  13.         }
@@ -46,7 +46,7 @@ C:\ian\git\siman\siman_nestloop.ado
  16.                 local targetopt target(estimand)
  17.                 local xnumtarget 1
  18.                 local xtarget estimand
- 19.                 local xtargetlabels 2
+ 19.                 local xtargetnature 2
  20.                 local xvaltarget effect
  21.                 local xconfirm string var estimand
  22.         }
@@ -54,7 +54,7 @@ C:\ian\git\siman\siman_nestloop.ado
  24.                 local targetopt target(estimand)
  25.                 local xnumtarget 3
  26.                 local xtarget estimand
- 27.                 local xtargetlabels 2
+ 27.                 local xtargetnature 2
  28.                 local xvaltarget effect mean0 mean1
  29.                 local xconfirm string var estimand
  30.         }
@@ -63,7 +63,7 @@ C:\ian\git\siman\siman_nestloop.ado
  33.                 local targetopt target(estimand)
  34.                 local xnumtarget 3
  35.                 local xtarget estimand
- 36.                 local xtargetlabels 1
+ 36.                 local xtargetnature 1
  37.                 local xvaltarget effect mean0 mean1
  38.                 local xconfirm numeric var estimand
  39.         }
@@ -73,7 +73,7 @@ C:\ian\git\siman\siman_nestloop.ado
  43.                 local targetopt target(1 2 3)
  44.                 local xnumtarget 3
  45.                 local xtarget target
- 46.                 local xtargetlabels 0
+ 46.                 local xtargetnature 0
  47.                 local xvaltarget 1 2 3
  48.                 local xconfirm numeric var target
  49.         }
@@ -83,7 +83,7 @@ C:\ian\git\siman\siman_nestloop.ado
  52.                 local targetopt target(effect mean0 mean1)
  53.                 local xnumtarget 3
  54.                 local xtarget target
- 55.                 local xtargetlabels 1
+ 55.                 local xtargetnature 1
  56.                 local xvaltarget effect mean0 mean1
  57.                 local xconfirm numeric var target
  58.         }
@@ -91,7 +91,7 @@ C:\ian\git\siman\siman_nestloop.ado
 > e) true(truevalue)
  60.         
 .         * check chars
-.         foreach thing in numtarget target targetlabels valtarget {
+.         foreach thing in numtarget target targetnature valtarget {
  61.                 local xx `: char _dta[siman_`thing']'
  62.                 cap assert "`x`thing''" == "`xx'"
  63.                 if _rc {
