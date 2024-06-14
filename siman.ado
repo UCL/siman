@@ -1,4 +1,5 @@
-*!version 0.3  08aug2023
+*!version 0.9  14jun2024
+* version 0.9  14jun2024  IW remove reshape
 * version 0.3  08aug2023  EMZ allow analyze spelling
 * version 0.2  27mar2023
 * version 0.1  28nov2022
@@ -20,7 +21,7 @@ foreach thing in `_dta[siman_allthings]' {
 * subcmds requiring data not to be set
 local subcmds0 setup 
 * subcmds requiring data to be set
-local subcmds1 describe analyse analyze table reshape lollyplot zipplot comparemethodsscatter blandaltman swarm scatter nestloop
+local subcmds1 describe analyse analyze table lollyplot zipplot comparemethodsscatter blandaltman swarm scatter nestloop
 * subcmds not minding whether data are set
 local subcmds2 
 * all known subcommands
