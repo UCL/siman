@@ -32,14 +32,6 @@ if "`analyserun'"=="0" | "`analyserun'"=="" {
 
 preserve
 
-* reshape data to long-long format for output display
-if `nformat'!=1 {
-	qui siman_reshape, longlong                    
-	foreach thing in `_dta[siman_allthings]' {
-		local `thing' : char _dta[siman_`thing']
-		}
-	}
-
 * remove underscores from variables est_ and se_ for long-long format
 foreach val in `estimate' `se' {
    if strpos("`val'","_")!=0 {

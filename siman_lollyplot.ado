@@ -114,14 +114,6 @@ if mi("`estimate'","`se'") {
 
 preserve   
 	
-* If data is not in long-long format, then reshape
-if `nformat'!=1 {
-	siman reshape, longlong nodescribe
-	foreach thing in `_dta[siman_allthings]' {
-		local `thing' : char _dta[siman_`thing']
-		}
-}
-
 * keep performance measures only
 qui drop if `rep'>0
 qui replace `estimate' = 0 if _perfmeascode=="relprec" & mi(`estimate')

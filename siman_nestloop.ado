@@ -118,14 +118,7 @@ preserve
 * keep performance measures only
 qui drop if `rep'>0
 
-* Need data in wide format (with method/perf measures wide) which siman reshape does not offer, so do below.  Start with reshaping to long-long format if not already in this format
-* If data is not in long-long format, then reshape
-if `nformat'!=1 {
-	qui siman reshape, longlong
-	foreach thing in `_dta[siman_allthings]' {
-		local `thing' : char _dta[siman_`thing']
-	}
-}
+* Need data in wide format (with method/perf measures wide) which siman reshape does not offer, so do below.
 
 * If user has specified an order for dgm, use this order (so that siman_setup doesn't need to be re-run).  Take out -ve signs if there are any.
 if !mi("`dgmorder'") {

@@ -54,14 +54,6 @@ if mi("`estimate'") | mi("`se'") {
 marksample touse, novarlist
 tempvar meantouse
 
-* If data is not in long-long format, then reshape to get method labels
-if `nformat'!=1 {
-	qui siman reshape, longlong
-		foreach thing in `_dta[siman_allthings]' {
-		local `thing' : char _dta[siman_`thing']
-		}
-}
-
 * if statistics are not specified, run graphs for estimate only, otherwise run for all that are specified
 if "`anything'"=="" local varlist `estimate'
 else foreach thing of local anything {

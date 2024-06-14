@@ -349,13 +349,13 @@ DGMs
 {synopt:{opt dgmcreated}}Dummy for dgm being a created variable. Values: always 0. {p_end}
 
 Targets
-{synopt:{opt target}}Variable name or stub for targets. Values: varname. {p_end}
+{synopt:{opt target}}Variable name for targets. Values: varname. {p_end}
 {synopt:{opt numtarget}}Number of targets. Values: integer {p_end}
 {synopt:{opt targetnature}}Nature of target variable: 0=numeric unlabelled, 1=numeric labelled, 2=string. Values: ./0/1/2. {p_end}
 {synopt:{opt valtarget}}Names of targets, using value labels if they exist. {p_end}
 
 Methods
-{synopt:{opt method}}Method variable name (longlong format) or method values (longwide format). {p_end}
+{synopt:{opt method}}Variable name for method. Values: varname. {p_end}
 {synopt:{opt nummethod}}Number of methods. Values: integer. {p_end}
 {synopt:{opt methodnature}}Nature of method variable: 0=numeric unlabelled, 1=numeric labelled, 2=string. Values: ./0/1/2. {p_end}
 {synopt:{opt methodvalues}}Names of methods, ignoring any value labels. {p_end}

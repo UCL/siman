@@ -90,14 +90,6 @@ if mi("`xsize'") local xsize 4
 tempfile origdata
 qui save `origdata'
 
-* If data is not in long-long format, then reshape to get method labels
-if `nformat'!=1 {
-	qui siman reshape, longlong
-	foreach thing in `_dta[siman_allthings]' {
-		local `thing' : char _dta[siman_`thing']
-	}
-}
-
 * Need to know what format method is in (string or numeric) for the below code
 local methodstringindi = 0
 capture confirm string variable `method'

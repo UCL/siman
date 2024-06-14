@@ -41,14 +41,6 @@ if mi("`estimate'") | mi("`se'") {
 marksample touse, novarlist
 tempvar meantouse
 
-* If data is not in long-long format, then reshape
-if `nformat'!=1 {
-	qui siman reshape, longlong
-		foreach thing in `_dta[siman_allthings]' {
-		local `thing' : char _dta[siman_`thing']
-		}
-}
-
 di as text "working....."
 
 /* Start preparations */
