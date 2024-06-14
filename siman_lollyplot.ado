@@ -206,8 +206,8 @@ local nmethods = r(r)
 
 * For the purposes of the graphs below, if dgm is missing in the dataset then set
 * the number of dgms to be 1.
-if `dgmcreated' == 1 {
-    qui gen dgm = 1
+if mi("`dgm'") == 1 {
+	qui gen dgm = 1
 	local dgm "dgm"
 	local ndgmvars=1
 }

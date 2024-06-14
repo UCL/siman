@@ -203,14 +203,12 @@ forvalues g = 1/`nummethodnew' {
 * check if many graphs will be created - if so warn the user
 local dgmcount: word count `dgm'
 qui tokenize `dgm'
-if `dgmcreated' == 0 {
-	forvalues j = 1/`dgmcount' {
-		qui tab ``j''
-		local nlevels = r(r)
-		local dgmvarsandlevels `"`dgmvarsandlevels'"' `"``j''"' `" (`nlevels') "'
-		if `j' == 1 local totaldgmnum = `nlevels'
-		else local totaldgmnum = `totaldgmnum'*`nlevels'
-	}
+forvalues j = 1/`dgmcount' {
+	qui tab ``j''
+	local nlevels = r(r)
+	local dgmvarsandlevels `"`dgmvarsandlevels'"' `"``j''"' `" (`nlevels') "'
+	if `j' == 1 local totaldgmnum = `nlevels'
+	else local totaldgmnum = `totaldgmnum'*`nlevels'
 }
 if "`numtarget'" == "N/A" local numtargetcheck = 1
 else {
@@ -234,8 +232,7 @@ if `graphnumcheck' > 15 {
 * defining 'by'
 local byorig = "`by'"
 if "`byorig'"=="" {
-	if "`dgmcreated'" == "1" local by = "`target'"
-	else local by = "`dgm' `target'"
+	local by `dgm' `target'
 }
 
 * Can't tokenize/substr as many "" in the string

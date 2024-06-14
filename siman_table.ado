@@ -19,14 +19,14 @@ syntax [anything] [if], [Column(varlist) Row(varlist) debug]
 // PARSING
 
 foreach thing in `_dta[siman_allthings]' {
-    local `thing' : char _dta[siman_`thing']
+	local `thing' : char _dta[siman_`thing']
 }
 
 * check if siman analyse has been run, if not produce an error message
 if "`analyserun'"=="0" | "`analyserun'"=="" {
-	di as error "siman analyse has not been run.  Please use siman_analyse first before siman_table."
+	di as error "siman analyse has not been run.  Please use siman analyse first before siman table."
 	exit 498
-	}
+}
 
 // PREPARE DATA
 
@@ -34,13 +34,13 @@ preserve
 
 * remove underscores from variables est_ and se_ for long-long format
 foreach val in `estimate' `se' {
-   if strpos("`val'","_")!=0 {
-	   if substr("`val'",strlen("`val'"),1)=="_" {
-		   local l = substr("`val'", 1,strlen("`val'","_") - 1)    
-		   local `l'vars = "`l'"
-		   }
-       }
-   }
+	if strpos("`val'","_")!=0 {
+		if substr("`val'",strlen("`val'"),1)=="_" {
+			local l = substr("`val'", 1,strlen("`val'","_") - 1)    
+			local `l'vars = "`l'"
+		}
+	}
+}
 
 
 * choose sample
@@ -50,12 +50,11 @@ marksample touse
 
 
 * if the 'if' condition varies within dgm, method and target then write error
-if `dgmcreated' local dgm
 cap bysort `dgm' `method' `target' : assert `touse'==`touse'[1] 
 if _rc {
 	di as error "'if' can only be used for dgm, method and target."
 	exit 498
-	}
+}
 
 
 * if performance measures are not specified then display table for all of them, otherwise only display for selected subset
@@ -89,7 +88,6 @@ rename _perfmeascodeorder _perfmeascode
 
 
 * sort out numbers of variables to be tabulated, and their levels
-if `dgmcreated' local dgm
 if `methodcreated' local method
 * identify non-varying dgm
 foreach onedgmvar in `dgm' {
@@ -111,7 +109,7 @@ foreach thing in dgm target method {
 	else n`thing'levels = 1
 	if !mi("`debug'") di "`n`thing'levels' levels, `thing': `n`thing'vars' variables (``thing'')"
 	drop `group'
-	}
+}
 
 
 * decide what to put in columns

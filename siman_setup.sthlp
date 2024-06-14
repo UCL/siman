@@ -223,7 +223,7 @@ estimate and {it:method} denotes the method used to produce the estimates.
 {pstd}The variable {bf:dgm} needs to be in numerical format (string labels allowed), with integer values.  If {bf:dgm} is a string variable then {cmd:siman setup} will encode it to be numeric.  If {bf:dgm} has non-integer values, then {bf:dgm} 
 should be re-formatted by the user so that it has integer values with non-integer labels.
 
-{pstd}If the method variable is missing, then {cmd:siman setup} will create a variable {bf:_methodvar} in the dataset with a value of 1 in order that all the other {bf: siman} programs can run.
+{pstd}If the method variable is missing, then {cmd:siman setup} will create a variable {bf:_method} in the dataset with a value of 1 in order that all the other {bf: siman} programs can run.
 
 {pstd} If true exists, it has to be constant across methods.  If using {bf:true({it:stub_varname})}, this stub has to be in the same format as the other variables.  For example if {bf: method} and {bf: target} are in wide format with values 1/2 
 and beta/gamma respectively, with a different true value per target, and estimate defined as {bf: est}, standard error as {bf: se}, then the variables in the dataset would need to be as follows:
@@ -346,10 +346,9 @@ will be reshaped before {cmd: siman setup} is run.
 DGMs
 {synopt:{opt dgm}}Variables defining the DGM. Values: varlist or empty. {p_end}
 {synopt:{opt ndgmvars}}Number of dgm variables. Values: integers. {p_end}
-{synopt:{opt dgmcreated}}Dummy for dgm being a created variable. Values: always 0. {p_end}
 
 Targets
-{synopt:{opt target}}Variable name for targets. Values: varname. {p_end}
+{synopt:{opt target}}Variable name for targets. Values: varname or empty. {p_end}
 {synopt:{opt numtarget}}Number of targets. Values: integer {p_end}
 {synopt:{opt targetnature}}Nature of target variable: 0=numeric unlabelled, 1=numeric labelled, 2=string. Values: ./0/1/2. {p_end}
 {synopt:{opt valtarget}}Names of targets, using value labels if they exist. {p_end}
@@ -360,7 +359,7 @@ Methods
 {synopt:{opt methodnature}}Nature of method variable: 0=numeric unlabelled, 1=numeric labelled, 2=string. Values: ./0/1/2. {p_end}
 {synopt:{opt methodvalues}}Names of methods, ignoring any value labels. {p_end}
 {synopt:{opt valmethod}}Names of methods, using value labels if they exist. {p_end}
-{synopt:{opt methodcreated}}Dummy for method being a variable _methodvar created by siman setup. Values: 0/1. {p_end}
+{synopt:{opt methodcreated}}Dummy for method being a variable _method created by siman setup. Values: 0/1. {p_end}
 
 Estimates
 {synopt:{opt estimate}}variable or stub containing estimate. {p_end}

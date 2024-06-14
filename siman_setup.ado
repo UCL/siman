@@ -462,8 +462,7 @@ if "`targetformat'"=="wide" & "`methodformat'"=="long" {
 ******************************
 
 * DGM
-local dgmcreated 0
-local allthings dgm dgmcreated ndgmvars
+local allthings dgm ndgmvars
 * Target
 if !mi("`target'") { // find local targetnature
 	cap confirm numeric variable `target'

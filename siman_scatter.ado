@@ -88,10 +88,11 @@ else foreach thing of local anything {
 
 * For the purposes of the graphs below, if dgm is missing in the dataset then set
 * the number of dgms to be 1.
-if `dgmcreated' == 1 {
-    qui gen dgm = 1
+if mi("`dgm'") {
+	qui gen dgm = 1
 	local dgm "dgm"
-	local ndgmvars=1
+	local ndgmvars 1
+	local dgmcreated 1
 }
 
 local numberdgms: word count `dgm'

@@ -54,27 +54,27 @@ if _rc local truetype "string"
 else local truetype "numeric"
 
 * For dgm description
-local dgmcount: word count `dgm'
-qui tokenize `dgm'
-if `dgmcreated' == 0 {
+if !mi("`dgm'") {
+	local dgmcount: word count `dgm'
+	qui tokenize `dgm'
 	forvalues j = 1/`dgmcount' {
 		qui tab ``j''
 		local nlevels = r(r)
 		local dgmvarsandlevels `"`dgmvarsandlevels'"' `"``j''"' `" (`nlevels') "'
 	}
+	* Count DGMs
+	preserve
+	tempvar first
+	bysort `dgm': gen `first' = _n==1
+	qui count if `first'
+	local totaldgmnum = r(N)
+	drop `first'
+	restore
 }
-else if `dgmcreated' == 1 {
+else {
 	local dgmvarsandlevels N/A
+	local totaldgmnum 1
 }
-
-* Count DGMs
-preserve
-tempvar first
-bysort `dgm': gen `first' = _n==1
-qui count if `first'
-local totaldgmnum = r(N)
-drop `first'
-restore
 
 * Print summary of data
 di as text _newline _col(`titlewidth') "SUMMARY OF DATA"

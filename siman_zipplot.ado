@@ -96,10 +96,8 @@ if !mi("`by'") {
 	local byvar = "`by'"
 }
 else if mi("`by'") {
-	if "`dgmcreated'" == "1" & "`methodcreated'" == "1" local byvar "`target'"
-	else if "`dgmcreated'" == "1" & "`methodcreated'" == "0" local byvar "`target' `method'"
-	else if "`dgmcreated'" == "0" & "`methodcreated'" == "1" local byvar "`dgm' `target'"
-	else local byvar = "`dgm' `target' `method'"
+	if `methodcreated' local byvar `dgm' `target'
+	else local byvar `dgm' `target' `method'
 }
 
 * Zip plot of confidence intervals
@@ -355,14 +353,12 @@ if !mi(`"`options'"') {
 * check if many graphs will be created - if so warn the user
 local dgmcount: word count `dgm'
 qui tokenize `dgm'
-if `dgmcreated' == 0 {
-	forvalues j = 1/`dgmcount' {
-		qui tab ``j''
-		local nlevels = r(r)
-		local dgmvarsandlevels `"`dgmvarsandlevels'"' `"``j''"' `" (`nlevels') "'
-		if `j' == 1 local totaldgmnum = `nlevels'
-		else local totaldgmnum = `totaldgmnum'*`nlevels'
-	}
+forvalues j = 1/`dgmcount' {
+	qui tab ``j''
+	local nlevels = r(r)
+	local dgmvarsandlevels `"`dgmvarsandlevels'"' `"``j''"' `" (`nlevels') "'
+	if `j' == 1 local totaldgmnum = `nlevels'
+	else local totaldgmnum = `totaldgmnum'*`nlevels'
 }
 
 if "`numtarget'" == "N/A" local numtargetcheck = 1
