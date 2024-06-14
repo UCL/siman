@@ -1,5 +1,5 @@
 *!	version 0.10.2	14jun2024	
-*	version 0.10.2	14jun2024	IW wide target/method: numeric/string comes out as numeric/numeric-labelled; remove more unwanted chars
+*	version 0.10.2	14jun2024	IW wide target/method: numeric/string comes out as numeric/numeric-labelled and respects string order; remove more unwanted chars
 *	version 0.10.1	11jun2024	IW allow variable abbreviations
 *	version 0.10	 7may2024	IW major restructure
 *	version 0.9.1	12apr2024	IW remove chars ifsetup, insetup
