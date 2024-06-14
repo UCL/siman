@@ -90,15 +90,13 @@ qui tempvar touse
 qui generate `touse' = 0
 qui replace `touse' = 1 `ifanalyse' 
 
-* The 'if' condition will only apply to dgm, target and method.  
-* The 'if' condition is not allowed to be used on rep and an error message will be issued if the user tries to do so
+* Warn the user if the 'if' condition is used other than on dgm target method
 tempvar min max
 egen `min' = min(`touse'), by(`dgm' `target' `method')
 egen `max' = max(`touse'), by(`dgm' `target' `method')
 cap assert `min'==`max'
 if _rc == 9 {
-	di as error "The 'if' condition can only be applied to 'dgm' `target' `method' in siman analyse."  
-	exit 498
+	di as error "Warning: this 'if' condition will change the values of the performance measures. It is safest to subset only on dgm, target and method."  
 }
 drop `min' `max'
 
