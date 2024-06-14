@@ -1,4 +1,5 @@
-*! version 0.9		11jun2024		IW assume data are longlong, don't let 'if' delete data, tidy up chars
+*! version 0.9.1	14jun2024		IW remove code for nformat!=1 and nmethod!=1
+* version 0.9		11jun2024		IW assume data are longlong, don't let 'if' delete data, tidy up chars
 * version 0.8		8may2024		IW no longer remove any underscores
 * version 0.7     3apr2024    IW make it work with missing se()
 * version 0.6.15 14mar2024    IW respect lci, uci and p from setup
@@ -157,7 +158,7 @@ local nmethodlabels = `r(r)'
 qui levels `method', local(levels)
 tokenize `"`levels'"'
 forvalues f = 1/`nmethodlabels' { // edited 19dec2023
-	if `methodstringindi' == 0 & `methodlabels'!=1 local ff = "`f'"
+	if `methodstringindi' == 0 & `methodnature'!=1 local ff = "`f'"
 	else local ff = "``f''"
 	local methodlabel`f' `ff'
 	local methodlist `methodlist' `methodlabel`f''
@@ -197,7 +198,7 @@ qui `simsumcmd'
 
 
 * rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
-if `methodlabels' == 0 local methodloop `valmethod'
+if `methodnature' == 0 local methodloop `valmethod'
 else local methodloop `methodvalues' 
 foreach v in `methodloop'  {
 	cap confirm variable `estimate'`v'_mcse
@@ -221,12 +222,12 @@ else local methodreshape `valmethod'
 if `methodstringindi'==1  {
 	`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'") string
 }
-else if `methodstringindi'==0 & `methodlabels' == 0 {
+else if `methodstringindi'==0 & `methodnature' == 0 {
 	`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'")
 	* restore number format to method
 	label value `method' `methodvallabel'
 }
-else if `methodstringindi'==0 & `methodlabels' == 1 {
+else if `methodstringindi'==0 & `methodnature' == 1 {
 	`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodvalues'")
 	* restore number format to method
 	label value `method' `methodvallabel'
@@ -246,7 +247,7 @@ qui drop _perfmeasnum
 
 if `methodstringindi'==1 {
 	capture quietly tostring `method', replace
-	}
+}
 
 qui append using `estimatesdata'
 qui replace indi = `rep' if `rep'>0 & `rep'!=.
@@ -269,7 +270,6 @@ qui order `allnames'
 * restore lost method labels in characteristics
 * If format is long-long, or wide-long then 
 * 'number of methods' will be the number of variable labels for method
-* wide-long: nformat = 3 and method in long format i.e. nmethod =1
 if `methodcreated'!=1 {
 	cap confirm numeric variable `method'
 	if _rc local methodstringindi = 1
@@ -277,66 +277,39 @@ if `methodcreated'!=1 {
 
 	local methodlabelsn = 0
 
-	if `nformat'==1 | (`nformat'==3 & `nmethod'==1)  { 
-		if `nmethod'!=0 {
-			qui tab `method',m
-			local nmethodlabels = `r(r)'
-			
-					
-			* Get method label values
-			cap qui labelsof `method'
-			cap qui ret list
-
-				if `"`r(labels)'"'!="" {
-				local 0 = `"`r(labels)'"'
-
-				forvalues i = 1/`nmethodlabels' {  
-					gettoken `method'label`i' 0 : 0, parse(": ")
-					local methlist `methlist' ``method'label`i''
-					local methodlabelsn = 1
-					}
-				}
-				else {
-
-				qui levels `method', local(levels)
-				tokenize `"`levels'"'
-					if `methodstringindi' == 0 {		
-						forvalues i = 1/`nmethodlabels' {  
-							local `method'label`i' `i'
-							local methlist `methlist' ``method'label`i''
-							}
-					}
-					else forvalues i = 1/`nmethodlabels' {  
-							local `method'label`i' ``i''
-							local methlist `methlist' ``method'label`i''
-							}
-				 }	
-	  }
-	}
-	else local methlist `valmethod'
+	qui tab `method',m
+	local nmethodlabels = `r(r)'
 	
-	if `nformat'==1 {
-		* For format 1, long-long: number of methods will be the number of method labels
-		local valmethod = "`methlist'"
-	}
-	else if `nformat'==2 {
-		* number of methods will be the number of methods that the user specified
-		local valmethod = "`method'"
-	}
-	else if `nformat'==3 {
-		* For format 3, long-wide format
-		* will be in long-wide with long targets and wide methods after auto-reshape
-		if `nmethod'==1 {
-			* the number of methods will be the number of method labels
-			local valmethod = "`methlist'"
-		}
-		else if `nmethod'>=1 & `nmethod'!=. {
-			*  number of methods will be the number of methods that the user specified
-			* need valmethod to be method values for use in reshape command
-	*		local valmethod = "`method'"
-			local valmethod = "`methlist'"
+	* Get method label values
+	cap qui labelsof `method'
+	cap qui ret list
+
+	if `"`r(labels)'"'!="" {
+		local 0 = `"`r(labels)'"'
+
+		forvalues i = 1/`nmethodlabels' {
+			gettoken `method'label`i' 0 : 0, parse(": ")
+			local methlist `methlist' ``method'label`i''
+			local methodlabelsn = 1
 		}
 	}
+	else {
+		qui levels `method', local(levels)
+		tokenize `"`levels'"'
+		if `methodstringindi' == 0 {
+			forvalues i = 1/`nmethodlabels' {
+				local `method'label`i' `i'
+				local methlist `methlist' ``method'label`i''
+			}
+		}
+		else forvalues i = 1/`nmethodlabels' {
+			local `method'label`i' ``i''
+			local methlist `methlist' ``method'label`i''
+		}
+	}
+	
+	* For format 1, long-long: number of methods will be the number of method labels
+	local valmethod = "`methlist'"
 }
 
 restore, not

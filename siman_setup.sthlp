@@ -345,23 +345,22 @@ will be reshaped before {cmd: siman setup} is run.
 {synoptset 20 tabbed}{...}
 DGMs
 {synopt:{opt dgm}}Variables defining the DGM. Values: varlist or empty. {p_end}
-{synopt:{opt dgmcreated}}Dummy for dgm being a created variable. Values: always 0. {p_end}
 {synopt:{opt ndgmvars}}Number of dgm variables. Values: integers. {p_end}
+{synopt:{opt dgmcreated}}Dummy for dgm being a created variable. Values: always 0. {p_end}
 
 Targets
 {synopt:{opt target}}Variable name or stub for targets. Values: varname. {p_end}
 {synopt:{opt numtarget}}Number of targets. Values: integer {p_end}
-{synopt:{opt targetlabels}}Dummy for target being a variable with value labels. Values: 0/1. {p_end}
+{synopt:{opt targetnature}}Nature of target variable: 0=numeric unlabelled, 1=numeric labelled, 2=string. Values: ./0/1/2. {p_end}
 {synopt:{opt valtarget}}Names of targets, using value labels if they exist. {p_end}
 
 Methods
 {synopt:{opt method}}Method variable name (longlong format) or method values (longwide format). {p_end}
-{synopt:{opt methodcreated}}Dummy for method being a variable _methodvar created by siman setup. Values: 0/1. {p_end}
-{synopt:{opt methodlabels}}Dummy for method being value-labelled. Values: 0/1/2 (2=string). {p_end}
-{synopt:{opt methodvalues}}Names of methods, ignoring any value labels. {p_end}
-{synopt:{opt nmethod}}Dummy for long method. Values: always 1. {p_end}
 {synopt:{opt nummethod}}Number of methods. Values: integer. {p_end}
+{synopt:{opt methodnature}}Nature of method variable: 0=numeric unlabelled, 1=numeric labelled, 2=string. Values: ./0/1/2. {p_end}
+{synopt:{opt methodvalues}}Names of methods, ignoring any value labels. {p_end}
 {synopt:{opt valmethod}}Names of methods, using value labels if they exist. {p_end}
+{synopt:{opt methodcreated}}Dummy for method being a variable _methodvar created by siman setup. Values: 0/1. {p_end}
 
 Estimates
 {synopt:{opt estimate}}variable or stub containing estimate. {p_end}
@@ -376,8 +375,6 @@ True values
 {synopt:{opt true}}Variable name for true values. Values: varname. {p_end}
 
 Data formats
-{synopt:{opt format}}current data format, in words. Values: always "long-long". {p_end}
-{synopt:{opt nformat}}current data format, coded. Values: always 1. {p_end}
 {synopt:{opt setuprun}}is set to 1 when siman setup is run. Values: always 1. {p_end}
 
 Characteristics created by {help siman analyse}

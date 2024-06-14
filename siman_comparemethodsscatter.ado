@@ -257,7 +257,7 @@ if !_rc qui ret list
 else qui capture levelsof `method'
 
 
-local methodlabels 0
+local methodnature 0
 if `"`r(labels)'"'!="" {
 	local 0 = `"`r(labels)'"'
 
@@ -266,7 +266,7 @@ if `"`r(labels)'"'!="" {
 		local methodvaluesloop `methodvaluesloop' `mlabel`i''
 		local methodlabel`i': word `i' of `methodvaluesloop'
 		local mlabelname`i' Method_`methodlabel`i''
-		local methodlabels 1
+		local methodnature 1
 	}
 }
 else {
@@ -295,17 +295,15 @@ else {
 
 
 * for numeric method variables with string labels, need to re-assign valmethod later on to be numerical values
-if `nmethod'!=0 {
-	qui tab `method',m
-	local nmethodlabels = `r(r)'
-	qui levels `method', local(levels)
-	tokenize `"`levels'"'
-	forvalues e = 1/`nmethodlabels' {
-		local methlabel`e' = "``e''"
-		if `e'==1 local valmethodnumwithlabel `methlabel`e''
-		else if `e'>=2 local valmethodnumwithlabel `valmethodnumwithlabel' `methlabel`e''
-	}	
-}
+qui tab `method',m
+local nmethodlabels = `r(r)'
+qui levels `method', local(levels)
+tokenize `"`levels'"'
+forvalues e = 1/`nmethodlabels' {
+	local methlabel`e' = "``e''"
+	if `e'==1 local valmethodnumwithlabel `methlabel`e''
+	else if `e'>=2 local valmethodnumwithlabel `valmethodnumwithlabel' `methlabel`e''
+}	
 
 
 * If data is not in long-wide format, then reshape for graphs
@@ -361,12 +359,12 @@ else if !mi("`by'") & "`by'"!="`target'" {
 
 local c 1
 `forcommand' {
-	if `methodstringindi'==0 & `methodlabels' == 0 {
+	if `methodstringindi'==0 & `methodnature' == 0 {
 		label var `estimate'`j' "`estimate', `mlabel`j''"
 		label var `se'`j' "`se', `mlabel`j''"
 		local mlabel`c' Method: `j'
 	}
-	else if `methodstringindi'==0 & `methodlabels' == 1 {
+	else if `methodstringindi'==0 & `methodnature' == 1 {
 		local k : word `j' of `valmethod'
 		label var `estimate'`j' "`estimate', Method_`k'"
 		label var `se'`j' "`se', Method_`k'"
@@ -489,7 +487,7 @@ if `numberdgms'==1 {
 	foreach m in `dgmvalues' {
 		if !mi("`debug'") di as text "Loop for numberdgms = 1: m = `m'"
 		* check if target is numeric with string labels for the looping over target values
-		*if `targetlabels' == 1 {
+		*if `targetnature' == 1 {
 		if "`valtarget'"!= "N/A" {
 			qui levelsof `target', local(targetlevels)
 			local foreachtarget "`targetlevels'"
@@ -511,7 +509,7 @@ if `numberdgms'==1 {
 			if `methodstringindi'==0  {
 				if mi("`methlist'") {
 					* if numerical method without labels
-					if `methodlabels'!= 1 local methodvaluesloop `valmethod'	
+					if `methodnature'!= 1 local methodvaluesloop `valmethod'	
 					* if numerical method with labels
 					else local methodvaluesloop `valmethodnumwithlabel'
 				}
@@ -563,7 +561,7 @@ if `numberdgms'==1 {
 			}
 			
 			* use target labels if target numeric with string labels
-			if `targetlabels' == 1 {
+			if `targetnature' == 1 {
 				local tlab: word `t' of `valtarget'
 				local targetlab ", `target': `tlab'"
 			}
@@ -662,7 +660,7 @@ else if `numberdgms' != 1 {
 			local dgmlevels`d' : label grouplevels `d'
 	
 			* check if target is numeric with string labels for the looping over target values
-			*if `targetlabels' == 1 {
+			*if `targetnature' == 1 {
 			if "`valtarget'"!= "N/A" {
 				qui levelsof `target', local(targetlevels)
 				local foreachtarget "`targetlevels'"
@@ -686,7 +684,7 @@ else if `numberdgms' != 1 {
 				if `methodstringindi'==0   {		
 					if mi("`methlist'") {
 						* if numerical method without labels
-						if `methodlabels'!= 1 local methodvaluesloop `valmethod'	
+						if `methodnature'!= 1 local methodvaluesloop `valmethod'	
 						* if numerical method with labels
 						else local methodvaluesloop `valmethodnumwithlabel'
 					}
@@ -750,7 +748,7 @@ else if `numberdgms' != 1 {
 				}
 						
 				* use target labels if target numeric with string labels
-				if `targetlabels' == 1 { 
+				if `targetnature' == 1 { 
 					local tlab: word `t' of `valtarget'
 					local targetlab ", `target': `tlab'"
 				}

@@ -1,4 +1,5 @@
-*!	version 0.10.1	11jun2024	
+*!	version 0.10.2	14jun2024	
+*	version 0.10.2	14jun2024	IW wide target/method: numeric/string comes out as numeric/numeric-labelled; remove more unwanted chars
 *	version 0.10.1	11jun2024	IW allow variable abbreviations
 *	version 0.10	 7may2024	IW major restructure
 *	version 0.9.1	12apr2024	IW remove chars ifsetup, insetup
@@ -138,12 +139,19 @@ if !mi("`dgm'") {
 local ntarget: word count `target'
 cap confirm var `target'
 local targetisvar = _rc==0
-local targetlabels 0
 if `targetisvar' unab target : `target'
 if `ntarget'>1 | (`ntarget'==1 & `targetisvar'==0) {
 	local targetformat wide
 	local valtarget `target'
 	local numtarget `ntarget'
+	cap numlist `"`target'"'
+	if _rc local targetstring string // when reshaping target as long, create it as string
+	* create a value label for use after reshape
+	cap label drop targetlabel
+	local i 0
+	foreach thistarget of local target {
+		label def targetlabel `++i' `"`thistarget'"', add
+	}
 }
 else if `ntarget'==1 & `targetisvar'==1 {
 	local targetformat long
@@ -156,7 +164,6 @@ else if `ntarget'==1 & `targetisvar'==1 {
 			local thisval : label (`target') `val'
 			local valtarget `valtarget' `thisval'
 		}
-		local targetlabels 1
 		if !mi("`debug'") mac l _valtarget
 		if !mi("`debug'") mac l _valtargetorig
 	}
@@ -190,6 +197,14 @@ if `methodisvar' unab method : `method'
 if `nmethod'>1 | `methodisvar'==0 {
 	local methodformat wide
 	local methodvalues `method'
+	cap numlist `"`method'"'
+	if _rc local methodstring string // when reshaping method as long, create it as string
+	* create a value label for use after reshape
+	cap label drop methodlabel
+	local i 0
+	foreach thismethod of local method {
+		label def methodlabel `++i' `"`thismethod'"', add
+	}
 }
 else if `nmethod'==1 & `methodisvar'==1 {
 	local methodformat long
@@ -386,10 +401,12 @@ if "`targetformat'"=="wide" & "`methodformat'"=="wide" & "`order'"=="method" {
 			local stubvarsinterim `stubvarsinterim' `stubvar'`methodvalue'
 		}
 	}
-	`dicmd' reshape long `stubvarsinterim' `truestub', i(`rep' `longvars') j(target `target') string
+	`dicmd' reshape long `stubvarsinterim' `truestub', i(`rep' `longvars') j(target `target') `targetstring'
 	local targetformat long
 	local target target
 	local longvars `longvars' `target'
+	if "`targetstring'"=="string" sencode target, label(targetlabel) replace
+	else label value target // empty label can get used
 	if "`truetype'"=="stub" {
 		local truetype variable
 		local truestub
@@ -405,26 +422,32 @@ if "`targetformat'"=="wide" & "`methodformat'"=="wide" & "`order'"=="target" {
 			local stubvarsinterim `stubvarsinterim' `stubvar'`targetvalue'
 		}
 	}
-	`dicmd' reshape long `stubvarsinterim' `truestub', i(`rep' `longvars') j(method `method') string
+	`dicmd' reshape long `stubvarsinterim' `truestub', i(`rep' `longvars') j(method `method') `methodstring'
 	local methodformat long
 	local method method
 	local longvars `longvars' `method'
+	if "`methodstring'"=="string" sencode method, label(methodlabel) replace
+	else label value method // empty label can get used
 }
 
 if "`targetformat'"=="long" & "`methodformat'"=="wide" { 
 	`di' "reshaping long-wide to long-long"
-	`dicmd' reshape long `stubvars', i(`rep' `longvars') j(method `method') string
+	`dicmd' reshape long `stubvars', i(`rep' `longvars') j(method `method') `methodstring'
 	local methodformat long
 	local method method
 	local longvars `longvars' `method'
+	if "`methodstring'"=="string" sencode method, label(methodlabel) replace
+	else label value method // empty label can get used
 }
 
 if "`targetformat'"=="wide" & "`methodformat'"=="long" { 
 	`di' "reshaping wide-long to long-long"
-	`dicmd' reshape long `stubvars' `truestub', i(`rep' `longvars') j(target `target') string
+	`dicmd' reshape long `stubvars' `truestub', i(`rep' `longvars') j(target `target') `targetstring'
 	local targetformat long
 	local target target
 	local longvars `longvars' `target'
+	if "`targetstring'"=="string" sencode target, label(targetlabel) replace
+	else label value target // empty label can get used
 	if "`truetype'"=="stub" {
 		local truetype variable
 		local truestub
@@ -442,23 +465,32 @@ if "`targetformat'"=="wide" & "`methodformat'"=="long" {
 local dgmcreated 0
 local allthings dgm dgmcreated ndgmvars
 * Target
-local allthings `allthings' numtarget target targetlabels valtarget
+if !mi("`target'") { // find local targetnature
+	cap confirm numeric variable `target'
+	if _rc local targetnature 2
+	else {
+		local targetlabelname : value label `target'
+		local targetnature = !mi("`targetlabelname'")
+	}
+}
+else local targetnature .
+local allthings `allthings' numtarget target targetnature valtarget
 * Method
 if !mi("`method'") {
 	cap confirm numeric variable `method'
-	if _rc local methodlabels 2
+	if _rc local methodnature 2
 	else {
 		local methodlabelname : value label `method'
-		local methodlabels = !mi("`methodlabelname'")
+		local methodnature = !mi("`methodlabelname'")
 	}
-	if `methodlabels'==1 { // numeric labelled
+	if `methodnature'==1 { // numeric labelled
 		qui levelsof `method', local(valmethodorig) clean
 		local valmethod
 		foreach val of local valmethodorig {
 			local thisval : label (`method') `val'
 			local valmethod `valmethod' `thisval'
 		}
-		local methodlabels 1
+		local methodnature 1
 		local methodvalues `valmethodorig'
 	}
 	else {
@@ -467,15 +499,14 @@ if !mi("`method'") {
 	}
 	local nummethod : word count `valmethod'
 }
-local nmethod 1
-local allthings `allthings' method methodcreated methodlabels methodvalues nmethod nummethod valmethod
+local allthings `allthings' method methodcreated methodnature methodvalues nummethod valmethod
 * Estimates
 local allthings `allthings' estimate se df p rep lci uci 
 * True values
 local allthings `allthings' true 
 * Data formats
 local format long-long
-local nformat 1
+local nformat 1 // keep for now, until all graphs cope without
 local allthings `allthings' format nformat targetformat methodformat 
 * Utilities
 local setuprun 1

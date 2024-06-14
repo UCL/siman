@@ -436,7 +436,7 @@ if "`valtarget'" != "N/A" & "`by'"!="`dgmbyvar'" {
 				else if "`el'"=="`se'" local eltitle = "`se'" 
 			
 				* use target labels if target numeric with string labels
-				if `targetlabels' == 1 local tlab: word `t' of `valtarget'
+				if `targetnature' == 1 local tlab: word `t' of `valtarget'
 				else local tlab `t'
 			
 				local dgmlevels`d' : label grouplevels `d'

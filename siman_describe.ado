@@ -127,7 +127,8 @@ else if `dgmcreated' == 1 {
 //  di as text "The format for targets is:" as result _col(`colwidth') cond(inlist(`nformat',1,3),"long","wide")
     di as text "  Variable containing targets:" as result _col(`colwidth') "`target'"
     di as text "  Number of targets:" as result _col(`colwidth') "`numtarget'"
-	local ntarget 0 // temporary fix after removing char ntarget from setup 
+local ntarget 0 // TEMPORARY FIX AFTER REMOVING CHAR NTARGET FROM SETUP 
+local nmethod 1 // TEMPORARY FIX AFTER REMOVING CHAR NMETHOD FROM SETUP 
     if (`nformat'==1 & `ntarget'==0 & `nmethod'==0 ) {
         di as text "  Target values:" as result _col(`colwidth') "`valtarget'" _newline
     }

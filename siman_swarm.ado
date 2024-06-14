@@ -39,7 +39,7 @@ if "`setuprun'"!="1" {
 
 * if the data is read in long-long format, then reshaped to longwide, then there will be no method variable (only
 * method values), so base the error message on number of methods
-if (`nmethod'<1 | `nummethod'<1) & "`setuprun'"=="1" {
+if `nummethod'<1 & "`setuprun'"=="1" {
 	di as error "The variable 'method' is missing so siman swarm can not be created.  Please create a variable in your dataset called method containing the method value(s)."
 	exit 498
 }
