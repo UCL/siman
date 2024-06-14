@@ -54,9 +54,8 @@ forvalues dgmtype = 1/5 {
 		local xdgm beta pmiss mech
 		local xndgmvars 3
 	}
-	local xdgmcreated 0
 	qui siman setup, rep(re) `dgmopt' target(estim) method(meth) estimate(b) se(se) true(truev)
-	foreach thing in dgm ndgmvars dgmcreated {
+	foreach thing in dgm ndgmvars {
 		local xx `: char _dta[siman_`thing']'
 		cap assert "`x`thing''" == "`xx'"
 		if _rc {

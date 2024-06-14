@@ -5,7 +5,8 @@ C:\ian\git\siman\siman.ado
 C:\ian\git\siman\siman_setup.ado
 *!      version 0.10.2  14jun2024       
 C:\ian\git\siman\siman_describe.ado
-*! version 0.6   8may2024       IW no longer removes underscores from display
+*! version 0.7  14jun2024       IW streamline for longlong only; calculate #dgms without assuming fa
+> ctorial; remove commented out code
 C:\ian\git\siman\siman_analyse.ado
 *! version 0.9.1        14jun2024               IW remove code for nformat!=1 and nmethod!=1
 C:\ian\git\siman\siman_table.ado
@@ -62,26 +63,25 @@ C:\ian\git\siman\siman_nestloop.ado
  34.                 local xdgm beta pmiss mech
  35.                 local xndgmvars 3
  36.         }
- 37.         local xdgmcreated 0
- 38.         qui siman setup, rep(re) `dgmopt' target(estim) method(meth) estimate(b) se(se) true(tr
+ 37.         qui siman setup, rep(re) `dgmopt' target(estim) method(meth) estimate(b) se(se) true(tr
 > uev)
- 39.         foreach thing in dgm ndgmvars dgmcreated {
- 40.                 local xx `: char _dta[siman_`thing']'
- 41.                 cap assert "`x`thing''" == "`xx'"
- 42.                 if _rc {
- 43.                         di as error "Error with dgmtype = `dgmtype':"
- 44.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
- 45.                 }
- 46.         }
- 47.         qui count if method=="CCA"
- 48.         local x = r(N)
- 49.         siman analyse if method=="MeanImp", notable
- 50.         qui count if method=="CCA"
- 51.         assert `x' == r(N)
- 52.         siman analyse if method=="Noadj", notable replace
- 53.         qui count if method=="CCA"
- 54.         assert `x' == r(N)
- 55. }
+ 38.         foreach thing in dgm ndgmvars {
+ 39.                 local xx `: char _dta[siman_`thing']'
+ 40.                 cap assert "`x`thing''" == "`xx'"
+ 41.                 if _rc {
+ 42.                         di as error "Error with dgmtype = `dgmtype':"
+ 43.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
+ 44.                 }
+ 45.         }
+ 46.         qui count if method=="CCA"
+ 47.         local x = r(N)
+ 48.         siman analyse if method=="MeanImp", notable
+ 49.         qui count if method=="CCA"
+ 50.         assert `x' == r(N)
+ 51.         siman analyse if method=="Noadj", notable replace
+ 52.         qui count if method=="CCA"
+ 53.         assert `x' == r(N)
+ 54. }
 dgmtype = 1
 (99,000 observations deleted)
 siman analyse has run successfully

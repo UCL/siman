@@ -3,9 +3,10 @@
 C:\ian\git\siman\siman.ado
 *!version 0.9  14jun2024
 C:\ian\git\siman\siman_setup.ado
-*!      version 0.10.1  11jun2024       
+*!      version 0.10.2  14jun2024       
 C:\ian\git\siman\siman_describe.ado
-*! version 0.6   8may2024       IW no longer removes underscores from display
+*! version 0.7  14jun2024       IW streamline for longlong only; calculate #dgms without assuming fa
+> ctorial; remove commented out code
 C:\ian\git\siman\siman_analyse.ado
 *! version 0.9.1        14jun2024               IW remove code for nformat!=1 and nmethod!=1
 C:\ian\git\siman\siman_table.ado
@@ -779,8 +780,8 @@ Warning: no method specified. siman will proceed assuming there is only one meth
 _____________________________________________________
 
 Data-generating mechanism (DGM)
-  DGM variables (# levels):       
-  Total number of DGMs:           
+  DGM variables (# levels):       N/A
+  Total number of DGMs:           1
 
 Targets
   Variable containing targets:    estimand
@@ -2830,8 +2831,8 @@ Warning: no method specified. siman will proceed assuming there is only one meth
 _____________________________________________________
 
 Data-generating mechanism (DGM)
-  DGM variables (# levels):       
-  Total number of DGMs:           
+  DGM variables (# levels):       N/A
+  Total number of DGMs:           1
 
 Targets
   Variable containing targets:    estimand
@@ -4700,8 +4701,8 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 _____________________________________________________
 
 Data-generating mechanism (DGM)
-  DGM variables (# levels):       
-  Total number of DGMs:           
+  DGM variables (# levels):       N/A
+  Total number of DGMs:           1
 
 Targets
   Variable containing targets:    target
@@ -6678,8 +6679,8 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 _____________________________________________________
 
 Data-generating mechanism (DGM)
-  DGM variables (# levels):       
-  Total number of DGMs:           
+  DGM variables (# levels):       N/A
+  Total number of DGMs:           1
 
 Targets
   Variable containing targets:    target
@@ -8659,8 +8660,8 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 _____________________________________________________
 
 Data-generating mechanism (DGM)
-  DGM variables (# levels):       
-  Total number of DGMs:           
+  DGM variables (# levels):       N/A
+  Total number of DGMs:           1
 
 Targets
   Variable containing targets:    target

@@ -3,9 +3,10 @@
 C:\ian\git\siman\siman.ado
 *!version 0.9  14jun2024
 C:\ian\git\siman\siman_setup.ado
-*!      version 0.10.1  11jun2024       
+*!      version 0.10.2  14jun2024       
 C:\ian\git\siman\siman_describe.ado
-*! version 0.6   8may2024       IW no longer removes underscores from display
+*! version 0.7  14jun2024       IW streamline for longlong only; calculate #dgms without assuming fa
+> ctorial; remove commented out code
 C:\ian\git\siman\siman_analyse.ado
 *! version 0.9.1        14jun2024               IW remove code for nformat!=1 and nmethod!=1
 C:\ian\git\siman\siman_table.ado
