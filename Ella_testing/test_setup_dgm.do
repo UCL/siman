@@ -4,7 +4,9 @@ IW 11jun2024
 DATA STRUCTURE
 	D = beta (3, integer) pmiss (2, integer) mech (2, string)
 	E - estimand (3, string)
-	M - method (3, string)
+	M - [method (3, string)]
+[] = dropped here
+
 */
 
 local filename test_setup_dgm
@@ -21,6 +23,8 @@ siman which
 forvalues dgmtype = 1/5 {
 	di as input "dgmtype = `dgmtype'"
 	use c:\temp\extendedtestdata, clear
+	keep if method=="CCA"
+	drop method
 	if `dgmtype'==1 {
 		keep if beta==1 & pmiss==1 & mech=="MCAR"
 		drop beta pmiss mech
@@ -54,7 +58,7 @@ forvalues dgmtype = 1/5 {
 		local xdgm beta pmiss mech
 		local xndgmvars 3
 	}
-	qui siman setup, rep(re) `dgmopt' target(estim) method(meth) estimate(b) se(se) true(truev)
+	qui siman setup, rep(re) `dgmopt' target(estim) estimate(b) se(se) true(truev)
 	foreach thing in dgm ndgmvars {
 		local xx `: char _dta[siman_`thing']'
 		cap assert "`x`thing''" == "`xx'"
@@ -67,13 +71,13 @@ forvalues dgmtype = 1/5 {
 	* save for testing siman graph commands
 	save data/setupdata_dgm`dgmtype', replace
 
-	qui count if method=="CCA"
+	qui count if estimand=="effect"
 	local x = r(N)
-	siman analyse if method=="MeanImp", notable
-	qui count if method=="CCA"
+	siman analyse if estimand=="mean1", notable
+	qui count if estimand=="effect"
 	assert `x' == r(N)
-	siman analyse if method=="Noadj", notable replace
-	qui count if method=="CCA"
+	siman analyse if estimand=="mean0", notable replace
+	qui count if estimand=="effect"
 	assert `x' == r(N)
 }
 

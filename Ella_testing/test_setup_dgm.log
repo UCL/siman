@@ -22,94 +22,63 @@ C:\ian\git\siman\siman_blandaltman.ado
 C:\ian\git\siman\siman_swarm.ado
 *! version 1.10 22apr2024
 C:\ian\git\siman\siman_scatter.ado
-*! version 1.7 22apr2024
+*!      version 0.10    18jun2024       IW Clean up handling of varlist, if/in, by
 C:\ian\git\siman\siman_nestloop.ado
 *! version 1.8.2   17aug2023
 
 . 
-. forvalues dgmtype = 1/5 {
-  2.         di as input "dgmtype = `dgmtype'"
-  3.         use c:\temp\extendedtestdata, clear
-  4.         if `dgmtype'==1 {
-  5.                 keep if beta==1 & pmiss==1 & mech=="MCAR"
-  6.                 drop beta pmiss mech
-  7.                 local dgmopt
-  8.                 local xdgm 
-  9.                 local xndgmvars 0
- 10.         }
- 11.         if `dgmtype'==2 {
- 12.                 keep if beta==1 & pmiss==1 & mech=="MCAR"
- 13.                 drop pmiss mech 
- 14.                 local dgmopt dgm(beta)
- 15.                 local xdgm beta
- 16.                 local xndgmvars 1
- 17.         }
- 18.         if `dgmtype'==3 {
- 19.                 keep if beta==1 & pmiss==1 
- 20.                 drop beta pmiss
- 21.                 local dgmopt dgm(mech)
- 22.                 local xdgm mech
- 23.                 local xndgmvars 1
- 24.         }
- 25.         if `dgmtype'==4 {
- 26.                 keep if beta==1
- 27.                 drop beta
- 28.                 local dgmopt dgm(pmiss mech)
- 29.                 local xdgm pmiss mech
- 30.                 local xndgmvars 2
- 31.         }
- 32.         if `dgmtype'==5 {
- 33.                 local dgmopt dgm(beta pmiss mech)
- 34.                 local xdgm beta pmiss mech
- 35.                 local xndgmvars 3
- 36.         }
- 37.         qui siman setup, rep(re) `dgmopt' target(estim) method(meth) estimate(b) se(se) true(tr
-> uev)
- 38.         foreach thing in dgm ndgmvars {
- 39.                 local xx `: char _dta[siman_`thing']'
- 40.                 cap assert "`x`thing''" == "`xx'"
- 41.                 if _rc {
- 42.                         di as error "Error with dgmtype = `dgmtype':"
- 43.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
- 44.                 }
- 45.         }
- 46.         
-.         * save for testing siman graph commands
-.         save data/setupdata_dgm`dgmtype', replace
- 47. 
-.         qui count if method=="CCA"
- 48.         local x = r(N)
- 49.         siman analyse if method=="MeanImp", notable
- 50.         qui count if method=="CCA"
- 51.         assert `x' == r(N)
- 52.         siman analyse if method=="Noadj", notable replace
- 53.         qui count if method=="CCA"
- 54.         assert `x' == r(N)
- 55. }
-dgmtype = 1
-(99,000 observations deleted)
-file data/setupdata_dgm1.dta saved
-siman analyse has run successfully
-siman analyse has run successfully
-dgmtype = 2
-(99,000 observations deleted)
-file data/setupdata_dgm2.dta saved
-siman analyse has run successfully
-siman analyse has run successfully
-dgmtype = 3
-(90,000 observations deleted)
-file data/setupdata_dgm3.dta saved
-siman analyse has run successfully
-siman analyse has run successfully
-dgmtype = 4
-(72,000 observations deleted)
-file data/setupdata_dgm4.dta saved
-siman analyse has run successfully
-siman analyse has run successfully
-dgmtype = 5
-file data/setupdata_dgm5.dta saved
-siman analyse has run successfully
-siman analyse has run successfully
+. foreach feature in dgm target method {
+  2.         local N 6
+  3.         if "`feature'"=="dgm" local N 5
+  4.         forvalues n=1/`N' {
+  5.                 dicmd use data/setupdata_`feature'`n', clear
+  6.                 siman scatter, name(scatter_`feature'`n', replace) bygr(title(Test siman scatte
+> r using data `feature'`n'))
+  7.         }
+  8. }
+use data/setupdata_dgm1, clear
+siman scatter will draw 1 graph with 3 panels
+use data/setupdata_dgm2, clear
+siman scatter will draw 1 graph with 3 panels
+use data/setupdata_dgm3, clear
+siman scatter will draw 1 graph with 6 panels
+use data/setupdata_dgm4, clear
+siman scatter will draw 1 graph with 12 panels
+use data/setupdata_dgm5, clear
+siman scatter will draw 1 graph with 36 panels
+Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+use data/setupdata_target1, clear
+siman scatter will draw 1 graph with 9 panels
+use data/setupdata_target2, clear
+siman scatter will draw 1 graph with 9 panels
+use data/setupdata_target3, clear
+siman scatter will draw 1 graph with 27 panels
+Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+use data/setupdata_target4, clear
+siman scatter will draw 1 graph with 27 panels
+Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+use data/setupdata_target5, clear
+siman scatter will draw 1 graph with 27 panels
+Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+use data/setupdata_target6, clear
+siman scatter will draw 1 graph with 27 panels
+Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+use data/setupdata_method1, clear
+siman scatter will draw 1 graph with 6 panels
+use data/setupdata_method2, clear
+siman scatter will draw 1 graph with 6 panels
+use data/setupdata_method3, clear
+siman scatter will draw 1 graph with 18 panels
+Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+use data/setupdata_method4, clear
+siman scatter will draw 1 graph with 18 panels
+Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+use data/setupdata_method5, clear
+siman scatter will draw 1 graph with 18 panels
+Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+use data/setupdata_method6, clear
+siman scatter will draw 1 graph with 18 panels
+Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
 
 . 
 . di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"

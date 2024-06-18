@@ -2,9 +2,10 @@
 TEST SIMAN SETUP: TARGETS
 IW 11jun2024
 DATA STRUCTURE
-	D = beta (3, integer) pmiss (2, integer) mech (2, string)
+	D = beta (3, integer) [pmiss (2, integer) mech (2, string)]
 	E - estimand (3, string)
 	M - method (3, string)
+[] = dropped here
 */
 
 local filename test_setup_target
@@ -23,6 +24,8 @@ siman which
 forvalues targettype = 1/6 {
 	di as input "targettype = `targettype'"
 	use c:\temp\extendedtestdata, clear
+	keep if pmiss==1 & mech=="MCAR"
+	drop pmiss mech
 	if `targettype'==1 { // no target var
 		keep if estimand=="effect"
 		drop estimand
@@ -61,7 +64,7 @@ forvalues targettype = 1/6 {
 	}
 	if `targettype'==5 { // 3 targets, numeric, wide
 		sencode estimand, replace
-		qui reshape wide b se truevalue, i(rep beta pmiss mech method) j(estimand)
+		qui reshape wide b se truevalue, i(rep beta method) j(estimand)
 		local targetopt target(1 2 3)
 		local xnumtarget 3
 		local xtarget target
@@ -70,7 +73,7 @@ forvalues targettype = 1/6 {
 		local xconfirm numeric var target
 	}
 	if `targettype'==6 { // 3 targets, string, wide
-		qui reshape wide b se truevalue, i(rep beta pmiss mech method) j(estimand) string
+		qui reshape wide b se truevalue, i(rep beta method) j(estimand) string
 		local targetopt target(effect mean0 mean1)
 		local xnumtarget 3
 		local xtarget target
@@ -78,7 +81,7 @@ forvalues targettype = 1/6 {
 		local xvaltarget effect mean0 mean1
 		local xconfirm numeric var target
 	}
-	qui siman setup, rep(re) dgm(beta pmiss mech) `targetopt' method(meth) estimate(b) se(se) true(truevalue)
+	qui siman setup, rep(re) dgm(beta) `targetopt' method(meth) estimate(b) se(se) true(truevalue)
 	
 	* check chars
 	foreach thing in numtarget target targetnature valtarget {
