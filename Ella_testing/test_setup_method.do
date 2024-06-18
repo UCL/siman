@@ -98,6 +98,10 @@ forvalues methodtype = 1/6 {
 			di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
 		}
 	}
+
+	* save for testing siman graph commands
+	save data/setupdata_method`methodtype', replace
+
 	qui count if beta==3
 	local x = r(N)
 	siman analyse if beta==2, notable

@@ -63,6 +63,10 @@ forvalues dgmtype = 1/5 {
 			di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
 		}
 	}
+	
+	* save for testing siman graph commands
+	save data/setupdata_dgm`dgmtype', replace
+
 	qui count if method=="CCA"
 	local x = r(N)
 	siman analyse if method=="MeanImp", notable

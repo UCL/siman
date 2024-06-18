@@ -73,32 +73,41 @@ C:\ian\git\siman\siman_nestloop.ado
  43.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
  44.                 }
  45.         }
- 46.         qui count if method=="CCA"
- 47.         local x = r(N)
- 48.         siman analyse if method=="MeanImp", notable
- 49.         qui count if method=="CCA"
- 50.         assert `x' == r(N)
- 51.         siman analyse if method=="Noadj", notable replace
- 52.         qui count if method=="CCA"
- 53.         assert `x' == r(N)
- 54. }
+ 46.         
+.         * save for testing siman graph commands
+.         save data/setupdata_dgm`dgmtype', replace
+ 47. 
+.         qui count if method=="CCA"
+ 48.         local x = r(N)
+ 49.         siman analyse if method=="MeanImp", notable
+ 50.         qui count if method=="CCA"
+ 51.         assert `x' == r(N)
+ 52.         siman analyse if method=="Noadj", notable replace
+ 53.         qui count if method=="CCA"
+ 54.         assert `x' == r(N)
+ 55. }
 dgmtype = 1
 (99,000 observations deleted)
+file data/setupdata_dgm1.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 dgmtype = 2
 (99,000 observations deleted)
+file data/setupdata_dgm2.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 dgmtype = 3
 (90,000 observations deleted)
+file data/setupdata_dgm3.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 dgmtype = 4
 (72,000 observations deleted)
+file data/setupdata_dgm4.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 dgmtype = 5
+file data/setupdata_dgm5.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 

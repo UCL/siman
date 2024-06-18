@@ -93,6 +93,9 @@ forvalues targettype = 1/6 {
 	* check name and type of target variable
 	confirm `xconfirm'
 	
+	* save for testing siman graph commands
+	save data/setupdata_target`targettype', replace
+
 	* check analyse with subsets
 	qui count if beta==3
 	local x = r(N)

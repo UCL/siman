@@ -109,33 +109,43 @@ C:\ian\git\siman\siman_nestloop.ado
  72.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
  73.                 }
  74.         }
- 75.         qui count if beta==3
- 76.         local x = r(N)
- 77.         siman analyse if beta==2, notable
- 78.         qui count if beta==3
- 79.         assert `x' == r(N)
- 80.         siman analyse if beta==1, notable replace
- 81.         qui count if beta==3
- 82.         assert `x' == r(N)
- 83. }
+ 75. 
+.         * save for testing siman graph commands
+.         save data/setupdata_method`methodtype', replace
+ 76. 
+.         qui count if beta==3
+ 77.         local x = r(N)
+ 78.         siman analyse if beta==2, notable
+ 79.         qui count if beta==3
+ 80.         assert `x' == r(N)
+ 81.         siman analyse if beta==1, notable replace
+ 82.         qui count if beta==3
+ 83.         assert `x' == r(N)
+ 84. }
 methodtype = 1
 (72,000 observations deleted)
+file data/setupdata_method1.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 2
 (72,000 observations deleted)
+file data/setupdata_method2.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 3
+file data/setupdata_method3.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 4
+file data/setupdata_method4.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 5
+file data/setupdata_method5.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 6
+file data/setupdata_method6.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 

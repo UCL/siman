@@ -104,34 +104,43 @@ C:\ian\git\siman\siman_nestloop.ado
 .         * check name and type of target variable
 .         confirm `xconfirm'
  69.         
+.         * save for testing siman graph commands
+.         save data/setupdata_target`targettype', replace
+ 70. 
 .         * check analyse with subsets
 .         qui count if beta==3
- 70.         local x = r(N)
- 71.         siman analyse if beta==2, notable
- 72.         qui count if beta==3
- 73.         assert `x' == r(N)
- 74.         siman analyse if beta==1, notable replace
- 75.         qui count if beta==3
- 76.         assert `x' == r(N)
- 77. }
+ 71.         local x = r(N)
+ 72.         siman analyse if beta==2, notable
+ 73.         qui count if beta==3
+ 74.         assert `x' == r(N)
+ 75.         siman analyse if beta==1, notable replace
+ 76.         qui count if beta==3
+ 77.         assert `x' == r(N)
+ 78. }
 targettype = 1
 (72,000 observations deleted)
+file data/setupdata_target1.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 2
 (72,000 observations deleted)
+file data/setupdata_target2.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 3
+file data/setupdata_target3.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 4
+file data/setupdata_target4.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 5
+file data/setupdata_target5.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 6
+file data/setupdata_target6.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 
