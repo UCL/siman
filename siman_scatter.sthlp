@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.3 15aug2023}{...}
+{* *! version 0.10 18jun2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_scatter##syntax"}{...}
 {viewerjumpto "Description" "siman_scatter##description"}{...}
@@ -15,36 +15,25 @@
 {title:Syntax}
 
 {p 8 17 2}
-{cmdab:siman scatter} [{it:estimands}] {ifin}
+{cmdab:siman scatter} [{it:varlist}] {ifin}
 [{cmd:,}
 {it:options}]
 
-{pstd}If no variables are specified, then the scatter graph will be drawn for the {it:estimands:} {it:estimate vs se}.  Alternatively the user can select {it:se vs estimate} by typing {bf:siman scatter,} {it:se estimate}.
+{pstd}If no variables are specified, then the scatter graph will be drawn for  {it:estimate vs se}.  Alternatively the user can select {it:se vs estimate} by typing {bf:siman scatter} {it:se estimate}.
+
+{pstd}The {it:if} and {it:in} conditions are usually applied only to {bf:dgm}, {bf:target} and {bf:method}.  If they are applied otherwise, e.g. to {bf:repetition}, a warning is issued.
 
 {synoptset 20 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Main}
 
-{pstd}
-{p_end}
-{synopt:{opt if/in}}  The user can specify {it:if} and {it:in} within the siman scatter syntax. If they do not, but have already specified 
-an {it:if/in} during {help siman_setup:siman setup}, then the {it:if/in} from {help siman_setup:siman setup} will be used.
-The {it:if} option will only apply to {bf:dgm}, {bf:target} and {bf:method}.  The {it:if} option is not allowed to be used on 
-{bf:repetition} and an error message will be issued if the user tries to do so.
-
-{pstd}
-{p_end}
-{synopt:{opt by(string)}}  specifies the nesting of the variables, with the default being {bf:by(dgm target method)}
+{synopt:{opt by(string)}}  specifies the nesting of the variables, with the default being all of {bf:dgm target method} that vary within the selected data.
 
 {syntab:Graph options}
-{pstd}
-{p_end}
 
-{pstd}{it:For the siman scatter graph user-inputted options, most of the valid options for {help scatter:scatter} are available.}
+{synopt:{it:graphoptions}}Most of the valid options for {help scatter:scatter} are available.
 
-{pstd}
-{p_end}
 {synopt:{opt bygr:aphoptions(string)}}  graph options for the nesting of the graphs due to the {it:by} option
 
 

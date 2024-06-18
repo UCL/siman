@@ -1,4 +1,5 @@
-*! version 1.7 22apr2024
+*!	version 0.10	18jun2024	IW Clean up handling of varlist, if/in, by
+*								NB reduce version # to match other programs
 *  version 1.7 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
 *  version 1.6.7 03oct2023   EMZ update to warning message when by() conditions used
 *  version 1.6.6 18sept2023  EMZ updated warning of # panels to be printed based on 'if' subset
@@ -20,7 +21,7 @@
 program define siman_scatter, rclass
 version 16
 
-syntax [anything] [if][in] [,* BY(varlist) BYGRaphoptions(string)]
+syntax [varlist(default=none max=2)] [if][in] [, BY(varlist) BYGRaphoptions(string) name(passthru) *]
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -37,53 +38,45 @@ if mi("`estimate'") | mi("`se'") {
 	exit 498
 }
 
-* mark sample (needs to be before reshape)
+* mark sample
 marksample touse, novarlist
-tempvar meantouse
-
-di as text "working....."
 
 /* Start preparations */
 
 preserve
 
 * check if/in conditions
+tempvar meantouse
 egen `meantouse' = mean(`touse'), by(`dgm' `target' `method')
 cap assert inlist(`meantouse',0,1)
 if _rc {
-	di as error "The 'if' and 'in' conditions can only be applied to dgm, target and method variables"
-	exit 498
+	di as error "{p 0 2}Warning: this 'if' condition cuts across dgm, target and method. It is safest to subset only on dgm, target and method.{p_end}"
 }
-drop `meantouse'	
+drop `meantouse'
+
+qui count if `touse' & `rep'>0
+if r(N)==0 error 2000
 
 qui keep if `touse'
 * keeps estimates data only
 qui drop if `rep'<0
 
-* take out underscores at the end of variable names if there are any
-		foreach u of var * {
-			if  substr("`u'",strlen("`u'"),1)=="_" {
-				local U = substr("`u'", 1, index("`u'","_") - 1)
-					if "`U'" != "" {
-					capture rename `u' `U' 
-					if _rc di as txt "problem with `u'"
-					} 
-			}
-		}
-		
-if  substr("`estimate'",strlen("`estimate'"),1)=="_" local estimate = substr("`estimate'", 1, index("`estimate'","_") - 1)
-if  substr("`se'",strlen("`se'"),1)=="_" local se = substr("`se'", 1, index("`se'","_") - 1)
-
 * if statistics are not specified, run graphs for estimate and se, otherwise run for alternative order
-local anythingcount: word count `anything'
-if "`anything'"=="" local varlist `estimate' `se'
-else foreach thing of local anything {
-	local varelement = "`thing'"
-		if ("`varelement'"!="`estimate'" & "`varelement'"!="`se'") | "`anythingcount'"!="2" {
-			di as error "only -estimate se- or -se estimate- allowed"
-			exit 498
-		}
-	local varlist `varlist' `varelement'
+local error 0
+if "`varlist'"=="" local varlist `estimate' `se'
+else {
+	local y1 : word 1 of `varlist'
+	if "`y1'"=="`estimate'" local y2needed `se'
+	else if "`y1'"=="`se'" local y2needed `estimate'
+	else local error 1
+	if "`y2'"=="" local y2 `y2needed'
+	else if "`y2'"!="se" local error 1
+	local varlist `y1' `y2'
+}
+* di as error "{p 0 2}{p_end}"
+if `error' {
+	di as error "{p 0 2}Syntax: siman scatter [`estimate' `se' | `se' `estimate']{p_end}"
+	exit 198
 }
 
 * For the purposes of the graphs below, if dgm is missing in the dataset then set
@@ -94,106 +87,39 @@ if mi("`dgm'") {
 	local ndgmvars 1
 	local dgmcreated 1
 }
+else local dgmcreated 0
 
-local numberdgms: word count `dgm'
-if `numberdgms'==1 {
-	qui tab `dgm'
-	local ndgmlabels = `r(r)'
-}
-if `numberdgms'!=1 local ndgmlabels = `numberdgms'
-
-
-if !mi("`by'") {
-	local byvar = "`by'"
-}
-else if mi("`by'") {
-	if "`dgmcreated'" == "1" & "`methodcreated'" == "1" local byvar "`target'"
-	else if "`dgmcreated'" == "1" & "`methodcreated'" == "0" local byvar "`target' `method'"
-	else if "`dgmcreated'" == "0" & "`methodcreated'" == "1" local byvar "`dgm' `target'"
-	else local byvar = "`dgm' `target' `method'"
-}
-
-/*
-* handle by if contains dgm: make dgmvar equal to the `by' option only
-if !mi("`by'") {
-	local keep `by'
-	local vars `dgm'
-	local tokeep : list vars & keep
-	if !mi("`tokeep'") {
-		local dgmvar = "`by'"
-		qui tab `by'
-		local ndgmlabels = `r(r)'
+* create by if missing
+if mi("`by'") {
+	if !`dgmcreated' local by0 `by0' `dgm'
+	local by0 `by0' `target' 
+	if !`methodcreated' local by0 `by0' `method'
+	foreach thisby of local by0 {
+		qui levelsof `thisby'
+		if r(r)>1 local by `by' `thisby'
 	}
 }
-*/
-
-* scatter plot
-* check if many graphs will be created - if so warn the user
-local dgmcount: word count `dgm'
-qui tokenize `dgm'
-if `dgmcreated' == 0 {
-	forvalues j = 1/`dgmcount' {
-		qui tab ``j''
-		local nlevels = r(r)
-		local dgmvarsandlevels `"`dgmvarsandlevels'"' `"``j''"' `" (`nlevels') "'
-		if `j' == 1 local totaldgmnum = `nlevels'
-		else local totaldgmnum = `totaldgmnum'*`nlevels'
-	}
+if mi("`by'") { // i.e. if none of dgm target method varies
+	local byoption `bygraphoptions'
+	local npanels 1
 }
-
-if "`numtarget'" == "N/A" local numtargetcheck = 1
 else {
-    * need to re-count in case there is an 'if' statement.  Data is in long-long format from reshape above
-	qui tab `target'   
-	local numtargetcheck = `r(r)'
-}
-if "`nummethod'" == "N/A" local nummethodcheck = 1
-else {
-      * need to re-count in case there is an 'if' statement.  Data is in long-long format from reshape above
-	qui tab `method'   
-	local nummethodcheck = `r(r)'
-}
-if "`totaldgmnum'" == "" local totaldgmnum = 1
-
-if !mi("`by'") & strpos("`dgm'", "`by'")>0 {
-	local numtargetcheck = 1
-	local nummethodcheck = 1
-	cap qui tab `by'
-	local totaldgmnum = `r(r)'
-}
-if !mi("`by'") & "`by'" == "`target'" {
-	local totaldgmnum = 1
-	local nummethodcheck = 1
-}
-if !mi("`by'") & "`by'" == "`method'" {
-	local totaldgmnum = 1
-	local numtargetcheck = 1
+	local byoption by(`by', ixaxes `bygraphoptions') 
+	* count how many panels will be created
+	tempvar unique
+	egen `unique' = tag(`by')
+	qui count if `unique'
+	local npanels = r(N)
 }
 
-
-local graphnumcheck = `totaldgmnum' * `nummethodcheck' * `numtargetcheck'
-if `graphnumcheck' > 15 {
-	di as smcl as text "{p 0 2}Warning: `graphnumcheck' panels will be created: consider using 'if' condition or 'by' option as detailed in {help siman_scatter:siman scatter}{p_end}"
+di as text "siman scatter will draw " as result 1 as text " graph with " as result `npanels' as text " panels"
+if `npanels' > 15 {
+	di as smcl as text "{p 0 2}Consider reducing number of panels using 'if' condition or 'by' option as detailed in {help siman scatter}{p_end}"
 }
 
-* if dgm is defined by multiple variables, default is to plot scatter graphs for each dgm variable, split out by each level
-
-* Can't tokenize/substr as many "" in the string
-if !mi(`"`options'"') {
-	tempvar _namestring
-	qui gen `_namestring' = `"`options'"'
-	qui split `_namestring',  parse(`"name"')
-	local options = `_namestring'1
-	cap confirm var `_namestring'2
-		if !_rc {
-			local namestring = `_namestring'2
-			local name = `"name`namestring'"'
-			local options: list options - name
-		}
-}
 if mi("`name'") local name "name(simanscatter, replace)"
 	
-twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) by(`byvar', ixaxes `bygraphoptions') `name' `options'
+twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) `byoption' `name' `options'
 
 end
 
