@@ -3,7 +3,7 @@ test_scatter.do
 IW 18jun2024
 */
 
-local filename test_setup_dgm
+local filename test_scatter
 
 prog drop _all
 cd $testpath

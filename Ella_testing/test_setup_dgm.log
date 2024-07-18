@@ -27,58 +27,95 @@ C:\ian\git\siman\siman_nestloop.ado
 *! version 1.8.2   17aug2023
 
 . 
-. foreach feature in dgm target method {
-  2.         local N 6
-  3.         if "`feature'"=="dgm" local N 5
-  4.         forvalues n=1/`N' {
-  5.                 dicmd use data/setupdata_`feature'`n', clear
-  6.                 siman scatter, name(scatter_`feature'`n', replace) bygr(title(Test siman scatte
-> r using data `feature'`n'))
-  7.         }
-  8. }
-use data/setupdata_dgm1, clear
-siman scatter will draw 1 graph with 3 panels
-use data/setupdata_dgm2, clear
-siman scatter will draw 1 graph with 3 panels
-use data/setupdata_dgm3, clear
-siman scatter will draw 1 graph with 6 panels
-use data/setupdata_dgm4, clear
-siman scatter will draw 1 graph with 12 panels
-use data/setupdata_dgm5, clear
-siman scatter will draw 1 graph with 36 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
-use data/setupdata_target1, clear
-siman scatter will draw 1 graph with 9 panels
-use data/setupdata_target2, clear
-siman scatter will draw 1 graph with 9 panels
-use data/setupdata_target3, clear
-siman scatter will draw 1 graph with 27 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
-use data/setupdata_target4, clear
-siman scatter will draw 1 graph with 27 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
-use data/setupdata_target5, clear
-siman scatter will draw 1 graph with 27 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
-use data/setupdata_target6, clear
-siman scatter will draw 1 graph with 27 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
-use data/setupdata_method1, clear
-siman scatter will draw 1 graph with 6 panels
-use data/setupdata_method2, clear
-siman scatter will draw 1 graph with 6 panels
-use data/setupdata_method3, clear
-siman scatter will draw 1 graph with 18 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
-use data/setupdata_method4, clear
-siman scatter will draw 1 graph with 18 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
-use data/setupdata_method5, clear
-siman scatter will draw 1 graph with 18 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
-use data/setupdata_method6, clear
-siman scatter will draw 1 graph with 18 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+. forvalues dgmtype = 1/5 {
+  2.         di as input "dgmtype = `dgmtype'"
+  3.         use c:\temp\extendedtestdata, clear
+  4.         keep if method=="CCA"
+  5.         drop method
+  6.         if `dgmtype'==1 {
+  7.                 keep if beta==1 & pmiss==1 & mech=="MCAR"
+  8.                 drop beta pmiss mech
+  9.                 local dgmopt
+ 10.                 local xdgm 
+ 11.                 local xndgmvars 0
+ 12.         }
+ 13.         if `dgmtype'==2 {
+ 14.                 keep if beta==1 & pmiss==1 & mech=="MCAR"
+ 15.                 drop pmiss mech 
+ 16.                 local dgmopt dgm(beta)
+ 17.                 local xdgm beta
+ 18.                 local xndgmvars 1
+ 19.         }
+ 20.         if `dgmtype'==3 {
+ 21.                 keep if beta==1 & pmiss==1 
+ 22.                 drop beta pmiss
+ 23.                 local dgmopt dgm(mech)
+ 24.                 local xdgm mech
+ 25.                 local xndgmvars 1
+ 26.         }
+ 27.         if `dgmtype'==4 {
+ 28.                 keep if beta==1
+ 29.                 drop beta
+ 30.                 local dgmopt dgm(pmiss mech)
+ 31.                 local xdgm pmiss mech
+ 32.                 local xndgmvars 2
+ 33.         }
+ 34.         if `dgmtype'==5 {
+ 35.                 local dgmopt dgm(beta pmiss mech)
+ 36.                 local xdgm beta pmiss mech
+ 37.                 local xndgmvars 3
+ 38.         }
+ 39.         qui siman setup, rep(re) `dgmopt' target(estim) estimate(b) se(se) true(truev)
+ 40.         foreach thing in dgm ndgmvars {
+ 41.                 local xx `: char _dta[siman_`thing']'
+ 42.                 cap assert "`x`thing''" == "`xx'"
+ 43.                 if _rc {
+ 44.                         di as error "Error with dgmtype = `dgmtype':"
+ 45.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
+ 46.                 }
+ 47.         }
+ 48.         
+.         * save for testing siman graph commands
+.         save data/setupdata_dgm`dgmtype', replace
+ 49. 
+.         qui count if estimand=="effect"
+ 50.         local x = r(N)
+ 51.         siman analyse if estimand=="mean1", notable
+ 52.         qui count if estimand=="effect"
+ 53.         assert `x' == r(N)
+ 54.         siman analyse if estimand=="mean0", notable replace
+ 55.         qui count if estimand=="effect"
+ 56.         assert `x' == r(N)
+ 57. }
+dgmtype = 1
+(72,000 observations deleted)
+(33,000 observations deleted)
+file data/setupdata_dgm1.dta saved
+siman analyse has run successfully
+siman analyse has run successfully
+dgmtype = 2
+(72,000 observations deleted)
+(33,000 observations deleted)
+file data/setupdata_dgm2.dta saved
+siman analyse has run successfully
+siman analyse has run successfully
+dgmtype = 3
+(72,000 observations deleted)
+(30,000 observations deleted)
+file data/setupdata_dgm3.dta saved
+siman analyse has run successfully
+siman analyse has run successfully
+dgmtype = 4
+(72,000 observations deleted)
+(24,000 observations deleted)
+file data/setupdata_dgm4.dta saved
+siman analyse has run successfully
+siman analyse has run successfully
+dgmtype = 5
+(72,000 observations deleted)
+file data/setupdata_dgm5.dta saved
+siman analyse has run successfully
+siman analyse has run successfully
 
 . 
 . di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
