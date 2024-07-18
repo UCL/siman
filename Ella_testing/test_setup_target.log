@@ -121,32 +121,38 @@ C:\ian\git\siman\siman_nestloop.ado
 targettype = 1
 (81,000 observations deleted)
 (18,000 observations deleted)
+(file data/setupdata_target1.dta not found)
 file data/setupdata_target1.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 2
 (81,000 observations deleted)
 (18,000 observations deleted)
+(file data/setupdata_target2.dta not found)
 file data/setupdata_target2.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 3
 (81,000 observations deleted)
+(file data/setupdata_target3.dta not found)
 file data/setupdata_target3.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 4
 (81,000 observations deleted)
+(file data/setupdata_target4.dta not found)
 file data/setupdata_target4.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 5
 (81,000 observations deleted)
+(file data/setupdata_target5.dta not found)
 file data/setupdata_target5.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 6
 (81,000 observations deleted)
+(file data/setupdata_target6.dta not found)
 file data/setupdata_target6.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
