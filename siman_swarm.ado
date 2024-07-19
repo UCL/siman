@@ -1,4 +1,7 @@
-*! version 1.10 22apr2024
+*! version 0.10 19jul2024
+* version 0.10 19jul2024	IW align with new setup: clean up anything (use "estimate" not "`estimate'"), if/in, locals
+*							change meanoff to nomean; reorganise options, new scatteroptions, re-parse name
+*							align versioning with siman.ado
 *  version 1.10 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
 *  version 1.9.8 27mar2024	  IW comment out lines creating ndgm, seems unused
 *  version 1.9.7 03oct2023    EMZ update to warning message when if/by conditions used
@@ -25,163 +28,99 @@
 program define siman_swarm, rclass
 version 16
 
-syntax [anything] [if][in] [, * MEANOFF MEANGRaphoptions(string) BY(varlist) BYGRaphoptions(string) GRAPHOPtions(string)]
+syntax [anything] [if][in] [, * nomean MEANGRaphoptions(string) BY(varlist) BYGRaphoptions(string) GRAPHOPtions(string) SCatteroptions(string) name(string) debug msymbol(passthru) msize(passthru) mcolor(passthru) title(passthru) note(passthru) row(passthru) col(passthru) xtitle(passthru) ytitle(passthru)]
+
+* attempt to assign graph options correctly
+local scatteroptions `scatteroptions' `msymbol' `msize' `mcolor' `options'
+local bygraphoptions `bygraphoptions' `title' `note' `row' `col'
+local graphoptions `graphoptions' `xtitle' `ytitle'
 
 foreach thing in `_dta[siman_allthings]' {
-    local `thing' : char _dta[siman_`thing']
+	local `thing' : char _dta[siman_`thing']
 }
-
 
 if "`setuprun'"!="1" {
-	di as error "siman_setup needs to be run first."
+	di as error "siman setup needs to be run before siman swarm"
 	exit 498
 }
-
-* if the data is read in long-long format, then reshaped to longwide, then there will be no method variable (only
-* method values), so base the error message on number of methods
-if `nummethod'<1 & "`setuprun'"=="1" {
-	di as error "The variable 'method' is missing so siman swarm can not be created.  Please create a variable in your dataset called method containing the method value(s)."
-	exit 498
-}
-	
-* if both estimate and se are missing, give error message as program requires them for the graph(s)
-if mi("`estimate'") & mi("`se'") {
-    di as error "siman swarm requires either estimate or se to plot"
-	exit 498
-}
-
-* mark sample (needs to be before reshape)
-marksample touse, novarlist
-tempvar meantouse
-
 
 * if statistics are not specified, run graphs for estimate only
 * only allow estimate or se to be specified for siman swarm
-local anythingcount: word count `anything'
-if "`anything'"=="" local varlist `estimate'
-else foreach thing of local anything {
-	local varelement = "`thing'"
-		if ("`varelement'"!="`estimate'" & "`varelement'"!="`se'") | "`anythingcount'"!="1" {
-			di as error "only -estimate- or -se- allowed"
-			exit 498
-		}
-	local varlist `varlist' `varelement'
+foreach thing of local anything {
+	if ("`thing'"!="estimate" & "`thing'"!="se") {
+		di as error "only estimate or se allowed"
+		exit 498
+	}
+	if mi("``thing''") {
+		di as error "`thing'() was not specified in siman setup"
+		exit 498
+	}
 }
+if "`anything'"=="" local statlist estimate
+else local statlist `anything'
+local ngraphs : word count `statlist'
+
+tokenize `"`name'"', parse(",")
+local name `1'
+local replace `3'
+if mi("`name'") {
+	local name simanswarm
+	local replace replace
+}
+
+/* Start preparations */
 
 preserve
 
+* mark sample
+marksample touse, novarlist
+
+qui count if `touse' & `rep'>0
+if r(N)==0 error 2000
+
 * check if/in conditions
+tempvar meantouse
 egen `meantouse' = mean(`touse'), by(`dgm' `target' `method')
 cap assert inlist(`meantouse',0,1)
 if _rc {
-	di as error "The 'if' and 'in' conditions can only be applied to dgm, target and method variables"
-	exit 498
+	di as error "{p 0 2}Warning: this 'if' condition cuts across dgm, target and method. It is safest to subset only on dgm, target and method.{p_end}"
 }
-drop `meantouse'	
+drop `meantouse'
 qui keep if `touse'
 
-
-* Need to know number of dgms for later on
-local numberdgms: word count `dgm'
-if `numberdgms'==1 {
-	qui tab `dgm'
-	*local ndgm = `r(r)'
-}
-*if `numberdgms'!=1 local ndgm = `numberdgms'
-
-
 * check number of methods (for example if the 'if' syntax has been used)
-qui tab `method'
-local nummethodnew = `r(r)'
-
-
+if mi("`method'") local nummethodnew = 1
+else {
+	qui tab `method'
+	local nummethodnew = `r(r)'
+}
 if `nummethodnew' < 2 {
-	di as error "There are not enough methods to compare: siman swarm requires at least 2 methods."
+	di as error "{p 0 2}There are not enough methods to compare: siman swarm requires at least 2 methods.{p_end}"
 	exit 498
 }
-	
 
-* Need to know what format method is in (string or numeric) for the below code
-local methodstringindi = 0
-capture confirm string variable `method'
-if !_rc local methodstringindi = 1
-
-* Need labelsof package installed to extract method labels
-qui capture which labelsof
-if _rc {
-	di as smcl  "labelsof package required, please install by clicking: "  `"{stata ssc install labelsof}"'
-	exit
-} 
-
-* label values are lost during reshape so need to account for both versions
-qui capture labelsof `method'
-if !_rc qui ret list 
-else qui capture levelsof `method'
-
-if "`r(labels)'"!="" {
-	local 0 = `"`r(labels)'"'
-
-	forvalues i = 1/`nummethodnew' {  
-		gettoken mlabel`i' 0 : 0, parse(": ")
-		if `i'==1 local mgraphlabels `mlabel`i''
-		else if `i'>1 local mgraphlabels `mgraphlabels' `mlabel`i''
-	}
-}
-else {
-qui levels `method', local(levels)
-tokenize `"`levels'"'
-	
-	if `methodstringindi'==0 {
-	
-		forvalues i = 1/`nummethodnew' {  
-			local mlabel`i' "Method: `i'"
-			if `i'==1 local mgraphlabels `mlabel`i''
-			else if `i'>1 local mgraphlabels `mgraphlabels' `mlabel`i''
-		}
-	}
-	else if `methodstringindi'==1 {
-	
-		forvalues i = 1/`nummethodnew' {  
-			local mlabel`i' "Method: ``i''"
-			if `i'==1 local mgraphlabels `"`mlabel`i''"'
-			else if `i'>1 local mgraphlabels `mgraphlabels' `"`mlabel`i''"'
-		}
-		
-	}
+* store method names in locals mlabel`i'
+qui levelsof `method'
+local methods = r(levels)
+forvalues i = 1/`nummethodnew' {
+	if `methodnature'==1 local mlabel`i' : label (`method') `i'
+	else if `methodnature'==2 local mlabel`i' : word `i' of `methods'
+	else local mlabel`i' `i'
 }
 
 * keeps estimates data only
 qui drop if `rep'<0
 
-* take out underscores at the end of variable names if there are any
-foreach u of var * {
-	if  substr("`u'",strlen("`u'"),1)=="_" {
-		local U = substr("`u'", 1, index("`u'","_") - 1)
-			if "`U'" != "" {
-				capture rename `u' `U' 
-					if _rc di as txt "problem with `u'"
-			} 
-	}
-}
-		
-if  substr("`estimate'",strlen("`estimate'"),1)=="_" local estimate = substr("`estimate'", 1, index("`estimate'","_") - 1)
-if  substr("`se'",strlen("`se'"),1)=="_" local se = substr("`se'", 1, index("`se'","_") - 1)
-
-
-* If method is a string variable, need to encode it to numeric format for graphs 
-if `methodstringindi'==1 {
-	encode `method', generate(numericmethod)	
+* If method is a string variable, encode it to numeric format for graphs 
+if `methodnature'==2 {
+	tempvar numericmethod
+	encode `method', generate(`numericmethod')
 	drop `method'
-	rename numericmethod method
-	local method = "method"
+	rename `numericmethod' `method'
 }
-
-di as text "working....."
 
 * For a nicer presentation and better better use of space
-local nummethodminus1 = `nummethodnew'-1
 local nummethodplus1 = `nummethodnew'+1
-
 local maxrep = _N
 forvalues g = 1/`nummethodnew' {
 	local step = `maxrep'/`nummethodplus1'
@@ -195,86 +134,38 @@ forvalues g = 1/`nummethodnew' {
 	if `g'==`nummethodnew' label define newidreplab `labelvalues'
 }
 
-
-* For the purposes of the graphs below, if dgm is missing in the dataset then set
-* the number of dgms to be 1.
-*if "`dgm'"=="" local ndgm=1
-
-* check if many graphs will be created - if so warn the user
-local dgmcount: word count `dgm'
-qui tokenize `dgm'
-forvalues j = 1/`dgmcount' {
-	qui tab ``j''
-	local nlevels = r(r)
-	local dgmvarsandlevels `"`dgmvarsandlevels'"' `"``j''"' `" (`nlevels') "'
-	if `j' == 1 local totaldgmnum = `nlevels'
-	else local totaldgmnum = `totaldgmnum'*`nlevels'
-}
-if "`numtarget'" == "N/A" local numtargetcheck = 1
-else {
-    * need to re-count in case there is an 'if' statement.  Data is in long-long format from reshape above
-	qui tab `target'   
-	local numtargetcheck = `r(r)'
-}
-if "`totaldgmnum'" == "" local totaldgmnum = 1
-if "`by'" == "`target'" local totaldgmnum = 1
-if !mi("`by'") & strpos("`dgm'", "`by'")>0 {
-    local numtargetcheck = 1
-	cap qui tab `by'
-	local totaldgmnum = `r(r)'
-}
-
-local graphnumcheck = `totaldgmnum' * `numtargetcheck'
-if `graphnumcheck' > 15 {
-	di as smcl as text "{p 0 2}Warning: `graphnumcheck' panels will be created: consider using 'if' or 'by' options as detailed in {help siman_swarm:siman swarm}{p_end}"
-}
-
-* defining 'by'
-local byorig = "`by'"
-if "`byorig'"=="" {
+if "`by'"=="" {
 	local by `dgm' `target'
 }
 
-* Can't tokenize/substr as many "" in the string
-if !mi(`"`graphoptions'"') {
-	tempvar _namestring
-	qui gen `_namestring' = `"`graphoptions'"'
-	qui split `_namestring',  parse(`"name"')
-	local graphoptions = `_namestring'1
-	cap confirm var `_namestring'2
-		if !_rc {
-			local namestring = `_namestring'2
-			local name = `"name`namestring'"'
-			local graphoptions: list graphoptions - name
-		}
+* Count how many graphs will be created
+if !mi("`by'") {
+	tempvar first
+	bysort `dgm' `target': gen `first' = _n==1
+	qui count if `first'
+	local npanels = r(N)
+	drop `first'
+}
+else {
+	local npanels 1
 }
 
-foreach el in `varlist' {
-*	qui egen mean`el' = mean(`el'), by (`dgm' `method' `target')
-	qui egen mean`el' = mean(`el'), by (`by')
-	if mi(`"`name'"') local name "name(simanswarm_`el', replace)"		
-		if "`meanoff'"=="" {
-			local graphname `graphname' `el'
-			local cmd twoway (scatter newidrep `el', ///
-			msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `options')	///
-			(scatter newidrep mean`el', msym(|) msize(huge) mcol(orange) `meangraphoptions')	///
-			, ///
-			by(`by', title("") noxrescale legend(off) `bygraphoptions')	///
-			ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `name' `graphoptions'
-			}
-			else {
-			local graphname `graphname' `el'
-			local cmd twoway (scatter newidrep `el', ///
-			msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `options')	///
-			, ///
-			by(`by', title("") noxrescale legend(off) `bygraphoptions')	///
-			ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `name' `graphoptions'
-			}
+if `ngraphs'==2 local s "s each "
+di as text "{p 0 2}siman swarm will draw " as result `ngraphs' as text " graph`s' with " as result `npanels' as text " panels.{p_end}"
+if `npanels'>15 di "{p 0 2}Consider reducing the number of panels using 'if' condition or 'by' option as detailed in {help siman swarm}{p_end}"
+
+foreach el of local statlist { // estimate and/or se
+	local cmd twoway (scatter newidrep ``el'', msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `scatteroptions')
+	if "`mean'"!="nomean" {
+		qui egen mean`el' = mean(``el''), by(`by' `method')
+		local cmd `cmd' (scatter newidrep mean`el', msym(|) msize(huge) mcol(orange) `meangraphoptions')
+	}
+	local nameopt name(`name'_`el', `replace')
+	local cmd `cmd', by(`by', title("") noxrescale legend(off) `bygraphoptions') ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions'
+	if !mi("`debug'") di as input `"`cmd'"'
+	qui `cmd'
 }
 
-
-qui `cmd'
-	
 end
 
 

@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.4 26june2023}{...}
+{* *! version 0.10 19jul2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Syntax" "siman_swarm##syntax"}{...}
@@ -20,68 +20,56 @@
 [{cmd:,}
 {it:options}]
 
-{pstd}If no estimates data variables are specified, then the swarm graph will be drawn for {it:estimate} only.
+{pstd}If [estimate|se] is not specified, then the swarm graph will be drawn for {it:estimate} only.
 
-{synoptset 20 tabbed}{...}
+{pstd}
+The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not to {bf:repetition}. A warning is issued if this is breached.
+
+
+{synoptset 25 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Main}
 
-{pstd}
-{p_end}
-{synopt:{opt if/in}}  The user can specify {it:if} and {it:in} within the {bf:siman swarm} syntax. If they do not, but have already specified 
-an {it:if/in} during {help siman_setup:siman setup}, then the {it:if/in} from {help siman_setup:siman setup} will be used.
-The {it:if} option will only apply to {bf:dgm}, {bf:target} and {bf:method}.  The {it:if} option is not allowed to be used on 
-{bf:repetition} and an error message will be issued if the user tries to do so.
-
-{pstd}
-{p_end}
-{synopt:{opt by(string)}}  specifies the nesting of the variables, with the default being {bf:by(dgm target)} with method on the y-axis. 
+{synopt:{opt by(string)}}  specifies the nesting of the variables, with the default being {bf:by(dgm target)}. 
 
 {syntab:Graph options}
-{pstd}
-{p_end}
 
 {pstd}{it:For the siman swarm graph user-inputted options, most of the valid options for {help scatter:scatter} are available.}
 
-{pstd}
-{p_end}
-{synopt:{opt meanoff}}  to turn off displaying the mean on the swarm graphs
+{synopt:{opt nomean}}  do not add the mean to the graph
 
-{pstd}
-{p_end}
-{synopt:{opt meangr:aphoptions(string)}}  graph options for the mean
+{synopt:{opt meangr:aphoptions(string)}}  options for {help scatter} to be applied to the mean: e.g. mcolor()
 
-{pstd}
-{p_end}
-{synopt:{opt bygr:aphoptions(string)}}  graph options for the nesting of the graphs due to the {it:by} option
+{synopt:{opt sc:atteroptions(string)}}  options for {help scatter} to be applied to the scatterplot: e.g. msymbol(), moclor()
 
-{pstd}
-{p_end}
-{synopt:{opt graphop:tions(string)}}  graph options for the overall graphical display
+{synopt:{opt bygr:aphoptions(string)}}  graph options for the overall graph that need to be within the {it:by} option: e.g. title(), note(), row(), col()
+
+{synopt:{opt graphop:tions(string)}}  graph options for the overall graph that need to be outside the {it:by} option: e.g. xtitle(), ytitle()
+
+{synopt:{opt name(string)}}  the stub for the graph name, to which is appended "_estimate" or "_se". Deafult is "simanswarm"
+
+{synopt:graph options}  siman swarm will attempt to allocate graph options as scatteroptions, bygraphoptions or graphoptions.
 
 
 {marker description}{...}
 {title:Description}
 
 {pstd}
-{cmd:siman swarm} draws a swarm plot of the estimates or the standard error data by method, the results of which are from analysing multiple simulated data sets.  The vertical axis is repetition number, to provide some separation between 
-the points, with sample means in the middle. The {cmd: siman swarm} graphs help to inspect the distribution and, 
+{cmd:siman swarm} draws a swarm plot of the estimates or the standard error data by method, the results of which are from analysing multiple simulated data sets.
+The vertical axis is repetition number, to provide some separation between 
+the points, with sample means in the middle. 
+The {cmd: siman swarm} graphs help to inspect the distribution and, 
 in particular, to look for outliers in the data.
 
 {pstd}
-Please note that {help siman_setup:siman setup} needs to be run first before {cmd:siman swarm}.  If the data is not already in long-long format then it will be reshaped to this format to create the graphs 
-(see {help siman_reshape:siman reshape} for further details on data 
-format types and the reshape command).
+{help siman_setup:siman setup} needs to be run first before {cmd:siman swarm}.
 
 {pstd}
 {cmd:siman swarm} requires a {bf:method} variable/values in the estimates dataset defined in the {help siman_setup:siman setup} syntax by {bf:method()}. 
  
 {pstd}
 {cmd:siman swarm} requires at least 2 methods to compare.
-
-{pstd}
-The {cmd:labelsof} package (by Ben Jann) is required by siman swarm, which can be installed by clicking: {stata ssc install labelsof}
 
 {pstd}
 For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
@@ -98,7 +86,7 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 
 {phang}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
 
-{phang}. {stata `"siman swarm, meanoff scheme(s1color) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title"))"'}
+{phang}. {stata `"siman swarm, nomean scheme(s1color) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title"))"'}
 
 {phang}. {stata `"siman swarm, scheme(economist) bygraphoptions(title("My swarm plot")) graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm", replace))"'}
 

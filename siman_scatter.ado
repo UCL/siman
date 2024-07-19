@@ -28,7 +28,7 @@ foreach thing in `_dta[siman_allthings]' {
 }
 
 if "`setuprun'"!="1" {
-	di as error "siman_setup needs to be run first."
+	di as error "siman_setup needs to be run before siman scatter"
 	exit 498
 }
 	
@@ -114,11 +114,11 @@ else {
 
 di as text "siman scatter will draw " as result 1 as text " graph with " as result `npanels' as text " panels"
 if `npanels' > 15 {
-	di as smcl as text "{p 0 2}Consider reducing number of panels using 'if' condition or 'by' option as detailed in {help siman scatter}{p_end}"
+	di as smcl as text "{p 0 2}Consider reducing the number of panels using 'if' condition or 'by' option as detailed in {help siman scatter}{p_end}"
 }
 
-if mi("`name'") local name "name(simanscatter, replace)"
-	
+if mi("`name'") local name name(simanscatter, replace)
+
 twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) `byoption' `name' `options'
 
 end
