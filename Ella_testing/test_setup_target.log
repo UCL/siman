@@ -14,13 +14,14 @@ C:\ian\git\siman\siman_table.ado
 C:\ian\git\siman\siman_lollyplot.ado
 *! version 1.13.2  15dec2023
 C:\ian\git\siman\siman_zipplot.ado
+*! version 0.10 19jul2024
 *!  version 1.9 22apr2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
 *! version 1.9.19 2may2024
 C:\ian\git\siman\siman_blandaltman.ado
 *!  version 1.7 22apr2024
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.10 22apr2024
+*! version 0.10 19jul2024
 C:\ian\git\siman\siman_scatter.ado
 *!      version 0.10    18jun2024       IW Clean up handling of varlist, if/in, by
 C:\ian\git\siman\siman_nestloop.ado
@@ -31,7 +32,7 @@ C:\ian\git\siman\siman_nestloop.ado
 . 
 . forvalues targettype = 1/6 {
   2.         di as input "targettype = `targettype'"
-  3.         use c:\temp\extendedtestdata, clear
+  3.         use data/extendedtestdata2, clear
   4.         keep if pmiss==1 & mech=="MCAR"
   5.         drop pmiss mech
   6.         if `targettype'==1 { // no target var
@@ -72,7 +73,7 @@ C:\ian\git\siman\siman_nestloop.ado
  41.         }
  42.         if `targettype'==5 { // 3 targets, numeric, wide
  43.                 sencode estimand, replace
- 44.                 qui reshape wide b se truevalue, i(rep beta method) j(estimand)
+ 44.                 qui reshape wide b se true, i(rep beta method) j(estimand)
  45.                 local targetopt target(1 2 3)
  46.                 local xnumtarget 3
  47.                 local xtarget target
@@ -81,7 +82,7 @@ C:\ian\git\siman\siman_nestloop.ado
  50.                 local xconfirm numeric var target
  51.         }
  52.         if `targettype'==6 { // 3 targets, string, wide
- 53.                 qui reshape wide b se truevalue, i(rep beta method) j(estimand) string
+ 53.                 qui reshape wide b se true, i(rep beta method) j(estimand) string
  54.                 local targetopt target(effect mean0 mean1)
  55.                 local xnumtarget 3
  56.                 local xtarget target
@@ -90,7 +91,7 @@ C:\ian\git\siman\siman_nestloop.ado
  59.                 local xconfirm numeric var target
  60.         }
  61.         qui siman setup, rep(re) dgm(beta) `targetopt' method(meth) estimate(b) se(se) true(tru
-> evalue)
+> e)
  62.         
 .         * check chars
 .         foreach thing in numtarget target targetnature valtarget {
@@ -121,38 +122,32 @@ C:\ian\git\siman\siman_nestloop.ado
 targettype = 1
 (81,000 observations deleted)
 (18,000 observations deleted)
-(file data/setupdata_target1.dta not found)
 file data/setupdata_target1.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 2
 (81,000 observations deleted)
 (18,000 observations deleted)
-(file data/setupdata_target2.dta not found)
 file data/setupdata_target2.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 3
 (81,000 observations deleted)
-(file data/setupdata_target3.dta not found)
 file data/setupdata_target3.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 4
 (81,000 observations deleted)
-(file data/setupdata_target4.dta not found)
 file data/setupdata_target4.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 5
 (81,000 observations deleted)
-(file data/setupdata_target5.dta not found)
 file data/setupdata_target5.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 targettype = 6
 (81,000 observations deleted)
-(file data/setupdata_target6.dta not found)
 file data/setupdata_target6.dta saved
 siman analyse has run successfully
 siman analyse has run successfully

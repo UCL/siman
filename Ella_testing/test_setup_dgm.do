@@ -22,7 +22,7 @@ siman which
 
 forvalues dgmtype = 1/5 {
 	di as input "dgmtype = `dgmtype'"
-	use c:\temp\extendedtestdata, clear
+	use data/extendedtestdata2, clear
 	keep if method=="CCA"
 	drop method
 	if `dgmtype'==1 {
@@ -58,7 +58,7 @@ forvalues dgmtype = 1/5 {
 		local xdgm beta pmiss mech
 		local xndgmvars 3
 	}
-	qui siman setup, rep(re) `dgmopt' target(estim) estimate(b) se(se) true(truev)
+	qui siman setup, rep(re) `dgmopt' target(estim) estimate(b) se(se) true(true)
 	foreach thing in dgm ndgmvars {
 		local xx `: char _dta[siman_`thing']'
 		cap assert "`x`thing''" == "`xx'"
@@ -67,7 +67,7 @@ forvalues dgmtype = 1/5 {
 			di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
 		}
 	}
-	
+
 	* save for testing siman graph commands
 	save data/setupdata_dgm`dgmtype', replace
 

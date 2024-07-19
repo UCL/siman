@@ -23,7 +23,7 @@ siman which
 
 forvalues targettype = 1/6 {
 	di as input "targettype = `targettype'"
-	use c:\temp\extendedtestdata, clear
+	use data/extendedtestdata2, clear
 	keep if pmiss==1 & mech=="MCAR"
 	drop pmiss mech
 	if `targettype'==1 { // no target var
@@ -64,7 +64,7 @@ forvalues targettype = 1/6 {
 	}
 	if `targettype'==5 { // 3 targets, numeric, wide
 		sencode estimand, replace
-		qui reshape wide b se truevalue, i(rep beta method) j(estimand)
+		qui reshape wide b se true, i(rep beta method) j(estimand)
 		local targetopt target(1 2 3)
 		local xnumtarget 3
 		local xtarget target
@@ -73,7 +73,7 @@ forvalues targettype = 1/6 {
 		local xconfirm numeric var target
 	}
 	if `targettype'==6 { // 3 targets, string, wide
-		qui reshape wide b se truevalue, i(rep beta method) j(estimand) string
+		qui reshape wide b se true, i(rep beta method) j(estimand) string
 		local targetopt target(effect mean0 mean1)
 		local xnumtarget 3
 		local xtarget target
@@ -81,7 +81,7 @@ forvalues targettype = 1/6 {
 		local xvaltarget effect mean0 mean1
 		local xconfirm numeric var target
 	}
-	qui siman setup, rep(re) dgm(beta) `targetopt' method(meth) estimate(b) se(se) true(truevalue)
+	qui siman setup, rep(re) dgm(beta) `targetopt' method(meth) estimate(b) se(se) true(true)
 	
 	* check chars
 	foreach thing in numtarget target targetnature valtarget {

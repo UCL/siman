@@ -21,7 +21,7 @@ siman which
 
 forvalues methodtype = 1/6 {
 	di as input "methodtype = `methodtype'"
-	use c:\temp\extendedtestdata, clear
+	use data/extendedtestdata2, clear
 	keep if pmiss==1 & estimand=="effect"
 	drop pmiss estimand
 	if `methodtype'==1 { // no method var
@@ -70,7 +70,7 @@ forvalues methodtype = 1/6 {
 	}
 	if `methodtype'==5 { // 3 methods, numeric, wide
 		sencode method, gsort(method) replace
-		qui reshape wide b se, i(rep beta mech truevalue) j(method)
+		qui reshape wide b se, i(rep beta mech true) j(method)
 		char _dta[__JValLab] // needed to stop Stata remembering method names
 		local methodopt method(1 2 3)
 
@@ -82,7 +82,7 @@ forvalues methodtype = 1/6 {
 		local xvalmethod 1 2 3
 	}
 	if `methodtype'==6 { // 3 methods, string, wide
-		qui reshape wide b se, i(rep beta mech truevalue) j(method) string
+		qui reshape wide b se, i(rep beta mech true) j(method) string
 		local methodopt method(CCA MeanImp Noadj)
 
 		local xmethod method
@@ -92,7 +92,7 @@ forvalues methodtype = 1/6 {
 		local xnummethod 3
 		local xvalmethod CCA MeanImp Noadj
 	}
-	qui siman setup, rep(re) dgm(beta mech) `methodopt' estimate(b) se(se) true(truevalue)
+	qui siman setup, rep(re) dgm(beta mech) `methodopt' estimate(b) se(se) true(true)
 	foreach thing in method methodcreated methodnature methodvalues nummethod valmethod {
 		local xx `: char _dta[siman_`thing']'
 		cap assert "`x`thing''" == "`xx'"
