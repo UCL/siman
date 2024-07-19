@@ -14,13 +14,14 @@ C:\ian\git\siman\siman_table.ado
 C:\ian\git\siman\siman_lollyplot.ado
 *! version 1.13.2  15dec2023
 C:\ian\git\siman\siman_zipplot.ado
+*! version 0.10 19jul2024
 *!  version 1.9 22apr2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
 *! version 1.9.19 2may2024
 C:\ian\git\siman\siman_blandaltman.ado
 *!  version 1.7 22apr2024
 C:\ian\git\siman\siman_swarm.ado
-*! version 0.10 18jul2024
+*! version 0.10 19jul2024
 C:\ian\git\siman\siman_scatter.ado
 *!      version 0.10    18jun2024       IW Clean up handling of varlist, if/in, by
 C:\ian\git\siman\siman_nestloop.ado
@@ -51,48 +52,48 @@ use data/setupdata_dgm5, clear
 Skipped (only one method)
 use data/setupdata_target1, clear
 siman swarm estimate, name(swarm_target1, replace) bygr(title(Test siman swarm using data target1))
-siman swarm will draw 1 graph with 3 panels.
+siman swarm will draw 1 graph with 3 panels
 use data/setupdata_target2, clear
 siman swarm estimate, name(swarm_target2, replace) bygr(title(Test siman swarm using data target2))
-siman swarm will draw 1 graph with 3 panels.
+siman swarm will draw 1 graph with 3 panels
 use data/setupdata_target3, clear
 siman swarm estimate, name(swarm_target3, replace) bygr(title(Test siman swarm using data target3))
-siman swarm will draw 1 graph with 9 panels.
+siman swarm will draw 1 graph with 9 panels
 use data/setupdata_target4, clear
 siman swarm estimate, name(swarm_target4, replace) bygr(title(Test siman swarm using data target4))
-siman swarm will draw 1 graph with 9 panels.
+siman swarm will draw 1 graph with 9 panels
 use data/setupdata_target5, clear
 siman swarm estimate, name(swarm_target5, replace) bygr(title(Test siman swarm using data target5))
-siman swarm will draw 1 graph with 9 panels.
+siman swarm will draw 1 graph with 9 panels
 use data/setupdata_target6, clear
 siman swarm estimate, name(swarm_target6, replace) bygr(title(Test siman swarm using data target6))
-siman swarm will draw 1 graph with 9 panels.
+siman swarm will draw 1 graph with 9 panels
 use data/setupdata_method1, clear
 Skipped (only one method)
 use data/setupdata_method2, clear
 Skipped (only one method)
 use data/setupdata_method3, clear
 siman swarm estimate, name(swarm_method3, replace) bygr(title(Test siman swarm using data method3))
-siman swarm will draw 1 graph with 6 panels.
+siman swarm will draw 1 graph with 6 panels
 use data/setupdata_method4, clear
 siman swarm estimate, name(swarm_method4, replace) bygr(title(Test siman swarm using data method4))
-siman swarm will draw 1 graph with 6 panels.
+siman swarm will draw 1 graph with 6 panels
 use data/setupdata_method5, clear
 siman swarm estimate, name(swarm_method5, replace) bygr(title(Test siman swarm using data method5))
-siman swarm will draw 1 graph with 6 panels.
+siman swarm will draw 1 graph with 6 panels
 use data/setupdata_method6, clear
 siman swarm estimate, name(swarm_method6, replace) bygr(title(Test siman swarm using data method6))
-siman swarm will draw 1 graph with 6 panels.
+siman swarm will draw 1 graph with 6 panels
 
 . 
 . siman swarm estimate, nomean mcol(red) name(g1,replace)
-siman swarm will draw 1 graph with 6 panels.
+siman swarm will draw 1 graph with 6 panels
 
 . siman swarm se, meangr(mcol(pink)) name(g2,replace) row(3)
-siman swarm will draw 1 graph with 6 panels.
+siman swarm will draw 1 graph with 6 panels
 
 . siman swarm estimate se, bygr(note("I've changed the note")) name(g3,replace) by(mech beta) debug
-siman swarm will draw 2 graphs each with 6 panels.
+siman swarm will draw 2 graphs each with 6 panels
 twoway (scatter newidrep b, msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) ) (sca
 > tter newidrep meanestimate, msym(|) msize(huge) mcol(orange) ), by(mech beta, title("") noxrescale
 >  legend(off) note("I've changed the note")) ytitle("") ylabel(501 "CCA" 5001 "MeanImp" 9501 "Noadj

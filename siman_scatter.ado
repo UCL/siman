@@ -99,6 +99,8 @@ if mi("`by'") {
 		if r(r)>1 local by `by' `thisby'
 	}
 }
+
+* count panels
 if mi("`by'") { // i.e. if none of dgm target method varies
 	local byoption `bygraphoptions'
 	local npanels 1
@@ -110,11 +112,12 @@ else {
 	egen `unique' = tag(`by')
 	qui count if `unique'
 	local npanels = r(N)
+	drop `unique'
 }
 
 di as text "siman scatter will draw " as result 1 as text " graph with " as result `npanels' as text " panels"
 if `npanels' > 15 {
-	di as smcl as text "{p 0 2}Consider reducing the number of panels using 'if' condition or 'by' option as detailed in {help siman scatter}{p_end}"
+	di as smcl as text "{p 0 2}Consider reducing the number of panels using 'if' condition or 'by' option{p_end}"
 }
 
 if mi("`name'") local name name(simanscatter, replace)

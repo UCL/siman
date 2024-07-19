@@ -1,7 +1,6 @@
 {smcl}
 {* *! version 0.10 19jul2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
-{vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Syntax" "siman_swarm##syntax"}{...}
 {viewerjumpto "Description" "siman_swarm##description"}{...}
 {viewerjumpto "Examples" "siman_swarm##examples"}{...}
@@ -108,6 +107,4 @@ Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
 {title:See Also}
 
-
-{pstd}{help labelsof} (if installed)
 

@@ -14,13 +14,14 @@ C:\ian\git\siman\siman_table.ado
 C:\ian\git\siman\siman_lollyplot.ado
 *! version 1.13.2  15dec2023
 C:\ian\git\siman\siman_zipplot.ado
+*! version 0.10 19jul2024
 *!  version 1.9 22apr2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
 *! version 1.9.19 2may2024
 C:\ian\git\siman\siman_blandaltman.ado
 *!  version 1.7 22apr2024
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.10 22apr2024
+*! version 0.10 19jul2024
 C:\ian\git\siman\siman_scatter.ado
 *!      version 0.10    18jun2024       IW Clean up handling of varlist, if/in, by
 C:\ian\git\siman\siman_nestloop.ado
@@ -46,39 +47,39 @@ use data/setupdata_dgm4, clear
 siman scatter will draw 1 graph with 12 panels
 use data/setupdata_dgm5, clear
 siman scatter will draw 1 graph with 36 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_target1, clear
 siman scatter will draw 1 graph with 9 panels
 use data/setupdata_target2, clear
 siman scatter will draw 1 graph with 9 panels
 use data/setupdata_target3, clear
 siman scatter will draw 1 graph with 27 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_target4, clear
 siman scatter will draw 1 graph with 27 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_target5, clear
 siman scatter will draw 1 graph with 27 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_target6, clear
 siman scatter will draw 1 graph with 27 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_method1, clear
 siman scatter will draw 1 graph with 6 panels
 use data/setupdata_method2, clear
 siman scatter will draw 1 graph with 6 panels
 use data/setupdata_method3, clear
 siman scatter will draw 1 graph with 18 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_method4, clear
 siman scatter will draw 1 graph with 18 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_method5, clear
 siman scatter will draw 1 graph with 18 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_method6, clear
 siman scatter will draw 1 graph with 18 panels
-Consider reducing number of panels using 'if' condition or 'by' option as detailed in siman scatter
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . 
 . di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"

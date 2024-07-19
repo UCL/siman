@@ -1,7 +1,6 @@
 {smcl}
-{* *! version 1.3 21nov2022}{...}
+{* *! version 0.10 19jul2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
-{vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Syntax" "siman_zipplot##syntax"}{...}
 {viewerjumpto "Description" "siman_zipplot##description"}{...}
 {viewerjumpto "Examples" "siman_zipplot##examples"}{...}
@@ -21,20 +20,13 @@
 [{cmd:,}
 {it:options}]
 
+{pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not to {bf:repetition}. A warning is issued if this is breached.
+
 {synoptset 30 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Main}
 
-{pstd}
-{p_end}
-{synopt:{opt if/in}}  The user can specify {it:if} and {it:in} within the siman zipplot syntax. If they do not, but have already specified 
-an {it:if/in} during {help siman_setup:siman setup}, then the {it:if/in} from {help siman_setup:siman setup} will be used.
-The {it:if} option will only apply to {bf:dgm}, {bf:target} and {bf:method}.  The {it:if} option is not allowed to be used on 
-{bf:repetition} and an error message will be issued if the user tries to do so.
-
-{pstd}
-{p_end}
 {synopt:{opt by(string)}}  specifies the nesting of the variables, with the default being {bf:by(dgm method)} if there is only one true value, and
 {bf:by(dgm target method)} where there are different true values per target.
 
@@ -45,36 +37,28 @@ The {it:if} option will only apply to {bf:dgm}, {bf:target} and {bf:method}.  Th
 {pstd}{it:For the siman zipplot graph user-inputted options, most of the valid options for {help scatter:scatter} are available.}
 
 
-{pstd}
-{p_end}
 {synopt:{opt noncov:eroptions(string)}}  graph options for the non-coverers 
 
-{pstd}
-{p_end}
 {synopt:{opt cov:eroptions(string)}}  graph options for the coverers 
 
-{pstd}
-{p_end}
 {synopt:{opt sca:tteroptions(string)}} graph options for the scatter plot of the point estimates
 
-{pstd}
-{p_end}
 {synopt:{opt truegr:aphoptions(string)}}  graph options for the true value(s)
 
-{pstd}
-{p_end}
 {synopt:{opt bygr:aphoptions(string)}}  graph options for the nesting of the graphs due to the {it:by} option
 
-{pstd}
-{p_end}
 {synopt:{opt sch:eme(string)}}  to change the graph scheme
+
+{synopt:{opt l:evel(cilevel)}}  changes the level for confidence intervals
+
+{synopt:{opt ymin(pct)}}  omits the lowest {it:pct}% of the confidence intervals from the zipplot
 
 
 {marker description}{...}
 {title:Description}
 
 {pstd}
-{cmd:siman zipplot} draws a "zip plot" plot of the confidence interval coverage for each data-generating mechanism 
+{cmd:siman zipplot} draws a "zip plot" of the confidence intervals for each data-generating mechanism, target  
 and analysis method in the estimates dataset. Both Monte Carlo 
 confidence intervals for percent coverage and 95% confidence intervals for individual repetitions are shown. For coverage 
 (or type I error), true θ is used for the null value.
@@ -87,13 +71,9 @@ shown on the plot, along with the point estimates.
 The zipplot provides a means of understanding any issues with coverage by viewing the confidence intervals directly.  
 
 {pstd}
-Please note that {help siman_setup:siman setup} needs to be run first before siman zipplot.
-
-{pstd}
-The {cmd:labelsof} package (by Ben Jann) is required by siman zipplot, which can be installed by clicking: {stata ssc install labelsof}
-
-{pstd}
-siman zipplot requires a true variable in the estimates dataset defined in the {help siman_setup:siman setup} syntax by {bf:true()}. 
+{help siman setup} must be run first before siman zipplot. 
+It must have defined a true variable by {bf:true()}, an estimate variable by {bf:estimate()},
+and either a standard error by {bf:se()} or a confidence interval by {bf:lci()} and {bf:uci()}. 
 
 {pstd}
 For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
@@ -118,7 +98,7 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 
 {pstd} To change the colour scheme, legend and titles in the display:
 
-{phang}. {stata  `"siman zipplot, scheme(scheme(economist)) legend(order(4 "Covering" 3 "Not covering")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50))"'}
+{phang}. {stata  `"siman zipplot, scheme(economist) legend(order(1 "Not covering" 2 "Covering")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50))"'}
 
 {marker reference}{...}
 {title:Reference}
@@ -143,5 +123,4 @@ Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
 {title:See Also}
 
-{pstd}{help labelsof} (if installed)
 

@@ -1,3 +1,6 @@
+*! version 0.10 19jul2024
+* version 0.10 19jul2024	IW align with new setup; respect true but don't separate graphs by true; respect cilevel; allow ci instead of se
+*							align versioning with siman.ado
 *!  version 1.9 22apr2024
 *  version 1.9 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
 *  version 1.8.12 25oct2023  IW Added true value to note
@@ -29,8 +32,10 @@ program define siman_zipplot, rclass
 version 15
 
 syntax [if][in] [, * BY(varlist) ///
-                     NONCOVeroptions(string) COVeroptions(string) SCAtteroptions(string) ///
-					 TRUEGRaphoptions(string) BYGRaphoptions(string) SCHeme(string) ymin(integer 0) ]
+	NONCOVeroptions(string) COVeroptions(string) SCAtteroptions(string) ///
+	TRUEGRaphoptions(string) BYGRaphoptions(string) SCHeme(passthru) ymin(integer 0) name(passthru) Level(cilevel) ///
+	debug pause /// undocumented
+	]
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -42,222 +47,73 @@ if "`setuprun'"!="1" {
 }
 
 * if estimate or se are missing, give error message as program requires them for the graph(s)
-capture confirm _lci _uci
+capture confirm variable `lci' `uci'
 if _rc {
 	if mi("`estimate'") | mi("`se'") {
-		di as error "siman zipplot requires either lower & upper CI" _n "or estimate & se (optionally df)"
+		di as error "{p 0 2}siman zipplot requires either lower & upper CI or estimate & se{p_end}"
 		exit 498
-	}	
+	}
 }
 
 * if true is missing, produce an error message
 if "`true'"=="" {
-	di as error "The variable 'true' is missing so siman zipplot can not be created.  Please create a variable in your dataset called true containing the true value(s) re-run siman setup with true() option specified."
+	di as error "{p 0 2}The variable 'true' is missing so siman zipplot can not be created.  Please create a variable in your dataset called true containing the true value(s) re-run siman setup with true() option specified.{p_end}"
 	exit 498
 }
 
-* mark sample (needs to be before reshape)
-marksample touse, novarlist
-tempvar meantouse
+if mi("`name'") local name name(simanzipplot, replace)
+
+/* Start preparations */
 
 preserve
 
+* mark sample
+marksample touse, novarlist
+
+qui count if `touse' & `rep'>0
+if r(N)==0 error 2000
+
 * check if/in conditions
+tempvar meantouse
 egen `meantouse' = mean(`touse'), by(`dgm' `target' `method')
 cap assert inlist(`meantouse',0,1)
 if _rc {
-	di as error "The 'if' and 'in' conditions can only be applied to dgm, target and method variables"
-	exit 498
+	di as error "{p 0 2}Warning: this 'if' condition cuts across dgm, target and method. It is safest to subset only on dgm, target and method.{p_end}"
 }
-drop `meantouse'	
-
+drop `meantouse'
 qui keep if `touse'
 
-* keep estimates data only
-qui drop if `rep'<0
-if _N==0 error 2000
-
-* take out underscores at the end of variable names if there are any
-foreach u of var * {
-	if  substr("`u'",strlen("`u'"),1)=="_" {
-	local U = substr("`u'", 1, index("`u'","_") - 1)
-		if "`U'" != "" {
-		capture rename `u' `U' 
-			if _rc di as txt "problem with `u'"
-		} 
+* default 'by' is all varying among dgm target method
+if mi("`by'") {
+	local mayby `dgm' `target' `method'
+	foreach var of local mayby {
+		cap assert `var'==`var'[1]
+		if _rc local by `by' `var'
 	}
-}
-		
-if  substr("`estimate'",strlen("`estimate'"),1)=="_" local estimate = substr("`estimate'", 1, index("`estimate'","_") - 1)
-if  substr("`se'",strlen("`se'"),1)=="_" local se = substr("`se'", 1, index("`se'","_") - 1)
-
-* define 'by'
-if !mi("`by'") {
-	local byvar = "`by'"
-}
-else if mi("`by'") {
-	if `methodcreated' local byvar `dgm' `target'
-	else local byvar `dgm' `target' `method'
+	if !mi("`debug'") di as input "Graphing by: `by'"
 }
 
-* Zip plot of confidence intervals
-
-capture confirm variable _lci
-if _rc {
-	capture confirm variable df
-	if !_rc {
-		qui gen float _lci = `estimate' + (`se'*invttail(`df', .025))
-			local lci _lci
-		qui gen float _uci = `estimate' + (`se'*invttail(`df', .975))
-			local uci _uci
-	}
-	else {
-		qui gen float _lci = `estimate' + (`se'*invnorm(.025))
-			local lci _lci
-		qui gen float _uci = `estimate' + (`se'*invnorm(.975))
-			local uci _uci
-	}
+* create confidence intervals, if not already there
+local level2 = 1/2+`level'/200
+if mi("`lci'") {
+	tempvar lci
+	if !mi("`df'") gen `lci' = `estimate' - `se'*invttail(`df', `level2')
+	else gen `lci' = `estimate' - `se'*invnorm(`level2')
+}
+if mi("`uci'") {
+	tempvar uci
+	if !mi("`df'") gen `uci' = `estimate' + `se'*invttail(`df', `level2')
+	else gen `uci' = `estimate' + `se'*invnorm(`level2')
 }
 
-if "`method'"!="" {
-
-* for value labels of method
-	qui tab `method'
-	local nmethodlabels = `r(r)'
-	
-	qui levels `method', local(levels)
-	tokenize `"`levels'"'
-		forvalues m = 1/`nmethodlabels' { 
-		    local methodlabel`m' "``m''"
-		}
-}
-		
-		
-if "`target'"!="" {
-
-* for value labels of target
-	qui tab `target'
-	local ntargetlabels = `r(r)'
-	
-	qui levels `target', local(levels)
-	tokenize `"`levels'"'
-		forvalues k = 1/`ntargetlabels' { 
-		    local targetlabel`k' "``k''"
-		}
-}
-
-capture confirm number `true'
-if _rc {
-	qui gen `true'calc = .
-	if "`true'"!="" {
-		qui tab `true'
-		local ntrue = `r(r)'
-			if `r(r)'==1 {
-				qui levelsof `true', local(levels)   
-				local `true'value = `r(levels)'
-				local `true'value1 = `r(levels)'
-				local `true'label1 = `r(levels)'
-				*local `true'number`truevalue' `truevalue'
-				qui replace `true'calc = ``true'value'
-				local truevalue ``true'value'
-				
-			}
-			else if `r(r)'>1 {
-				* Get true label values
-				cap qui labelsof `true'
-				cap qui ret list
-
-				if `"`r(labels)'"'!="" {
-				local 0 = `"`r(labels)'"'
-
-					forvalues t = 1/`ntrue' {  
-					gettoken `true'label`t' 0 : 0, parse(" ")
-	*				local `true'number`t' `t' 
-					local `true'value`t' `t'
-					qui replace `true'calc = ``true'value`t'' if `true' == float(`t')
-					local truelabels = 1
-					}
-				}
-				else {
-					local truelabels = 0
-					qui tab `true'
-					local ntrue = `r(r)'
-					qui levelsof `true', local(levels)
-					tokenize `"`levels'"'
-				
-					forvalues t = 1/`ntrue' {  
-					local `true'label`t' ``t''
-					local `true'value`t' `t'
-					qui replace `true'calc = ``true'value`t'' if `true' == float(``t'')
-					}
-				}
-				
-				/*
-			    qui levels `true', local(truelevels)
-				tokenize `"`truelevels'"'
-				forvalues j = 1/`ntrue' { 
-					local truevalue`j' "``j''"
-				
-				}
-				*/			
-			
-				
-			}
-	}
-}
-else {
-	local ntrue = 1
-	local truevalue = `true'
-	local truevalue1 = `true'
-	local truelabel1 = `true'
-	local truenumber1 1
-	qui gen truecalc = `true'
-	local true "true"
-}
-
-local dgmorig = "`dgm'"
-local numberdgms: word count `dgm'
-if `numberdgms'==1 {
-	qui tab `dgm'
-	local ndgmlabels = `r(r)'
-}
-if `numberdgms'!=1 {
-	local ndgmlabels = `numberdgms'
-	local dgmexcludetrue: list dgm - true
-	local dgm `dgmexcludetrue'
-}
-
-foreach dgmvar in `dgm' {
-		
-	local dgmlabels = 0
-		
-	qui tab `dgmvar'
-	local ndgmvar = `r(r)'
-
-	* Get dgm label values
-	cap qui labelsof `dgmvar'
-	cap qui ret list
-
-	if `"`r(labels)'"'!="" {
-		local 0 = `"`r(labels)'"'
-
-		forvalues i = 1/`ndgmvar' {  
-			gettoken `dgmvar'dlabel`i' 0 : 0, parse(": ")
-			local dgmlabels = 1
-		}
-	}
-	else {
-	local dgmlabels = 0
-	qui levels `dgmvar', local(levels)
-	tokenize `"`levels'"'
-			
-		forvalues i = 1/`ndgmvar' {  
-			local `dgmvar'dlabel`i' `i'
-		}
-	}
-
-	qui tab `dgmvar'
-	local n`dgmvar'labels = `r(r)'
+* store method names in locals mlabel`i'
+qui levelsof `method'
+local methods = r(levels)
+local nummethodnew = r(r)
+forvalues i = 1/`nummethodnew' {
+	if `methodnature'==1 local mlabel`i' : label (`method') `i'
+	else if `methodnature'==2 local mlabel`i' : word `i' of `methods'
+	else local mlabel`i' `i'
 }
 
 * For coverage (or type I error), use true θ for null value
@@ -265,198 +121,83 @@ foreach dgmvar in `dgm' {
 * make sure using actual true value and not the label value (e.g. using 0.5, 0.67 and not 1, 2 etc)
 * if true is just one value, then sorting on it won't make a difference so can use the below code for all cases of true
 
-capture confirm variable _p`estimate'
-if _rc {
-	qui bysort `true': gen float _p`estimate' = 1-normal(abs(`estimate'-`true'calc)/`se')  // if sim outputs df, use ttail and remove 1-'
-}
-capture confirm variable _covers 
-if _rc {
-	qui bysort `true' : gen byte _covers = _p`estimate' > .025   // binary indicator of whether ci covers true estimate
-}		
-sort `byvar' `true' _p`estimate'
-capture confirm variable _p`estimate'rank
-if _rc {
-	qui bysort `byvar' `true': gen double _p`estimate'rank = 100 - (_n/(_N/100))  // scale from 0-100. This will be vertical axis.
-}
+* create covering indicator
+tempvar covers
+gen byte `covers' = inrange(`true',`lci',`uci')
+		
+* create sort order
+tempvar zstat rank
+if !mi("`se'") gen float `zstat' = -abs(`estimate'-`true')/`se'
+else gen float `zstat' = -abs(`estimate'-`true')/abs(`uci'-`lci')
+sort `by' `zstat' // check: was sorted by by true zstat
+drop `zstat'
+qui bysort `by': gen double `rank' = 100*(1 - _n/_N)
 
 * Create MC conf. int. for coverage
-capture confirm variable _covlb
-if _rc {
-	qui gen float _covlb = .
+tempvar cov ncov covlb covub
+qui egen `cov' = mean(`covers'), by(`by')
+qui egen `ncov' = count(`covers'), by(`by')
+gen `covlb' = 100 * (`cov' - invnorm(`level2')*sqrt(`cov'*(1-`cov')/`ncov'))
+gen `covub' = 100 * (`cov' + invnorm(`level2')*sqrt(`cov'*(1-`cov')/`ncov'))
+qui bysort `by': replace `covlb' = . if _n>1
+qui bysort `by': replace `covub' = . if _n>1
+drop `cov' `ncov'
+
+* find range to plot over
+tempvar lpoint rpoint
+qui egen `lpoint' = min(`lci') , by(`by') 
+qui egen `rpoint' = max(`uci') , by(`by') 
+
+* count panels
+tempvar unique
+egen `unique' = tag(`by')
+qui count if `unique'
+local npanels = r(N)
+drop `unique'
+
+di as text "siman zipplot will draw " as result 1 as text " graph with " as result `npanels' as text " panels"
+if `npanels' > 15 {
+	di as smcl as text "{p 0 2}Consider reducing the number of panels using 'if' condition or 'by' option{p_end}"
 }
-capture confirm variable _covub
-if _rc {
-	qui gen float _covub = .
-}
-
-		
-* Need to know what format method is in (string or numeric)
-local methodstringindi = 0
-capture confirm string variable `method'
-if !_rc local methodstringindi = 1
-
-* to get lb and ub of CIs per dgm/method/target/true combinations, create groups to map these on to
-sort `byvar' `true'
-qui egen group = group(`byvar' `true')
-
-tempfile masterdata
-qui save `masterdata'
-
-qui statsby, by(group) clear: ci proportions _covers
-tempfile statsbydata
-qui save `statsbydata'
-
-qui use `masterdata', clear
-qui merge m:1 group using `statsbydata', keepusing(lb ub) 
-
-* check
-* ci proportions _covers if method == 1 & estimand == 1 & true == 0.5
-
-qui replace _covlb = 100*(lb)
-qui replace _covub = 100*(ub)
-qui drop _merge lb ub
-
-
-qui bysort `byvar': replace _covlb = . if _n>1
-qui bysort `byvar': replace _covub = . if _n>1
-
-//capture confirm variable _lpoint
-//	if _rc {
-	qui egen _lpoint = min(_lci) , by(`byvar' `true') 
-//}
-//capture confirm variable _rpoint
-//	if _rc {
-	qui egen _rpoint = max(_uci) , by(`byvar' `true') 
-//}
-
-* Can't tokenize/substr as many "" in the string
-if !mi(`"`options'"') {
-	tempvar _namestring
-	qui gen `_namestring' = `"`options'"'
-	qui split `_namestring',  parse(`"name"')
-	local options = `_namestring'1
-	cap confirm var `_namestring'2
-	if !_rc {
-		local namestring = `_namestring'2
-		local name = `"name`namestring'"'
-		local options: list options - name
-		
-		* strip out the actual name out of the command
-		local namelastpart = subinstr(`"`name'"',"name("," ",1)
-		local namefirstpart = strtrim(subinstr(`"`namelastpart'"',", replace)"," ",1))
-		*di `"`namefirstpart'"'
-		local namestub = substr(`namefirstpart',1,.)
-	}
-}
-
-
-* check if many graphs will be created - if so warn the user
-local dgmcount: word count `dgm'
-qui tokenize `dgm'
-forvalues j = 1/`dgmcount' {
-	qui tab ``j''
-	local nlevels = r(r)
-	local dgmvarsandlevels `"`dgmvarsandlevels'"' `"``j''"' `" (`nlevels') "'
-	if `j' == 1 local totaldgmnum = `nlevels'
-	else local totaldgmnum = `totaldgmnum'*`nlevels'
-}
-
-if "`numtarget'" == "N/A" local numtargetcheck = 1
-else {
-    * need to re-count in case there is an 'if' statement.  Data is in long-long format from reshape above
-	qui tab `target'   
-	local numtargetcheck = `r(r)'
-}
-if "`nummethod'" == "N/A" local nummethodcheck = 1
-else {
-    * need to re-count in case there is an 'if' statement.  Data is in long-long format from reshape above
-	qui tab `method'   
-	local nummethodcheck = `r(r)'
-}
-if "`totaldgmnum'" == "" local totaldgmnum = 1
-if "`by'" == "`method'" {
-	local totaldgmnum = 1
-	local numtargetcheck = 1
-}
-if !mi("`by'") & strpos("`dgm'", "`by'")>0 {
-	local nummethodcheck = 1
-	cap qui tab `by'
-	local totaldgmnum = `r(r)'
-}
-
-local numtruecheck = 1
-if !mi("`ntrue'") local numtruecheck `ntrue'
-
-local graphnumcheck = (`totaldgmnum' * `nummethodcheck' * `numtargetcheck')/`numtruecheck'
-if `graphnumcheck' > 15 {
-	di as smcl as text "{p 0 2}Warning: `numtruecheck' graphs each of `graphnumcheck' panels will be created: consider using 'if' condition or 'by' option as detailed in {help siman_zipplot:siman zipplot}{p_end}"
-}
-
-if `numtruecheck' > 1 di as txt "Drawing `numtruecheck' graphs (1 per true value)"
 
 * Plot of confidence interval coverage:
 * First two rspike plots: Monte Carlo confidence interval for percent coverage
 * second two rspike plots: confidence intervals for individual reps
 * blue intervals cover, purple do not
 * scatter plot (white dots) are point estimates - probably unnecessary
+tempvar truemax truemin
+gen `truemax'=100
+gen `truemin'=`ymin'
+if `ymin'<=5 local ylab ylab(5 50 95)
+else if `ymin'<=50 local ylab ylab(50 95)
+else if `ymin'<=95 local ylab ylab(95)
+else local ylab
+#delimit ;
+local cmd twoway
+	(rspike `lci' `uci' `rank' if !`covers' & `rank'>=`ymin', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions') // non-covering CIs
+	(rspike `lci' `uci' `rank' if  `covers' & `rank'>=`ymin', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions') // covering CIs
+	(scatter `rank' `estimate' if `rank'>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
+	(rspike `truemax' `truemin' `true', pstyle(p5) lw(thin) `truegraphoptions') // vertical line at true value
+	(rspike `lpoint' `rpoint' `covlb', hor lw(thin) pstyle(p5)) // MC CI for obs coverage
+	(rspike `lpoint' `rpoint' `covub', hor lw(thin) pstyle(p5))
+	, 
+	xtitle("`level'% confidence intervals")
+	ytitle("Centile")
+	`ylab'
+	by(`by', ixaxes noxrescale iscale(*.9) `bygraphoptions')
+	legend(order(1 "Non-coverers" 2 "Coverers"))
+	`scheme'
+	`options'
+	`name'
+;
+#delimit cr
+if !mi("`debug'") di as input `"`cmd'"'
+`cmd'
+if !mi("`pause'") {
+	global F9 `cmd'
+	di "Comamnd is in F9"
+	pause
+}
 
-tempfile graphdata
-qui save `graphdata'
-
-if `ntrue' == 1 {
-	#delimit ;
-	twoway
-		(rspike `lci' `uci' _p`estimate'rank if !_covers & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions')	
-		(rspike `lci' `uci' _p`estimate'rank if  _covers & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions')
-		(scatter _p`estimate'rank `estimate' if _p`estimate'rank>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
-		(pci `ymin' `truevalue' 100 `truevalue', pstyle(p5) lw(thin) `truegraphoptions')
-		(rspike _lpoint _rpoint _covlb, hor lw(thin) pstyle(p5)) // MC 
-		(rspike _lpoint _rpoint _covub, hor lw(thin) pstyle(p5))
-		, 
-		xtitle("95% confidence intervals")
-		ytitle("Centile")
-		ylab(5 50 95)
-		by(`byvar', ixaxes noxrescale iscale(*.9) `bygraphoptions')
-		legend(order(1  "Non-coverers" 2 "Coverers"))
-		`scheme'
-		`options'
-		`name'
-	;
-	#delimit cr
-}
-else if `ntrue'>1 {
-* note have to use true_`j' in name to get true_1 etc, not value as will error out if e.g. have 0.25 in the name                           
-forvalues k = 1/`ntrue' {
-	qui keep if `true'calc == `k'
-* have to create local noname for the loop (to re-set name later, so that each graph is named)
-	local noname 0
-	if mi("`name'") local noname = 1
-	if `noname'==1 local name "name(simanzip_true_`k', replace)"
-	else local name "name(`namestub'_`k', replace)"
-	#delimit ;
-	twoway 
-		(rspike `lci' `uci' _p`estimate'rank if !_covers & `true'calc == `k' & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions')
-		(rspike `lci' `uci' _p`estimate'rank if  _covers & `true'calc == `k' & _p`estimate'rank>=`ymin', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions')
-		(scatter _p`estimate'rank `estimate' if `true'calc == `k' & _p`estimate'rank>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
-		(pci `ymin' ``true'label`k'' 100 ``true'label`k'', pstyle(p5) lw(thin) `truegraphoptions')
-		(rspike _lpoint _rpoint _covlb, hor lw(thin) pstyle(p5)) // MC 
-		(rspike _lpoint _rpoint _covub, hor lw(thin) pstyle(p5))
-		,
-		xtitle("95% confidence intervals")
-		ytitle("Centile") 
-		ylab(5 50 95)
-		by(`byvar', ixaxes noxrescale iscale(*.9) note("Graphs by `byvar', true=``true'label`k''") `bygraphoptions' ) 
-		legend(order(1  "Non-coverers" 2 "Coverers"))
-		`scheme'
-		`options'
-		`name'
-	;
-	#delimit cr
-	use `graphdata', clear
-	* have to re-set otherwise name will not be updated
-	if `noname' == 1 local name ""
-}
-}
 
 end
-

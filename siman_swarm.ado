@@ -151,7 +151,7 @@ else {
 }
 
 if `ngraphs'==2 local s "s each "
-di as text "{p 0 2}siman swarm will draw " as result `ngraphs' as text " graph`s' with " as result `npanels' as text " panels.{p_end}"
+di as text "{p 0 2}siman swarm will draw " as result `ngraphs' as text " graph`s' with " as result `npanels' as text " panels{p_end}"
 if `npanels'>15 di "{p 0 2}Consider reducing the number of panels using 'if' condition or 'by' option as detailed in {help siman swarm}{p_end}"
 
 foreach el of local statlist { // estimate and/or se
