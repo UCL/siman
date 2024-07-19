@@ -45,7 +45,7 @@ The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:ta
 
 {synopt:{opt bygr:aphoptions(string)}}  graph options for the overall graph that need to be within the {it:by} option: e.g. title(), note(), row(), col()
 
-{synopt:{opt graphop:tions(string)}}  graph options for the overall graph that need to be outside the {it:by} option: e.g. xtitle(), ytitle()
+{synopt:{opt graphop:tions(string)}}  graph options for the overall graph that need to be outside the {it:by} option: e.g. xtitle(), ytitle(). This must not include name().
 
 {synopt:{opt name(string)}}  the stub for the graph name, to which is appended "_estimate" or "_se". Deafult is "simanswarm"
 
@@ -88,7 +88,7 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 
 {phang}. {stata `"siman swarm, nomean scheme(s1color) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title"))"'}
 
-{phang}. {stata `"siman swarm, scheme(economist) bygraphoptions(title("My swarm plot")) graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm", replace))"'}
+{phang}. {stata `"siman swarm, scheme(economist) row(1) name("swarm", replace)"'}
 
 {marker authors}{...}
 {title:Authors}
