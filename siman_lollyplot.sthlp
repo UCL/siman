@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.13.2 15dec2023}{...}
+{* *! version 0.10 23jul2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "Main simsum help page" "simsum"}{...}
 {viewerjumpto "Syntax" "siman_lollyplot##syntax"}{...}
@@ -26,7 +26,7 @@
 {synoptset 25 tabbed}{...}
 {synopthdr}
 {synoptline}
-{syntab:Specific options}
+{syntab:Specific graph options}
 
 {synopt:{opt labf:ormat(string)}}defines formats for the marker labels for (i) numeric performance measures (e.g. bias), (ii) percentage performance measures (e.g. coverage), and (iii) count performance measures (e.g. bsims).
 
@@ -34,7 +34,7 @@
 
 {synopt:{opt ms:ymbol(string)}}specifies marker symbols for the graphs: one per method, or one for all methods.
 	
-{synopt:{opt refp:ower(string)}}sets the reference level for power. Default is 80.
+{synopt:{opt refp:ower(string)}}sets a reference level for power. Default is no reference level for power.
 
 {synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
 
