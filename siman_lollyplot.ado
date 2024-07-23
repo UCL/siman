@@ -120,8 +120,6 @@ preserve
 
 * keep performance measures only
 qui drop if `rep'>0
-qui keep if `touse'
-if _N==0 error 2000
 
 * check if/in conditions
 tempvar meantouse
@@ -131,6 +129,10 @@ if _rc {
 	di as error "{p 0 2}Warning: this 'if' condition cuts across dgm, target and method. It is safest to subset only on dgm, target and method.{p_end}"
 }
 drop `meantouse'
+
+* do if/in
+qui keep if `touse'
+if _N==0 error 2000
 
 * HANDLE DGMS
 if mi("`dgmshow'") {

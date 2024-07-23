@@ -122,10 +122,19 @@ preserve
 
 * keep performance measures only
 qui drop if `rep'>0
+
+* check if/in conditions
+tempvar meantouse
+egen `meantouse' = mean(`touse'), by(`dgm' `target' `method')
+cap assert inlist(`meantouse',0,1)
+if _rc {
+	di as error "{p 0 2}Warning: this 'if' condition cuts across dgm, target and method. It is safest to subset only on dgm, target and method.{p_end}"
+}
+drop `meantouse'
+
+* do if/in
 qui keep if `touse'
 if _N==0 error 2000
-
-* Need data in wide format (with method/perf measures wide) which siman reshape does not offer, so do below.
 
 * If user has specified an order for dgm, use this order (so that siman_setup doesn't need to be re-run).  Take out -ve signs if there are any.
 if !mi("`dgmorder'") {
@@ -152,15 +161,6 @@ if !mi("`dgmorder'") {
 	}
 	local dgm `dgmnew'
 }
-
-* check if/in conditions
-tempvar meantouse
-egen `meantouse' = mean(`touse'), by(`dgm' `target' `method')
-cap assert inlist(`meantouse',0,1)
-if _rc {
-	di as error "{p 0 2}Warning: this 'if' condition cuts across dgm, target and method. It is safest to subset only on dgm, target and method.{p_end}"
-}
-drop `meantouse'
 
 * create a variable `scenario' that uniquely identifies each of the dgm combinations
 tempvar scenario
@@ -189,8 +189,7 @@ if !mi("`se'`df'`lci'`uci'`p'") qui drop `se' `df' `lci' `uci' `p'
 
 * Process methods
 * If method is a string variable, encode it to numeric format
-capture confirm string variable `method'
-if !_rc {
+if `methodnature'==2 {
 	rename `method' `method'0
 	encode `method'0, generate(`method')
 	drop `method'0
