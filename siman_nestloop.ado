@@ -1,4 +1,6 @@
-*! version 1.8.2   17aug2023
+*!	version 0.10	23jun2024	IW Correct handling of if/in
+*								PMs default to just bias or mean
+*								NB reduce version # to match other programs
 * version 1.8.2 17aug2023	  IW renamed descriptor graph options from frac* and legend* to dg*; new checks for wrong dgmorder(), only 1 dgm; handle missing or numeric target; remove some unwanted `if's; handle method as any type
 * version 1.8.1 16aug2023	  IW changed how main graph is written, so that stagger works; correct looping over PMs and targets; general tidying up and clarifying; correct use of true
 * version 1.8   14aug2023	  IW extended lines to include last scenario; reduced default PMs; range correctly allows for all methods
@@ -25,7 +27,7 @@ syntax [anything] [if], ///
 	DGSIze(real 0.3) DGGAp(real 0) /// control sizing of descriptor graph
 	DGINnergap(real 3) DGCOlor(string) /// control descriptor graph
 	DGPAttern(string) DGLAbsize(string) DGSTyle(string) DGLWidth(string) /// control descriptor graph
-	debug pause nodg METHLEGend(string) /// undocumented
+	debug pause nodg METHLEGend(string) force /// undocumented
 	LColor(string) LPattern(string) LSTYle(string) LWidth(string) /// twoway options for main graph
 	name(string) * /// twoway options for overall graph
 	] 
@@ -42,8 +44,8 @@ if "`dgm'"=="" {
 	
 * If only 1 dgm in the dataset, produce error message as nothing will be graphed
 if `ndgmvars'==1 {
-	di as error "Only 1 dgm in the dataset, nothing to graph."
-	exit 498
+	di as error "Only 1 dgmvar in the dataset, nothing to graph."
+	if mi("`force'") exit 498
 }
 
 * check if siman analyse has been run, if not produce an error message
@@ -56,10 +58,10 @@ if "`analyserun'"=="0" | "`analyserun'"=="" {
 qui levelsof _perfmeascode, local(allpms) clean 
 if "`anything'"=="" {
 	if !mi("`true'") {
-		local pmdefault bias empse cover
+		local pmdefault bias
 	}
 	else {
-		local pmdefault mean empse relerror
+		local pmdefault mean
 		local missedmessage " and no true value"
 	}
 	di as text "Performance measures not specified`missedmessage': defaulting to `pmdefault'"
@@ -111,12 +113,17 @@ else if "`methlegend'"!="" {
 	exit 198
 }
 
+* mark sample
+marksample touse, novarlist
+
 *** END OF PARSING ***
 
 preserve
 
 * keep performance measures only
 qui drop if `rep'>0
+qui keep if `touse'
+if _N==0 error 2000
 
 * Need data in wide format (with method/perf measures wide) which siman reshape does not offer, so do below.
 
@@ -146,20 +153,14 @@ if !mi("`dgmorder'") {
 	local dgm `dgmnew'
 }
 
-* if the user has not specified 'if' in the siman nestloop syntax, but there is one from siman analyse then use that 'if'
-if ("`if'"=="" & "`ifanalyse'"!="") local ifnestloop = `"`ifanalyse'"'
-else local ifnestloop = `"`if'"'
-tempvar touseif
-qui generate `touseif' = 0
-qui replace `touseif' = 1 `ifnestloop' 
-qui sort `dgm' `target' `method' `touseif'
-* The 'if' condition will only apply to dgm, target and method.  The 'if' condition is not allowed to be used on rep and an error message will be issued if the user tries to do so
-capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
-if _rc == 9 {
-	di as error "The 'if' condition can not be applied to 'rep' in siman nestloop.  If you have not specified an 'if' in siman nestloop, but you specified one in siman setup/analyse, then that 'if' will have been applied to siman nestloop." 
-	exit 498
-	}
-qui keep if `touseif'
+* check if/in conditions
+tempvar meantouse
+egen `meantouse' = mean(`touse'), by(`dgm' `target' `method')
+cap assert inlist(`meantouse',0,1)
+if _rc {
+	di as error "{p 0 2}Warning: this 'if' condition cuts across dgm, target and method. It is safest to subset only on dgm, target and method.{p_end}"
+}
+drop `meantouse'
 
 * create a variable `scenario' that uniquely identifies each of the dgm combinations
 tempvar scenario
@@ -182,25 +183,6 @@ if upper("`connect'") != "L" {
 	qui replace `scenario' = `scenario'-0.5
 }
 label var `scenario' "Scenario"
-
-* take out underscores at the end of variable names if there are any
-foreach u of var * {
-	if  substr("`u'",strlen("`u'"),1)=="_" {
-		local U = substr("`u'", 1, index("`u'","_") - 1)
-			if "`U'" != "" {
-			capture rename `u' `U' 
-			if _rc di as txt "problem with `u'"
-		} 
-	}
-}
-* and update macros
-if  substr("`estimate'",strlen("`estimate'"),1)=="_" local estimate = substr("`estimate'", 1, index("`estimate'","_") - 1)
-if  substr("`se'",strlen("`se'"),1)=="_" local se = substr("`se'", 1, index("`se'","_") - 1)
-if  substr("`df'",strlen("`df'"),1)=="_" local df = substr("`df'", 1, index("`df'","_") - 1)
-if  substr("`lci'",strlen("`lci'"),1)=="_" local lci = substr("`lci'", 1, index("`lci'","_") - 1)
-if  substr("`uci'",strlen("`uci'"),1)=="_" local uci = substr("`uci'", 1, index("`uci'","_") - 1)
-if  substr("`p'",strlen("`p'"),1)=="_" local p = substr("`p'", 1, index("`p'","_") - 1)
-if  substr("`true'",strlen("`true'"),1)=="_" local true = substr("`true'", 1, index("`true'","_") - 1)
 
 * drop variables that we're not going to use
 if !mi("`se'`df'`lci'`uci'`p'") qui drop `se' `df' `lci' `uci' `p' 
@@ -260,9 +242,10 @@ if _rc {
 * summarise targets
 qui levelsof `target', local(targetlist)
 local ntargets = r(r)
+
+* report panels and graphs
 local ngraphs = `ntargets'*`npms'
-if `ngraphs'>1 di as text "Drawing `ngraphs' graphs (`ntargets' targets * `npms' performance measures)..."
-else di as text "Drawing graph..."
+di as text "siman nestloop will draw " as result `ngraphs' as text " graphs (" as result `ntargets' as text " targets * " as result `npms' as text " performance measures)"
 
 * resolve varlists in descriptors: can in principle allow continuous descriptors
 local ndescriptors 0

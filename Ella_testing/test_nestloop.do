@@ -6,7 +6,7 @@ updated 16/8/2023
 17/8/2023 added tests of dgmorder and edge cases
 */
 
-local filename siman_nestloop_test
+local filename test_nestloop
 
 prog drop _all
 cd $testpath
@@ -38,7 +38,7 @@ use $testpath/data/extendedtestdata2, clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman analyse if mech!=2, notable
 siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) stagger(0.03) 
-* graph should ignore mech
+pause Graph should ignore mech
 
 
 // COMPARE METHOD AS UNLABELLED/LABELLED NUMERIC OR STRING
@@ -49,6 +49,7 @@ tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman analyse, notable
 siman nestloop empse if estimand=="effect", name(mstring,replace)
+graph export mstring.pdf, replace
 
 * method is numeric labelled in alphabetical order
 use $testpath/data/extendedtestdata2, clear
@@ -90,7 +91,15 @@ tab methchar if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, 
 siman setup, rep(rep) dgm(beta pmiss mech) method(methchar) target(estimand) est(b) se(se) true(true)
 siman analyse, notable
 siman nestloop empse if estimand=="effect", name(munlabplus10,replace)
-* graph should be same as mstring
+
+* graph should be the same as mstring
+graph export munlabplus10.pdf, replace
+!fc mstring.pdf munlabplus10.pdf > result
+type result
+pause Check "no differences encountered" above, then type exit
+foreach file in mstring.pdf munlabplus10.pdf result {
+	erase `file'
+}
 
 
 

@@ -1,31 +1,32 @@
 
 . siman which
 C:\ian\git\siman\siman.ado
-*!version 0.3  08aug2023
+*!version 0.9  14jun2024
 C:\ian\git\siman\siman_setup.ado
-*!    version 0.9.1 12apr2024    remove chars ifsetup, insetup
+*!      version 0.10.2  14jun2024       
 C:\ian\git\siman\siman_describe.ado
-*! version 0.5.1   13mar2024
+*! version 0.7  14jun2024       IW streamline for longlong only; calculate #dgms without assuming fa
+> ctorial; remove commented out code
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.7     3apr2024
+*! version 0.9.1        14jun2024               IW remove code for nformat!=1 and nmethod!=1
 C:\ian\git\siman\siman_table.ado
 *! version 0.8.3   3apr2024
-C:\ian\git\siman\siman_reshape.ado
-*!  version 0.3.4   06nov2023
 C:\ian\git\siman\siman_lollyplot.ado
+*!      version 0.10    23jun2024       IW Clean up handling of if/in
 *! version 1.13.2  15dec2023
 C:\ian\git\siman\siman_zipplot.ado
+*! version 0.10 19jul2024
 *!  version 1.9 22apr2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*! version 1.9.18 25oct2023
+*! version 1.9.19 2may2024
 C:\ian\git\siman\siman_blandaltman.ado
 *!  version 1.7 22apr2024
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.10 22apr2024
+*! version 0.10 19jul2024
 C:\ian\git\siman\siman_scatter.ado
-*! version 1.7 22apr2024
+*!      version 0.10    18jun2024       IW Clean up handling of varlist, if/in, by
 C:\ian\git\siman\siman_nestloop.ado
-*! version 1.8.2   17aug2023
+*!      version 0.10    23jun2024       IW Correct handling of if/in
 
 . 
 . use $testpath/data/extendedtestdata2.dta, clear
@@ -70,13 +71,13 @@ _____________________________________________________
 siman analyse has run successfully
 
 . siman nestloop bias, lcol(black red blue) 
-Drawing 3 graphs (3 targets * 1 performance measures)...
+siman nestloop will draw 3 graphs (3 targets * 1 performance measures)
 
 . 
 . siman nestloop relerror if estimand=="mean1", dgmorder(beta pmiss -mech) stagger(0.05) dgsize(.4) 
 > dggap(.2) dgcol(green orange purple) dgpatt(dash solid =) dglabsize(medium) dglwidth(1) lcol(black
 >  red blue) lwidth(1) title(My nested loop plot) name(sn1,replace) xla(none) norefline
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * setup without true
@@ -121,8 +122,8 @@ _____________________________________________________
 siman analyse has run successfully
 
 . siman nestloop if estimand=="effect", lcol(black red blue) xtitle("") xlabel(none) stagger(0.03) 
-Performance measures not specified and no true value: defaulting to mean empse relerror
-Drawing 3 graphs (1 targets * 3 performance measures)...
+Performance measures not specified and no true value: defaulting to mean
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * siman analyse with if
@@ -167,9 +168,12 @@ siman analyse has run successfully
 
 . siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) stagger(0.0
 > 3) 
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
-. * graph should ignore mech
+. pause Graph should ignore mech
+pause:  Graph should ignore mech
+-> . exit
+
 . 
 . 
 . // COMPARE METHOD AS UNLABELLED/LABELLED NUMERIC OR STRING
@@ -227,7 +231,10 @@ _____________________________________________________
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mstring,replace)
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
+
+. graph export mstring.pdf, replace
+file mstring.pdf saved as PDF format
 
 . 
 . * method is numeric labelled in alphabetical order
@@ -284,7 +291,7 @@ _____________________________________________________
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mlabalpha,replace)
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * method is numeric labelled in data order
@@ -341,7 +348,7 @@ _____________________________________________________
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mlabdata,replace)
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * method is numeric unlabelled in alphabetical order
@@ -411,7 +418,7 @@ _____________________________________________________
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(munlabelled,replace)
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . ** NB name(string) gives funny error
@@ -483,9 +490,27 @@ _____________________________________________________
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(munlabplus10,replace)
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
-. * graph should be same as mstring
+. 
+. * graph should be the same as mstring
+. graph export munlabplus10.pdf, replace
+file munlabplus10.pdf saved as PDF format
+
+. !fc mstring.pdf munlabplus10.pdf > result
+
+. type result
+Comparing files mstring.pdf and MUNLABPLUS10.PDF
+FC: no differences encountered
+
+. pause Check "no differences encountered" above, then type exit
+pause:  Check "no differences encountered" above, then type exit
+-> . exit
+
+. foreach file in mstring.pdf munlabplus10.pdf result {
+  2.         erase `file'
+  3. }
+
 . 
 . 
 . 
@@ -532,13 +557,13 @@ siman analyse has run successfully
 
 . siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) stagger(0.0
 > 3)
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 .  
 . * only one method
 . siman nestloop bias if method=="CCA" & estimand=="mean0", lcol(black red blue) xtitle("") xlabel(n
 > one) name(sn2,replace)
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * incomplete dgmorder
@@ -567,7 +592,7 @@ Surplus vars found in dgmorder(): mech
 
 . * abbreviated dgmorder
 . siman nestloop bias if estimand=="mean0", dgmorder(pmiss be -mec) name(sn3,replace)
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * wrong pm
@@ -608,8 +633,8 @@ Data-generating mechanism (DGM)
 
 Targets
   Variable containing targets:    
-  Number of targets:              N/A
-  Target values:                  N/A
+  Number of targets:              1
+  Target values:                  
 
 Methods
   Variable containing methods:    method
@@ -629,7 +654,7 @@ _____________________________________________________
 siman analyse has run successfully
 
 . siman nestloop bias, name(sn4,replace)
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * numeric target
@@ -676,25 +701,25 @@ _____________________________________________________
 siman analyse has run successfully
 
 . siman nestloop bias, name(sn5,replace)
-Drawing 3 graphs (3 targets * 1 performance measures)...
+siman nestloop will draw 3 graphs (3 targets * 1 performance measures)
 
 . siman nestloop bias if estinum==1, name(sn6,replace) nodg legend(row(1)) saving(sn6,replace)
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 (file sn6.gph not found)
 file sn6.gph saved
 
 . siman nestloop bias if estinum==1, nodg legend(row(1)) methlegend(item)
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . siman nestloop bias if estinum==1, nodg legend(row(1)) methlegend(title)
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * this is a good quality graph
 . siman nestloop bias if estinum==1, legend(row(1)) ///
 >         title(Good nestloop graph for estimand effect) note("") stagger(.05) xlab(none) lcol(red g
 > reen blue)
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * tidy up
