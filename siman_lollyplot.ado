@@ -1,7 +1,8 @@
 *!	version 0.10	23jun2024	IW Clean up handling of if/in
-*								Drop non-varying dgmvars, unless nodropdgm option used
+*								Drop non-varying dgmvars, unless dgmshow option used
 *								Correct DGM labelling at top of graph (was wrongly alpha-sorted)
 *								refpower defaults to off
+*								fix errors when method isn't 1,2...
 *								NB reduce version # to match other programs
 *! version 1.13.2  15dec2023
 * version 1.13.2  15dec2023   IW 'if' is a condition not an option
@@ -41,11 +42,11 @@ version 15
 
 syntax [anything] [if] [, ///
 	LABFormat(string) COLors(string) MSymbol(string)  ///
-	REFPower(real -1) /// specific graph options
+	REFPower(real -1) METHLEGend(string) DGMShow /// specific graph options
 	Level(cilevel) logit /// calculation options
 	BYGRaphoptions(string) name(string) * /// general graph options
 	pause /// advanced graph option
-	dgmwidth(int 30) pmwidth(int 24) debug METHLEGend(string) noDROPdgm /// undocumented options
+	dgmwidth(int 30) pmwidth(int 24) debug rangeadd(real 0.2) /// undocumented options
 	]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -132,13 +133,7 @@ if _rc {
 drop `meantouse'
 
 * HANDLE DGMS
-* if dgm is missing in the dataset then set the number of dgms to be 1.
-if mi("`dgm'") {
-	tempvar dgm
-	qui gen `dgm' = 1
-	local ndgmvars = 1
-}
-if mi("`dropdgm'") {
+if mi("`dgmshow'") {
 	* drop non-varying dgmvars
 	local dgmvary
 	foreach dgmvar of local dgm {
@@ -148,28 +143,36 @@ if mi("`dropdgm'") {
 	}
 	local dgm `dgmvary'
 }
-local ndgmvars : word count `dgm'
-if `ndgmvars'>1 {
-	tempvar dgmgroup
-	egen `dgmgroup' = group(`dgm'), label
-	local varname novarname
+if mi("`dgm'") {
+*	tempvar dgm
+*	qui gen `dgm' = 1
+	local ndgmvars 1
+	local ndgmlevels 1
 }
 else {
-	local dgmgroup `dgm'
-	local dgmequals `dgm'=
-}
-qui tab `dgmgroup'
-local ndgmlevels = r(r)
+	local ndgmvars : word count `dgm'
+	if `ndgmvars'>1 {
+		tempvar dgmgroup
+		egen `dgmgroup' = group(`dgm'), label
+		local varname novarname
+	}
+	else {
+		local dgmgroup `dgm'
+		if !mi("`dgm'") local dgmequals `"`dgm'="'
+	}
+	qui tab `dgmgroup'
+	local ndgmlevels = r(r)
 
-* create graph title for top
-forvalues i=1/`ndgmlevels' {
-	local thisdgmname : label (`dgmgroup') `i'
-	local dgmnames `"`dgmnames' `"`dgmequals'`thisdgmname'"'"'
+	* create graph title for top
+	forvalues i=1/`ndgmlevels' {
+		local thisdgmname : label (`dgmgroup') `i'
+		local dgmnames `"`dgmnames' `"`dgmequals'`thisdgmname'"'"'
+	}
+	padding `dgmnames', width(`dgmwidth')
+	local titlepadded = s(titlepadded)
+	if `ndgmvars'>1 local titlepadded `"`"`dgm'"' `"`titlepadded'"'"'
+	else local titlepadded `"`"`titlepadded'"'"'
 }
-padding `dgmnames', width(`dgmwidth')
-local titlepadded = s(titlepadded)
-if `ndgmvars'>1 local titlepadded `"`"`dgm'"' `"`titlepadded'"'"'
-else local titlepadded `"`"`titlepadded'"'"'
 
 * HANDLE TARGETS
 if !mi("`target'") {
@@ -199,17 +202,20 @@ if `methodnature'==2 {
 * find levels of method
 qui levelsof `method', local(methodlevels)
 local nmethods = r(r)
+sum `method', meanonly
+local methodmin = r(min)-`rangeadd'
+local methodmax = r(max)+`rangeadd'
 
 * set labels, colours and symbols for methods
 local i 0
 foreach j of local methodlevels { 
-	local label`j' : label (`method') `j' // defaults to `j' if no label
 	local ++i
-	local mcol`j' : word `i' of `colors'
-	if mi("`mcol`j'") local mcol`j' "scheme p`i'"
-	local msym`j' : word `i' of `msymbol'
-	if mi("`msym`j'") & `j'==1 local msym`j' O
-	else if mi("`msym`j'") & `j'>1 local msym`j' `msym`=`j'-1'
+	local label`i' : label (`method') `j' // defaults to `j' if no label
+	local mcol`i' : word `i' of `colors'
+	if mi("`mcoi`i'") local mcol`i' "scheme p`i'"
+	local msym`i' : word `i' of `msymbol'
+	if mi("`msym`i'") & `i'==1 local msym`i' O
+	else if mi("`msym`i'") & `i'>1 local msym`i' `msym`=`i'-1'
 }
 
 * HANDLE PERFORMANCE MEASURES
@@ -314,7 +320,7 @@ foreach thistarget of local targetlevels {
 		msym(i) c(l) col(gray) lpattern(dash)
 	local graph_cmd `graph_cmd' , by(`pmvar' `dgmgroup', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions') 
 	local graph_cmd `graph_cmd' subtitle("") ylab(none) ///
-		ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse range(0.8)) ///
+		ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse range(`methodmin' `methodmax')) ///
 		legend(order(`graphorder') `methlegtitle')
 	if `ntargetlevels'<=1 local graph_cmd `graph_cmd' name(`name'`nameopts')
 	else local graph_cmd `graph_cmd' name(`name'_`thistargetname'`nameopts')

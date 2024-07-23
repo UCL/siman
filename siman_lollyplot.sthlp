@@ -38,6 +38,8 @@
 
 {synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
 
+{synopt:{opt dgms:how}}shows in the top title the values of any DGM variables that are constant within the 'if' condition. The default is no to show them.{p_end}
+
 {syntab:Calculation options}
 
 {synopt:{opt l:evel(#)}}sets the level for confidence intervals. Default is the current level (see {help level}).
@@ -46,7 +48,9 @@
 
 {syntab:General graph options}
 
-{synopt:{opt bygr:aphoptions(string)}}Graph options which need to be placed within the {cmd:by()} option.
+{synopt:{opt bygr:aphoptions(string)}}Graph options which need to be placed within the {cmd:by()} option.{p_end}
+
+{synopt:{opt name(string)}}Stub for graph name, to which "_" and the target name are appended.{p_end}
 
 {synopt:{it:graph_options}}Most of the valid options for {help scatter:scatter} are available.{p_end}
 
