@@ -12,6 +12,7 @@ C:\ian\git\siman\siman_analyse.ado
 C:\ian\git\siman\siman_table.ado
 *! version 0.8.3   3apr2024
 C:\ian\git\siman\siman_lollyplot.ado
+*!      version 0.10    23jun2024       IW Clean up handling of if/in
 *! version 1.13.2  15dec2023
 C:\ian\git\siman\siman_zipplot.ado
 *! version 0.10 19jul2024
@@ -19,13 +20,13 @@ C:\ian\git\siman\siman_zipplot.ado
 C:\ian\git\siman\siman_comparemethodsscatter.ado
 *! version 1.9.19 2may2024
 C:\ian\git\siman\siman_blandaltman.ado
-*!  version 1.7 22apr2024
+*!      version 0.10    23jun2024       IW Correct handling of if/in
 C:\ian\git\siman\siman_swarm.ado
 *! version 0.10 19jul2024
 C:\ian\git\siman\siman_scatter.ado
 *!      version 0.10    18jun2024       IW Clean up handling of varlist, if/in, by
 C:\ian\git\siman\siman_nestloop.ado
-*! version 1.8.2   17aug2023
+*!      version 0.10    23jun2024       IW Correct handling of if/in
 
 . 
 . foreach feature in dgm target method {

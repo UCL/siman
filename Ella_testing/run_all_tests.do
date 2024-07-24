@@ -4,7 +4,8 @@ siman overarching testing program
 IW 19dec2023
 updated 3apr2024 - runs in 5 minutes!
 11jun2024 - new test_setup programs
-18-19jun2024 - add test_scatter, test_swarm, test_ziplot
+18-19jun2024 - add test_scatter, test_swarm, test_zipplot
+24jul2024 - rename test_lollyplot & test_nestloop, add test_bland
 */
 
 // USER-SPECIFIC SETUP
@@ -31,9 +32,7 @@ local testfiles ///
 	test_siman_widelong_EMZ /// from wide-long
 	testing_graphs_matrix   /// from all formats and var types
 	/// test graphs command by command
-	test_scatter 			///
-	test_swarm				///
-	test_zipplot			
+	test_scatter test_swarm test_zipplot test_lollyplot test_nestloop test_bland
 /*
 	/// test graphs in mixed ways
 	Testing_IRW_TPM_EMZ     /// various graph tests: 2 minutes
