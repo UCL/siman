@@ -328,10 +328,13 @@ foreach thistarget of local targetlevels {
 	else local graph_cmd `graph_cmd' name(`name'_`thistargetname'`nameopts')
 	local graph_cmd `graph_cmd' `options'
 
-	global F9 `graph_cmd'
 	if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
-	if !mi("`pause'") pause Press F9 to recall, optionally edit and run the graph command
+	if !mi("`pause'") {
+		global F9 `graph_cmd'
+		pause Press F9 to recall, optionally edit and run the graph command
+	}
 	`graph_cmd'
+
 }
 
 end

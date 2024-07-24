@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.8.2 17aug2023}{...}
+{* *! version 0.10 23jun2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_nestloop##syntax"}{...}
 {viewerjumpto "Description" "siman_nestloop##description"}{...}

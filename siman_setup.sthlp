@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.7 3apr2024}{...}
+{* *! version 0.10 24jul2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Input data formats" "siman_setup##data"}{...}

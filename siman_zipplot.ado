@@ -173,7 +173,7 @@ else if `ymin'<=50 local ylab ylab(50 95)
 else if `ymin'<=95 local ylab ylab(95)
 else local ylab
 #delimit ;
-local cmd twoway
+local graph_cmd twoway
 	(rspike `lci' `uci' `rank' if !`covers' & `rank'>=`ymin', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions') // non-covering CIs
 	(rspike `lci' `uci' `rank' if  `covers' & `rank'>=`ymin', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions') // covering CIs
 	(scatter `rank' `estimate' if `rank'>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
@@ -191,13 +191,13 @@ local cmd twoway
 	`name'
 ;
 #delimit cr
-if !mi("`debug'") di as input `"`cmd'"'
-`cmd'
+
+if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
 if !mi("`pause'") {
-	global F9 `cmd'
-	di "Comamnd is in F9"
-	pause
+	global F9 `graph_cmd'
+	pause Press F9 to recall, optionally edit and run the graph command
 }
+`graph_cmd'
 
 
 end

@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.4 11sep2023}{...}
+{* *! version 0.10 24jul2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Syntax" "siman_blandaltman##syntax"}{...}

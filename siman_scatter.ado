@@ -21,7 +21,7 @@
 program define siman_scatter, rclass
 version 16
 
-syntax [varlist(default=none max=2)] [if][in] [, BY(varlist) BYGRaphoptions(string) name(passthru) *]
+syntax [varlist(default=none max=2)] [if][in] [, BY(varlist) BYGRaphoptions(string) name(passthru) debug pause *]
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -122,7 +122,14 @@ if `npanels' > 15 {
 
 if mi("`name'") local name name(simanscatter, replace)
 
-twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) `byoption' `name' `options'
+local graph_cmd twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) `byoption' `name' `options'
+
+if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+if !mi("`pause'") {
+	global F9 `graph_cmd'
+	pause Press F9 to recall, optionally edit and run the graph command
+}
+`graph_cmd'
 
 end
 

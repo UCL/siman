@@ -412,9 +412,12 @@ foreach thispm of local pmlist { // loop over PMs
 			name(`name'`targetname'_`thispm' `nameopts')				    ///
 			`note' `yline'													///
 			`options'
-		global F9 `graph_cmd'
-		if !mi("`debug'") di as text `"Graph command is: "' as input `"`graph_cmd'"'
-		if !mi("`pause'") pause
+
+		if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+		if !mi("`pause'") {
+			global F9 `graph_cmd'
+			pause Press F9 to recall, optionally edit and run the graph command
+		}
 		`graph_cmd'
 		
 	} // end of loop over targets

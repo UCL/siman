@@ -28,7 +28,7 @@
 program define siman_swarm, rclass
 version 16
 
-syntax [anything] [if][in] [, * nomean MEANGRaphoptions(string) BY(varlist) BYGRaphoptions(string) GRAPHOPtions(string) SCatteroptions(string) name(string) debug msymbol(passthru) msize(passthru) mcolor(passthru) title(passthru) note(passthru) row(passthru) col(passthru) xtitle(passthru) ytitle(passthru)]
+syntax [anything] [if][in] [, * nomean MEANGRaphoptions(string) BY(varlist) BYGRaphoptions(string) GRAPHOPtions(string) SCatteroptions(string) name(string) msymbol(passthru) msize(passthru) mcolor(passthru) title(passthru) note(passthru) row(passthru) col(passthru) xtitle(passthru) ytitle(passthru) debug pause]
 
 * attempt to assign graph options correctly
 local scatteroptions `scatteroptions' `msymbol' `msize' `mcolor' `options'
@@ -155,15 +155,21 @@ di as text "{p 0 2}siman swarm will draw " as result `ngraphs' as text " graph`s
 if `npanels'>15 di "{p 0 2}Consider reducing the number of panels using 'if' condition or 'by' option as detailed in {help siman swarm}{p_end}"
 
 foreach el of local statlist { // estimate and/or se
-	local cmd twoway (scatter newidrep ``el'', msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `scatteroptions')
+	local graph_cmd twoway (scatter newidrep ``el'', msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `scatteroptions')
 	if "`mean'"!="nomean" {
 		qui egen mean`el' = mean(``el''), by(`by' `method')
-		local cmd `cmd' (scatter newidrep mean`el', msym(|) msize(huge) mcol(orange) `meangraphoptions')
+		local graph_cmd `graph_cmd' (scatter newidrep mean`el', msym(|) msize(huge) mcol(orange) `meangraphoptions')
 	}
 	local nameopt name(`name'_`el', `replace')
-	local cmd `cmd', by(`by', title("") noxrescale legend(off) `bygraphoptions') ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions'
-	if !mi("`debug'") di as input `"`cmd'"'
-	qui `cmd'
+	local graph_cmd `graph_cmd', by(`by', title("") noxrescale legend(off) `bygraphoptions') ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions'
+
+	if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+	if !mi("`pause'") {
+		global F9 `graph_cmd'
+		pause Press F9 to recall, optionally edit and run the graph command
+	}
+	`graph_cmd'
+
 }
 
 end
