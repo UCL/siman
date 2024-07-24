@@ -342,6 +342,9 @@ will be reshaped before {cmd: siman setup} is run.
 {marker chars}{...}
 {title:Characteristics stored by siman setup}
 
+{pstd}Each characteristic {cmd:{it:char}} in the list below is stored as characteristic {cmd:_dta[siman_{it:char}]}.
+The characteristics can be viewed using {cmd:siman describe, char}.
+
 {synoptset 20 tabbed}{...}
 DGMs
 {synopt:{opt dgm}}Variables defining the DGM. Values: varlist or empty. {p_end}
@@ -378,7 +381,6 @@ Data formats
 
 Characteristics created by {help siman analyse}
 {synopt:{opt analyserun}}is set to 1 when siman analyse is run. Values: missing or 1. {p_end}
-{synopt:{opt ifanalyse}}is any if condition used in siman analyse. Values: string. {p_end}
 {synopt:{opt secreated}}is a dummy for the SE variable having been created by siman analyse 
 to hold Monte Carlo standard errors. Values: missing or 1. {p_end}
 

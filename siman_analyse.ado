@@ -85,10 +85,9 @@ if _rc==0 {
 }
 
 * if condition
-local ifanalyse `if'
 qui tempvar touse
 qui generate `touse' = 0
-qui replace `touse' = 1 `ifanalyse' 
+qui replace `touse' = 1 `if' 
 
 * Warn the user if the 'if' condition is used other than on dgm target method
 tempvar min max
@@ -255,8 +254,8 @@ qui rename indi `rep'
 
 * generate a byte variable ‘dataset’ with labels 0 “Estimates” 1 “Performance”
 qui gen byte _dataset = `rep'>0 if `rep'!=.
-label define estimatesperformancelab 0 "Performance" 1 "Estimates"
-label values _dataset estimatesperformancelab
+label define _dataset 0 "Performance" 1 "Estimates"
+label values _dataset _dataset
 
 
 if "`perfonly'"!="" qui drop if `rep'>0 & `rep'!=.
@@ -314,7 +313,7 @@ restore, not
 
 * Set indicator so that user can determine if siman analyse has been run (e.g. for use in siman lollyplot)
 local analyserun = 1
-local allthings `allthings' analyserun ifanalyse secreated
+local allthings `allthings' analyserun secreated
 * de-duplicate
 local allthings : list uniq allthings
 
