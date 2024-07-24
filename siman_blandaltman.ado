@@ -1,4 +1,4 @@
-*!	version 0.10	23jun2024	IW Correct handling of if/in
+*!	version 0.10	24jun2024	IW Correct handling of if/in
 *								NB reduce version # to match other programs
 *  version 1.7 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
 *  version 1.6.12 20feb2024  TPM removed xsize(5) as default and added yline(0, ...) to graphs
@@ -169,117 +169,6 @@ drop `estimate' `se'
 qui drop if `method' == `m1'
 
 
-/* avoid this by doing graphs with wide stats
-
-*if mi("`methlist'") {
-	qui tab strmeth
-	local numstrmeth = `r(r)'
-	qui gen byte method = 1 if strmeth=="`mlabel1'"
-	if mi("`methlist'") local nforvalues = `nummethod'
-	else local nforvalues = `nmethods'
-	 forvalues n = 2/`nforvalues' {
-		cap qui replace method = `n' if strmeth=="`mlabel`n''"
-		local labelvalues `n' "`mlabel`n'' vs. `mlabel1'" `labelvalues'
-		if `n'==`nforvalues' label define method `labelvalues'
-	}
-	lab val method method
-}
-
-qui gen byte thing = 1 if strthing=="`estimate'"
-qui replace thing = 2 if strthing=="`se'"
-qui drop strmeth
-
-lab def thing 1 "`estimate' " 2 "`se'"
-lab val thing thing
-lab var diff "Difference"
-lab var mean "Mean"
-
-
-* For the purposes of the graphs below, if dgm is missing in the dataset then set
-* the number of dgms to be 1.
-if mi("`dgm'") {
-	qui gen dgm = 1
-	local dgm "dgm"
-	local ndgmvars=1
-}
-
-* Need to know number of dgms for later on
-local numberdgms: word count `dgm'
-if `numberdgms'==1 {
-	qui tab `dgm'
-	local ndgmvars = `r(r)'
-}
-if `numberdgms'!=1 local ndgmvars = `numberdgms'
-
-if `numberdgms'==1 {
-	* Need to know what format dgm is in (string or numeric) for the below code
-	local dgmstringindi = 0
-	capture confirm string variable `dgm'
-	if !_rc local dgmstringindi = 1
-}
-else local dgmstringindi = 1
-
-
-* for 'by' syntax
-
-if mi("`by'") {
-	local dgmbyvar = "`by'"
-}
-else local dgmbyvar = "`dgm'"
-
-foreach dgmvar in `dgmbyvar' {
-	
-	local dgmlabels = 0
-	
-	qui tab `dgmvar'
-	local ndgmvar = `r(r)'
-
-	* Get dgm label values
-	cap qui labelsof `dgmvar'
-	cap qui ret list
-
-	if `"`r(labels)'"'!="" {
-		local 0 = `"`r(labels)'"'
-
-		forvalues i = 1/`ndgmvar' {  
-			gettoken `dgmvar'dlabel`i' 0 : 0, parse(": ")
-			local dgmlabels = 1
-		}
-	}
-	else {
-	local dgmlabels = 0
-	qui levels `dgmvar', local(levels)
-	tokenize `"`levels'"'
-		
-		if `dgmstringindi'==0 {
-		
-			forvalues i = 1/`ndgmvar' {  
-				local `dgmvar'dlabel`i' `i'
-			}
-		}
-		else if `dgmstringindi'==1 {
-		
-			forvalues i = 1/`ndgmvar' {  
-				local `dgmvar'dlabel`i' ``i''
-			}
-			
-		}
-	}
-
-	qui tab `dgmvar'
-	local n`dgmvar'labels = `r(r)'
-}
-
-if mi(`"`options'"') {
-	local options mlc(white%1) msym(O) msize(tiny)
-}
-		
-local targetstringindi = 0
-capture confirm string variable `target'
-if !_rc local targetstringindi = 1
-
-*/
-
 * IDENTIFY OVER AND BY VARIABLES
 local all `dgm' `target' `method'
 if mi("`by'") local by `method'
@@ -299,17 +188,6 @@ qui levelsof `bygroup'
 local npanels = r(r)
 drop `bygroup'
 
-/* HANDLE TARGET - DROP?
-if !mi("`target'") {
-	qui levelsof `target'
-	local ntargets = r(r)
-	local valtarget = r(levels)
-}
-else {
-	local ntargets 1
-}
-*/
-
 * report graphs to be drawn
 local ngraphs = `novers' * `nstats'
 if `ngraphs'>1 local sg "s each"
@@ -320,74 +198,23 @@ if `npanels' > 15 | `ngraphs' > 3 {
 }
 
 
-/*
-* If target is not missing / 'by' is not by a dgm variable (i.e. not splitting out by target)
-if "`valtarget'" != "N/A" & "`by'"!="`dgmbyvar'" {
-
-	* check number of targets in case 'if' syntax has been applied
-	qui tab `target',m
-	local ntargetlabels = `r(r)'
-
-	qui levels `target', local(levels)
-	tokenize `"`levels'"'
-	forvalues e = 1/`ntargetlabels' {
-		local tarlabel`e' = "``e''"
-		if `e'==1 local valtargetloop `tarlabel`e''
-		else if `e'>=2 local valtargetloop `valtargetloop' `tarlabel`e''
-	}
-*/
-	
 forvalues g = 1/`novers' { // loop over graphs
 	local gname : label (`group') `g'
-		foreach stat in `statlist' { // loop over stats
-			if !mi("`debug'") di as input "Group `gname', stat `stat'"
-			* graph titles
-			if "`stat'"=="estimate" local eltitle = "`estimate'"
-			else if "`stat'"=="se" local eltitle = "`se'" 
-		
-/*
-			* use target labels if target numeric with string labels
-			if `targetnature' == 1 local tlab: word `t' of `valtarget'
-			else local tlab `t'
-		
-			local dgmlevels`d' : label (`group') `g'
+	foreach stat in `statlist' { // loop over stats
+		if !mi("`debug'") di as input "Group `gname', stat `stat'"
+		* graph titles
+		if "`stat'"=="estimate" local eltitle = "`estimate'"
+		else if "`stat'"=="se" local eltitle = "`se'" 
+		if !mi("`over'") local overnote ", `over' = `gname'"
 
-			if ("`by'"=="" | "`by'"=="`dgm' `target'") {
-		
-				local bytitle = "`dgmbyvar': `dgmlevels`d'', target: `tlab'"
-				
-				if `targetstringindi' == 1 local byvarlist = `"`group'==`d' & `target'=="`t'""'
-				else local byvarlist = `"`group'==`d' & `target'==`t'"'
-		
-				local byname = "`d'`tlab'"
-
-			}
-
-			else if "`by'"=="`dgmbyvar'" {
-			local bytitle = "`dgmbyvar': `dgmlevels`d''"
-			local byvarlist = `"`group'==`d'"'
-			local byname = `d'
-			}
-			else if "`by'"=="`target'" {
-			local bytitle = "target: `tlab'"
-			if `targetstringindi' == 1 local byvarlist = `"`target'=="`t'""'
-			else local byvarlist = `"`target'==`t'"'
-			local byname = "`tlab'"
-			}
-			else if "`by'"=="`target' `dgm'" {
-				di as err "'by' nesting order should be by(dgm target)"
-				exit 198
-			}
-*/
-if !mi("`over'") local overnote ", `over' = `gname'"
 		#delimit ;
-			local graph_cmd twoway (scatter diff`stat' mean`stat' if `group'==`g', `options')
-			,
-			by(`by', note("Graph: `eltitle'`overnote'. Panels: `by'") iscale(1.1) title("") norescale `bygraphoptions')
-			yline(0, lp(l) lc(gs8))
-			name(`name'_`g'_`stat' `nameopts')
-			ytitle(Difference vs `mlabel1') xtitle(Average `eltitle')
-			;
+		local graph_cmd twoway (scatter diff`stat' mean`stat' if `group'==`g', `options')
+		,
+		by(`by', note("Graph: `eltitle'`overnote'. Panels: `by'") iscale(1.1) title("") norescale `bygraphoptions')
+		yline(0, lp(l) lc(gs8))
+		name(`name'_`g'_`stat' `nameopts')
+		ytitle(Difference vs `mlabel1') xtitle(Average `eltitle')
+		;
 		#delimit cr
 		
 		if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
@@ -396,50 +223,8 @@ if !mi("`over'") local overnote ", `over' = `gname'"
 			pause Press F9 to recall, optionally edit and run the graph command
 		}
 		`graph_cmd'
-
-		}
-}
-
-/*
-else {
-	forvalues d = 1/`groupnum' {
-		foreach stat in `statlist' {
-
-			* graph titles
-			if "`stat'"=="`estimate'" local eltitle = "`estimate'"
-			else if "`stat'"=="`se'" local eltitle = "`se'" 
-			
-			local dgmlevels`d' : label grouplevels `d'
-
-			if ("`by'"=="" | "`by'"=="`dgmbyvar'") {
-				local bytitle = "`dgmbyvar': `dgmlevels`d''"
-				local byvarlist = `"`group'==`d'"'
-				local byname = `d'
-			}	
-			if `ndgmvars' > 1 {
-				#delimit ;
-				local graph_cmd twoway (scatter diff mean if `byvarlist', `options')
-				,
-				by(method, note("Graphs for `eltitle', `bytitle'") iscale(1.1) title("") norescale `bygraphoptions')
-				yline(0, lp(l) lc(gs8))
-				name( `name'_`byname'`stat' `nameopts')
-				;
-				#delimit cr
-			}
-			else {
-				#delimit ;
-				local graph_cmd twoway (scatter diff mean, `options')
-				,
-				by(method, note("Graphs for `eltitle'") iscale(1.1) title("") norescale `bygraphoptions')
-				yline(0, lp(l) lc(gs8))
-				name( `name'_`stat' `nameopts')
-				;
-				#delimit cr
-			}
-		}
 	}
 }
-*/
 
 end
 
