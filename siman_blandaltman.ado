@@ -80,9 +80,11 @@ marksample touse, novarlist
 
 preserve
 
-* keeps estimates data only
-qui drop if `rep'<0
-drop _dataset _perfmeascode
+if "`analyserun'"=="1" {
+	* keep estimates data only
+	qui drop if `rep'<0
+	drop _dataset _perfmeascode
+}
 
 * check if/in conditions
 tempvar meantouse
@@ -141,13 +143,7 @@ if `methodnature'==2 {
 	qui rename numericmethod `method'
 	local methodnature 1
 	local methlist `newmethlist'
-	if !mi("`debug'") {
-		label list numericmethod
-		tab `method', missing
-		tab `method', missing nol
-	}
 }
-if !mi("`debug'") mac l _methlist
 
 * find method values and labels
 local i 0
@@ -169,10 +165,8 @@ foreach s in `statlist' {
 	drop `ref`s''
 }
 
-drop `estimate'
-drop `se'
-drop if `method' == `m1'
-su
+drop `estimate' `se'
+qui drop if `method' == `m1'
 
 
 /* avoid this by doing graphs with wide stats
@@ -286,29 +280,43 @@ if !_rc local targetstringindi = 1
 
 */
 
+* IDENTIFY OVER AND BY VARIABLES
 local all `dgm' `target' `method'
 if mi("`by'") local by `method'
 if mi("`over'") local over : list all - by
-if !mi("debug'") di as input "Graphing over `over' and by `by'"
+local over2 = cond(mi("`over'"),"[nothing]","`over'")
+local by2 = cond(mi("`by'"),"[nothing]","`by'")
+if !mi("`debug'") di as input "Graphing over `over2' and by `by2'"
 
-* HANDLE DGM
-* make a group for when dgm is defined by >1 variable
 tempvar group
 qui egen `group' = group(`over'), label
-tab `group'
-local ngroups = r(r)
+qui tab `group'
+local novers = r(r)
 
-* handle target
-qui levelsof `target'
-local ntargets = r(r)
-local valtarget = r(levels)
+tempvar bygroup
+qui egen `bygroup' = group(`by')
+qui levelsof `bygroup'
+local npanels = r(r)
+drop `bygroup'
+
+/* HANDLE TARGET - DROP?
+if !mi("`target'") {
+	qui levelsof `target'
+	local ntargets = r(r)
+	local valtarget = r(levels)
+}
+else {
+	local ntargets 1
+}
+*/
 
 * report graphs to be drawn
-local ngraphs = `ngroups' * `ntargets' * `nstats'
-local npanels `nmethods'
-di as text "siman blandaltman will draw " as result `ngraphs' as text " graphs (`ngroups' dgms, `ntargets' targets, `nstats' stats) each with " as result `npanels' as text " panels"
-if `npanels' > 15 {
-	di as smcl as text "{p 0 2}Consider reducing the number of panels using 'if' condition or 'by' option{p_end}"
+local ngraphs = `novers' * `nstats'
+if `ngraphs'>1 local sg "s each"
+if `npanels'>1 local sp "s"
+di as text "siman blandaltman will draw " as result `ngraphs' as text " graph`sg' with " as result `npanels' as text " panel`sp'"
+if `npanels' > 15 | `ngraphs' > 3 {
+	di as smcl as text "{p 0 2}Consider reducing the number of graphs/panels using 'if' condition or 'by' option{p_end}"
 }
 
 
@@ -329,9 +337,9 @@ if "`valtarget'" != "N/A" & "`by'"!="`dgmbyvar'" {
 	}
 */
 	
-forvalues g = 1/`ngroups' {
+forvalues g = 1/`novers' { // loop over graphs
 	local gname : label (`group') `g'
-		foreach stat in `statlist' {
+		foreach stat in `statlist' { // loop over stats
 			if !mi("`debug'") di as input "Group `gname', stat `stat'"
 			* graph titles
 			if "`stat'"=="estimate" local eltitle = "`estimate'"
@@ -371,11 +379,11 @@ forvalues g = 1/`ngroups' {
 				exit 198
 			}
 */
-
+if !mi("`over'") local overnote ", `over' = `gname'"
 		#delimit ;
 			local graph_cmd twoway (scatter diff`stat' mean`stat' if `group'==`g', `options')
 			,
-			by(`by', note("Graphs for `eltitle', `over' = `gname'") iscale(1.1) title("") norescale `bygraphoptions')
+			by(`by', note("Graph: `eltitle'`overnote'. Panels: `by'") iscale(1.1) title("") norescale `bygraphoptions')
 			yline(0, lp(l) lc(gs8))
 			name(`name'_`g'_`stat' `nameopts')
 			ytitle(Difference vs `mlabel1') xtitle(Average `eltitle')
