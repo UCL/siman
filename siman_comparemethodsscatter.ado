@@ -149,7 +149,7 @@ else { // allow methlist(numlist)
 	cap numlist "`methlist'"
 	if !_rc local methlist = r(numlist)
 }
-if !mi("`debug'") di as input "methlist = `methlist'"
+if !mi("`debug'") di as input `"methlist = `methlist'"'
 
 * count methods & choose type
 local nmethods : word count `methlist'
@@ -167,6 +167,12 @@ if mi("`statlist'") {
 local nstats : word count `statlist'
 if !mi("`debug'") di as input "statlist = `statlist'"
 local do_se = strpos("`statlist'","se")>0
+local do_estimate = strpos("`statlist'","estimate")>0
+if "`type'"=="combine" {
+	if !`do_se' & !mi("`se'") di as text "Standard error not included in lower triangle (by request)"
+	if !`do_se' & mi("`se'") di as text "Standard error not included in lower triangle (not available)"
+	if !`do_estimate' di as text "Estimate not included in upper triangle (by request)"
+}
 
 tempvar newmethod
 qui generate `newmethod' = .
@@ -220,6 +226,7 @@ if `ngraphs' > 3 {
 * DRAW GRAPH(S)
 
 forvalues g = 1/`ngraphs' {
+serset clear
 	local glabel : label (`group') `g'
 
 	* nice label for this over-group
@@ -231,21 +238,20 @@ forvalues g = 1/`ngraphs' {
 		local notetext `notetext' `thisvar'=`thisval'
 	}
 
-	if !mi("`debug'") di as input "--> Drawing graph `g': `notetext'"
+	if !mi("`debug'") di as input `"--> Drawing graph `g': `notetext'"'
 
 	if "`type'"=="combine" {
 
 		* prepare
 		local graphlist
 		forvalues j = 1/`nmethods' { // min/max
-			summ `estimate'`j' if `group'==`g', meanonly
-			local minestimate`j'=r(min)
-			local maxestimate`j'=r(max)
-			summ `se'`j' if `group'==`g', meanonly
-			local minse`j'=r(min)
-			local maxse`j'=r(max)
+			foreach stat of local statlist {
+				summ ``stat''`j' if `group'==`g', meanonly
+				local min`stat'`j'=r(min)
+				local max`stat'`j'=r(max)
+			}
 		}
-		if !`do_se' { // create an empty graph
+		if !`do_se' | !`do_estimate' { // create an empty graph
 			`dicmd' twoway scatteri 0 0 (0) " " , ///
 				ytit("") ylab(none) yscale(lstyle(none) range(-1 1)) ///
 				xtit("") xlab(none) xscale(lstyle(none) range(-1 1)) ///
@@ -253,8 +259,8 @@ forvalues g = 1/`ngraphs' {
 				plotregion(style(none)) legend(off) ///
 				`subgraphoptions' nodraw name(emptygraph, replace) 
 		}
-		else local setitle l2title(Standard error, just(left) bexpand) ///
-
+		if `do_se' local setitle l2title(Standard error `se', just(left) bexpand)
+		if `do_estimate' local esttitle r2title(Estimate `estimate', just(left) bexpand orient(rvertical))
 
 		* loop over constituent graphs
 		forvalues j = 1/`nmethods' { // rows
@@ -268,7 +274,7 @@ forvalues g = 1/`ngraphs' {
 						plotregion(style(none)) legend(off) ///
 						`subgraphoptions' nodraw name(graph`j'`k', replace) 
 				}
-				else if `j'>`k' & !`do_se' {
+				else if (`j'>`k' & !`do_se') | (`j'<`k' & !`do_estimate') {
 					local graphlist `graphlist' emptygraph
 					continue
 				}
@@ -290,11 +296,12 @@ forvalues g = 1/`ngraphs' {
 				local graphlist `graphlist' graph`j'`k'
 			}
 		}
-		`dicmd' graph combine `graphlist', name(`name'_`g',replace) ///
+		`dicmd' cap graph combine `graphlist', name(`name'_`g',replace) ///
 			note("Graphs for `notetext'") ///
-			title("") cols(`nmethods') ///
-			`setitle' ///
-			t2title(Estimate, just(right) bexpand pos(1)) `options'	
+			title("") cols(`nmethods') `esttitle' `setitle' ///
+			`options'	
+		if _rc==111 di as error `"{p 0 2}siman comparemethodsscatter called graph combine, which failed. Try {stata "serset clear"} and {stata "graph drop _all"}{p_end}"'
+		if _rc exit _rc
 	}
 
 	else { // type = matrix

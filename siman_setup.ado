@@ -392,7 +392,7 @@ if !mi("`toofew'") {
 /*** WE'RE READY TO REFORMAT ***/
 cap which sencode
 if _rc {
-	di as error "{p 0 2}sencode needs to be installed to run siman seetup. Please use {stata: ssc install sencode}"
+	di as error `"{p 0 2}sencode needs to be installed to run siman seetup. Please use {stata "ssc install sencode"}"'
 	exit 498
 }
 

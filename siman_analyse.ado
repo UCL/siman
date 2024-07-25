@@ -39,7 +39,7 @@ if "`debug'"=="" local qui qui
 
 capture which simsum.ado
 if _rc == 111 {
-	di as error "simsum needs to be installed to run siman analyse. Please use {stata: ssc install simsum}"  
+	di as error `"simsum needs to be installed to run siman analyse. Please use {stata "ssc install simsum"}"'
 	exit 498
 	}
 vercheck simsum, vermin(2.1.2) quietly message(`"{p 0 2}You can install the latest simsum using {stata "net from https://raw.githubusercontent.com/UCL/simsum/main/package/"}{p_end}"')

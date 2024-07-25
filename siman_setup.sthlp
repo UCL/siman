@@ -153,10 +153,7 @@ data generating mechanism ({opt dgm}), {opt target}, {opt method}, {opt estimate
  
 {pstd}
 Four data set formats are permitted by the siman suite as detailed {help siman_setup##data:above}.
-{cmd:siman setup} automatically reshapes wide-wide data (i.e. wide targets, wide
-methods) or wide-long format data (i.e. wide targets, long methods) into long-wide
-format. Therefore the two output data formats of {cmd:siman setup} are long-long (option
-1) and long-wide (option 3) as shown in more detail {help siman_setup##outputdata:below}.
+{cmd:siman setup} automatically reshapes the data into long-long format. 
 
 {pstd}
 {cmd:siman setup} checks the data, reformats it

@@ -43,14 +43,15 @@ The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:ta
 {synopt:{opt meth:list(string)}}specifies a subgroup of methods, and their order, to be graphed.
 For example, in a dataset with methods A, B, C and D, the option {bf: methlist(B D)}, which would plot graphs for B vs. D, the same as using {bf:if method=="B" | method=="D"}. 
 But the option {bf: methlist(D B)} would also change the ordering of the graphs.
+{it:string} may be a numlist if method is numeric.
 
 {synopt:{opt noeq:uality}}does not draw the line of equality when the combine method is used. The line of equality is never drawn when the matrix method is used.
 
 {synopt:{it:graph_options}}most of the valid options for {help graph combine:graph combine} are available.
 
 {synopt:{opt subgr:aphoptions(string)}}to change the format of the constituent scatter graphs, which are drawn if and only if the combine method is used.
-Therefore, for example, if the user wishes to use the red plotting symbol, with the combine method then {bf:subgr(mcol(red))} must be used, with the matrix method then 
-{bf:mcol(red)} must be used.
+For example, to use the red plotting symbol with the combine method, use {bf:subgr(mcol(red))}; with the matrix method, use 
+{bf:mcol(red)}.
 
 
 {marker description}{...}
@@ -58,42 +59,31 @@ Therefore, for example, if the user wishes to use the red plotting symbol, with 
 
 {pstd}
 {cmd:siman comparemethodsscatter} draws sets of scatter plots comparing the point estimates data or standard error data for various methods, where each point represents one repetition. The data pairs come from the same repetition 
-(ie. they are estimated in the same simulated dataset) and are compared to the line of equality.  
+(i.e. they are estimated in the same simulated dataset) and are compared to the line of equality.  
 These graphs help the user to look for correlations between methods and any systematic differences. Where more
 than two methods are compared, a graph of every method versus every other is plotted.
 
 {pstd}
-For up to 3 methods (inclusive), {bf:siman comparemethodsscatter} will plot both the estimate {it:and} the standard error. 
-The upper triangle will display the estimate data, the lower triangle will display the standard error data.  
-For more than 3 methods, {bf:siman comparemethodsscatter} will plot either the estimate {it:or} the standard error depending on 
+The default graphing approach for 2 or 3 methods, "combine", plots both the estimate {it:and} the standard error. 
+The upper triangle displays the estimates, the lower triangle displays the standard errors.  
+The default graphing approach for more than 3 methods, "matrix", plots either the estimate {it:or} the standard error depending on 
 which the user specifies, with the default being estimate if no variables are specified.  The graph for the larger 
-number of methods is plotted using the {help graph matrix:graph matrix} command. 
+number of methods is plotted using the {help graph matrix} command. The default approach can be changed with the {cmd:combine} and {cmd:matrix} options.
 
 {pstd}
 If there are many methods in the data set and the user wishes to compare subsets of methods, then this can be 
-achieved by using the {bf: methlist()} option.  Please note however that if your data has underscores, for example 
-wide-wide data where the method and target are both in the variable name such as 
-estA_beta estA_gamma estB_beta estB_gamma estC_beta estC_gamma, then in {help siman_setup:siman setup}, you 
-would have specified {bf:method(A_ B_ C_)}.
-However if you would then like to graph a subset of methods A and B with {bf:siman comparemethodsscatter} then you would 
-enter {bf:methlist(A B)} [not {bf: methlist(A_ B_)}].  
-
-{pstd}
-Note also that the value needs to be entered in to {bf: methlist()} and not the label 
-(if these are different).  For example if instead method is a numeric labelled variable with values 1, 2, 3 and corresponding labels A, B, and C, then 
-{bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)}.  The {bf: methlist()} option needs to be specified to subset on methods, 
-using <= and >= will not work.  The components of {bf: methlist()}  need to be written out in full, for example {bf: methlist(1 2 3 4)} and not
-{bf: methlist(1/4)}.
+achieved by using the {bf: methlist()} option.  
+Note that the value needs to be entered in {bf: methlist()} and not the label 
+(if these are different).  
+For example if method is a numeric labelled variable with values 1, 2, 3 and corresponding labels A, B, and C, then 
+{bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)}.  
 
 {pstd}
 The graphs are split out by dgm (one graph per dgm) and they compare the methods to each other.  Therefore the only 
 other option to split the graphs with the {bf:by} option is by target, so the {bf:by(varlist)} option will only allow {bf:by(target)}.
 
 {pstd}
-The {bf:labelsof} package (by Ben Jann) is required by {bf:siman comparemethodsscatter}, which can be installed by clicking: {stata ssc install labelsof}
-
-{pstd}
-Please note that {help siman_setup:siman setup} needs to be run first before {bf:siman comparemethodsscatter}.
+{help siman setup} needs to be run first before {bf:siman comparemethodsscatter}.
 
 {pstd}
 For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.

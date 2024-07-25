@@ -151,7 +151,7 @@ local i 0
 foreach thismethod of local methlist {
 	local ++i
 	local m`i' `thismethod' // raw value of ith method
-	if `methodnature'==1 local mlabel`i' : label (`method') `i' 
+	if `methodnature'==1 local mlabel`i' : label (`method') `thismethod' 
 		// label of ith method
 	else local mlabel`i' `thismethod'
 	if !mi("`debug'") di `"Method `i': value `m`i'', label `mlabel`i''"'
@@ -181,7 +181,8 @@ if !mi("`debug'") di as input "Graphing over `over2' and by `by2'"
 tempvar group
 qui egen `group' = group(`over'), label
 qui tab `group'
-local novers = r(r)
+local novervalues = r(r)
+local novervars : word count `over'
 
 tempvar bygroup
 qui egen `bygroup' = group(`by')
@@ -190,7 +191,7 @@ local npanels = r(r)
 drop `bygroup'
 
 * report graphs to be drawn
-local ngraphs = `novers' * `nstats'
+local ngraphs = `novervalues' * `nstats'
 if `ngraphs'>1 local sg "s each"
 if `npanels'>1 local sp "s"
 di as text "siman blandaltman will draw " as result `ngraphs' as text " graph`sg' with " as result `npanels' as text " panel`sp'"
@@ -199,19 +200,32 @@ if `npanels' > 15 | `ngraphs' > 3 {
 }
 
 
-forvalues g = 1/`novers' { // loop over graphs
-	local gname : label (`group') `g'
+forvalues g = 1/`novervalues' { // loop over graphs
+	local glabel : label (`group') `g'
+
+	if !mi("`over'") {
+		* nice label for this over-group
+		local notetext
+		forvalues v=1/`novervars' {
+			local thisvar : word `v' of `over'
+			local thisval : word `v' of `glabel'
+			local notetext `notetext', `thisvar'=`thisval'
+		}
+	}
+
+	if !mi("`debug'") di as input `"--> Drawing graph `g': `notetext'"'
+	if `nmethods'>2 local panelnote ". Panels: `by'."
+
 	foreach stat in `statlist' { // loop over stats
-		if !mi("`debug'") di as input "Group `gname', stat `stat'"
+		if !mi("`debug'") di as input "Group `glabel', stat `stat'"
 		* graph titles
 		if "`stat'"=="estimate" local eltitle = "`estimate'"
 		else if "`stat'"=="se" local eltitle = "`se'" 
-		if !mi("`over'") local overnote ", `over' = `gname'"
-
+		local elnote "stat=`stat'"
 		#delimit ;
 		local graph_cmd twoway (scatter diff`stat' mean`stat' if `group'==`g', `options')
 		,
-		by(`by', note("Graph: `eltitle'`overnote'. Panels: `by'") iscale(1.1) title("") norescale `bygraphoptions')
+		by(`by', note("Graph: `elnote'`notetext'`panelnote'") iscale(1.1) title("") norescale `bygraphoptions')
 		yline(0, lp(l) lc(gs8))
 		name(`name'_`g'_`stat' `nameopts')
 		ytitle(Difference vs `mlabel1') xtitle(Average `eltitle')
