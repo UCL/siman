@@ -4,7 +4,6 @@ IW 23jun2024
 NB includes some pause points when graphs or output need to be checked
 */
 
-pause on
 local filename test_lollyplot
 
 prog drop _all
@@ -99,7 +98,8 @@ siman lol bias relprec power cover, refpower(10) name(mstringplus,replace)
 graph export mstringplus.pdf, replace
 !fc mstring.pdf mstringplus.pdf > result
 type result
-pause Check "no differences encountered" above, then type exit
+* Check "no differences encountered" above
+
 * method orderings disagree: numeric ordering should be used
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
 drop if esti=="gamma"
@@ -113,7 +113,7 @@ siman lol bias relprec power cover, refpower(10) name(mstringrev,replace)
 graph export mstringrev.pdf, replace
 !fc mstring.pdf mstringplus.pdf > result
 type result
-pause Check "no differences encountered" above, then type exit
+* Check "no differences encountered" above
 foreach file in mstring.pdf mstringplus.pdf mstringrev.pdf result {
 	erase `file'
 }
@@ -125,7 +125,7 @@ siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b
 siman analyse, notable
 siman lol if esti=="effect" & beta==1 & pmiss==1, name(meth3,replace) legend(row(1)) col(red blue green) debug
 siman lol if esti=="effect" & beta==1 & pmiss==1 & meth!=1, name(meth2,replace) legend(row(1)) col(blue green) debug
-pause Compare graphs meth3 and meth2, then type exit
+* Compare graphs meth3 and meth2
 
 // MULTIPLE DGMVARS
 use $testpath/data/extendedtestdata2.dta, clear

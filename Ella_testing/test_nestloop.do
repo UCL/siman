@@ -38,7 +38,7 @@ use $testpath/data/extendedtestdata2, clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman analyse if mech!=2, notable
 siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) stagger(0.03) 
-pause Graph should ignore mech
+* Graph should ignore mech
 
 
 // COMPARE METHOD AS UNLABELLED/LABELLED NUMERIC OR STRING
@@ -96,7 +96,7 @@ siman nestloop empse if estimand=="effect", name(munlabplus10,replace)
 graph export munlabplus10.pdf, replace
 !fc mstring.pdf munlabplus10.pdf > result
 type result
-pause Check "no differences encountered" above, then type exit
+* Check "no differences encountered" above
 foreach file in mstring.pdf munlabplus10.pdf result {
 	erase `file'
 }

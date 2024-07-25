@@ -6,6 +6,7 @@ updated 3apr2024 - runs in 5 minutes!
 11jun2024 - new test_setup programs
 18-19jun2024 - add test_scatter, test_swarm, test_zipplot
 24jul2024 - rename test_lollyplot & test_nestloop, add test_bland
+25jul2024 - add test_cms
 */
 
 // USER-SPECIFIC SETUP
@@ -32,16 +33,11 @@ local testfiles ///
 	test_siman_widelong_EMZ /// from wide-long
 	testing_graphs_matrix   /// from all formats and var types
 	/// test graphs command by command
-	test_scatter test_swarm test_zipplot test_lollyplot test_nestloop test_bland
-/*
+	test_scatter test_swarm test_zipplot test_lollyplot test_nestloop test_bland test_cms ///
 	/// test graphs in mixed ways
 	Testing_IRW_TPM_EMZ     /// various graph tests: 2 minutes
-	siman_lollyplot_test    /// test lollyplot: ~1 minute
-	siman_nestloop_test     /// test nestloop: ~1 minute
 	testing_graphs_main     /// test graphs from all formats and var types: 2 minutes
-*/
-
-* "Testing estimates graphs" // 50 minutes
+	"Testing estimates graphs" // 50 minutes
 
 foreach testfile of local testfiles {
 	cap noi do `testfile'.do

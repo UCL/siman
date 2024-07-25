@@ -2,6 +2,7 @@
 Testing_IRW_TPM_EMZ.do
 Short testing file for discussion
 3apr2024 Removed tests with excessive numbers of graphs and panels: reduced from 8 to 2 minutes
+25jul2024 Updates for revised setup
 */
 
 * switch on detail if want to run all graphs
@@ -52,8 +53,12 @@ siman swarm
 if ${detail} == 1 siman swarm if estimand == 1
 if ${detail} == 1 siman swarm if estimand == 2
 
+serset clear
+graph drop _all
 siman comparemethodsscatter 
 * 1 graph per dgm and target, comparing methods
+serset clear
+graph drop _all
 if ${detail} == 1 siman comparemethodsscatter if estimand == 1
 * metlist option too
 
@@ -71,25 +76,24 @@ siman analyse
 
 siman lollyplot
 
-serset clear
-siman nestloop
+* siman nestloop - only one dgmvar
 
 
 * testing setup and reshape via the chars (could be expanded)
 
 * setup data in LW - this is known to be correct (makes other programs work)
 use $testpath/data/extendedtestdata2.dta, clear
-reshape wide b se true, i(rep beta pmiss mech estimand) j(method) string
+reshape wide b se, i(rep beta pmiss mech estimand) j(method) string
 siman setup, rep(rep) dgm(beta pmiss mech) method(CCA MeanImp Noadj) target(estimand) est(b) se(se) true(true)
-assert "`: char _dta[siman_nmethod]'" == "3"
-assert "`: char _dta[siman_method]'" == "CCA MeanImp Noadj"
+assert "`: char _dta[siman_nummethod]'" == "3"
+assert "`: char _dta[siman_valmethod]'" == "CCA MeanImp Noadj"
 
 * setup data in LL and reshape to LW
 use $testpath/data/extendedtestdata2.dta, clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman reshape, longwide
-assert "`: char _dta[siman_nmethod]'" == "3"
-assert "`: char _dta[siman_method]'" == "CCA MeanImp Noadj"
+assert "`: char _dta[siman_nummethod]'" == "3"
+assert "`: char _dta[siman_valmethod]'" == "CCA MeanImp Noadj"
 
 
 * dgm defined by >1 variable
@@ -133,6 +137,7 @@ if ${detail} == 1 siman swarm if beta == 1 & pmiss == 1 & mech == 1 & estimand =
 * mean noadj: -0.0034964
 
 serset clear
+graph drop _all // sometimes helps
 * siman comparemethodsscatter
 * one graph per dgm and target combination, comparing methods - too slow
 siman comparemethodsscatter if beta == 1 & pmiss == 1 & mech == 2 & estimand=="effect"
@@ -161,16 +166,15 @@ siman scatter
 
 siman swarm
 
+graph drop _all
 siman comparemethodsscatter if dgm==1
 
 siman blandaltman 
 
 siman zipplot
 
+* siman nestloop - no because only one dgmvar
 
-* trellis
-
-* nestloop
 
 use $testpath/nestloop/res.dta, clear
 * theta as dgmvar must be encoded, but theta as true value mustn't be
