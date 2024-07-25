@@ -1,0 +1,102 @@
+
+. siman which
+C:\ian\git\siman\siman.ado
+*!version 0.10 25jul2024        
+C:\ian\git\siman\siman_setup.ado
+*!      version 0.10.2  14jun2024       
+C:\ian\git\siman\siman_describe.ado
+*! version 0.7  14jun2024       IW streamline for longlong only; calculate #dgms without assuming fa
+> ctorial; remove commented out code
+C:\ian\git\siman\siman_analyse.ado
+*! version 0.9.1        14jun2024               IW remove code for nformat!=1 and nmethod!=1
+C:\ian\git\siman\siman_table.ado
+*! version 0.8.3   3apr2024
+C:\ian\git\siman\siman_lollyplot.ado
+*!      version 0.10    23jun2024       IW Clean up handling of if/in
+*! version 1.13.2  15dec2023
+C:\ian\git\siman\siman_zipplot.ado
+*! version 0.10 19jul2024
+*!  version 1.9 22apr2024
+C:\ian\git\siman\siman_comparemethodsscatter.ado
+*! version 1.9.19 2may2024
+C:\ian\git\siman\siman_blandaltman.ado
+*!      version 0.10    24jun2024       IW Correct handling of if/in
+C:\ian\git\siman\siman_swarm.ado
+*! version 0.10 19jul2024
+C:\ian\git\siman\siman_scatter.ado
+*!      version 0.10    18jun2024       IW Clean up handling of varlist, if/in, by
+C:\ian\git\siman\siman_nestloop.ado
+*!      version 0.10    23jun2024       IW Correct handling of if/in
+
+. 
+. foreach feature in dgm target method {
+  2.         local N 6
+  3.         if "`feature'"=="dgm" local N 5
+  4.         forvalues n=1/`N' {
+  5.                 dicmd use data/setupdata_`feature'`n', clear
+  6.                 if `: char _dta[siman_nummethod]' > 1 {
+  7.                         dicmd siman cms estimate, name(cms_`feature'`n', replace) ///
+>                                 title(Test siman cms using data `feature'`n')
+  8.                 }
+  9.                 else di as text "Skipped (only one method)"
+ 10.         }
+ 11. }
+use data/setupdata_dgm1, clear
+Skipped (only one method)
+use data/setupdata_dgm2, clear
+Skipped (only one method)
+use data/setupdata_dgm3, clear
+Skipped (only one method)
+use data/setupdata_dgm4, clear
+Skipped (only one method)
+use data/setupdata_dgm5, clear
+Skipped (only one method)
+use data/setupdata_target1, clear
+siman cms estimate, name(cms_target1, replace) title(Test siman cms using data target1)
+siman comparemethodsscatter will draw 3 graphs each showing 3 methods
+use data/setupdata_target2, clear
+siman cms estimate, name(cms_target2, replace) title(Test siman cms using data target2)
+siman comparemethodsscatter will draw 3 graphs each showing 3 methods
+use data/setupdata_target3, clear
+siman cms estimate, name(cms_target3, replace) title(Test siman cms using data target3)
+siman comparemethodsscatter will draw 9 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition or 'by' option
+use data/setupdata_target4, clear
+siman cms estimate, name(cms_target4, replace) title(Test siman cms using data target4)
+siman comparemethodsscatter will draw 9 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition or 'by' option
+use data/setupdata_target5, clear
+siman cms estimate, name(cms_target5, replace) title(Test siman cms using data target5)
+siman comparemethodsscatter will draw 9 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition or 'by' option
+use data/setupdata_target6, clear
+siman cms estimate, name(cms_target6, replace) title(Test siman cms using data target6)
+siman comparemethodsscatter will draw 9 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition or 'by' option
+use data/setupdata_method1, clear
+Skipped (only one method)
+use data/setupdata_method2, clear
+Skipped (only one method)
+use data/setupdata_method3, clear
+siman cms estimate, name(cms_method3, replace) title(Test siman cms using data method3)
+siman comparemethodsscatter will draw 6 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition or 'by' option
+use data/setupdata_method4, clear
+siman cms estimate, name(cms_method4, replace) title(Test siman cms using data method4)
+siman comparemethodsscatter will draw 6 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition or 'by' option
+use data/setupdata_method5, clear
+siman cms estimate, name(cms_method5, replace) title(Test siman cms using data method5)
+siman comparemethodsscatter will draw 6 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition or 'by' option
+use data/setupdata_method6, clear
+siman cms estimate, name(cms_method6, replace) title(Test siman cms using data method6)
+siman comparemethodsscatter will draw 6 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition or 'by' option
+
+. 
+. di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
+*** SIMAN HAS PASSED ALL THE TESTS IN test_cms.do ***
+
+. 
+. log close

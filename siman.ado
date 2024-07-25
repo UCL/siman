@@ -1,4 +1,5 @@
-*!version 0.9  14jun2024
+*!version 0.10 25jul2024	
+* version 0.10 25jul2024	IW parsing doesn't break -siman cms se- or -siman anal,repl-
 * version 0.9  14jun2024  IW remove reshape
 * version 0.3  08aug2023  EMZ allow analyze spelling
 * version 0.2  27mar2023
@@ -9,8 +10,9 @@ adapted from network.ado
 IW 17sep2019
 */
 version 13
+gettoken subcmd 0 : 0, parse(" ,")
+if "`subcmd'"=="cms" local subcmd comparemethodsscatter
 syntax [anything] [if] [in], [which *]
-if "`anything'"=="cms" local anything comparemethodsscatter
 
 // LOAD SAVED SIMAN PARAMETERS
 foreach thing in `_dta[siman_allthings]' {
@@ -28,13 +30,13 @@ local subcmds2
 local subcmds `subcmds0' `subcmds1' `subcmds'
 
 // check a subcommand is given
-if mi("`anything'") {
+if mi("`subcmd'") {
 	di as error "Syntax: siman <subcommand>"
 	exit 198
 }
 
 // "which" option
-if inlist("`anything'", "which", "whic", "whi") {
+if inlist("`subcmd'", "which", "whic", "whi") {
 	which siman
 	foreach subcmd of local subcmds {
 		if "`subcmd'"=="analyze" continue
@@ -42,9 +44,6 @@ if inlist("`anything'", "which", "whic", "whi") {
 	}
 	exit
 }
-
-// Parse current subcommand
-gettoken subcmd rest : anything
 
 // Identify abbreviations of known subcommands
 if length("`subcmd'")>=3 {
@@ -79,6 +78,5 @@ if `type1' & mi("`allthings'") {
 	exit 459
 }
 	
-if mi(`"`options'"') siman_`subcmd' `rest' `if' `in'
-else                 siman_`subcmd' `rest' `if' `in', `options'
+siman_`subcmd' `0'
 end

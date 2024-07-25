@@ -20,7 +20,7 @@ C:\ian\git\siman\siman_zipplot.ado
 C:\ian\git\siman\siman_comparemethodsscatter.ado
 *! version 1.9.19 2may2024
 C:\ian\git\siman\siman_blandaltman.ado
-*!      version 0.10    23jun2024       IW Correct handling of if/in
+*!      version 0.10    24jun2024       IW Correct handling of if/in
 C:\ian\git\siman\siman_swarm.ado
 *! version 0.10 19jul2024
 C:\ian\git\siman\siman_scatter.ado
@@ -92,29 +92,34 @@ C:\ian\git\siman\siman_nestloop.ado
 dgmtype = 1
 (72,000 observations deleted)
 (33,000 observations deleted)
+(file data/setupdata_dgm1.dta not found)
 file data/setupdata_dgm1.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 dgmtype = 2
 (72,000 observations deleted)
 (33,000 observations deleted)
+(file data/setupdata_dgm2.dta not found)
 file data/setupdata_dgm2.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 dgmtype = 3
 (72,000 observations deleted)
 (30,000 observations deleted)
+(file data/setupdata_dgm3.dta not found)
 file data/setupdata_dgm3.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 dgmtype = 4
 (72,000 observations deleted)
 (24,000 observations deleted)
+(file data/setupdata_dgm4.dta not found)
 file data/setupdata_dgm4.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 dgmtype = 5
 (72,000 observations deleted)
+(file data/setupdata_dgm5.dta not found)
 file data/setupdata_dgm5.dta saved
 siman analyse has run successfully
 siman analyse has run successfully

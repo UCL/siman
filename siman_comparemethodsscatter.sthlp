@@ -17,7 +17,7 @@
 {title:Syntax}
 
 {phang}
-{cmdab:siman comparemethodsscatter} [estimate|se] {ifin} 
+{cmdab:siman comparemethodsscatter} [estimate] [se] {ifin} 
 [{cmd:,}
 {it:options}]
 
@@ -25,37 +25,33 @@
 
 {pstd}The subcommand {cmd:comparemethodsscatter} may be abbreviated to 3 or more characters or to {cmd:cms}.
 
-{synoptset 20 tabbed}{...}
+{pstd}
+The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not to {bf:repetition}. A warning is issued if this is breached.
+
+
+{synoptset 25 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Main}
 
-{pstd}
-{p_end}
-{synopt:{opt if/in}}  The user can specify {bf:if} and {bf:in} within the {bf:siman comparemethodsscatter} syntax. If these are not specified, but have already been used earlier in {help siman_setup:siman setup}, 
-then the {bf:if/in} from {help siman_setup:siman setup} will be used.
-The {bf:if} option should only be applied to {bf:dgm} and {bf:target}, use the {bf: methlist()} option to subset on method.  The {bf:if} option is not allowed to be used on {bf:repetition} and an error message will be issued if 
-the user tries to do so.
-
 {syntab:Graph options}
-{pstd}
-{p_end}
 
-{pstd}{it:For the siman comparemethodsscatter graph user-inputted options, most of the valid options for {help graph combine:graph combine} are available.}
-{p_end}
-{pstd} Additionally, if the user would like to change the appearance of the constituent graphs, {cmd: subgraphoptions()} can be used.
-{p_end}
+{synopt:{opt com:bine(string)}}forces use of the 'combine' method: the graph is made by combining individual graphs, potentially showing both estimate and SE. This is the default for 2 or 3 methods.
 
-{pstd}
-{p_end}
-{synopt:{opt subgr:aphoptions(string)}} to change the format of the constituent scatter graphs, which are drawn if and only if the number of methods <= 3.
-Therefore, for example, if the user wishes to use the red plotting symbol, with <=3 methods then {bf:subgr(mcol(red))} must be used, with >3 methods then 
+{synopt:{opt mat:rix(string)}}forces use of the 'matrix' method: the graph is made by {help graph matrix}, showing only estimate or SE. This is the default for more than 3 methods.
+
+{synopt:{opt meth:list(string)}}specifies a subgroup of methods, and their order, to be graphed.
+For example, in a dataset with methods A, B, C and D, the option {bf: methlist(B D)}, which would plot graphs for B vs. D, the same as using {bf:if method=="B" | method=="D"}. 
+But the option {bf: methlist(D B)} would also change the ordering of the graphs.
+
+{synopt:{opt noeq:uality}}does not draw the line of equality when the combine method is used. The line of equality is never drawn when the matrix method is used.
+
+{synopt:{it:graph_options}}most of the valid options for {help graph combine:graph combine} are available.
+
+{synopt:{opt subgr:aphoptions(string)}}to change the format of the constituent scatter graphs, which are drawn if and only if the combine method is used.
+Therefore, for example, if the user wishes to use the red plotting symbol, with the combine method then {bf:subgr(mcol(red))} must be used, with the matrix method then 
 {bf:mcol(red)} must be used.
 
-{pstd}
-{p_end}
-{synopt:{opt m:ethlist(string)}}  if the user would like to display the graphs for a subgroup of methods, these methods can be specified in {bf: methlist()}.
-For example, in a dataset with methods A, B, C and D if the user would like to compare methods B and D, they would enter {bf: methlist(B D)}, which would plot graphs for B vs. D.  
 
 {marker description}{...}
 {title:Description}

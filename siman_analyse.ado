@@ -28,7 +28,7 @@
 program define siman_analyse, rclass
 version 15
 
-syntax [anything] [if], [PERFONLY replace /// documented options
+syntax [anything] [if], [PERFONLY REPlace /// documented options
 	ref(string) * /// simsum options
 	noTABle force debug pause /// undocumented options
 	]

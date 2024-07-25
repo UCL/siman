@@ -1,4 +1,6 @@
-*! version 1.9.19 2may2024
+*!	version 0.10	25jun2024	
+*	version 0.10	25jun2024	IW Better handling of if/in, reshape; simplified loop over graphs
+*								NB reduce version # to match other programs
 *  version 1.9.19 2may2024    IW allowed xsize() to be user-specified (ysize already is)
 *  version 1.9.18 25oct2023   IW removed space before comma in note
 *  version 1.9.17 16oct2023   EMZ produce error message if >=, <= or methlist(x/y) is used.
@@ -41,8 +43,11 @@
 program define siman_comparemethodsscatter, rclass
 version 16
 
-syntax [anything] [if][in] [, Methlist(string) SUBGRaphoptions(string) XSIZe(string) matrix combine * ///
-	debug /// undocumented options]
+syntax [anything] [if][in] [, COMbine MATrix METHlist(string) ///
+	noEQuality SUBGRaphoptions(string) * ///
+	name(string) /// standard options handled differently
+	half debug /// undocumented options
+	]
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -55,6 +60,8 @@ if "`setuprun'"!="1" {
 
 * parse statistics
 foreach thing of local anything {
+	if substr("estimate",1,length("`thing'")) == substr("`thing'",1,length("`thing'")) local thing estimate
+	if substr("se",1,length("`thing'")) == substr("`thing'",1,length("`thing'")) local thing se
 	if ("`thing'"!="estimate" & "`thing'"!="se") {
 		di as error "only estimate or se allowed"
 		exit 498
@@ -63,34 +70,30 @@ foreach thing of local anything {
 		di as error "`thing'() was not specified in siman setup"
 		exit 498
 	}
+	local statlist `statlist' `thing'
 }
-if "`anything'"=="" local statlist estimate
-else local statlist `anything'
-local nstats : word count `statlist'
-if `nstats'>1 local half half 
+* default is set later, once #methods is known
 
 if !mi("`debug'") local dicmd dicmd
 
-if !mi("`if'") {
-	if strpos("`if'","<=")!= 0 | strpos("`if'","=>")!= 0 {
-	di as error "<= and >= are not permitted.  Please use methlist() option if subsetting on method."
-	exit 498
-	}
-}
-
-if !mi("`methlist'") {
-	if strpos("`methlist'","/")!= 0 {
-	di as error "The notation x/y is not permitted.  Please write out methlist() subset in full."
-	exit 498
-	}
-}
-
-if mi("`xsize'") local xsize 4
-
-if mi("`subgraphoptions'") local subgraphoptions aspect(1) graphregion(margin(zero)) plotregion(margin(zero)) xtit("") legend(off) 
+if mi("`subgraphoptions'") local subgraphoptions aspect(1) graphregion(margin(zero)) plotregion(margin(zero))
 
 if !mi("`matrix'") & !mi("`combine'") {
 	di as error "Can't have both matrix and combine"
+	exit 498
+}
+
+* parse name
+if !mi(`"`name'"') {
+	gettoken name nameopts : name, parse(",")
+	local name = trim("`name'")
+}
+else {
+	local name simancms
+	local nameopts , replace
+}
+if wordcount("`name'_something")>1 {
+	di as error "Something has gone wrong with name()"
 	exit 498
 }
 
@@ -156,6 +159,14 @@ if `nmethods' < 2 {
 }
 local type `matrix' `combine'
 if mi("`type'") local type = cond(`nmethods'>3, "matrix", "combine")
+if mi("`statlist'") {
+	if mi("`se'") local statlist estimate 
+	else if "`type'"=="combine" local statlist estimate se
+	else if "`type'"=="matrix" local statlist estimate
+}
+local nstats : word count `statlist'
+if !mi("`debug'") di as input "statlist = `statlist'"
+local do_se = strpos("`statlist'","se")>0
 
 tempvar newmethod
 qui generate `newmethod' = .
@@ -173,552 +184,131 @@ forvalues i=1/`nmethods' {
 		qui replace `newmethod' = `i' if `method' == "`thismeth'"
 		local mlabel`i' `thismeth'
 	}
-	if !mi("`debug'") mac l _mlabel`i'
 }
 qui keep if !mi(`newmethod')
 
-if `nummethod' > 5 {
-    di as smcl as text "{p 0 2}Warning: with `nummethod' methods compared, this plot may be too dense to read.  If you find it unreadable, you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a and b are the methods you are particularly interested to compare.{p_end}"
+if `nmethods' > 5 {
+    di as smcl as text "{p 0 2}Warning: with `nmethods' methods compared, this plot may be too dense to read.  If you find it unreadable, you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a and b are the methods you are particularly interested to compare.{p_end}"
 }
-
-/*
-cap confirm variable `dgm'
-	if !_rc {
-		local numberdgms: word count `dgm'
-		if `numberdgms'==1 {
-	
-			local dgmlabels 0
-	
-			qui tab `dgm'
-			*	local ndgmvar = `r(r)'
-			* Get dgm label values
-			cap qui labelsof `dgm'
-			cap qui ret list
-	
-			if `"`r(labels)'"' != "" {
-			local 0 = `"`r(labels)'"'
-
-				forvalues i = 1/`ndgmvars' {
-					gettoken `dgm'dlabel`i' 0 : 0, parse(": ")
-					local dgmlabels = 1
-				}
-			}
-			else {
-				local dgmlabels 0
-				qui levels `dgm', local(levels)
-		
-				local loop 1
-					foreach l of local levels {
-						local `dgm'dlabel`loop' `l'
-						local loop = `loop' + 1
-					}
-			}
-		}
-	}
-
-* if the user has not specified 'if' in the siman comparemethods scatter syntax, but there is one from siman setup then use that 'if'
-if ("`if'"=="" & "`ifsetup'"!="") local ifscatterc = `"`ifsetup'"'
-else local ifscatterc = `"`if'"'
-* handle if dgm defined by multiple variables, and user specifies 'if dgm1 == x'
-local ifdgm = 0
-if !mi("`ifscatterc'") & strpos("`dgm'", "`ifscatterc'")>0 {
-	cap confirm variable `dgm'
-	if !_rc {
-		local numberdgms: word count `dgm'
-		if `numberdgms'!=1 {
-			gettoken dgmfilter ifscatterc: ifscatterc, parse("==")
-			local ifremove "if "
-			local dgmleft: list dgmfilter - ifremove
-			local dgmorig = "`dgm'"
-			local dgmtodrop: list dgm - dgmleft
-			local ifdgm = 1
-			* for value of dgm being filtered on
-			gettoken dgmleft2 ifscatterc: ifscatterc, parse("==")
-			local dgmfiltervalues = `ifscatterc'
-			* to restore `if'
-			local ifscatterc = `"`if'"'
-		}
-	}
-}
-
-tempvar touseif
-qui generate `touseif' = 0
-qui replace `touseif' = 1 `ifscatterc' 
-preserve
-sort `dgm' `target' `method' `touseif'
-* The 'if' condition will only apply to dgm, target and method.  The 'if' condition is not allowed to be used on rep and an error message will be issued if the user tries to do so
-capture by `dgm' `target' `method': assert `touseif'==`touseif'[_n-1] if _n>1
-if _rc == 9 {
-	di as error "The 'if' condition can not be applied to 'rep' in siman comparemethodsscatter (cms).  If you have not specified an 'if' in siman cms, but you specified one in siman setup, then that 'if' will have been applied to siman cms."  
-	exit 498
-}
-restore
-qui keep if `touseif'
-
-
-* if the user has not specified 'in' in the siman comparemethods scatter syntax, but there is one from siman setup then use that 'in'
-if ("`in'"=="" & "`insetup'"!="") local inscatterc = `"`insetup'"'
-else local inscatterc = `"`in'"'
-tempvar tousein
-qui generate `tousein' = 0
-qui replace `tousein' = 1 `inscatterc' 
-qui keep if `tousein'
-
-
-* Obtain dgm values
-cap confirm variable `dgm'
-if !_rc {
-	local numberdgms: word count `dgm'
-	if `numberdgms'==1 {
-		qui tab `dgm'
-		local ndgmlabels = `r(r)'
-	
-		qui levels `dgm', local(levels)
-		tokenize `"`levels'"'
-		forvalues i=1/`ndgmlabels' {
-			local d`i' = "``i''"
-			if `i'==1 local dgmvalues `d`i''
-			else local dgmvalues `dgmvalues' `d`i''
-		}
-	}
-	if `numberdgms'!=1 {
-		local ndgmlabels = `numberdgms'
-		local dgmvalues `dgm'
-	}
-}
-
-* only analyse the methods that the user has requested
-if !mi("`methlist'") {
-*	numlist "`methlist'"
-	local methodvaluesloop = "`methlist'"
-	local methodcount: word count `methlist'
-*	local nummethod = `count'
-	tempvar tousemethod
-	qui generate `tousemethod' = 0
-    tokenize `methlist'
-	foreach j in `methodvaluesloop' {
-		if `methodnature' != 2 qui replace `tousemethod' = 1  if `method' == `j'
-		else qui replace `tousemethod' = 1  if `method' == "`j'"
-	}
-	qui keep if `tousemethod' == 1	
-	qui drop `tousemethod'	
-}
-
-* for numeric method variables with string labels, need to re-assign valmethod later on to be numerical values
-qui tab `method',m
-local nmethodlabels = `r(r)'
-qui levels `method', local(levels)
-tokenize `"`levels'"'
-forvalues e = 1/`nmethodlabels' {
-	local methlabel`e' = "``e''"
-	if `e'==1 local valmethodnumwithlabel `methlabel`e''
-	else if `e'>=2 local valmethodnumwithlabel `valmethodnumwithlabel' `methlabel`e''
-}	
-*/
-
 
 // RESHAPE METHODS TO WIDE
 cap drop `p' `lci' `uci' `df' `true' `method'
-reshape wide `estimate' `se', i(`dgm' `target' `rep') j(`newmethod')
+qui reshape wide `estimate' `se', i(`dgm' `target' `rep') j(`newmethod')
+if !mi("`debug'") di as input "reshape successful"
 
 
-// DRAW GRAPHS FOR DIAGONAL OF MATRIX, SHOWING VARIABLE NAMES ONLY
-if "`type'"=="combine" {
-	forvalues j = 1/`nmethods' {
-		tempname mlabelname`j'
-		`dicmd' twoway scatteri 0 0 (0) "`mlabel`j''" , ///
-			ytit("") ylab(none) yscale(lstyle(none) range(-1 1)) ///
-			xtit("") xlab(none) xscale(lstyle(none) range(-1 1)) ///
-			msym(i) mlabs(vlarge) mlab(black) ///
-			plotregion(style(none)) legend(off) ///
-			`subgraphoptions' nodraw name(`mlabelname`j'', replace) 
-	}
+* IDENTIFY 'OVER' VARIABLE
+
+if mi("`over'") local over `dgm' `target' 
+local over2 = cond(mi("`over'"),"[nothing]","`over'")
+if !mi("`debug'") di as input "Graphing over `over2' and by `method'"
+local novers : word count `over'
+
+tempvar group
+qui egen `group' = group(`over'), label
+qui tab `group'
+local ngraphs = r(r)
+
+* report graphs to be drawn
+if `ngraphs'>1 local sg "s each"
+di as text "siman comparemethodsscatter will draw " as result `ngraphs' as text " graph`sg' showing " as result `nmethods' as text " methods"
+if `ngraphs' > 3 {
+	di as smcl as text "{p 0 2}Consider reducing the number of graphs using 'if' condition or 'by' option{p_end}"
 }
 
-* create ranges for theta and se graphs (min and max)
-qui tokenize `methodvaluesloop'
-forvalues m = 1/`nmethods' {
-	if `methodnature'<2 & mi("`methlist'")  {
-		qui summarize `estimate'`m'
-		local minest`m' = `r(min)'
-		local maxest`m' = `r(max)'
-		
-		qui summarize `se'`m'
-		local minse`m' = `r(min)'
-		local maxse`m' = `r(max)'
+
+* DRAW GRAPH(S)
+
+forvalues g = 1/`ngraphs' {
+	local glabel : label (`group') `g'
+
+	* nice label for this over-group
+	local notetext
+	forvalues v=1/`novers' {
+		local thisvar : word `v' of `over'
+		local thisval : word `v' of `glabel'
+		if `v'>1 local notetext `notetext',
+		local notetext `notetext' `thisvar'=`thisval'
 	}
-	else {
-		qui summarize `estimate'``m''
-		local minest`m' = `r(min)'
-		local maxest`m' = `r(max)'
-		
-		qui summarize `se'``m''
-		local minse`m' = `r(min)'
-		local maxse`m' = `r(max)'
-	}
-	if `m'>1 {
-		local n = `m' - 1
-		if `minest`n'' < `minest`m'' local minest = `minest`n''
-		else local minest = `minest`m''
-		if `minse`n'' < `minse`m'' local minse = `minse`n''
-		else local minse = `minse`m''
-		
-		if `maxest`n'' > `maxest`m'' local maxest = `maxest`n''
-		else local maxest = `maxest`m''
-		if `maxse`n'' > `maxse`m'' local maxse = `maxse`n''
-		else local maxse = `maxse`m''
-	}
-}
 
-* If have number of methods > 3 then need list of estimate and se variables in long-wide format e.g. est1 est2 est3 etc for graph matrix command
+	if !mi("`debug'") di as input "--> Drawing graph `g': `notetext'"
 
-local track 1
-foreach j in `methodvaluesloop' {
-	foreach option in `estimate' `se' {
-		local `option'`j' = "`option'`j'"
-		if `track'==1 local `option'list ``option'`j''
-		else if `track'>=2 local `option'list ``option'list' ``option'`j''
-	}
-	local track = `track' + 1
-}
+	if "`type'"=="combine" {
 
-local name = "simancms"
-
-* Can't tokenize/substr as many "" in the string
-if !mi(`"`options'"') {
-	tempvar _namestring
-	qui gen `_namestring' = `"`options'"'
-	qui split `_namestring', parse(`"name"')
-	local options = `_namestring'1
-	cap confirm var `_namestring'2
-	if !_rc {
-		local namestring = `_namestring'2
-		local name = `namestring'
-	}
-}
-
-* For the purposes of the graphs below, if dgm is missing in the dataset then set
-* the number of dgms to be 1.
-if "`dgm'"=="" local dgmvalues=1 
-
-
-*if `numberdgms'==1 local for "foreach m in `dgmvalues'"
-*else if `numberdgms'!=1 {
-*	qui tab `dgmvar'
-*	local numlevelsdgmvar = `r(r)'	
-*	labelsof `dgmvar'
-*	local for "forvalues m = 1/`numlevelsdgmvar'"
-*	local dgm `dgmvar'
-*}
-
-*local s1: "Standard"
-*local s2: "Error"
-*local seytit `""`s1'" "`s2'" "'
-
-if `numberdgms'==1 {
-	
-	foreach m in `dgmvalues' {
-		if !mi("`debug'") di as text "Loop for numberdgms = 1: m = `m'"
-		* check if target is numeric with string labels for the looping over target values
-		*if `targetnature' == 1 {
-		if "`valtarget'"!= "N/A" {
-			qui levelsof `target', local(targetlevels)
-			local foreachtarget "`targetlevels'"
+		* prepare
+		local graphlist
+		forvalues j = 1/`nmethods' { // min/max
+			summ `estimate'`j' if `group'==`g', meanonly
+			local minestimate`j'=r(min)
+			local maxestimate`j'=r(max)
+			summ `se'`j' if `group'==`g', meanonly
+			local minse`j'=r(min)
+			local maxse`j'=r(max)
 		}
-		*}
-		*else if "`valtarget'"!= "N/A" local foreachtarget "`valtarget'"
-		else local foreachtarget 1
-		
-		foreach t in `foreachtarget' {
-			* for target, determine if string/string labels or not
-			cap confirm numeric variable `target'
-			if _rc local iftarget `"& `target' == "`t'""'
-			else local iftarget `"& `target' == `t'"'
-			if "`valtarget'"== "N/A" local iftarget
-			
-			local frtheta `minest' `maxest'
-			local frse `minse' `maxse'
-			
-			if `methodnature'<2  {
-				if mi("`methlist'") {
-					* if numerical method without labels
-					if `methodnature'!= 1 local methodvaluesloop `valmethod'	
-					* if numerical method with labels
-					else local methodvaluesloop `valmethodnumwithlabel'
-				}
-				local maxmethodvaluesloop : word `numbermethod' of `methodvaluesloop'
-				local maxmethodvaluesplus1 = substr("`methodvaluesloop'", -`numbermethod', .)
-				*di "`maxmethodvaluesplus1'"
-				local maxmethodvaluesminus1 = substr("`methodvaluesloop'", 1 ,`numbermethod')
-				*di "`maxmethodvaluesminus1'"
-				local counter = 1
-				local counterplus1 = 2
-				foreach j in `maxmethodvaluesminus1' {
-					*di "`j'"
-					foreach k in `maxmethodvaluesplus1' {
-						if "`j'" != "`k'" {
-							`dicmd' twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'`j' `estimate'`k' if `dgm'==`m' `iftarget', ms(o) ///
-								mlc(white%1) msize(tiny) xtit("") ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw), `by' name(`estimate'`j'`k'dgm`m'tar`t', replace) 
-							`dicmd' twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'`j' `se'`k' if `dgm'==`m' `iftarget', ms(o) mlc(white%1) ///
-								msize(tiny) xtit("") ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw), `by' name(`se'`j'`k'dgm`m'tar`t', replace) 
-							local graphtheta`counter'`counterplus1'`m'`t' `estimate'`j'`k'dgm`m'tar`t'
-							local graphse`counter'`counterplus1'`m'`t' `se'`j'`k'dgm`m'tar`t'
-							local counterplus1 = `counterplus1' + 1
-							if `counterplus1' > `numbermethod' local counterplus1 = `numbermethod'
-						}
-					}
-					local counter = `counter' + 1
-				}
-			}
-
-			else if `methodnature'==2 | !mi("`methlist'") {
-				local counter = 1
-				local counterplus1 = 2
-				local maxmethodvaluesminus1 = `numbermethod' - 1
-				*local maxmethodvaluesplus1  = `numbermethod' + 1
-				forvalues j = 1/`maxmethodvaluesminus1' {
-					forvalues k = 2/`numbermethod' {
-						if "`j'" != "`k'" {
-							`dicmd' twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'``j'' `estimate'``k'' if `dgm'==`m' `iftarget', ms(o) ///
-								mlc(white%1) msize(tiny) xtit("") ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw), `by' name(`estimate'``j''``k''dgm`m'tar`t', replace)
-							`dicmd' twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'``j'' `se'``k'' if `dgm'==`m'`iftarget', ms(o) ///
-								mlc(white%1) msize(tiny) xtit("") ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw), `by' name(`se'``j''``k''dgm`m'tar`t', replace)
-							local graphtheta`counter'`counterplus1'`m'`t' `estimate'``j''``k''dgm`m'tar`t'
-							local graphse`counter'`counterplus1'`m'`t' `se'``j''``k''dgm`m'tar`t'
-							local counterplus1 = `counterplus1' + 1
-							if `counterplus1' > `numbermethod' local counterplus1 = `numbermethod'
-						}
-					}
-					local counter = `counter' + 1
-				}
-			}
-			
-			* use target labels if target numeric with string labels
-			if `targetnature' == 1 {
-				local tlab: word `t' of `valtarget'
-				local targetlab ", `target': `tlab'"
-			}
-			else {
-				local tlab `t'
-				local targetlab ", `target': `tlab'"
-			}
-			if "`valtarget'"== "N/A" local targetlab
-			
-			if mi("``dgm'dlabel`m''") local `dgm'dlabel`m' `m'
-			
-			if `numbermethod'==2 {
-				`dicmd' graph combine `mlabelname1' `graphtheta12`m'`t'' ///
-					`graphse12`m'`t'' `mlabelname2' ///
-					, title("") note("Graphs for `dgm': ``dgm'dlabel`m''`targetlab'") cols(2)	///
-					xsize(`xsize')	///
-					name(`name'_dgm`m'`tlab', replace) `options'
-			}
-			else if `numbermethod'==3 {
-				`dicmd' graph combine `mlabelname1' `graphtheta12`m'`t'' `graphtheta13`m'`t''	///
-					`graphse12`m'`t'' `mlabelname2' `graphtheta23`m'`t''	///
-					`graphse13`m'`t'' `graphse23`m'`t'' `mlabelname3'	///
-					, title("") note("Graphs for `dgm': ``dgm'dlabel`m''`targetlab'") cols(3)	///
-					xsize(`xsize')	///
-					name(`name'_dgm`m'`tlab', replace) `options'
-			}
-			else if `numbermethod'>3 {
-				if mi("`anything'") local anything = "est"
-				`dicmd' graph matrix `statlist' if `dgm'==`m' `iftarget', `half' `by' title("") note("") ms(o) mlc(gs10) msize(tiny) ///
-				name(`name'_`anything'`j'`k'dgm`m'`tlab', replace) `options'
-			}
+		if !`do_se' { // create an empty graph
+			`dicmd' twoway scatteri 0 0 (0) " " , ///
+				ytit("") ylab(none) yscale(lstyle(none) range(-1 1)) ///
+				xtit("") xlab(none) xscale(lstyle(none) range(-1 1)) ///
+				msym(i) mlabs(vlarge) mlab(black) ///
+				plotregion(style(none)) legend(off) ///
+				`subgraphoptions' nodraw name(emptygraph, replace) 
 		}
-	}
-}
-
-else if `numberdgms' != 1 {
-		
-	foreach dgmvar in `dgmvalues' {
-		if !mi("`debug'") di as text "Loop for numberdgms > 1: m = `m'"
-		local dgmlabels = 0
-		
-		qui tab `dgmvar'
-		local ndgmvar = `r(r)'
-		* Get dgm label values
-		cap qui labelsof `dgmvar'
-		cap qui ret list
-		
-		if `"`r(labels)'"'!="" {
-			local 0 = `"`r(labels)'"'
-
-			forvalues i = 1/`ndgmvar' {
-				gettoken `dgmvar'dlabel`i' 0 : 0, parse(": ")
-				local dgmlabels = 1
-			}
-		}
-		else {
-			local dgmlabels = 0
-			qui levels `dgmvar', local(levels)
-			
-			local loop = 1
-			foreach l of local levels {
-				local `dgmvar'dlabel`loop' `l'
-				local loop = `loop' + 1
-			}
-		}
-	}
-
-*		if `dgmlabels' == 0 local dgmfilter = "`dgmvar' == ``dgmvar'dlabel`d''"
-*		else if `dgmlabels' == 1 local dgmfilter = "`dgmvar'==`d'"
-			
-		tempvar _group
-		qui egen `_group' = group(`dgmvalues'), label lname(grouplevels)
-		local group "`_group'"
-		qui tab `group'
-		local groupnum = `r(r)'
-			
-		* give user a warning if lots of graphs will be created
-		if "`numtarget'" == "N/A" local numtargetcheck = 1
-		else {
-				* need to re-count in case there is an 'if' statement.  Data is in long-long format from reshape above
-				qui tab `target'   
-				local numtargetcheck = `r(r)'
-		}
-		if "`groupnum'" == "" local totalgroupnum = 1
-		else local totalgroupnum = `groupnum'
-
-			local graphnumcheck = `totalgroupnum' * `numtargetcheck'
-			if `graphnumcheck' > 15 {
-				di as smcl as text "{p 0 2}Warning: `graphnumcheck' graphs will be created: consider using 'if' condition as detailed in {help siman_comparemethodsscatter:siman comparemethodsscatter}{p_end}"
-			}
+		else local setitle l2title(Standard error, just(left) bexpand) ///
 
 
-		forvalues d = 1/`groupnum' {
-			    
-			local dgmfilter = "`group'==`d'"
-			local dgmlevels`d' : label grouplevels `d'
-	
-			* check if target is numeric with string labels for the looping over target values
-			*if `targetnature' == 1 {
-			if "`valtarget'"!= "N/A" {
-				qui levelsof `target', local(targetlevels)
-				local foreachtarget "`targetlevels'"
-			}
-			*}
-			*else local foreachtarget "`valtarget'"
-			*else if "`valtarget'"!= "N/A" local foreachtarget "`valtarget'"
-			else local foreachtarget 1
-
-			foreach t in `foreachtarget' {
-
-				* for target, determine if string/string labels or not
-				cap confirm numeric variable `target'
-				if _rc local iftarget `"& `target' == "`t'""'
-				else local iftarget `"& `target' == `t'"'	
-				if "`valtarget'"== "N/A" local iftarget
+		* loop over constituent graphs
+		forvalues j = 1/`nmethods' { // rows
+			forvalues k = 1/`nmethods' { // cols
 				
-				local frtheta `minest' `maxest'
-				local frse `minse' `maxse'
-				
-				if `methodnature'<2   {		
-					if mi("`methlist'") {
-						* if numerical method without labels
-						if `methodnature'!= 1 local methodvaluesloop `valmethod'	
-						* if numerical method with labels
-						else local methodvaluesloop `valmethodnumwithlabel'
-					}
-					local maxmethodvaluesloop : word `numbermethod' of `methodvaluesloop'
-					local maxmethodvaluesplus1 = substr("`methodvaluesloop'", -`numbermethod', .)
-					*di "`maxmethodvaluesplus1'"
-					local maxmethodvaluesminus1 = substr("`methodvaluesloop'", 1 ,`numbermethod')
-					*di "`maxmethodvaluesminus1'"
-					local counter = 1
-					local counterplus1 = 2
-					
-					foreach j in `maxmethodvaluesminus1' {
-					*	di "`j'"
-
-						foreach k in `maxmethodvaluesplus1' {
-							if "`j'" != "`k'" {
-								`dicmd' twoway (function x, range(`frtheta') lcolor(gs10)) ///
-									(scatter `estimate'`j' `estimate'`k' ///
-									if `dgmfilter' `iftarget', ms(o) mlc(white%1) msize(tiny)), ///
-									xtit("") ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw ///
-									`by' name(`estimate'`j'`k'`d'tar`t', replace)
-								`dicmd' twoway (function x, range(`frse') lcolor(gs10)) ///
-									(scatter `se'`j' `se'`k' if ///
-									`dgmfilter' `iftarget', ms(o) mlc(white%1) msize(tiny)), ///
-									xtit("") ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw ///
-									`by' name(`se'`j'`k'`d'tar`t', replace) 
-								local graphtheta`counter'`counterplus1'`d'`t' `estimate'`j'`k'`d'tar`t'
-								local graphse`counter'`counterplus1'`d'`t'  `se'`j'`k'`d'tar`t'
-								local counterplus1 = `counterplus1' + 1
-								if `counterplus1' > `numbermethod' local counterplus1 = `numbermethod'
-						    }
-						}
-						local counter = `counter' + 1
-					}
+				if `j'==`k' { // GRAPHS ON DIAGONAL SHOW VARIABLE NAMES ONLY
+					`dicmd' twoway scatteri 0 0 (0) "`mlabel`j''" , ///
+						ytit("") ylab(none) yscale(lstyle(none) range(-1 1)) ///
+						xtit("") xlab(none) xscale(lstyle(none) range(-1 1)) ///
+						msym(i) mlabs(vlarge) mlab(black) ///
+						plotregion(style(none)) legend(off) ///
+						`subgraphoptions' nodraw name(graph`j'`k', replace) 
 				}
-						
-				else if `methodnature'==2 | !mi("`methlist'") {
-					local counter = 1
-					local counterplus1 = 2
-					local maxmethodvaluesminus1 = `numbermethod' - 1
-				*	local maxmethodvaluesplus1 = `nummethod' + 1
-					forvalues j = 1/`maxmethodvaluesminus1' {
-						forvalues k = 2/`numbermethod' {
-							if "`j'" != "`k'" {
-								`dicmd' twoway (function x, range(`frtheta') lcolor(gs10)) (scatter `estimate'``j'' `estimate'``k'' ///
-									if `dgmfilter' `iftarget', ms(o) mlc(white%1) msize(tiny) xtit("") ///
-									ytit("Estimate", size(medium)) legend(off) `subgraphoptions' nodraw), ///
-									`by' name(`estimate'``j''``k''`d'tar`t', replace)
-								`dicmd' twoway (function x, range(`frse') lcolor(gs10)) (scatter `se'``j'' `se'``k'' if ///
-									`dgmfilter' `iftarget', ms(o) mlc(white%1) msize(tiny) xtit("") ///
-									ytit("Standard Error", size(medium)) legend(off) `subgraphoptions' nodraw), ///
-									`by' name(`se'``j''``k''`d'tar`t', replace)
-								local graphtheta`counter'`counterplus1'`d'`t' `estimate'``j''``k''`d'tar`t'
-								local graphse`counter'`counterplus1'`d'`t' `se'``j''``k''`d'tar`t'
-								local counterplus1 = `counterplus1' + 1		
-								if `counterplus1' > `numbermethod' local counterplus1 = `numbermethod'
-							}
-						}
-						local counter = `counter' + 1
-					}
-				}
-						
-				* use target labels if target numeric with string labels
-				if `targetnature' == 1 { 
-					local tlab: word `t' of `valtarget'
-					local targetlab ", `target': `tlab'"
+				else if `j'>`k' & !`do_se' {
+					local graphlist `graphlist' emptygraph
+					continue
 				}
 				else {
-					local tlab `t'
-					local targetlab ", `target': `tlab'"
+					// GRAPHS ABOVE/BELOW DIAGONAL SCATTERPLOT ESTIMATE/SE
+					local stat = cond(`j'>`k', "se", "estimate")
+					local min=min(`min`stat'`j'',`min`stat'`k'')
+					local max=max(`max`stat'`j'',`max`stat'`k'')
+					if "`equality'"=="noequality" local eqgraph
+					else local eqgraph (function x, range(`min' `max') sort lcolor(gs10))
+					`dicmd' twoway ///
+						`eqgraph' /// line of equality
+						(scatter ``stat''`j' ``stat''`k' if `group'==`g', ///
+							ms(o) mlc(white%1) msize(tiny) ///
+							`subgraphoptions' nodraw) ///
+						, xtitle("") ytitle("") legend(off) ///
+						name(graph`j'`k', replace) // scatterplot of methods
 				}
-				if "`valtarget'"== "N/A" local targetlab
-
-				if `numbermethod'==2 {
-
-					`dicmd' graph combine `mlabelname1' `graphtheta12`d'`t'' `graphse12`d'`t'' `mlabelname2', ///
-						title("") note("Graphs for `dgmvalues': `dgmlevels`d''`targetlab'") cols(2)	xsize(`xsize') ///
-						name(`name'_`d'`tlab', replace) `options'
-				}
-				else if `numbermethod'==3 {
-					`dicmd' graph combine `mlabelname1' `graphtheta12`d'`t'' `graphtheta13`d'`t'' ///
-						`graphse12`d'`t'' `mlabelname2' `graphtheta23`d'`t'' ///
-						`graphse13`d'`t'' `graphse23`d'`t'' `mlabelname3', ///
-						title("") note("Graphs for `dgmvalues': `dgmlevels`d''`targetlab'") cols(3)	xsize(`xsize') ///
-						name(`name'_`d'`tlab', replace) `options'
-				}
-				else if `numbermethod'>3 {
-					if mi("`anything'") local anything = "est"
-					`dicmd' graph matrix `statlist' if `group'==`d' `iftarget', `half' `by' title("") note("") ms(o) mlc(gs10) msize(tiny)///
-						name(`name'_`anything'`j'`k'`d'`tlab', replace) `options'
-				}
+				local graphlist `graphlist' graph`j'`k'
 			}
 		}
+		`dicmd' graph combine `graphlist', name(`name'_`g',replace) ///
+			note("Graphs for `notetext'") ///
+			title("") cols(`nmethods') ///
+			`setitle' ///
+			t2title(Estimate, just(right) bexpand pos(1)) `options'	
+	}
+
+	else { // type = matrix
+		local varlist
+		forvalues j = 1/`nmethods' {
+			local varlist `varlist' ``statlist''`j'
+			label var ``statlist''`j' "`mlabel`j''"
+		}
+		`dicmd' graph matrix `varlist' if `group'==`g', `half' title("") note("") ///
+			ms(o) mlc(gs10) msize(tiny) ///
+			name(`name'_`g',replace) note("Graphs for stat=`statlist', `notetext'") ///
+			`options'
+	}
 }
-
-
-restore
-
-local dgm = "`dgmorig'"
-
-qui use `origdata', clear
 
 end
 
