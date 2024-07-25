@@ -1,10 +1,11 @@
-*!	version 0.10	23jun2024	IW Clean up handling of if/in
+*!	version 0.10	23jun2024	
+*	version 0.10	23jun2024	IW Clean up handling of if/in
 *								Drop non-varying dgmvars, unless dgmshow option used
 *								Correct DGM labelling at top of graph (was wrongly alpha-sorted)
 *								refpower defaults to off
 *								fix errors when method isn't 1,2...
 *								NB reduce version # to match other programs
-*! version 1.13.2  15dec2023
+* version 1.13.2  15dec2023
 * version 1.13.2  15dec2023   IW 'if' is a condition not an option
 * version 1.13.1  25oct2023   IW clearer error if no obs; helpful message with pause option
 * version 1.13  13sep2023     IW add level() option; streamline pm variables; show PMs in order requested; use pstyle to harmonise graph; new logit option calculates CI for power & coverage on logit scale 

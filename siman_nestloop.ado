@@ -1,4 +1,5 @@
-*!	version 0.10	23jun2024	IW Correct handling of if/in
+*!	version 0.10	23jun2024	
+*	version 0.10	23jun2024	IW Correct handling of if/in
 *								PMs default to just bias or mean
 *								NB reduce version # to match other programs
 * version 1.8.2 17aug2023	  IW renamed descriptor graph options from frac* and legend* to dg*; new checks for wrong dgmorder(), only 1 dgm; handle missing or numeric target; remove some unwanted `if's; handle method as any type

@@ -1,4 +1,5 @@
-*!	version 0.10	18jun2024	IW Clean up handling of varlist, if/in, by
+*!	version 0.10	18jun2024	
+*	version 0.10	18jun2024	IW Clean up handling of varlist, if/in, by
 *								NB reduce version # to match other programs
 *  version 1.7 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
 *  version 1.6.7 03oct2023   EMZ update to warning message when by() conditions used

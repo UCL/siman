@@ -1,4 +1,5 @@
-*! version 0.7	14jun2024	IW streamline for longlong only; calculate #dgms without assuming factorial; remove commented out code
+*!	version 0.7	14jun2024	
+*	version 0.7	14jun2024	IW streamline for longlong only; calculate #dgms without assuming factorial; remove commented out code
 * version 0.6   8may2024	IW no longer removes underscores from display
 * version 0.5.1   13mar2024
 *  version 0.5.1 13mar2024     IW new undocumented sort option 

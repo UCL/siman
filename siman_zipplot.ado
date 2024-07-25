@@ -1,7 +1,7 @@
-*! version 0.10 19jul2024
+*!	version 0.10	19jul2024
 * version 0.10 19jul2024	IW align with new setup; respect true but don't separate graphs by true; respect cilevel; allow ci instead of se
 *							align versioning with siman.ado
-*!  version 1.9 22apr2024
+*  version 1.9 22apr2024
 *  version 1.9 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
 *  version 1.8.12 25oct2023  IW Added true value to note
 *  version 1.8.11 16oct2023  EMZ minor update to warning message (# graphs each of # panels)

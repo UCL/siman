@@ -1,4 +1,4 @@
-*! version 0.8.3   3apr2024
+*!	version 0.8.3   3apr2024
 *  version 0.8.3    3apr2024 IW ignore method if methodcreated
 *                  14feb2024 IW allow new performance measure (pctbias) from simsum
 *  version 0.8.2   20dec2023   IW add row() option (undocumented at present)

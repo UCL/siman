@@ -1,4 +1,5 @@
-*! version 0.9.1	14jun2024		IW remove code for nformat!=1 and nmethod!=1
+*!	version 0.9.1	14jun2024		
+*	version 0.9.1	14jun2024		IW remove code for nformat!=1 and nmethod!=1
 * version 0.9		11jun2024		IW assume data are longlong, don't let 'if' delete data, tidy up chars
 * version 0.8		8may2024		IW no longer remove any underscores
 * version 0.7     3apr2024    IW make it work with missing se()

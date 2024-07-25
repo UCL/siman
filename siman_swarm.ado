@@ -1,4 +1,4 @@
-*! version 0.10 19jul2024
+*!	version 0.10	19jul2024
 * version 0.10 19jul2024	IW align with new setup: clean up anything (use "estimate" not "`estimate'"), if/in, locals
 *							change meanoff to nomean; reorganise options, new scatteroptions, re-parse name
 *							align versioning with siman.ado

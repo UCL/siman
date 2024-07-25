@@ -1,4 +1,5 @@
-*!	version 0.10	24jun2024	IW Correct handling of if/in
+*!	version 0.10	24jun2024
+*	version 0.10	24jun2024	IW Correct handling of if/in
 *								NB reduce version # to match other programs
 *  version 1.7 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
 *  version 1.6.12 20feb2024  TPM removed xsize(5) as default and added yline(0, ...) to graphs
