@@ -64,7 +64,7 @@ siman comparemethodsscatter if estimand=="beta" & dgm==2
 * graphs
 siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test1", replace) 
 
-siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test1", replace)) 
+siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_test1", replace)
 
 siman zipplot, bygr(cols(4))
 siman zipplot, legend(order(1 "Stalk" 2 "Carrot")) xtit("x-title") ylab(95) noncoveroptions(pstyle(p3)) ///
@@ -104,7 +104,7 @@ siman setup, rep(rep) dgm(dgm) target(1 2) method(A B) estimate(est) se(se) true
 * graphs
 siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test2", replace) 
 
-siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test2", replace)) 
+siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_test2", replace)
 
 siman zipplot, legend(order(1 "Stalk" 2 "Carrot")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test2", replace)
@@ -137,7 +137,7 @@ siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(
 * graphs
 siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test3", replace) 
 
-siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test3", replace)) 
+siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_test3", replace)
 
 cap siman zipplot, legend(order(1 "Stalk" 2 "Carrot")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test3", replace)
@@ -173,7 +173,7 @@ siman setup, rep(rep) target(estimand) estimate(est) se(se) true(true)
 * graphs
 siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test4", replace) 
 
-cap siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test4", replace)) 
+cap siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_test4", replace)
 assert _rc == 498
 * siman swarm can not be run without method as required
 
@@ -201,7 +201,7 @@ siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
 * graphs
 siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test5", replace) 
 
-siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test5", replace)) 
+siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_test5", replace)
 
 siman zipplot, legend(order(1 "Stalk" 2 "Carrot")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test5", replace)
@@ -237,19 +237,9 @@ drop dupindicator
 
 siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
 siman comparemethodsscatter if target=="beta" & dgm==1, methlist(3 7) name("cms_test6", replace) 
-siman comparemethodsscatter if target=="beta" & dgm==1, methlist(3 5 7) name("cms_test6a", replace) 
+siman comparemethodsscatter if target=="beta" & dgm==1, methlist(3/7) combine name("cms_test6a", replace) 
 siman comparemethodsscatter if target=="beta" & dgm==1
-siman_blandaltman, methlist(3 7) name("ba_test6", replace)
-
-* check error messages
-cap siman comparemethodsscatter if method <= 3
-assert _rc
-cap siman comparemethodsscatter, methlist(1/5)
-assert _rc
-cap siman blandaltman if method <= 3
-assert _rc
-cap siman blandaltman, methlist(1/5)
-assert _rc
+siman_blandaltman, methlist(3/7) name("ba_test6", replace)
 
  
   
@@ -285,7 +275,7 @@ local useit4 theta==1 & rho==1 & k==5 // flags just 4 dgms
 local useit1 theta==1 & rho==1 & pc==1 & k==5 // flags just 1 dgm
 siman scatter if `useit4', ytitle("test y-title") xtitle("test x-title") name("scatter_test7", replace) 
 
-siman swarm if `useit4', graphoptions(ytitle("test y-title") xtitle("test x-title") name("swarm_test7", replace)) 
+siman swarm if `useit4', graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_test7", replace)
 
 * siman zipplot is not appropriate for these data
 

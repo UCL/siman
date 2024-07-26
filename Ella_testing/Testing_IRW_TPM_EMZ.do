@@ -91,7 +91,6 @@ assert "`: char _dta[siman_valmethod]'" == "CCA MeanImp Noadj"
 * setup data in LL and reshape to LW
 use $testpath/data/extendedtestdata2.dta, clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
-siman reshape, longwide
 assert "`: char _dta[siman_nummethod]'" == "3"
 assert "`: char _dta[siman_valmethod]'" == "CCA MeanImp Noadj"
 

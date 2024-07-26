@@ -725,7 +725,6 @@ siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b
 
 siman_scatter
 siman scatter, by(beta)
-siman_reshape, longlong
 siman scatter, by(method)
 siman scatter if method == "CCA", name("simanscatter_CCA", replace)
 
@@ -736,7 +735,6 @@ siman scatter if method == "CCA", name("simanscatter_CCA", replace)
 siman_swarm                                                          
 siman swarm, by(pmiss)              
 siman swarm, by(mech)
-siman_reshape, longlong
 siman swarm if method == "Noadj" | method == "MeanImp"   
 siman swarm if (method == "Noadj" | method == "MeanImp"), by(beta) graphoptions(name("simanswarm_beta", replace))                  
 siman swarm if (method == "Noadj" | method == "MeanImp"), by(pmiss)
@@ -747,7 +745,6 @@ siman swarm if (method == "Noadj" | method == "MeanImp"), by(pmiss)
 siman blandaltman
 siman blandaltman, by(beta)              
 siman blandaltman, by(mech)
-siman reshape, longlong
 siman blandaltman if method == "Noadj" | method == "CCA"  
 siman blandaltman if (method == "Noadj" | method == "MeanImp"), by(pmiss) 
 siman blandaltman if (method == "CCA" | method == "MeanImp"), by(beta) name("simanba_new", replace)                  
@@ -767,7 +764,6 @@ siman comparemethodsscatter if mech == 2, name("simancmsmech", replace)
 
 siman_zipplot  
 siman zipplot, by(mech)       
-siman reshape, longlong 
 siman zipplot if (method == "Noadj" | method == "MeanImp"), name("simanzip_new", replace) 
 siman zipplot, by(method pmiss)
 siman zipplot if (method == "CCA" | method == "MeanImp"), by(method mech) 
