@@ -29,9 +29,10 @@ syntax [anything] [if], ///
 	DGSIze(real 0.3) DGGAp(real 0) /// control sizing of descriptor graph
 	DGINnergap(real 3) DGCOlor(string) /// control descriptor graph
 	DGPAttern(string) DGLAbsize(string) DGSTyle(string) DGLWidth(string) /// control descriptor graph
-	debug pause nodg METHLEGend(string) force /// undocumented
+	debug pause nodg force /// undocumented
 	LColor(string) LPattern(string) LSTYle(string) LWidth(string) /// twoway options for main graph
-	NAMe(string) SAVing(string) EXPort(string) * /// twoway options for overall graph
+	METHLEGend(string) * /// other graph options
+	NAMe(string) SAVing(string) EXPort(string) /// twoway options for overall graph
 	] 
 
 foreach thing in `_dta[siman_allthings]' {

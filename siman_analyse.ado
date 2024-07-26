@@ -128,7 +128,7 @@ if !_rc local methodstringindi = 1
 if mi("`se'") {
 	cap confirm new variable _se
 	if _rc {
-		di as error "{p 0 2}siman analyse wants to create a new variable _se, but it alredy exists.{p_end}"
+		di as error "{p 0 2}siman analyse wants to create a new variable _se, but it already exists{p_end}"
 		exit 498
 	}
 	local se _se

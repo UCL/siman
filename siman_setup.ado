@@ -57,7 +57,7 @@ else local di *
 * check whether setup already run
 local setuprun : char _dta[siman_setuprun]
 if "`setuprun'" == "1" {
-	di as error "{p 0 2}siman setup has already been run on the dataset held in memory; siman setup should be run on the 'raw' estimates dataset produced by your simulation study.{p_end}"
+	di as error "{p 0 2}siman setup has already been run on the dataset held in memory; siman setup should be run on the 'raw' estimates dataset produced by your simulation study..{p_end}"
 	exit 498
 }
 local setuprun 0
@@ -79,7 +79,7 @@ if mi("`estimate'") &  mi("`se'") & mi("`lci'") & mi("`uci'") {
 
 * produce a warning message if no est and no se contained in dataset
 if mi("`estimate'") &  mi("`se'") {
-	di as text "{p 0 2}Warning: no estimates or SEs, siman's output will be limited.{p_end}"
+	di as text "{p 0 2}Warning: no estimates or SEs, siman's output will be limited{p_end}"
 }
 
 /*** END OF PARSING ***/
@@ -128,7 +128,7 @@ if !mi("`dgm'") {
 	foreach var of varlist `dgm' {
 		cap assert `var' == round(`var', 0.1)
 		if _rc {
-			di as error "{p 0 2}Non-integer values of dgm are not permitted by siman: variable `var'.{p_end}"
+			di as error "{p 0 2}Non-integer values of dgm are not permitted by siman: variable `var'{p_end}"
 			exit 498
 		}
 	}
@@ -215,7 +215,7 @@ else if `nmethod'==1 & `methodisvar'==1 {
 * check if method contains missing values
 if "`methodformat'" == "long" {
 	cap assert !missing(`method')
-	if _rc di as text "{p 0 2}Warning: variable `method' should not contain missing values.{p_end}"
+	if _rc di as text "{p 0 2}Warning: variable `method' should not contain missing values{p_end}"
 }
 
 /*** UNDERSTAND STUBS ***/

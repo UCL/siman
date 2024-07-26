@@ -95,7 +95,7 @@ else {
 	local nummethodnew = `r(r)'
 }
 if `nummethodnew' < 2 {
-	di as error "{p 0 2}siman swarm requires at least 2 methods to compare.{p_end}"
+	di as error "{p 0 2}siman swarm requires at least 2 methods to compare{p_end}"
 	exit 498
 }
 
@@ -152,7 +152,7 @@ else {
 
 if `ngraphs'==2 local s "s each "
 di as text "{p 0 2}siman swarm will draw " as result `ngraphs' as text " graph`s' with " as result `npanels' as text " panels{p_end}"
-if `npanels'>15 di "{p 0 2}Consider reducing the number of panels using 'if' condition or 'by' option as detailed in {help siman swarm}{p_end}"
+if `npanels'>15 di "{p 0 2}Consider reducing the number of panels using 'if' condition or 'by' option{p_end}"
 
 foreach el of local statlist { // estimate and/or se
 	local graph_cmd twoway (scatter newidrep ``el'', msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `scatteroptions')

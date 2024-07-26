@@ -154,7 +154,7 @@ if !mi("`debug'") di as input `"methlist = `methlist'"'
 * count methods & choose type
 local nmethods : word count `methlist'
 if `nmethods' < 2 {
-	di as error "{p 0 2}siman comparemethodsscatter requires at least 2 methods to compare.{p_end}"
+	di as error "{p 0 2}siman comparemethodsscatter requires at least 2 methods to compare{p_end}"
 	exit 498
 }
 local type `matrix' `combine'
@@ -221,7 +221,7 @@ local ngraphs = r(r)
 if `ngraphs'>1 local sg "s each"
 di as text "siman comparemethodsscatter will draw " as result `ngraphs' as text " graph`sg' showing " as result `nmethods' as text " methods"
 if `ngraphs' > 3 {
-	di as smcl as text "{p 0 2}Consider reducing the number of graphs using 'if' condition or 'by' option{p_end}"
+	di as smcl as text "{p 0 2}Consider reducing the number of graphs using 'if' condition{p_end}"
 }
 
 
@@ -304,6 +304,11 @@ serset clear
 			`options'	
 		if _rc==111 di as error `"{p 0 2}siman comparemethodsscatter called graph combine, which failed. Try {stata "serset clear"} and {stata "graph drop _all"}{p_end}"'
 		if _rc exit _rc
+		
+		* drop constituent graphs - need capture since there may be duplicates
+		foreach graph of local graphlist {
+			cap graph drop `graph'
+		}
 	}
 
 	else { // type = matrix

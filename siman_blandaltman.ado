@@ -124,7 +124,7 @@ else {
 	local nmethods = r(r)
 }
 if `nmethods' < 2 {
-	di as error "{p 0 2}siman blandaltman requires at least 2 methods to compare.{p_end}"
+	di as error "{p 0 2}siman blandaltman requires at least 2 methods to compare{p_end}"
 	exit 498
 }
 
