@@ -119,7 +119,7 @@ if !mi("`dgm'") {
 		}
 		qui count if missing(`var')
 		cap assert r(N)==0
-		if _rc di as text "{p 0 2}Warning: variable `var' should not contain missing values.  Consider combining dgms.{p_end}"
+		if _rc di as error "{p 0 2}Warning: variable `var' contains missing values. This may cause problems. Consider recoding as non-missing.{p_end}"
 	}
 }
 
@@ -288,7 +288,10 @@ if "`targetformat'"=="wide" & "`methodformat'"=="wide" & "`order'"=="" {
 local shouldbeid `rep' `longvars'
 local createdvar _method
 local shouldbeid : list shouldbeid - createdvar
-cap isid `shouldbeid'
+*cap isid `shouldbeid'
+tempvar shouldbe1
+bysort `shouldbeid': gen `shouldbe1' = _n
+cap assert `shouldbe1'==1
 if _rc {
 	di as error "{p 0 2}Multiple records per `shouldbeid'."
 	if mi("`dgm'") di "Do you need to specify dgm()?"

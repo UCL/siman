@@ -74,7 +74,7 @@ else if "`anything'"=="all" local anything `allpms'
 local pmlist `anything'
 local wrongpms : list pmlist - allpms
 if !mi("`wrongpms'") {
-	di as error "Performance measures wrongly specified: `wrongpms'"
+	di as error "Performance measures not in data: `wrongpms'"
 	exit 498
 }	
 local npms : word count `pmlist'
