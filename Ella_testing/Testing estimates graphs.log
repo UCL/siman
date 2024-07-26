@@ -1,112 +1,116 @@
 
 . siman which
 C:\ian\git\siman\siman.ado
-*!version 0.3  08aug2023
+*!      version 0.10    25jul2024       
 C:\ian\git\siman\siman_setup.ado
-*!    version 0.9  3apr2024    
+*!      version 0.10.2  14jun2024       
 C:\ian\git\siman\siman_describe.ado
-*! version 0.5.1   13mar2024
+*!      version 0.7     14jun2024       
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.7     3apr2024
+*!      version 0.9.1   14jun2024               
 C:\ian\git\siman\siman_table.ado
-*! version 0.8.3   3apr2024
-C:\ian\git\siman\siman_reshape.ado
-*!  version 0.3.4   06nov2023
+*!      version 0.8.3   3apr2024
 C:\ian\git\siman\siman_lollyplot.ado
-*! version 1.13.2  15dec2023
+*!      version 0.10    23jun2024       
 C:\ian\git\siman\siman_zipplot.ado
-*! version 1.8.12 25oct2023
+*!      version 0.10    19jul2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*! version 1.9.18 25oct2023
+*!      version 0.10    25jun2024       
 C:\ian\git\siman\siman_blandaltman.ado
-*! version 1.6.11 16oct2023  EMZ produce error message if >=, <= or methlist(x/y) is used.
+*!      version 0.10    24jun2024
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.9.8 27mar2024
+*!      version 0.10    19jul2024
 C:\ian\git\siman\siman_scatter.ado
-*! version 1.6.7 03oct2023
+*!      version 0.10    18jun2024       
 C:\ian\git\siman\siman_nestloop.ado
-*! version 1.8.2   17aug2023
+*!      version 0.10.1  26jun2024       
 
 . 
 . use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
-. siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . 
 . * siman scatter
-. siman_scatter, ytitle("test y-title") xtitle("test x-title") name("test") 
-working.....
+. siman scatter, ytitle("test y-title") xtitle("test x-title") name("test", replace) 
+siman scatter will draw 1 graph with 8 panels
 
-. siman_scatter, ytitle("test y-title") xtitle("test x-title")     
-working.....
+. siman scatter, ytitle("test y-title") xtitle("test x-title")     
+siman scatter will draw 1 graph with 8 panels
 
-. siman_scatter 
-working.....
+. siman scatter 
+siman scatter will draw 1 graph with 8 panels
 
-. siman_scatter if dgm==2, name(siman_scatter_dgm2)
-working.....
+. siman scatter if dgm==2, name(siman_scatter_dgm2, replace)
+siman scatter will draw 1 graph with 4 panels
 
 . 
-. * siman_swarm
-. siman_swarm
-working.....
+. * siman swarm
+. siman swarm
+siman swarm will draw 1 graph with 4 panels
 
-. siman_swarm, meanoff scheme(s1color) bygraphoptions(title("main-title")) graphoptions(ytitle("test
->  y-title"))
-working.....
+. siman swarm, nomean scheme(s1color) bygraphoptions(title("main-title")) graphoptions(ytitle("test 
+> y-title"))
+siman swarm will draw 1 graph with 4 panels
 
-. siman_swarm, scheme(economist) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-tit
+. siman swarm, scheme(economist) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-tit
 > le") xtitle("test x-title"))
-working.....
+siman swarm will draw 1 graph with 4 panels
 
-. siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("test2", replace))
-working.....
+. siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name(test2, replace)
+siman swarm will draw 1 graph with 4 panels
 
-. siman_swarm if dgm == 1   
-working.....
+. siman swarm if dgm == 1   
+siman swarm will draw 1 graph with 2 panels
 
 . 
 . 
-. *siman_zipplot
-. siman_zipplot
+. *siman zipplot
+. siman zipplot
+siman zipplot will draw 1 graph with 8 panels
 
-. siman_zipplot, by(dgm estimand method)
+. siman zipplot, by(dgm estimand method)
+siman zipplot will draw 1 graph with 8 panels
 
 . 
 . siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y
 > -title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 > coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) 
+siman zipplot will draw 1 graph with 8 panels
+(note: scheme scheme(s2color) not found, using s2color)
 
 . siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y
 > -title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 > coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("carrot",
 >  replace)
+siman zipplot will draw 1 graph with 8 panels
+(note: scheme scheme(s2color) not found, using s2color)
 
 . 
 . use $testpath/data/simlongESTPM_longE_longM.dta, clear
@@ -115,35 +119,36 @@ working.....
 
 . gen true = -0.5
 
-. siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
-. siman_zipplot
+. siman zipplot
+siman zipplot will draw 1 graph with 8 panels
 
 . 
 . 
@@ -162,47 +167,52 @@ _____________________________________________________
 
 . label values method methodvar
 
-. siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            X Y
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  X Y_
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman scatter                  
-working.....
+siman scatter will draw 1 graph with 8 panels
 
 . siman zipplot                  
+siman zipplot will draw 1 graph with 8 panels
 
 . siman swarm                   
-working.....
+siman swarm will draw 1 graph with 4 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter 
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman  
-working....
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . * check works ok
 . siman analyse
@@ -399,42 +409,43 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 . replace true=0.5 if estimand=="beta"
 (4,000 real changes made)
 
-. siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
-. siman_zipplot  
-Drawing 2 graphs (1 per true value)
+. siman zipplot  
+siman zipplot will draw 1 graph with 8 panels
 
-. siman_zipplot, scheme(scheme(economist)) legend(order(4 "Covering" 3 "Not covering")) xtit("x-titl
+. siman zipplot, scheme(scheme(economist)) legend(order(4 "Covering" 3 "Not covering")) xtit("x-titl
 > e") ytit("y-title") ylab(0 40 100) ///
 > noncoveroptions(pstyle(p3)) coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoption
 > s(pstyle(p6))
-Drawing 2 graphs (1 per true value)
+siman zipplot will draw 1 graph with 8 panels
+(note: scheme scheme(economist) not found, using s2color)
 (note:  named style grey not found in class color, default attributes used)
 (note:  named style grey not found in class color, default attributes used)
 (note:  named style grey not found in class color, default attributes used)
@@ -456,72 +467,84 @@ Drawing 2 graphs (1 per true value)
 . * siman scatter
 . use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
-. siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
-. siman_scatter
-working.....
+. siman scatter
+siman scatter will draw 1 graph with 8 panels
 
-. siman_scatter, by(dgm)
-working.....
+. siman scatter, by(dgm)
+siman scatter will draw 1 graph with 2 panels
 
-. siman_scatter, by(estimand method)
-working.....
+. siman scatter, by(estimand method)
+siman scatter will draw 1 graph with 4 panels
 
-. siman_scatter, ytitle("test y-title") xtitle("test x-title") scheme(economist) bygraphoptions(titl
+. siman scatter, ytitle("test y-title") xtitle("test x-title") scheme(economist) bygraphoptions(titl
 > e("main-title"))
-working.....
+siman scatter will draw 1 graph with 8 panels
 
-. siman_scatter, ytitle("test y-title") xtitle("test x-title") scheme(s2mono) by(dgm) bygraphoptions
+. siman scatter, ytitle("test y-title") xtitle("test x-title") scheme(s2mono) by(dgm) bygraphoptions
 > (title("main-title")) 
-working.....
+siman scatter will draw 1 graph with 2 panels
 
 . 
 . * siman comparemethodsscatter
-. siman_comparemethodsscatter 
-Working.....
+. graph drop _all
 
-. siman_comparemethodsscatter, scheme(economist) 
-Working.....
+. siman comparemethodsscatter, scheme(economist) 
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . * to change title in main graph
-. siman_comparemethodsscatter, title("test")
-Working.....
+. graph drop _all
+
+. siman comparemethodsscatter, title("test")
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . * to have subtitles in consituent graphs (looks messy, but just for testing)
-. siman_comparemethodsscatter, subgr(xtit("test"))
-Working.....
+. graph drop _all
 
-. siman_comparemethodsscatter, name("test")     
-Working.....
+. siman comparemethodsscatter, subgr(xtit("test"))
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
-. siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("test", replace)    
-Working.....
+. graph drop _all
+
+. siman comparemethodsscatter, name("test", replace)     
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
+
+. siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("test", replace)    
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . 
 . clear all
@@ -584,78 +607,93 @@ xij variables:
 . drop dupindicator
 
 . *drop if method>4
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         10
-The method values are:            1 2 3 4 5 6 7 8 9 10
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              10
+  Method values:                  1 2 3 4 5 6 7 8 9 10
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             N/A
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            N/A
 _____________________________________________________
 
-. siman_comparemethodsscatter
+. graph drop _all
+
+. siman comparemethodsscatter
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
   and b are the methods you are particularly interested to compare.
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 10 methods
+Consider reducing the number of graphs using 'if' condition
 
-. siman_comparemethodsscatter, by(target)  
+. graph drop _all
+
+. siman comparemethodsscatter, by(target)  
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
   and b are the methods you are particularly interested to compare.
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 10 methods
+Consider reducing the number of graphs using 'if' condition
 
-. siman_blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 9 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman_blandaltman, by(dgm)   
-working....
+. siman blandaltman, by(dgm)   
+siman blandaltman will draw 18 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman blandaltman if target == "gamma"                     
-working....
+siman blandaltman will draw 2 graphs each with 9 panels
 
-. siman_blandaltman, bygraphoptions(norescale)
-working....
+. siman blandaltman, bygraphoptions(norescale)
+siman blandaltman will draw 4 graphs each with 9 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman_blandaltman, methlist(2 8)
-working....
+. siman blandaltman, methlist(2 8)
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman_blandaltman, methlist(3 7) by(dgm)  
-working....
+. siman blandaltman, methlist(3 7) by(dgm)  
+siman blandaltman will draw 2 graphs each with 2 panels
 
-. siman_blandaltman, methlist(10 4 8)
-working....
+. siman blandaltman, methlist(10 4 8)
+siman blandaltman will draw 4 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman_blandaltman, methlist(2 9 3)                
-working....
+. siman blandaltman, methlist(2 9 3)                
+siman blandaltman will draw 4 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman_blandaltman
-working....
+. siman blandaltman
+siman blandaltman will draw 4 graphs each with 9 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("yabberdabberdoo", replace) 
-working....
+. siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("yabberdabberdoo", replace) 
+siman blandaltman will draw 4 graphs each with 9 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman_blandaltman, ytitle("test y-title") xtitle("test x-title")
-working....
+. siman blandaltman, ytitle("test y-title") xtitle("test x-title")
+siman blandaltman will draw 4 graphs each with 9 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . 
 . clear all
@@ -717,66 +755,90 @@ xij variables:
 . drop dupindicator
 
 . *drop if method>4
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         10
-The method values are:            1 2 3 4 5 6 7 8 9 10
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              10
+  Method values:                  1 2 3 4 5 6 7 8 9 10
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             N/A
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            N/A
 _____________________________________________________
 
-. siman_comparemethodsscatter
+. graph drop _all
+
+. siman comparemethodsscatter
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
   and b are the methods you are particularly interested to compare.
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 10 methods
+Consider reducing the number of graphs using 'if' condition
 
-. siman_comparemethodsscatter se                             
+. graph drop _all
+
+. siman comparemethodsscatter se                             
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
   and b are the methods you are particularly interested to compare.
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 10 methods
+Consider reducing the number of graphs using 'if' condition
 
-. siman_comparemethodsscatter est
+. graph drop _all
+
+. siman comparemethodsscatter est
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
   and b are the methods you are particularly interested to compare.
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 10 methods
+Consider reducing the number of graphs using 'if' condition
 
-. siman_comparemethodsscatter, methlist(3 8) 
-Working.....
+. graph drop _all
 
-. siman_comparemethodsscatter, methlist(1 3 8)                      
-Working.....
+. siman comparemethodsscatter, methlist(3 8) 
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
-. siman_comparemethodsscatter se, methlist(1 3 8 9) 
-Working.....
+. graph drop _all
 
-. siman_comparemethodsscatter, methlist(1 3 8)                      
-Working.....
+. siman comparemethodsscatter, methlist(1 3 8)                      
+siman comparemethodsscatter will draw 4 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition
 
-. siman_comparemethodsscatter se, methlist(1 3 8 9) 
-Working.....
+. graph drop _all
+
+. siman comparemethodsscatter se, methlist(1 3 8 9) 
+siman comparemethodsscatter will draw 4 graphs each showing 4 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
+
+. siman comparemethodsscatter, methlist(1 3 8)                      
+siman comparemethodsscatter will draw 4 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
+
+. siman comparemethodsscatter se, methlist(1 3 8 9) 
+siman comparemethodsscatter will draw 4 graphs each showing 4 methods
+Consider reducing the number of graphs using 'if' condition
 
 . 
 . * method numeric labelled string variable
@@ -842,86 +904,92 @@ xij variables:
 
 . label values method methodl
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         10
-The method values are:            A B C D E F G H I J
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              10
+  Method values:                  A B C D E F G H I J
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             N/A
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            N/A
 _____________________________________________________
 
-. siman_blandaltman, methlist(10 4 8)
-working....
+. siman blandaltman, methlist(10 4 8)
+siman blandaltman will draw 4 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman_blandaltman, methlist(2 9 3)
-working....
+. siman blandaltman, methlist(2 9 3)
+siman blandaltman will draw 4 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . 
 . * String variable method
 . use $testpath/data/simlongESTPM_wideE_wideM4.dta, clear
 
-. siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) or
+. siman setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) or
 > der(method)
-note: converting to long-wide format, creating variable target
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 3: long-wide
-The format for targets is:        long
-The format for methods is:        wide
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            A B
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  A_ B_
 
-Estimates are contained in the dataset
-
-The estimates stub is:            est
-The se stub is:                   se
-The df stub is:                   N/A
-The ci stubs are:                 N/A
-The p stub is:                    N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
-. siman_comparemethodsscatter 
-Working.....
+. graph drop _all
 
-. siman_blandaltman
-working....
+. siman comparemethodsscatter 
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
-. siman_blandaltman est se
-working....
+. siman blandaltman
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman_blandaltman, by(dgm)                                                                        
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+
+. siman blandaltman, by(dgm)                                                                        
 >         
-working....
+siman blandaltman will draw 2 graphs each with 2 panels
 
 . * To test methlist subset, create a dataset with more than 3 string method variables
 . clear all
@@ -998,51 +1066,65 @@ xij variables:
 
 . rename method_string method
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         4
-The method values are:            A B C D
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              4
+  Method values:                  A B C D
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             N/A
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            N/A
 _____________________________________________________
 
-. siman_comparemethodsscatter
-Working.....
+. graph drop _all
 
-. siman_comparemethodsscatter, methlist(A C)                       
-Working.....
+. siman comparemethodsscatter
+siman comparemethodsscatter will draw 4 graphs each showing 4 methods
+Consider reducing the number of graphs using 'if' condition
 
-. siman_comparemethodsscatter, methlist(B C D) 
-Working.....
+. graph drop _all
 
-. siman_comparemethodsscatter, methlist(B C D)                       
-Working.....
+. siman comparemethodsscatter, methlist(A C)                       
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
-. siman_blandaltman       
-working....
+. graph drop _all
 
-. siman_blandaltman, methlist(B A C)  
-working....
+. siman comparemethodsscatter, methlist(B C D) 
+siman comparemethodsscatter will draw 4 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
+
+. siman comparemethodsscatter, methlist(B C D)                       
+siman comparemethodsscatter will draw 4 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition
+
+. siman blandaltman       
+siman blandaltman will draw 4 graphs each with 3 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+
+. siman blandaltman, methlist(B A C)  
+siman blandaltman will draw 4 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . 
 . clear all
@@ -1069,31 +1151,31 @@ working....
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         N/A
-The target values are:            N/A
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         3
-The method values are:            Exponential Weibull Cox
+Targets
+  Variable containing targets:    
+  Number of targets:              1
+  Target values:                  
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  Exponential Weibull Cox
 
-Estimates are contained in the dataset
-
-The estimates variable is:        theta
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             N/A
+Repetition-level output
+  Point estimate variable:        theta
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            N/A
 _____________________________________________________
 
 . siman swarm                                                         
-working.....
+siman swarm will draw 1 graph with 2 panels
 
 . 
 . * Combinations of #methods and #targets for testing matrix
@@ -1158,8 +1240,8 @@ xij variables:
 . tempfile origdata
 
 . save `origdata', replace
-(file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000001.tmp not found)
-file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000001.tmp saved as .dta format
+(file C:\Users\rmjwiww\AppData\Local\Temp\ST_6970_000001.tmp not found)
+file C:\Users\rmjwiww\AppData\Local\Temp\ST_6970_000001.tmp saved as .dta format
 
 . global origdata `origdata'
 
@@ -1170,53 +1252,59 @@ file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000001.tmp saved as .dta format
 
 . gen true = 0.5
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 8 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 8 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
+siman zipplot will draw 1 graph with 8 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . * 3 methods, true variable
 . use ${origdata}, clear
@@ -1227,121 +1315,133 @@ working.....
 
 . gen true = 0.5
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         3
-The method values are:            1 2 3
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  1 2 3
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 12 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 12 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
+siman zipplot will draw 1 graph with 12 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . * > 3 methods, true variable
 . use ${origdata}, clear
 
 . gen true = 0.5
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         10
-The method values are:            1 2 3 4 5 6 7 8 9 10
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              10
+  Method values:                  1 2 3 4 5 6 7 8 9 10
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman scatter
-working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+siman scatter will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman scatter se est
-working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+siman scatter will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
+
+. graph drop _all
 
 . siman comparemethodsscatter
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
   and b are the methods you are particularly interested to compare.
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 10 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
 
 . siman comparemethodsscatter se
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
   and b are the methods you are particularly interested to compare.
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 10 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 9 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 9 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
-Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot
+siman zipplot will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . 
 . * 2 methods, true value
@@ -1350,55 +1450,61 @@ working.....
 . drop if method>2
 (3,200 observations deleted)
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             _true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true
 _____________________________________________________
 
 . 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 8 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 8 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . 
 . siman zipplot
+siman zipplot will draw 1 graph with 8 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . * 3 methods, true value
 . use ${origdata}, clear
@@ -1406,119 +1512,131 @@ working.....
 . drop if method>3
 (2,800 observations deleted)
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         3
-The method values are:            1 2 3
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  1 2 3
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             _true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 12 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 12 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
+siman zipplot will draw 1 graph with 12 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . * > 3 methods, true value
 . use ${origdata}, clear
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         10
-The method values are:            1 2 3 4 5 6 7 8 9 10
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              10
+  Method values:                  1 2 3 4 5 6 7 8 9 10
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             _true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true
 _____________________________________________________
 
 . siman scatter
-working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+siman scatter will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman scatter se est
-working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+siman scatter will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
+
+. graph drop _all
 
 . siman comparemethodsscatter
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
   and b are the methods you are particularly interested to compare.
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 10 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
 
 . siman comparemethodsscatter se
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
   and b are the methods you are particularly interested to compare.
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 10 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 9 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 9 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
-Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot
+siman zipplot will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . 
 . 
@@ -1601,7 +1719,7 @@ xij variables:
 . tempfile origdata
 
 . save ${origdata}, replace
-file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000001.tmp saved as .dta format
+file C:\Users\rmjwiww\AppData\Local\Temp\ST_6970_000001.tmp saved as .dta format
 
 . * 2 methods, true variable
 . drop if method == "C" | method == "D"
@@ -1609,53 +1727,59 @@ file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000001.tmp saved as .dta format
 
 . gen true = 0.5
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            A B
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  A B
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 8 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 8 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot                                                   
+siman zipplot will draw 1 graph with 8 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . * 3 methods, true variable
 . use ${origdata}, clear
@@ -1665,115 +1789,127 @@ working.....
 
 . gen true = 0.5
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         3
-The method values are:            A B C
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  A B C
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 12 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 12 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
+siman zipplot will draw 1 graph with 12 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . * > 3 methods, true variable
 . use ${origdata}, clear
 
 . gen true = 0.5
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         4
-The method values are:            A B C D
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              4
+  Method values:                  A B C D
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman scatter
-working.....
-Warning: 16 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+siman scatter will draw 1 graph with 16 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman scatter se est
-working.....
-Warning: 16 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+siman scatter will draw 1 graph with 16 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 4 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
 
 . siman comparemethodsscatter se
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 4 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 3 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 3 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
-Warning: 1 graphs each of 16 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot
+siman zipplot will draw 1 graph with 16 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . * 2 methods, true value
 . use ${origdata}, clear
@@ -1781,53 +1917,59 @@ working.....
 . drop if method == "C" | method == "D"
 (800 observations deleted)
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            A B
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  A B
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             _true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 8 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 8 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
+siman zipplot will draw 1 graph with 8 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . * 3 methods, true value
 . use ${origdata}, clear
@@ -1835,113 +1977,125 @@ working.....
 . drop if  method == "D"
 (400 observations deleted)
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         3
-The method values are:            A B C
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  A B C
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             _true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 12 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 12 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
+siman zipplot will draw 1 graph with 12 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . * > 3 methods, true value
 . use ${origdata}, clear
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         4
-The method values are:            A B C D
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              4
+  Method values:                  A B C D
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             _true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true
 _____________________________________________________
 
 . siman scatter
-working.....
-Warning: 16 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+siman scatter will draw 1 graph with 16 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman scatter se est
-working.....
-Warning: 16 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+siman scatter will draw 1 graph with 16 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 4 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
 
 . siman comparemethodsscatter se
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 4 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 3 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 3 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
-Warning: 1 graphs each of 16 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot
+siman zipplot will draw 1 graph with 16 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . 
 . 
@@ -2016,8 +2170,8 @@ xij variables:
 . tempfile origdata
 
 . save `origdata', replace
-(file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000003.tmp not found)
-file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000003.tmp saved as .dta format
+(file C:\Users\rmjwiww\AppData\Local\Temp\ST_6970_000003.tmp not found)
+file C:\Users\rmjwiww\AppData\Local\Temp\ST_6970_000003.tmp saved as .dta format
 
 . global origdata `origdata'
 
@@ -2029,53 +2183,59 @@ file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000003.tmp saved as .dta format
 
 . gen true = 0.5
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            1 2
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            A B
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  1 2
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  A B
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 8 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 8 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
+siman zipplot will draw 1 graph with 8 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . * 3 targets, true variable
 . use ${origdata}, clear
@@ -2085,118 +2245,129 @@ working.....
 
 . gen true = 0.5
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         3
-The target values are:            1 2 3
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            A B
+Targets
+  Variable containing targets:    target
+  Number of targets:              3
+  Target values:                  1 2 3
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  A B
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 12 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 12 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 6 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 6 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 6 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
+siman zipplot will draw 1 graph with 12 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 6 panels
 
 . * > 3 targets, true variable
 . use ${origdata}, clear
 
 . gen true = 0.5
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         10
-The target values are:            1 2 3 4 5 6 7 8 9 10
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            A B
+Targets
+  Variable containing targets:    target
+  Number of targets:              10
+  Target values:                  1 2 3 4 5 6 7 8 9 10
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  A B
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman scatter
-working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+siman scatter will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman scatter se est
-working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+siman scatter will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 20 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
 
 . siman comparemethodsscatter se
-Working.....
+Estimate not included in upper triangle (by request)
+siman comparemethodsscatter will draw 20 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
-Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+siman blandaltman will draw 20 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
-Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+. siman blandaltman se
+siman blandaltman will draw 20 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
-Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot
+siman zipplot will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman swarm
-working.....
-Warning: 20 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
+siman swarm will draw 1 graph with 20 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . * 2 targets, true value
 . use ${origdata}, clear
@@ -2204,53 +2375,59 @@ Warning: 20 panels will be created: consider using 'if' or 'by' options as detai
 . drop if  target > 2
 (3,200 observations deleted)
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            1 2
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            A B
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  1 2
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  A B
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             _true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 8 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 8 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
+siman zipplot will draw 1 graph with 8 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . * 3 targets, true value
 . use ${origdata}, clear
@@ -2258,116 +2435,127 @@ working.....
 . drop if target > 3
 (2,800 observations deleted)
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         3
-The target values are:            1 2 3
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            A B
+Targets
+  Variable containing targets:    target
+  Number of targets:              3
+  Target values:                  1 2 3
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  A B
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             _true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 12 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 12 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 6 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 6 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 6 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
+siman zipplot will draw 1 graph with 12 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 6 panels
 
 . * > 3 targets, true value
 . use ${origdata}, clear
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         10
-The target values are:            1 2 3 4 5 6 7 8 9 10
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            A B
+Targets
+  Variable containing targets:    target
+  Number of targets:              10
+  Target values:                  1 2 3 4 5 6 7 8 9 10
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  A B
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             _true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true
 _____________________________________________________
 
 . siman scatter
-working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+siman scatter will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman scatter se est
-working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in
-  siman scatter
+siman scatter will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 20 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
 
 . siman comparemethodsscatter se
-Working.....
+Estimate not included in upper triangle (by request)
+siman comparemethodsscatter will draw 20 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
-Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+siman blandaltman will draw 20 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
-Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+. siman blandaltman se
+siman blandaltman will draw 20 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
-Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot
+siman zipplot will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman swarm
-working.....
-Warning: 20 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
+siman swarm will draw 1 graph with 20 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . 
 .   
@@ -2472,8 +2660,8 @@ xij variables:
 . tempfile origdata
 
 . save `origdata', replace
-(file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000004.tmp not found)
-file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000004.tmp saved as .dta format
+(file C:\Users\rmjwiww\AppData\Local\Temp\ST_6970_000004.tmp not found)
+file C:\Users\rmjwiww\AppData\Local\Temp\ST_6970_000004.tmp saved as .dta format
 
 . global origdata `origdata'
 
@@ -2486,53 +2674,59 @@ file C:\Users\rmjwiww\AppData\Local\Temp\ST_8050_000004.tmp saved as .dta format
 
 . gen true = 0.5
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            A B
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  A B
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 8 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 8 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
+siman zipplot will draw 1 graph with 8 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . * 3 targets, true variable
 . use ${origdata}, clear
@@ -2543,291 +2737,319 @@ working.....
 
 . gen true = 0.5
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         3
-The target values are:            A B C
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    target
+  Number of targets:              3
+  Target values:                  A B C
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 12 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 12 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 6 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 6 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 6 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
+siman zipplot will draw 1 graph with 12 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 6 panels
 
 . * > 3 targets, true variable
 . use ${origdata}, clear
 
 . gen true = 0.5
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         10
-The target values are:            A B C D E F G H I J
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    target
+  Number of targets:              10
+  Target values:                  A B C D E F G H I J
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman scatter
-working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
-  scatter
+siman scatter will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman scatter se est
-working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
-  scatter
+siman scatter will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 20 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
 
 . siman comparemethodsscatter se
-Working.....
+Estimate not included in upper triangle (by request)
+siman comparemethodsscatter will draw 20 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
-Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+siman blandaltman will draw 20 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
-Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+. siman blandaltman se
+siman blandaltman will draw 20 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
-Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot
+siman zipplot will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman swarm
-working.....
-Warning: 20 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
+siman swarm will draw 1 graph with 20 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . * 2 targets, true value
 . use ${origdata}, clear
 
-. drop if  target == "C" | target == "D" | target == "E" | target == "F" | target == "G" | target == "H" 
-> | target == "I" | target == "J"
+. drop if  target == "C" | target == "D" | target == "E" | target == "F" | target == "G" | target ==
+>  "H" | target == "I" | target == "J"
 (3,200 observations deleted)
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            A B
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  A B
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             _true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 8 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 8 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
+siman zipplot will draw 1 graph with 8 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . * 3 targets, true value
 . use ${origdata}, clear
 
-. drop if target == "D" | target == "E" | target == "F" | target == "G" | target == "H" | target == "I" |
->  target == "J"
+. drop if target == "D" | target == "E" | target == "F" | target == "G" | target == "H" | target == 
+> "I" | target == "J"
 (2,800 observations deleted)
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         3
-The target values are:            A B C
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    target
+  Number of targets:              3
+  Target values:                  A B C
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             _true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true
 _____________________________________________________
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 12 panels
 
 . siman scatter se est
-working.....
+siman scatter will draw 1 graph with 12 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 6 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
+siman blandaltman will draw 6 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
+. siman blandaltman se
+siman blandaltman will draw 6 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
+siman zipplot will draw 1 graph with 12 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 6 panels
 
 . * > 3 targets, true value
 . use ${origdata}, clear
 
-. siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+. siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         10
-The target values are:            A B C D E F G H I J
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    target
+  Number of targets:              10
+  Target values:                  A B C D E F G H I J
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             _true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true
 _____________________________________________________
 
 . siman scatter
-working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
-  scatter
+siman scatter will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman scatter se est
-working.....
-Warning: 40 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
-  scatter
+siman scatter will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 20 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
 
 . siman comparemethodsscatter se
-Working.....
+Estimate not included in upper triangle (by request)
+siman comparemethodsscatter will draw 20 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman blandaltman
-working....
-Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+siman blandaltman will draw 20 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman est se
-working....
-Warning: 20 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+. siman blandaltman se
+siman blandaltman will draw 20 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman zipplot
-Warning: 1 graphs each of 40 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot
+siman zipplot will draw 1 graph with 40 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman swarm
-working.....
-Warning: 20 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
+siman swarm will draw 1 graph with 20 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . 
 . * missing target
@@ -2843,66 +3065,72 @@ Warning: 20 panels will be created: consider using 'if' or 'by' options as detai
 
 . drop repitionindi
 
-. siman_setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
+. siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         N/A
-The target values are:            N/A
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    
+  Number of targets:              1
+  Target values:                  
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . * > 1 DGM 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 4 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 2 panels
 
 . siman blandaltman
-working....
+siman blandaltman will draw 2 graphs each with 1 panel
 
 . siman zipplot
+siman zipplot will draw 1 graph with 4 panels
 
-. siman_comparemethodsscatter
-Working.....
+. graph drop _all
+
+. siman comparemethodsscatter
+siman comparemethodsscatter will draw 2 graphs each showing 2 methods
 
 . * 1 DGM
 . drop if dgm == 2
 (2,000 observations deleted)
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 2 panels
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 1 panels
 
 . siman blandaltman
-working....
+siman blandaltman will draw 1 graph with 1 panel
 
 . siman zipplot
+siman zipplot will draw 1 graph with 2 panels
 
-. siman_comparemethodsscatter
-Working.....
+. graph drop _all
+
+. siman comparemethodsscatter
+siman comparemethodsscatter will draw 1 graph showing 2 methods
 
 . 
 . * missing method
@@ -2918,66 +3146,68 @@ Working.....
 
 . drop repitionindi
 
-. siman_setup, rep(rep) dgm(dgm) target(estimand) estimate(est) se(se) true(true)
-Warning: no method specified. siman will proceed assuming there is only one method. If this is a mistake,
-  enter method() option in -siman setup-.
+. siman setup, rep(rep) dgm(dgm) target(estimand) estimate(est) se(se) true(true)
+Warning: no method specified. siman will proceed assuming there is only one method. If this is a
+  mistake, enter method() option in -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         1
-The method values are:            1
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm (2) 
+Methods
+  Variable containing methods:    _method
+  Number of methods:              1
+  Method values:                  1
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . * > 1 DGM 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 4 panels
 
 . *siman swarm
 . * error message as required
 . * siman blandaltman
 . * error message as required
 . siman zipplot
+siman zipplot will draw 1 graph with 4 panels
 
-. * siman_comparemethodsscatter
+. * siman comparemethodsscatter
 . * error message as required
 . * 1 DGM
 . drop if dgm == 2
 (2,000 observations deleted)
 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 2 panels
 
 . * siman swarm
 . * error message as required
 . * siman blandaltman
 . * error message as required
 . siman zipplot
+siman zipplot will draw 1 graph with 2 panels
 
-. * siman_comparemethodsscatter
+. * siman comparemethodsscatter
 . * error message as required
 . 
-. * Testing siman scatter.  Check if have 2 dgms, A (0/1) and B(0/1).  Then siman scatter, by A B if A==0
->  should be same as siman scatter, by B.
+. * Testing siman scatter.  Check if have 2 dgms, A (0/1) and B(0/1).  Then siman scatter, by A B if
+>  A==0 should be same as siman scatter, by B.
 . clear all
 
 . prog drop _all
@@ -2996,40 +3226,41 @@ working.....
 . order rep dgmA dgmB dgmC
 
 . *append using long_long_formats\simlongESTPM_longE_longM.dta
-. siman setup, rep(rep) dgm(dgmA dgmB dgmC) target(estimand) method(method) est(est) se(se) true(true)
+. siman setup, rep(rep) dgm(dgmA dgmB dgmC) target(estimand) method(method) est(est) se(se) true(tru
+> e)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgmA (2) dgmB (2) dgmC (2) 
+  Total number of DGMs:           8
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      8
-The dgm variables (# levels):     dgmA (2) dgmB (2) dgmC (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . siman scatter if dgmA==0, by(dgmA dgmB)
-working.....
+siman scatter will draw 1 graph with 2 panels
 
 . *should be same as 
 . siman scatter, by(dgmB)
-working.....
+siman scatter will draw 1 graph with 2 panels
 
 . * it is!
 . 
@@ -3042,7 +3273,7 @@ working.....
 (simsum example: data from a simulation study comparing 3 ways to handle missing )
 
 . cap noi siman setup, rep(dataset) method(method)
-no estimates, SEs, or confidence intervals specified.  Need to specify at least one for siman to run.
+no estimates, SEs, or confidence intervals specified. Need to specify at least one for siman to run.
 
 . cap noi siman blandaltman                                               
 Data are not in siman format: use siman setup
@@ -3056,34 +3287,34 @@ Data are not in siman format: use siman setup
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         N/A
-The target values are:            N/A
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       N/A
+  Total number of DGMs:           1
 
-The number of methods is:         3
-The method values are:            CC MI_LOGT MI_T
+Targets
+  Variable containing targets:    
+  Number of targets:              1
+  Target values:                  
 
-Data generating mechanism (dgm)
-The total number of dgms is:      1
-The dgm variables (# levels):     N/A
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  CC MI_LOGT MI_T
 
-Estimates are contained in the dataset
-
-The estimates variable is:        b
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             N/A
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            N/A
 _____________________________________________________
 
 . siman blandaltman // note implicit norescale: scales are same in the two graphs
-working....
+siman blandaltman will draw 1 graph with 2 panels
 
 . siman blandaltman, bygraphoptions(yrescale) // yrescale works
-working....
+siman blandaltman will draw 1 graph with 2 panels
 
 . 
 . 
@@ -3132,180 +3363,180 @@ variable betastring was str1 now str4
 . rename betastring beta
 
 . 
-. siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(betatrue)
+. siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(beta
+> true)
   variable beta was long now byte
   (324,000 bytes saved)
-Warning: variable beta, which appears in dgm(), was stored as a string. It has been encoded as numeric so
-  that subsequent siman commands will work. If you require a different order, encode beta as numeric
-  before running -siman setup-.
+Warning: variable beta, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode beta
+  as numeric before running -siman setup-.
   variable mech was long now byte
   (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as numeric so
-  that subsequent siman commands will work. If you require a different order, encode mech as numeric
-  before running -siman setup-.
+Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
+  numeric so that subsequent siman commands will work. If you require a different order, encode mech
+  as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         3
-The target values are:            effect mean0 mean1
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       beta (3) pmiss (2) mech (2) 
+  Total number of DGMs:           12
 
-The number of methods is:         3
-The method values are:            CCA MeanImp Noadj
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              3
+  Target values:                  effect mean0 mean1
 
-Data generating mechanism (dgm)
-The total number of dgms is:      12
-The dgm variables (# levels):     beta (3) pmiss (2) mech (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  CCA MeanImp Noadj
 
-Estimates are contained in the dataset
-
-The estimates variable is:        b
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             betatrue
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            betatrue
 _____________________________________________________
 
 . 
-. siman_scatter
-working.....
-Warning: 108 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
-  scatter
+. siman scatter
+siman scatter will draw 1 graph with 108 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman scatter, by(beta)
-working.....
-
-. siman_reshape, longlong
+siman scatter will draw 1 graph with 3 panels
 
 . siman scatter, by(method)
-working.....
+siman scatter will draw 1 graph with 3 panels
 
 . siman scatter if method == "CCA", name("simanscatter_CCA", replace)
-working.....
-Warning: 36 panels will be created: consider using 'if' condition or 'by' option as detailed in siman
-  scatter
+siman scatter will draw 1 graph with 36 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . 
 . 
 . * Testing siman swarm
 . *************************
 . 
-. siman_swarm                                                          
-working.....
-Warning: 36 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
+. siman swarm                                                          
+siman swarm will draw 1 graph with 36 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman swarm, by(pmiss)              
-working.....
+siman swarm will draw 1 graph with 36 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman swarm, by(mech)
-working.....
-
-. siman_reshape, longlong
+siman swarm will draw 1 graph with 36 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman swarm if method == "Noadj" | method == "MeanImp"   
-working.....
-Warning: 36 panels will be created: consider using 'if' or 'by' options as detailed in siman swarm
+siman swarm will draw 1 graph with 36 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
-. siman swarm if (method == "Noadj" | method == "MeanImp"), by(beta) graphoptions(name("simanswarm_beta",
->  replace))                  
-working.....
+. siman swarm if (method == "Noadj" | method == "MeanImp"), by(beta) name("simanswarm_beta", replace
+> )
+siman swarm will draw 1 graph with 36 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman swarm if (method == "Noadj" | method == "MeanImp"), by(pmiss)
-working.....
+siman swarm will draw 1 graph with 36 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . 
 . * Testing siman blandaltman
 . ****************************
 . 
 . siman blandaltman
-working....
-Warning: 36 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+siman blandaltman will draw 36 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman blandaltman, by(beta)              
-working....
+siman blandaltman will draw 24 graphs each with 3 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman blandaltman, by(mech)
-working....
-
-. siman reshape, longlong
+siman blandaltman will draw 36 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman blandaltman if method == "Noadj" | method == "CCA"  
-working....
-Warning: 36 graphs will be created: consider using 'if' condition as detailed in siman blandaltman
+siman blandaltman will draw 36 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . siman blandaltman if (method == "Noadj" | method == "MeanImp"), by(pmiss) 
-working....
+siman blandaltman will draw 18 graphs each with 2 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
-. siman blandaltman if (method == "CCA" | method == "MeanImp"), by(beta) name("simanba_new", replace)    
->               
-working....
+. siman blandaltman if (method == "CCA" | method == "MeanImp"), by(beta) name("simanba_new", replace
+> )                  
+siman blandaltman will draw 12 graphs each with 3 panels
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . 
 . * Testing siman comparemethodsscatter
 . **************************************
 . serset clear
 
+. graph drop _all
+
 . siman comparemethodsscatter
-Working.....
-Warning: 36 graphs will be created: consider using 'if' condition as detailed in siman
-  comparemethodsscatter
+siman comparemethodsscatter will draw 36 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
 
 . siman comparemethodsscatter, methlist("CCA" "MeanImp") 
-Working.....
-Warning: 36 graphs will be created: consider using 'if' condition as detailed in siman
-  comparemethodsscatter
+siman comparemethodsscatter will draw 36 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
 
 . siman comparemethodsscatter, methlist("Noadj" "MeanImp") name("simancms_new", replace) 
-Working.....
-Warning: 36 graphs will be created: consider using 'if' condition as detailed in siman
-  comparemethodsscatter
+siman comparemethodsscatter will draw 36 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
+
+. graph drop _all
 
 . siman comparemethodsscatter if beta == 1  
-Working.....
+siman comparemethodsscatter will draw 12 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition
 
-. siman comparemethodsscatter if mech == 2, name("simancmsmech", replace)                                
->    
-Working.....
-Warning: 18 graphs will be created: consider using 'if' condition as detailed in siman
-  comparemethodsscatter
+. graph drop _all
+
+. siman comparemethodsscatter if mech == 2, name("simancmsmech", replace)                           
+>         
+siman comparemethodsscatter will draw 18 graphs each showing 3 methods
+Consider reducing the number of graphs using 'if' condition
 
 . 
 . 
 . * Testing siman zipplot
 . ************************
 . 
-. siman_zipplot  
-Warning: 3 graphs each of 36 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot
-Drawing 3 graphs (1 per true value)
+. siman zipplot  
+siman zipplot will draw 1 graph with 108 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman zipplot, by(mech)       
-Drawing 3 graphs (1 per true value)
-
-. siman reshape, longlong 
+siman zipplot will draw 1 graph with 2 panels
 
 . siman zipplot if (method == "Noadj" | method == "MeanImp"), name("simanzip_new", replace) 
-Warning: 3 graphs each of 24 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot
-Drawing 3 graphs (1 per true value)
+siman zipplot will draw 1 graph with 72 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . siman zipplot, by(method pmiss)
-Warning: 3 graphs each of 36 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot
-Drawing 3 graphs (1 per true value)
+siman zipplot will draw 1 graph with 6 panels
 
 . siman zipplot if (method == "CCA" | method == "MeanImp"), by(method mech) 
-Warning: 3 graphs each of 24 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot
-Drawing 3 graphs (1 per true value)
+siman zipplot will draw 1 graph with 4 panels
 
 . siman zipplot if beta == 1  
-Warning: 1 graphs each of 36 panels will be created: consider using 'if' condition or 'by' option as
-  detailed in siman zipplot
+siman zipplot will draw 1 graph with 36 panels
+Consider reducing the number of panels using 'if' condition or 'by' option
 
 . 
 . 
@@ -3316,7 +3547,7 @@ Warning: 1 graphs each of 36 panels will be created: consider using 'if' conditi
 
 . which siman_setup
 C:\ian\git\siman\siman_setup.ado
-*!    version 0.9  3apr2024    
+*!      version 0.10.2  14jun2024       
 
 . use $testpath/data/simlongESTPM_longE_longM.dta, clear
 
@@ -3327,7 +3558,8 @@ C:\ian\git\siman\siman_setup.ado
 
 . drop dgm
 
-. siman_setup, rep(rep) dgm(dgm_string) target(estimand) method(method) estimate(est) se(se) true(true)
+. siman setup, rep(rep) dgm(dgm_string) target(estimand) method(method) estimate(est) se(se) true(tr
+> ue)
   variable dgm_string was long now byte
   (24,000 bytes saved)
 Warning: variable dgm_string, which appears in dgm(), was stored as a string. It has been encoded as
@@ -3337,43 +3569,48 @@ Warning: variable dgm_string, which appears in dgm(), was stored as a string. It
                    SUMMARY OF DATA
 _____________________________________________________
 
-The siman format is:              format 1: long-long
-The format for targets is:        long
-The format for methods is:        long
-The number of targets is:         2
-The target values are:            beta gamma
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm_string (2) 
+  Total number of DGMs:           2
 
-The number of methods is:         2
-The method values are:            1 2
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta gamma
 
-Data generating mechanism (dgm)
-The total number of dgms is:      2
-The dgm variables (# levels):     dgm_string (2) 
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1 2
 
-Estimates are contained in the dataset
-
-The estimates variable is:        est
-The se variable is:               se
-The df variable is:               N/A
-The ci variables are:             N/A
-The p variable is:                N/A
-The true variable is:             true
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
 _____________________________________________________
 
 . 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 8 panels
+
+. graph drop _all
 
 . siman comparemethodsscatter
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . siman zipplot
+siman zipplot will draw 1 graph with 8 panels
 
 . siman blandaltman
-working....
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . 
 . di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"

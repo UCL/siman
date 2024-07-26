@@ -23,7 +23,7 @@ C:\ian\git\siman\siman_swarm.ado
 C:\ian\git\siman\siman_scatter.ado
 *!      version 0.10    18jun2024       
 C:\ian\git\siman\siman_nestloop.ado
-*!      version 0.10    23jun2024       
+*!      version 0.10.1  26jun2024       
 
 . 
 . use $testpath/data/extendedtestdata2.dta, clear
@@ -691,13 +691,25 @@ _____________________________________________________
 . siman analyse, notable
 siman analyse has run successfully
 
-. siman nestloop bias, name(sn5,replace)
+. siman nestloop bias, name(sn5,replace) saving(sn5s,replace) export(sn5e.pdf,replace)
 siman nestloop will draw 3 graphs (3 targets * 1 performance measures)
+(file sn5s_effect_bias.gph not found)
+file sn5s_effect_bias.gph saved
+file sn5e_effect_bias.pdf saved as PDF format
+(file sn5s_mean0_bias.gph not found)
+file sn5s_mean0_bias.gph saved
+file sn5e_mean0_bias.pdf saved as PDF format
+(file sn5s_mean1_bias.gph not found)
+file sn5s_mean1_bias.gph saved
+file sn5e_mean1_bias.pdf saved as PDF format
 
-. siman nestloop bias if estinum==1, name(sn6,replace) nodg legend(row(1)) saving(sn6,replace)
+. foreach target in effect mean0 mean1 {
+  2.         erase sn5s_`target'_bias.gph
+  3.         erase sn5e_`target'_bias.pdf
+  4. }
+
+. siman nestloop bias if estinum==1, name(sn6,replace) nodg legend(row(1))
 siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
-(file sn6.gph not found)
-file sn6.gph saved
 
 . siman nestloop bias if estinum==1, nodg legend(row(1)) methlegend(item)
 siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
@@ -711,10 +723,6 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 >         title(Good nestloop graph for estimand effect) note("") stagger(.05) xlab(none) lcol(red g
 > reen blue)
 siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
-
-. 
-. * tidy up
-. erase sn6.gph
 
 . 
 . di as result  "*** SIMAN NESTLOOP HAS PASSED ALL ITS TESTS ***"

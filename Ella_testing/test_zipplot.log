@@ -23,7 +23,7 @@ C:\ian\git\siman\siman_swarm.ado
 C:\ian\git\siman\siman_scatter.ado
 *!      version 0.10    18jun2024       
 C:\ian\git\siman\siman_nestloop.ado
-*!      version 0.10    23jun2024       
+*!      version 0.10.1  26jun2024       
 
 . 
 . foreach feature in dgm target method {
@@ -31,68 +31,68 @@ C:\ian\git\siman\siman_nestloop.ado
   3.         if "`feature'"=="dgm" local N 5
   4.         forvalues n=1/`N' {
   5.                 dicmd use data/setupdata_`feature'`n', clear
-  6.                 dicmd siman zipplot, name(swarm_`feature'`n', replace) bygr(title(Test siman zi
-> pplot using data `feature'`n'))
+  6.                 dicmd siman zipplot, name(zipplot_`feature'`n', replace) bygr(title(Test siman 
+> zipplot using data `feature'`n'))
   7.         }
   8. }
 use data/setupdata_dgm1, clear
-siman zipplot, name(swarm_dgm1, replace) bygr(title(Test siman zipplot using data dgm1))
+siman zipplot, name(zipplot_dgm1, replace) bygr(title(Test siman zipplot using data dgm1))
 siman zipplot will draw 1 graph with 3 panels
 use data/setupdata_dgm2, clear
-siman zipplot, name(swarm_dgm2, replace) bygr(title(Test siman zipplot using data dgm2))
+siman zipplot, name(zipplot_dgm2, replace) bygr(title(Test siman zipplot using data dgm2))
 siman zipplot will draw 1 graph with 3 panels
 use data/setupdata_dgm3, clear
-siman zipplot, name(swarm_dgm3, replace) bygr(title(Test siman zipplot using data dgm3))
+siman zipplot, name(zipplot_dgm3, replace) bygr(title(Test siman zipplot using data dgm3))
 siman zipplot will draw 1 graph with 6 panels
 use data/setupdata_dgm4, clear
-siman zipplot, name(swarm_dgm4, replace) bygr(title(Test siman zipplot using data dgm4))
+siman zipplot, name(zipplot_dgm4, replace) bygr(title(Test siman zipplot using data dgm4))
 siman zipplot will draw 1 graph with 12 panels
 use data/setupdata_dgm5, clear
-siman zipplot, name(swarm_dgm5, replace) bygr(title(Test siman zipplot using data dgm5))
+siman zipplot, name(zipplot_dgm5, replace) bygr(title(Test siman zipplot using data dgm5))
 siman zipplot will draw 1 graph with 36 panels
 Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_target1, clear
-siman zipplot, name(swarm_target1, replace) bygr(title(Test siman zipplot using data target1))
+siman zipplot, name(zipplot_target1, replace) bygr(title(Test siman zipplot using data target1))
 siman zipplot will draw 1 graph with 9 panels
 use data/setupdata_target2, clear
-siman zipplot, name(swarm_target2, replace) bygr(title(Test siman zipplot using data target2))
+siman zipplot, name(zipplot_target2, replace) bygr(title(Test siman zipplot using data target2))
 siman zipplot will draw 1 graph with 9 panels
 use data/setupdata_target3, clear
-siman zipplot, name(swarm_target3, replace) bygr(title(Test siman zipplot using data target3))
+siman zipplot, name(zipplot_target3, replace) bygr(title(Test siman zipplot using data target3))
 siman zipplot will draw 1 graph with 27 panels
 Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_target4, clear
-siman zipplot, name(swarm_target4, replace) bygr(title(Test siman zipplot using data target4))
+siman zipplot, name(zipplot_target4, replace) bygr(title(Test siman zipplot using data target4))
 siman zipplot will draw 1 graph with 27 panels
 Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_target5, clear
-siman zipplot, name(swarm_target5, replace) bygr(title(Test siman zipplot using data target5))
+siman zipplot, name(zipplot_target5, replace) bygr(title(Test siman zipplot using data target5))
 siman zipplot will draw 1 graph with 27 panels
 Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_target6, clear
-siman zipplot, name(swarm_target6, replace) bygr(title(Test siman zipplot using data target6))
+siman zipplot, name(zipplot_target6, replace) bygr(title(Test siman zipplot using data target6))
 siman zipplot will draw 1 graph with 27 panels
 Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_method1, clear
-siman zipplot, name(swarm_method1, replace) bygr(title(Test siman zipplot using data method1))
+siman zipplot, name(zipplot_method1, replace) bygr(title(Test siman zipplot using data method1))
 siman zipplot will draw 1 graph with 6 panels
 use data/setupdata_method2, clear
-siman zipplot, name(swarm_method2, replace) bygr(title(Test siman zipplot using data method2))
+siman zipplot, name(zipplot_method2, replace) bygr(title(Test siman zipplot using data method2))
 siman zipplot will draw 1 graph with 6 panels
 use data/setupdata_method3, clear
-siman zipplot, name(swarm_method3, replace) bygr(title(Test siman zipplot using data method3))
+siman zipplot, name(zipplot_method3, replace) bygr(title(Test siman zipplot using data method3))
 siman zipplot will draw 1 graph with 18 panels
 Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_method4, clear
-siman zipplot, name(swarm_method4, replace) bygr(title(Test siman zipplot using data method4))
+siman zipplot, name(zipplot_method4, replace) bygr(title(Test siman zipplot using data method4))
 siman zipplot will draw 1 graph with 18 panels
 Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_method5, clear
-siman zipplot, name(swarm_method5, replace) bygr(title(Test siman zipplot using data method5))
+siman zipplot, name(zipplot_method5, replace) bygr(title(Test siman zipplot using data method5))
 siman zipplot will draw 1 graph with 18 panels
 Consider reducing the number of panels using 'if' condition or 'by' option
 use data/setupdata_method6, clear
-siman zipplot, name(swarm_method6, replace) bygr(title(Test siman zipplot using data method6))
+siman zipplot, name(zipplot_method6, replace) bygr(title(Test siman zipplot using data method6))
 siman zipplot will draw 1 graph with 18 panels
 Consider reducing the number of panels using 'if' condition or 'by' option
 

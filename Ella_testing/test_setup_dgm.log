@@ -23,7 +23,7 @@ C:\ian\git\siman\siman_swarm.ado
 C:\ian\git\siman\siman_scatter.ado
 *!      version 0.10    18jun2024       
 C:\ian\git\siman\siman_nestloop.ado
-*!      version 0.10    23jun2024       
+*!      version 0.10.1  26jun2024       
 
 . 
 . forvalues dgmtype = 1/5 {

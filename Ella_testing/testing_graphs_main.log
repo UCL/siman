@@ -23,7 +23,7 @@ C:\ian\git\siman\siman_swarm.ado
 C:\ian\git\siman\siman_scatter.ado
 *!      version 0.10    18jun2024       
 C:\ian\git\siman\siman_nestloop.ado
-*!      version 0.10    23jun2024       
+*!      version 0.10.1  26jun2024       
 
 . 
 . ********************************
@@ -116,7 +116,7 @@ siman zipplot will draw 1 graph with 8 panels
 . siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test1", replace)
 >  
 siman comparemethodsscatter will draw 4 graphs each showing 2 methods
-Consider reducing the number of graphs using 'if' condition or 'by' option
+Consider reducing the number of graphs using 'if' condition
 
 . 
 . siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test1", replace) 
@@ -426,7 +426,7 @@ siman zipplot will draw 1 graph with 8 panels
 . siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test2", replace)
 >  
 siman comparemethodsscatter will draw 4 graphs each showing 2 methods
-Consider reducing the number of graphs using 'if' condition or 'by' option
+Consider reducing the number of graphs using 'if' condition
 
 . 
 . siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test2", replace)        
@@ -711,7 +711,7 @@ siman swarm will draw 1 graph with 4 panels
 . siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test3", replace)
 >  
 siman comparemethodsscatter will draw 4 graphs each showing 2 methods
-Consider reducing the number of graphs using 'if' condition or 'by' option
+Consider reducing the number of graphs using 'if' condition
 
 . 
 . siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test3", replace) 

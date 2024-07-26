@@ -23,7 +23,7 @@ C:\ian\git\siman\siman_swarm.ado
 C:\ian\git\siman\siman_scatter.ado
 *!      version 0.10    18jun2024       
 C:\ian\git\siman\siman_nestloop.ado
-*!      version 0.10    23jun2024       
+*!      version 0.10.1  26jun2024       
 
 . 
 . foreach feature in dgm target method {
@@ -60,22 +60,22 @@ use data/setupdata_target3, clear
 siman cms estimate, name(cms_target3, replace) title(Test siman cms using data target3)
 Standard error not included in lower triangle (by request)
 siman comparemethodsscatter will draw 9 graphs each showing 3 methods
-Consider reducing the number of graphs using 'if' condition or 'by' option
+Consider reducing the number of graphs using 'if' condition
 use data/setupdata_target4, clear
 siman cms estimate, name(cms_target4, replace) title(Test siman cms using data target4)
 Standard error not included in lower triangle (by request)
 siman comparemethodsscatter will draw 9 graphs each showing 3 methods
-Consider reducing the number of graphs using 'if' condition or 'by' option
+Consider reducing the number of graphs using 'if' condition
 use data/setupdata_target5, clear
 siman cms estimate, name(cms_target5, replace) title(Test siman cms using data target5)
 Standard error not included in lower triangle (by request)
 siman comparemethodsscatter will draw 9 graphs each showing 3 methods
-Consider reducing the number of graphs using 'if' condition or 'by' option
+Consider reducing the number of graphs using 'if' condition
 use data/setupdata_target6, clear
 siman cms estimate, name(cms_target6, replace) title(Test siman cms using data target6)
 Standard error not included in lower triangle (by request)
 siman comparemethodsscatter will draw 9 graphs each showing 3 methods
-Consider reducing the number of graphs using 'if' condition or 'by' option
+Consider reducing the number of graphs using 'if' condition
 use data/setupdata_method1, clear
 Skipped (only one method)
 use data/setupdata_method2, clear
@@ -84,22 +84,22 @@ use data/setupdata_method3, clear
 siman cms estimate, name(cms_method3, replace) title(Test siman cms using data method3)
 Standard error not included in lower triangle (by request)
 siman comparemethodsscatter will draw 6 graphs each showing 3 methods
-Consider reducing the number of graphs using 'if' condition or 'by' option
+Consider reducing the number of graphs using 'if' condition
 use data/setupdata_method4, clear
 siman cms estimate, name(cms_method4, replace) title(Test siman cms using data method4)
 Standard error not included in lower triangle (by request)
 siman comparemethodsscatter will draw 6 graphs each showing 3 methods
-Consider reducing the number of graphs using 'if' condition or 'by' option
+Consider reducing the number of graphs using 'if' condition
 use data/setupdata_method5, clear
 siman cms estimate, name(cms_method5, replace) title(Test siman cms using data method5)
 Standard error not included in lower triangle (by request)
 siman comparemethodsscatter will draw 6 graphs each showing 3 methods
-Consider reducing the number of graphs using 'if' condition or 'by' option
+Consider reducing the number of graphs using 'if' condition
 use data/setupdata_method6, clear
 siman cms estimate, name(cms_method6, replace) title(Test siman cms using data method6)
 Standard error not included in lower triangle (by request)
 siman comparemethodsscatter will draw 6 graphs each showing 3 methods
-Consider reducing the number of graphs using 'if' condition or 'by' option
+Consider reducing the number of graphs using 'if' condition
 
 . 
 . di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
