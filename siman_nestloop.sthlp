@@ -51,6 +51,15 @@ An alternative is {cmd:connect(L)} which shows each performance measure value at
 {synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
 {synopt:{it:graph_options}}Most of the valid options for {help line:line} are available.{p_end}
 
+{syntab:Saving options}
+
+{synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata format. 
+The graph name is {it:namestub} with the target and performance measures appended.{p_end}
+{synopt:{opt exp:ort(namestub[.fileformat, export_options])}}exports each graph to disk in non-Stata format. 
+The graph name is {it:namestub} with the target and performance measures appended. 
+{it:export_options} are options for {help graph export}. 
+Either {it:fileformat} or {it:as()} must be specified.{p_end}
+
 {marker description}{...}
 {title:Description}
 

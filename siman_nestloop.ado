@@ -1,4 +1,5 @@
-*!	version 0.10	23jun2024	
+*!	version 0.10.1	26jun2024	
+*	version 0.10.1	26jun2024	IW added saving() and export() options
 *	version 0.10	23jun2024	IW Correct handling of if/in
 *								PMs default to just bias or mean
 *								NB reduce version # to match other programs
@@ -30,7 +31,7 @@ syntax [anything] [if], ///
 	DGPAttern(string) DGLAbsize(string) DGSTyle(string) DGLWidth(string) /// control descriptor graph
 	debug pause nodg METHLEGend(string) force /// undocumented
 	LColor(string) LPattern(string) LSTYle(string) LWidth(string) /// twoway options for main graph
-	name(string) * /// twoway options for overall graph
+	NAMe(string) SAVing(string) EXPort(string) * /// twoway options for overall graph
 	] 
 
 foreach thing in `_dta[siman_allthings]' {
@@ -39,13 +40,13 @@ foreach thing in `_dta[siman_allthings]' {
 
 * Check DGMs are in the dataset, if not produce an error message
 if "`dgm'"=="" {
-	di as error "dgm variable is missing: can not run nested loop plot."
+	di as error "siman nestloop requires at least 2 dgm variables."
 	exit 498
 }
 	
 * If only 1 dgm in the dataset, produce error message as nothing will be graphed
 if `ndgmvars'==1 {
-	di as error "Only 1 dgmvar in the dataset, nothing to graph."
+	di as error "siman nestloop expects at least 2 dgm variables."
 	if mi("`force'") exit 498
 }
 
@@ -88,6 +89,26 @@ else {
 }
 if wordcount("`name'_something")>1 {
 	di as error "Something has gone wrong with name()"
+	exit 498
+}
+
+* parse optional saving
+if !mi(`"`saving'"') {
+	gettoken saving savingopts : saving, parse(",")
+	local saving = trim("`saving'")
+}
+if wordcount("`saving'_something")>1 {
+	di as error "Something has gone wrong with saving()"
+	exit 498
+}
+
+* parse optional export (needs 
+if !mi(`"`export'"') {
+	gettoken export exportopts : export, parse(".")
+	local export = trim("`export'")
+}
+if wordcount("`export'_something")>1 {
+	di as error "Something has gone wrong with export()"
 	exit 498
 }
 
@@ -401,6 +422,7 @@ foreach thispm of local pmlist { // loop over PMs
 			local note note(`target'=`thistarget')
 			local targetname _`thistarget'
 		}
+		if !mi("`saving'") local savingopt saving(`saving'`targetname'_`thispm'`savingopts')
 		if !mi("`debug'") & `ngraphs'>1 di as text "Drawing graph for `target'=`thistarget', PM=`thispm'..."
 		local graph_cmd graph twoway 										///
 			`main_graph_cmd'												///
@@ -410,7 +432,7 @@ foreach thispm of local pmlist { // loop over PMs
 			ytitle("`thispm'") 												///
 			xla(1/`nscenarios') yla(,nogrid) 								///
 			`descriptor_labels_cmd'											///
-			name(`name'`targetname'_`thispm' `nameopts')				    ///
+			name(`name'`targetname'_`thispm'`nameopts') `savingopt'	    ///
 			`note' `yline'													///
 			`options'
 
@@ -420,7 +442,14 @@ foreach thispm of local pmlist { // loop over PMs
 			pause Press F9 to recall, optionally edit and run the graph command
 		}
 		`graph_cmd'
-		
+		if !mi("`export'") {
+			local graphexportcmd graph export `export'`targetname'_`thispm'`exportopts'
+			if !mi("`debug'") di `"`graphexportcmd'"'
+			cap `graphexportcmd'
+			if _rc di as error "Error in export() option:"
+			`graphexportcmd'
+		}
+
 	} // end of loop over targets
 
 } // end of main loop of PMs

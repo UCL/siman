@@ -154,7 +154,7 @@ if !mi("`debug'") di as input `"methlist = `methlist'"'
 * count methods & choose type
 local nmethods : word count `methlist'
 if `nmethods' < 2 {
-	di as error "There are not enough methods to compare, siman comparemethodsscatter requires at least 2 methods."
+	di as error "{p 0 2}siman comparemethodsscatter requires at least 2 methods to compare.{p_end}"
 	exit 498
 }
 local type `matrix' `combine'

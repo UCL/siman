@@ -95,7 +95,7 @@ else {
 	local nummethodnew = `r(r)'
 }
 if `nummethodnew' < 2 {
-	di as error "{p 0 2}There are not enough methods to compare: siman swarm requires at least 2 methods.{p_end}"
+	di as error "{p 0 2}siman swarm requires at least 2 methods to compare.{p_end}"
 	exit 498
 }
 
