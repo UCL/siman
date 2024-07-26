@@ -1,32 +1,29 @@
 
 . siman which
 C:\ian\git\siman\siman.ado
-*!version 0.9  14jun2024
+*!      version 0.10    25jul2024       
 C:\ian\git\siman\siman_setup.ado
 *!      version 0.10.2  14jun2024       
 C:\ian\git\siman\siman_describe.ado
-*! version 0.7  14jun2024       IW streamline for longlong only; calculate #dgms without assuming fa
-> ctorial; remove commented out code
+*!      version 0.7     14jun2024       
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.9.1        14jun2024               IW remove code for nformat!=1 and nmethod!=1
+*!      version 0.9.1   14jun2024               
 C:\ian\git\siman\siman_table.ado
-*! version 0.8.3   3apr2024
+*!      version 0.8.3   3apr2024
 C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10    23jun2024       IW Clean up handling of if/in
-*! version 1.13.2  15dec2023
+*!      version 0.10    23jun2024       
 C:\ian\git\siman\siman_zipplot.ado
-*! version 0.10 19jul2024
-*!  version 1.9 22apr2024
+*!      version 0.10    19jul2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*! version 1.9.19 2may2024
+*!      version 0.10    25jun2024       
 C:\ian\git\siman\siman_blandaltman.ado
-*!      version 0.10    24jun2024       IW Correct handling of if/in
+*!      version 0.10    24jun2024
 C:\ian\git\siman\siman_swarm.ado
-*! version 0.10 19jul2024
+*!      version 0.10    19jul2024
 C:\ian\git\siman\siman_scatter.ado
-*!      version 0.10    18jun2024       IW Clean up handling of varlist, if/in, by
+*!      version 0.10    18jun2024       
 C:\ian\git\siman\siman_nestloop.ado
-*!      version 0.10    23jun2024       IW Correct handling of if/in
+*!      version 0.10    23jun2024       
 
 . 
 . forvalues methodtype = 1/6 {
@@ -127,38 +124,32 @@ C:\ian\git\siman\siman_nestloop.ado
 methodtype = 1
 (90,000 observations deleted)
 (12,000 observations deleted)
-(file data/setupdata_method1.dta not found)
 file data/setupdata_method1.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 2
 (90,000 observations deleted)
 (12,000 observations deleted)
-(file data/setupdata_method2.dta not found)
 file data/setupdata_method2.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 3
 (90,000 observations deleted)
-(file data/setupdata_method3.dta not found)
 file data/setupdata_method3.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 4
 (90,000 observations deleted)
-(file data/setupdata_method4.dta not found)
 file data/setupdata_method4.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 5
 (90,000 observations deleted)
-(file data/setupdata_method5.dta not found)
 file data/setupdata_method5.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 6
 (90,000 observations deleted)
-(file data/setupdata_method6.dta not found)
 file data/setupdata_method6.dta saved
 siman analyse has run successfully
 siman analyse has run successfully

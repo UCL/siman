@@ -1,31 +1,29 @@
 
 . siman which
 C:\ian\git\siman\siman.ado
-*!version 0.3  08aug2023
+*!      version 0.10    25jul2024       
 C:\ian\git\siman\siman_setup.ado
-*!    version 0.9.1 12apr2024    remove chars ifsetup, insetup
+*!      version 0.10.2  14jun2024       
 C:\ian\git\siman\siman_describe.ado
-*! version 0.5.1   13mar2024
+*!      version 0.7     14jun2024       
 C:\ian\git\siman\siman_analyse.ado
-*! version 0.7     3apr2024
+*!      version 0.9.1   14jun2024               
 C:\ian\git\siman\siman_table.ado
-*! version 0.8.3   3apr2024
-C:\ian\git\siman\siman_reshape.ado
-*!  version 0.3.4   06nov2023
+*!      version 0.8.3   3apr2024
 C:\ian\git\siman\siman_lollyplot.ado
-*! version 1.13.2  15dec2023
+*!      version 0.10    23jun2024       
 C:\ian\git\siman\siman_zipplot.ado
-*!  version 1.9 22apr2024
+*!      version 0.10    19jul2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*! version 1.9.18 25oct2023
+*!      version 0.10    25jun2024       
 C:\ian\git\siman\siman_blandaltman.ado
-*!  version 1.7 22apr2024
+*!      version 0.10    24jun2024
 C:\ian\git\siman\siman_swarm.ado
-*! version 1.10 22apr2024
+*!      version 0.10    19jul2024
 C:\ian\git\siman\siman_scatter.ado
-*! version 1.7 22apr2024
+*!      version 0.10    18jun2024       
 C:\ian\git\siman\siman_nestloop.ado
-*! version 1.8.2   17aug2023
+*!      version 0.10    23jun2024       
 
 . 
 .  
@@ -92,66 +90,79 @@ _____________________________________________________
 . 
 . 
 . siman scatter
-working.....
+siman scatter will draw 1 graph with 8 panels
 
 . if ${detail} == 1 siman scatter est se, name(est_onyaxis)
-working.....
+siman scatter will draw 1 graph with 8 panels
 
 . if ${detail} == 1 siman scatter se est, name(se_onyaxis)
-working.....
+siman scatter will draw 1 graph with 8 panels
 
 . * 1 panel per dgm, method and target combination
 . 
 . if ${detail} == 1 siman scatter, by(dgm)
-working.....
+siman scatter will draw 1 graph with 2 panels
 
 . * by dgm only
 . if ${detail} == 1 siman scatter if dgm == 1, by(method)
-working.....
+siman scatter will draw 1 graph with 2 panels
 
 . * by method only
 . if ${detail} == 1 siman scatter, by(estimand)
-working.....
+siman scatter will draw 1 graph with 2 panels
 
 . * by estimand only
 . 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 4 panels
 
 . * 1 panel per dgm and target combination, method on y-axis
 . if ${detail} == 1 siman swarm if estimand == 1
-working.....
+siman swarm will draw 1 graph with 2 panels
 
 . if ${detail} == 1 siman swarm if estimand == 2
-working.....
+siman swarm will draw 1 graph with 2 panels
 
 . 
+. serset clear
+
+. graph drop _all
+
 . siman comparemethodsscatter 
-Working.....
+siman comparemethodsscatter will draw 4 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition or 'by' option
 
 . * 1 graph per dgm and target, comparing methods
+. serset clear
+
+. graph drop _all
+
 . if ${detail} == 1 siman comparemethodsscatter if estimand == 1
-Working.....
+siman comparemethodsscatter will draw 2 graphs each showing 2 methods
 
 . * metlist option too
 . 
 . siman blandaltman 
-working....
+siman blandaltman will draw 4 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . * 1 graph per dgm and target combination, comparison of methods
 . if ${detail} == 1 siman blandaltman if dgm ==1
-working....
+siman blandaltman will draw 2 graphs each with 1 panel
 
 . if ${detail} == 1 siman blandaltman if estimand == 2
-working....
+siman blandaltman will draw 2 graphs each with 1 panel
 
 . 
 . siman zipplot
+siman zipplot will draw 1 graph with 8 panels
 
 . * 1 panel per dgm, method and target combination
 . if ${detail} == 1 siman zipplot, by(estimand) 
+siman zipplot will draw 1 graph with 2 panels
 
 . if ${detail} == 1 siman zipplot, by(method) 
+siman zipplot will draw 1 graph with 2 panels
 
 . 
 . siman analyse
@@ -343,15 +354,10 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 . 
 . siman lollyplot
 Performance measures not specified: defaulting to bias empse cover
-Drawing 2 graphs (one per target)...
+siman lollyplot will draw 2 graphs with 6 panels (3 PMs by 2 DGMs)
 
 . 
-. serset clear
-
-. siman nestloop
-Performance measures not specified: defaulting to bias empse cover
-Drawing 6 graphs (2 targets * 3 performance measures)...
-
+. * siman nestloop - only one dgmvar
 . 
 . 
 . * testing setup and reshape via the chars (could be expanded)
@@ -359,18 +365,17 @@ Drawing 6 graphs (2 targets * 3 performance measures)...
 . * setup data in LW - this is known to be correct (makes other programs work)
 . use $testpath/data/extendedtestdata2.dta, clear
 
-. reshape wide b se true, i(rep beta pmiss mech estimand) j(method) string
+. reshape wide b se, i(rep beta pmiss mech estimand) j(method) string
 (j = CCA MeanImp Noadj)
 
 Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
 Number of observations          108,000   ->   36,000      
-Number of variables                   9   ->   14          
+Number of variables                   9   ->   12          
 j variable (3 values)            method   ->   (dropped)
 xij variables:
                                       b   ->   bCCA bMeanImp bNoadj
                                      se   ->   seCCA seMeanImp seNoadj
-                                   true   ->   trueCCA trueMeanImp trueNoadj
 -----------------------------------------------------------------------------
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(CCA MeanImp Noadj) target(estimand) est(b) se(se
@@ -394,22 +399,22 @@ Targets
   Target values:                  effect mean0 mean1
 
 Methods
-  Variable containing methods:    CCA MeanImp Noadj
+  Variable containing methods:    method
   Number of methods:              3
   Method values:                  CCA MeanImp Noadj
 
 Repetition-level output
-  Point estimate stub:            b
-  SE stub:                        se
-  df stub:                        N/A
-  Conf. limit stubs:              N/A
-  p-value stub:                   N/A
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
   True value variable:            true
 _____________________________________________________
 
-. assert "`: char _dta[siman_nmethod]'" == "3"
+. assert "`: char _dta[siman_nummethod]'" == "3"
 
-. assert "`: char _dta[siman_method]'" == "CCA MeanImp Noadj"
+. assert "`: char _dta[siman_valmethod]'" == "CCA MeanImp Noadj"
 
 . 
 . * setup data in LL and reshape to LW
@@ -449,11 +454,9 @@ Repetition-level output
   True value variable:            true
 _____________________________________________________
 
-. siman reshape, longwide
+. assert "`: char _dta[siman_nummethod]'" == "3"
 
-. assert "`: char _dta[siman_nmethod]'" == "3"
-
-. assert "`: char _dta[siman_method]'" == "CCA MeanImp Noadj"
+. assert "`: char _dta[siman_valmethod]'" == "CCA MeanImp Noadj"
 
 . 
 . 
@@ -539,22 +542,22 @@ _____________________________________________________
 
 . 
 . siman scatter if beta==1 & pmiss==1 & mech==1
-working.....
+siman scatter will draw 1 graph with 9 panels
 
 . * 1 panel per dgm, target and method 
 . if ${detail} == 1 siman scatter if beta==1 & pmiss==1 & mech==1 & method == "CCA"
-working.....
+siman scatter will draw 1 graph with 3 panels
 
 . 
 . siman swarm if beta==1 & pmiss==1 & mech==1
-working.....
+siman swarm will draw 1 graph with 3 panels
 
 . * 1 panel per dgm level(s) and target, method on y-axis
 . * for the first panel in the all-graph display (beta level 1, pmiss level 1, mech level 1, estiman
 > d == "effect"), the means per
 . * method have a very small difference, visible as follows:
 . if ${detail} == 1 siman swarm if beta == 1 & pmiss == 1 & mech == 1 & estimand == "effect"
-working.....
+siman swarm will draw 1 graph with 1 panels
 
 . * FYI:
 . * mean method CCA: 0.0025341
@@ -563,20 +566,22 @@ working.....
 . 
 . serset clear
 
+. graph drop _all // sometimes helps
+
 . * siman comparemethodsscatter
 . * one graph per dgm and target combination, comparing methods - too slow
 . siman comparemethodsscatter if beta == 1 & pmiss == 1 & mech == 2 & estimand=="effect"
-Working.....
+siman comparemethodsscatter will draw 1 graph showing 3 methods
 
 . * one graph per target, comparing methods
 . 
 . siman blandaltman if beta == 1 & pmiss == 2 & mech == 2
-working....
+siman blandaltman will draw 3 graphs each with 2 panels
 
 . * 1 graph per combination of dgm levels and target, by method difference
 . 
 . siman zipplot if beta == 1 & pmiss == 2 & mech == 2
-Drawing 2 graphs (1 per true value)
+siman zipplot will draw 1 graph with 9 panels
 
 . * 1 panel per dgm, target and method combination, 1 graph per beta (as defines y-axis)
 . 
@@ -2251,14 +2256,13 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 . 
 . siman lollyplot if mech==2 & estimand=="effect"
 Performance measures not specified: defaulting to bias empse cover
-Drawing graph...
-Warning: graph will have 6 columns of panels: consider using 'if' condition as detailed in siman
-  lollyplot
+Ignoring non-varying dgm variable mech
+siman lollyplot will draw 1 graph with 18 panels (3 PMs by 6 DGMs)
 
 . 
 . siman nestloop
-Performance measures not specified: defaulting to bias empse cover
-Drawing 9 graphs (3 targets * 3 performance measures)...
+Performance measures not specified: defaulting to bias
+siman nestloop will draw 3 graphs (3 targets * 1 performance measures)
 
 . 
 . 
@@ -2277,8 +2281,8 @@ Data-generating mechanism (DGM)
 
 Targets
   Variable containing targets:    
-  Number of targets:              N/A
-  Target values:                  N/A
+  Number of targets:              1
+  Target values:                  
 
 Methods
   Variable containing methods:    method
@@ -2298,28 +2302,29 @@ _____________________________________________________
 
 . 
 . siman scatter 
-working.....
+siman scatter will draw 1 graph with 9 panels
 
 . 
 . siman swarm
-working.....
+siman swarm will draw 1 graph with 3 panels
 
 . 
+. graph drop _all
+
 . siman comparemethodsscatter if dgm==1
-Working.....
+siman comparemethodsscatter will draw 1 graph showing 3 methods
 
 . 
 . siman blandaltman 
-working....
+siman blandaltman will draw 3 graphs each with 2 panels
 
 . 
 . siman zipplot
+siman zipplot will draw 1 graph with 9 panels
 
 . 
+. * siman nestloop - no because only one dgmvar
 . 
-. * trellis
-. 
-. * nestloop
 . 
 . use $testpath/nestloop/res.dta, clear
 
@@ -2379,20 +2384,20 @@ Data-generating mechanism (DGM)
 
 Targets
   Variable containing targets:    
-  Number of targets:              N/A
-  Target values:                  N/A
+  Number of targets:              1
+  Target values:                  
 
 Methods
-  Variable containing methods:    peto g2 limf peters trimfill
+  Variable containing methods:    method
   Number of methods:              5
   Method values:                  peto g2 limf peters trimfill
 
 Repetition-level output
-  Point estimate stub:            exp
-  SE stub:                        var2
-  df stub:                        N/A
-  Conf. limit stubs:              N/A
-  p-value stub:                   N/A
+  Point estimate variable:        exp
+  SE variable:                    var2
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
   True value variable:            theta
 _____________________________________________________
 
@@ -2407,7 +2412,7 @@ _____________________________________________________
 . * Recreating Gerta's graph, Figure 2
 . siman nestloop mean, dgmorder(-theta_new rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") x
 > label(none) xtitle("")
-Drawing graph...
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
