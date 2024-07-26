@@ -46,7 +46,7 @@ The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:ta
 
 {synopt:{opt graphop:tions(string)}}  graph options for the overall graph that need to be outside the {it:by} option: e.g. xtitle(), ytitle(). This must not include name().
 
-{synopt:{opt name(string)}}  the stub for the graph name, to which is appended "_estimate" or "_se". Deafult is "simanswarm"
+{synopt:{opt name(string)}}  the stub for the graph name, to which is appended "_estimate" or "_se". Default is "simanswarm"
 
 {synopt:graph options}  siman swarm will attempt to allocate graph options as scatteroptions, bygraphoptions or graphoptions.
 

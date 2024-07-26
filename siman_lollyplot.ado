@@ -231,7 +231,7 @@ qui gen `ref'=.
 qui replace `ref' = 0 if inlist(_perfmeascode, "bias", "relerror", "relprec")
 qui replace `ref' = $S_level if _perfmeascode=="cover"
 if `refpower'>=0 qui replace `ref' = `refpower' if _perfmeascode=="power"
-qui replace `ref' = `true' if _perfmeascode=="mean"
+if !mi("`true'") qui replace `ref' = `true' if _perfmeascode=="mean"
 
 * gen thelab variable - numerical value that will label each graph
 local labformat1 : word 1 of `labformat'

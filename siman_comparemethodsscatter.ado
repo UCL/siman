@@ -198,7 +198,9 @@ if `nmethods' > 5 {
 }
 
 // RESHAPE METHODS TO WIDE
-cap drop `p' `lci' `uci' `df' `true' `method'
+* drop unwanted variables, but only drop true if it's not a dgmvar
+local truedrop : list true - dgm
+cap drop `p' `lci' `uci' `df' `method' `truedrop' 
 qui reshape wide `estimate' `se', i(`dgm' `target' `rep') j(`newmethod')
 if !mi("`debug'") di as input "reshape successful"
 

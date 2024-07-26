@@ -377,6 +377,7 @@ cap ds __*, not // picks out everything except tempvars
 if _rc unab allvars : _all
 else local allvars = r(varlist)
 local simanvars `longvars' `simanvars' `widevars' `truevars'
+local simanvars : list uniq simanvars // remove duplicate if true is a dgmvar
 local toomany : list allvars - simanvars
 local toofew : list simanvars - allvars
 if !mi("`toomany'") {
