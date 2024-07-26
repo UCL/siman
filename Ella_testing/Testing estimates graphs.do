@@ -1,4 +1,10 @@
-* Testing estimates graph options
+/* 
+"Testing estimates graph.do"
+Test the graphs that use estimates data (i.e. not lollyplot, nestloop)
+Extensive, slow and largely redundant
+IW updated 26jul2024
+*/
+
 local filename Testing estimates graphs
 
 prog drop _all
@@ -11,25 +17,25 @@ log using "`filename'", replace text nomsg
 siman which
 
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
-siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
 * siman scatter
-siman_scatter, ytitle("test y-title") xtitle("test x-title") name("test") 
-siman_scatter, ytitle("test y-title") xtitle("test x-title")     
-siman_scatter 
-siman_scatter if dgm==2, name(siman_scatter_dgm2)
+siman scatter, ytitle("test y-title") xtitle("test x-title") name("test", replace) 
+siman scatter, ytitle("test y-title") xtitle("test x-title")     
+siman scatter 
+siman scatter if dgm==2, name(siman_scatter_dgm2, replace)
 
-* siman_swarm
-siman_swarm
-siman_swarm, meanoff scheme(s1color) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title"))
-siman_swarm, scheme(economist) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title") xtitle("test x-title"))
-siman_swarm, graphoptions(ytitle("test y-title") xtitle("test x-title") name("test2", replace))
-siman_swarm if dgm == 1   
+* siman swarm
+siman swarm
+siman swarm, nomean scheme(s1color) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title"))
+siman swarm, scheme(economist) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title") xtitle("test x-title"))
+siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name(test2, replace)
+siman swarm if dgm == 1   
 
 
-*siman_zipplot
-siman_zipplot
-siman_zipplot, by(dgm estimand method)
+*siman zipplot
+siman zipplot
+siman zipplot, by(dgm estimand method)
 
 siman zipplot, scheme(scheme(s2color)) legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) 
@@ -39,8 +45,8 @@ coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
 drop true
 gen true = -0.5
-siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
-siman_zipplot
+siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+siman zipplot
 
 
 * Check dgm labels when dgm numeric with string labels
@@ -51,10 +57,11 @@ label define dgmvar 1 "A" 2 "B"
 label values dgm dgmvar
 label define methodvar 1 "X" 2 "Y_"
 label values method methodvar
-siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman scatter                  
 siman zipplot                  
 siman swarm                   
+graph drop _all
 siman comparemethodsscatter 
 siman blandaltman  
 * check works ok
@@ -64,29 +71,33 @@ siman analyse
 * Different true values per target
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
 replace true=0.5 if estimand=="beta"
-siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
-siman_zipplot  
-siman_zipplot, scheme(scheme(economist)) legend(order(4 "Covering" 3 "Not covering")) xtit("x-title") ytit("y-title") ylab(0 40 100) ///
+siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+siman zipplot  
+siman zipplot, scheme(scheme(economist)) legend(order(4 "Covering" 3 "Not covering")) xtit("x-title") ytit("y-title") ylab(0 40 100) ///
 noncoveroptions(pstyle(p3)) coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50)) truegraphoptions(pstyle(p6))
 
 * siman scatter
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
-siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
-siman_scatter
-siman_scatter, by(dgm)
-siman_scatter, by(estimand method)
-siman_scatter, ytitle("test y-title") xtitle("test x-title") scheme(economist) bygraphoptions(title("main-title"))
-siman_scatter, ytitle("test y-title") xtitle("test x-title") scheme(s2mono) by(dgm) bygraphoptions(title("main-title")) 
+siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+siman scatter
+siman scatter, by(dgm)
+siman scatter, by(estimand method)
+siman scatter, ytitle("test y-title") xtitle("test x-title") scheme(economist) bygraphoptions(title("main-title"))
+siman scatter, ytitle("test y-title") xtitle("test x-title") scheme(s2mono) by(dgm) bygraphoptions(title("main-title")) 
 
 * siman comparemethodsscatter
-siman_comparemethodsscatter 
-siman_comparemethodsscatter, scheme(economist) 
+graph drop _all
+siman comparemethodsscatter, scheme(economist) 
 * to change title in main graph
-siman_comparemethodsscatter, title("test")
+graph drop _all
+siman comparemethodsscatter, title("test")
 * to have subtitles in consituent graphs (looks messy, but just for testing)
-siman_comparemethodsscatter, subgr(xtit("test"))
-siman_comparemethodsscatter, name("test")     
-siman_comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("test", replace)    
+graph drop _all
+siman comparemethodsscatter, subgr(xtit("test"))
+graph drop _all
+siman comparemethodsscatter, name("test", replace)     
+graph drop _all
+siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("test", replace)    
 
 clear all
 prog drop _all
@@ -106,20 +117,22 @@ expand 2, gen(dupindicator)
 replace dgm=2 if dupindicator==1
 drop dupindicator
 *drop if method>4
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
-siman_comparemethodsscatter
-siman_comparemethodsscatter, by(target)  
-siman_blandaltman est se
-siman_blandaltman, by(dgm)   
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
+graph drop _all
+siman comparemethodsscatter
+graph drop _all
+siman comparemethodsscatter, by(target)  
+siman blandaltman se
+siman blandaltman, by(dgm)   
 siman blandaltman if target == "gamma"                     
-siman_blandaltman, bygraphoptions(norescale)
-siman_blandaltman, methlist(2 8)
-siman_blandaltman, methlist(3 7) by(dgm)  
-siman_blandaltman, methlist(10 4 8)
-siman_blandaltman, methlist(2 9 3)                
-siman_blandaltman
-siman_blandaltman, ytitle("test y-title") xtitle("test x-title") name("yabberdabberdoo", replace) 
-siman_blandaltman, ytitle("test y-title") xtitle("test x-title")
+siman blandaltman, bygraphoptions(norescale)
+siman blandaltman, methlist(2 8)
+siman blandaltman, methlist(3 7) by(dgm)  
+siman blandaltman, methlist(10 4 8)
+siman blandaltman, methlist(2 9 3)                
+siman blandaltman
+siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("yabberdabberdoo", replace) 
+siman blandaltman, ytitle("test y-title") xtitle("test x-title")
 
 clear all
 prog drop _all
@@ -138,15 +151,23 @@ expand 2, gen(dupindicator)
 replace dgm=2 if dupindicator==1
 drop dupindicator
 *drop if method>4
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
-siman_comparemethodsscatter
-siman_comparemethodsscatter se                             
-siman_comparemethodsscatter est
-siman_comparemethodsscatter, methlist(3 8) 
-siman_comparemethodsscatter, methlist(1 3 8)                      
-siman_comparemethodsscatter se, methlist(1 3 8 9) 
-siman_comparemethodsscatter, methlist(1 3 8)                      
-siman_comparemethodsscatter se, methlist(1 3 8 9) 
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
+graph drop _all
+siman comparemethodsscatter
+graph drop _all
+siman comparemethodsscatter se                             
+graph drop _all
+siman comparemethodsscatter est
+graph drop _all
+siman comparemethodsscatter, methlist(3 8) 
+graph drop _all
+siman comparemethodsscatter, methlist(1 3 8)                      
+graph drop _all
+siman comparemethodsscatter se, methlist(1 3 8 9) 
+graph drop _all
+siman comparemethodsscatter, methlist(1 3 8)                      
+graph drop _all
+siman comparemethodsscatter se, methlist(1 3 8 9) 
 
 * method numeric labelled string variable
 clear all
@@ -167,17 +188,18 @@ replace dgm=2 if dupindicator==1
 drop dupindicator
 label define methodl 1 "A" 2 "B" 3 "C" 4 "D" 5 "E" 6 "F" 7 "G" 8 "H" 9 "I" 10 "J"
 label values method methodl
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
-siman_blandaltman, methlist(10 4 8)
-siman_blandaltman, methlist(2 9 3)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
+siman blandaltman, methlist(10 4 8)
+siman blandaltman, methlist(2 9 3)
 
 * String variable method
 use $testpath/data/simlongESTPM_wideE_wideM4.dta, clear
-siman_setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) order(method)
-siman_comparemethodsscatter 
-siman_blandaltman
-siman_blandaltman est se
-siman_blandaltman, by(dgm)                                                                                
+siman setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) order(method)
+graph drop _all
+siman comparemethodsscatter 
+siman blandaltman
+siman blandaltman se
+siman blandaltman, by(dgm)                                                                                
 * To test methlist subset, create a dataset with more than 3 string method variables
 clear all
 use $testpath/data/bvsim_all_out.dta, clear
@@ -201,13 +223,17 @@ replace method_string = "C" if method == 3
 replace method_string = "D" if method == 4
 drop method
 rename method_string method
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
-siman_comparemethodsscatter
-siman_comparemethodsscatter, methlist(A C)                       
-siman_comparemethodsscatter, methlist(B C D) 
-siman_comparemethodsscatter, methlist(B C D)                       
-siman_blandaltman	
-siman_blandaltman, methlist(B A C)  
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target)
+graph drop _all
+siman comparemethodsscatter
+graph drop _all
+siman comparemethodsscatter, methlist(A C)                       
+graph drop _all
+siman comparemethodsscatter, methlist(B C D) 
+graph drop _all
+siman comparemethodsscatter, methlist(B C D)                       
+siman blandaltman	
+siman blandaltman, methlist(B A C)  
 
 clear all
 prog drop _all
@@ -247,12 +273,13 @@ global origdata `origdata'
 * 2 methods, true variable
 drop if method>2
 gen true = 0.5
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * 3 methods, true variable
@@ -260,60 +287,67 @@ use ${origdata}, clear
 
 drop if method>3
 gen true = 0.5
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * > 3 methods, true variable
 use ${origdata}, clear
 gen true = 0.5
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
+graph drop _all
 siman comparemethodsscatter se
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 
 * 2 methods, true value
 use ${origdata}, clear
 drop if method>2
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 
 siman zipplot
 siman swarm
 * 3 methods, true value
 use ${origdata}, clear
 drop if method>3
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * > 3 methods, true value
 use ${origdata}, clear
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
+graph drop _all
 siman comparemethodsscatter se
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 
@@ -347,69 +381,77 @@ save ${origdata}, replace
 * 2 methods, true variable
 drop if method == "C" | method == "D"
 gen true = 0.5
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot                                                   
 siman swarm
 * 3 methods, true variable
 use ${origdata}, clear
 drop if  method == "D"
 gen true = 0.5
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * > 3 methods, true variable
 use ${origdata}, clear
 gen true = 0.5
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
+graph drop _all
 siman comparemethodsscatter se
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * 2 methods, true value
 use ${origdata}, clear
 drop if method == "C" | method == "D"
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * 3 methods, true value
 use ${origdata}, clear
 drop if  method == "D"
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * > 3 methods, true value
 use ${origdata}, clear
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
+graph drop _all
 siman comparemethodsscatter se
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 
@@ -442,69 +484,77 @@ global origdata `origdata'
 use ${origdata}, clear
 drop if  target > 2
 gen true = 0.5
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * 3 targets, true variable
 use ${origdata}, clear
 drop if target > 3
 gen true = 0.5
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * > 3 targets, true variable
 use ${origdata}, clear
 gen true = 0.5
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
+graph drop _all
 siman comparemethodsscatter se
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * 2 targets, true value
 use ${origdata}, clear
 drop if  target > 2
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * 3 targets, true value
 use ${origdata}, clear
 drop if target > 3
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * > 3 targets, true value
 use ${origdata}, clear
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
+graph drop _all
 siman comparemethodsscatter se
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 
@@ -547,69 +597,77 @@ global origdata `origdata'
 use ${origdata}, clear
 drop if  target == "C" | target == "D" | target == "E" | target == "F" | target == "G" | target == "H" | target == "I" | target == "J"
 gen true = 0.5
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * 3 targets, true variable
 use ${origdata}, clear
 drop if target == "D" | target == "E" | target == "F" | target == "G" | target == "H" | target == "I" | target == "J"
 gen true = 0.5
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * > 3 targets, true variable
 use ${origdata}, clear
 gen true = 0.5
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(true)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
+graph drop _all
 siman comparemethodsscatter se
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * 2 targets, true value
 use ${origdata}, clear
 drop if  target == "C" | target == "D" | target == "E" | target == "F" | target == "G" | target == "H" | target == "I" | target == "J"
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * 3 targets, true value
 use ${origdata}, clear
 drop if target == "D" | target == "E" | target == "F" | target == "G" | target == "H" | target == "I" | target == "J"
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 * > 3 targets, true value
 use ${origdata}, clear
-siman_setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
+siman setup, rep(dnum) dgm(dgm) est(est) se(se) method(method) target(target) true(0.5)
 siman scatter
 siman scatter se est
+graph drop _all
 siman comparemethodsscatter
+graph drop _all
 siman comparemethodsscatter se
 siman blandaltman
-siman blandaltman est se
+siman blandaltman se
 siman zipplot
 siman swarm
 
@@ -620,20 +678,22 @@ drop estimand
 bysort rep dgm method: gen repitionindi=_n
 drop if repitionindi==2
 drop repitionindi
-siman_setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
+siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
 * > 1 DGM 
 siman scatter
 siman swarm
 siman blandaltman
 siman zipplot
-siman_comparemethodsscatter
+graph drop _all
+siman comparemethodsscatter
 * 1 DGM
 drop if dgm == 2
 siman scatter
 siman swarm
 siman blandaltman
 siman zipplot
-siman_comparemethodsscatter
+graph drop _all
+siman comparemethodsscatter
 
 * missing method
 * creating a data set that has long target and missing method
@@ -642,7 +702,7 @@ drop method
 bysort rep dgm estimand: gen repitionindi=_n
 drop if repitionindi==2
 drop repitionindi
-siman_setup, rep(rep) dgm(dgm) target(estimand) estimate(est) se(se) true(true)
+siman setup, rep(rep) dgm(dgm) target(estimand) estimate(est) se(se) true(true)
 * > 1 DGM 
 siman scatter
 *siman swarm
@@ -650,7 +710,7 @@ siman scatter
 * siman blandaltman
 * error message as required
 siman zipplot
-* siman_comparemethodsscatter
+* siman comparemethodsscatter
 * error message as required
 * 1 DGM
 drop if dgm == 2
@@ -660,7 +720,7 @@ siman scatter
 * siman blandaltman
 * error message as required
 siman zipplot
-* siman_comparemethodsscatter
+* siman comparemethodsscatter
 * error message as required
 
 * Testing siman scatter.  Check if have 2 dgms, A (0/1) and B(0/1).  Then siman scatter, by A B if A==0 should be same as siman scatter, by B.
@@ -721,9 +781,9 @@ replace betastring = "0.5" if beta == 3
 drop beta
 rename betastring beta
 
-siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(betatrue)
+siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(betatrue)
 
-siman_scatter
+siman scatter
 siman scatter, by(beta)
 siman scatter, by(method)
 siman scatter if method == "CCA", name("simanscatter_CCA", replace)
@@ -732,11 +792,11 @@ siman scatter if method == "CCA", name("simanscatter_CCA", replace)
 * Testing siman swarm
 *************************
 
-siman_swarm                                                          
+siman swarm                                                          
 siman swarm, by(pmiss)              
 siman swarm, by(mech)
 siman swarm if method == "Noadj" | method == "MeanImp"   
-siman swarm if (method == "Noadj" | method == "MeanImp"), by(beta) graphoptions(name("simanswarm_beta", replace))                  
+siman swarm if (method == "Noadj" | method == "MeanImp"), by(beta) name("simanswarm_beta", replace)
 siman swarm if (method == "Noadj" | method == "MeanImp"), by(pmiss)
 
 * Testing siman blandaltman
@@ -752,17 +812,22 @@ siman blandaltman if (method == "CCA" | method == "MeanImp"), by(beta) name("sim
 * Testing siman comparemethodsscatter
 **************************************
 serset clear
+graph drop _all
 siman comparemethodsscatter
+graph drop _all
 siman comparemethodsscatter, methlist("CCA" "MeanImp") 
+graph drop _all
 siman comparemethodsscatter, methlist("Noadj" "MeanImp") name("simancms_new", replace) 
+graph drop _all
 siman comparemethodsscatter if beta == 1  
+graph drop _all
 siman comparemethodsscatter if mech == 2, name("simancmsmech", replace)                                   
 
 
 * Testing siman zipplot
 ************************
 
-siman_zipplot  
+siman zipplot  
 siman zipplot, by(mech)       
 siman zipplot if (method == "Noadj" | method == "MeanImp"), name("simanzip_new", replace) 
 siman zipplot, by(method pmiss)
@@ -778,9 +843,10 @@ use $testpath/data/simlongESTPM_longE_longM.dta, clear
 gen dgm_string = "1"
 replace dgm_string = "2" if dgm == 2
 drop dgm
-siman_setup, rep(rep) dgm(dgm_string) target(estimand) method(method) estimate(est) se(se) true(true)
+siman setup, rep(rep) dgm(dgm_string) target(estimand) method(method) estimate(est) se(se) true(true)
 
 siman scatter
+graph drop _all
 siman comparemethodsscatter
 siman swarm
 siman zipplot
