@@ -20,7 +20,7 @@ foreach feature in dgm target method {
 	if "`feature'"=="dgm" local N 5
 	forvalues n=1/`N' {
 		dicmd use data/setupdata_`feature'`n', clear
-		dicmd siman zipplot, name(swarm_`feature'`n', replace) bygr(title(Test siman zipplot using data `feature'`n'))
+		dicmd siman zipplot, name(zipplot_`feature'`n', replace) bygr(title(Test siman zipplot using data `feature'`n'))
 	}
 }
 

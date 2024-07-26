@@ -150,17 +150,18 @@ encode estimand, gen(estinum)
 drop estimand
 siman setup, target(estinum) rep(rep) dgm(beta pmiss mech) method(method) est(b) se(se) true(true)
 siman analyse, notable
-siman nestloop bias, name(sn5,replace)
-siman nestloop bias if estinum==1, name(sn6,replace) nodg legend(row(1)) saving(sn6,replace)
+siman nestloop bias, name(sn5,replace) saving(sn5s,replace) export(sn5e.pdf,replace)
+foreach target in effect mean0 mean1 {
+	erase sn5s_`target'_bias.gph
+	erase sn5e_`target'_bias.pdf
+}
+siman nestloop bias if estinum==1, name(sn6,replace) nodg legend(row(1))
 siman nestloop bias if estinum==1, nodg legend(row(1)) methlegend(item)
 siman nestloop bias if estinum==1, nodg legend(row(1)) methlegend(title)
 
 * this is a good quality graph
 siman nestloop bias if estinum==1, legend(row(1)) ///
 	title(Good nestloop graph for estimand effect) note("") stagger(.05) xlab(none) lcol(red green blue)
-
-* tidy up
-erase sn6.gph
 
 di as result  "*** SIMAN NESTLOOP HAS PASSED ALL ITS TESTS ***"
 
