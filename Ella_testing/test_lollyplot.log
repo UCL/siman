@@ -11,7 +11,7 @@ C:\ian\git\siman\siman_analyse.ado
 C:\ian\git\siman\siman_table.ado
 *!      version 0.8.3   3apr2024
 C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10    23jun2024       
+*!      version 0.10.1  29jun2024       
 C:\ian\git\siman\siman_zipplot.ado
 *!      version 0.10    19jul2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
@@ -3373,22 +3373,23 @@ Ignoring non-varying dgm variable beta
 Ignoring non-varying dgm variable pmiss
 siman lollyplot will draw 1 graph with 6 panels (3 PMs by 2 DGMs)
 Graph command is: twoway scatter method b if method==1 , pstyle(p1) mlabstyle(p1) mcol(red) msym() m
-> lab(thelab) mlabpos(12) mlabcol(red) || scatter method __000003 if method==1 , pstyle(p1) mlabcol(
-> red) msym(i) mlab(__000005) mlabpos(0) || scatter method __000004 if method==1 , pstyle(p1) mlabco
-> l(red) msym(i) mlab(__000006) mlabpos(0) || rspike b __000002 method if method==1 , pstyle(p1) hor
-> iz lcol(red) || scatter method b if method==2 , pstyle(p2) mlabstyle(p2) mcol(blue) msym() mlab(th
-> elab) mlabpos(12) mlabcol(blue) || scatter method __000003 if method==2 , pstyle(p2) mlabcol(blue)
->  msym(i) mlab(__000005) mlabpos(0) || scatter method __000004 if method==2 , pstyle(p2) mlabcol(bl
-> ue) msym(i) mlab(__000006) mlabpos(0) || rspike b __000002 method if method==2 , pstyle(p2) horiz 
-> lcol(blue) || scatter method b if method==3 , pstyle(p3) mlabstyle(p3) mcol(green) msym() mlab(the
-> lab) mlabpos(12) mlabcol(green) || scatter method __000003 if method==3 , pstyle(p3) mlabcol(green
-> ) msym(i) mlab(__000005) mlabpos(0) || scatter method __000004 if method==3 , pstyle(p3) mlabcol(g
-> reen) msym(i) mlab(__000006) mlabpos(0) || rspike b __000002 method if method==3 , pstyle(p3) hori
-> z lcol(green) || scatter method __000002 , msym(i) c(l) col(gray) lpattern(dash) , by(__000007 mec
-> h, note(`""') col(2) xrescale title(`"               mech=MCAR                              mech=M
-> NAR               "', size(medium) just(center)) imargin(r=5) ) subtitle("") ylab(none) ytitle(`" 
->         cover                 empse                  bias          "', size(medium)) yscale(revers
-> e range(.8 3.2)) legend(order(1 "Noadj" 5 "CCA" 9 "MeanImp") ) name(meth3,replace) legend(row(1))
+> label(__000003) mlabpos(12) mlabcol(red) || scatter method __000004 if method==1 , pstyle(p1) mlab
+> col(red) msym(i) mlab(__000006) mlabpos(0) || scatter method __000005 if method==1 , pstyle(p1) ml
+> abcol(red) msym(i) mlab(__000007) mlabpos(0) || rspike b __000002 method if method==1 , pstyle(p1)
+>  horiz lcol(red) || scatter method b if method==2 , pstyle(p2) mlabstyle(p2) mcol(blue) msym() mla
+> bel(__000003) mlabpos(12) mlabcol(blue) || scatter method __000004 if method==2 , pstyle(p2) mlabc
+> ol(blue) msym(i) mlab(__000006) mlabpos(0) || scatter method __000005 if method==2 , pstyle(p2) ml
+> abcol(blue) msym(i) mlab(__000007) mlabpos(0) || rspike b __000002 method if method==2 , pstyle(p2
+> ) horiz lcol(blue) || scatter method b if method==3 , pstyle(p3) mlabstyle(p3) mcol(green) msym() 
+> mlabel(__000003) mlabpos(12) mlabcol(green) || scatter method __000004 if method==3 , pstyle(p3) m
+> labcol(green) msym(i) mlab(__000006) mlabpos(0) || scatter method __000005 if method==3 , pstyle(p
+> 3) mlabcol(green) msym(i) mlab(__000007) mlabpos(0) || rspike b __000002 method if method==3 , pst
+> yle(p3) horiz lcol(green) || scatter method __000002 , msym(i) c(l) col(gray) lpattern(dash) , by(
+> __000008 mech, note(`""') col(2) xrescale title(`"               mech=MCAR                        
+>       mech=MNAR               "', size(medium) just(center)) imargin(r=5) ) subtitle("") ylab(none
+> ) ytitle(`"         cover                 empse                  bias          "', size(medium)) y
+> scale(reverse range(.8 3.2)) legend(order(1 "Noadj" 5 "CCA" 9 "MeanImp") ) name(meth3,replace) leg
+> end(row(1))
 
 . siman lol if esti=="effect" & beta==1 & pmiss==1 & meth!=1, name(meth2,replace) legend(row(1)) col
 > (blue green) debug
@@ -3397,18 +3398,19 @@ Ignoring non-varying dgm variable beta
 Ignoring non-varying dgm variable pmiss
 siman lollyplot will draw 1 graph with 6 panels (3 PMs by 2 DGMs)
 Graph command is: twoway scatter method b if method==2 , pstyle(p1) mlabstyle(p1) mcol(blue) msym() 
-> mlab(thelab) mlabpos(12) mlabcol(blue) || scatter method __000003 if method==2 , pstyle(p1) mlabco
-> l(blue) msym(i) mlab(__000005) mlabpos(0) || scatter method __000004 if method==2 , pstyle(p1) mla
-> bcol(blue) msym(i) mlab(__000006) mlabpos(0) || rspike b __000002 method if method==2 , pstyle(p1)
->  horiz lcol(blue) || scatter method b if method==3 , pstyle(p2) mlabstyle(p2) mcol(green) msym() m
-> lab(thelab) mlabpos(12) mlabcol(green) || scatter method __000003 if method==3 , pstyle(p2) mlabco
-> l(green) msym(i) mlab(__000005) mlabpos(0) || scatter method __000004 if method==3 , pstyle(p2) ml
-> abcol(green) msym(i) mlab(__000006) mlabpos(0) || rspike b __000002 method if method==3 , pstyle(p
-> 2) horiz lcol(green) || scatter method __000002 , msym(i) c(l) col(gray) lpattern(dash) , by(__000
-> 007 mech, note(`""') col(2) xrescale title(`"               mech=MCAR                             
->  mech=MNAR               "', size(medium) just(center)) imargin(r=5) ) subtitle("") ylab(none) yti
-> tle(`"         cover                 empse                  bias          "', size(medium)) yscale
-> (reverse range(1.8 3.2)) legend(order(1 "CCA" 5 "MeanImp") ) name(meth2,replace) legend(row(1))
+> mlabel(__000003) mlabpos(12) mlabcol(blue) || scatter method __000004 if method==2 , pstyle(p1) ml
+> abcol(blue) msym(i) mlab(__000006) mlabpos(0) || scatter method __000005 if method==2 , pstyle(p1)
+>  mlabcol(blue) msym(i) mlab(__000007) mlabpos(0) || rspike b __000002 method if method==2 , pstyle
+> (p1) horiz lcol(blue) || scatter method b if method==3 , pstyle(p2) mlabstyle(p2) mcol(green) msym
+> () mlabel(__000003) mlabpos(12) mlabcol(green) || scatter method __000004 if method==3 , pstyle(p2
+> ) mlabcol(green) msym(i) mlab(__000006) mlabpos(0) || scatter method __000005 if method==3 , pstyl
+> e(p2) mlabcol(green) msym(i) mlab(__000007) mlabpos(0) || rspike b __000002 method if method==3 , 
+> pstyle(p2) horiz lcol(green) || scatter method __000002 , msym(i) c(l) col(gray) lpattern(dash) , 
+> by(__000008 mech, note(`""') col(2) xrescale title(`"               mech=MCAR                     
+>          mech=MNAR               "', size(medium) just(center)) imargin(r=5) ) subtitle("") ylab(n
+> one) ytitle(`"         cover                 empse                  bias          "', size(medium)
+> ) yscale(reverse range(1.8 3.2)) legend(order(1 "CCA" 5 "MeanImp") ) name(meth2,replace) legend(ro
+> w(1))
 
 . * Compare graphs meth3 and meth2
 . 
@@ -3453,7 +3455,7 @@ _____________________________________________________
 . siman analyse, notable
 siman analyse has run successfully
 
-. siman lol bias relprec power cover if beta==3, ///
+. siman lol bias relprec power cover if beta==3, labformat(none) ///
 >         refpower(90) dgmwidth(35) pmwidth(20) legend(col(1)) name(l`++i', replace)
 Ignoring non-varying dgm variable beta
 siman lollyplot will draw 3 graphs with 16 panels (4 PMs by 4 DGMs)

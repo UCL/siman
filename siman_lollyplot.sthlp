@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.10 23jul2024}{...}
+{* *! version 0.10.1 29jul2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "Main simsum help page" "simsum"}{...}
 {viewerjumpto "Syntax" "siman_lollyplot##syntax"}{...}
@@ -28,17 +28,18 @@
 {synoptline}
 {syntab:Specific graph options}
 
-{synopt:{opt labf:ormat(string)}}defines formats for the marker labels for (i) numeric performance measures (e.g. bias), (ii) percentage performance measures (e.g. coverage), and (iii) count performance measures (e.g. bsims).
+{synopt:{opt labf:ormat(string)}}defines formats for the marker labels for (i) numeric performance measures (e.g. bias), (ii) percentage performance measures (e.g. coverage), and (iii) count performance measures (e.g. bsims). 
+Alternatively, {cmd:labformat(none)} removes the marker labels.
 
 {synopt:{opt col:ors(string)}}specifies colours for the graphs: one per method.
 
 {synopt:{opt ms:ymbol(string)}}specifies marker symbols for the graphs: one per method, or one for all methods.
 	
-{synopt:{opt refp:ower(string)}}sets a reference level for power. Default is no reference level for power.
+{synopt:{opt refp:ower(string)}}draws a reference line for power. Default is no reference line for power.
 
 {synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
 
-{synopt:{opt dgms:how}}shows in the top title the values of any DGM variables that are constant within the 'if' condition. The default is no to show them.{p_end}
+{synopt:{opt dgms:how}}shows in the top title the values of any DGM variables that are constant within the 'if' condition. The default is not to show them.{p_end}
 
 {syntab:Calculation options}
 

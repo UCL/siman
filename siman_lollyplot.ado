@@ -1,4 +1,5 @@
-*!	version 0.10	23jun2024	
+*!	version 0.10.1	29jun2024	
+*	version 0.10.1	29jun2024	IW add labformat(none) option
 *	version 0.10	23jun2024	IW Clean up handling of if/in
 *								Drop non-varying dgmvars, unless dgmshow option used
 *								Correct DGM labelling at top of graph (was wrongly alpha-sorted)
@@ -234,15 +235,24 @@ if `refpower'>=0 qui replace `ref' = `refpower' if _perfmeascode=="power"
 if !mi("`true'") qui replace `ref' = `true' if _perfmeascode=="mean"
 
 * gen thelab variable - numerical value that will label each graph
-local labformat1 : word 1 of `labformat'
-if mi("`labformat1'") local labformat1 %12.4g
-local labformat2 : word 2 of `labformat'
-if mi("`labformat2'") local labformat2 %6.1f 
-local labformat3 : word 3 of `labformat'
-if mi("`labformat3'") local labformat3 %6.0f
-qui gen thelab = string(`estimate',"`labformat1'")
-qui replace thelab = string(`estimate',"`labformat2'") if inlist(_perfmeascode, "relprec", "relerr", "power", "cover")
-qui replace thelab = string(`estimate',"`labformat3'") if inlist(_perfmeascode, "bsims", "sesims")
+if "`labformat'"!="none" {
+	forvalues i=1/3 {
+		local labformat`i' : word `i' of `labformat'
+		cap di 0 `labformat`i''
+		if _rc {
+			di as error "Error in labformat(): format `labformat`i'' not found, ignored"
+			local labformat`i'
+		}
+	}
+	if mi("`labformat1'") local labformat1 %12.4g
+	if mi("`labformat2'") local labformat2 %6.1f 
+	if mi("`labformat3'") local labformat3 %6.0f
+	tempvar thelab
+	qui gen `thelab' = string(`estimate',"`labformat1'")
+	qui replace `thelab' = string(`estimate',"`labformat2'") if inlist(_perfmeascode, "relprec", "relerr", "power", "cover")
+	qui replace `thelab' = string(`estimate',"`labformat3'") if inlist(_perfmeascode, "bsims", "sesims")
+	local mlabel mlabel(`thelab')
+}
 
 * confidence intervals
 tempvar lci uci l r
@@ -305,7 +315,7 @@ foreach thistarget of local targetlevels {
 		* main marker
 		local graph_cmd `graph_cmd' scatter `method' `estimate' ///
 			if `method'==`thismethod' `andtargetcond', pstyle(p`i') mlabstyle(p`i') ///
-			mcol(`mcol`i'') msym(`msym`i'') mlab(thelab) mlabpos(12) mlabcol(`mcol`i'') ||
+			mcol(`mcol`i'') msym(`msym`i'') `mlabel' mlabpos(12) mlabcol(`mcol`i'') ||
 		* brackets for LCL and UCL
 		local graph_cmd `graph_cmd' scatter `method' `lci' ///
 			if `method'==`thismethod' `andtargetcond', pstyle(p`i') ///

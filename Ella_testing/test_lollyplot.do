@@ -1,6 +1,6 @@
 /*
 test_lollyplot.do
-IW 23jun2024
+IW 29jul2024
 NB includes some pause points when graphs or output need to be checked
 */
 
@@ -132,7 +132,7 @@ use $testpath/data/extendedtestdata2.dta, clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 
 siman analyse, notable
-siman lol bias relprec power cover if beta==3, ///
+siman lol bias relprec power cover if beta==3, labformat(none) ///
 	refpower(90) dgmwidth(35) pmwidth(20) legend(col(1)) name(l`++i', replace)
 
 * finish with a high quality graph
