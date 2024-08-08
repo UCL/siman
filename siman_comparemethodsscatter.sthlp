@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.6 03oct2023}{...}
+{* *! version 0.10.1 8aug2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Syntax" "siman_comparemethodsscatter##syntax"}{...}
@@ -21,7 +21,8 @@
 [{cmd:,}
 {it:options}]
 
-{pstd}The scatter graph will be drawn for estimate {it:and} se if and only if the number of methods is <= 3.  Alternatively the user can select estimate {it:or} se for more than 3 methods.
+{pstd}The scatter graph can display {it:both} estimate and se with the slower 'combine' method.
+With the faster 'matrix' method, the user can select {it:either} estimate or se.
 
 {pstd}The subcommand {cmd:comparemethodsscatter} may be abbreviated to 3 or more characters or to {cmd:cms}.
 
@@ -32,13 +33,10 @@ The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:ta
 {synoptset 25 tabbed}{...}
 {synopthdr}
 {synoptline}
-{syntab:Main}
 
-{syntab:Graph options}
+{synopt:{opt com:bine}}forces use of the 'combine' method: the graph is made by combining individual graphs, potentially showing both estimate and SE. This is the default for 2 or 3 methods.
 
-{synopt:{opt com:bine(string)}}forces use of the 'combine' method: the graph is made by combining individual graphs, potentially showing both estimate and SE. This is the default for 2 or 3 methods.
-
-{synopt:{opt mat:rix(string)}}forces use of the 'matrix' method: the graph is made by {help graph matrix}, showing only estimate or SE. This is the default for more than 3 methods.
+{synopt:{opt mat:rix}}forces use of the 'matrix' method: the graph is made by {help graph matrix}, showing only estimate or SE. This is the default for more than 3 methods.
 
 {synopt:{opt meth:list(string)}}specifies a subgroup of methods, and their order, to be graphed.
 For example, in a dataset with methods A, B, C and D, the option {bf: methlist(B D)}, which would plot graphs for B vs. D, the same as using {bf:if method=="B" | method=="D"}. 
@@ -91,7 +89,7 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {marker examples}{...}
 {title:Examples}
 
-{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
+{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} {browse "https://github.com/UCL/siman/":GitHub repository}.
 
 {pstd} To plot the {bf: comparemethodsscatter (cms)} graph, first load the data set in to {cmd: siman}.
 

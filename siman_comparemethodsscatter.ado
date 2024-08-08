@@ -1,4 +1,5 @@
-*!	version 0.10	25jun2024	
+*!	version 0.10.1	8aug2024	
+*	version 0.10.1	8aug2024	IW Tidy up graph titles
 *	version 0.10	25jun2024	IW Better handling of if/in, reshape; simplified loop over graphs
 *								NB reduce version # to match other programs
 *  version 1.9.19 2may2024    IW allowed xsize() to be user-specified (ysize already is)
@@ -228,7 +229,6 @@ if `ngraphs' > 3 {
 * DRAW GRAPH(S)
 
 forvalues g = 1/`ngraphs' {
-serset clear
 	local glabel : label (`group') `g'
 
 	* nice label for this over-group
@@ -239,7 +239,8 @@ serset clear
 		if `v'>1 local notetext `notetext',
 		local notetext `notetext' `thisvar'=`thisval'
 	}
-
+	if !mi("`notetext'") local notetextopt note("Graphs for `notetext'") 
+	else local notetextopt 
 	if !mi("`debug'") di as input `"--> Drawing graph `g': `notetext'"'
 
 	if "`type'"=="combine" {
@@ -261,8 +262,8 @@ serset clear
 				plotregion(style(none)) legend(off) ///
 				`subgraphoptions' nodraw name(emptygraph, replace) 
 		}
-		if `do_se' local setitle l2title(Standard error `se', just(left) bexpand)
-		if `do_estimate' local esttitle r2title(Estimate `estimate', just(left) bexpand orient(rvertical))
+		if `do_se' local setitle l2title(Standard error (`se'), just(left) bexpand)
+		if `do_estimate' local esttitle r2title(Estimate (`estimate'), just(left) bexpand orient(rvertical))
 
 		* loop over constituent graphs
 		forvalues j = 1/`nmethods' { // rows
@@ -299,8 +300,7 @@ serset clear
 			}
 		}
 		`dicmd' cap graph combine `graphlist', name(`name'_`g',replace) ///
-			note("Graphs for `notetext'") ///
-			title("") cols(`nmethods') `esttitle' `setitle' ///
+			`notetextopt' title("") cols(`nmethods') `esttitle' `setitle' ///
 			`options'	
 		if _rc==111 di as error `"{p 0 2}siman comparemethodsscatter called graph combine, which failed. Try {stata "serset clear"} and {stata "graph drop _all"}{p_end}"'
 		if _rc exit _rc
