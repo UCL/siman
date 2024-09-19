@@ -1,8 +1,8 @@
 v 3
 d siman: Suite of commands for analysing the results of simulation studies and producing graphs
-d Program by Ella Marley-Zagar
+d Program by Ella Marley-Zagar, Ian White and Tim Morris
 d Version 0.3
-d Distribution-Date: 08aug2023
+d Distribution-Date: 22apr2024
 
 f siman.ado
 f siman_analyse.ado
