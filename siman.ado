@@ -1,5 +1,6 @@
-*!	version 0.10	25jul2024	
-* version 0.10 25jul2024	IW parsing doesn't break -siman cms se- or -siman anal,repl-
+*!	version 0.11	07oct2024
+*!	Type -siman which- to see versions of siman's subprograms
+* version 0.10 25jul2024  IW parsing doesn't break -siman cms se- or -siman anal,repl-
 * version 0.9  14jun2024  IW remove reshape
 * version 0.3  08aug2023  EMZ allow analyze spelling
 * version 0.2  27mar2023
