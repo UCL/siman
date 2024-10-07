@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.10 23jun2024}{...}
+{* *! version 0.10 15aug2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_nestloop##syntax"}{...}
 {viewerjumpto "Description" "siman_nestloop##description"}{...}
@@ -41,7 +41,7 @@ An alternative is {cmd:connect(L)} which shows each performance measure value at
 {synopt:{opt dgga:p(#)}}defines the vertical size of the gap between the main graph and the descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.{p_end}
 {synopt:{opt dgin:nergap(#)}}controls the vertical spacing between the  descriptor graphs.  Default # is 3.{p_end}
 {synopt:{opt dgco:lor(string)}}controls the colour(s) for the descriptor graphs and their labels. Default is gs4.{p_end}
-{synopt:{opt dgpa:ttern(string)}}controls the pattern(s) for descriptor graph. Deafult is solid.{p_end}
+{synopt:{opt dgpa:ttern(string)}}controls the pattern(s) for descriptor graph. Default is solid.{p_end}
 {synopt:{opt dgla:bsize(string)}}controls the size of the descriptor graph labels. Default is vsmall.{p_end}
 {synopt:{opt dgst:yle(string)}}controls the style(s) of the descriptor graph.{p_end}
 {synopt:{opt dglw:idth(string)}}controls the width(s) of the descriptor graph.{p_end}
@@ -49,7 +49,10 @@ An alternative is {cmd:connect(L)} which shows each performance measure value at
 {syntab:Other graph options}
 
 {synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
-{synopt:{it:graph_options}}Most of the valid options for {help line:line} are available.{p_end}
+{synopt:{it:graph_options}}Most of the valid options for {help line:line} are available.
+We find these especially useful: {cmd:ylabel()} to stop the y-labels extending to the descriptor graph; 
+{cmd:legend()} to arrange legends in a single row or column, e.g.
+{cmd:legend(pos(6) row(1))} or {cmd:legend(pos(3) col(1))}.{p_end}
 
 {syntab:Saving options}
 
@@ -87,7 +90,7 @@ We recommend to sort the simulation dataset in such a way that the simulation pa
 of interest is considered first, and so forth.  Further guidance can be found in {help siman_nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}.
 
 {pstd}
-{help siman_setup:siman setup} and {help siman analyse} need to be run first before {bf:siman nestloop}.
+{help siman setup} and {help siman analyse} need to be run first before {bf:siman nestloop}.
 
 {pstd}
 For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.

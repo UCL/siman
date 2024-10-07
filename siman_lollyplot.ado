@@ -1,4 +1,5 @@
-*!	version 0.10.1	29jun2024	
+*!	version 0.10.2	19aug2024	
+*!	version 0.10.2	19aug2024	IW add undocumented nodgmtitle option
 *	version 0.10.1	29jun2024	IW add labformat(none) option
 *	version 0.10	23jun2024	IW Clean up handling of if/in
 *								Drop non-varying dgmvars, unless dgmshow option used
@@ -48,7 +49,7 @@ syntax [anything] [if] [, ///
 	Level(cilevel) logit /// calculation options
 	BYGRaphoptions(string) name(string) * /// general graph options
 	pause /// advanced graph option
-	dgmwidth(int 30) pmwidth(int 24) debug rangeadd(real 0.2) /// undocumented options
+	dgmwidth(int 30) pmwidth(int 24) debug rangeadd(real 0.2) noDGMTItle /// undocumented options
 	]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -166,6 +167,7 @@ else {
 	}
 	qui tab `dgmgroup'
 	local ndgmlevels = r(r)
+	if "`dgmtitle'"=="nodgmtitle" local dgmequals
 
 	* create graph title for top
 	forvalues i=1/`ndgmlevels' {
