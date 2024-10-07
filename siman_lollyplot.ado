@@ -40,7 +40,7 @@
 * File to produce the lollyplot
 * changed to incorporate 3 new perfomance measures created by simsumv2.ado
 
-program define siman_lollyplot, rclass
+program define siman_lollyplot
 version 15
 
 syntax [anything] [if] [, ///

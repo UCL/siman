@@ -27,7 +27,7 @@
 * Last update 29/09/2021
 ******************************************************************************************************************************************************
 
-program define siman_blandaltman, rclass
+program define siman_blandaltman
 version 15
 
 syntax [anything] [if][in] [, ///
