@@ -19,7 +19,7 @@
 * File to produce the siman scatter plot
 ******************************************************************************************************************************************************
 
-program define siman_scatter, rclass
+program define siman_scatter
 version 16
 
 syntax [varlist(default=none max=2)] [if][in] [, BY(varlist) BYGRaphoptions(string) name(passthru) debug pause *]

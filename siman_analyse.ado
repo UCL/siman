@@ -26,7 +26,7 @@
 * version 0.1  08june2020     Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
 * Uses Ian's new simsumv2
 
-program define siman_analyse, rclass
+program define siman_analyse
 version 15
 
 syntax [anything] [if], [PERFONLY REPlace /// documented options

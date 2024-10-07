@@ -41,7 +41,7 @@
 * to only plot est or se (default is both).
 ******************************************************************************************************************************************************
 
-program define siman_comparemethodsscatter, rclass
+program define siman_comparemethodsscatter
 version 16
 
 syntax [anything] [if][in] [, COMbine MATrix METHlist(string) ///

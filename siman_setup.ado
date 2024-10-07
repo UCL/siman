@@ -34,7 +34,7 @@
 *	version 0.2		23June2020	IW changes
 *	version 0.1		04June2020	Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
 
-program define siman_setup, rclass
+program define siman_setup
 version 15
 
 syntax [if] [in], Rep(varname numeric min=1 max=1) [DGM(varlist) TARget(string) METHod(string)/* define the structure variables

@@ -28,7 +28,7 @@
 * File to produce the zip plot
 *******************************************************************************************************************************************************
 
-program define siman_zipplot, rclass
+program define siman_zipplot
 version 15
 
 syntax [if][in] [, * BY(varlist) ///
