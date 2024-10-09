@@ -41,7 +41,7 @@ capture which simsum.ado
 if _rc == 111 {
 	di as error `"simsum needs to be installed to run siman analyse. Please use {stata "ssc install simsum"}"'
 	exit 498
-	}
+}
 vercheck simsum, vermin(2.1.2) quietly message(`"{p 0 2}You can install the latest simsum using {stata "net from https://raw.githubusercontent.com/UCL/simsum/main/package/"}{p_end}"')
 
 foreach thing in `_dta[siman_allthings]' {
@@ -51,12 +51,12 @@ foreach thing in `_dta[siman_allthings]' {
 if "`method'"=="" {
 	di as error "The variable 'method' is missing so siman analyse can not be run.  Please create a variable in your dataset called method containing the method value(s)."
 	exit 498
-	}
+}
 
 if "`analyserun'"=="1" & "`replace'" == "" {
 	di as error "There are already performance measures in the dataset.  If you would like to replace these, please use the 'replace' option"
 	exit 498
-	}
+}
 
 local estimatesindi = (`rep'[_N]>0)
 	
@@ -64,11 +64,11 @@ if "`analyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==1 {
 	qui drop if `rep'<0
 	qui drop _perfmeascode
 	qui drop _dataset
-	}
+}
 else if "`analyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==0 {
 	di as error "There are no estimates data in the data set.  Please re-load data and use siman setup to import data."
 	exit 498
-	}
+}
 	
 local analyserun = 0
 
@@ -76,7 +76,7 @@ local analyserun = 0
 if "`setuprun'"=="0" | "`setuprun'"=="" {
 	di as error "siman setup has not been run.  Please use siman setup first before siman analyse."
 	exit 498
-	}
+}
 
 * true variable, to be used in reshape, if not in dgm
 cap confirm variable `true'
@@ -232,9 +232,14 @@ else if `methodstringindi'==0 & `methodnature' == 1 {
 }
 
 
+* change _perfmeascode from simsum's terminology: bsims->estreps and sesims->sereps
+replace _perfmeascode = "estreps" if _perfmeascode == "bsims"
+replace _perfmeascode = "sereps"  if _perfmeascode == "sesims"
+
 * labelling performance measures
 qui gen indi = -_perfmeasnum
 qui levelsof _perfmeasnum, local(lablevels)
+noi di `"`lablevels'"'
 foreach lablevel of local lablevels {
 	local labvalue : label (_perfmeasnum) `lablevel'
 	label define indilab -`lablevel' "`labvalue'", modify

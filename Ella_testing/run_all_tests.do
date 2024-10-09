@@ -16,7 +16,10 @@ if "$user"=="Ian" {
 	global codepath C:\ian\git\siman 
 	adopath ++ c:\ian\git\simsum\package
 }
-if "$user" == "tpm" {
+if "$user" == "tpm" & c(os)=="Windows" {
+	global codepath c:\git\simsum\package
+}
+if "$user" == "tpm" & c(os)=="MacOSX" {
 	global codepath /Users/timothymorris/Documents/GitHub/siman
 }
 

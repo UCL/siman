@@ -72,7 +72,7 @@ if "`anything'"!="" {
 
 
 * re-order performance measures for display in the table as per simsum
-local perfvar = "bsims sesims bias pctbias mean empse relprec mse rmse modelse ciwidth relerror cover power"
+local perfvar = "estreps sereps bias pctbias mean empse relprec mse rmse modelse ciwidth relerror cover power"
 qui gen _perfmeascodeorder=.
 local p = 0
 foreach perf of local perfvar {
