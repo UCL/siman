@@ -82,14 +82,14 @@ siman lollyplot
 * testing setup and reshape via the chars (could be expanded)
 
 * setup data in LW - this is known to be correct (makes other programs work)
-use $testpath/data/extendedtestdata2.dta, clear
+use $testpath/data/extendedtestdata.dta, clear
 reshape wide b se, i(rep beta pmiss mech estimand) j(method) string
 siman setup, rep(rep) dgm(beta pmiss mech) method(CCA MeanImp Noadj) target(estimand) est(b) se(se) true(true)
 assert "`: char _dta[siman_nummethod]'" == "3"
 assert "`: char _dta[siman_valmethod]'" == "CCA MeanImp Noadj"
 
 * setup data in LL and reshape to LW
-use $testpath/data/extendedtestdata2.dta, clear
+use $testpath/data/extendedtestdata.dta, clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 assert "`: char _dta[siman_nummethod]'" == "3"
 assert "`: char _dta[siman_valmethod]'" == "CCA MeanImp Noadj"
@@ -97,39 +97,26 @@ assert "`: char _dta[siman_valmethod]'" == "CCA MeanImp Noadj"
 
 * dgm defined by >1 variable
 use $testpath/data/extendedtestdata.dta, clear
-
-* create true values, corrected 25oct2023
-gen betatrue = beta if estimand == "effect"
-replace betatrue = 1 if estimand == "mean0"
-replace betatrue = 1 + beta if estimand == "mean1"
-
-* remove non-integer values
-foreach var in beta pmiss {
-	gen `var'char = strofreal(`var')
-	drop `var'
-	sencode `var'char, gen(`var')
-	drop `var'char
-}
 order beta pmiss
 
 * create a string dgm var as well for testing
 gen betastring = "0"
-replace betastring = "0.25" if beta == 2
-replace betastring = "0.5" if beta == 3
+replace betastring = "0.25" if float(beta)==float(0.25)
+replace betastring = "0.5" if float(beta)==float(0.5)
 drop beta
-rename betastring beta
 
-siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(betatrue)
+siman setup, rep(rep) dgm(betastring pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
+* NB setup has coded beta as 1/2/3
 
-siman scatter if beta==1 & pmiss==1 & mech==1
+siman scatter if betastring==1 & float(pmiss)==float(0.2) & mech==1
 * 1 panel per dgm, target and method 
-if ${detail} == 1 siman scatter if beta==1 & pmiss==1 & mech==1 & method == "CCA"
+if ${detail} == 1 siman scatter if beta==1 & float(pmiss)==float(0.2) & mech==1 & method == "CCA"
 
-siman swarm if beta==1 & pmiss==1 & mech==1
+siman swarm if betastring==1 & float(pmiss)==float(0.2) & mech==1
 * 1 panel per dgm level(s) and target, method on y-axis
 * for the first panel in the all-graph display (beta level 1, pmiss level 1, mech level 1, estimand == "effect"), the means per
 * method have a very small difference, visible as follows:
-if ${detail} == 1 siman swarm if beta == 1 & pmiss == 1 & mech == 1 & estimand == "effect"
+if ${detail} == 1 siman swarm if betastring==1 & float(pmiss)==float(0.2) & mech == 1 & estimand == "effect"
 * FYI:
 * mean method CCA: 0.0025341
 * mean method meanlmp: 0.0021761
@@ -139,13 +126,13 @@ serset clear
 graph drop _all // sometimes helps
 * siman comparemethodsscatter
 * one graph per dgm and target combination, comparing methods - too slow
-siman comparemethodsscatter if beta == 1 & pmiss == 1 & mech == 2 & estimand=="effect"
+siman comparemethodsscatter if betastring==1 & float(pmiss)==float(0.2) & mech == 2 & estimand=="effect"
 * one graph per target, comparing methods
 
-siman blandaltman if beta == 1 & pmiss == 2 & mech == 2
+siman blandaltman if betastring==1 & float(pmiss)==float(0.4) & mech == 2
 * 1 graph per combination of dgm levels and target, by method difference
 
-siman zipplot if beta == 1 & pmiss == 2 & mech == 2
+siman zipplot if betastring==1 & float(pmiss)==float(0.4) & mech == 2
 * 1 panel per dgm, target and method combination, 1 graph per beta (as defines y-axis)
 
 * different spelling

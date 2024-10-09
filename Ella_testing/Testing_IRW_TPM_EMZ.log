@@ -1,9 +1,10 @@
 
 . siman which
 C:\ian\git\siman\siman.ado
-*!      version 0.10    25jul2024       
+*!      version 0.11    07oct2024
+*!      Type -siman which- to see versions of siman's subprograms
 C:\ian\git\siman\siman_setup.ado
-*!      version 0.10.2  14jun2024       
+*!      version 0.11    09oct2024       
 C:\ian\git\siman\siman_describe.ado
 *!      version 0.7     14jun2024       
 C:\ian\git\siman\siman_analyse.ado
@@ -11,11 +12,12 @@ C:\ian\git\siman\siman_analyse.ado
 C:\ian\git\siman\siman_table.ado
 *!      version 0.8.3   3apr2024
 C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10    23jun2024       
+*!      version 0.10.2  19aug2024       
+*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
 C:\ian\git\siman\siman_zipplot.ado
 *!      version 0.10    19jul2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10    25jun2024       
+*!      version 0.10.1  8aug2024        
 C:\ian\git\siman\siman_blandaltman.ado
 *!      version 0.10    24jun2024
 C:\ian\git\siman\siman_swarm.ado
@@ -55,11 +57,8 @@ C:\ian\git\siman\siman_nestloop.ado
 
 . 
 . siman_setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(0)
-  variable dgm was long now byte
-  (24,000 bytes saved)
-Warning: variable dgm, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode dgm
-  as numeric before running -siman setup-.
+Warning: dgm variable dgm has been converted from string to numeric. If you require its levels to be
+  ordered differently, encode dgm as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -363,7 +362,7 @@ siman lollyplot will draw 2 graphs with 6 panels (3 PMs by 2 DGMs)
 . * testing setup and reshape via the chars (could be expanded)
 . 
 . * setup data in LW - this is known to be correct (makes other programs work)
-. use $testpath/data/extendedtestdata2.dta, clear
+. use $testpath/data/extendedtestdata.dta, clear
 
 . reshape wide b se, i(rep beta pmiss mech estimand) j(method) string
 (j = CCA MeanImp Noadj)
@@ -380,11 +379,12 @@ xij variables:
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(CCA MeanImp Noadj) target(estimand) est(b) se(se
 > ) true(true)
-  variable mech was long now byte
-  (108,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (36,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -418,15 +418,16 @@ _____________________________________________________
 
 . 
 . * setup data in LL and reshape to LW
-. use $testpath/data/extendedtestdata2.dta, clear
+. use $testpath/data/extendedtestdata.dta, clear
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -463,62 +464,36 @@ _____________________________________________________
 . * dgm defined by >1 variable
 . use $testpath/data/extendedtestdata.dta, clear
 
-. 
-. * create true values, corrected 25oct2023
-. gen betatrue = beta if estimand == "effect"
-(72,000 missing values generated)
-
-. replace betatrue = 1 if estimand == "mean0"
-(36,000 real changes made)
-
-. replace betatrue = 1 + beta if estimand == "mean1"
-(36,000 real changes made)
-
-. 
-. * remove non-integer values
-. foreach var in beta pmiss {
-  2.         gen `var'char = strofreal(`var')
-  3.         drop `var'
-  4.         sencode `var'char, gen(`var')
-  5.         drop `var'char
-  6. }
-
 . order beta pmiss
 
 . 
 . * create a string dgm var as well for testing
 . gen betastring = "0"
 
-. replace betastring = "0.25" if beta == 2
+. replace betastring = "0.25" if float(beta)==float(0.25)
 variable betastring was str1 now str4
 (36,000 real changes made)
 
-. replace betastring = "0.5" if beta == 3
+. replace betastring = "0.5" if float(beta)==float(0.5)
 (36,000 real changes made)
 
 . drop beta
 
-. rename betastring beta
-
 . 
-. siman_setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(beta
-> true)
-  variable beta was long now byte
-  (324,000 bytes saved)
-Warning: variable beta, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode beta
-  as numeric before running -siman setup-.
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+. siman setup, rep(rep) dgm(betastring pmiss mech) method(method) target(estimand) est(b) se(se) tru
+> e(true)
+Warning: dgm variable betastring has been converted from string to numeric. If you require its
+  levels to be ordered differently, encode betastring as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
 
 Data-generating mechanism (DGM)
-  DGM variables (# levels):       beta (3) pmiss (2) mech (2) 
+  DGM variables (# levels):       betastring (3) pmiss (2) mech (2) 
   Total number of DGMs:           12
 
 Targets
@@ -537,26 +512,28 @@ Repetition-level output
   df variable:                    N/A
   Conf. limit variables:          N/A
   p-value variable:               N/A
-  True value variable:            betatrue
+  True value variable:            true
 _____________________________________________________
 
+. * NB setup has coded beta as 1/2/3
 . 
-. siman scatter if beta==1 & pmiss==1 & mech==1
+. siman scatter if betastring==1 & float(pmiss)==float(0.2) & mech==1
 siman scatter will draw 1 graph with 9 panels
 
 . * 1 panel per dgm, target and method 
-. if ${detail} == 1 siman scatter if beta==1 & pmiss==1 & mech==1 & method == "CCA"
+. if ${detail} == 1 siman scatter if beta==1 & float(pmiss)==float(0.2) & mech==1 & method == "CCA"
 siman scatter will draw 1 graph with 3 panels
 
 . 
-. siman swarm if beta==1 & pmiss==1 & mech==1
+. siman swarm if betastring==1 & float(pmiss)==float(0.2) & mech==1
 siman swarm will draw 1 graph with 3 panels
 
 . * 1 panel per dgm level(s) and target, method on y-axis
 . * for the first panel in the all-graph display (beta level 1, pmiss level 1, mech level 1, estiman
 > d == "effect"), the means per
 . * method have a very small difference, visible as follows:
-. if ${detail} == 1 siman swarm if beta == 1 & pmiss == 1 & mech == 1 & estimand == "effect"
+. if ${detail} == 1 siman swarm if betastring==1 & float(pmiss)==float(0.2) & mech == 1 & estimand =
+> = "effect"
 siman swarm will draw 1 graph with 1 panels
 
 . * FYI:
@@ -570,17 +547,18 @@ siman swarm will draw 1 graph with 1 panels
 
 . * siman comparemethodsscatter
 . * one graph per dgm and target combination, comparing methods - too slow
-. siman comparemethodsscatter if beta == 1 & pmiss == 1 & mech == 2 & estimand=="effect"
+. siman comparemethodsscatter if betastring==1 & float(pmiss)==float(0.2) & mech == 2 & estimand=="e
+> ffect"
 siman comparemethodsscatter will draw 1 graph showing 3 methods
 
 . * one graph per target, comparing methods
 . 
-. siman blandaltman if beta == 1 & pmiss == 2 & mech == 2
+. siman blandaltman if betastring==1 & float(pmiss)==float(0.4) & mech == 2
 siman blandaltman will draw 3 graphs each with 2 panels
 
 . * 1 graph per combination of dgm levels and target, by method difference
 . 
-. siman zipplot if beta == 1 & pmiss == 2 & mech == 2
+. siman zipplot if betastring==1 & float(pmiss)==float(0.4) & mech == 2
 siman zipplot will draw 1 graph with 9 panels
 
 . * 1 panel per dgm, target and method combination, 1 graph per beta (as defines y-axis)
@@ -590,8 +568,8 @@ siman zipplot will draw 1 graph with 9 panels
 siman analyse has run successfully
 
 ------------------------------------------------------
-beta, pmiss, mech,   |
-estimand and         |             method             
+betastring, pmiss,   |
+mech, estimand and   |             method             
 performance measure  |       CCA    MeanImp      Noadj
 ---------------------+--------------------------------
 0                    |

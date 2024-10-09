@@ -300,15 +300,6 @@ siman nestloop mean, dgmorder(-theta rho -pc -k) ylabel(0.2 0.5 1) ytitle("Odds 
 clear all
 prog drop _all
 use $testpath/data/extendedtestdata.dta, clear
-
-* remove non-integer values
-gen betatrue=beta
-foreach var in beta pmiss {
-	gen `var'char = strofreal(`var')
-	drop `var'
-	sencode `var'char, gen(`var')
-	drop `var'char
-}
 order beta pmiss
 
 * create a string dgm var as well for testing

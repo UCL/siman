@@ -25,16 +25,16 @@ foreach feature in dgm target method {
 }
 
 // Compare zips made from se and from ci
-use data/extendedtestdata2, clear
+use data/extendedtestdata, clear
 siman setup, rep(re) dgm(beta pmi mech) target(esti) method(meth) estimate(b) se(se) true(true)
-siman zip if mech==1 & pmiss==1 & estimand=="effect", noncov(lcol(red)) cov(lcol(blue)) sca(mcol(red)) truegr(lcol(green)) bygr(row(3)) scheme(s1color) name(g1,replace)
+siman zip if mech==1 & float(pmiss)==float(0.2) & estimand=="effect", noncov(lcol(red)) cov(lcol(blue)) sca(mcol(red)) truegr(lcol(green)) bygr(row(3)) scheme(s1color) name(g1,replace)
 
-use data/extendedtestdata2, clear
+use data/extendedtestdata, clear
 gen lower=b-invnorm(.975)*se
 gen upper=b+invnorm(.975)*se
 drop se
 siman setup, rep(re) estimate(b) dgm(beta pmi mech) target(esti) method(meth) lci(lower) uci(upper) true(true)
-siman zip if mech==1 & pmiss==1 & estimand=="effect", noncov(lcol(red)) cov(lcol(blue)) sca(mcol(red)) truegr(lcol(green)) bygr(row(3)) scheme(s1color) name(g2,replace)
+siman zip if mech==1 & float(pmiss)==float(0.2) & estimand=="effect", noncov(lcol(red)) cov(lcol(blue)) sca(mcol(red)) truegr(lcol(green)) bygr(row(3)) scheme(s1color) name(g2,replace)
 
 di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 

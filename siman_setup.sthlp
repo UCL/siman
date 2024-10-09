@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.10 24jul2024}{...}
+{* *! version 0.11 9oct2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Input data formats" "siman_setup##data"}{...}
@@ -58,7 +58,6 @@ relates to one simulation combination of {bf:dgm}/{bf:method}/{bf:target}, label
 Options for data in long-long input format (data format 1):
 
 {pstd}
-{opt dgm(varlist)}
 {opt tar:get(varname)}
 {opt meth:od(varname)}
 {opt est:imate(varname)}
@@ -68,13 +67,11 @@ Options for data in long-long input format (data format 1):
 {opt uci(varname)}
 {opt p(varname)}
 {opt true(#|varname)}
-clear
 
 {pstd}
 Options for data in wide-wide input format (data format 2):
 
 {pstd}
-{opt dgm(varlist)}
 {opt tar:get(values)}
 {opt meth:od(values)}
 {opt est:imate(stub_varname)}
@@ -85,13 +82,12 @@ Options for data in wide-wide input format (data format 2):
 {opt p(stub_varname)}
 {opt true(#|stub_varname)}
 {opt ord:er(varname)}
-clear
+{opt sep(string)}
 
 {pstd}
 Options for data in long-wide input format (data format 3):
 
 {pstd}
-{opt dgm(varlist)}
 {opt tar:get(varname)}
 {opt meth:od(values)}
 {opt est:imate(stub_varname)}
@@ -101,13 +97,12 @@ Options for data in long-wide input format (data format 3):
 {opt uci(stub_varname)}
 {opt p(stub_varname)}
 {opt true(#|stub_varname)}
-clear
+{opt sep(string)}
 
 {pstd}
 Options for data in wide-long input format (data format 4):
 
 {pstd}
-{opt dgm(varlist)}
 {opt tar:get(values)}
 {opt meth:od(varname)}
 {opt est:imate(stub_varname)}
@@ -117,8 +112,15 @@ Options for data in wide-long input format (data format 4):
 {opt uci(stub_varname)}
 {opt p(stub_varname)}
 {opt true(#|stub_varname)}
-clear
- 
+{opt sep(string)}
+
+{pstd}
+Options for data in any input format:
+
+{pstd}
+{opt dgm(varlist)}
+{opt clear}
+
  
 {synoptset 35 tabbed}{...}
 {synopthdr}
@@ -137,6 +139,8 @@ clear
 {synopt:{opt ord:er(varname)}}if in wide-wide format, this must be either {it:target} or {it:method}, 
 denoting that either the target stub is first or the method stub is first in the variable names. {p_end}
 {synopt:{opt clear}}to clear the existing data held in memory: only needed with {cmd:if} or {cmd:in} conditions. {p_end}
+{synopt:{opt sep(string)}}a separator within wide-format variable names. 
+For example, if variables est_beta and est_gamma hold the estimates for targets  beta and gamma, you could code {cmd:estimate(est) sep(_) target(beta gamma)} instead of {cmd:estimate(est) target(_beta _gamma)}. {p_end}
 
 
 {marker description}{...}

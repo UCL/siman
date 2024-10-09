@@ -119,24 +119,24 @@ foreach file in mstring.pdf mstringplus.pdf mstringrev.pdf result {
 }
 
 // RESTRICTING METHODS
-use $testpath/data/extendedtestdata2.dta, clear
+use $testpath/data/extendedtestdata.dta, clear
 sencode met, replace
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman analyse, notable
-siman lol if esti=="effect" & beta==1 & pmiss==1, name(meth3,replace) legend(row(1)) col(red blue green) debug
-siman lol if esti=="effect" & beta==1 & pmiss==1 & meth!=1, name(meth2,replace) legend(row(1)) col(blue green) debug
+siman lol if esti=="effect" & float(beta)==float(0) & float(pmiss)==float(0.2), name(meth3,replace) legend(row(1)) col(red blue green) debug
+siman lol if esti=="effect" & float(beta)==float(0) & float(pmiss)==float(0.2) & meth!=1, name(meth2,replace) legend(row(1)) col(blue green) debug
 * Compare graphs meth3 and meth2
 
 // MULTIPLE DGMVARS
-use $testpath/data/extendedtestdata2.dta, clear
+use $testpath/data/extendedtestdata.dta, clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 
 siman analyse, notable
-siman lol bias relprec power cover if beta==3, labformat(none) ///
+siman lol bias relprec power cover if float(beta)==float(0.5), labformat(none) ///
 	refpower(90) dgmwidth(35) pmwidth(20) legend(col(1)) name(l`++i', replace)
 
 * finish with a high quality graph
-siman lol bias relprec power cover if beta==3 & esti=="effect", ///
+siman lol bias relprec power cover if float(beta)==float(0.5) & esti=="effect", ///
 	legend(row(1)) name(l`++i', replace) col(red green blue) ///
 	bygr(note(Good lollyplot for estimand effect) title(,size(medium))) ///
 	labf(%6.3f %6.0f)

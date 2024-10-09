@@ -22,32 +22,32 @@ siman which
 
 forvalues dgmtype = 1/5 {
 	di as input "dgmtype = `dgmtype'"
-	use data/extendedtestdata2, clear
+	use data/extendedtestdata, clear
 	keep if method=="CCA"
 	drop method
 	if `dgmtype'==1 {
-		keep if beta==1 & pmiss==1 & mech=="MCAR"
+		keep if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR"
 		drop beta pmiss mech
 		local dgmopt
 		local xdgm 
 		local xndgmvars 0
 	}
 	if `dgmtype'==2 {
-		keep if beta==1 & pmiss==1 & mech=="MCAR"
+		keep if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR"
 		drop pmiss mech 
 		local dgmopt dgm(beta)
 		local xdgm beta
 		local xndgmvars 1
 	}
 	if `dgmtype'==3 {
-		keep if beta==1 & pmiss==1 
+		keep if float(beta)==float(0) & float(pmiss)==float(0.2) 
 		drop beta pmiss
 		local dgmopt dgm(mech)
 		local xdgm mech
 		local xndgmvars 1
 	}
 	if `dgmtype'==4 {
-		keep if beta==1
+		keep if float(beta)==float(0)
 		drop beta
 		local dgmopt dgm(pmiss mech)
 		local xdgm pmiss mech

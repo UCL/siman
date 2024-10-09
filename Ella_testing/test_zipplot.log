@@ -1,9 +1,10 @@
 
 . siman which
 C:\ian\git\siman\siman.ado
-*!      version 0.10    25jul2024       
+*!      version 0.11    07oct2024
+*!      Type -siman which- to see versions of siman's subprograms
 C:\ian\git\siman\siman_setup.ado
-*!      version 0.10.2  14jun2024       
+*!      version 0.11    09oct2024       
 C:\ian\git\siman\siman_describe.ado
 *!      version 0.7     14jun2024       
 C:\ian\git\siman\siman_analyse.ado
@@ -11,11 +12,12 @@ C:\ian\git\siman\siman_analyse.ado
 C:\ian\git\siman\siman_table.ado
 *!      version 0.8.3   3apr2024
 C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10    23jun2024       
+*!      version 0.10.2  19aug2024       
+*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
 C:\ian\git\siman\siman_zipplot.ado
 *!      version 0.10    19jul2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10    25jun2024       
+*!      version 0.10.1  8aug2024        
 C:\ian\git\siman\siman_blandaltman.ado
 *!      version 0.10    24jun2024
 C:\ian\git\siman\siman_swarm.ado
@@ -98,14 +100,15 @@ Consider reducing the number of panels using 'if' condition or 'by' option
 
 . 
 . // Compare zips made from se and from ci
-. use data/extendedtestdata2, clear
+. use data/extendedtestdata, clear
 
 . siman setup, rep(re) dgm(beta pmi mech) target(esti) method(meth) estimate(b) se(se) true(true)
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -133,12 +136,12 @@ Repetition-level output
   True value variable:            true
 _____________________________________________________
 
-. siman zip if mech==1 & pmiss==1 & estimand=="effect", noncov(lcol(red)) cov(lcol(blue)) sca(mcol(r
-> ed)) truegr(lcol(green)) bygr(row(3)) scheme(s1color) name(g1,replace)
+. siman zip if mech==1 & float(pmiss)==float(0.2) & estimand=="effect", noncov(lcol(red)) cov(lcol(b
+> lue)) sca(mcol(red)) truegr(lcol(green)) bygr(row(3)) scheme(s1color) name(g1,replace)
 siman zipplot will draw 1 graph with 9 panels
 
 . 
-. use data/extendedtestdata2, clear
+. use data/extendedtestdata, clear
 
 . gen lower=b-invnorm(.975)*se
 
@@ -148,11 +151,12 @@ siman zipplot will draw 1 graph with 9 panels
 
 . siman setup, rep(re) estimate(b) dgm(beta pmi mech) target(esti) method(meth) lci(lower) uci(upper
 > ) true(true)
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -180,8 +184,8 @@ Repetition-level output
   True value variable:            true
 _____________________________________________________
 
-. siman zip if mech==1 & pmiss==1 & estimand=="effect", noncov(lcol(red)) cov(lcol(blue)) sca(mcol(r
-> ed)) truegr(lcol(green)) bygr(row(3)) scheme(s1color) name(g2,replace)
+. siman zip if mech==1 & float(pmiss)==float(0.2) & estimand=="effect", noncov(lcol(red)) cov(lcol(b
+> lue)) sca(mcol(red)) truegr(lcol(green)) bygr(row(3)) scheme(s1color) name(g2,replace)
 siman zipplot will draw 1 graph with 9 panels
 
 . 

@@ -1,4 +1,5 @@
-*!	version 0.10.2	14jun2024	
+*!	version 0.11	09oct2024	
+*	version 0.11	09oct2024	IW allow non-integer dgmvar; allow extra variables; new sep() option for wide formats; new check for true constant within dgm & target
 *	version 0.10.2	14jun2024	IW wide target/method: numeric/string comes out as numeric/numeric-labelled and respects string order; remove more unwanted chars
 *	version 0.10.1	11jun2024	IW allow variable abbreviations
 *	version 0.10	 7may2024	IW major restructure
@@ -37,8 +38,14 @@
 program define siman_setup
 version 15
 
-syntax [if] [in], Rep(varname numeric min=1 max=1) [DGM(varlist) TARget(string) METHod(string)/* define the structure variables
-	*/ ESTimate(name) SE(name) DF(name) LCI(name) UCI(name) P(name) TRUE(string) ORDer(string) CLEAR debug] 
+syntax [if] [in], ///
+	Rep(varname numeric min=1 max=1) ///
+	[DGM(varlist) TARget(string) METHod(string) /// structure variables
+	ESTimate(name) SE(name) DF(name) LCI(name) UCI(name) P(name) /// estimation result variables
+	TRUE(string) ORDer(string) ///
+	CLEAR ///
+	debug sep(string) /// undocumented
+	] 
 
 /*
 if method() contains one entry and target() contains one entry, then the program will assume that those entries are variable names and will select data format 1 (long-long).  
@@ -114,22 +121,26 @@ if !mi("`dgm'") {
 			encode `var', gen(`t`var'') label(`var')
 			drop `var'
 			rename `t`var'' `var'
-			compress `var'
-			di as text "{p 0 2}Warning: variable `var', which appears in dgm(), was stored as a string. It has been encoded as numeric so that subsequent siman commands will work. If you require a different order, encode `var' as numeric before running -siman setup-.{p_end}"
+			qui compress `var'
+			di as text "{p 0 2}Warning: dgm variable " as result "`var'" as text " has been converted from string to numeric. If you require its levels to be ordered differently, encode " as result "`var'" as text " as numeric before running -siman setup-.{p_end}"
 		}
 		qui count if missing(`var')
 		cap assert r(N)==0
-		if _rc di as error "{p 0 2}Warning: variable `var' contains missing values. This may cause problems. Consider recoding as non-missing.{p_end}"
+		if _rc di as error "{p 0 2}Warning: dgm variable " as result "`var'" as text " contains missing values. This may cause problems. Consider recoding as non-missing.{p_end}"
 	}
 }
 
-* check no non-integer values of dgm
+* recast dgmvars as double if they have non-integer values
 if !mi("`dgm'") {
 	foreach var of varlist `dgm' {
-		cap assert `var' == round(`var', 0.1)
-		if _rc {
-			di as error "{p 0 2}Non-integer values of dgm are not permitted by siman: variable `var'{p_end}"
-			exit 498
+		cap assert `var' == int(`var')
+		if _rc & "`: type `var''" == "float" {
+			di as text "{p 0 2}Warning: dgm variable " as result "`var'" as text " has non-integer values: converting from float to double " _c
+			summ `var', meanonly
+			local prec = ceil(log10(epsfloat()*r(max)))
+			recast double `var' 
+			replace `var' = round(`var', 1E`prec')
+			di as text "{p_end}"
 		}
 	}
 }
@@ -231,20 +242,29 @@ if "`methodformat'"=="long" & "`targetformat'"=="long" {
 }
 else local stubvars `estimate' `se' `df' `lci' `uci' `p' 
 
-/*** CHECK WIDE VARIABLES EXIST ***/
+/*** CHECK WIDE VARIABLES EXIST, AND REMOVE SEPARATOR FROM VARNAME ***/
+
+if !mi("`debug'") di as input "methodformat = `methodformat', targetformat = `targetformat'"
 
 if "`methodformat'"=="wide" & "`targetformat'"=="wide" {
 	foreach stubvar of local stubvars {
 		foreach thismethod of local methodvalues {
 			foreach thistarget of local valtarget {
-				if "`order'"=="target" local widevar `stubvar'`thistarget'`thismethod'
-				else local widevar `stubvar'`thismethod'`thistarget'
+				if "`order'"=="target" {
+					local widevar `stubvar'`sep'`thistarget'`sep'`thismethod'
+					local widevarnew `stubvar'`thistarget'`thismethod'
+				}
+				else {
+					local widevar `stubvar'`sep'`thismethod'`sep'`thistarget'
+					local widevarnew `stubvar'`thismethod'`thistarget'
+				}
 				cap confirm variable `widevar'
 				if _rc {
 					di as error "{p 0 2}Variable `widevar' was expected but not found{p_end}"
 					exit 498
 				}
-				local widevars `widevars' `widevar'
+				if !mi("`sep'") rename `widevar' `widevarnew'
+				local widevars `widevars' `widevarnew'
 			}
 		}
 	}
@@ -252,26 +272,30 @@ if "`methodformat'"=="wide" & "`targetformat'"=="wide" {
 if "`methodformat'"=="long" & "`targetformat'"=="wide" {
 	foreach stubvar of local stubvars {
 		foreach thistarget of local valtarget {
-			local widevar `stubvar'`thistarget'
+			local widevar `stubvar'`sep'`thistarget'
+			local widevarnew `stubvar'`thistarget'
 			cap confirm variable `widevar'
 			if _rc {
 				di as error "{p 0 2}Variable `widevar' was expected but not found{p_end}"
 				exit 498
 			}
-			local widevars `widevars' `widevar'
+			if !mi("`sep'") rename `widevar' `widevarnew'
+			local widevars `widevars' `widevarnew'
 		}
 	}
 }
 if "`methodformat'"=="wide" & "`targetformat'"=="long" {
 	foreach stubvar of local stubvars {
 		foreach thismethod of local methodvalues {
-			local widevar `stubvar'`thismethod'
+			local widevar `stubvar'`sep'`thismethod'
+			local widevarnew `stubvar'`thismethod'
 			cap confirm variable `widevar'
 			if _rc {
 				di as error "{p 0 2}Variable `widevar' was expected but not found{p_end}"
 				exit 498
 			}
-			local widevars `widevars' `widevar'
+			if !mi("`sep'") rename `widevar' `widevarnew'
+			local widevars `widevars' `widevarnew'
 		}
 	}
 }
@@ -384,8 +408,8 @@ local simanvars : list uniq simanvars // remove duplicate if true is a dgmvar
 local toomany : list allvars - simanvars
 local toofew : list simanvars - allvars
 if !mi("`toomany'") {
-	di as error "{p 0 2}siman setup found unwanted variables: `toomany'{p_end}"
-	exit 498
+	di as text "{p 0 2}Warning: siman setup found unwanted variables: " as result "`toomany'{p_end}"
+	*exit 498
 }
 if !mi("`toofew'") {
 	di as error "{p 0 2}siman setup did not find needed variables: `toofew'{p_end}"
@@ -396,7 +420,7 @@ if !mi("`toofew'") {
 /*** WE'RE READY TO REFORMAT ***/
 cap which sencode
 if _rc {
-	di as error `"{p 0 2}sencode needs to be installed to run siman seetup. Please use {stata "ssc install sencode"}"'
+	di as error `"{p 0 2}sencode needs to be installed to run siman setup. Please use {stata "ssc install sencode"}"'
 	exit 498
 }
 
@@ -431,7 +455,7 @@ if "`targetformat'"=="wide" & "`methodformat'"=="wide" & "`order'"=="target" {
 			local stubvarsinterim `stubvarsinterim' `stubvar'`targetvalue'
 		}
 	}
-	`dicmd' reshape long `stubvarsinterim' `truestub', i(`rep' `longvars') j(method `method') `methodstring'
+	`dicmd' reshape long `stubvarsinterim', i(`rep' `longvars') j(method `method') `methodstring'
 	local methodformat long
 	local method method
 	local longvars `longvars' `method'
@@ -464,11 +488,19 @@ if "`targetformat'"=="wide" & "`methodformat'"=="long" {
 	}
 }
 
-* produce error message if any other variables contained in the dataset, excluding tempvars
-* do this later
 
-* Assigning characteristics
-******************************
+/* CHECK TRUE IS CONSTANT BY DGM AND TARGET */
+
+if !mi("`dgm'") & !mi("`true'") {
+	cap bysort `dgm' `target': assert `true'==`true'[1]
+	if _rc {
+		di as error "{p 0 2}True value is not constant within dgm{p_end}"
+		exit 498
+	}
+}
+
+
+/* ASSIGN CHARACTERISTICS */
 
 * DGM
 local allthings dgm ndgmvars

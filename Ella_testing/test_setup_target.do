@@ -23,8 +23,8 @@ siman which
 
 forvalues targettype = 1/6 {
 	di as input "targettype = `targettype'"
-	use data/extendedtestdata2, clear
-	keep if pmiss==1 & mech=="MCAR"
+	use data/extendedtestdata, clear
+	keep if float(pmiss)==float(0.2) & mech=="MCAR"
 	drop pmiss mech
 	if `targettype'==1 { // no target var
 		keep if estimand=="effect"
@@ -100,13 +100,13 @@ forvalues targettype = 1/6 {
 	save data/setupdata_target`targettype', replace
 
 	* check analyse with subsets
-	qui count if beta==3
+	qui count if float(beta)==float(0.5)
 	local x = r(N)
-	siman analyse if beta==2, notable
-	qui count if beta==3
+	siman analyse if float(beta)==float(0.25), notable
+	qui count if float(beta)==float(0.5)
 	assert `x' == r(N)
-	siman analyse if beta==1, notable replace
-	qui count if beta==3
+	siman analyse if float(beta)==float(0), notable replace
+	qui count if float(beta)==float(0.5)
 	assert `x' == r(N)
 }
 

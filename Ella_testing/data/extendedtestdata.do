@@ -26,12 +26,17 @@ These settings chosen to make both nestloop and trellis sensible
 
 IW 27mar2023: created
 IW 15dec2023: postfile renamed extendedtestdata.dta, and create extendedtestdata2.dta
+IW 09oct2024: add true to extendedtestdata.dta
+
+Produces two data files:
+	extendedtestdata - simulation results with non-integer dgmvars
+	extendedtestdata2 - the same but with non-integer dgmvars encoded as integers
 */
 
 * set up
 version 17
 local filename extendedtestdata
-local run 1
+local run 0
 prog drop _all
 
 * run simulation (if required)
@@ -93,6 +98,8 @@ gen true = 1 if estimand=="mean0"
 replace true = 1+beta if estimand=="mean1"
 replace true = beta if estimand=="effect"
 
+save `filename', replace
+
 * siman setup requires beta, pmiss to be integer
 rename beta _beta
 gen beta=string(_beta)
@@ -104,7 +111,7 @@ drop _pmiss _beta
 order beta pmiss
 
 * save
-save extendedtestdata2, replace
+save `filename'2, replace
 
 * view DGMvars
 table beta pmiss mech
