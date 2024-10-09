@@ -1,9 +1,10 @@
 
 . siman which
 C:\ian\git\siman\siman.ado
-*!      version 0.10    25jul2024       
+*!      version 0.11    07oct2024
+*!      Type -siman which- to see versions of siman's subprograms
 C:\ian\git\siman\siman_setup.ado
-*!      version 0.10.2  14jun2024       
+*!      version 0.11    09oct2024       
 C:\ian\git\siman\siman_describe.ado
 *!      version 0.7     14jun2024       
 C:\ian\git\siman\siman_analyse.ado
@@ -11,11 +12,12 @@ C:\ian\git\siman\siman_analyse.ado
 C:\ian\git\siman\siman_table.ado
 *!      version 0.8.3   3apr2024
 C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10    23jun2024       
+*!      version 0.10.2  19aug2024       
+*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
 C:\ian\git\siman\siman_zipplot.ado
 *!      version 0.10    19jul2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10    25jun2024       
+*!      version 0.10.1  8aug2024        
 C:\ian\git\siman\siman_blandaltman.ado
 *!      version 0.10    24jun2024
 C:\ian\git\siman\siman_swarm.ado
@@ -30,8 +32,8 @@ C:\ian\git\siman\siman_nestloop.ado
 . 
 . forvalues targettype = 1/6 {
   2.         di as input "targettype = `targettype'"
-  3.         use data/extendedtestdata2, clear
-  4.         keep if pmiss==1 & mech=="MCAR"
+  3.         use data/extendedtestdata, clear
+  4.         keep if float(pmiss)==float(0.2) & mech=="MCAR"
   5.         drop pmiss mech
   6.         if `targettype'==1 { // no target var
   7.                 keep if estimand=="effect"
@@ -108,13 +110,13 @@ C:\ian\git\siman\siman_nestloop.ado
 .         save data/setupdata_target`targettype', replace
  72. 
 .         * check analyse with subsets
-.         qui count if beta==3
+.         qui count if float(beta)==float(0.5)
  73.         local x = r(N)
- 74.         siman analyse if beta==2, notable
- 75.         qui count if beta==3
+ 74.         siman analyse if float(beta)==float(0.25), notable
+ 75.         qui count if float(beta)==float(0.5)
  76.         assert `x' == r(N)
- 77.         siman analyse if beta==1, notable replace
- 78.         qui count if beta==3
+ 77.         siman analyse if float(beta)==float(0), notable replace
+ 78.         qui count if float(beta)==float(0.5)
  79.         assert `x' == r(N)
  80. }
 targettype = 1

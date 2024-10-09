@@ -1,9 +1,10 @@
 
 . siman which
 C:\ian\git\siman\siman.ado
-*!      version 0.10    25jul2024       
+*!      version 0.11    07oct2024
+*!      Type -siman which- to see versions of siman's subprograms
 C:\ian\git\siman\siman_setup.ado
-*!      version 0.10.2  14jun2024       
+*!      version 0.11    09oct2024       
 C:\ian\git\siman\siman_describe.ado
 *!      version 0.7     14jun2024       
 C:\ian\git\siman\siman_analyse.ado
@@ -11,11 +12,12 @@ C:\ian\git\siman\siman_analyse.ado
 C:\ian\git\siman\siman_table.ado
 *!      version 0.8.3   3apr2024
 C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10    23jun2024       
+*!      version 0.10.2  19aug2024       
+*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
 C:\ian\git\siman\siman_zipplot.ado
 *!      version 0.10    19jul2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10    25jun2024       
+*!      version 0.10.1  8aug2024        
 C:\ian\git\siman\siman_blandaltman.ado
 *!      version 0.10    24jun2024
 C:\ian\git\siman\siman_swarm.ado
@@ -365,67 +367,24 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 
 . 
 . * check get error if true is not constant across methods
-. clear all
+. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
 
-. 
-. use $testpath/data/msgbsl_inter_try_postfile.dta
-
-. 
-. * targets are wide, methods are long 
-. * so data are in wide-long format (format 4)
-. 
-. * need estimates to be stub + target
 . rename inter binter
 
 . rename main bmain
 
-. 
-. * set up true value variables
 . gen trueinter=.3
 
 . gen truemain=0
 
-. 
+. * introduce error
 . replace trueinter = 0.5 in 2
 (1 real change made)
 
-. replace trueinter = 0.8 in 3
-(1 real change made)
+. cap siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
 
-. replace truemain = 0.2 in 2
-(1 real change made)
+. assert _rc==498
 
-. 
-. * set up
-. siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-Data-generating mechanism (DGM)
-  DGM variables (# levels):       parm1 (1) 
-  Total number of DGMs:           1
-
-Targets
-  Variable containing targets:    target
-  Number of targets:              2
-  Target values:                  inter main
-
-Methods
-  Variable containing methods:    method
-  Number of methods:              4
-  Method values:                  CC FULLDAT IMPALL IMPBYZ
-
-Repetition-level output
-  Point estimate variable:        b
-  SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
-  True value variable:            true
-_____________________________________________________
-
-. 
 . 
 . /*
 > TEST LCI, UCI, P OPTIONS

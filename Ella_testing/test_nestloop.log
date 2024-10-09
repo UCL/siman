@@ -1,9 +1,10 @@
 
 . siman which
 C:\ian\git\siman\siman.ado
-*!      version 0.10    25jul2024       
+*!      version 0.11    07oct2024
+*!      Type -siman which- to see versions of siman's subprograms
 C:\ian\git\siman\siman_setup.ado
-*!      version 0.10.2  14jun2024       
+*!      version 0.11    09oct2024       
 C:\ian\git\siman\siman_describe.ado
 *!      version 0.7     14jun2024       
 C:\ian\git\siman\siman_analyse.ado
@@ -11,11 +12,12 @@ C:\ian\git\siman\siman_analyse.ado
 C:\ian\git\siman\siman_table.ado
 *!      version 0.8.3   3apr2024
 C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10    23jun2024       
+*!      version 0.10.2  19aug2024       
+*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
 C:\ian\git\siman\siman_zipplot.ado
 *!      version 0.10    19jul2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10    25jun2024       
+*!      version 0.10.1  8aug2024        
 C:\ian\git\siman\siman_blandaltman.ado
 *!      version 0.10    24jun2024
 C:\ian\git\siman\siman_swarm.ado
@@ -26,16 +28,17 @@ C:\ian\git\siman\siman_nestloop.ado
 *!      version 0.10.1  26jun2024       
 
 . 
-. use $testpath/data/extendedtestdata2.dta, clear
+. use $testpath/data/extendedtestdata.dta, clear
 
 . 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -78,16 +81,17 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * setup without true
-. use $testpath/data/extendedtestdata2, clear
+. use $testpath/data/extendedtestdata, clear
 
 . drop true
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) 
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -124,15 +128,16 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * siman analyse with if
-. use $testpath/data/extendedtestdata2, clear
+. use $testpath/data/extendedtestdata, clear
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -173,10 +178,10 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 . // COMPARE METHOD AS UNLABELLED/LABELLED NUMERIC OR STRING
 . 
 . * method is string (as in source data)
-. use $testpath/data/extendedtestdata2, clear
+. use $testpath/data/extendedtestdata, clear
 
-. tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b) // CCA, MeanIm
-> p, Noadj
+. tab method if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR" & estimand=="effect"
+>  & rep>0, su(b) // CCA, MeanImp, Noadj
 
             |            Summary of b
      method |        Mean   Std. dev.       Freq.
@@ -189,11 +194,12 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -232,11 +238,12 @@ file mstring.pdf saved as PDF format
 
 . 
 . * method is numeric labelled in alphabetical order
-. use $testpath/data/extendedtestdata2, clear
+. use $testpath/data/extendedtestdata, clear
 
 . sencode method, gsort(method) replace // 1=CCA, 2=MeanImp, 3=Noadj
 
-. tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+. tab method if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR" & estimand=="effect"
+>  & rep>0, su(b)
 
             |            Summary of b
      method |        Mean   Std. dev.       Freq.
@@ -249,11 +256,12 @@ file mstring.pdf saved as PDF format
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -289,11 +297,12 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * method is numeric labelled in data order
-. use $testpath/data/extendedtestdata2, clear
+. use $testpath/data/extendedtestdata, clear
 
 . sencode method, replace // 1=Noadj, 2=CCA, 3=MeanImp
 
-. tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+. tab method if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR" & estimand=="effect"
+>  & rep>0, su(b)
 
             |            Summary of b
      method |        Mean   Std. dev.       Freq.
@@ -306,11 +315,12 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -346,11 +356,12 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * method is numeric unlabelled in alphabetical order
-. use $testpath/data/extendedtestdata2, clear
+. use $testpath/data/extendedtestdata, clear
 
 . sencode method, gsort(method) replace // order is alphabetical: CCA MeanImp Noadj 
 
-. tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+. tab method if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR" & estimand=="effect"
+>  & rep>0, su(b)
 
             |            Summary of b
      method |        Mean   Std. dev.       Freq.
@@ -363,7 +374,8 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . label val method // 1 [=Noadj], 2 [=CCA], 3 [=MeanImp]
 
-. tab method if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+. tab method if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR" & estimand=="effect"
+>  & rep>0, su(b)
 
             |            Summary of b
      method |        Mean   Std. dev.       Freq.
@@ -376,11 +388,12 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -418,7 +431,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 . ** NB name(string) gives funny error
 . 
 . * method is not 1...
-. use $testpath/data/extendedtestdata2, clear
+. use $testpath/data/extendedtestdata, clear
 
 . gen methchar = 11 if method == "CCA"
 (72,000 missing values generated)
@@ -435,7 +448,8 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . drop method
 
-. tab methchar if beta==1 & pmiss==1 & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
+. tab methchar if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR" & estimand=="effec
+> t" & rep>0, su(b)
 
             |            Summary of b
    methchar |        Mean   Std. dev.       Freq.
@@ -448,11 +462,12 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(methchar) target(estimand) est(b) se(se) true(tr
 > ue)
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -507,15 +522,16 @@ FC: no differences encountered
 . 
 . // more tests with true
 . * check mean 
-. use $testpath/data/extendedtestdata2, clear
+. use $testpath/data/extendedtestdata, clear
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -588,20 +604,20 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 . 
 . * wrong pm
 . cap noi siman nestloop rhubarb 
-Performance measures wrongly specified: rhubarb
+Performance measures not in data: rhubarb
 
 . assert _rc == 498
 
 . 
 . * only one dgm
-. cap noi siman nestloop bias if pmiss==1 & beta==1 & mech==1
+. cap noi siman nestloop bias if float(beta)==0 & float(pmiss)==float(0.2) & mech==1
 siman nestloop requires more than 1 dgm combination
 
 . assert _rc == 498
 
 . 
 . * no target
-. use $testpath/data/extendedtestdata2, clear
+. use $testpath/data/extendedtestdata, clear
 
 . keep if estimand=="mean0"
 (72,000 observations deleted)
@@ -609,11 +625,12 @@ siman nestloop requires more than 1 dgm combination
 . drop estimand
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) est(b) se(se) true(true)
-  variable mech was long now byte
-  (108,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (36,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -649,18 +666,19 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * numeric target
-. use $testpath/data/extendedtestdata2, clear
+. use $testpath/data/extendedtestdata, clear
 
 . encode estimand, gen(estinum)
 
 . drop estimand
 
 . siman setup, target(estinum) rep(rep) dgm(beta pmiss mech) method(method) est(b) se(se) true(true)
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________

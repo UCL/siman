@@ -134,17 +134,8 @@ siman analyse
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
 use $testpath/data/extendedtestdata.dta, clear
-
-* remove non-integer values
-foreach var in beta pmiss {
-	gen `var'char = strofreal(`var')
-	drop `var'
-	sencode `var'char, gen(`var')
-	drop `var'char
-}
 order beta pmiss
-
-siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) 
+siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman analyse
 
 *************************************************************************
@@ -211,19 +202,11 @@ siman analyse
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
 use $testpath/data/extendedtestdata.dta, clear
-
-* remove non-integer values
-foreach var in beta pmiss {
-	gen `var'char = strofreal(`var')
-	drop `var'
-	sencode `var'char, gen(`var')
-	drop `var'char
-}
 order beta pmiss
-* reshape in to long-wide format
+* reshape to long-wide format
 reshape wide b se, i(rep mech pmiss beta estimand) j(method "Noadj" "CCA" "MeanImp") string
 
-siman setup, rep(rep) dgm(beta pmiss mech) method(Noadj CCA MeanImp) target(estimand) est(b) se(se) 
+siman setup, rep(rep) dgm(beta pmiss mech) method(Noadj CCA MeanImp) target(estimand) est(b) se(se) true(true)
 siman analyse
 
 *************************************************************************
@@ -277,19 +260,14 @@ siman analyse
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
 use $testpath/data/extendedtestdata.dta, clear
-
-* remove non-integer values
-foreach var in beta pmiss {
-	gen `var'char = strofreal(`var')
-	drop `var'
-	sencode `var'char, gen(`var')
-	drop `var'char
-}
 order beta pmiss
-* reshape in to wide-wide format, method in label first
+* data are long-long
+* reshape method to wide
 reshape wide b se, i(rep mech pmiss beta estimand) j(method "Noadj" "CCA" "MeanImp") string
-reshape wide bNoadj seNoadj bCCA seCCA bMeanImp seMeanImp, i(rep mech pmiss beta) j(estimand "effect" "mean0" "mean1") string
-siman setup, rep(rep) dgm(beta pmiss mech) method(Noadj CCA MeanImp) target(effect mean0 mean1) est(b) se(se) order(method)
+* reshape target to wide
+reshape wide bNoadj seNoadj bCCA seCCA bMeanImp seMeanImp true, i(rep mech pmiss beta) j(estimand "effect" "mean0" "mean1") string
+* data are now wide-wide
+siman setup, rep(rep) dgm(beta pmiss mech) method(Noadj CCA MeanImp) target(effect mean0 mean1) est(b) se(se) order(method) true(true)
 siman analyse
 
 *************************************************************************
@@ -341,19 +319,12 @@ siman analyse
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
 use $testpath/data/extendedtestdata.dta, clear
-
-* remove non-integer values
-foreach var in beta pmiss {
-	gen `var'char = strofreal(`var')
-	drop `var'
-	sencode `var'char, gen(`var')
-	drop `var'char
-}
 order beta pmiss
-* reshape in to wide-wide format, target in label first
-reshape wide b se, i(rep mech pmiss beta method) j(estimand "effect" "mean0" "mean1") string
+* reshape target to wide
+reshape wide b se true, i(rep mech pmiss beta method) j(estimand "effect" "mean0" "mean1") string
+* reshape method to wide
 reshape wide beffect seeffect bmean0 semean0 bmean1 semean1, i(rep mech pmiss beta) j(method "Noadj" "CCA" "MeanImp") string
-siman setup, rep(rep) dgm(beta pmiss mech) method(Noadj CCA MeanImp) target(effect mean0 mean1) est(b) se(se) order(target)
+siman setup, rep(rep) dgm(beta pmiss mech) method(Noadj CCA MeanImp) target(effect mean0 mean1) est(b) se(se) order(target) true(true)
 siman analyse
 
 *************************************************************************
@@ -418,18 +389,10 @@ siman analyse
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
 use $testpath/data/extendedtestdata.dta, clear
-
-* remove non-integer values
-foreach var in beta pmiss {
-	gen `var'char = strofreal(`var')
-	drop `var'
-	sencode `var'char, gen(`var')
-	drop `var'char
-}
 order beta pmiss
 * reshape in to wide-long format
-reshape wide b se, i(rep mech pmiss beta method) j(estimand "effect" "mean0" "mean1") string
-siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(effect mean0 mean1) est(b) se(se) 
+reshape wide b se true, i(rep mech pmiss beta method) j(estimand "effect" "mean0" "mean1") string
+siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(effect mean0 mean1) est(b) se(se) true(true)
 siman analyse
 
 

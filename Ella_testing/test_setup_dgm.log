@@ -1,9 +1,10 @@
 
 . siman which
 C:\ian\git\siman\siman.ado
-*!      version 0.10    25jul2024       
+*!      version 0.11    07oct2024
+*!      Type -siman which- to see versions of siman's subprograms
 C:\ian\git\siman\siman_setup.ado
-*!      version 0.10.2  14jun2024       
+*!      version 0.11    09oct2024       
 C:\ian\git\siman\siman_describe.ado
 *!      version 0.7     14jun2024       
 C:\ian\git\siman\siman_analyse.ado
@@ -11,11 +12,12 @@ C:\ian\git\siman\siman_analyse.ado
 C:\ian\git\siman\siman_table.ado
 *!      version 0.8.3   3apr2024
 C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10    23jun2024       
+*!      version 0.10.2  19aug2024       
+*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
 C:\ian\git\siman\siman_zipplot.ado
 *!      version 0.10    19jul2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10    25jun2024       
+*!      version 0.10.1  8aug2024        
 C:\ian\git\siman\siman_blandaltman.ado
 *!      version 0.10    24jun2024
 C:\ian\git\siman\siman_swarm.ado
@@ -28,32 +30,32 @@ C:\ian\git\siman\siman_nestloop.ado
 . 
 . forvalues dgmtype = 1/5 {
   2.         di as input "dgmtype = `dgmtype'"
-  3.         use data/extendedtestdata2, clear
+  3.         use data/extendedtestdata, clear
   4.         keep if method=="CCA"
   5.         drop method
   6.         if `dgmtype'==1 {
-  7.                 keep if beta==1 & pmiss==1 & mech=="MCAR"
+  7.                 keep if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR"
   8.                 drop beta pmiss mech
   9.                 local dgmopt
  10.                 local xdgm 
  11.                 local xndgmvars 0
  12.         }
  13.         if `dgmtype'==2 {
- 14.                 keep if beta==1 & pmiss==1 & mech=="MCAR"
+ 14.                 keep if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR"
  15.                 drop pmiss mech 
  16.                 local dgmopt dgm(beta)
  17.                 local xdgm beta
  18.                 local xndgmvars 1
  19.         }
  20.         if `dgmtype'==3 {
- 21.                 keep if beta==1 & pmiss==1 
+ 21.                 keep if float(beta)==float(0) & float(pmiss)==float(0.2) 
  22.                 drop beta pmiss
  23.                 local dgmopt dgm(mech)
  24.                 local xdgm mech
  25.                 local xndgmvars 1
  26.         }
  27.         if `dgmtype'==4 {
- 28.                 keep if beta==1
+ 28.                 keep if float(beta)==float(0)
  29.                 drop beta
  30.                 local dgmopt dgm(pmiss mech)
  31.                 local xdgm pmiss mech

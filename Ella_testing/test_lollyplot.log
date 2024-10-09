@@ -1,9 +1,10 @@
 
 . siman which
 C:\ian\git\siman\siman.ado
-*!      version 0.10    25jul2024       
+*!      version 0.11    07oct2024
+*!      Type -siman which- to see versions of siman's subprograms
 C:\ian\git\siman\siman_setup.ado
-*!      version 0.10.2  14jun2024       
+*!      version 0.11    09oct2024       
 C:\ian\git\siman\siman_describe.ado
 *!      version 0.7     14jun2024       
 C:\ian\git\siman\siman_analyse.ado
@@ -11,11 +12,12 @@ C:\ian\git\siman\siman_analyse.ado
 C:\ian\git\siman\siman_table.ado
 *!      version 0.8.3   3apr2024
 C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10.1  29jun2024       
+*!      version 0.10.2  19aug2024       
+*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
 C:\ian\git\siman\siman_zipplot.ado
 *!      version 0.10    19jul2024
 C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10    25jun2024       
+*!      version 0.10.1  8aug2024        
 C:\ian\git\siman\siman_blandaltman.ado
 *!      version 0.10    24jun2024
 C:\ian\git\siman\siman_swarm.ado
@@ -3325,17 +3327,18 @@ FC: no differences encountered
 
 . 
 . // RESTRICTING METHODS
-. use $testpath/data/extendedtestdata2.dta, clear
+. use $testpath/data/extendedtestdata.dta, clear
 
 . sencode met, replace
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -3366,8 +3369,8 @@ _____________________________________________________
 . siman analyse, notable
 siman analyse has run successfully
 
-. siman lol if esti=="effect" & beta==1 & pmiss==1, name(meth3,replace) legend(row(1)) col(red blue 
-> green) debug
+. siman lol if esti=="effect" & float(beta)==float(0) & float(pmiss)==float(0.2), name(meth3,replace
+> ) legend(row(1)) col(red blue green) debug
 Performance measures not specified: defaulting to bias empse cover
 Ignoring non-varying dgm variable beta
 Ignoring non-varying dgm variable pmiss
@@ -3391,8 +3394,8 @@ Graph command is: twoway scatter method b if method==1 , pstyle(p1) mlabstyle(p1
 > scale(reverse range(.8 3.2)) legend(order(1 "Noadj" 5 "CCA" 9 "MeanImp") ) name(meth3,replace) leg
 > end(row(1))
 
-. siman lol if esti=="effect" & beta==1 & pmiss==1 & meth!=1, name(meth2,replace) legend(row(1)) col
-> (blue green) debug
+. siman lol if esti=="effect" & float(beta)==float(0) & float(pmiss)==float(0.2) & meth!=1, name(met
+> h2,replace) legend(row(1)) col(blue green) debug
 Performance measures not specified: defaulting to bias empse cover
 Ignoring non-varying dgm variable beta
 Ignoring non-varying dgm variable pmiss
@@ -3415,15 +3418,16 @@ Graph command is: twoway scatter method b if method==2 , pstyle(p1) mlabstyle(p1
 . * Compare graphs meth3 and meth2
 . 
 . // MULTIPLE DGMVARS
-. use $testpath/data/extendedtestdata2.dta, clear
+. use $testpath/data/extendedtestdata.dta, clear
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
-  variable mech was long now byte
-  (324,000 bytes saved)
-Warning: variable mech, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode mech
-  as numeric before running -siman setup-.
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -3455,14 +3459,14 @@ _____________________________________________________
 . siman analyse, notable
 siman analyse has run successfully
 
-. siman lol bias relprec power cover if beta==3, labformat(none) ///
+. siman lol bias relprec power cover if float(beta)==float(0.5), labformat(none) ///
 >         refpower(90) dgmwidth(35) pmwidth(20) legend(col(1)) name(l`++i', replace)
 Ignoring non-varying dgm variable beta
 siman lollyplot will draw 3 graphs with 16 panels (4 PMs by 4 DGMs)
 
 . 
 . * finish with a high quality graph
-. siman lol bias relprec power cover if beta==3 & esti=="effect", ///
+. siman lol bias relprec power cover if float(beta)==float(0.5) & esti=="effect", ///
 >         legend(row(1)) name(l`++i', replace) col(red green blue) ///
 >         bygr(note(Good lollyplot for estimand effect) title(,size(medium))) ///
 >         labf(%6.3f %6.0f)
