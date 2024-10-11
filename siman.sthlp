@@ -1,9 +1,5 @@
 {smcl}
-{* *! version 0.5 14aug2023}{...}
-{* version 0.4 21nov2022}{...}
-{* version 0.3 13dec2021}{...}
-{* version 0.2 23June2020}{...}  
-{* version 0.1 04June2020}{...}
+{* *! version 0.11 11oct2024}{...}
 {vieweralsosee "simsum (if installed)" "simsum"}{...}
 {viewerjumpto "Syntax" "siman##syntax"}{...}
 {viewerjumpto "Description" "siman##description"}{...}
@@ -19,24 +15,23 @@
 
 
 {title:Syntax}{marker syntax}
-{p2colset 5 25 25 0}{...}
+{p2colset 9 29 29 0}{...}
 
-
-{p}Get started
+{pstd}Get started
 
 {p2col:{bf:{help siman_setup:siman setup}}}set up data in the format required by siman, with the user’s raw simulation data (estimates data set)
 
-{p}Analyses
+{pstd}Analyses
 
 {p2col:{bf:{help siman_analyse:siman analyse}}}creates performance measures data set from the estimates data set, and can hold both in memory
 
-{p}Descriptive tables and figures
+{pstd}Descriptive tables and figures
 
 {p2col:{bf:{help siman_describe:siman describe}}}tabulates imported estimates data
 
 {p2col:{bf:{help siman_table:siman table}}}tabulates computed performance measures data
 
-{p}Graphs of results: Estimates data
+{pstd}Graphs of results: Estimates data
 
 {p2col:{bf:{help siman_scatter:siman scatter}}}scatter plot: plots the estimate versus the standard error
 
@@ -48,17 +43,17 @@
 
 {p2col:{bf:{help siman_zipplot:siman zipplot}}}zipplot plot: shows all of the confidence intervals for each data-generating mechanism and analysis method
 
-{p}Graphs of results: Performance measures data
+{pstd}Graphs of results: Performance measures data
 
 {p2col:{bf:{help siman_lollyplot:siman lollyplot}}}lollyplot plot: shows the performance for measures of interest with monte Carlo 95% confidence intervals 
 
 {p2col:{bf:{help siman_nestloop:siman nestloop}}}nestloop plot: plots the results of a full factorial simulation study
 
-{p}Utilities
+{pstd}Utilities
 
 {p2col:{bf:siman which}}report the version number and date for each siman subcommand
 
-{p}Subcommands may be abbreviated to 3 or more characters, and {cmd:comparemethodsscatter} may be abbreviated to {cmd:cms}.
+{pstd}Subcommands may be abbreviated to 3 or more characters, and {cmd:comparemethodsscatter} may be abbreviated to {cmd:cms}.
 
 
 {marker description}{...}
@@ -83,6 +78,7 @@ Produced by {bf:{help siman_analyse:siman analyse}}  which calculates performanc
 for use with {bf:{help siman_lollyplot:siman lollyplot}} and {bf:{help siman_nestloop:siman nestloop}}.  Please note, this will usually be appended to the estimates data set.
 
 {pstd}For troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
+
 
 {marker examples}{...}
 {title:Examples}
@@ -125,7 +121,6 @@ Statistics in Medicine 2019; 38: 2074-2102.
 
 
 {title:Authors and updates}{marker updates}
-
 
 {pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK. 
 Email {browse "mailto:e.marley-zagar@ucl.ac.uk":e.marley-zagar@ucl.ac.uk}.
