@@ -1,7 +1,6 @@
 {smcl}
 {* *! version 0.11 9oct2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
-{vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Input data formats" "siman_setup##data"}{...}
 {viewerjumpto "Syntax" "siman_setup##syntax"}{...}
 {viewerjumpto "Description" "siman_setup##description"}{...}
@@ -17,26 +16,29 @@
 {p2col :{hi:siman setup} - Prepare data for siman suite}{p_end}
 {p2colreset}{...}
 
+
 {marker data}{...}
 {title:Input data formats}
 
 {pstd}
-The input data for {cmd:siman setup} is an estimates data set.  This contains the results from analysing multiple simulated data sets, with data relating to different statistics for each simulated data set.  Each row in the estimates data set 
-relates to one simulation combination of {bf:dgm}/{bf:method}/{bf:target}, labelled here as repetition ({bf:rep}).
+The input data for {cmd:siman setup} is an estimates data set.  
+This contains the results from analysing multiple simulated data sets, each one termed a repetition ({bf:rep}).
+Each result relates to one simulation combination of data generating method ({bf:dgm}), {bf:target} and {bf:method}.
   
-{pstd}Input data can be in any of these formats:
+{pstd}The input data can be in any of these formats:
 
 {pstd}
-(1) long-long format (i.e. long targets, long methods),
+(1) long-long format (i.e. long targets, long methods): one record per repetition, target and method.
 
 {pstd}
-(2) wide-wide format (i.e. wide targets, wide methods),
+(2) wide-wide format (i.e. wide targets, wide methods): one record per repetition.
 
 {pstd}
-(3) long-wide format (i.e. long targets, wide methods),
+(3) long-wide format (i.e. long targets, wide methods): one record per repetition and target.
 
 {pstd}
-(4) wide-long format (i.e. wide targets, long methods).
+(4) wide-long format (i.e. wide targets, long methods): one record per repetition and method.
+
 
 {marker syntax}{...}
 {title:Syntax}
@@ -51,13 +53,9 @@ relates to one simulation combination of {bf:dgm}/{bf:method}/{bf:target}, label
 ]
 
 {pstd}
-{it:Note {cmd: rep} is to be numeric variable only}.  At least one of {bf:est()} and {bf:se()} is required.
-
-
-{pstd}
 Options for data in long-long input format (data format 1):
 
-{pstd}
+{pmore}
 {opt tar:get(varname)}
 {opt meth:od(varname)}
 {opt est:imate(varname)}
@@ -71,7 +69,7 @@ Options for data in long-long input format (data format 1):
 {pstd}
 Options for data in wide-wide input format (data format 2):
 
-{pstd}
+{pmore}
 {opt tar:get(values)}
 {opt meth:od(values)}
 {opt est:imate(stub_varname)}
@@ -87,7 +85,7 @@ Options for data in wide-wide input format (data format 2):
 {pstd}
 Options for data in long-wide input format (data format 3):
 
-{pstd}
+{pmore}
 {opt tar:get(varname)}
 {opt meth:od(values)}
 {opt est:imate(stub_varname)}
@@ -102,7 +100,7 @@ Options for data in long-wide input format (data format 3):
 {pstd}
 Options for data in wide-long input format (data format 4):
 
-{pstd}
+{pmore}
 {opt tar:get(values)}
 {opt meth:od(varname)}
 {opt est:imate(stub_varname)}
@@ -115,9 +113,12 @@ Options for data in wide-long input format (data format 4):
 {opt sep(string)}
 
 {pstd}
-Options for data in any input format:
+In each format, at least one of {opt estimate()} and {opt se()} is required.
 
 {pstd}
+Options for data in any input format:
+
+{pmore}
 {opt dgm(varlist)}
 {opt clear}
 
@@ -126,16 +127,17 @@ Options for data in any input format:
 {synopthdr}
 {synoptline}
 
-{synopt:{opt dgm(varlist)}}data generating mechanism. {p_end}
-{synopt:{opt tar:get(varname|values)}}the target variable name or values. {p_end}
-{synopt:{opt meth:od(varname|values)}}the method variable name or values. {p_end}
-{synopt:{opt est:imate(varname|stub_varname)}}the estimate variable name or the name of its stub if in wide format. {p_end}
-{synopt:{opt se(varname|stub_varname)}}the standard error variable name or the name of its stub if in wide format. {p_end}
-{synopt:{opt df(varname|stub_varname)}}the degrees of freedom variable name or the name of its stub if in wide format. {p_end}
-{synopt:{opt lci(varname|stub_varname)}}the lower confidence interval variable name or the name of its stub if in wide format. {p_end}
-{synopt:{opt uci(varname|stub_varname)}}the upper confidence interval variable name or the name of its stub if in wide format. {p_end}
-{synopt:{opt p(varname|stub_varname)}}the P-value variable name or the name of its stub if in wide format. {p_end}
-{synopt:{opt true(#|varname|stub_varname)}}the true value, or variable name or the name of its stub if in wide format. Must be constant across methods. {p_end}
+{synopt:{opt r:ep(varname)}}numeric variable identifying repetitions: required. {p_end}
+{synopt:{opt dgm(varlist)}}variable(s) identifying the data generating mechanism. {p_end}
+{synopt:{opt tar:get(varname|values)}}the target variable name (data formats 1/3) or values (data formats 2/4). {p_end}
+{synopt:{opt meth:od(varname|values)}}the method variable name (data formats 1/4) or values (data formats 2/3). {p_end}
+{synopt:{opt est:imate(varname|stub_varname)}}the estimate variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
+{synopt:{opt se(varname|stub_varname)}}the standard error variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
+{synopt:{opt df(varname|stub_varname)}}the degrees of freedom variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
+{synopt:{opt lci(varname|stub_varname)}}the lower confidence interval variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
+{synopt:{opt uci(varname|stub_varname)}}the upper confidence interval variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
+{synopt:{opt p(varname|stub_varname)}}the P-value variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
+{synopt:{opt true(#|varname|stub_varname)}}the true value of each target, given as a number, as the variable name (data format 1/3), or as the name of its stub (data formats 2/4). The true value should be the same for all methods: this is assumed in data formats 2/3 and must be true in data formats 1/4. {p_end}
 {synopt:{opt ord:er(varname)}}if in wide-wide format, this must be either {it:target} or {it:method}, 
 denoting that either the target stub is first or the method stub is first in the variable names. {p_end}
 {synopt:{opt clear}}to clear the existing data held in memory: only needed with {cmd:if} or {cmd:in} conditions. {p_end}
@@ -147,36 +149,35 @@ For example, if variables est_beta and est_gamma hold the estimates for targets 
 {title:Description}
 
 {pstd}
-{cmd:siman setup} takes the user’s raw simulation data (estimates data set) and puts it in the format required by {bf:siman}. 
+{cmd:siman setup} takes the user’s raw simulation data (estimates data set) and puts it in the format required by {cmd:siman}. 
 
 {pstd}
 The raw simulation data set must include a numeric variable, {opt rep(varname)}, which indexes the repetitions of the simulation experiment.  
-Other variables of interest such as 
-data generating mechanism ({opt dgm}), {opt target}, {opt method}, {opt estimate}, standard error ({opt se}) are typically specified.
-{cmd:siman setup} allows multiple data generating mechanisms, multiple targets and multiple analysis methods. 
+Other variables of interest that are typically specified to describe the repetition are
+the data generating mechanism ({opt dgm});
+the {opt target} which identifies different quantities that can be estimated in the analysis; and
+the {opt method} which identifies different methods of analysis.
+Results of the analysis typically include the {opt estimate} and its standard error ({opt se}).
  
 {pstd}
 Four data set formats are permitted by the siman suite as detailed {help siman_setup##data:above}.
 {cmd:siman setup} automatically reshapes the data into long-long format. 
 
 {pstd}
-{cmd:siman setup} checks the data, reformats it
-and attaches characteristics to the data set: these characteristics are read by every other {bf:siman} command.  The {bf:siman} estimates data set is held in memory.
-An auto-summary output available for the user to confirm the data set up (using  {bf:{help siman_describe:siman describe}}). 
+{cmd:siman setup} checks the data, reformats it if necessary,
+and attaches characteristics to the data set: these characteristics are read by every other {bf:siman} command.  
+The {bf:siman} estimates data set is held in memory.
+A summary of the data set up is printed, and can be repeated using  {bf:{help siman_describe:siman describe}}. 
 
-{pstd}
-The {bf:labelsof} package (by Ben Jann) is required by {bf:siman setup}, which can be installed by clicking: {stata ssc install labelsof} 
 
-{marker outputdata}
+{marker outputdata}{...}
 {title:Output data format}
 
 {pstd}
-Estimates data will be converted by {cmd:siman setup} to be {it:long-long} or {it:long-wide}, examples of which are 
-shown below. Note that {it:rep} indexes the repetition number, {it:dgm} denotes the data-generating 
-mechanism to which a method was applied, {it:target} sets out what quantity the analysis is trying to 
-estimate and {it:method} denotes the method used to produce the estimates.
+Estimates data are converted by {cmd:siman setup} to be {it:long-long}. 
+The example below shows two repetitions in a simulation experiment with two data-generating mechanisms (labelled 1, 2),
+two targets (beta, gamma), and two methods of analysis (A, B).
 
-           {it:Long-long} format
         {c TLC}{hline 42}{c TRC}
         {c |} {it:rep  dgm  target method  estimate  se   } {c |}
         {c |}{hline 42}{c |}
@@ -198,33 +199,17 @@ estimate and {it:method} denotes the method used to produce the estimates.
         {c |}   2    2   gamma   B     .1513   .1289   {c |}
         {c BLC}{hline 42}{c BRC}
 
-           {it:Long-wide} format
-        {c TLC}{hline 53}{c TRC}
-        {c |} {it:rep  dgm  target  estimateA  seA  estimateB  seB   } {c |}
-        {c |}{hline 53}{c |}
-        {c |}   1    1   beta    .1433    .0774   .2338  .1104    {c |}
-        {c |}   1    1   gamma   .0517    .0810   .1375  .1167    {c |}
-        {c |}   1    2   beta    .1135    .0946   .1543  .1400    {c |}
-        {c |}   1    2   gamma   .0597    .0935   .1588  .1347    {c |}
-        {c |}   2    1   beta    .1509    .0768   .0784  .1087    {c |}
-        {c |}   2    1   gamma   .0297    .0738   .1310  .1116    {c |}
-        {c |}   2    2   beta    .1337    .0928   .1541  .1324    {c |}
-        {c |}   2    2   gamma   .0343    .0852   .1513  .1289    {c |}
-        {c BLC}{hline 53}{c BRC}
-
 
 {marker limitations}{...}
 {title:Troubleshooting and limitations}
 {pstd}
+TO BE CHECKED.
 
-{pstd}There can be no other variables in the data set other than those specified in {cmd:siman setup}.
+{pstd}There can be no other variables in the data set other than those specified in {cmd:siman setup}. 
 
 {pstd}Abbreviations should not be used for variable names and value labels in {cmd:siman setup}.
 
-{pstd}The variable {bf:dgm} needs to be in numerical format (string labels allowed), with integer values.  If {bf:dgm} is a string variable then {cmd:siman setup} will encode it to be numeric.  If {bf:dgm} has non-integer values, then {bf:dgm} 
-should be re-formatted by the user so that it has integer values with non-integer labels.
-
-{pstd}If the method variable is missing, then {cmd:siman setup} will create a variable {bf:_method} in the dataset with a value of 1 in order that all the other {bf: siman} programs can run.
+{pstd}If the method variable is not specified, then {cmd:siman setup} will create a variable {bf:_method} in the dataset with a value of 1 in order that all the other {bf: siman} programs can run.
 
 {pstd} If true exists, it has to be constant across methods.  If using {bf:true({it:stub_varname})}, this stub has to be in the same format as the other variables.  For example if {bf: method} and {bf: target} are in wide format with values 1/2 
 and beta/gamma respectively, with a different true value per target, and estimate defined as {bf: est}, standard error as {bf: se}, then the variables in the dataset would need to be as follows:
@@ -250,19 +235,6 @@ The method labels would therefore need to be {it:Complete_case} and {it:Complete
 {pstd}
 Note that {bf:true} must be a {bf:variable} in the dataset for {bf:{help siman nestloop:siman nestloop}}, and should be listed in both the {bf:dgm()} and the {bf:true()} options in {cmd:siman setup} before running these graphs, with the 
 {cmd:true} variable being listed before the {cmd:dgm} variable in the {bf:dgm()} option.
-
-{pstd}{bf:{help siman_reshape:siman reshape}} can only reshape a maximum of 10 variables, due to {help reshape} only allowing
-10 elements in the i() syntax. This can be mitigated by creating a group identifier.
-
-{pstd}For example, instead of:
-
-{phang}. {stata "reshape wide est , i(rep scenario dgm severity CTE switchproportion treateffect switcherprog sfunccomp estimand perfmeascode) j(method 1 2)"}
-
-{pstd}use:
-
-{phang}. {stata "egen i = group(rep scenario dgm severity CTE switchproportion treateffect switcherprog sfunccomp estimand perfmeascode)"}
-
-{phang}. {stata "reshape wide est , i(i) j(method 1 2)"}
 
 
 {marker examples}{...}
@@ -339,7 +311,6 @@ will be reshaped before {cmd: siman setup} is run.
 {phang}Also note that the session has to be cleared before each new dataset is loaded, to remove the previous characteristics created by {cmd: siman setup}.
 
 
-
 {marker chars}{...}
 {title:Characteristics stored by siman setup}
 
@@ -384,7 +355,6 @@ Characteristics created by {help siman analyse}
 {synopt:{opt analyserun}}is set to 1 when siman analyse is run. Values: missing or 1. {p_end}
 {synopt:{opt secreated}}is a dummy for the SE variable having been created by siman analyse 
 to hold Monte Carlo standard errors. Values: missing or 1. {p_end}
-
 
 
 {marker authors}{...}
