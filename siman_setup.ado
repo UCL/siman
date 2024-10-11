@@ -58,7 +58,7 @@ Please note that if method() contains one entry and target() contains more than 
 
 if !mi("`debug'") local dicmd dicmd
 else local dicmd qui
-if !mi("`debug'") local di di as input
+if !mi("`debug'") local di di as input "Debug: " 
 else local di *
 
 * check whether setup already run
@@ -175,8 +175,6 @@ else if `ntarget'==1 & `targetisvar'==1 {
 			local thisval : label (`target') `val'
 			local valtarget `valtarget' `thisval'
 		}
-		if !mi("`debug'") mac l _valtarget
-		if !mi("`debug'") mac l _valtargetorig
 	}
 	else local valtarget `valtargetorig'
 }
@@ -244,7 +242,7 @@ else local stubvars `estimate' `se' `df' `lci' `uci' `p'
 
 /*** CHECK WIDE VARIABLES EXIST, AND REMOVE SEPARATOR FROM VARNAME ***/
 
-if !mi("`debug'") di as input "methodformat = `methodformat', targetformat = `targetformat'"
+if !mi("`debug'") di as input "Debug: method format = `methodformat', target format = `targetformat'"
 
 if "`methodformat'"=="wide" & "`targetformat'"=="wide" {
 	foreach stubvar of local stubvars {
@@ -392,7 +390,7 @@ if "`targetformat'"=="wide" & "`truetype'"=="stub" {
 /*** CHECK THE RIGHT VARIABLES ARE PRESENT ***/
 
 if !mi("`debug'") {
-	di as input "List of variables:"
+	di as input "Debug: list of variables:"
 	di "  Long vars:  `longvars'"
 	di "  Stub vars:  `stubvars'"
 	di "  Siman vars: `simanvars'"
@@ -558,4 +556,11 @@ foreach thing in `allthings' {
 
 siman_describe
 restore, not
+end
+
+
+
+program define dicmd
+noi di as input `"Debug: `0'"'
+`0'
 end

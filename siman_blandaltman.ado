@@ -104,10 +104,10 @@ drop `touse'
 * HANDLE METHODS
 * only analyse the methods that the user has requested
 if !mi("`methlist'") {
-	if !mi("`debug'") di as input "methlist = `methlist'"
+	if !mi("`debug'") di as input "Debug: methlist = `methlist'"
 	cap numlist "`methlist'"
 	if !_rc local methlist = r(numlist)
-	if !mi("`debug'") di as input "methlist = `methlist'"
+	if !mi("`debug'") di as input "Debug: methlist = `methlist'"
 
 	tempvar tousemethod
 	qui generate `tousemethod' = 0
@@ -154,7 +154,7 @@ foreach thismethod of local methlist {
 	if `methodnature'==1 local mlabel`i' : label (`method') `thismethod' 
 		// label of ith method
 	else local mlabel`i' `thismethod'
-	if !mi("`debug'") di `"Method `i': value `m`i'', label `mlabel`i''"'
+	if !mi("`debug'") di as input `"Debug: Method `i': value `m`i'', label `mlabel`i''"'
 }
 
 // AVOID RESHAPE!!!
@@ -176,7 +176,7 @@ if mi("`by'") local by `method'
 if mi("`over'") local over : list all - by
 local over2 = cond(mi("`over'"),"[nothing]","`over'")
 local by2 = cond(mi("`by'"),"[nothing]","`by'")
-if !mi("`debug'") di as input "Graphing over `over2' and by `by2'"
+if !mi("`debug'") di as input "Debug: graphing over `over2' and by `by2'"
 
 tempvar group
 qui egen `group' = group(`over'), label
@@ -213,11 +213,11 @@ forvalues g = 1/`novervalues' { // loop over graphs
 		}
 	}
 
-	if !mi("`debug'") di as input `"--> Drawing graph `g': `notetext'"'
+	if !mi("`debug'") di as input `"--> Debug: drawing graph `g': `notetext'"'
 	if `nmethods'>2 local panelnote ". Panels: `by'."
 
 	foreach stat in `statlist' { // loop over stats
-		if !mi("`debug'") di as input "Group `glabel', stat `stat'"
+		if !mi("`debug'") di as input "Debug: group `glabel', stat `stat'"
 		* graph titles
 		if "`stat'"=="estimate" local eltitle = "`estimate'"
 		else if "`stat'"=="se" local eltitle = "`se'" 
@@ -232,7 +232,7 @@ forvalues g = 1/`novervalues' { // loop over graphs
 		;
 		#delimit cr
 		
-		if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+		if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 		if !mi("`pause'") {
 			global F9 `graph_cmd'
 			pause Press F9 to recall, optionally edit and run the graph command

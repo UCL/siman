@@ -150,7 +150,7 @@ else { // allow methlist(numlist)
 	cap numlist "`methlist'"
 	if !_rc local methlist = r(numlist)
 }
-if !mi("`debug'") di as input `"methlist = `methlist'"'
+if !mi("`debug'") di as input `"Debug: methlist = `methlist'"'
 
 * count methods & choose type
 local nmethods : word count `methlist'
@@ -166,7 +166,7 @@ if mi("`statlist'") {
 	else if "`type'"=="matrix" local statlist estimate
 }
 local nstats : word count `statlist'
-if !mi("`debug'") di as input "statlist = `statlist'"
+if !mi("`debug'") di as input "Debug: statlist = `statlist'"
 local do_se = strpos("`statlist'","se")>0
 local do_estimate = strpos("`statlist'","estimate")>0
 if "`type'"=="combine" {
@@ -203,14 +203,14 @@ if `nmethods' > 5 {
 local truedrop : list true - dgm
 cap drop `p' `lci' `uci' `df' `method' `truedrop' 
 qui reshape wide `estimate' `se', i(`dgm' `target' `rep') j(`newmethod')
-if !mi("`debug'") di as input "reshape successful"
+if !mi("`debug'") di as input "Debug: reshape successful"
 
 
 * IDENTIFY 'OVER' VARIABLE
 
 if mi("`over'") local over `dgm' `target' 
 local over2 = cond(mi("`over'"),"[nothing]","`over'")
-if !mi("`debug'") di as input "Graphing over `over2' and by `method'"
+if !mi("`debug'") di as input "Debug: Graphing over `over2' and by `method'"
 local novers : word count `over'
 
 tempvar group
@@ -241,7 +241,7 @@ forvalues g = 1/`ngraphs' {
 	}
 	if !mi("`notetext'") local notetextopt note("Graphs for `notetext'") 
 	else local notetextopt 
-	if !mi("`debug'") di as input `"--> Drawing graph `g': `notetext'"'
+	if !mi("`debug'") di as input `"--> Debug: Drawing graph `g': `notetext'"'
 
 	if "`type'"=="combine" {
 
@@ -328,6 +328,6 @@ end
 
 
 program define dicmd
-noi di as input `"`0'"'
+noi di as input `"Debug: `0'"'
 `0'
 end

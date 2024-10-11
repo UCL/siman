@@ -226,7 +226,7 @@ foreach thismethod of local methodlist {
 	local mlab`i' : label (`method') `thismethod' // label of ith method
 	if substr("`mlab`i''",length("`mlab`i''"),1)=="_" /// remove final _
 		local mlab`i' = substr("`mlab`i''",1,length("`mlab`i''")-1)
-	if !mi("`debug'") di `"Method `i': numeric value `m`i'', label `mlab`i''"'
+	if !mi("`debug'") di as input `"Debug: method `i': numeric value `m`i'', label `mlab`i''"'
 }
 
 
@@ -328,7 +328,7 @@ foreach thispm of local pmlist { // loop over PMs
 			local lmin = (`min'-`fracsum'*`max') / (1-`fracsum')
 			local lmax = `min' - `dggap'*(`max'-`lmin')
 			local step = (`lmax'-`lmin') / ((`dginnergap'+1)*`ndescriptors')
-			* if !mi("`debug'") di as text "Descriptor graph: lmax=`lmax', lmin=`lmin', step=`step'"
+			* if !mi("`debug'") di as input "Descriptor graph: lmax=`lmax', lmin=`lmin', step=`step'"
 			local j 0
 			local descriptor_labels_cmd
 			local factorlist
@@ -339,7 +339,7 @@ foreach thispm of local pmlist { // loop over PMs
 				}
 				summ `var', meanonly
 				if r(max)==r(min) {
-					if !mi("`debug'") di as smcl as text "{p 0 2}Warning: no variation for descriptor `var'{p_end}"
+					if !mi("`debug'") di as smcl as input "{p 0 2}Warning: no variation for descriptor `var'{p_end}"
 					continue
 				}
 				local ++j
@@ -424,7 +424,7 @@ foreach thispm of local pmlist { // loop over PMs
 			local targetname _`thistarget'
 		}
 		if !mi("`saving'") local savingopt saving(`saving'`targetname'_`thispm'`savingopts')
-		if !mi("`debug'") & `ngraphs'>1 di as text "Drawing graph for `target'=`thistarget', PM=`thispm'..."
+		if !mi("`debug'") & `ngraphs'>1 di as input "Debug: drawing graph for `target'=`thistarget', PM=`thispm'..."
 		local graph_cmd graph twoway 										///
 			`main_graph_cmd'												///
 			`descriptor_graph_cmd'											///
@@ -437,7 +437,7 @@ foreach thispm of local pmlist { // loop over PMs
 			`note' `yline'													///
 			`options'
 
-		if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+		if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 		if !mi("`pause'") {
 			global F9 `graph_cmd'
 			pause Press F9 to recall, optionally edit and run the graph command
@@ -445,7 +445,7 @@ foreach thispm of local pmlist { // loop over PMs
 		`graph_cmd'
 		if !mi("`export'") {
 			local graphexportcmd graph export `export'`targetname'_`thispm'`exportopts'
-			if !mi("`debug'") di `"`graphexportcmd'"'
+			if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
 			cap `graphexportcmd'
 			if _rc di as error "Error in export() option:"
 			`graphexportcmd'

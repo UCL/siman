@@ -163,7 +163,7 @@ foreach el of local statlist { // estimate and/or se
 	local nameopt name(`name'_`el', `replace')
 	local graph_cmd `graph_cmd', by(`by', title("") noxrescale legend(off) `bygraphoptions') ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions'
 
-	if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+	if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 	if !mi("`pause'") {
 		global F9 `graph_cmd'
 		pause Press F9 to recall, optionally edit and run the graph command

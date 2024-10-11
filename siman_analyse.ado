@@ -34,7 +34,7 @@ syntax [anything] [if], [PERFONLY REPlace /// documented options
 	noTABle force debug pause /// undocumented options
 	]
 local simsumoptions `options'
-if "`debug'"!="" di as input `"Options to pass to simsum: `options'"'
+if "`debug'"!="" di as input `"Debug: options to pass to simsum: `options'"'
 if "`debug'"=="" local qui qui
 
 capture which simsum.ado
@@ -191,7 +191,7 @@ if !mi("`pause'") {
 	global F9 `simsumcmd'
 	pause
 }
-if !mi("`debug'") noi di as input "Running: `simsumcmd'"
+if !mi("`debug'") noi di as input "Debug: running command: `simsumcmd'"
 qui `simsumcmd'
 
 

@@ -93,11 +93,11 @@ if `methodcreated' local method
 foreach onedgmvar in `dgm' {
 	summ `onedgmvar' `if', meanonly
 	if r(min)<r(max) local newdgmvar `newdgmvar' `onedgmvar'
-	else if !mi("`debug'") di as error "Ignoring non-varying dgmvar: `onedgmvar'"
+	else if !mi("`debug'") di as input "Debug: ignoring non-varying dgmvar: `onedgmvar'"
 	}
 local dgm `newdgmvar'
 local myfactors _perfmeascode `dgm' `target' `method'
-if !mi("`debug'") di as input "Factors to display: `myfactors'"
+if !mi("`debug'") di as input "Debug: factors to display: `myfactors'"
 tempvar group
 foreach thing in dgm target method {
 	local n`thing'vars = wordcount("``thing''")
@@ -107,7 +107,7 @@ foreach thing in dgm target method {
 		local n`thing'levels = r(r)
 		}
 	else n`thing'levels = 1
-	if !mi("`debug'") di "`n`thing'levels' levels, `thing': `n`thing'vars' variables (``thing'')"
+	if !mi("`debug'") di as input "Debug: `thing' has `n`thing'levels' levels, `n`thing'vars' variables (``thing'')"
 	drop `group'
 }
 
@@ -133,10 +133,11 @@ if wordcount("`by'")>4 {
 * display the table
 local tablecommand tabdisp `row' `column' `if', by(`by') c(`estimate' `se') stubwidth(20)
 if !mi("`debug'") {
-	di "Table column: `column'"
-	di "Table row: `row'"
-	di "Table by: `by'"
-	di "Table command: `tablecommand'"
+	di as input "Debug: table features:"
+	di "    column:  `column'"
+	di "    row:     `row'"
+	di "    by:      `by'"
+	di `"    command: `tablecommand'"'
 }
 `tablecommand'
 

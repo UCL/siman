@@ -125,7 +125,7 @@ if mi("`name'") local name name(simanscatter, replace)
 
 local graph_cmd twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) `byoption' `name' `options'
 
-if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 if !mi("`pause'") {
 	global F9 `graph_cmd'
 	pause Press F9 to recall, optionally edit and run the graph command

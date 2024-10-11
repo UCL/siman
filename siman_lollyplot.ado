@@ -264,7 +264,7 @@ qui gen float `uci' = `estimate' + `se'*invnorm(1-`alpha2')
 qui gen `l' = "("
 qui gen `r' = ")"
 if !mi("`logit'") { // logit transform for CIs for power and cover
-	if !mi("`debug'") di as text "Computing CI for power and coverage on logit scale"
+	if !mi("`debug'") di as input "Debug: computing CI for power and coverage on logit scale"
 	qui replace `lci' = 100 * invlogit( logit(`estimate'/100) + `se'*invnorm(`alpha2')/(`estimate'*(1-`estimate'/100))) ///
 		if inlist( _perfmeascode,"power","cover")
 	qui replace `uci' = 100 * invlogit( logit(`estimate'/100) + `se'*invnorm(1-`alpha2')/(`estimate'*(1-`estimate'/100))) ///
@@ -304,7 +304,7 @@ foreach thistarget of local targetlevels {
 		local iftargetcond if `target'==`thistarget'
 		local andtargetcond & `target'==`thistarget'
 		local note `target': `thistargetname'
-		if !mi("`debug'") di as text `"Drawing graph for `targetcond'"'
+		if !mi("`debug'") di as input `"Debug: drawing graph for `targetcond'"'
 	}
 	else {
 		local note
@@ -341,7 +341,7 @@ foreach thistarget of local targetlevels {
 	else local graph_cmd `graph_cmd' name(`name'_`thistargetname'`nameopts')
 	local graph_cmd `graph_cmd' `options'
 
-	if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+	if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 	if !mi("`pause'") {
 		global F9 `graph_cmd'
 		pause Press F9 to recall, optionally edit and run the graph command
@@ -369,7 +369,7 @@ foreach dgm in `anything' {
 	local dgml : _length "`dgm'"
 	local nspaces = round((`width'/`ndgm'-`dgml')/`spacel'/2,1)
 	if `nspaces'<0 {
-		if !mi("`debug'") di as text `"Error in subroutine padding: "`dgm'" too long"'
+		if !mi("`debug'") di as input `"Debug: error in subroutine padding: "`dgm'" too long"'
 		local padding
 	}
 	else local padding : display _dup(`nspaces') " "

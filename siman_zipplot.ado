@@ -90,7 +90,7 @@ if mi("`by'") {
 		cap assert `var'==`var'[1]
 		if _rc local by `by' `var'
 	}
-	if !mi("`debug'") di as input "Graphing by: `by'"
+	if !mi("`debug'") di as input "Debug: graphing by: `by'"
 }
 
 * create confidence intervals, if not already there
@@ -192,7 +192,7 @@ local graph_cmd twoway
 ;
 #delimit cr
 
-if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 if !mi("`pause'") {
 	global F9 `graph_cmd'
 	pause Press F9 to recall, optionally edit and run the graph command
