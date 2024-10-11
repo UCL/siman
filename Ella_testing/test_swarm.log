@@ -94,15 +94,16 @@ siman swarm will draw 1 graph with 6 panels
 
 . siman swarm estimate se, bygr(note("I've changed the note")) name(g3,replace) by(mech beta) debug
 siman swarm will draw 2 graphs each with 6 panels
-Graph command is: twoway (scatter newidrep b, msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwid
-> th(vvvthin) ) (scatter newidrep meanestimate, msym(|) msize(huge) mcol(orange) ), by(mech beta, ti
-> tle("") noxrescale legend(off) note("I've changed the note")) ytitle("") ylabel(501 "CCA" 5001 "Me
-> anImp" 9501 "Noadj", nogrid labsize(medium) angle(horizontal)) yscale(reverse) name(g3_estimate, r
-> eplace)
-Graph command is: twoway (scatter newidrep se, msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwi
-> dth(vvvthin) ) (scatter newidrep meanse, msym(|) msize(huge) mcol(orange) ), by(mech beta, title("
-> ") noxrescale legend(off) note("I've changed the note")) ytitle("") ylabel(501 "CCA" 5001 "MeanImp
-> " 9501 "Noadj", nogrid labsize(medium) angle(horizontal)) yscale(reverse) name(g3_se, replace)
+Debug: graph command is: twoway (scatter newidrep b, msymbol(o) msize(small) mcolor(%30) mlc(white%1
+> ) mlwidth(vvvthin) ) (scatter newidrep meanestimate, msym(|) msize(huge) mcol(orange) ), by(mech b
+> eta, title("") noxrescale legend(off) note("I've changed the note")) ytitle("") ylabel(501 "CCA" 5
+> 001 "MeanImp" 9501 "Noadj", nogrid labsize(medium) angle(horizontal)) yscale(reverse) name(g3_esti
+> mate, replace)
+Debug: graph command is: twoway (scatter newidrep se, msymbol(o) msize(small) mcolor(%30) mlc(white%
+> 1) mlwidth(vvvthin) ) (scatter newidrep meanse, msym(|) msize(huge) mcol(orange) ), by(mech beta, 
+> title("") noxrescale legend(off) note("I've changed the note")) ytitle("") ylabel(501 "CCA" 5001 "
+> MeanImp" 9501 "Noadj", nogrid labsize(medium) angle(horizontal)) yscale(reverse) name(g3_se, repla
+> ce)
 
 . foreach graph in g1_estimate g2_se g3_estimate g3_se {
   2.         qui graph describe `graph'

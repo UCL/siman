@@ -424,9 +424,9 @@ Repetition-level output
 _____________________________________________________
 
 . siman analyse bias ciwidth cover power, level(80) debug
-Options to pass to simsum: level(80)
-Running: simsum est , true(true) se(se) df() lci() uci() p() method(method) id(rep) by(true dgm esti
-> mand) max(20) bias ciwidth cover power clear mcse gen(_perfmeas)  level(80)
+Debug: options to pass to simsum: level(80)
+Debug: running command: simsum est , true(true) se(se) df() lci() uci() p() method(method) id(rep) b
+> y(true dgm estimand) max(20) bias ciwidth cover power clear mcse gen(_perfmeas)  level(80)
 
 Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
@@ -561,9 +561,9 @@ Repetition-level output
 _____________________________________________________
 
 . siman analyse ciwidth cover power, debug
-Options to pass to simsum: 
-Running: simsum est , true(true) se(se) df() lci(lower) uci(upper) p() method(method) id(rep) by(tru
-> e dgm estimand) max(20) ciwidth cover power clear mcse gen(_perfmeas)
+Debug: options to pass to simsum: 
+Debug: running command: simsum est , true(true) se(se) df() lci(lower) uci(upper) p() method(method)
+>  id(rep) by(true dgm estimand) max(20) ciwidth cover power clear mcse gen(_perfmeas)
 
 Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
@@ -696,9 +696,9 @@ Repetition-level output
 _____________________________________________________
 
 . siman analyse ciwidth power, level(80) debug
-Options to pass to simsum: level(80)
-Running: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(rep) by(true dg
-> m estimand) max(20) ciwidth power clear mcse gen(_perfmeas)  level(80)
+Debug: options to pass to simsum: level(80)
+Debug: running command: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(
+> rep) by(true dgm estimand) max(20) ciwidth power clear mcse gen(_perfmeas)  level(80)
 
 Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
@@ -808,9 +808,9 @@ Repetition-level output
 _____________________________________________________
 
 . siman analyse ciwidth power, debug // NB default level
-Options to pass to simsum: 
-Running: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(rep) by(true dg
-> m estimand) max(20) ciwidth power clear mcse gen(_perfmeas)
+Debug: options to pass to simsum: 
+Debug: running command: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(
+> rep) by(true dgm estimand) max(20) ciwidth power clear mcse gen(_perfmeas)
 
 Data                               Wide   ->   Long
 -----------------------------------------------------------------------------

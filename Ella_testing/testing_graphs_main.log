@@ -1,30 +1,30 @@
 
 . siman which
-..\siman.ado
+C:\ian\git\siman\siman.ado
 *!      version 0.11    07oct2024
 *!      Type -siman which- to see versions of siman's subprograms
-..\siman_setup.ado
-*!      version 0.10.2  14jun2024       
-..\siman_describe.ado
+C:\ian\git\siman\siman_setup.ado
+*!      version 0.11    09oct2024       
+C:\ian\git\siman\siman_describe.ado
 *!      version 0.7     14jun2024       
-..\siman_analyse.ado
+C:\ian\git\siman\siman_analyse.ado
 *!      version 0.9.1   14jun2024               
-..\siman_table.ado
+C:\ian\git\siman\siman_table.ado
 *!      version 0.8.3   3apr2024
-..\siman_lollyplot.ado
+C:\ian\git\siman\siman_lollyplot.ado
 *!      version 0.10.2  19aug2024       
 *!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
-..\siman_zipplot.ado
+C:\ian\git\siman\siman_zipplot.ado
 *!      version 0.10    19jul2024
-..\siman_comparemethodsscatter.ado
+C:\ian\git\siman\siman_comparemethodsscatter.ado
 *!      version 0.10.1  8aug2024        
-..\siman_blandaltman.ado
+C:\ian\git\siman\siman_blandaltman.ado
 *!      version 0.10    24jun2024
-..\siman_swarm.ado
+C:\ian\git\siman\siman_swarm.ado
 *!      version 0.10    19jul2024
-..\siman_scatter.ado
+C:\ian\git\siman\siman_scatter.ado
 *!      version 0.10    18jun2024       
-..\siman_nestloop.ado
+C:\ian\git\siman\siman_nestloop.ado
 *!      version 0.10.1  26jun2024       
 
 . 
@@ -659,11 +659,8 @@ siman lollyplot will draw 2 graphs with 6 panels (3 PMs by 2 DGMs)
 
 . 
 . siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) 
-  variable dgm was long now byte
-  (24,000 bytes saved)
-Warning: variable dgm, which appears in dgm(), was stored as a string. It has been encoded as
-  numeric so that subsequent siman commands will work. If you require a different order, encode dgm
-  as numeric before running -siman setup-.
+Warning: dgm variable dgm has been converted from string to numeric. If you require its levels to be
+  ordered differently, encode dgm as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -1283,11 +1280,8 @@ variable pc_str was str2 now str3
 . rename pc_str pc
 
 . siman setup, rep(v1) dgm(theta rho pc k) method(peto g2) estimate(exp) se(var2) true(theta)
-  variable pc was long now byte
-  (2,304 bytes saved)
-Warning: variable pc, which appears in dgm(), was stored as a string. It has been encoded as numeric
-  so that subsequent siman commands will work. If you require a different order, encode pc as
-  numeric before running -siman setup-.
+Warning: dgm variable pc has been converted from string to numeric. If you require its levels to be
+  ordered differently, encode pc as numeric before running -siman setup-.
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -10214,15 +10208,6 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 > clear all
 > prog drop _all
 > use $testpath/data/extendedtestdata.dta, clear
-> 
-> * remove non-integer values
-> gen betatrue=beta
-> foreach var in beta pmiss {
->         gen `var'char = strofreal(`var')
->         drop `var'
->         sencode `var'char, gen(`var')
->         drop `var'char
-> }
 > order beta pmiss
 > 
 > * create a string dgm var as well for testing
