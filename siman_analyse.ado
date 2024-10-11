@@ -280,7 +280,10 @@ if `methodcreated'!=1 {
 	
 	* Get method label values
 	cap qui labelsof `method'
-	cap qui ret list
+	if _rc==199 {
+		di as error "Please install the labelsof package using {stata ssc install labelsof}"
+		exit _rc
+	}
 
 	if `"`r(labels)'"'!="" {
 		local 0 = `"`r(labels)'"'

@@ -1,7 +1,6 @@
 {smcl}
 {* *! version 0.10 24jul2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
-{vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Syntax" "siman_blandaltman##syntax"}{...}
 {viewerjumpto "Description" "siman_blandaltman##description"}{...}
 {viewerjumpto "Examples" "siman_blandaltman##examples"}{...}
@@ -74,9 +73,6 @@ compared with a comparator.  If there are more than 2 methods in the data set, f
 as the reference, and the {bf:siman blandaltman} plots will be created for method B - method A and method C - method A.  
 
 {pstd}
-The {bf:labelsof} package (by Ben Jann) is required by {bf:siman blandaltman}, which can be installed by clicking: {stata ssc install labelsof}
-
-{pstd}
 Please note that {help siman_setup:siman setup} needs to be run first before {bf:siman blandaltman}.
 
 {pstd}
@@ -120,8 +116,6 @@ Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
 {marker seealso}{...}
 {title:See Also}
-
-{pstd}{help labelsof} (if installed)
 
 {pstd}{helpb siman: Return to main help page for siman}
 

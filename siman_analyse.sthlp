@@ -2,6 +2,7 @@
 {* *! version 0.9 28nov2023}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "simsum (if installed)" "simsum"}{...}
+{vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Syntax" "siman_analyse##syntax"}{...}
 {viewerjumpto "Performance measures" "siman_analyse##perfmeas"}{...}
 {viewerjumpto "Description" "siman_analyse##description"}{...}
@@ -102,6 +103,10 @@ Additionally the performance measure code (as listed above) and the dataset (est
 {cmd:siman analyse} will also calculate Monte-Carlo standard errors (mcses).  MSCEs quantify a measure of the simulation uncertainty.  They provide an estimate of the standard error of the performance measure, as a finite number of 
 repetitions are used.  For example, for the performance measure bias, the Monte-Carlo standard error would show the uncertainty around the estimate of the bias of all of the estimates over all of the repetitions 
 (i.e. for all in the estimates data set).
+
+{pstd}
+The {bf:labelsof} package (by Ben Jann) is required by {bf:siman analyse}.
+It can be installed by {stata ssc install labelsof}.
 
 {pstd}
 For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.

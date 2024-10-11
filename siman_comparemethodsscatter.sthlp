@@ -1,7 +1,6 @@
 {smcl}
 {* *! version 0.10.1 8aug2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
-{vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Syntax" "siman_comparemethodsscatter##syntax"}{...}
 {viewerjumpto "Description" "siman_comparemethodsscatter##description"}{...}
 {viewerjumpto "Examples" "siman_comparemethodsscatter##examples"}{...}
@@ -127,7 +126,6 @@ Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 {marker seealso}{...}
 {title:See Also}
 
-{pstd}{help labelsof} (if installed)
 
 
 {pstd}{helpb siman: Return to main help page for siman}
