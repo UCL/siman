@@ -126,7 +126,7 @@ if !mi("`dgm'") {
 		}
 		qui count if missing(`var')
 		cap assert r(N)==0
-		if _rc di as error "{p 0 2}Warning: dgm variable " as result "`var'" as text " contains missing values. This may cause problems. Consider recoding as non-missing.{p_end}"
+		if _rc di as text "{p 0 2}Warning: dgm variable " as result "`var'" as text " contains missing values. This may cause problems. Consider recoding as non-missing.{p_end}"
 	}
 }
 

@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.11 9oct2024}{...}
+{* *! version 0.11 14oct2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Input data formats" "siman_setup##data"}{...}
 {viewerjumpto "Syntax" "siman_setup##syntax"}{...}
@@ -202,39 +202,14 @@ two targets (beta, gamma), and two methods of analysis (A, B).
 
 {marker limitations}{...}
 {title:Troubleshooting and limitations}
-{pstd}
-TO BE CHECKED.
-
-{pstd}There can be no other variables in the data set other than those specified in {cmd:siman setup}. 
-
-{pstd}Abbreviations should not be used for variable names and value labels in {cmd:siman setup}.
 
 {pstd}If the method variable is not specified, then {cmd:siman setup} will create a variable {bf:_method} in the dataset with a value of 1 in order that all the other {bf: siman} programs can run.
 
-{pstd} If true exists, it has to be constant across methods.  If using {bf:true({it:stub_varname})}, this stub has to be in the same format as the other variables.  For example if {bf: method} and {bf: target} are in wide format with values 1/2 
-and beta/gamma respectively, with a different true value per target, and estimate defined as {bf: est}, standard error as {bf: se}, then the variables in the dataset would need to be as follows:
-est1beta est2beta est1gamma est2gamma se1beta se2beta se1gamma se2gamma true1beta true2beta true1gamma true2gamma.
+{pstd} Dgm can contain missing values, but the graphs may show unexpected behaviour. THIS IS WORK IN PROGRESS.
 
-{pstd}Note that if the data was in {it:widewide} format similar to above with variable names {it:est1_beta est2_beta est1_gamma est2_gamma}, then 
-the underscores would need to be included in {bf:siman setup}, i.e. {bf:siman setup, est(est) method(1_ 2_) target(beta gamma) order(method)}.
-
-{pstd}If the data is in {it:widewide} format with underscores separating the {bf:method} and {bf:target} labels (as in the example above), or in
-{it:widelong} format with underscores after the {bf:target} labels, then these underscores will be removed by the {bf:siman} auto-reshape in to 
-{it:longwide} format.  Underscores will be removed from the end of variable labels displayed by {bf:{help siman describe:siman describe}}, e.g. A_ and B_ will be displayed as A and B.
-
-{pstd}No special characters are allowed in the labels of the variables, as these are not allowed in Stata graphs.  No spaces in the variable labels are allowed either, to enable reshaping to {it:longwide} format and back again (required 
-internally for some of the graphs).  For example, if the data is in {it:longlong} format the estimate variable is {it:b} 
-and the method variable has labels {it: Complete case} and {it:Complete data}, then when reshaped to {it:longwide} format 
-the variable names would become {it:bComplete case} and {it:bComplete data} which is not permitted by Stata.  
-The method labels would therefore need to be {it:Complete_case} and {it:Complete_data}.
-
-{pstd} Dgm can not contain missing values.
-
-{pstd}If the user would like to specify a different name for any of the graphs using the graph options, the new name is not permitted to contain the word 'name' (e.g. name("testname") would not be allowed).
-
-{pstd}
-Note that {bf:true} must be a {bf:variable} in the dataset for {bf:{help siman nestloop:siman nestloop}}, and should be listed in both the {bf:dgm()} and the {bf:true()} options in {cmd:siman setup} before running these graphs, with the 
-{cmd:true} variable being listed before the {cmd:dgm} variable in the {bf:dgm()} option.
+{pstd}Selecting on dgm variables with non-integer values can cause problems. 
+For example, {cmd:siman scatter if pmiss==0.2} may show no observations.
+We recommend {cmd:siman scatter if float(pmiss)==float(0.2)} to be safe.
 
 
 {marker examples}{...}
@@ -242,73 +217,45 @@ Note that {bf:true} must be a {bf:variable} in the dataset for {bf:{help siman n
 {pstd}
 
 {pstd}
-The following dataset will be used: 
-{browse "https://github.com/UCL/siman/tree/master/Ella_testing/data/simlongESTPM_longE_longM.dta":longlong_dataset}
+We will use an estimates dataset in different formats.
+It contains 1000 repetitions (variable rep = 1-1000) for each of two dgms (variable dgm = 1/2).
+Targets {it:beta} and {it:gamma} and methods {it:1} and {it:2} appear differently in different formats, as do the estimate, standard error and true value.
 
-{pstd} 
-This is a dataset in long-long format (format 1) containing the variables repetition (rep), dgm, 2 targets (contained in a variable called 
-estimand, with labels {it:beta} and {it:gamma}) and 2 methods (with labels {it:1} and {it:2}), the estimate (est), standard error (se) and true variable.  {cmd:siman setup} is entered as follows:
-
-
-{pstd}{bf:Data in format 1} (long-long: long target, long method):
+{pstd}{bf:Data in format 1} (long-long: long target, long method).
+Each feature is stored as a variable: targets (estimand), methods (method), estimate (est), standard error (se) and true value (true).  
 
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)"}
 
 
-{pstd}Alternatively, to show the data in wide-wide format (format 2) the following example dataset will be used:
-{browse "https://github.com/UCL/siman/tree/master/Ella_testing/data/simlongESTPM_wideE_wideM4.dta":widewide_dataset}
+{pstd}{bf:Data in format 2} (wide-wide: wide target, wide method).
+Here there is one set of variables for each target and method: e.g. est1beta is the estimate for method 1 and target beta. 
+The methods appear before the targets in the variable names, so {cmd:order(method)} is needed.
+There is a single variable true because in these data its value is constant.
+
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_wideE_wideM1.dta, clear"}
+
+{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(1 2) estimate(est) se(se) true(true) order(method)"}
 
 
-{pstd}{bf:Data in format 2} (wide-wide: wide target, wide method):
+{pstd}{bf:Data in format 3} (long-wide: long target, wide method). 
+Here the target is the variable estimand but methods are wide, e.g. est_1 is the estimate for method 1. 
+Note the underscore separating est and method in the variable name: we remove it by the {cmd:sep(_)} option.
 
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_wideE_wideM4.dta, clear"}
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_wideM1.dta, clear"}
 
-{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) order(method)"}
-
-{phang}Note that the variable names are {bf:estA_beta} etc and so the method values need to be inputted with the separator underscores in {bf:method()}.  
-This could also be done with {bf:target(beta_ gamma_) method(A B)}.
-
-{phang}The method labels appear before the target labels in the wide-wide dataset so {cmd:order(method)} is entered.
-
-{phang} Also note that the dataset is auto-reshaped to long-wide format by {cmd:siman setup}.
+{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(1 2) sep(_) estimate(est) se(se) true(true)"}
 
 
-{pstd}Now to illustrate the original input data in format 3 (long-wide), the long-long data set 
-({browse "https://github.com/UCL/siman/tree/master/Ella_testing/data/simlongESTPM_longE_longM.dta":longlong_dataset})
-will be reshaped before {cmd:siman setup} is run.
+{pstd}{bf:Data in format 4} (wide-long: wide target, long method). 
+Here the method is the variable method but the targets are wide, e.g. estbeta is the estimate of beta.
 
-
-{pstd}{bf:Data in format 3} (long-wide: long target, wide method):
-
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
-
-{phang}. {stata "reshape wide est se, i(rep dgm estimand true) j(method)"}
-
-{phang}Now the input data is in long-wide format.
-
-{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(1 2) estimate(est) se(se) true(true)"}
-
-
-{pstd}
-Finally, to illustrate the original input data in format 4 (wide-long), the long-long data set ({browse "https://github.com/UCL/siman/tree/master/Ella_testing/data/simlongESTPM_longE_longM.dta":longlong_dataset})
-will be reshaped before {cmd: siman setup} is run.
-
-
-{pstd}{bf:Data in format 4} (wide-long: wide target, long method ):
-
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
-
-{phang}. {stata "reshape wide est se, i(rep dgm method true) j(estimand) string"}
-
-{phang}Now the input data is in wide-long format, so {cmd: siman setup} will be as follows.
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_wideE_longM.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(method) estimate(est) se(se) true(true)"}
 
-{phang}Note this dataset is auto-reshaped to long-wide format by {cmd: siman setup}. 
-
-{phang}Also note that the session has to be cleared before each new dataset is loaded, to remove the previous characteristics created by {cmd: siman setup}.
+{phang}Note that whatever the input format, the output dataset is in long-long format. 
 
 
 {marker chars}{...}
@@ -318,17 +265,17 @@ will be reshaped before {cmd: siman setup} is run.
 The characteristics can be viewed using {cmd:siman describe, char}.
 
 {synoptset 20 tabbed}{...}
-DGMs
+{pstd}DGMs{p_end}
 {synopt:{opt dgm}}Variables defining the DGM. Values: varlist or empty. {p_end}
 {synopt:{opt ndgmvars}}Number of dgm variables. Values: integers. {p_end}
 
-Targets
+{pstd}Targets{p_end}
 {synopt:{opt target}}Variable name for targets. Values: varname or empty. {p_end}
 {synopt:{opt numtarget}}Number of targets. Values: integer {p_end}
 {synopt:{opt targetnature}}Nature of target variable: 0=numeric unlabelled, 1=numeric labelled, 2=string. Values: ./0/1/2. {p_end}
 {synopt:{opt valtarget}}Names of targets, using value labels if they exist. {p_end}
 
-Methods
+{pstd}Methods{p_end}
 {synopt:{opt method}}Variable name for method. Values: varname. {p_end}
 {synopt:{opt nummethod}}Number of methods. Values: integer. {p_end}
 {synopt:{opt methodnature}}Nature of method variable: 0=numeric unlabelled, 1=numeric labelled, 2=string. Values: ./0/1/2. {p_end}
@@ -336,7 +283,7 @@ Methods
 {synopt:{opt valmethod}}Names of methods, using value labels if they exist. {p_end}
 {synopt:{opt methodcreated}}Dummy for method being a variable _method created by siman setup. Values: 0/1. {p_end}
 
-Estimates
+{pstd}Estimates{p_end}
 {synopt:{opt estimate}}variable or stub containing estimate. {p_end}
 {synopt:{opt se}}variable or stub containing standard error. {p_end}
 {synopt:{opt df}}degrees of freedom for the standard error: variable or number. {p_end}
@@ -345,13 +292,13 @@ Estimates
 {synopt:{opt rep}}variable containing the replicate identifier. {p_end}
 {synopt:{opt uci}}variable or stub containing upper confidence limit. {p_end}
 
-True values
+{pstd}True values{p_end}
 {synopt:{opt true}}Variable name for true values. Values: varname. {p_end}
 
-Data formats
+{pstd}Data formats{p_end}
 {synopt:{opt setuprun}}is set to 1 when siman setup is run. Values: always 1. {p_end}
 
-Characteristics created by {help siman analyse}
+{pstd}Characteristics created by {help siman analyse}{p_end}
 {synopt:{opt analyserun}}is set to 1 when siman analyse is run. Values: missing or 1. {p_end}
 {synopt:{opt secreated}}is a dummy for the SE variable having been created by siman analyse 
 to hold Monte Carlo standard errors. Values: missing or 1. {p_end}
