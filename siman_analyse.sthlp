@@ -115,45 +115,23 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {title:Examples}
 {pstd}
 
-{pstd}Using the {browse "https://github.com/UCL/siman/tree/master/Ella_testing/data/simlongESTPM_wideE_wideM4.dta":widewide_dataset} from
-{bf:{help siman_setup:siman setup}}.
-{p_end}
-
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_wideE_wideM4.dta, clear"}
-
-{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(A_ B_) estimate(est) se(se) true(true) order(method)"}
-
-{pstd}
-Display performance measures only:
-{p_end}
-
-{phang}. {stata "siman analyse, perfonly"}
-
-{pstd}
-If more than one method, with method labels 1 and 2, using the {browse "https://github.com/UCL/siman/tree/master/Ella_testing/data/simlongESTPM_longE_longM.dta":longlong_dataset} from
-{bf:{help siman_setup:siman setup}}.
-{p_end}
-
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)"}
+
+{pstd}Standard use:
+
+{phang}. {stata "siman analyse"}
 
 {pstd}
 Run for method 2 only:
-{p_end}
 
 {phang}. {stata "siman analyse if method==2, replace"}
 
+{pstd}To only calculate the performance measures bias and model-based standard error, and discard the estimates data:
 
-{pstd}
-To only calculate the performance measures bias and model-based standard error:
-{p_end}
+{phang}. {stata "siman analyse bias modelse, replace perfonly"}
 
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
-
-{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)"}
-
-{phang}. {stata "siman analyse bias modelse"}
 
 {marker authors}{...}
 {title:Authors}
