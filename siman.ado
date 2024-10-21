@@ -1,4 +1,4 @@
-*!	version 0.11	07oct2024
+*!	version 0.11.1	21oct2024
 *!	Type -siman which- to see versions of siman's subprograms
 * version 0.10 25jul2024  IW parsing doesn't break -siman cms se- or -siman anal,repl-
 * version 0.9  14jun2024  IW remove reshape
