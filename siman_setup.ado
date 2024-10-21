@@ -139,7 +139,8 @@ if !mi("`dgm'") {
 			summ `var', meanonly
 			local prec = ceil(log10(epsfloat()*r(max)))
 			recast double `var' 
-			replace `var' = round(`var', 1E`prec')
+			replace `var' = real(strofreal(round(`var', 1E`prec'))) 
+				// conversion via string avoids strange inexactness
 			di as text "{p_end}"
 		}
 	}
