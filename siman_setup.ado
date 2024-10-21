@@ -1,5 +1,5 @@
 *!	version 0.11.1	21oct2024	
-*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option; don't save char methodvalues
 *	version 0.11	09oct2024	IW allow non-integer dgmvar; allow extra variables; new sep() option for wide formats; new check for true constant within dgm & target
 *	version 0.10.2	14jun2024	IW wide target/method: numeric/string comes out as numeric/numeric-labelled and respects string order; remove more unwanted chars
 *	version 0.10.1	11jun2024	IW allow variable abbreviations
@@ -544,7 +544,7 @@ if !mi("`method'") {
 		local valmethod `valmethod' `thisval'
 	}
 }
-local allthings `allthings' method methodcreated methodnature methodvalues nummethod valmethod
+local allthings `allthings' method methodcreated methodnature nummethod valmethod
 * Estimates
 local allthings `allthings' estimate se df p rep lci uci 
 * True values

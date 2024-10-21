@@ -282,7 +282,6 @@ The characteristics can be viewed using {cmd:siman describe, char}.
 {synopt:{opt method}}Variable name for method. Values: varname. {p_end}
 {synopt:{opt nummethod}}Number of methods. Values: integer. {p_end}
 {synopt:{opt methodnature}}Nature of method variable: 0=numeric unlabelled, 1=numeric labelled, 2=string. Values: ./0/1/2. {p_end}
-{synopt:{opt methodvalues}}Names of methods, ignoring any value labels. {p_end}
 {synopt:{opt valmethod}}Names of methods, using value labels if they exist. {p_end}
 {synopt:{opt methodcreated}}Dummy for method being a variable _method created by siman setup. Values: 0/1. {p_end}
 
