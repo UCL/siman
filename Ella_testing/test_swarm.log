@@ -1,32 +1,4 @@
 
-. siman which
-C:\ian\git\siman\siman.ado
-*!      version 0.11    07oct2024
-*!      Type -siman which- to see versions of siman's subprograms
-C:\ian\git\siman\siman_setup.ado
-*!      version 0.11    09oct2024       
-C:\ian\git\siman\siman_describe.ado
-*!      version 0.7     14jun2024       
-C:\ian\git\siman\siman_analyse.ado
-*!      version 0.9.1   14jun2024               
-C:\ian\git\siman\siman_table.ado
-*!      version 0.8.3   3apr2024
-C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10.2  19aug2024       
-*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
-C:\ian\git\siman\siman_zipplot.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10.1  8aug2024        
-C:\ian\git\siman\siman_blandaltman.ado
-*!      version 0.10    24jun2024
-C:\ian\git\siman\siman_swarm.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_scatter.ado
-*!      version 0.10    18jun2024       
-C:\ian\git\siman\siman_nestloop.ado
-*!      version 0.10.1  26jun2024       
-
 . 
 . foreach feature in dgm target method {
   2.         local N 6
@@ -96,14 +68,14 @@ siman swarm will draw 1 graph with 6 panels
 siman swarm will draw 2 graphs each with 6 panels
 Debug: graph command is: twoway (scatter newidrep b, msymbol(o) msize(small) mcolor(%30) mlc(white%1
 > ) mlwidth(vvvthin) ) (scatter newidrep meanestimate, msym(|) msize(huge) mcol(orange) ), by(mech b
-> eta, title("") noxrescale legend(off) note("I've changed the note")) ytitle("") ylabel(501 "CCA" 5
-> 001 "MeanImp" 9501 "Noadj", nogrid labsize(medium) angle(horizontal)) yscale(reverse) name(g3_esti
-> mate, replace)
+> eta, title("") noxrescale legend(off) note("I've changed the note") ) ytitle("") ylabel(801 "CCA" 
+> 2101 "MeanImp" 3401 "Noadj", nogrid labsize(medium) angle(horizontal)) yscale(reverse) name(g3_est
+> imate, replace)
 Debug: graph command is: twoway (scatter newidrep se, msymbol(o) msize(small) mcolor(%30) mlc(white%
 > 1) mlwidth(vvvthin) ) (scatter newidrep meanse, msym(|) msize(huge) mcol(orange) ), by(mech beta, 
-> title("") noxrescale legend(off) note("I've changed the note")) ytitle("") ylabel(501 "CCA" 5001 "
-> MeanImp" 9501 "Noadj", nogrid labsize(medium) angle(horizontal)) yscale(reverse) name(g3_se, repla
-> ce)
+> title("") noxrescale legend(off) note("I've changed the note") ) ytitle("") ylabel(801 "CCA" 2101 
+> "MeanImp" 3401 "Noadj", nogrid labsize(medium) angle(horizontal)) yscale(reverse) name(g3_se, repl
+> ace)
 
 . foreach graph in g1_estimate g2_se g3_estimate g3_se {
   2.         qui graph describe `graph'

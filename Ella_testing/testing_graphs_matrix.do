@@ -13,8 +13,11 @@ cap log close
 set linesize 100
 
 // START TESTING
-log using `filename', replace text nomsg
+log using `filename'_which, replace text
 siman which
+log close
+
+log using `filename', replace text nomsg
 
 ********************************
 ********************************
@@ -394,6 +397,20 @@ order beta pmiss
 reshape wide b se true, i(rep mech pmiss beta method) j(estimand "effect" "mean0" "mean1") string
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(effect mean0 mean1) est(b) se(se) true(true)
 siman analyse
+
+
+* Test -analyse if-
+*******************
+use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear
+siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+
+siman analyse, notable 
+su est if dgm==1 & estimand=="beta" & rep<0 & method==2 & _perfmeascode!="relprec"
+local ref = r(mean)
+
+siman analyse if method==2, notable replace
+su est if dgm==1 & estimand=="beta" & rep<0 & method==2 & _perfmeascode!="relprec"
+assert reldif(`ref', r(mean)) < 1E-10
 
 
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"

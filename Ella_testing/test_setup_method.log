@@ -1,32 +1,4 @@
 
-. siman which
-C:\ian\git\siman\siman.ado
-*!      version 0.11    07oct2024
-*!      Type -siman which- to see versions of siman's subprograms
-C:\ian\git\siman\siman_setup.ado
-*!      version 0.11    09oct2024       
-C:\ian\git\siman\siman_describe.ado
-*!      version 0.7     14jun2024       
-C:\ian\git\siman\siman_analyse.ado
-*!      version 0.9.1   14jun2024               
-C:\ian\git\siman\siman_table.ado
-*!      version 0.8.3   3apr2024
-C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10.2  19aug2024       
-*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
-C:\ian\git\siman\siman_zipplot.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10.1  8aug2024        
-C:\ian\git\siman\siman_blandaltman.ado
-*!      version 0.10    24jun2024
-C:\ian\git\siman\siman_swarm.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_scatter.ado
-*!      version 0.10    18jun2024       
-C:\ian\git\siman\siman_nestloop.ado
-*!      version 0.10.1  26jun2024       
-
 . 
 . forvalues methodtype = 1/6 {
   2.         di as input "methodtype = `methodtype'"
@@ -41,88 +13,83 @@ C:\ian\git\siman\siman_nestloop.ado
 .                 local xmethod _method
  11.                 local xmethodcreated 1
  12.                 local xmethodnature 0
- 13.                 local xmethodvalues 1
- 14.                 local xnummethod 1
- 15.                 local xvalmethod 1
- 16.         }
- 17.         if `methodtype'==2 { // 1 method, string
- 18.                 keep if method=="CCA"
- 19.                 local methodopt method(method)
- 20. 
+ 13.                 local xnummethod 1
+ 14.                 local xvalmethod 1
+ 15.         }
+ 16.         if `methodtype'==2 { // 1 method, string
+ 17.                 keep if method=="CCA"
+ 18.                 local methodopt method(method)
+ 19. 
 .                 local xmethod method
- 21.                 local xmethodcreated 0
- 22.                 local xmethodnature 2
- 23.                 local xmethodvalues CCA
- 24.                 local xnummethod 1
- 25.                 local xvalmethod CCA
- 26.         }
- 27.         if `methodtype'==3 { // 3 methods, string
- 28.                 local methodopt method(method)
- 29. 
+ 20.                 local xmethodcreated 0
+ 21.                 local xmethodnature 2
+ 22.                 local xnummethod 1
+ 23.                 local xvalmethod CCA
+ 24.         }
+ 25.         if `methodtype'==3 { // 3 methods, string
+ 26.                 local methodopt method(method)
+ 27. 
 .                 local xmethod method
- 30.                 local xmethodcreated 0
- 31.                 local xmethodnature 2
- 32.                 local xmethodvalues CCA MeanImp Noadj
- 33.                 local xnummethod 3
- 34.                 local xvalmethod CCA MeanImp Noadj
- 35.         }
- 36.         if `methodtype'==4 { // 3 methods, num-labelled
- 37.                 sencode method, gsort(method) replace
- 38.                 local methodopt method(method)
- 39.         
+ 28.                 local xmethodcreated 0
+ 29.                 local xmethodnature 2
+ 30.                 local xnummethod 3
+ 31.                 local xvalmethod CCA; MeanImp; Noadj
+ 32.         }
+ 33.         if `methodtype'==4 { // 3 methods, num-labelled
+ 34.                 sencode method, gsort(method) replace
+ 35.                 local methodopt method(method)
+ 36.         
 .                 local xmethod method
- 40.                 local xmethodcreated 0
- 41.                 local xmethodnature 1
- 42.                 local xmethodvalues 1 2 3
- 43.                 local xnummethod 3
- 44.                 local xvalmethod CCA MeanImp Noadj
- 45.         }
- 46.         if `methodtype'==5 { // 3 methods, numeric, wide
- 47.                 sencode method, gsort(method) replace
- 48.                 qui reshape wide b se, i(rep beta mech true) j(method)
- 49.                 char _dta[__JValLab] // needed to stop Stata remembering method names
- 50.                 local methodopt method(1 2 3)
- 51. 
+ 37.                 local xmethodcreated 0
+ 38.                 local xmethodnature 1
+ 39.                 local xnummethod 3
+ 40.                 local xvalmethod CCA; MeanImp; Noadj
+ 41.         }
+ 42.         if `methodtype'==5 { // 3 methods, numeric, wide
+ 43.                 sencode method, gsort(method) replace
+ 44.                 qui reshape wide b se, i(rep beta mech true) j(method)
+ 45.                 char _dta[__JValLab] // needed to stop Stata remembering method names
+ 46.                 local methodopt method(1 2 3)
+ 47. 
 .                 local xmethod method
- 52.                 local xmethodcreated 0
- 53.                 local xmethodnature 0
- 54.                 local xmethodvalues 1 2 3
- 55.                 local xnummethod 3
- 56.                 local xvalmethod 1 2 3
- 57.         }
- 58.         if `methodtype'==6 { // 3 methods, string, wide
- 59.                 qui reshape wide b se, i(rep beta mech true) j(method) string
- 60.                 local methodopt method(CCA MeanImp Noadj)
- 61. 
+ 48.                 local xmethodcreated 0
+ 49.                 local xmethodnature 0
+ 50.                 local xnummethod 3
+ 51.                 local xvalmethod 1; 2; 3
+ 52.         }
+ 53.         if `methodtype'==6 { // 3 methods, string, wide
+ 54.                 qui reshape wide b se, i(rep beta mech true) j(method) string
+ 55.                 local methodopt method(CCA MeanImp Noadj)
+ 56. 
 .                 local xmethod method
- 62.                 local xmethodcreated 0
- 63.                 local xmethodnature 1
- 64.                 local xmethodvalues 1 2 3
- 65.                 local xnummethod 3
- 66.                 local xvalmethod CCA MeanImp Noadj
- 67.         }
- 68.         qui siman setup, rep(re) dgm(beta mech) `methodopt' estimate(b) se(se) true(true)
- 69.         foreach thing in method methodcreated methodnature methodvalues nummethod valmethod {
- 70.                 local xx `: char _dta[siman_`thing']'
- 71.                 cap assert "`x`thing''" == "`xx'"
- 72.                 if _rc {
- 73.                         di as error "Error with methodtype = `methodtype':"
- 74.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
- 75.                 }
- 76.         }
- 77. 
+ 57.                 local xmethodcreated 0
+ 58.                 local xmethodnature 1
+ 59.                 local xnummethod 3
+ 60.                 local xvalmethod CCA; MeanImp; Noadj
+ 61.         }
+ 62.         qui siman setup, rep(re) dgm(beta mech) `methodopt' estimate(b) se(se) true(true)
+ 63.         foreach thing in method methodcreated methodnature nummethod valmethod {
+ 64.                 local xx `: char _dta[siman_`thing']'
+ 65.                 cap assert "`x`thing''" == "`xx'"
+ 66.                 if _rc {
+ 67.                         di as error "Error with methodtype = `methodtype':"
+ 68.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
+ 69.                         exit _rc
+ 70.                 }
+ 71.         }
+ 72. 
 .         * save for testing siman graph commands
 .         save data/setupdata_method`methodtype', replace
- 78. 
+ 73. 
 .         qui count if float(beta)==float(0.5)
- 79.         local x = r(N)
- 80.         siman analyse if float(beta)==float(0.25), notable
- 81.         qui count if float(beta)==float(0.5)
- 82.         assert `x' == r(N)
- 83.         siman analyse if float(beta)==float(0), notable replace
- 84.         qui count if float(beta)==float(0.5)
- 85.         assert `x' == r(N)
- 86. }
+ 74.         local x = r(N)
+ 75.         siman analyse if float(beta)==float(0.25), notable
+ 76.         qui count if float(beta)==float(0.5)
+ 77.         assert `x' == r(N)
+ 78.         siman analyse if float(beta)==float(0), notable replace
+ 79.         qui count if float(beta)==float(0.5)
+ 80.         assert `x' == r(N)
+ 81. }
 methodtype = 1
 (90,000 observations deleted)
 (12,000 observations deleted)

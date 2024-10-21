@@ -1,32 +1,4 @@
 
-. siman which
-C:\ian\git\siman\siman.ado
-*!      version 0.11    07oct2024
-*!      Type -siman which- to see versions of siman's subprograms
-C:\ian\git\siman\siman_setup.ado
-*!      version 0.11    09oct2024       
-C:\ian\git\siman\siman_describe.ado
-*!      version 0.7     14jun2024       
-C:\ian\git\siman\siman_analyse.ado
-*!      version 0.9.1   14jun2024               
-C:\ian\git\siman\siman_table.ado
-*!      version 0.8.3   3apr2024
-C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10.2  19aug2024       
-*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
-C:\ian\git\siman\siman_zipplot.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10.1  8aug2024        
-C:\ian\git\siman\siman_blandaltman.ado
-*!      version 0.10    24jun2024
-C:\ian\git\siman\siman_swarm.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_scatter.ado
-*!      version 0.10    18jun2024       
-C:\ian\git\siman\siman_nestloop.ado
-*!      version 0.10.1  26jun2024       
-
 . 
 . forvalues dgmtype = 1/5 {
   2.         di as input "dgmtype = `dgmtype'"
@@ -73,21 +45,22 @@ C:\ian\git\siman\siman_nestloop.ado
  43.                 if _rc {
  44.                         di as error "Error with dgmtype = `dgmtype':"
  45.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
- 46.                 }
- 47.         }
- 48. 
+ 46.                         exit _rc
+ 47.                 }
+ 48.         }
+ 49. 
 .         * save for testing siman graph commands
 .         save data/setupdata_dgm`dgmtype', replace
- 49. 
+ 50. 
 .         qui count if estimand=="effect"
- 50.         local x = r(N)
- 51.         siman analyse if estimand=="mean1", notable
- 52.         qui count if estimand=="effect"
- 53.         assert `x' == r(N)
- 54.         siman analyse if estimand=="mean0", notable replace
- 55.         qui count if estimand=="effect"
- 56.         assert `x' == r(N)
- 57. }
+ 51.         local x = r(N)
+ 52.         siman analyse if estimand=="mean1", notable
+ 53.         qui count if estimand=="effect"
+ 54.         assert `x' == r(N)
+ 55.         siman analyse if estimand=="mean0", notable replace
+ 56.         qui count if estimand=="effect"
+ 57.         assert `x' == r(N)
+ 58. }
 dgmtype = 1
 (72,000 observations deleted)
 (33,000 observations deleted)

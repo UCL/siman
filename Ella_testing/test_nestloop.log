@@ -1,32 +1,4 @@
 
-. siman which
-C:\ian\git\siman\siman.ado
-*!      version 0.11    07oct2024
-*!      Type -siman which- to see versions of siman's subprograms
-C:\ian\git\siman\siman_setup.ado
-*!      version 0.11    09oct2024       
-C:\ian\git\siman\siman_describe.ado
-*!      version 0.7     14jun2024       
-C:\ian\git\siman\siman_analyse.ado
-*!      version 0.9.1   14jun2024               
-C:\ian\git\siman\siman_table.ado
-*!      version 0.8.3   3apr2024
-C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10.2  19aug2024       
-*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
-C:\ian\git\siman\siman_zipplot.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10.1  8aug2024        
-C:\ian\git\siman\siman_blandaltman.ado
-*!      version 0.10    24jun2024
-C:\ian\git\siman\siman_swarm.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_scatter.ado
-*!      version 0.10    18jun2024       
-C:\ian\git\siman\siman_nestloop.ado
-*!      version 0.10.1  26jun2024       
-
 . 
 . use $testpath/data/extendedtestdata.dta, clear
 
@@ -50,12 +22,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              3
-  Target values:                  effect mean0 mean1
+  Target values:                  effect; mean0; mean1
 
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  CCA MeanImp Noadj
+  Method values:                  CCA; MeanImp; Noadj
 
 Repetition-level output
   Point estimate variable:        b
@@ -103,12 +75,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              3
-  Target values:                  effect mean0 mean1
+  Target values:                  effect; mean0; mean1
 
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  CCA MeanImp Noadj
+  Method values:                  CCA; MeanImp; Noadj
 
 Repetition-level output
   Point estimate variable:        b
@@ -149,12 +121,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              3
-  Target values:                  effect mean0 mean1
+  Target values:                  effect; mean0; mean1
 
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  CCA MeanImp Noadj
+  Method values:                  CCA; MeanImp; Noadj
 
 Repetition-level output
   Point estimate variable:        b
@@ -211,12 +183,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              3
-  Target values:                  effect mean0 mean1
+  Target values:                  effect; mean0; mean1
 
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  CCA MeanImp Noadj
+  Method values:                  CCA; MeanImp; Noadj
 
 Repetition-level output
   Point estimate variable:        b
@@ -273,12 +245,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              3
-  Target values:                  effect mean0 mean1
+  Target values:                  effect; mean0; mean1
 
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  CCA MeanImp Noadj
+  Method values:                  CCA; MeanImp; Noadj
 
 Repetition-level output
   Point estimate variable:        b
@@ -332,12 +304,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              3
-  Target values:                  effect mean0 mean1
+  Target values:                  effect; mean0; mean1
 
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  Noadj CCA MeanImp
+  Method values:                  Noadj; CCA; MeanImp
 
 Repetition-level output
   Point estimate variable:        b
@@ -405,12 +377,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              3
-  Target values:                  effect mean0 mean1
+  Target values:                  effect; mean0; mean1
 
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  1 2 3
+  Method values:                  1; 2; 3
 
 Repetition-level output
   Point estimate variable:        b
@@ -479,12 +451,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              3
-  Target values:                  effect mean0 mean1
+  Target values:                  effect; mean0; mean1
 
 Methods
   Variable containing methods:    methchar
   Number of methods:              3
-  Method values:                  CCA MeanImp Noadj
+  Method values:                  CCA; MeanImp; Noadj
 
 Repetition-level output
   Point estimate variable:        b
@@ -543,12 +515,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              3
-  Target values:                  effect mean0 mean1
+  Target values:                  effect; mean0; mean1
 
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  CCA MeanImp Noadj
+  Method values:                  CCA; MeanImp; Noadj
 
 Repetition-level output
   Point estimate variable:        b
@@ -647,7 +619,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  CCA MeanImp Noadj
+  Method values:                  CCA; MeanImp; Noadj
 
 Repetition-level output
   Point estimate variable:        b
@@ -690,12 +662,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estinum
   Number of targets:              3
-  Target values:                  effect mean0 mean1
+  Target values:                  effect; mean0; mean1
 
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  CCA MeanImp Noadj
+  Method values:                  CCA; MeanImp; Noadj
 
 Repetition-level output
   Point estimate variable:        b

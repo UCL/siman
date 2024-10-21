@@ -13,8 +13,11 @@ set linesize 100
 graph drop _all
 
 // START TESTING
-log using `filename', replace text nomsg
+log using `filename'_which, replace text
 siman which
+log close
+
+log using `filename', replace text nomsg
 
 // STANDARD TESTS
 foreach feature in dgm target method {

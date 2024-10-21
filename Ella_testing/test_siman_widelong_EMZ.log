@@ -1,32 +1,4 @@
 
-. siman which
-C:\ian\git\siman\siman.ado
-*!      version 0.11    07oct2024
-*!      Type -siman which- to see versions of siman's subprograms
-C:\ian\git\siman\siman_setup.ado
-*!      version 0.11    09oct2024       
-C:\ian\git\siman\siman_describe.ado
-*!      version 0.7     14jun2024       
-C:\ian\git\siman\siman_analyse.ado
-*!      version 0.9.1   14jun2024               
-C:\ian\git\siman\siman_table.ado
-*!      version 0.8.3   3apr2024
-C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10.2  19aug2024       
-*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
-C:\ian\git\siman\siman_zipplot.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10.1  8aug2024        
-C:\ian\git\siman\siman_blandaltman.ado
-*!      version 0.10    24jun2024
-C:\ian\git\siman\siman_swarm.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_scatter.ado
-*!      version 0.10    18jun2024       
-C:\ian\git\siman\siman_nestloop.ado
-*!      version 0.10.1  26jun2024       
-
 . 
 . use $testpath/data/msgbsl_inter_try_postfile.dta, clear
 
@@ -64,7 +36,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              4
-  Method values:                  CC FULLDAT IMPALL IMPBYZ
+  Method values:                  CC; FULLDAT; IMPALL; IMPBYZ
 
 Repetition-level output
   Point estimate variable:        b
@@ -407,12 +379,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              2
-  Target values:                  beta gamma
+  Target values:                  beta; gamma
 
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -425,6 +397,7 @@ _____________________________________________________
 
 . siman analyse bias ciwidth cover power, level(80) debug
 Debug: options to pass to simsum: level(80)
+Debug: method values are 1 2
 Debug: running command: simsum est , true(true) se(se) df() lci() uci() p() method(method) id(rep) b
 > y(true dgm estimand) max(20) bias ciwidth cover power clear mcse gen(_perfmeas)  level(80)
 
@@ -544,12 +517,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              2
-  Target values:                  beta gamma
+  Target values:                  beta; gamma
 
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -562,6 +535,7 @@ _____________________________________________________
 
 . siman analyse ciwidth cover power, debug
 Debug: options to pass to simsum: 
+Debug: method values are 1 2
 Debug: running command: simsum est , true(true) se(se) df() lci(lower) uci(upper) p() method(method)
 >  id(rep) by(true dgm estimand) max(20) ciwidth cover power clear mcse gen(_perfmeas)
 
@@ -679,12 +653,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              2
-  Target values:                  beta gamma
+  Target values:                  beta; gamma
 
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -697,6 +671,7 @@ _____________________________________________________
 
 . siman analyse ciwidth power, level(80) debug
 Debug: options to pass to simsum: level(80)
+Debug: method values are 1 2
 Debug: running command: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(
 > rep) by(true dgm estimand) max(20) ciwidth power clear mcse gen(_perfmeas)  level(80)
 
@@ -791,12 +766,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              2
-  Target values:                  beta gamma
+  Target values:                  beta; gamma
 
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -809,6 +784,7 @@ _____________________________________________________
 
 . siman analyse ciwidth power, debug // NB default level
 Debug: options to pass to simsum: 
+Debug: method values are 1 2
 Debug: running command: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(
 > rep) by(true dgm estimand) max(20) ciwidth power clear mcse gen(_perfmeas)
 
@@ -902,12 +878,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              2
-  Target values:                  beta gamma
+  Target values:                  beta; gamma
 
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est

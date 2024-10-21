@@ -17,8 +17,11 @@ cap log close
 set linesize 100
 
 // START TESTING
-log using `filename', replace text nomsg
+log using `filename'_which, replace text
 siman which
+log close
+
+log using `filename', replace text nomsg
 
 forvalues dgmtype = 1/5 {
 	di as input "dgmtype = `dgmtype'"
@@ -65,6 +68,7 @@ forvalues dgmtype = 1/5 {
 		if _rc {
 			di as error "Error with dgmtype = `dgmtype':"
 			di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
+			exit _rc
 		}
 	}
 

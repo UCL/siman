@@ -16,8 +16,12 @@ cap log close
 set linesize 100
 
 // START TESTING
-log using `filename', replace text nomsg
+log using `filename'_which, replace text
 siman which
+log close
+
+log using `filename', replace text nomsg
+
 
  
 * dgm defined by 1 variable
@@ -86,13 +90,13 @@ use $testpath/data/extendedtestdata.dta, clear
 reshape wide b se, i(rep beta pmiss mech estimand) j(method) string
 siman setup, rep(rep) dgm(beta pmiss mech) method(CCA MeanImp Noadj) target(estimand) est(b) se(se) true(true)
 assert "`: char _dta[siman_nummethod]'" == "3"
-assert "`: char _dta[siman_valmethod]'" == "CCA MeanImp Noadj"
+assert "`: char _dta[siman_valmethod]'" == "CCA; MeanImp; Noadj"
 
 * setup data in LL and reshape to LW
 use $testpath/data/extendedtestdata.dta, clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 assert "`: char _dta[siman_nummethod]'" == "3"
-assert "`: char _dta[siman_valmethod]'" == "CCA MeanImp Noadj"
+assert "`: char _dta[siman_valmethod]'" == "CCA; MeanImp; Noadj"
 
 
 * dgm defined by >1 variable
@@ -163,34 +167,16 @@ siman zipplot
 
 
 use $testpath/nestloop/res.dta, clear
-* theta as dgmvar must be encoded, but theta as true value mustn't be
-gen theta_new = 1
-replace theta_new = 0 if theta == 0.5
-replace theta_new = 2 if theta == 0.75
-replace theta_new = 3 if theta == 1
-label define theta_newl 0 "0.5" 1 "0.6666667" 2 "0.75" 3 "1"
-label values theta_new theta_newl
-
-* also encode tau2
-gen tau2_new = 0
-replace tau2_new = 1 if round(tau2,0.01) == 0.05
-replace tau2_new = 2 if round(tau2,0.01) == 0.1
-replace tau2_new = 3 if round(tau2,0.01) == 0.2
-label define tau2_newl 0 "0" 1 "0.05" 2 "0.1" 3 "0.2"
-label values tau2_new tau2_newl
-drop tau2
-rename tau2_new tau2
-
 drop expfem exprem expmh msefem mserem msemh msepeto mseg2 mselimf covfem covrem covmh covpeto covg2 covlimf msepeters covpeters expexpect mseexpect covexpect msetrimfill covtrimfill biasfem biasrem biasmh biaspeto biaspeters biassfem biassrem biasg2 biaslimf biaslimr biasexpect biastrimfill var2fem var2rem var2mh var2expect
 
-siman setup, rep(v1) dgm(theta_new rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)
+siman setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)
 
 * siman analyse needs force option to cope with only 1 repetition per dgm [NB gets many lines of red output, suppressed by cap], and notable option because siman table fails
 cap siman analyse, force 
 assert _rc == 198
 
 * Recreating Gerta's graph, Figure 2
-siman nestloop mean, dgmorder(-theta_new rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") xlabel(none) xtitle("")
+siman nestloop mean, dgmorder(-theta rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") xlabel(none) xtitle("")
 
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 

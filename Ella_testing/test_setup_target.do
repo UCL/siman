@@ -16,10 +16,11 @@ cap log close
 set linesize 100
 
 // START TESTING
-log using `filename', replace text nomsg
+log using `filename'_which, replace text
 siman which
+log close
 
-
+log using `filename', replace text nomsg
 
 forvalues targettype = 1/6 {
 	di as input "targettype = `targettype'"
@@ -50,7 +51,7 @@ forvalues targettype = 1/6 {
 		local xnumtarget 3
 		local xtarget estimand
 		local xtargetnature 2
-		local xvaltarget effect mean0 mean1
+		local xvaltarget effect; mean0; mean1
 		local xconfirm string var estimand
 	}
 	if `targettype'==4 { // 3 targets, num-labelled
@@ -59,7 +60,7 @@ forvalues targettype = 1/6 {
 		local xnumtarget 3
 		local xtarget estimand
 		local xtargetnature 1
-		local xvaltarget effect mean0 mean1
+		local xvaltarget effect; mean0; mean1
 		local xconfirm numeric var estimand
 	}
 	if `targettype'==5 { // 3 targets, numeric, wide
@@ -90,6 +91,7 @@ forvalues targettype = 1/6 {
 		if _rc {
 			di as error "Error with targettype = `targettype':"
 			di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
+			exit _rc
 		}
 	}
 	

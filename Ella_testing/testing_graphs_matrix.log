@@ -1,32 +1,4 @@
 
-. siman which
-C:\ian\git\siman\siman.ado
-*!      version 0.11    07oct2024
-*!      Type -siman which- to see versions of siman's subprograms
-C:\ian\git\siman\siman_setup.ado
-*!      version 0.11    09oct2024       
-C:\ian\git\siman\siman_describe.ado
-*!      version 0.7     14jun2024       
-C:\ian\git\siman\siman_analyse.ado
-*!      version 0.9.1   14jun2024               
-C:\ian\git\siman\siman_table.ado
-*!      version 0.8.3   3apr2024
-C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10.2  19aug2024       
-*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
-C:\ian\git\siman\siman_zipplot.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10.1  8aug2024        
-C:\ian\git\siman\siman_blandaltman.ado
-*!      version 0.10    24jun2024
-C:\ian\git\siman\siman_swarm.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_scatter.ado
-*!      version 0.10    18jun2024       
-C:\ian\git\siman\siman_nestloop.ado
-*!      version 0.10.1  26jun2024       
-
 . 
 . ********************************
 . ********************************
@@ -103,12 +75,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              2
-  Target values:                  beta gamma
+  Target values:                  beta; gamma
 
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -350,12 +322,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              2
-  Target values:                  beta gamma
+  Target values:                  beta; gamma
 
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  A B
+  Method values:                  A; B
 
 Repetition-level output
   Point estimate variable:        est
@@ -600,12 +572,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              2
-  Target values:                  1 2
+  Target values:                  1; 2
 
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  A B
+  Method values:                  A; B
 
 Repetition-level output
   Point estimate variable:        est
@@ -784,7 +756,7 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              2
-  Target values:                  1 2
+  Target values:                  1; 2
 
 Methods
   Variable containing methods:    _method
@@ -878,7 +850,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -1012,12 +984,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              3
-  Target values:                  effect mean0 mean1
+  Target values:                  effect; mean0; mean1
 
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  CCA MeanImp Noadj
+  Method values:                  CCA; MeanImp; Noadj
 
 Repetition-level output
   Point estimate variable:        b
@@ -2719,12 +2691,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              2
-  Target values:                  beta gamma
+  Target values:                  beta; gamma
 
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  _1 _2
+  Method values:                  _1; _2
 
 Repetition-level output
   Point estimate variable:        est
@@ -2953,12 +2925,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              2
-  Target values:                  1 2
+  Target values:                  1; 2
 
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -3130,12 +3102,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              2
-  Target values:                  beta gamma
+  Target values:                  beta; gamma
 
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  _1 _2
+  Method values:                  _1; _2
 
 Repetition-level output
   Point estimate variable:        est
@@ -3364,7 +3336,7 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              2
-  Target values:                  beta gamma
+  Target values:                  beta; gamma
 
 Methods
   Variable containing methods:    _method
@@ -3459,7 +3431,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  _1 _2
+  Method values:                  _1; _2
 
 Repetition-level output
   Point estimate variable:        est
@@ -3606,12 +3578,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              3
-  Target values:                  effect mean0 mean1
+  Target values:                  effect; mean0; mean1
 
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  Noadj CCA MeanImp
+  Method values:                  Noadj; CCA; MeanImp
 
 Repetition-level output
   Point estimate variable:        b
@@ -5320,7 +5292,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1_ 2_
+  Method values:                  1_; 2_
 
 Repetition-level output
   Point estimate variable:        est
@@ -5367,7 +5339,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -5539,7 +5511,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1_ 2_
+  Method values:                  1_; 2_
 
 Repetition-level output
   Point estimate variable:        est
@@ -5768,7 +5740,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1_ 2_
+  Method values:                  1_; 2_
 
 Repetition-level output
   Point estimate variable:        est
@@ -5940,7 +5912,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  Noadj CCA MeanImp
+  Method values:                  Noadj; CCA; MeanImp
 
 Repetition-level output
   Point estimate variable:        b
@@ -7648,7 +7620,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -7879,7 +7851,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -8051,7 +8023,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -8279,7 +8251,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -8449,7 +8421,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  Noadj CCA MeanImp
+  Method values:                  Noadj; CCA; MeanImp
 
 Repetition-level output
   Point estimate variable:        b
@@ -10156,7 +10128,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -10389,7 +10361,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -10566,7 +10538,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  Method1 Method2
+  Method values:                  Method1; Method2
 
 Repetition-level output
   Point estimate variable:        est
@@ -10791,7 +10763,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  A B
+  Method values:                  A; B
 
 Repetition-level output
   Point estimate variable:        est
@@ -11082,7 +11054,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  CCA MeanImp Noadj
+  Method values:                  CCA; MeanImp; Noadj
 
 Repetition-level output
   Point estimate variable:        b
@@ -12759,6 +12731,65 @@ mean1                |
 ------------------------------------------------------
 NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
   second entry is its Monte Carlo error.
+
+. 
+. 
+. * Test -analyse if-
+. *******************
+. use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.
+> dta, clear
+
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
+
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta; gamma
+
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1; 2
+
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
+_____________________________________________________
+
+. 
+. siman analyse, notable 
+siman analyse has run successfully
+
+. su est if dgm==1 & estimand=="beta" & rep<0 & method==2 & _perfmeascode!="relprec"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |         12    175.1337    386.2543  -.0025973       1000
+
+. local ref = r(mean)
+
+. 
+. siman analyse if method==2, notable replace
+siman analyse has run successfully
+
+. su est if dgm==1 & estimand=="beta" & rep<0 & method==2 & _perfmeascode!="relprec"
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         est |         12    175.1337    386.2543  -.0025973       1000
+
+. assert reldif(`ref', r(mean)) < 1E-10
 
 . 
 . 
