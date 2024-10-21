@@ -179,13 +179,12 @@ else if `ntarget'==1 & `targetisvar'==1 {
 	local longvars `longvars' `target'
 	local numtarget = r(r)
 	local targetvallab : value label `target'
-	if !mi("`targetvallab'") {
-		foreach val of local valtargetorig {
-			local thisval : label (`target') `val'
-			local valtarget `valtarget' `thisval'
-		}
+	foreach val of local valtargetorig {
+		if !mi("`targetvallab'") local thisval : label (`target') `val'
+		else local thisval `val'
+		if !mi(`"`valtarget'"') local valtarget `valtarget';
+		local valtarget `valtarget' `thisval'
 	}
-	else local valtarget `valtargetorig'
 }
 else if mi("`target'") {
 	local targetformat long
@@ -539,13 +538,14 @@ if !mi("`method'") {
 		local valmethod
 		foreach val of local valmethodorig {
 			local thisval : label (`method') `val'
+			if !mi(`"`valmethod'"') local valmethod `valmethod'; 
 			local valmethod `valmethod' `thisval'
 		}
 		local methodnature 1
 		local methodvalues `valmethodorig'
 	}
 	else {
-		qui levelsof `method', local(valmethod) clean
+		qui levelsof `method', local(valmethod) clean sep(;)
 		local methodvalues `valmethod'
 	}
 	local nummethod : word count `valmethod'

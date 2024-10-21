@@ -151,7 +151,7 @@ qui egen `rpoint' = max(`uci') , by(`by')
 
 * count panels
 tempvar unique
-egen `unique' = tag(`by')
+egen `unique' = tag(`by'), `dgmmissingok'
 qui count if `unique'
 local npanels = r(N)
 drop `unique'

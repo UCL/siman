@@ -347,7 +347,6 @@ foreach thispm of local pmlist { // loop over PMs
 				tempvar S`var' // this is the variable containing the y-axis position for descriptor `var'
 				egen `S`var'' = group(`var'), label `dgmmissingok'
 				local ++j
-tab `S`var''
 				qui replace `S`var'' = ( (`S`var''-1) / (`thisdgmlevels'-1) + (`dginnergap'+1)*(`j'-1)) * `step' + `lmin'
 				label var `S`var'' "y-value for descriptor `var'"
 				local Svarname_ypos = ( (`dginnergap'+1)*(`j' - 1)+2.2 ) * `step' + `lmin'
