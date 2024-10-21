@@ -533,22 +533,16 @@ if !mi("`method'") {
 		local methodlabelname : value label `method'
 		local methodnature = !mi("`methodlabelname'")
 	}
-	if `methodnature'==1 { // numeric labelled
-		qui levelsof `method', local(valmethodorig) clean
-		local valmethod
-		foreach val of local valmethodorig {
+	qui levelsof `method', local(methodvalues) clean
+	local nummethod = r(r)
+	foreach val of local methodvalues {
+		if `methodnature'==1 { // numeric labelled
 			local thisval : label (`method') `val'
-			if !mi(`"`valmethod'"') local valmethod `valmethod'; 
-			local valmethod `valmethod' `thisval'
 		}
-		local methodnature 1
-		local methodvalues `valmethodorig'
+		else local thisval `val'
+		if !mi(`"`valmethod'"') local valmethod `valmethod'; 
+		local valmethod `valmethod' `thisval'
 	}
-	else {
-		qui levelsof `method', local(valmethod) clean sep(;)
-		local methodvalues `valmethod'
-	}
-	local nummethod : word count `valmethod'
 }
 local allthings `allthings' method methodcreated methodnature methodvalues nummethod valmethod
 * Estimates
