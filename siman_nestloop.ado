@@ -1,4 +1,4 @@
-*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option; make -if- work correctly
 *!	version 0.11.1	21oct2024	
 *	version 0.10.1	26jun2024	IW added saving() and export() options
 *	version 0.10	23jun2024	IW Correct handling of if/in
@@ -32,7 +32,7 @@ syntax [anything] [if], ///
 	DGPAttern(string) DGLAbsize(string) DGSTyle(string) DGLWidth(string) /// control descriptor graph
 	debug pause nodg force /// undocumented
 	LColor(string) LPattern(string) LSTYle(string) LWidth(string) /// twoway options for main graph
-	METHLEGend(string) * /// other graph options
+	METHLEGend(string) SCENariolabel * /// other graph options
 	NAMe(string) SAVing(string) EXPort(string) /// twoway options for overall graph
 	] 
 
@@ -158,7 +158,10 @@ drop `meantouse'
 
 * do if/in
 qui keep if `touse'
-if _N==0 error 2000
+if _N==0 {
+	di as error "{p 0 2}No observations: perhaps you used a variable other than dgm, target and method variables in the -if- condition?{p_end}"
+	exit 2000
+}
 
 * If user has specified an order for dgm, use this order (so that siman_setup doesn't need to be re-run).  Take out -ve signs if there are any.
 if !mi("`dgmorder'") {
@@ -294,8 +297,26 @@ if `stagger'>0  {
 		gen `scenario'`k' = `scenario' + `stagger'*(2*`k'-1-`nmethods')/(`nmethods'-1)
 	}
 }
+if !mi("`scenariolabel'") local scenarioaxis xla(1/`nscenarios') xtitle("Scenario")
+else local scenarioaxis xla(none) xtitle("") // default is no labels, no title
 
 foreach thispm of local pmlist { // loop over PMs
+	* nicer names for PMs (same as in lollyplot)
+	if "`thispm'"=="bsims" local thispm2 "Est reps"
+	if "`thispm'"=="bias" local thispm2 "Bias"
+	if "`thispm'"=="ciwidth" local thispm2 "CI width"
+	if "`thispm'"=="cover" local thispm2 "Coverage"
+	if "`thispm'"=="empse" local thispm2 "Empirical SE"
+	if "`thispm'"=="mean" local thispm2 "Mean"
+	if "`thispm'"=="modelse" local thispm2 "Model SE"
+	if "`thispm'"=="mse" local thispm2 "MSE"
+	if "`thispm'"=="pctbias" local thispm2 "% bias"
+	if "`thispm'"=="power" local thispm2 "Power"
+	if "`thispm'"=="relerror" local thispm2 "% error in SE"
+	if "`thispm'"=="relprec" local thispm2 "% precision gain"
+	if "`thispm'"=="rmse" local thispm2 "RMSE"
+	if "`thispm'"=="sesims" local thispm2 "SE reps"
+
 	foreach thistarget of local targetlist { // loop over targets
 
 		* range of upper part
@@ -432,11 +453,11 @@ foreach thispm of local pmlist { // loop over PMs
 			`main_graph_cmd'												///
 			`descriptor_graph_cmd'											///
 			,																///
-			legend(order(`legend') `methlegtitle')							///
-			ytitle("`thispm'") 												///
-			xla(1/`nscenarios') yla(,nogrid) 								///
+			legend(pos(6) row(1) order(`legend') `methlegtitle')							///
+			ytitle("`thispm2'") 											///
+			`scenarioaxis' yla(,nogrid) 								///
 			`descriptor_labels_cmd'											///
-			name(`name'`targetname'_`thispm'`nameopts') `savingopt'	    ///
+			name(`name'`targetname'_`thispm'`nameopts') `savingopt'	    	///
 			`note' `yline'													///
 			`options'
 

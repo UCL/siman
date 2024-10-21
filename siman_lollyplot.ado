@@ -1,4 +1,4 @@
-*	version 0.11.1	21oct2024	IW implement new dgmmissingok option; correct coding of non-integer dgmvars
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option; correct coding of non-integer dgmvars; nicer names for PMs
 *!	version 0.11.1	21oct2024	
 *	version 0.10.2	19aug2024	IW add undocumented nodgmtitle option
 *	version 0.10.1	29jun2024	IW add labformat(none) option
@@ -141,7 +141,10 @@ drop `meantouse'
 
 * do if/in
 qui keep if `touse'
-if _N==0 error 2000
+if _N==0 {
+	di as error "{p 0 2}No observations: perhaps you used a variable other than dgm, target and method variables in the -if- condition?{p_end}"
+	exit 2000
+}
 
 * HANDLE DGMS
 if mi("`dgmshow'") {
@@ -175,7 +178,6 @@ else {
 	}
 	padding `dgmnames', width(`dgmwidth')
 	local titlepadded = s(titlepadded)
-	if mi("`dgmequals'") local titlepadded `"`"`dgm'"' `"`titlepadded'"'"'
 	else local titlepadded `"`"`titlepadded'"'"'
 }
 
@@ -285,8 +287,26 @@ foreach pm of local pmlist {
 qui drop if `pmvar' == 0
 label val `pmvar' `pmvar'
 
+* nicer names for PMs (same as in nestloop)
+foreach pm of local pmlist {
+	if "`pm'"=="bsims" local pmlist2 `"`pmlist2' "Est reps""'
+	if "`pm'"=="bias" local pmlist2 `"`pmlist2' "Bias""'
+	if "`pm'"=="ciwidth" local pmlist2 `"`pmlist2' "CI width""'
+	if "`pm'"=="cover" local pmlist2 `"`pmlist2' "Coverage""'
+	if "`pm'"=="empse" local pmlist2 `"`pmlist2' "Empirical SE""'
+	if "`pm'"=="mean" local pmlist2 `"`pmlist2' "Mean""'
+	if "`pm'"=="modelse" local pmlist2 `"`pmlist2' "Model SE""'
+	if "`pm'"=="mse" local pmlist2 `"`pmlist2' "MSE""'
+	if "`pm'"=="pctbias" local pmlist2 `"`pmlist2' "% bias""'
+	if "`pm'"=="power" local pmlist2 `"`pmlist2' "Power""'
+	if "`pm'"=="relerror" local pmlist2 `"`pmlist2' "% error in SE""'
+	if "`pm'"=="relprec" local pmlist2 `"`pmlist2' "% precision gain""'
+	if "`pm'"=="rmse" local pmlist2 `"`pmlist2' "RMSE""'
+	if "`pm'"=="sesims" local pmlist2 `"`pmlist2' "SE reps""'
+}
+
 * create graph title for left
-padding `pmlist', width(`pmwidth') reverse
+padding `pmlist2', width(`pmwidth') reverse
 local ytitlepadded = s(titlepadded)
 
 * REPORT PANELS AND GRAPHS
@@ -302,12 +322,10 @@ foreach thistarget of local targetlevels {
 		local thistargetname : label (`target') `thistarget'
 		local iftargetcond if `target'==`thistarget'
 		local andtargetcond & `target'==`thistarget'
-		local note `target': `thistargetname'
+		local note `"`target' = `thistargetname'. "'
 		if !mi("`debug'") di as input `"Debug: drawing graph for `targetcond'"'
 	}
-	else {
-		local note
-	}
+	if !mi("`dgm'") local note `note' Graphs by `dgm'.
 	local graph_cmd twoway 
 	local i 1
 	local graphorder
@@ -335,7 +353,7 @@ foreach thistarget of local targetlevels {
 	local graph_cmd `graph_cmd' , by(`pmvar' `dgmgroup', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions' `dgmmissingok') 
 	local graph_cmd `graph_cmd' subtitle("") ylab(none) ///
 		ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse range(`methodmin' `methodmax')) ///
-		legend(order(`graphorder') `methlegtitle')
+		legend(col(1) order(`graphorder') `methlegtitle')
 	if `ntargetlevels'<=1 local graph_cmd `graph_cmd' name(`name'`nameopts')
 	else local graph_cmd `graph_cmd' name(`name'_`thistargetname'`nameopts')
 	local graph_cmd `graph_cmd' `options'
