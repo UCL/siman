@@ -1,4 +1,5 @@
-*!	version 0.10	24jun2024
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
+*!	version 0.11.1	21oct2024	
 *	version 0.10	24jun2024	IW Correct handling of if/in
 *								NB reduce version # to match other programs
 *  version 1.7 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
@@ -179,13 +180,13 @@ local by2 = cond(mi("`by'"),"[nothing]","`by'")
 if !mi("`debug'") di as input "Debug: graphing over `over2' and by `by2'"
 
 tempvar group
-qui egen `group' = group(`over'), label
+qui egen `group' = group(`over'), label `dgmmissingok'
 qui tab `group'
 local novervalues = r(r)
 local novervars : word count `over'
 
 tempvar bygroup
-qui egen `bygroup' = group(`by')
+qui egen `bygroup' = group(`by'), `dgmmissingok'
 qui levelsof `bygroup'
 local npanels = r(r)
 drop `bygroup'
@@ -225,7 +226,7 @@ forvalues g = 1/`novervalues' { // loop over graphs
 		#delimit ;
 		local graph_cmd twoway (scatter diff`stat' mean`stat' if `group'==`g', `options')
 		,
-		by(`by', note("Graph: `elnote'`notetext'`panelnote'") iscale(1.1) title("") norescale `bygraphoptions')
+		by(`by', note("Graph: `elnote'`notetext'`panelnote'") iscale(1.1) title("") norescale `bygraphoptions' `dgmmissingok')
 		yline(0, lp(l) lc(gs8))
 		name(`name'_`g'_`stat' `nameopts')
 		ytitle(Difference vs `mlabel1') xtitle(Average `eltitle')

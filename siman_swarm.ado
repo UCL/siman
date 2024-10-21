@@ -1,4 +1,5 @@
-*!	version 0.11	21oct2024
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
+*!	version 0.11.1	21oct2024	
 *	version 0.11	21oct2024	IW fix y-scale when rep is not 1,2,3,... (e.g. res.dta)
 * version 0.10 19jul2024	IW align with new setup: clean up anything (use "estimate" not "`estimate'"), if/in, locals
 *							change meanoff to nomean; reorganise options, new scatteroptions, re-parse name
@@ -129,7 +130,7 @@ summ newidrep, meanonly
 local maxnewidrep = r(max)
 sort `method' `by'
 by `method': gen first = _n==1
-replace newidrep = newidrep + `gap'*`maxnewidrep'*sum(first)
+qui replace newidrep = newidrep + `gap'*`maxnewidrep'*sum(first)
 forvalues g = 1/`nummethodnew' {
 	* if `g'==1 qui gen newidrep = `rep' if `method' == `g'
 	* else qui replace newidrep = (`rep'-1)+ ceil((`g'-1)*`step') + 1 if `method' == `g'
@@ -164,7 +165,7 @@ foreach el of local statlist { // estimate and/or se
 		local graph_cmd `graph_cmd' (scatter newidrep mean`el', msym(|) msize(huge) mcol(orange) `meangraphoptions')
 	}
 	local nameopt name(`name'_`el', `replace')
-	local graph_cmd `graph_cmd', by(`by', title("") noxrescale legend(off) `bygraphoptions') ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions'
+	local graph_cmd `graph_cmd', by(`by', title("") noxrescale legend(off) `bygraphoptions' `dgmmissingok') ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions'
 
 	if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 	if !mi("`pause'") {

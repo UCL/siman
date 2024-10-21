@@ -1,4 +1,5 @@
-*!	version 0.10.1	8aug2024	
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
+*!	version 0.11.1	21oct2024	
 *	version 0.10.1	8aug2024	IW Tidy up graph titles
 *	version 0.10	25jun2024	IW Better handling of if/in, reshape; simplified loop over graphs
 *								NB reduce version # to match other programs
@@ -214,7 +215,7 @@ if !mi("`debug'") di as input "Debug: Graphing over `over2' and by `method'"
 local novers : word count `over'
 
 tempvar group
-qui egen `group' = group(`over'), label
+qui egen `group' = group(`over'), label `dgmmissingok'
 qui tab `group'
 local ngraphs = r(r)
 

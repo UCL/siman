@@ -1,5 +1,6 @@
-*!	version 0.10.2	19aug2024	
-*!	version 0.10.2	19aug2024	IW add undocumented nodgmtitle option
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option; correct coding of non-integer dgmvars
+*!	version 0.11.1	21oct2024	
+*	version 0.10.2	19aug2024	IW add undocumented nodgmtitle option
 *	version 0.10.1	29jun2024	IW add labformat(none) option
 *	version 0.10	23jun2024	IW Clean up handling of if/in
 *								Drop non-varying dgmvars, unless dgmshow option used
@@ -49,7 +50,7 @@ syntax [anything] [if] [, ///
 	Level(cilevel) logit /// calculation options
 	BYGRaphoptions(string) name(string) * /// general graph options
 	pause /// advanced graph option
-	dgmwidth(int 30) pmwidth(int 24) debug rangeadd(real 0.2) noDGMTItle /// undocumented options
+	dgmwidth(int 30) pmwidth(int 24) debug rangeadd(real 0.2) DGMTItle(string) /// undocumented options
 	]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -114,6 +115,11 @@ if mi("`estimate'","`se'") {
 	exit 498
 }
 
+if !inlist("`dgmtitle'","off","on","") {
+	di as error "Syntax: dgmtitle(off|on|)"
+	exit 198
+}
+
 * mark sample
 marksample touse, novarlist
 
@@ -156,18 +162,11 @@ if mi("`dgm'") {
 }
 else {
 	local ndgmvars : word count `dgm'
-	if `ndgmvars'>1 {
-		tempvar dgmgroup
-		egen `dgmgroup' = group(`dgm'), label
-		local varname novarname
-	}
-	else {
-		local dgmgroup `dgm'
-		if !mi("`dgm'") local dgmequals `"`dgm'="'
-	}
-	qui tab `dgmgroup'
+	tempvar dgmgroup
+	egen `dgmgroup' = group(`dgm'), label `dgmmissingok'
+	qui tab `dgmgroup', `dgmmissingok'
 	local ndgmlevels = r(r)
-	if "`dgmtitle'"=="nodgmtitle" local dgmequals
+	if "`dgmtitle'"=="on" | (`ndgmvars'==1 & "`dgmtitle'"=="") local dgmequals `dgm'=
 
 	* create graph title for top
 	forvalues i=1/`ndgmlevels' {
@@ -176,7 +175,7 @@ else {
 	}
 	padding `dgmnames', width(`dgmwidth')
 	local titlepadded = s(titlepadded)
-	if `ndgmvars'>1 local titlepadded `"`"`dgm'"' `"`titlepadded'"'"'
+	if mi("`dgmequals'") local titlepadded `"`"`dgm'"' `"`titlepadded'"'"'
 	else local titlepadded `"`"`titlepadded'"'"'
 }
 
@@ -333,7 +332,7 @@ foreach thistarget of local targetlevels {
 	}
 	local graph_cmd `graph_cmd' scatter `method' `ref' `iftargetcond', ///
 		msym(i) c(l) col(gray) lpattern(dash)
-	local graph_cmd `graph_cmd' , by(`pmvar' `dgmgroup', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions') 
+	local graph_cmd `graph_cmd' , by(`pmvar' `dgmgroup', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions' `dgmmissingok') 
 	local graph_cmd `graph_cmd' subtitle("") ylab(none) ///
 		ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse range(`methodmin' `methodmax')) ///
 		legend(order(`graphorder') `methlegtitle')

@@ -1,4 +1,5 @@
-*!	version 0.10.1	26jun2024	
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
+*!	version 0.11.1	21oct2024	
 *	version 0.10.1	26jun2024	IW added saving() and export() options
 *	version 0.10	23jun2024	IW Correct handling of if/in
 *								PMs default to just bias or mean
@@ -337,14 +338,17 @@ foreach thispm of local pmlist { // loop over PMs
 					di as error "Sorry, this program does not yet handle continuous variables"
 					exit 498
 				}
-				summ `var', meanonly
-				if r(max)==r(min) {
+				qui levelsof `var', `dgmmissingok'
+				local thisdgmlevels = r(r)
+				if `thisdgmlevels'==1 {
 					if !mi("`debug'") di as smcl as input "{p 0 2}Warning: no variation for descriptor `var'{p_end}"
 					continue
 				}
-				local ++j
 				tempvar S`var' // this is the variable containing the y-axis position for descriptor `var'
-				qui gen `S`var'' = ( (`var'-r(min)) / (r(max)-r(min)) + (`dginnergap'+1)*(`j'-1)) * `step' + `lmin'
+				egen `S`var'' = group(`var'), label `dgmmissingok'
+				local ++j
+tab `S`var''
+				qui replace `S`var'' = ( (`S`var''-1) / (`thisdgmlevels'-1) + (`dginnergap'+1)*(`j'-1)) * `step' + `lmin'
 				label var `S`var'' "y-value for descriptor `var'"
 				local Svarname_ypos = ( (`dginnergap'+1)*(`j' - 1)+2.2 ) * `step' + `lmin'
 				local factorlist `factorlist' `S`var''

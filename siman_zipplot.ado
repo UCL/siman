@@ -1,4 +1,5 @@
-*!	version 0.10	19jul2024
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option; drop PMs
+*!	version 0.11.1	21oct2024	
 * version 0.10 19jul2024	IW align with new setup; respect true but don't separate graphs by true; respect cilevel; allow ci instead of se
 *							align versioning with siman.ado
 *  version 1.9 22apr2024
@@ -81,7 +82,7 @@ if _rc {
 	di as error "{p 0 2}Warning: this 'if' condition cuts across dgm, target and method. It is safest to subset only on dgm, target and method.{p_end}"
 }
 drop `meantouse'
-qui keep if `touse'
+qui keep if `touse' & `rep'>0
 
 * default 'by' is all varying among dgm target method
 if mi("`by'") {
@@ -184,7 +185,7 @@ local graph_cmd twoway
 	xtitle("`level'% confidence intervals")
 	ytitle("Centile")
 	`ylab'
-	by(`by', ixaxes noxrescale iscale(*.9) `bygraphoptions')
+	by(`by', ixaxes noxrescale iscale(*.9) `bygraphoptions' `dgmmissingok')
 	legend(order(1 "Non-coverers" 2 "Coverers"))
 	`scheme'
 	`options'

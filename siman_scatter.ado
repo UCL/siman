@@ -1,4 +1,5 @@
-*!	version 0.10	18jun2024	
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
+*!	version 0.11.1	21oct2024	
 *	version 0.10	18jun2024	IW Clean up handling of varlist, if/in, by
 *								NB reduce version # to match other programs
 *  version 1.7 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
@@ -96,7 +97,7 @@ if mi("`by'") {
 	local by0 `by0' `target' 
 	if !`methodcreated' local by0 `by0' `method'
 	foreach thisby of local by0 {
-		qui levelsof `thisby'
+		qui levelsof `thisby', `dgmmissingok'
 		if r(r)>1 local by `by' `thisby'
 	}
 }
@@ -107,10 +108,10 @@ if mi("`by'") { // i.e. if none of dgm target method varies
 	local npanels 1
 }
 else {
-	local byoption by(`by', ixaxes `bygraphoptions') 
+	local byoption by(`by', ixaxes `bygraphoptions' `dgmmissingok') 
 	* count how many panels will be created
 	tempvar unique
-	egen `unique' = tag(`by')
+	egen `unique' = tag(`by'), `dgmmissingok'
 	qui count if `unique'
 	local npanels = r(N)
 	drop `unique'

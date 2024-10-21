@@ -1,4 +1,5 @@
-*!	version 0.11	09oct2024	
+*!	version 0.11.1	21oct2024	
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
 *	version 0.11	09oct2024	IW allow non-integer dgmvar; allow extra variables; new sep() option for wide formats; new check for true constant within dgm & target
 *	version 0.10.2	14jun2024	IW wide target/method: numeric/string comes out as numeric/numeric-labelled and respects string order; remove more unwanted chars
 *	version 0.10.1	11jun2024	IW allow variable abbreviations
@@ -42,9 +43,9 @@ syntax [if] [in], ///
 	Rep(varname numeric min=1 max=1) ///
 	[DGM(varlist) TARget(string) METHod(string) /// structure variables
 	ESTimate(name) SE(name) DF(name) LCI(name) UCI(name) P(name) /// estimation result variables
-	TRUE(string) ORDer(string) ///
+	TRUE(string) ORDer(string) sep(string) DGMMIssingok /// other information
 	CLEAR ///
-	debug sep(string) /// undocumented
+	debug /// undocumented
 	] 
 
 /*
@@ -80,7 +81,7 @@ foreach varname in _perfmeascode _pm _dataset _scenario _true {
 
 * produce error message if no est, se, or ci contained in dataset
 if mi("`estimate'") &  mi("`se'") & mi("`lci'") & mi("`uci'") {
-	di as error "{p 0 2}no estimates, SEs, or confidence intervals specified. Need to specify at least one for siman to run.{p_end}"
+	di as error "{p 0 2}No estimates, SEs, or confidence intervals specified. Need to specify at least one for siman to run.{p_end}"
 	exit 498
 }
 
@@ -124,9 +125,16 @@ if !mi("`dgm'") {
 			qui compress `var'
 			di as text "{p 0 2}Warning: dgm variable " as result "`var'" as text " has been converted from string to numeric. If you require its levels to be ordered differently, encode " as result "`var'" as text " as numeric before running -siman setup-.{p_end}"
 		}
-		qui count if missing(`var')
-		cap assert r(N)==0
-		if _rc di as text "{p 0 2}Warning: dgm variable " as result "`var'" as text " contains missing values. This may cause problems. Consider recoding as non-missing.{p_end}"
+		cap assert !missing(`var')
+		if _rc {
+			if mi("`dgmmissingok'") {
+				di as error "{p 0 2}Dgm variable " as result "`var'" as error " contains missing values. Please recode it as non-missing, or use the dgmmissingok option.{p_end}"
+				exit 498
+			}
+			else {
+				di as text "{p 0 2}Warning: dgm variable " as result "`var'" as text " contains missing values. You have used the dgmmissingok option, so siman will procede, but please beware of problems.{p_end}"
+			}
+		}
 	}
 }
 
@@ -225,7 +233,10 @@ else if `nmethod'==1 & `methodisvar'==1 {
 * check if method contains missing values
 if "`methodformat'" == "long" {
 	cap assert !missing(`method')
-	if _rc di as text "{p 0 2}Warning: variable `method' should not contain missing values{p_end}"
+	if _rc {
+		di as error "{p 0 2}Variable " as result "`method'" as error " may not contain missing values{p_end}"
+		exit 498
+	}
 }
 
 /*** UNDERSTAND STUBS ***/
@@ -502,7 +513,8 @@ if !mi("`dgm'") & !mi("`true'") {
 /* ASSIGN CHARACTERISTICS */
 
 * DGM
-local allthings dgm ndgmvars
+local allthings dgm ndgmvars dgmmissingok
+if !mi("`dgmmissingok'") local dgmmissingok missing // dgmvars may have missing values
 * Target
 if !mi("`target'") { // find local targetnature
 	cap confirm numeric variable `target'

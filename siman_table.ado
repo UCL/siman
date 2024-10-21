@@ -1,4 +1,6 @@
-*!	version 0.8.3   3apr2024
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
+*!	version 0.11.1	21oct2024	
+*	version 0.8.3   3apr2024
 *  version 0.8.3    3apr2024 IW ignore method if methodcreated
 *                  14feb2024 IW allow new performance measure (pctbias) from simsum
 *  version 0.8.2   20dec2023   IW add row() option (undocumented at present)
@@ -91,8 +93,8 @@ rename _perfmeascodeorder _perfmeascode
 if `methodcreated' local method
 * identify non-varying dgm
 foreach onedgmvar in `dgm' {
-	summ `onedgmvar' `if', meanonly
-	if r(min)<r(max) local newdgmvar `newdgmvar' `onedgmvar'
+	qui levelsof `onedgmvar' `if', `dgmmissingok'
+	if r(r)>1 local newdgmvar `newdgmvar' `onedgmvar'
 	else if !mi("`debug'") di as input "Debug: ignoring non-varying dgmvar: `onedgmvar'"
 	}
 local dgm `newdgmvar'
@@ -102,7 +104,7 @@ tempvar group
 foreach thing in dgm target method {
 	local n`thing'vars = wordcount("``thing''")
 	if !mi("`thing'") {
-		egen `group' = group(``thing'')
+		egen `group' = group(``thing''), `dgmmissingok'
 		qui levelsof `group'
 		local n`thing'levels = r(r)
 		}

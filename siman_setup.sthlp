@@ -121,6 +121,7 @@ Options for data in any input format:
 {pmore}
 {opt dgm(varlist)}
 {opt clear}
+{opt dgmmi:ssingok}
 
  
 {synoptset 35 tabbed}{...}
@@ -143,6 +144,7 @@ denoting that either the target stub is first or the method stub is first in the
 {synopt:{opt clear}}to clear the existing data held in memory: only needed with {cmd:if} or {cmd:in} conditions. {p_end}
 {synopt:{opt sep(string)}}a separator within wide-format variable names. 
 For example, if variables est_beta and est_gamma hold the estimates for targets  beta and gamma, you could code {cmd:estimate(est) sep(_) target(beta gamma)} instead of {cmd:estimate(est) target(_beta _gamma)}. {p_end}
+{synopt:{opt dgmmi:ssingok}}dgm variables may contain missing values. {p_end}
 
 
 {marker description}{...}
@@ -268,6 +270,7 @@ The characteristics can be viewed using {cmd:siman describe, char}.
 {pstd}DGMs{p_end}
 {synopt:{opt dgm}}Variables defining the DGM. Values: varlist or empty. {p_end}
 {synopt:{opt ndgmvars}}Number of dgm variables. Values: integers. {p_end}
+{synopt:{opt dgmmissingok}}Whether missing values are allowed in dgmvars. Values: "missing" or empty. {p_end}
 
 {pstd}Targets{p_end}
 {synopt:{opt target}}Variable name for targets. Values: varname or empty. {p_end}
