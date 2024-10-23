@@ -58,7 +58,7 @@ if _rc {
 
 * if true is missing, produce an error message
 if "`true'"=="" {
-	di as error "{p 0 2}The variable 'true' is missing so siman zipplot can not be created.  Please create a variable in your dataset called true containing the true value(s) re-run siman setup with true() option specified.{p_end}"
+	di as error "{p 0 2}siman zipplot requires true() to be specified in siman setup{p_end}"
 	exit 498
 }
 
