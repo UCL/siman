@@ -1,4 +1,5 @@
-*!	version 0.9.1	14jun2024		
+*!	version 0.11	21oct2024		
+*	version 0.11	21oct2024		IW make analyse work correctly with if
 *	version 0.9.1	14jun2024		IW remove code for nformat!=1 and nmethod!=1
 * version 0.9		11jun2024		IW assume data are longlong, don't let 'if' delete data, tidy up chars
 * version 0.8		8may2024		IW no longer remove any underscores
@@ -31,17 +32,17 @@ version 15
 
 syntax [anything] [if], [PERFONLY REPlace /// documented options
 	ref(string) * /// simsum options
-	noTABle force debug pause /// undocumented options
+	noTABle force debug pause nopreserve /// undocumented options
 	]
 local simsumoptions `options'
-if "`debug'"!="" di as input `"Options to pass to simsum: `options'"'
+if "`debug'"!="" di as input `"Debug: options to pass to simsum: `options'"'
 if "`debug'"=="" local qui qui
 
 capture which simsum.ado
 if _rc == 111 {
 	di as error `"simsum needs to be installed to run siman analyse. Please use {stata "ssc install simsum"}"'
 	exit 498
-}
+	}
 vercheck simsum, vermin(2.1.2) quietly message(`"{p 0 2}You can install the latest simsum using {stata "net from https://raw.githubusercontent.com/UCL/simsum/main/package/"}{p_end}"')
 
 foreach thing in `_dta[siman_allthings]' {
@@ -51,12 +52,12 @@ foreach thing in `_dta[siman_allthings]' {
 if "`method'"=="" {
 	di as error "The variable 'method' is missing so siman analyse can not be run.  Please create a variable in your dataset called method containing the method value(s)."
 	exit 498
-}
+	}
 
 if "`analyserun'"=="1" & "`replace'" == "" {
 	di as error "There are already performance measures in the dataset.  If you would like to replace these, please use the 'replace' option"
 	exit 498
-}
+	}
 
 local estimatesindi = (`rep'[_N]>0)
 	
@@ -64,11 +65,11 @@ if "`analyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==1 {
 	qui drop if `rep'<0
 	qui drop _perfmeascode
 	qui drop _dataset
-}
+	}
 else if "`analyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==0 {
 	di as error "There are no estimates data in the data set.  Please re-load data and use siman setup to import data."
 	exit 498
-}
+	}
 	
 local analyserun = 0
 
@@ -76,7 +77,7 @@ local analyserun = 0
 if "`setuprun'"=="0" | "`setuprun'"=="" {
 	di as error "siman setup has not been run.  Please use siman setup first before siman analyse."
 	exit 498
-}
+	}
 
 * true variable, to be used in reshape, if not in dgm
 cap confirm variable `true'
@@ -106,7 +107,7 @@ drop `min' `max'
 
 
 * START OF ANALYSIS
-preserve
+if "`preserve'" != "nopreserve" preserve
 
 * put all variables in their original order in local allnames
 qui unab allnames : *
@@ -153,6 +154,7 @@ qui sort `rep' `dgm' `target' `method'
 qui tab `method'
 local nmethodlabels = `r(r)'
 	
+/* code changed 14oct2024 to work with if applied to method
 qui levels `method', local(levels)
 tokenize `"`levels'"'
 forvalues f = 1/`nmethodlabels' { // edited 19dec2023
@@ -162,7 +164,9 @@ forvalues f = 1/`nmethodlabels' { // edited 19dec2023
 	local methodlist `methodlist' `methodlabel`f''
 }
 local valmethod `methodlist'
-
+*/
+qui levelsof `method', local(methodvalues)
+if "`debug'"!="" di as input `"Debug: method values are `methodvalues'"'
 
 * simsum doesn't like to parse "`estimate'" etc so define a macro for simsum for estimate and se
 local estsimsum = "`estimate'"
@@ -191,14 +195,12 @@ if !mi("`pause'") {
 	global F9 `simsumcmd'
 	pause
 }
-if !mi("`debug'") noi di as input "Running: `simsumcmd'"
+if !mi("`debug'") noi di as input "Debug: running command: `simsumcmd'"
 qui `simsumcmd'
 
-
 * rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
-if `methodnature' == 0 local methodloop `valmethod'
-else local methodloop `methodvalues' 
-foreach v in `methodloop'  {
+
+foreach v in `methodvalues'  {
 	cap confirm variable `estimate'`v'_mcse
 	if _rc==111 continue
 	else if _rc di as error "Error in siman analyse"
@@ -208,20 +210,16 @@ foreach v in `methodloop'  {
 	else qui rename `estimate'`v'_mcse se`v'
 }
 
-
 * take out true from option list if included for the reshape, otherwise will be included in the optionlist as well as i() and reshape won't work
 local optionlistreshape `optionlist'
 local exclude "`true'"
 local optionlistreshape: list optionlistreshape - exclude
 
-if !mi("`metlist'") local methodreshape `metlist'
-else local methodreshape `valmethod'
-
 if `methodstringindi'==1  {
-	`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'") string
+	`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodvalues'") string
 }
 else if `methodstringindi'==0 & `methodnature' == 0 {
-	`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodreshape'")
+	`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodvalues'")
 	* restore number format to method
 	label value `method' `methodvallabel'
 }
@@ -231,15 +229,9 @@ else if `methodstringindi'==0 & `methodnature' == 1 {
 	label value `method' `methodvallabel'
 }
 
-
-* change _perfmeascode from simsum's terminology: bsims->estreps and sesims->sereps
-replace _perfmeascode = "estreps" if _perfmeascode == "bsims"
-replace _perfmeascode = "sereps"  if _perfmeascode == "sesims"
-
 * labelling performance measures
 qui gen indi = -_perfmeasnum
 qui levelsof _perfmeasnum, local(lablevels)
-noi di `"`lablevels'"'
 foreach lablevel of local lablevels {
 	local labvalue : label (_perfmeasnum) `lablevel'
 	label define indilab -`lablevel' "`labvalue'", modify
@@ -251,7 +243,6 @@ qui drop _perfmeasnum
 if `methodstringindi'==1 {
 	capture quietly tostring `method', replace
 }
-
 qui append using `estimatesdata'
 qui replace indi = `rep' if `rep'>0 & `rep'!=.
 qui drop `rep'
@@ -285,14 +276,17 @@ if `methodcreated'!=1 {
 	
 	* Get method label values
 	cap qui labelsof `method'
-	cap qui ret list
+	if _rc==199 {
+		di as error "Please install the labelsof package using {stata ssc install labelsof}"
+		exit _rc
+	}
 
 	if `"`r(labels)'"'!="" {
 		local 0 = `"`r(labels)'"'
 
 		forvalues i = 1/`nmethodlabels' {
-			gettoken `method'label`i' 0 : 0, parse(": ")
-			local methlist `methlist' ``method'label`i''
+			gettoken methodlabel`i' 0 : 0, parse(": ")
+			local methlist `methlist' `methodlabel`i''
 			local methodlabelsn = 1
 		}
 	}
@@ -301,13 +295,13 @@ if `methodcreated'!=1 {
 		tokenize `"`levels'"'
 		if `methodstringindi' == 0 {
 			forvalues i = 1/`nmethodlabels' {
-				local `method'label`i' `i'
-				local methlist `methlist' ``method'label`i''
+				local methodlabel`i' `i'
+				local methlist `methlist' `methodlabel`i''
 			}
 		}
 		else forvalues i = 1/`nmethodlabels' {
-			local `method'label`i' ``i''
-			local methlist `methlist' ``method'label`i''
+			local methodlabel`i' ``i''
+			local methlist `methlist' `methodlabel`i''
 		}
 	}
 	

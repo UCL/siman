@@ -1,4 +1,5 @@
-*!	version 0.10.1	26jun2024	
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option; make -if- work correctly
+*!	version 0.11.1	21oct2024	
 *	version 0.10.1	26jun2024	IW added saving() and export() options
 *	version 0.10	23jun2024	IW Correct handling of if/in
 *								PMs default to just bias or mean
@@ -31,7 +32,7 @@ syntax [anything] [if], ///
 	DGPAttern(string) DGLAbsize(string) DGSTyle(string) DGLWidth(string) /// control descriptor graph
 	debug pause nodg force /// undocumented
 	LColor(string) LPattern(string) LSTYle(string) LWidth(string) /// twoway options for main graph
-	METHLEGend(string) * /// other graph options
+	METHLEGend(string) SCENariolabel * /// other graph options
 	NAMe(string) SAVing(string) EXPort(string) /// twoway options for overall graph
 	] 
 
@@ -157,7 +158,10 @@ drop `meantouse'
 
 * do if/in
 qui keep if `touse'
-if _N==0 error 2000
+if _N==0 {
+	di as error "{p 0 2}No observations: perhaps you used a variable other than dgm, target and method variables in the -if- condition?{p_end}"
+	exit 2000
+}
 
 * If user has specified an order for dgm, use this order (so that siman_setup doesn't need to be re-run).  Take out -ve signs if there are any.
 if !mi("`dgmorder'") {
@@ -226,7 +230,7 @@ foreach thismethod of local methodlist {
 	local mlab`i' : label (`method') `thismethod' // label of ith method
 	if substr("`mlab`i''",length("`mlab`i''"),1)=="_" /// remove final _
 		local mlab`i' = substr("`mlab`i''",1,length("`mlab`i''")-1)
-	if !mi("`debug'") di `"Method `i': numeric value `m`i'', label `mlab`i''"'
+	if !mi("`debug'") di as input `"Debug: method `i': numeric value `m`i'', label `mlab`i''"'
 }
 
 
@@ -293,8 +297,26 @@ if `stagger'>0  {
 		gen `scenario'`k' = `scenario' + `stagger'*(2*`k'-1-`nmethods')/(`nmethods'-1)
 	}
 }
+if !mi("`scenariolabel'") local scenarioaxis xla(1/`nscenarios') xtitle("Scenario")
+else local scenarioaxis xla(none) xtitle("") // default is no labels, no title
 
 foreach thispm of local pmlist { // loop over PMs
+	* nicer names for PMs (same as in lollyplot)
+	if "`thispm'"=="bsims" local thispm2 "Est reps"
+	if "`thispm'"=="bias" local thispm2 "Bias"
+	if "`thispm'"=="ciwidth" local thispm2 "CI width"
+	if "`thispm'"=="cover" local thispm2 "Coverage"
+	if "`thispm'"=="empse" local thispm2 "Empirical SE"
+	if "`thispm'"=="mean" local thispm2 "Mean"
+	if "`thispm'"=="modelse" local thispm2 "Model SE"
+	if "`thispm'"=="mse" local thispm2 "MSE"
+	if "`thispm'"=="pctbias" local thispm2 "% bias"
+	if "`thispm'"=="power" local thispm2 "Power"
+	if "`thispm'"=="relerror" local thispm2 "% error in SE"
+	if "`thispm'"=="relprec" local thispm2 "% precision gain"
+	if "`thispm'"=="rmse" local thispm2 "RMSE"
+	if "`thispm'"=="sesims" local thispm2 "SE reps"
+
 	foreach thistarget of local targetlist { // loop over targets
 
 		* range of upper part
@@ -328,7 +350,7 @@ foreach thispm of local pmlist { // loop over PMs
 			local lmin = (`min'-`fracsum'*`max') / (1-`fracsum')
 			local lmax = `min' - `dggap'*(`max'-`lmin')
 			local step = (`lmax'-`lmin') / ((`dginnergap'+1)*`ndescriptors')
-			* if !mi("`debug'") di as text "Descriptor graph: lmax=`lmax', lmin=`lmin', step=`step'"
+			* if !mi("`debug'") di as input "Descriptor graph: lmax=`lmax', lmin=`lmin', step=`step'"
 			local j 0
 			local descriptor_labels_cmd
 			local factorlist
@@ -337,14 +359,16 @@ foreach thispm of local pmlist { // loop over PMs
 					di as error "Sorry, this program does not yet handle continuous variables"
 					exit 498
 				}
-				summ `var', meanonly
-				if r(max)==r(min) {
-					if !mi("`debug'") di as smcl as text "{p 0 2}Warning: no variation for descriptor `var'{p_end}"
+				qui levelsof `var', `dgmmissingok'
+				local thisdgmlevels = r(r)
+				if `thisdgmlevels'==1 {
+					if !mi("`debug'") di as smcl as input "{p 0 2}Warning: no variation for descriptor `var'{p_end}"
 					continue
 				}
-				local ++j
 				tempvar S`var' // this is the variable containing the y-axis position for descriptor `var'
-				qui gen `S`var'' = ( (`var'-r(min)) / (r(max)-r(min)) + (`dginnergap'+1)*(`j'-1)) * `step' + `lmin'
+				egen `S`var'' = group(`var'), label `dgmmissingok'
+				local ++j
+				qui replace `S`var'' = ( (`S`var''-1) / (`thisdgmlevels'-1) + (`dginnergap'+1)*(`j'-1)) * `step' + `lmin'
 				label var `S`var'' "y-value for descriptor `var'"
 				local Svarname_ypos = ( (`dginnergap'+1)*(`j' - 1)+2.2 ) * `step' + `lmin'
 				local factorlist `factorlist' `S`var''
@@ -424,20 +448,20 @@ foreach thispm of local pmlist { // loop over PMs
 			local targetname _`thistarget'
 		}
 		if !mi("`saving'") local savingopt saving(`saving'`targetname'_`thispm'`savingopts')
-		if !mi("`debug'") & `ngraphs'>1 di as text "Drawing graph for `target'=`thistarget', PM=`thispm'..."
+		if !mi("`debug'") & `ngraphs'>1 di as input "Debug: drawing graph for `target'=`thistarget', PM=`thispm'..."
 		local graph_cmd graph twoway 										///
 			`main_graph_cmd'												///
 			`descriptor_graph_cmd'											///
 			,																///
-			legend(order(`legend') `methlegtitle')							///
-			ytitle("`thispm'") 												///
-			xla(1/`nscenarios') yla(,nogrid) 								///
+			legend(pos(6) row(1) order(`legend') `methlegtitle')							///
+			ytitle("`thispm2'") 											///
+			`scenarioaxis' yla(,nogrid) 								///
 			`descriptor_labels_cmd'											///
-			name(`name'`targetname'_`thispm'`nameopts') `savingopt'	    ///
+			name(`name'`targetname'_`thispm'`nameopts') `savingopt'	    	///
 			`note' `yline'													///
 			`options'
 
-		if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+		if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 		if !mi("`pause'") {
 			global F9 `graph_cmd'
 			pause Press F9 to recall, optionally edit and run the graph command
@@ -445,7 +469,7 @@ foreach thispm of local pmlist { // loop over PMs
 		`graph_cmd'
 		if !mi("`export'") {
 			local graphexportcmd graph export `export'`targetname'_`thispm'`exportopts'
-			if !mi("`debug'") di `"`graphexportcmd'"'
+			if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
 			cap `graphexportcmd'
 			if _rc di as error "Error in export() option:"
 			`graphexportcmd'

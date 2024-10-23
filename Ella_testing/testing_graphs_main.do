@@ -21,8 +21,11 @@ set linesize 100
 clear all // avoids the "too many sersets" error
 
 // START TESTING
-log using `filename', replace text nomsg
+log using `filename'_which, replace text
 siman which
+log close
+
+log using `filename', replace text nomsg
 
 ********************************
 ********************************
@@ -215,6 +218,29 @@ siman analyse
 siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test5")
  
  
+* dgm has missing values AND method labels have spaces
+use $testpath/data/simlongESTPM_longE_longM.dta, clear
+replace dgm=. if dgm==2
+label def mymethod 1 "First method" 2 "Method, second"
+label val method mymethod
+siman setup, rep(rep) target(esti) dgm(dgm) method(method) estimate(est) se(se) true(true) dgmmissingok
+ 
+siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test5a", replace) 
+
+siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_test5a", replace)
+
+siman zipplot, legend(order(1 "Stalk" 2 "Carrot")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) ///
+coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test5a", replace)
+
+siman comparemethodsscatter if estimand=="beta", title("testtitle") subgr(xtit("testaxis")) name("cms_test5a", replace) 
+
+siman blandaltman if estimand=="beta", ytitle("test y-title") xtitle("test x-title") name("ba_test5a", replace) 
+
+siman analyse
+
+siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test5a", replace)
+
+
 
 * more than 3 methods for plots, methlist option
 ****************************************************
@@ -250,24 +276,6 @@ clear all
 prog drop _all
 use nestloop/res.dta, clear
 keep v1 theta rho pc k exppeto expg2 var2peto var2g2
-* theta needs to be in integer format for levelsof command to work (doesn't accept non-integer values), so make integer values with non-integer labels
-gen theta_new=2
-replace theta_new=1 if theta == 0.5
-replace theta_new=3 if theta == 0.75
-replace theta_new=4 if theta == 1 
-label define theta_new 1 "0.5" 2 "0.67" 3 "0.75" 4 "1"
-label values theta_new theta_new
-label var theta_new "theta categories"
-*br theta theta_new
-drop theta
-rename theta_new theta
-gen pc_str = ""
-replace pc_str = "5%" if pc == 1
-replace pc_str = "10%" if pc == 2
-replace pc_str = "20%" if pc == 3
-replace pc_str = "30%" if pc == 4
-drop pc
-rename pc_str pc
 siman setup, rep(v1) dgm(theta rho pc k) method(peto g2) estimate(exp) se(var2) true(theta)
 
 * graphs

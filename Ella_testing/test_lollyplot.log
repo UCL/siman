@@ -1,32 +1,4 @@
 
-. siman which
-C:\ian\git\siman\siman.ado
-*!      version 0.11    07oct2024
-*!      Type -siman which- to see versions of siman's subprograms
-C:\ian\git\siman\siman_setup.ado
-*!      version 0.11    09oct2024       
-C:\ian\git\siman\siman_describe.ado
-*!      version 0.7     14jun2024       
-C:\ian\git\siman\siman_analyse.ado
-*!      version 0.9.1   14jun2024               
-C:\ian\git\siman\siman_table.ado
-*!      version 0.8.3   3apr2024
-C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10.2  19aug2024       
-*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
-C:\ian\git\siman\siman_zipplot.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10.1  8aug2024        
-C:\ian\git\siman\siman_blandaltman.ado
-*!      version 0.10    24jun2024
-C:\ian\git\siman\siman_swarm.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_scatter.ado
-*!      version 0.10    18jun2024       
-C:\ian\git\siman\siman_nestloop.ado
-*!      version 0.10.1  26jun2024       
-
 . 
 . // STANDARD TESTS
 . foreach feature in dgm target method {
@@ -3124,12 +3096,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    myestimand
   Number of targets:              2
-  Target values:                  beta gamma
+  Target values:                  beta; gamma
 
 Methods
   Variable containing methods:    mymethod
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        myest
@@ -3175,7 +3147,7 @@ Targets
 Methods
   Variable containing methods:    method
   Number of methods:              2
-  Method values:                  1 2
+  Method values:                  1; 2
 
 Repetition-level output
   Point estimate variable:        est
@@ -3350,12 +3322,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              3
-  Target values:                  effect mean0 mean1
+  Target values:                  effect; mean0; mean1
 
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  Noadj CCA MeanImp
+  Method values:                  Noadj; CCA; MeanImp
 
 Repetition-level output
   Point estimate variable:        b
@@ -3375,24 +3347,24 @@ Performance measures not specified: defaulting to bias empse cover
 Ignoring non-varying dgm variable beta
 Ignoring non-varying dgm variable pmiss
 siman lollyplot will draw 1 graph with 6 panels (3 PMs by 2 DGMs)
-Graph command is: twoway scatter method b if method==1 , pstyle(p1) mlabstyle(p1) mcol(red) msym() m
-> label(__000003) mlabpos(12) mlabcol(red) || scatter method __000004 if method==1 , pstyle(p1) mlab
-> col(red) msym(i) mlab(__000006) mlabpos(0) || scatter method __000005 if method==1 , pstyle(p1) ml
-> abcol(red) msym(i) mlab(__000007) mlabpos(0) || rspike b __000002 method if method==1 , pstyle(p1)
->  horiz lcol(red) || scatter method b if method==2 , pstyle(p2) mlabstyle(p2) mcol(blue) msym() mla
-> bel(__000003) mlabpos(12) mlabcol(blue) || scatter method __000004 if method==2 , pstyle(p2) mlabc
-> ol(blue) msym(i) mlab(__000006) mlabpos(0) || scatter method __000005 if method==2 , pstyle(p2) ml
-> abcol(blue) msym(i) mlab(__000007) mlabpos(0) || rspike b __000002 method if method==2 , pstyle(p2
-> ) horiz lcol(blue) || scatter method b if method==3 , pstyle(p3) mlabstyle(p3) mcol(green) msym() 
-> mlabel(__000003) mlabpos(12) mlabcol(green) || scatter method __000004 if method==3 , pstyle(p3) m
-> labcol(green) msym(i) mlab(__000006) mlabpos(0) || scatter method __000005 if method==3 , pstyle(p
-> 3) mlabcol(green) msym(i) mlab(__000007) mlabpos(0) || rspike b __000002 method if method==3 , pst
-> yle(p3) horiz lcol(green) || scatter method __000002 , msym(i) c(l) col(gray) lpattern(dash) , by(
-> __000008 mech, note(`""') col(2) xrescale title(`"               mech=MCAR                        
->       mech=MNAR               "', size(medium) just(center)) imargin(r=5) ) subtitle("") ylab(none
-> ) ytitle(`"         cover                 empse                  bias          "', size(medium)) y
-> scale(reverse range(.8 3.2)) legend(order(1 "Noadj" 5 "CCA" 9 "MeanImp") ) name(meth3,replace) leg
-> end(row(1))
+Debug: graph command is: twoway scatter method b if method==1 , pstyle(p1) mlabstyle(p1) mcol(red) m
+> sym() mlabel(__000004) mlabpos(12) mlabcol(red) || scatter method __000005 if method==1 , pstyle(p
+> 1) mlabcol(red) msym(i) mlab(__000007) mlabpos(0) || scatter method __000006 if method==1 , pstyle
+> (p1) mlabcol(red) msym(i) mlab(__000008) mlabpos(0) || rspike b __000003 method if method==1 , pst
+> yle(p1) horiz lcol(red) || scatter method b if method==2 , pstyle(p2) mlabstyle(p2) mcol(blue) msy
+> m() mlabel(__000004) mlabpos(12) mlabcol(blue) || scatter method __000005 if method==2 , pstyle(p2
+> ) mlabcol(blue) msym(i) mlab(__000007) mlabpos(0) || scatter method __000006 if method==2 , pstyle
+> (p2) mlabcol(blue) msym(i) mlab(__000008) mlabpos(0) || rspike b __000003 method if method==2 , ps
+> tyle(p2) horiz lcol(blue) || scatter method b if method==3 , pstyle(p3) mlabstyle(p3) mcol(green) 
+> msym() mlabel(__000004) mlabpos(12) mlabcol(green) || scatter method __000005 if method==3 , pstyl
+> e(p3) mlabcol(green) msym(i) mlab(__000007) mlabpos(0) || scatter method __000006 if method==3 , p
+> style(p3) mlabcol(green) msym(i) mlab(__000008) mlabpos(0) || rspike b __000003 method if method==
+> 3 , pstyle(p3) horiz lcol(green) || scatter method __000003 , msym(i) c(l) col(gray) lpattern(dash
+> ) , by(__000009 __000002, note(`""') col(2) xrescale title(`"               mech=MCAR             
+>                  mech=MNAR               "', size(medium) just(center)) imargin(r=5)  ) subtitle("
+> ") ylab(none) ytitle(`"         cover                 empse                  bias          "', siz
+> e(medium)) yscale(reverse range(.8 3.2)) legend(order(1 "Noadj" 5 "CCA" 9 "MeanImp") ) name(meth3,
+> replace) legend(row(1))
 
 . siman lol if esti=="effect" & float(beta)==float(0) & float(pmiss)==float(0.2) & meth!=1, name(met
 > h2,replace) legend(row(1)) col(blue green) debug
@@ -3400,20 +3372,20 @@ Performance measures not specified: defaulting to bias empse cover
 Ignoring non-varying dgm variable beta
 Ignoring non-varying dgm variable pmiss
 siman lollyplot will draw 1 graph with 6 panels (3 PMs by 2 DGMs)
-Graph command is: twoway scatter method b if method==2 , pstyle(p1) mlabstyle(p1) mcol(blue) msym() 
-> mlabel(__000003) mlabpos(12) mlabcol(blue) || scatter method __000004 if method==2 , pstyle(p1) ml
-> abcol(blue) msym(i) mlab(__000006) mlabpos(0) || scatter method __000005 if method==2 , pstyle(p1)
->  mlabcol(blue) msym(i) mlab(__000007) mlabpos(0) || rspike b __000002 method if method==2 , pstyle
-> (p1) horiz lcol(blue) || scatter method b if method==3 , pstyle(p2) mlabstyle(p2) mcol(green) msym
-> () mlabel(__000003) mlabpos(12) mlabcol(green) || scatter method __000004 if method==3 , pstyle(p2
-> ) mlabcol(green) msym(i) mlab(__000006) mlabpos(0) || scatter method __000005 if method==3 , pstyl
-> e(p2) mlabcol(green) msym(i) mlab(__000007) mlabpos(0) || rspike b __000002 method if method==3 , 
-> pstyle(p2) horiz lcol(green) || scatter method __000002 , msym(i) c(l) col(gray) lpattern(dash) , 
-> by(__000008 mech, note(`""') col(2) xrescale title(`"               mech=MCAR                     
->          mech=MNAR               "', size(medium) just(center)) imargin(r=5) ) subtitle("") ylab(n
-> one) ytitle(`"         cover                 empse                  bias          "', size(medium)
-> ) yscale(reverse range(1.8 3.2)) legend(order(1 "CCA" 5 "MeanImp") ) name(meth2,replace) legend(ro
-> w(1))
+Debug: graph command is: twoway scatter method b if method==2 , pstyle(p1) mlabstyle(p1) mcol(blue) 
+> msym() mlabel(__000004) mlabpos(12) mlabcol(blue) || scatter method __000005 if method==2 , pstyle
+> (p1) mlabcol(blue) msym(i) mlab(__000007) mlabpos(0) || scatter method __000006 if method==2 , pst
+> yle(p1) mlabcol(blue) msym(i) mlab(__000008) mlabpos(0) || rspike b __000003 method if method==2 ,
+>  pstyle(p1) horiz lcol(blue) || scatter method b if method==3 , pstyle(p2) mlabstyle(p2) mcol(gree
+> n) msym() mlabel(__000004) mlabpos(12) mlabcol(green) || scatter method __000005 if method==3 , ps
+> tyle(p2) mlabcol(green) msym(i) mlab(__000007) mlabpos(0) || scatter method __000006 if method==3 
+> , pstyle(p2) mlabcol(green) msym(i) mlab(__000008) mlabpos(0) || rspike b __000003 method if metho
+> d==3 , pstyle(p2) horiz lcol(green) || scatter method __000003 , msym(i) c(l) col(gray) lpattern(d
+> ash) , by(__000009 __000002, note(`""') col(2) xrescale title(`"               mech=MCAR          
+>                     mech=MNAR               "', size(medium) just(center)) imargin(r=5)  ) subtitl
+> e("") ylab(none) ytitle(`"         cover                 empse                  bias          "', 
+> size(medium)) yscale(reverse range(1.8 3.2)) legend(order(1 "CCA" 5 "MeanImp") ) name(meth2,replac
+> e) legend(row(1))
 
 . * Compare graphs meth3 and meth2
 . 
@@ -3439,12 +3411,12 @@ Data-generating mechanism (DGM)
 Targets
   Variable containing targets:    estimand
   Number of targets:              3
-  Target values:                  effect mean0 mean1
+  Target values:                  effect; mean0; mean1
 
 Methods
   Variable containing methods:    method
   Number of methods:              3
-  Method values:                  CCA MeanImp Noadj
+  Method values:                  CCA; MeanImp; Noadj
 
 Repetition-level output
   Point estimate variable:        b

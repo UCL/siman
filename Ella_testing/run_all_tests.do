@@ -8,6 +8,7 @@ updated 3apr2024 - runs in 5 minutes!
 24jul2024 - rename test_lollyplot & test_nestloop, add test_bland
 25jul2024 - add test_cms. Tests apart from last take ~16 mins.
 26jul2024 - removed "Testing estimates graphs.do", as it's slow (50 minutes) and found nothing once other tests ran successfully
+21oct2024 - removed all "which" lines so that log files can show no change
 */
 
 // USER-SPECIFIC SETUP
@@ -27,6 +28,7 @@ if "$user" == "tpm" & c(os)=="MacOSX" {
 global testpath $codepath/Ella_testing
 adopath ++ $codepath
 cd $testpath
+prog drop _all
 
 // RUN ALL TESTS
 local testfiles ///

@@ -1,5 +1,6 @@
-*!	version 0.10.2	19aug2024	
-*!	version 0.10.2	19aug2024	IW add undocumented nodgmtitle option
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option; correct coding of non-integer dgmvars; nicer names for PMs
+*!	version 0.11.1	21oct2024	
+*	version 0.10.2	19aug2024	IW add undocumented nodgmtitle option
 *	version 0.10.1	29jun2024	IW add labformat(none) option
 *	version 0.10	23jun2024	IW Clean up handling of if/in
 *								Drop non-varying dgmvars, unless dgmshow option used
@@ -49,7 +50,7 @@ syntax [anything] [if] [, ///
 	Level(cilevel) logit /// calculation options
 	BYGRaphoptions(string) name(string) * /// general graph options
 	pause /// advanced graph option
-	dgmwidth(int 30) pmwidth(int 24) debug rangeadd(real 0.2) noDGMTItle /// undocumented options
+	dgmwidth(int 30) pmwidth(int 24) debug rangeadd(real 0.2) DGMTItle(string) /// undocumented options
 	]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -114,6 +115,11 @@ if mi("`estimate'","`se'") {
 	exit 498
 }
 
+if !inlist("`dgmtitle'","off","on","") {
+	di as error "Syntax: dgmtitle(off|on|)"
+	exit 198
+}
+
 * mark sample
 marksample touse, novarlist
 
@@ -135,7 +141,10 @@ drop `meantouse'
 
 * do if/in
 qui keep if `touse'
-if _N==0 error 2000
+if _N==0 {
+	di as error "{p 0 2}No observations: perhaps you used a variable other than dgm, target and method variables in the -if- condition?{p_end}"
+	exit 2000
+}
 
 * HANDLE DGMS
 if mi("`dgmshow'") {
@@ -156,18 +165,11 @@ if mi("`dgm'") {
 }
 else {
 	local ndgmvars : word count `dgm'
-	if `ndgmvars'>1 {
-		tempvar dgmgroup
-		egen `dgmgroup' = group(`dgm'), label
-		local varname novarname
-	}
-	else {
-		local dgmgroup `dgm'
-		if !mi("`dgm'") local dgmequals `"`dgm'="'
-	}
-	qui tab `dgmgroup'
+	tempvar dgmgroup
+	egen `dgmgroup' = group(`dgm'), label `dgmmissingok'
+	qui tab `dgmgroup', `dgmmissingok'
 	local ndgmlevels = r(r)
-	if "`dgmtitle'"=="nodgmtitle" local dgmequals
+	if "`dgmtitle'"=="on" | (`ndgmvars'==1 & "`dgmtitle'"=="") local dgmequals `dgm'=
 
 	* create graph title for top
 	forvalues i=1/`ndgmlevels' {
@@ -176,7 +178,6 @@ else {
 	}
 	padding `dgmnames', width(`dgmwidth')
 	local titlepadded = s(titlepadded)
-	if `ndgmvars'>1 local titlepadded `"`"`dgm'"' `"`titlepadded'"'"'
 	else local titlepadded `"`"`titlepadded'"'"'
 }
 
@@ -264,7 +265,7 @@ qui gen float `uci' = `estimate' + `se'*invnorm(1-`alpha2')
 qui gen `l' = "("
 qui gen `r' = ")"
 if !mi("`logit'") { // logit transform for CIs for power and cover
-	if !mi("`debug'") di as text "Computing CI for power and coverage on logit scale"
+	if !mi("`debug'") di as input "Debug: computing CI for power and coverage on logit scale"
 	qui replace `lci' = 100 * invlogit( logit(`estimate'/100) + `se'*invnorm(`alpha2')/(`estimate'*(1-`estimate'/100))) ///
 		if inlist( _perfmeascode,"power","cover")
 	qui replace `uci' = 100 * invlogit( logit(`estimate'/100) + `se'*invnorm(1-`alpha2')/(`estimate'*(1-`estimate'/100))) ///
@@ -286,8 +287,26 @@ foreach pm of local pmlist {
 qui drop if `pmvar' == 0
 label val `pmvar' `pmvar'
 
+* nicer names for PMs (same as in nestloop)
+foreach pm of local pmlist {
+	if "`pm'"=="bsims" local pmlist2 `"`pmlist2' "Est reps""'
+	if "`pm'"=="bias" local pmlist2 `"`pmlist2' "Bias""'
+	if "`pm'"=="ciwidth" local pmlist2 `"`pmlist2' "CI width""'
+	if "`pm'"=="cover" local pmlist2 `"`pmlist2' "Coverage""'
+	if "`pm'"=="empse" local pmlist2 `"`pmlist2' "Empirical SE""'
+	if "`pm'"=="mean" local pmlist2 `"`pmlist2' "Mean""'
+	if "`pm'"=="modelse" local pmlist2 `"`pmlist2' "Model SE""'
+	if "`pm'"=="mse" local pmlist2 `"`pmlist2' "MSE""'
+	if "`pm'"=="pctbias" local pmlist2 `"`pmlist2' "% bias""'
+	if "`pm'"=="power" local pmlist2 `"`pmlist2' "Power""'
+	if "`pm'"=="relerror" local pmlist2 `"`pmlist2' "% error in SE""'
+	if "`pm'"=="relprec" local pmlist2 `"`pmlist2' "% precision gain""'
+	if "`pm'"=="rmse" local pmlist2 `"`pmlist2' "RMSE""'
+	if "`pm'"=="sesims" local pmlist2 `"`pmlist2' "SE reps""'
+}
+
 * create graph title for left
-padding `pmlist', width(`pmwidth') reverse
+padding `pmlist2', width(`pmwidth') reverse
 local ytitlepadded = s(titlepadded)
 
 * REPORT PANELS AND GRAPHS
@@ -303,12 +322,10 @@ foreach thistarget of local targetlevels {
 		local thistargetname : label (`target') `thistarget'
 		local iftargetcond if `target'==`thistarget'
 		local andtargetcond & `target'==`thistarget'
-		local note `target': `thistargetname'
-		if !mi("`debug'") di as text `"Drawing graph for `targetcond'"'
+		local note `"`target' = `thistargetname'. "'
+		if !mi("`debug'") di as input `"Debug: drawing graph for `targetcond'"'
 	}
-	else {
-		local note
-	}
+	if !mi("`dgm'") local note `note' Graphs by `dgm'.
 	local graph_cmd twoway 
 	local i 1
 	local graphorder
@@ -333,15 +350,15 @@ foreach thistarget of local targetlevels {
 	}
 	local graph_cmd `graph_cmd' scatter `method' `ref' `iftargetcond', ///
 		msym(i) c(l) col(gray) lpattern(dash)
-	local graph_cmd `graph_cmd' , by(`pmvar' `dgmgroup', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions') 
+	local graph_cmd `graph_cmd' , by(`pmvar' `dgmgroup', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions' `dgmmissingok') 
 	local graph_cmd `graph_cmd' subtitle("") ylab(none) ///
 		ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse range(`methodmin' `methodmax')) ///
-		legend(order(`graphorder') `methlegtitle')
+		legend(col(1) order(`graphorder') `methlegtitle')
 	if `ntargetlevels'<=1 local graph_cmd `graph_cmd' name(`name'`nameopts')
 	else local graph_cmd `graph_cmd' name(`name'_`thistargetname'`nameopts')
 	local graph_cmd `graph_cmd' `options'
 
-	if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+	if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 	if !mi("`pause'") {
 		global F9 `graph_cmd'
 		pause Press F9 to recall, optionally edit and run the graph command
@@ -369,7 +386,7 @@ foreach dgm in `anything' {
 	local dgml : _length "`dgm'"
 	local nspaces = round((`width'/`ndgm'-`dgml')/`spacel'/2,1)
 	if `nspaces'<0 {
-		if !mi("`debug'") di as text `"Error in subroutine padding: "`dgm'" too long"'
+		if !mi("`debug'") di as input `"Debug: error in subroutine padding: "`dgm'" too long"'
 		local padding
 	}
 	else local padding : display _dup(`nspaces') " "

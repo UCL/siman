@@ -1,4 +1,5 @@
-*!	version 0.7	14jun2024	
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
+*!	version 0.11.1	21oct2024	
 *	version 0.7	14jun2024	IW streamline for longlong only; calculate #dgms without assuming factorial; remove commented out code
 * version 0.6   8may2024	IW no longer removes underscores from display
 * version 0.5.1   13mar2024
@@ -59,7 +60,7 @@ if !mi("`dgm'") {
 	local dgmcount: word count `dgm'
 	qui tokenize `dgm'
 	forvalues j = 1/`dgmcount' {
-		qui tab ``j''
+		qui tab ``j'', `dgmmissingok'
 		local nlevels = r(r)
 		local dgmvarsandlevels `"`dgmvarsandlevels'"' `"``j''"' `" (`nlevels') "'
 	}

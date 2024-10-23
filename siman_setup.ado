@@ -1,4 +1,5 @@
-*!	version 0.11	09oct2024	
+*!	version 0.11.1	21oct2024	
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option; don't save char methodvalues
 *	version 0.11	09oct2024	IW allow non-integer dgmvar; allow extra variables; new sep() option for wide formats; new check for true constant within dgm & target
 *	version 0.10.2	14jun2024	IW wide target/method: numeric/string comes out as numeric/numeric-labelled and respects string order; remove more unwanted chars
 *	version 0.10.1	11jun2024	IW allow variable abbreviations
@@ -42,9 +43,9 @@ syntax [if] [in], ///
 	Rep(varname numeric min=1 max=1) ///
 	[DGM(varlist) TARget(string) METHod(string) /// structure variables
 	ESTimate(name) SE(name) DF(name) LCI(name) UCI(name) P(name) /// estimation result variables
-	TRUE(string) ORDer(string) ///
+	TRUE(string) ORDer(string) sep(string) DGMMIssingok /// other information
 	CLEAR ///
-	debug sep(string) /// undocumented
+	debug /// undocumented
 	] 
 
 /*
@@ -58,7 +59,7 @@ Please note that if method() contains one entry and target() contains more than 
 
 if !mi("`debug'") local dicmd dicmd
 else local dicmd qui
-if !mi("`debug'") local di di as input
+if !mi("`debug'") local di di as input "Debug: " 
 else local di *
 
 * check whether setup already run
@@ -80,7 +81,7 @@ foreach varname in _perfmeascode _pm _dataset _scenario _true {
 
 * produce error message if no est, se, or ci contained in dataset
 if mi("`estimate'") &  mi("`se'") & mi("`lci'") & mi("`uci'") {
-	di as error "{p 0 2}no estimates, SEs, or confidence intervals specified. Need to specify at least one for siman to run.{p_end}"
+	di as error "{p 0 2}No estimates, SEs, or confidence intervals specified. Need to specify at least one for siman to run.{p_end}"
 	exit 498
 }
 
@@ -124,9 +125,16 @@ if !mi("`dgm'") {
 			qui compress `var'
 			di as text "{p 0 2}Warning: dgm variable " as result "`var'" as text " has been converted from string to numeric. If you require its levels to be ordered differently, encode " as result "`var'" as text " as numeric before running -siman setup-.{p_end}"
 		}
-		qui count if missing(`var')
-		cap assert r(N)==0
-		if _rc di as error "{p 0 2}Warning: dgm variable " as result "`var'" as text " contains missing values. This may cause problems. Consider recoding as non-missing.{p_end}"
+		cap assert !missing(`var')
+		if _rc {
+			if mi("`dgmmissingok'") {
+				di as error "{p 0 2}Dgm variable " as result "`var'" as error " contains missing values. Please recode it as non-missing, or use the dgmmissingok option.{p_end}"
+				exit 498
+			}
+			else {
+				di as text "{p 0 2}Warning: dgm variable " as result "`var'" as text " contains missing values. You have used the dgmmissingok option, so siman will procede, but please beware of problems.{p_end}"
+			}
+		}
 	}
 }
 
@@ -139,7 +147,8 @@ if !mi("`dgm'") {
 			summ `var', meanonly
 			local prec = ceil(log10(epsfloat()*r(max)))
 			recast double `var' 
-			replace `var' = round(`var', 1E`prec')
+			replace `var' = real(strofreal(round(`var', 1E`prec'))) 
+				// conversion via string avoids strange inexactness
 			di as text "{p_end}"
 		}
 	}
@@ -170,15 +179,12 @@ else if `ntarget'==1 & `targetisvar'==1 {
 	local longvars `longvars' `target'
 	local numtarget = r(r)
 	local targetvallab : value label `target'
-	if !mi("`targetvallab'") {
-		foreach val of local valtargetorig {
-			local thisval : label (`target') `val'
-			local valtarget `valtarget' `thisval'
-		}
-		if !mi("`debug'") mac l _valtarget
-		if !mi("`debug'") mac l _valtargetorig
+	foreach val of local valtargetorig {
+		if !mi("`targetvallab'") local thisval : label (`target') `val'
+		else local thisval `val'
+		if !mi(`"`valtarget'"') local valtarget `valtarget';
+		local valtarget `valtarget' `thisval'
 	}
-	else local valtarget `valtargetorig'
 }
 else if mi("`target'") {
 	local targetformat long
@@ -226,7 +232,10 @@ else if `nmethod'==1 & `methodisvar'==1 {
 * check if method contains missing values
 if "`methodformat'" == "long" {
 	cap assert !missing(`method')
-	if _rc di as text "{p 0 2}Warning: variable `method' should not contain missing values{p_end}"
+	if _rc {
+		di as error "{p 0 2}Variable " as result "`method'" as error " may not contain missing values{p_end}"
+		exit 498
+	}
 }
 
 /*** UNDERSTAND STUBS ***/
@@ -244,7 +253,7 @@ else local stubvars `estimate' `se' `df' `lci' `uci' `p'
 
 /*** CHECK WIDE VARIABLES EXIST, AND REMOVE SEPARATOR FROM VARNAME ***/
 
-if !mi("`debug'") di as input "methodformat = `methodformat', targetformat = `targetformat'"
+if !mi("`debug'") di as input "Debug: method format = `methodformat', target format = `targetformat'"
 
 if "`methodformat'"=="wide" & "`targetformat'"=="wide" {
 	foreach stubvar of local stubvars {
@@ -392,7 +401,7 @@ if "`targetformat'"=="wide" & "`truetype'"=="stub" {
 /*** CHECK THE RIGHT VARIABLES ARE PRESENT ***/
 
 if !mi("`debug'") {
-	di as input "List of variables:"
+	di as input "Debug: list of variables:"
 	di "  Long vars:  `longvars'"
 	di "  Stub vars:  `stubvars'"
 	di "  Siman vars: `simanvars'"
@@ -503,7 +512,8 @@ if !mi("`dgm'") & !mi("`true'") {
 /* ASSIGN CHARACTERISTICS */
 
 * DGM
-local allthings dgm ndgmvars
+local allthings dgm ndgmvars dgmmissingok
+if !mi("`dgmmissingok'") local dgmmissingok missing // dgmvars may have missing values
 * Target
 if !mi("`target'") { // find local targetnature
 	cap confirm numeric variable `target'
@@ -523,23 +533,18 @@ if !mi("`method'") {
 		local methodlabelname : value label `method'
 		local methodnature = !mi("`methodlabelname'")
 	}
-	if `methodnature'==1 { // numeric labelled
-		qui levelsof `method', local(valmethodorig) clean
-		local valmethod
-		foreach val of local valmethodorig {
+	qui levelsof `method', local(methodvalues) clean
+	local nummethod = r(r)
+	foreach val of local methodvalues {
+		if `methodnature'==1 { // numeric labelled
 			local thisval : label (`method') `val'
-			local valmethod `valmethod' `thisval'
 		}
-		local methodnature 1
-		local methodvalues `valmethodorig'
+		else local thisval `val'
+		if !mi(`"`valmethod'"') local valmethod `valmethod'; 
+		local valmethod `valmethod' `thisval'
 	}
-	else {
-		qui levelsof `method', local(valmethod) clean
-		local methodvalues `valmethod'
-	}
-	local nummethod : word count `valmethod'
 }
-local allthings `allthings' method methodcreated methodnature methodvalues nummethod valmethod
+local allthings `allthings' method methodcreated methodnature nummethod valmethod
 * Estimates
 local allthings `allthings' estimate se df p rep lci uci 
 * True values
@@ -558,4 +563,11 @@ foreach thing in `allthings' {
 
 siman_describe
 restore, not
+end
+
+
+
+program define dicmd
+noi di as input `"Debug: `0'"'
+`0'
 end

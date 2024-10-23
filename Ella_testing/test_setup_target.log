@@ -1,34 +1,4 @@
 
-. siman which
-C:\ian\git\siman\siman.ado
-*!      version 0.11    07oct2024
-*!      Type -siman which- to see versions of siman's subprograms
-C:\ian\git\siman\siman_setup.ado
-*!      version 0.11    09oct2024       
-C:\ian\git\siman\siman_describe.ado
-*!      version 0.7     14jun2024       
-C:\ian\git\siman\siman_analyse.ado
-*!      version 0.9.1   14jun2024               
-C:\ian\git\siman\siman_table.ado
-*!      version 0.8.3   3apr2024
-C:\ian\git\siman\siman_lollyplot.ado
-*!      version 0.10.2  19aug2024       
-*!      version 0.10.2  19aug2024       IW add undocumented nodgmtitle option
-C:\ian\git\siman\siman_zipplot.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_comparemethodsscatter.ado
-*!      version 0.10.1  8aug2024        
-C:\ian\git\siman\siman_blandaltman.ado
-*!      version 0.10    24jun2024
-C:\ian\git\siman\siman_swarm.ado
-*!      version 0.10    19jul2024
-C:\ian\git\siman\siman_scatter.ado
-*!      version 0.10    18jun2024       
-C:\ian\git\siman\siman_nestloop.ado
-*!      version 0.10.1  26jun2024       
-
-. 
-. 
 . 
 . forvalues targettype = 1/6 {
   2.         di as input "targettype = `targettype'"
@@ -59,7 +29,7 @@ C:\ian\git\siman\siman_nestloop.ado
  27.                 local xnumtarget 3
  28.                 local xtarget estimand
  29.                 local xtargetnature 2
- 30.                 local xvaltarget effect mean0 mean1
+ 30.                 local xvaltarget effect; mean0; mean1
  31.                 local xconfirm string var estimand
  32.         }
  33.         if `targettype'==4 { // 3 targets, num-labelled
@@ -68,7 +38,7 @@ C:\ian\git\siman\siman_nestloop.ado
  36.                 local xnumtarget 3
  37.                 local xtarget estimand
  38.                 local xtargetnature 1
- 39.                 local xvaltarget effect mean0 mean1
+ 39.                 local xvaltarget effect; mean0; mean1
  40.                 local xconfirm numeric var estimand
  41.         }
  42.         if `targettype'==5 { // 3 targets, numeric, wide
@@ -100,25 +70,26 @@ C:\ian\git\siman\siman_nestloop.ado
  65.                 if _rc {
  66.                         di as error "Error with targettype = `targettype':"
  67.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
- 68.                 }
- 69.         }
- 70.         
+ 68.                         exit _rc
+ 69.                 }
+ 70.         }
+ 71.         
 .         * check name and type of target variable
 .         confirm `xconfirm'
- 71.         
+ 72.         
 .         * save for testing siman graph commands
 .         save data/setupdata_target`targettype', replace
- 72. 
+ 73. 
 .         * check analyse with subsets
 .         qui count if float(beta)==float(0.5)
- 73.         local x = r(N)
- 74.         siman analyse if float(beta)==float(0.25), notable
- 75.         qui count if float(beta)==float(0.5)
- 76.         assert `x' == r(N)
- 77.         siman analyse if float(beta)==float(0), notable replace
- 78.         qui count if float(beta)==float(0.5)
- 79.         assert `x' == r(N)
- 80. }
+ 74.         local x = r(N)
+ 75.         siman analyse if float(beta)==float(0.25), notable
+ 76.         qui count if float(beta)==float(0.5)
+ 77.         assert `x' == r(N)
+ 78.         siman analyse if float(beta)==float(0), notable replace
+ 79.         qui count if float(beta)==float(0.5)
+ 80.         assert `x' == r(N)
+ 81. }
 targettype = 1
 (81,000 observations deleted)
 (18,000 observations deleted)

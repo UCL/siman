@@ -1,4 +1,6 @@
-*!	version 0.10	19jul2024
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
+*!	version 0.11.1	21oct2024	
+*	version 0.11	21oct2024	IW fix y-scale when rep is not 1,2,3,... (e.g. res.dta)
 * version 0.10 19jul2024	IW align with new setup: clean up anything (use "estimate" not "`estimate'"), if/in, locals
 *							change meanoff to nomean; reorganise options, new scatteroptions, re-parse name
 *							align versioning with siman.ado
@@ -28,7 +30,7 @@
 program define siman_swarm
 version 16
 
-syntax [anything] [if][in] [, * nomean MEANGRaphoptions(string) BY(varlist) BYGRaphoptions(string) GRAPHOPtions(string) SCatteroptions(string) name(string) msymbol(passthru) msize(passthru) mcolor(passthru) title(passthru) note(passthru) row(passthru) col(passthru) xtitle(passthru) ytitle(passthru) debug pause]
+syntax [anything] [if][in] [, * nomean MEANGRaphoptions(string) BY(varlist) BYGRaphoptions(string) GRAPHOPtions(string) SCatteroptions(string) name(string) msymbol(passthru) msize(passthru) mcolor(passthru) title(passthru) note(passthru) row(passthru) col(passthru) xtitle(passthru) ytitle(passthru) debug pause gap(real .1)]
 
 * attempt to assign graph options correctly
 local scatteroptions `scatteroptions' `msymbol' `msize' `mcolor' `options'
@@ -119,23 +121,25 @@ if `methodnature'==2 {
 	rename `numericmethod' `method'
 }
 
+if "`by'"=="" local by `dgm' `target'
+
 * For a nicer presentation and better better use of space
-local nummethodplus1 = `nummethodnew'+1
-local maxrep = _N
+sort `by' `method'
+by `by': gen newidrep = _n
+summ newidrep, meanonly
+local maxnewidrep = r(max)
+sort `method' `by'
+by `method': gen first = _n==1
+qui replace newidrep = newidrep + `gap'*`maxnewidrep'*sum(first)
 forvalues g = 1/`nummethodnew' {
-	local step = `maxrep'/`nummethodplus1'
-	if `g'==1 qui gen newidrep = `rep' if `method' == `g'
-	else qui replace newidrep = (`rep'-1)+ ceil((`g'-1)*`step') + 1 if `method' == `g'
+	* if `g'==1 qui gen newidrep = `rep' if `method' == `g'
+	* else qui replace newidrep = (`rep'-1)+ ceil((`g'-1)*`step') + 1 if `method' == `g'
 	qui tabstat newidrep if `method' == `g', s(p50) save
 	qui matrix list r(StatTotal) 
 	local median`g' = r(StatTotal)[1,1]
 	local ygraphvalue`g' = ceil(`median`g'')
 	local labelvalues `labelvalues' `ygraphvalue`g'' "`mlabel`g''"
 	if `g'==`nummethodnew' label define newidreplab `labelvalues'
-}
-
-if "`by'"=="" {
-	local by `dgm' `target'
 }
 
 * Count how many graphs will be created
@@ -161,9 +165,9 @@ foreach el of local statlist { // estimate and/or se
 		local graph_cmd `graph_cmd' (scatter newidrep mean`el', msym(|) msize(huge) mcol(orange) `meangraphoptions')
 	}
 	local nameopt name(`name'_`el', `replace')
-	local graph_cmd `graph_cmd', by(`by', title("") noxrescale legend(off) `bygraphoptions') ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions'
+	local graph_cmd `graph_cmd', by(`by', title("") noxrescale legend(off) `bygraphoptions' `dgmmissingok') ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions'
 
-	if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+	if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 	if !mi("`pause'") {
 		global F9 `graph_cmd'
 		pause Press F9 to recall, optionally edit and run the graph command

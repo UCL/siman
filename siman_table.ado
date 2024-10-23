@@ -1,4 +1,6 @@
-*!	version 0.8.3   3apr2024
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
+*!	version 0.11.1	21oct2024	
+*	version 0.8.3   3apr2024
 *  version 0.8.3    3apr2024 IW ignore method if methodcreated
 *                  14feb2024 IW allow new performance measure (pctbias) from simsum
 *  version 0.8.2   20dec2023   IW add row() option (undocumented at present)
@@ -91,23 +93,23 @@ rename _perfmeascodeorder _perfmeascode
 if `methodcreated' local method
 * identify non-varying dgm
 foreach onedgmvar in `dgm' {
-	summ `onedgmvar' `if', meanonly
-	if r(min)<r(max) local newdgmvar `newdgmvar' `onedgmvar'
-	else if !mi("`debug'") di as error "Ignoring non-varying dgmvar: `onedgmvar'"
+	qui levelsof `onedgmvar' `if', `dgmmissingok'
+	if r(r)>1 local newdgmvar `newdgmvar' `onedgmvar'
+	else if !mi("`debug'") di as input "Debug: ignoring non-varying dgmvar: `onedgmvar'"
 	}
 local dgm `newdgmvar'
 local myfactors _perfmeascode `dgm' `target' `method'
-if !mi("`debug'") di as input "Factors to display: `myfactors'"
+if !mi("`debug'") di as input "Debug: factors to display: `myfactors'"
 tempvar group
 foreach thing in dgm target method {
 	local n`thing'vars = wordcount("``thing''")
 	if !mi("`thing'") {
-		egen `group' = group(``thing'')
+		egen `group' = group(``thing''), `dgmmissingok'
 		qui levelsof `group'
 		local n`thing'levels = r(r)
 		}
 	else n`thing'levels = 1
-	if !mi("`debug'") di "`n`thing'levels' levels, `thing': `n`thing'vars' variables (``thing'')"
+	if !mi("`debug'") di as input "Debug: `thing' has `n`thing'levels' levels, `n`thing'vars' variables (``thing'')"
 	drop `group'
 }
 
@@ -133,10 +135,11 @@ if wordcount("`by'")>4 {
 * display the table
 local tablecommand tabdisp `row' `column' `if', by(`by') c(`estimate' `se') stubwidth(20)
 if !mi("`debug'") {
-	di "Table column: `column'"
-	di "Table row: `row'"
-	di "Table by: `by'"
-	di "Table command: `tablecommand'"
+	di as input "Debug: table features:"
+	di "    column:  `column'"
+	di "    row:     `row'"
+	di "    by:      `by'"
+	di `"    command: `tablecommand'"'
 }
 `tablecommand'
 

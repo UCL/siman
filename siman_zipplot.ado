@@ -1,4 +1,5 @@
-*!	version 0.10	19jul2024
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option; drop PMs
+*!	version 0.11.1	21oct2024	
 * version 0.10 19jul2024	IW align with new setup; respect true but don't separate graphs by true; respect cilevel; allow ci instead of se
 *							align versioning with siman.ado
 *  version 1.9 22apr2024
@@ -81,7 +82,7 @@ if _rc {
 	di as error "{p 0 2}Warning: this 'if' condition cuts across dgm, target and method. It is safest to subset only on dgm, target and method.{p_end}"
 }
 drop `meantouse'
-qui keep if `touse'
+qui keep if `touse' & `rep'>0
 
 * default 'by' is all varying among dgm target method
 if mi("`by'") {
@@ -90,7 +91,7 @@ if mi("`by'") {
 		cap assert `var'==`var'[1]
 		if _rc local by `by' `var'
 	}
-	if !mi("`debug'") di as input "Graphing by: `by'"
+	if !mi("`debug'") di as input "Debug: graphing by: `by'"
 }
 
 * create confidence intervals, if not already there
@@ -150,7 +151,7 @@ qui egen `rpoint' = max(`uci') , by(`by')
 
 * count panels
 tempvar unique
-egen `unique' = tag(`by')
+egen `unique' = tag(`by'), `dgmmissingok'
 qui count if `unique'
 local npanels = r(N)
 drop `unique'
@@ -184,7 +185,7 @@ local graph_cmd twoway
 	xtitle("`level'% confidence intervals")
 	ytitle("Centile")
 	`ylab'
-	by(`by', ixaxes noxrescale iscale(*.9) `bygraphoptions')
+	by(`by', ixaxes noxrescale iscale(*.9) `bygraphoptions' `dgmmissingok')
 	legend(order(1 "Non-coverers" 2 "Coverers"))
 	`scheme'
 	`options'
@@ -192,7 +193,7 @@ local graph_cmd twoway
 ;
 #delimit cr
 
-if !mi("`debug'") di as text "Graph command is: " as input `"`graph_cmd'"'
+if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 if !mi("`pause'") {
 	global F9 `graph_cmd'
 	pause Press F9 to recall, optionally edit and run the graph command

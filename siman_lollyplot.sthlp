@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.10.1 29jul2024}{...}
+{* *! version 0.11.1 21oct2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "Main simsum help page" "simsum"}{...}
 {viewerjumpto "Syntax" "siman_lollyplot##syntax"}{...}
@@ -80,10 +80,9 @@ If no performance measures are specified, then graphs will be drawn for {help si
 except that if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for {help siman_analyse##mean:mean}, {help siman_analyse##empse:empse} and {help siman_analyse##relerror:relerror}.
 
 {pstd}
-The user can specify {it:if} within the {cmd:siman lollyplot} syntax. If they do not, but have already specified 
-an {it:if} during {help siman_analyse:siman analyse}, then the {it:if} from {help siman_analyse:siman analyse} will be used.
-The {it:if} condition will only apply to {bf:dgm}, {bf:target} and {bf:method}.  The {it:if} condition is not allowed to be used on 
-{bf:repetition} and an error message will be issued if the user tries to do so.
+The user can specify {it:if} within the {cmd:siman lollyplot} syntax. 
+The {it:if} condition should only apply to {bf:dgm}, {bf:target} and {bf:method}.  
+If the {it:if} condition is applied to other variables, an error "no observations" is likely.
 
 {pstd}
 Please note that {help siman_setup:siman setup} and {help siman_analyse:siman analyse} need to be run first before {bf:siman lollyplot}.

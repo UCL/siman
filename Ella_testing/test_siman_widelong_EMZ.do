@@ -13,8 +13,11 @@ cap log close
 set linesize 100
 
 // START TESTING
-log using `filename', replace text nomsg
+log using `filename'_which, replace text
 siman which
+log close
+
+log using `filename', replace text nomsg
 
 use $testpath/data/msgbsl_inter_try_postfile.dta, clear
 

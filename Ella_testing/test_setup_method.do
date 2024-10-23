@@ -16,8 +16,11 @@ cap log close
 set linesize 100
 
 // START TESTING
-log using `filename', replace text nomsg
+log using `filename'_which, replace text
 siman which
+log close
+
+log using `filename', replace text nomsg
 
 forvalues methodtype = 1/6 {
 	di as input "methodtype = `methodtype'"
@@ -32,7 +35,6 @@ forvalues methodtype = 1/6 {
 		local xmethod _method
 		local xmethodcreated 1
 		local xmethodnature 0
-		local xmethodvalues 1
 		local xnummethod 1
 		local xvalmethod 1
 	}
@@ -43,7 +45,6 @@ forvalues methodtype = 1/6 {
 		local xmethod method
 		local xmethodcreated 0
 		local xmethodnature 2
-		local xmethodvalues CCA
 		local xnummethod 1
 		local xvalmethod CCA
 	}
@@ -53,9 +54,8 @@ forvalues methodtype = 1/6 {
 		local xmethod method
 		local xmethodcreated 0
 		local xmethodnature 2
-		local xmethodvalues CCA MeanImp Noadj
 		local xnummethod 3
-		local xvalmethod CCA MeanImp Noadj
+		local xvalmethod CCA; MeanImp; Noadj
 	}
 	if `methodtype'==4 { // 3 methods, num-labelled
 		sencode method, gsort(method) replace
@@ -64,9 +64,8 @@ forvalues methodtype = 1/6 {
 		local xmethod method
 		local xmethodcreated 0
 		local xmethodnature 1
-		local xmethodvalues 1 2 3
 		local xnummethod 3
-		local xvalmethod CCA MeanImp Noadj
+		local xvalmethod CCA; MeanImp; Noadj
 	}
 	if `methodtype'==5 { // 3 methods, numeric, wide
 		sencode method, gsort(method) replace
@@ -77,9 +76,8 @@ forvalues methodtype = 1/6 {
 		local xmethod method
 		local xmethodcreated 0
 		local xmethodnature 0
-		local xmethodvalues 1 2 3
 		local xnummethod 3
-		local xvalmethod 1 2 3
+		local xvalmethod 1; 2; 3
 	}
 	if `methodtype'==6 { // 3 methods, string, wide
 		qui reshape wide b se, i(rep beta mech true) j(method) string
@@ -88,17 +86,17 @@ forvalues methodtype = 1/6 {
 		local xmethod method
 		local xmethodcreated 0
 		local xmethodnature 1
-		local xmethodvalues 1 2 3
 		local xnummethod 3
-		local xvalmethod CCA MeanImp Noadj
+		local xvalmethod CCA; MeanImp; Noadj
 	}
 	qui siman setup, rep(re) dgm(beta mech) `methodopt' estimate(b) se(se) true(true)
-	foreach thing in method methodcreated methodnature methodvalues nummethod valmethod {
+	foreach thing in method methodcreated methodnature nummethod valmethod {
 		local xx `: char _dta[siman_`thing']'
 		cap assert "`x`thing''" == "`xx'"
 		if _rc {
 			di as error "Error with methodtype = `methodtype':"
 			di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
+			exit _rc
 		}
 	}
 

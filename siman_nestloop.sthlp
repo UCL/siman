@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.10 15aug2024}{...}
+{* *! version 0.11.1 21oct2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_nestloop##syntax"}{...}
 {viewerjumpto "Description" "siman_nestloop##description"}{...}
@@ -49,6 +49,8 @@ An alternative is {cmd:connect(L)} which shows each performance measure value at
 {syntab:Other graph options}
 
 {synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
+{synopt:{opt scena:riolabel}}labels the horizontal axis with scenario numbers. 
+The default is an unlabelled axis, since the descriptor graphs describe the scenarios.{p_end}
 {synopt:{it:graph_options}}Most of the valid options for {help line:line} are available.
 We find these especially useful: {cmd:ylabel()} to stop the y-labels extending to the descriptor graph; 
 {cmd:legend()} to arrange legends in a single row or column, e.g.
@@ -80,10 +82,10 @@ performance measures listed in {help siman_analyse##perfmeas:performance measure
 If no performance measures are specified, then graphs will be drawn for {help siman_analyse##bias:bias}, {help siman_analyse##empse:empse} and {help siman_analyse##cover:coverage}; 
 except that if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for {help siman_analyse##mean:mean}, {help siman_analyse##empse:empse} and {help siman_analyse##relerror:relerror}.
 
-{pstd}The user can specify {it:if} within the {cmd:siman nestloop} syntax. If they do not, but have already specified 
-an {it:if} during {help siman analyse}, then the {it:if} from {help siman analyse} will be used.
-The {it:if} option will only apply to {bf:dgm}, {bf:target} and {bf:method}.  The {it:if} option is not allowed to be used on 
-{bf:repetition} and an error message will be issued if the user tries to do so.
+{pstd}
+The user can specify {it:if} within the {cmd:siman lollyplot} syntax. 
+The {it:if} condition should only apply to {bf:dgm}, {bf:target} and {bf:method}.  
+If the {it:if} condition is applied to other variables, an error "no observations" is likely.
 
 {pstd}
 We recommend to sort the simulation dataset in such a way that the simulation parameter with the largest influence on the criterion 
