@@ -122,7 +122,7 @@ if `npanels' > 15 {
 	di as smcl as text "{p 0 2}Consider reducing the number of panels using 'if' condition or 'by' option{p_end}"
 }
 
-if mi("`name'") local name name(simanscatter, replace)
+if mi("`name'") local name name(scatter, replace)
 
 local graph_cmd twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) `byoption' `name' `options'
 

@@ -67,7 +67,7 @@ if !mi(`"`name'"') {
 	local name = trim("`name'")
 }
 else {
-	local name simanbland
+	local name blandaltman
 	local nameopts , replace
 }
 if wordcount("`name'_something")>1 {

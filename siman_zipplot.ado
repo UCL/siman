@@ -62,7 +62,7 @@ if "`true'"=="" {
 	exit 498
 }
 
-if mi("`name'") local name name(simanzipplot, replace)
+if mi("`name'") local name name(zipplot, replace)
 
 /* Start preparations */
 

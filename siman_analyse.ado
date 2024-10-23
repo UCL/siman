@@ -42,7 +42,7 @@ capture which simsum.ado
 if _rc == 111 {
 	di as error `"simsum needs to be installed to run siman analyse. Please use {stata "ssc install simsum"}"'
 	exit 498
-	}
+}
 vercheck simsum, vermin(2.1.2) quietly message(`"{p 0 2}You can install the latest simsum using {stata "net from https://raw.githubusercontent.com/UCL/simsum/main/package/"}{p_end}"')
 
 foreach thing in `_dta[siman_allthings]' {
@@ -50,14 +50,14 @@ foreach thing in `_dta[siman_allthings]' {
 }
 
 if "`method'"=="" {
-	di as error "The variable 'method' is missing so siman analyse can not be run.  Please create a variable in your dataset called method containing the method value(s)."
+	di as error "The variable 'method' is missing so siman analyse can not be run. Please create a variable in your dataset called method containing the method value(s)."
 	exit 498
-	}
+}
 
 if "`analyserun'"=="1" & "`replace'" == "" {
-	di as error "There are already performance measures in the dataset.  If you would like to replace these, please use the 'replace' option"
+	di as error "There are already performance estimates in the dataset. If you would like to replace these, please use the 'replace' option"
 	exit 498
-	}
+}
 
 local estimatesindi = (`rep'[_N]>0)
 	
@@ -65,19 +65,19 @@ if "`analyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==1 {
 	qui drop if `rep'<0
 	qui drop _perfmeascode
 	qui drop _dataset
-	}
+}
 else if "`analyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==0 {
-	di as error "There are no estimates data in the data set.  Please re-load data and use siman setup to import data."
+	di as error "There are no estimates data in the data set. Please re-load data and use siman setup to import data."
 	exit 498
-	}
+}
 	
 local analyserun = 0
 
 * check if siman setup has been run, if not produce an error message
 if "`setuprun'"=="0" | "`setuprun'"=="" {
-	di as error "siman setup has not been run.  Please use siman setup first before siman analyse."
+	di as error "siman setup has not been run. Please use siman setup first before siman analyse."
 	exit 498
-	}
+}
 
 * true variable, to be used in reshape, if not in dgm
 cap confirm variable `true'
@@ -97,13 +97,11 @@ egen `min' = min(`touse'), by(`dgm' `target' `method')
 egen `max' = max(`touse'), by(`dgm' `target' `method')
 cap assert `min'==`max'
 if _rc == 9 {
-	di as error "Warning: this 'if' condition will change the values of the performance measures. It is safest to subset only on dgm, target and method."  
+	di as error "Warning: this 'if' condition will change the values of performance estimates. It is safest to subset only on dgm, target and method."  
 }
 drop `min' `max'
 
-
 * END OF PARSING
-
 
 
 * START OF ANALYSIS
@@ -120,7 +118,7 @@ qui save `estimatesdata'
 qui keep if `touse' & `rep'>0
 
 
-* if the data has been reshaped, method could be in string format, otherwise numeric.  Need to know what format it is in for the append later
+* if the data has been reshaped, method could be in string format, otherwise numeric. Need to know what format it is in for the append later
 local methodstringindi = 0
 capture confirm string variable `method'
 if !_rc local methodstringindi = 1
@@ -175,13 +173,13 @@ if !`secreated' local sesimsum = "`se'"
 
 capture confirm variable _perfmeascode
 if !_rc {
-	di as error "siman would like to name a variable '_perfmeascode', but that name already exists in your dataset.  Please rename your variable _perfmeascode as something else."
+	di as error "siman would like to name a variable '_perfmeascode', but that name already exists in your dataset. Please rename your variable _perfmeascode as something else."
 	exit 498
 }
 
 capture confirm variable _dataset
 if !_rc {
-	di as error "siman would like to name a variable '_dataset', but that name already exists in your data.  Please rename your variable _dataset as something else."
+	di as error "siman would like to name a variable '_dataset', but that name already exists in your data. Please rename your variable _dataset as something else."
 	exit 498
 }
 

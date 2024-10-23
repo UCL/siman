@@ -66,7 +66,7 @@ tokenize `"`name'"', parse(",")
 local name `1'
 local replace `3'
 if mi("`name'") {
-	local name simanswarm
+	local name swarm
 	local replace replace
 }
 
