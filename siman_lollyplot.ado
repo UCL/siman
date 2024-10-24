@@ -329,7 +329,7 @@ foreach thistarget of local targetlevels {
 		local note `"`target' = `thistargetname'. "'
 		if !mi("`debug'") di as input `"Debug: drawing graph for `targetcond'"'
 	}
-	if !mi("`dgm'") local note `note' Graphs by `dgm'.
+	if !mi("`dgm'") local note `note' Graphs by `dgm'
 	local graph_cmd twoway 
 	local i 1
 	local graphorder
