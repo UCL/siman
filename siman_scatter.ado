@@ -1,5 +1,6 @@
+*!	version 0.11.2	24oct2024	
+*	version 0.11.2	24oct2024	IW by default se on y not x axis; nicer labels
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
-*!	version 0.11.1	21oct2024	
 *	version 0.10	18jun2024	IW Clean up handling of varlist, if/in, by
 *								NB reduce version # to match other programs
 *  version 1.7 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
@@ -35,8 +36,8 @@ if "`setuprun'"!="1" {
 }
 	
 * if estimate or se are missing, give error message as program requires them for the graph(s)
-if mi("`estimate'") | mi("`se'") {
-    di as error "siman scatter requires estimate and se to plot"
+if mi("`estimate'") | mi("`se'") | "`secreated'"=="1" {
+    di as error "{p 0 2}siman scatter requires both estimate and se to have been declared in siman setup{p_end}"
 	exit 498
 }
 
@@ -62,10 +63,12 @@ if r(N)==0 error 2000
 qui keep if `touse'
 * keeps estimates data only
 qui drop if `rep'<0
+if mi("`: variable label `estimate''") label var `estimate' "Estimates (`estimate')"
+if mi("`: variable label `se''") label var `se' "Standard errors (`se')"
 
 * if statistics are not specified, run graphs for estimate and se, otherwise run for alternative order
 local error 0
-if "`varlist'"=="" local varlist `estimate' `se'
+if "`varlist'"=="" local varlist `se' `estimate'
 else {
 	local y1 : word 1 of `varlist'
 	if "`y1'"=="`estimate'" local y2needed `se'

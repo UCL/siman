@@ -1,5 +1,6 @@
+*!	version 0.11.2	24oct2024	
+*	version 0.11.2	24oct2024	handle extra variables by using keep before reshape
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
-*!	version 0.11.1	21oct2024	
 *	version 0.10.1	8aug2024	IW Tidy up graph titles
 *	version 0.10	25jun2024	IW Better handling of if/in, reshape; simplified loop over graphs
 *								NB reduce version # to match other programs
@@ -200,9 +201,8 @@ if `nmethods' > 5 {
 }
 
 // RESHAPE METHODS TO WIDE
-* drop unwanted variables, but only drop true if it's not a dgmvar
-local truedrop : list true - dgm
-cap drop `p' `lci' `uci' `df' `method' `truedrop' 
+keep `estimate' `se' `dgm' `target' `rep' `newmethod' `true' 
+	// drop doesn't work now that extra variables are allowed
 qui reshape wide `estimate' `se', i(`dgm' `target' `rep') j(`newmethod')
 if !mi("`debug'") di as input "Debug: reshape successful"
 

@@ -1,5 +1,6 @@
+*!	version 0.11.2	24oct2024	
+*	version 0.11.2	24oct2024	IW improve graph titles and note
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
-*!	version 0.11.1	21oct2024	
 *	version 0.10	24jun2024	IW Correct handling of if/in
 *								NB reduce version # to match other programs
 *  version 1.7 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
@@ -210,7 +211,8 @@ forvalues g = 1/`novervalues' { // loop over graphs
 		forvalues v=1/`novervars' {
 			local thisvar : word `v' of `over'
 			local thisval : word `v' of `glabel'
-			local notetext `notetext', `thisvar'=`thisval'
+			if `v'>1 local notetext `notetext', 
+			local notetext `notetext' `thisvar'=`thisval'
 		}
 	}
 
@@ -220,16 +222,16 @@ forvalues g = 1/`novervalues' { // loop over graphs
 	foreach stat in `statlist' { // loop over stats
 		if !mi("`debug'") di as input "Debug: group `glabel', stat `stat'"
 		* graph titles
-		if "`stat'"=="estimate" local eltitle = "`estimate'"
-		else if "`stat'"=="se" local eltitle = "`se'" 
+		if "`stat'"=="estimate" local eltitle = "Estimates (`estimate')"
+		else if "`stat'"=="se" local eltitle = "Standard errors (`se')" 
 		local elnote "stat=`stat'"
 		#delimit ;
 		local graph_cmd twoway (scatter diff`stat' mean`stat' if `group'==`g', `options')
 		,
-		by(`by', note("Graph: `elnote'`notetext'`panelnote'") iscale(1.1) title("") norescale `bygraphoptions' `dgmmissingok')
+		by(`by', note("`eltitle' for `notetext'", suffix) iscale(1.1) title("") norescale `bygraphoptions' `dgmmissingok')
 		yline(0, lp(l) lc(gs8))
 		name(`name'_`g'_`stat' `nameopts')
-		ytitle(Difference vs `mlabel1') xtitle(Average `eltitle')
+		ytitle(Difference of `method' from `mlabel1') xtitle(Average of `method' with `mlabel1')
 		;
 		#delimit cr
 		

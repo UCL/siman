@@ -68,7 +68,7 @@ if "`anything'"=="" {
 		local pmdefault mean
 		local missedmessage " and no true value"
 	}
-	di as text "Performance measures not specified`missedmessage': defaulting to `pmdefault'"
+	di as text "{p 0 2}Performance measures not specified`missedmessage': defaulting to " as result "`pmdefault'{p_end}"
 	local anything `pmdefault'
 }
 else if "`anything'"=="all" local anything `allpms'

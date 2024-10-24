@@ -78,6 +78,9 @@ else {
 	local totaldgmnum 1
 }
 
+* For target description
+if mi("`target'") local target N/A
+
 * Print summary of data
 di as text _newline _col(`titlewidth') "SUMMARY OF DATA"
 di as text "_____________________________________________________" _newline

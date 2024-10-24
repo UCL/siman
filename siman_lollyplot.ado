@@ -1,5 +1,6 @@
+*!	version 0.11.2	24oct2024	
+*	version 0.11.2	24oct2024	IW make default PMs work if no se
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; correct coding of non-integer dgmvars; nicer names for PMs
-*!	version 0.11.1	21oct2024	
 *	version 0.10.2	19aug2024	IW add undocumented nodgmtitle option
 *	version 0.10.1	29jun2024	IW add labformat(none) option
 *	version 0.10	23jun2024	IW Clean up handling of if/in
@@ -66,14 +67,17 @@ if "`analyserun'"=="0" | "`analyserun'"=="" {
 * check performance measures
 qui levelsof _perfmeascode, local(allpms) clean 
 if "`anything'"=="" {
+	if "`secreated'"=="1" local missedmessage ", no standard errors"
 	if !mi("`true'") {
-		local pmdefault bias empse cover
+		if "`secreated'"=="1" local pmdefault bias empse
+		else local pmdefault bias empse cover
 	}
 	else {
-		local pmdefault mean empse relerror
-		local missedmessage " and no true value"
+		if "`secreated'"=="1" local pmdefault mean empse 
+		else local pmdefault mean empse relerror
+		local missedmessage `missedmessage', no true values
 	}
-	di as text "Performance measures not specified`missedmessage': defaulting to `pmdefault'"
+	di as text "{p 0 2}Performance measures not specified`missedmessage': defaulting to " as result "`pmdefault'{p_end}"
 	local pmlist `pmdefault'
 }
 else if "`anything'"=="all" local pmlist `allpms'

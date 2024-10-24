@@ -60,7 +60,11 @@ if "`analyserun'"=="1" & "`replace'" == "" {
 }
 
 local estimatesindi = (`rep'[_N]>0)
-	
+if mi("`estimate'") {
+	di as error "{p 0 2}siman analyse requires estimate() to have been declared in siman setup{p_end}"
+	exit 498
+}
+
 if "`analyserun'"=="1" & "`replace'" == "replace" & `estimatesindi'==1 {
 	qui drop if `rep'<0
 	qui drop _perfmeascode

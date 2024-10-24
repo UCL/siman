@@ -31,13 +31,13 @@ Each result relates to one simulation combination of data generating method ({bf
 (1) long-long format (i.e. long targets, long methods): one record per repetition, target and method.
 
 {pstd}
-(2) wide-wide format (i.e. wide targets, wide methods): one record per repetition.
+(2) long-wide format (i.e. long targets, wide methods): one record per repetition and target.
 
 {pstd}
-(3) long-wide format (i.e. long targets, wide methods): one record per repetition and target.
+(3) wide-long format (i.e. wide targets, long methods): one record per repetition and method.
 
 {pstd}
-(4) wide-long format (i.e. wide targets, long methods): one record per repetition and method.
+(4) wide-wide format (i.e. wide targets, wide methods): one record per repetition.
 
 
 {marker syntax}{...}
@@ -53,7 +53,7 @@ Each result relates to one simulation combination of data generating method ({bf
 ]
 
 {pstd}
-Options for data in long-long input format (data format 1):
+Options for input data in long-long format (data format 1):
 
 {pmore}
 {opt tar:get(varname)}
@@ -67,23 +67,7 @@ Options for data in long-long input format (data format 1):
 {opt true(#|varname)}
 
 {pstd}
-Options for data in wide-wide input format (data format 2):
-
-{pmore}
-{opt tar:get(values)}
-{opt meth:od(values)}
-{opt est:imate(stub_varname)}
-{opt se(stub_varname)}
-{opt df(stub_varname)}
-{opt lci(stub_varname)}
-{opt uci(stub_varname)}
-{opt p(stub_varname)}
-{opt true(#|stub_varname)}
-{opt ord:er(varname)}
-{opt sep(string)}
-
-{pstd}
-Options for data in long-wide input format (data format 3):
+Options for input data in long-wide format (data format 2):
 
 {pmore}
 {opt tar:get(varname)}
@@ -98,7 +82,7 @@ Options for data in long-wide input format (data format 3):
 {opt sep(string)}
 
 {pstd}
-Options for data in wide-long input format (data format 4):
+Options for input data in wide-long format (data format 3):
 
 {pmore}
 {opt tar:get(values)}
@@ -110,6 +94,22 @@ Options for data in wide-long input format (data format 4):
 {opt uci(stub_varname)}
 {opt p(stub_varname)}
 {opt true(#|stub_varname)}
+{opt sep(string)}
+
+{pstd}
+Options for input data in wide-wide format (data format 4):
+
+{pmore}
+{opt tar:get(values)}
+{opt meth:od(values)}
+{opt est:imate(stub_varname)}
+{opt se(stub_varname)}
+{opt df(stub_varname)}
+{opt lci(stub_varname)}
+{opt uci(stub_varname)}
+{opt p(stub_varname)}
+{opt true(#|stub_varname)}
+{opt ord:er(varname)}
 {opt sep(string)}
 
 {pstd}
@@ -230,18 +230,7 @@ Each feature is stored as a variable: targets (estimand), methods (method), esti
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)"}
 
-
-{pstd}{bf:Data in format 2} (wide-wide: wide target, wide method).
-Here there is one set of variables for each target and method: e.g. est1beta is the estimate for method 1 and target beta. 
-The methods appear before the targets in the variable names, so {cmd:order(method)} is needed.
-There is a single variable true because in these data its value is constant.
-
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_wideE_wideM1.dta, clear"}
-
-{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(1 2) estimate(est) se(se) true(true) order(method)"}
-
-
-{pstd}{bf:Data in format 3} (long-wide: long target, wide method). 
+{pstd}{bf:Data in format 2} (long-wide: long target, wide method). 
 Here the target is the variable estimand but methods are wide, e.g. est_1 is the estimate for method 1. 
 Note the underscore separating est and method in the variable name: we remove it by the {cmd:sep(_)} option.
 
@@ -249,13 +238,21 @@ Note the underscore separating est and method in the variable name: we remove it
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(1 2) sep(_) estimate(est) se(se) true(true)"}
 
-
-{pstd}{bf:Data in format 4} (wide-long: wide target, long method). 
+{pstd}{bf:Data in format 3} (wide-long: wide target, long method). 
 Here the method is the variable method but the targets are wide, e.g. estbeta is the estimate of beta.
 
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_wideE_longM.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(method) estimate(est) se(se) true(true)"}
+
+{pstd}{bf:Data in format 4} (wide-wide: wide target, wide method).
+Here there is one set of variables for each target and method: e.g. est1beta is the estimate for method 1 and target beta. 
+The methods appear before the targets in the variable names, so {cmd:order(method)} is needed.
+There is a single variable true because in these data its value is constant.
+
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_wideE_wideM1.dta, clear"}
+
+{phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(1 2) estimate(est) se(se) true(true) order(method)"}
 
 {phang}Note that whatever the input format, the output dataset is in long-long format. 
 

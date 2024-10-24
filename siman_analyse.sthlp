@@ -100,6 +100,11 @@ will append the performance measures to the estimates data set, with the perform
 Additionally the performance measure code (as listed above) and the dataset (estimates or performance) will be listed for each dataset row.
 
 {pstd}
+If {opt if} is used, performance measures are calculated for this subset only, but all estimates data are retained (unless {opt perfonly} is also used). 
+Subsequent performance graphs ({cmd:siman lollyplot} and {cmd:siman nestloop}) will therefore be restricted to the {opt if} subset, 
+but estimates graphs will be unrestricted.
+
+{pstd}
 {cmd:siman analyse} will also calculate Monte-Carlo standard errors (mcses).  MSCEs quantify a measure of the simulation uncertainty.  They provide an estimate of the standard error of the performance measure, as a finite number of 
 repetitions are used.  For example, for the performance measure bias, the Monte-Carlo standard error would show the uncertainty around the estimate of the bias of all of the estimates over all of the repetitions 
 (i.e. for all in the estimates data set).

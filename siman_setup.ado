@@ -1,4 +1,5 @@
-*!	version 0.11.1	21oct2024	
+*!	version 0.11.2	24oct2024	
+*	version 0.11.2	24oct2024	IW improve handling of fractional dgmvar and created method
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; don't save char methodvalues
 *	version 0.11	09oct2024	IW allow non-integer dgmvar; allow extra variables; new sep() option for wide formats; new check for true constant within dgm & target
 *	version 0.10.2	14jun2024	IW wide target/method: numeric/string comes out as numeric/numeric-labelled and respects string order; remove more unwanted chars
@@ -144,11 +145,9 @@ if !mi("`dgm'") {
 		cap assert `var' == int(`var')
 		if _rc & "`: type `var''" == "float" {
 			di as text "{p 0 2}Warning: dgm variable " as result "`var'" as text " has non-integer values: converting from float to double " _c
-			summ `var', meanonly
-			local prec = ceil(log10(epsfloat()*r(max)))
-			recast double `var' 
-			replace `var' = real(strofreal(round(`var', 1E`prec'))) 
-				// conversion via string avoids strange inexactness
+			recast double `var'
+			replace `var' = real(strofreal(`var'))
+				// conversion to  string avoids strange inexactness
 			di as text "{p_end}"
 		}
 	}
@@ -200,7 +199,7 @@ else {
 
 local methodcreated 0
 if mi("`method'") {
-	di as text "{p 0 2}Warning: no method specified. siman will proceed assuming there is only one method. If this is a mistake, enter method() option in -siman setup-.{p_end}"
+	di as text "{p 0 2}Warning: no method specified. siman will assume there is only one method and create a variable _method. If this is a mistake, enter method() option in -siman setup-.{p_end}"
 	local method _method
 	qui gen _method = 1
 	local methodcreated 1
