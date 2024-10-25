@@ -41,6 +41,9 @@ Alternatively, {cmd:labformat(none)} removes the marker labels.
 
 {synopt:{opt dgms:how}}shows in the top title the values of any DGM variables that are constant within the 'if' condition. The default is not to show them.{p_end}
 
+{synopt:{opt dgmti:tle}{cmd:(on|off)}}controls whether the top title shows the names of the DGM variables.
+The default is {cmd:dgmtitle(on)} with one DGM variable and {cmd:dgmtitle(off)} with more than one DGM variable.{p_end}
+
 {syntab:Calculation options}
 
 {synopt:{opt l:evel(#)}}sets the level for confidence intervals. Default is the current level (see {help level}).

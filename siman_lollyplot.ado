@@ -47,11 +47,11 @@ version 15
 
 syntax [anything] [if] [, ///
 	LABFormat(string) COLors(string) MSymbol(string)  ///
-	REFPower(real -1) METHLEGend(string) DGMShow /// specific graph options
+	REFPower(real -1) METHLEGend(string) DGMShow DGMTItle(string) /// specific graph options
 	Level(cilevel) logit /// calculation options
 	BYGRaphoptions(string) name(string) * /// general graph options
 	pause /// advanced graph option
-	dgmwidth(int 30) pmwidth(int 24) debug rangeadd(real 0.2) DGMTItle(string) /// undocumented options
+	dgmwidth(int 30) pmwidth(int 24) debug rangeadd(real 0.2) /// undocumented options
 	]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -304,7 +304,7 @@ foreach pm of local pmlist {
 	if "`pm'"=="pctbias" local pmlist2 `"`pmlist2' "% bias""'
 	if "`pm'"=="power" local pmlist2 `"`pmlist2' "Power""'
 	if "`pm'"=="relerror" local pmlist2 `"`pmlist2' "% error in SE""'
-	if "`pm'"=="relprec" local pmlist2 `"`pmlist2' "% precision gain""'
+	if "`pm'"=="relprec" local pmlist2 `"`pmlist2' "% prec gain""'
 	if "`pm'"=="rmse" local pmlist2 `"`pmlist2' "RMSE""'
 	if "`pm'"=="sesims" local pmlist2 `"`pmlist2' "SE reps""'
 }
