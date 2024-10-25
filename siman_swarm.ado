@@ -135,7 +135,8 @@ if mi("`by'") {
 
 * For a nicer presentation and better better use of space
 sort `by' `method'
-by `by': gen newidrep = _n
+if !mi("`by'") by `by': gen newidrep = _n
+else gen newidrep = _n
 summ newidrep, meanonly
 local maxnewidrep = r(max)
 sort `method' `by'
@@ -175,7 +176,9 @@ foreach el of local statlist { // estimate and/or se
 		local graph_cmd `graph_cmd' (scatter newidrep mean`el', msym(|) msize(huge) mcol(orange) `meangraphoptions')
 	}
 	local nameopt name(`name'_`el', `replace')
-	local graph_cmd `graph_cmd', by(`by', title("") noxrescale legend(off) `bygraphoptions' `dgmmissingok') ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions'
+	if !mi("`by'") local byopt by(`by', title("") noxrescale legend(off) `bygraphoptions' `dgmmissingok') 
+	else local byopt title("") legend(off) `bygraphoptions' `dgmmissingok'
+	local graph_cmd `graph_cmd', `byopt' ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions'
 
 	if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 	if !mi("`pause'") {
