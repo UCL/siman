@@ -63,6 +63,14 @@ The default is {cmd:dgmtitle(on)} with one DGM variable and {cmd:dgmtitle(off)} 
 {synopt:{opt pause}}Pauses before drawing each graph, allowing the user to retrieve and edit each graph command before running it. 
 Requires {help pause} to be on.
 
+{syntab:Saving options}
+
+{synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata format. 
+The graph name is {it:namestub} with the target name appended.{p_end}
+
+{synopt:{opt exp:ort}{it:(format[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
+{cmd:saving()} must also be specified, and the file name is the same as for {cmd:saving()} with the appropriate filetype.{p_end}
+
 
 {marker description}{...}
 {title:Description}

@@ -60,10 +60,9 @@ We find these especially useful: {cmd:ylabel()} to stop the y-labels extending t
 
 {synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata format. 
 The graph name is {it:namestub} with the target and performance measures appended.{p_end}
-{synopt:{opt exp:ort(namestub[.fileformat, export_options])}}exports each graph to disk in non-Stata format. 
-The graph name is {it:namestub} with the target and performance measures appended. 
-{it:export_options} are options for {help graph export}. 
-Either {it:fileformat} or {it:as()} must be specified.{p_end}
+
+{synopt:{opt exp:ort}{it:(format[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
+{cmd:saving()} must also be specified, and the file name is the same as for {cmd:saving()} with the appropriate filetype.{p_end}
 
 {marker description}{...}
 {title:Description}

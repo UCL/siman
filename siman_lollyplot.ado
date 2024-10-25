@@ -1,4 +1,5 @@
-*!	version 0.11.2	24oct2024	
+*!	version 0.11.2	25oct2024	IW 
+*	version 0.11.2	25oct2024	IW new saving() and export() options
 *	version 0.11.2	24oct2024	IW make default PMs work if no se
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; correct coding of non-integer dgmvars; nicer names for PMs
 *	version 0.10.2	19aug2024	IW add undocumented nodgmtitle option
@@ -50,7 +51,7 @@ syntax [anything] [if] [, ///
 	REFPower(real -1) METHLEGend(string) DGMShow DGMTItle(string) /// specific graph options
 	Level(cilevel) logit /// calculation options
 	BYGRaphoptions(string) name(string) * /// general graph options
-	pause /// advanced graph option
+	pause SAVing(string) EXPort(string) /// advanced graph option
 	dgmwidth(int 30) pmwidth(int 24) debug rangeadd(real 0.2) /// undocumented options
 	]
 
@@ -122,6 +123,24 @@ if mi("`estimate'","`se'") {
 if !inlist("`dgmtitle'","off","on","") {
 	di as error "Syntax: dgmtitle(off|on|)"
 	exit 198
+}
+
+* parse optional saving
+if !mi(`"`saving'"') {
+	gettoken saving savingopts : saving, parse(",")
+	local saving = trim("`saving'")
+	if strpos(`"`saving'"',".") & !strpos(`"`saving'"',".gph") {
+		di as error "Sorry, saving() must not contain a full stop"
+		exit 198
+	}
+}
+if !mi(`"`export'"') {
+	gettoken exporttype exportopts : export, parse(",")
+	local exporttype = trim("`exporttype'")
+	if mi("`saving'") {
+		di as error "Please specify saving(filename) with export()"
+		exit 198
+	}
 }
 
 * mark sample
@@ -327,7 +346,7 @@ foreach thistarget of local targetlevels {
 		local iftargetcond if `target'==`thistarget'
 		local andtargetcond & `target'==`thistarget'
 		local note `"`target' = `thistargetname'. "'
-		if !mi("`debug'") di as input `"Debug: drawing graph for `targetcond'"'
+		if !mi("`debug'") di as input `"Debug: drawing graph for `iftargetcond'"'
 	}
 	if !mi("`dgm'") local note `note' Graphs by `dgm'
 	local graph_cmd twoway 
@@ -352,12 +371,13 @@ foreach thistarget of local targetlevels {
 			horiz lcol(`mcol`i'') ||
 		local ++i
 	}
+	if !mi("`saving'") local savingopt saving(`"`saving'_`thistargetname'"'`savingopts')
 	local graph_cmd `graph_cmd' scatter `method' `ref' `iftargetcond', ///
 		msym(i) c(l) col(gray) lpattern(dash)
 	local graph_cmd `graph_cmd' , by(`pmvar' `dgmgroup', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions' `dgmmissingok') 
 	local graph_cmd `graph_cmd' subtitle("") ylab(none) ///
 		ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse range(`methodmin' `methodmax')) ///
-		legend(col(1) order(`graphorder') `methlegtitle')
+		legend(col(1) order(`graphorder') `methlegtitle') `savingopt'
 	if `ntargetlevels'<=1 local graph_cmd `graph_cmd' name(`name'`nameopts')
 	else local graph_cmd `graph_cmd' name(`name'_`thistargetname'`nameopts')
 	local graph_cmd `graph_cmd' `options'
@@ -368,6 +388,13 @@ foreach thistarget of local targetlevels {
 		pause Press F9 to recall, optionally edit and run the graph command
 	}
 	`graph_cmd'
+
+	if !mi("`export'") {
+		local graphexportcmd graph export `"`saving'_`thistargetname'.`exporttype'"'`exportopts'
+		if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
+		cap noi `graphexportcmd'
+		if _rc di as error "Error in export() option"
+	}
 
 }
 

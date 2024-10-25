@@ -1,5 +1,6 @@
+*!	version 0.11.2	25oct2024	IW 
+*	version 0.11.2	25oct2024	IW improve saving() and export() options
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; make -if- work correctly
-*!	version 0.11.1	21oct2024	
 *	version 0.10.1	26jun2024	IW added saving() and export() options
 *	version 0.10	23jun2024	IW Correct handling of if/in
 *								PMs default to just bias or mean
@@ -98,20 +99,18 @@ if wordcount("`name'_something")>1 {
 if !mi(`"`saving'"') {
 	gettoken saving savingopts : saving, parse(",")
 	local saving = trim("`saving'")
+	if strpos(`"`saving'"',".") & !strpos(`"`saving'"',".gph") {
+		di as error "Sorry, saving() must not contain a full stop"
+		exit 198
+	}
 }
-if wordcount("`saving'_something")>1 {
-	di as error "Something has gone wrong with saving()"
-	exit 498
-}
-
-* parse optional export (needs 
 if !mi(`"`export'"') {
-	gettoken export exportopts : export, parse(".")
-	local export = trim("`export'")
-}
-if wordcount("`export'_something")>1 {
-	di as error "Something has gone wrong with export()"
-	exit 498
+	gettoken exporttype exportopts : export, parse(",")
+	local exporttype = trim("`exporttype'")
+	if mi("`saving'") {
+		di as error "Please specify saving(filename) with export()"
+		exit 198
+	}
 }
 
 * graph option parsing
@@ -447,7 +446,7 @@ foreach thispm of local pmlist { // loop over PMs
 			local note note(`target'=`thistarget')
 			local targetname _`thistarget'
 		}
-		if !mi("`saving'") local savingopt saving(`saving'`targetname'_`thispm'`savingopts')
+		if !mi("`saving'") local savingopt saving(`"`saving'`targetname'_`thispm'"'`savingopts')
 		if !mi("`debug'") & `ngraphs'>1 di as input "Debug: drawing graph for `target'=`thistarget', PM=`thispm'..."
 		local graph_cmd graph twoway 										///
 			`main_graph_cmd'												///
@@ -468,11 +467,10 @@ foreach thispm of local pmlist { // loop over PMs
 		}
 		`graph_cmd'
 		if !mi("`export'") {
-			local graphexportcmd graph export `export'`targetname'_`thispm'`exportopts'
+			local graphexportcmd graph export `"`saving'`targetname'_`thispm'.`exporttype'"'`exportopts'
 			if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
-			cap `graphexportcmd'
-			if _rc di as error "Error in export() option:"
-			`graphexportcmd'
+			cap noi `graphexportcmd'
+			if _rc di as error "Error in export() option"
 		}
 
 	} // end of loop over targets
