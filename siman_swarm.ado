@@ -1,5 +1,6 @@
+*!	version 0.11.2	25oct2024	IW 
+*	version 0.11.2	25oct2024	IW Default by() ignores non-varying variables
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
-*!	version 0.11.1	21oct2024	
 *	version 0.11	21oct2024	IW fix y-scale when rep is not 1,2,3,... (e.g. res.dta)
 * version 0.10 19jul2024	IW align with new setup: clean up anything (use "estimate" not "`estimate'"), if/in, locals
 *							change meanoff to nomean; reorganise options, new scatteroptions, re-parse name
@@ -121,7 +122,16 @@ if `methodnature'==2 {
 	rename `numericmethod' `method'
 }
 
-if "`by'"=="" local by `dgm' `target'
+* default 'by' is all varying among dgm target
+if mi("`by'") {
+	local mayby `dgm' `target'
+	foreach var of local mayby {
+		cap assert `var'==`var'[1]
+		if _rc local by `by' `var'
+		else di as text "Ignoring non-varying " as result "`var'"
+	}
+	if !mi("`debug'") di as input "Debug: graphing by: `by'"
+}
 
 * For a nicer presentation and better better use of space
 sort `by' `method'
