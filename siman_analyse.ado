@@ -197,7 +197,7 @@ if !mi("`debug'") noi di as input "Debug: running command: `simsumcmd'"
 qui `simsumcmd'
 
 * rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
-
+foreach v in `methodvalues'  {
 foreach v in `methodvalues'  {
 	cap confirm variable `estimate'`v'_mcse
 	if _rc==111 continue

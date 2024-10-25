@@ -289,7 +289,7 @@ label val `pmvar' `pmvar'
 
 * nicer names for PMs (same as in nestloop)
 foreach pm of local pmlist {
-	if "`pm'"=="bsims" local pmlist2 `"`pmlist2' "Est reps""'
+	if "`pm'"=="estreps" local pmlist2 `"`pmlist2' "Est. reps""'
 	if "`pm'"=="bias" local pmlist2 `"`pmlist2' "Bias""'
 	if "`pm'"=="ciwidth" local pmlist2 `"`pmlist2' "CI width""'
 	if "`pm'"=="cover" local pmlist2 `"`pmlist2' "Coverage""'
@@ -302,7 +302,7 @@ foreach pm of local pmlist {
 	if "`pm'"=="relerror" local pmlist2 `"`pmlist2' "% error in SE""'
 	if "`pm'"=="relprec" local pmlist2 `"`pmlist2' "% precision gain""'
 	if "`pm'"=="rmse" local pmlist2 `"`pmlist2' "RMSE""'
-	if "`pm'"=="sesims" local pmlist2 `"`pmlist2' "SE reps""'
+	if "`pm'"=="sereps" local pmlist2 `"`pmlist2' "SE reps""'
 }
 
 * create graph title for left

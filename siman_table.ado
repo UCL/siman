@@ -26,7 +26,7 @@ foreach thing in `_dta[siman_allthings]' {
 
 * check if siman analyse has been run, if not produce an error message
 if "`analyserun'"=="0" | "`analyserun'"=="" {
-	di as error "siman analyse has not been run.  Please use siman analyse first before siman table."
+	di as error "siman analyse has not been run. Please use siman analyse first before siman table."
 	exit 498
 }
 
@@ -96,7 +96,7 @@ foreach onedgmvar in `dgm' {
 	qui levelsof `onedgmvar' `if', `dgmmissingok'
 	if r(r)>1 local newdgmvar `newdgmvar' `onedgmvar'
 	else if !mi("`debug'") di as input "Debug: ignoring non-varying dgmvar: `onedgmvar'"
-	}
+}
 local dgm `newdgmvar'
 local myfactors _perfmeascode `dgm' `target' `method'
 if !mi("`debug'") di as input "Debug: factors to display: `myfactors'"
@@ -107,7 +107,7 @@ foreach thing in dgm target method {
 		egen `group' = group(``thing''), `dgmmissingok'
 		qui levelsof `group'
 		local n`thing'levels = r(r)
-		}
+    }
 	else n`thing'levels = 1
 	if !mi("`debug'") di as input "Debug: `thing' has `n`thing'levels' levels, `n`thing'vars' variables (``thing'')"
 	drop `group'
