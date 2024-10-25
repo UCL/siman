@@ -136,7 +136,12 @@ siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b
 
 siman analyse, notable
 siman lol bias relprec power cover if float(beta)==float(0.5), labformat(none) ///
-	refpower(90) dgmwidth(35) pmwidth(20) legend(col(1)) name(l`++i', replace)
+	refpower(90) dgmwidth(35) pmwidth(20) legend(col(1)) name(l`++i', replace) ///
+	saving(mylolly, replace) export(pdf, replace)
+foreach target in effect mean0 mean1 {
+	erase mylolly_`target'.gph
+	erase mylolly_`target'.pdf
+}
 
 * finish with a high quality graph
 siman lol bias relprec power cover if float(beta)==float(0.5) & esti=="effect", ///

@@ -153,10 +153,10 @@ encode estimand, gen(estinum)
 drop estimand
 siman setup, target(estinum) rep(rep) dgm(beta pmiss mech) method(method) est(b) se(se) true(true)
 siman analyse, notable
-siman nestloop bias, name(sn5,replace) saving(sn5s,replace) export(sn5e.pdf,replace)
+siman nestloop bias, name(sn5,replace) saving(sn5s , replace) export(pdf, replace)
 foreach target in effect mean0 mean1 {
 	erase sn5s_`target'_bias.gph
-	erase sn5e_`target'_bias.pdf
+	erase sn5s_`target'_bias.pdf
 }
 siman nestloop bias if estinum==1, name(sn6,replace) nodg legend(row(1))
 siman nestloop bias if estinum==1, nodg legend(row(1)) methlegend(item)
