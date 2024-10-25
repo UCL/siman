@@ -196,8 +196,11 @@ if !mi("`pause'") {
 if !mi("`debug'") noi di as input "Debug: running command: `simsumcmd'"
 qui `simsumcmd'
 
+* switch from bsims and sesims (simsum) to estreps and sereps (siman)
+replace _perfmeascode = "estreps" if _perfmeascode == "bsims"
+replace _perfmeascode = "sereps"  if _perfmeascode == "sesims"
+
 * rename the newly formed "*_mcse" variables as "se*" to tie in with those currently in the dataset
-foreach v in `methodvalues'  {
 foreach v in `methodvalues'  {
 	cap confirm variable `estimate'`v'_mcse
 	if _rc==111 continue
