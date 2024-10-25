@@ -1456,6 +1456,9 @@ siman scatter will draw 1 graph with 8 panels
 . 
 . siman swarm if `useit4', graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_t
 > est7", replace)
+Ignoring non-varying theta
+Ignoring non-varying rho
+Ignoring non-varying k
 siman swarm will draw 1 graph with 4 panels
 
 . 

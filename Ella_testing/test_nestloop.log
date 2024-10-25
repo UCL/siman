@@ -681,21 +681,21 @@ _____________________________________________________
 . siman analyse, notable
 siman analyse has run successfully
 
-. siman nestloop bias, name(sn5,replace) saving(sn5s,replace) export(sn5e.pdf,replace)
+. siman nestloop bias, name(sn5,replace) saving(sn5s , replace) export(pdf, replace)
 siman nestloop will draw 3 graphs (3 targets * 1 performance measures)
 (file sn5s_effect_bias.gph not found)
 file sn5s_effect_bias.gph saved
-file sn5e_effect_bias.pdf saved as PDF format
+file sn5s_effect_bias.pdf saved as PDF format
 (file sn5s_mean0_bias.gph not found)
 file sn5s_mean0_bias.gph saved
-file sn5e_mean0_bias.pdf saved as PDF format
+file sn5s_mean0_bias.pdf saved as PDF format
 (file sn5s_mean1_bias.gph not found)
 file sn5s_mean1_bias.gph saved
-file sn5e_mean1_bias.pdf saved as PDF format
+file sn5s_mean1_bias.pdf saved as PDF format
 
 . foreach target in effect mean0 mean1 {
   2.         erase sn5s_`target'_bias.gph
-  3.         erase sn5e_`target'_bias.pdf
+  3.         erase sn5s_`target'_bias.pdf
   4. }
 
 . siman nestloop bias if estinum==1, name(sn6,replace) nodg legend(row(1))

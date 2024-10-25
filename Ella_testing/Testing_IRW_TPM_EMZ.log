@@ -90,9 +90,11 @@ siman swarm will draw 1 graph with 4 panels
 
 . * 1 panel per dgm and target combination, method on y-axis
 . if ${detail} == 1 siman swarm if estimand == 1
+Ignoring non-varying estimand
 siman swarm will draw 1 graph with 2 panels
 
 . if ${detail} == 1 siman swarm if estimand == 2
+Ignoring non-varying estimand
 siman swarm will draw 1 graph with 2 panels
 
 . 
@@ -487,6 +489,9 @@ siman scatter will draw 1 graph with 3 panels
 
 . 
 . siman swarm if betastring==1 & float(pmiss)==float(0.2) & mech==1
+Ignoring non-varying betastring
+Ignoring non-varying pmiss
+Ignoring non-varying mech
 siman swarm will draw 1 graph with 3 panels
 
 . * 1 panel per dgm level(s) and target, method on y-axis
@@ -495,6 +500,10 @@ siman swarm will draw 1 graph with 3 panels
 . * method have a very small difference, visible as follows:
 . if ${detail} == 1 siman swarm if betastring==1 & float(pmiss)==float(0.2) & mech == 1 & estimand =
 > = "effect"
+Ignoring non-varying betastring
+Ignoring non-varying pmiss
+Ignoring non-varying mech
+Ignoring non-varying estimand
 siman swarm will draw 1 graph with 1 panels
 
 . * FYI:

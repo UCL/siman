@@ -3162,11 +3162,11 @@ Debug: graph command is: twoway scatter method b if method==1 , pstyle(p1) mlabs
 > e(p3) mlabcol(green) msym(i) mlab(__000007) mlabpos(0) || scatter method __000006 if method==3 , p
 > style(p3) mlabcol(green) msym(i) mlab(__000008) mlabpos(0) || rspike b __000003 method if method==
 > 3 , pstyle(p3) horiz lcol(green) || scatter method __000003 , msym(i) c(l) col(gray) lpattern(dash
-> ) , by(__000009 __000002, note(`"Graphs by mech."') col(2) xrescale title(               mech=MCAR
->                               mech=MNAR               , size(medium) just(center)) imargin(r=5)  )
->  subtitle("") ylab(none) ytitle(`"      Coverage          Empirical SE              Bias          
-> "', size(medium)) yscale(reverse range(.8 3.2)) legend(col(1) order(1 "Noadj" 5 "CCA" 9 "MeanImp")
->  ) name(meth3,replace) legend(row(1))
+> ) , by(__000009 __000002, note(`"Graphs by mech"') col(2) xrescale title(               mech=MCAR 
+>                              mech=MNAR               , size(medium) just(center)) imargin(r=5)  ) 
+> subtitle("") ylab(none) ytitle(`"      Coverage          Empirical SE              Bias          "
+> ', size(medium)) yscale(reverse range(.8 3.2)) legend(col(1) order(1 "Noadj" 5 "CCA" 9 "MeanImp") 
+> ) name(meth3,replace) legend(row(1))
 
 . siman lol if esti=="effect" & float(beta)==float(0) & float(pmiss)==float(0.2) & meth!=1, name(met
 > h2,replace) legend(row(1)) col(blue green) debug
@@ -3183,11 +3183,11 @@ Debug: graph command is: twoway scatter method b if method==2 , pstyle(p1) mlabs
 > tyle(p2) mlabcol(green) msym(i) mlab(__000007) mlabpos(0) || scatter method __000006 if method==3 
 > , pstyle(p2) mlabcol(green) msym(i) mlab(__000008) mlabpos(0) || rspike b __000003 method if metho
 > d==3 , pstyle(p2) horiz lcol(green) || scatter method __000003 , msym(i) c(l) col(gray) lpattern(d
-> ash) , by(__000009 __000002, note(`"Graphs by mech."') col(2) xrescale title(               mech=M
-> CAR                              mech=MNAR               , size(medium) just(center)) imargin(r=5)
->   ) subtitle("") ylab(none) ytitle(`"      Coverage          Empirical SE              Bias       
->    "', size(medium)) yscale(reverse range(1.8 3.2)) legend(col(1) order(1 "CCA" 5 "MeanImp") ) nam
-> e(meth2,replace) legend(row(1))
+> ash) , by(__000009 __000002, note(`"Graphs by mech"') col(2) xrescale title(               mech=MC
+> AR                              mech=MNAR               , size(medium) just(center)) imargin(r=5) 
+>  ) subtitle("") ylab(none) ytitle(`"      Coverage          Empirical SE              Bias        
+>   "', size(medium)) yscale(reverse range(1.8 3.2)) legend(col(1) order(1 "CCA" 5 "MeanImp") ) name
+> (meth2,replace) legend(row(1))
 
 . * Compare graphs meth3 and meth2
 . 
@@ -3234,9 +3234,24 @@ _____________________________________________________
 siman analyse has run successfully
 
 . siman lol bias relprec power cover if float(beta)==float(0.5), labformat(none) ///
->         refpower(90) dgmwidth(35) pmwidth(20) legend(col(1)) name(l`++i', replace)
+>         refpower(90) dgmwidth(35) pmwidth(20) legend(col(1)) name(l`++i', replace) ///
+>         saving(mylolly, replace) export(pdf, replace)
 Ignoring non-varying dgm variable beta
 siman lollyplot will draw 3 graphs with 16 panels (4 PMs by 4 DGMs)
+(file mylolly_effect.gph not found)
+file mylolly_effect.gph saved
+file mylolly_effect.pdf saved as PDF format
+(file mylolly_mean0.gph not found)
+file mylolly_mean0.gph saved
+file mylolly_mean0.pdf saved as PDF format
+(file mylolly_mean1.gph not found)
+file mylolly_mean1.gph saved
+file mylolly_mean1.pdf saved as PDF format
+
+. foreach target in effect mean0 mean1 {
+  2.         erase mylolly_`target'.gph
+  3.         erase mylolly_`target'.pdf
+  4. }
 
 . 
 . * finish with a high quality graph

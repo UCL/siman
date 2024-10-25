@@ -27,6 +27,7 @@ siman swarm estimate, name(swarm_target1, replace) bygr(title(Test siman swarm u
 siman swarm will draw 1 graph with 3 panels
 use data/setupdata_target2, clear
 siman swarm estimate, name(swarm_target2, replace) bygr(title(Test siman swarm using data target2))
+Ignoring non-varying estimand
 siman swarm will draw 1 graph with 3 panels
 use data/setupdata_target3, clear
 siman swarm estimate, name(swarm_target3, replace) bygr(title(Test siman swarm using data target3))
