@@ -162,14 +162,14 @@ the {opt method} which identifies different methods of analysis.
 Results of the analysis typically include the {opt estimate} and its standard error ({opt se}).
  
 {pstd}
-Four data set formats are permitted by the siman suite as detailed {help siman_setup##data:above}.
+Four data set formats are permitted by the siman suite as detailed {help siman setup##data:above}.
 {cmd:siman setup} automatically reshapes the data into long-long format. 
 
 {pstd}
 {cmd:siman setup} checks the data, reformats it if necessary,
 and attaches characteristics to the data set: these characteristics are read by every other {bf:siman} command.  
 The {bf:siman} estimates data set is held in memory.
-A summary of the data set up is printed, and can be repeated using  {bf:{help siman_describe:siman describe}}. 
+A summary of the data set up is printed, and can be repeated using  {bf:{help siman describe}}. 
 
 
 {marker outputdata}{...}
@@ -207,11 +207,13 @@ two targets (beta, gamma), and two methods of analysis (A, B).
 
 {pstd}If the method variable is not specified, then {cmd:siman setup} will create a variable {bf:_method} in the dataset with a value of 1 in order that all the other {bf: siman} programs can run.
 
-{pstd} Dgm can contain missing values, but the graphs may show unexpected behaviour. THIS IS WORK IN PROGRESS.
+{pstd}Dgm can contain missing values, but the graphs may show unexpected behaviour.
 
 {pstd}Selecting on dgm variables with non-integer values can cause problems. 
 For example, {cmd:siman scatter if pmiss==0.2} may show no observations.
 We recommend {cmd:siman scatter if float(pmiss)==float(0.2)} to be safe.
+
+{pstd}'Estimates' data containing just p-values are not currently allowed.
 
 
 {marker examples}{...}

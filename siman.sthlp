@@ -19,35 +19,35 @@
 
 {pstd}Get started
 
-{p2col:{bf:{help siman_setup:siman setup}}}set up data in the format required by siman, with the user’s raw simulation data (estimates data set)
+{p2col:{bf:{help siman setup}}}set up data in the format required by siman, with the user’s raw simulation data (estimates data set)
 
 {pstd}Analyses
 
-{p2col:{bf:{help siman_analyse:siman analyse}}}creates performance measures data set from the estimates data set, and can hold both in memory
+{p2col:{bf:{help siman analyse}}}creates performance measures data set from the estimates data set, and can hold both in memory
 
 {pstd}Descriptive tables and figures
 
-{p2col:{bf:{help siman_describe:siman describe}}}tabulates imported estimates data
+{p2col:{bf:{help siman describe}}}tabulates imported estimates data
 
-{p2col:{bf:{help siman_table:siman table}}}tabulates computed performance measures data
+{p2col:{bf:{help siman table}}}tabulates computed performance measures data
 
 {pstd}Graphs of results: Estimates data
 
-{p2col:{bf:{help siman_scatter:siman scatter}}}scatter plot: plots the estimate versus the standard error
+{p2col:{bf:{help siman scatter}}}scatter plot: plots the estimate versus the standard error
 
-{p2col:{bf:{help siman_comparemethodsscatter:siman comparemethodsscatter}}}scatter compare methods plot: comparison of estimates and standard errors between methods for each repetition
+{p2col:{bf:{help siman comparemethodsscatter}}}scatter compare methods plot: comparison of estimates and standard errors between methods for each repetition
 
-{p2col:{bf:{help siman_swarm:siman swarm}}}swarm plot: either the estimates or the standard error data by method
+{p2col:{bf:{help siman swarm}}}swarm plot: either the estimates or the standard error data by method
 
-{p2col:{bf:{help siman_blandaltman:siman blandaltman}}}bland altman plot: shows the difference of the estimate compared to the mean of the estimate (or likewise for the  standard error) with a selected method as the comparator
+{p2col:{bf:{help siman blandaltman}}}bland altman plot: shows the difference of the estimate compared to the mean of the estimate (or likewise for the  standard error) with a selected method as the comparator
 
-{p2col:{bf:{help siman_zipplot:siman zipplot}}}zipplot plot: shows all of the confidence intervals for each data-generating mechanism and analysis method
+{p2col:{bf:{help siman zipplot}}}zipplot plot: shows all of the confidence intervals for each data-generating mechanism and analysis method
 
 {pstd}Graphs of results: Performance measures data
 
-{p2col:{bf:{help siman_lollyplot:siman lollyplot}}}lollyplot plot: shows the performance for measures of interest with monte Carlo 95% confidence intervals 
+{p2col:{bf:{help siman lollyplot}}}lollyplot plot: shows the performance for measures of interest with monte Carlo 95% confidence intervals 
 
-{p2col:{bf:{help siman_nestloop:siman nestloop}}}nestloop plot: plots the results of a full factorial simulation study
+{p2col:{bf:{help siman nestloop}}}nestloop plot: plots the results of a full factorial simulation study
 
 {pstd}Utilities
 
@@ -74,10 +74,10 @@ Such data may consist of, for example, parameter estimates, standard errors, deg
 confidence intervals, an indicator of rejection of a hypothesis, and more.
 
 {pstd}{bf:Performance measures data set.}
-Produced by {bf:{help siman_analyse:siman analyse}}  which calculates performance measures including Monte Carlo error, 
-for use with {bf:{help siman_lollyplot:siman lollyplot}} and {bf:{help siman_nestloop:siman nestloop}}.  Please note, this will usually be appended to the estimates data set.
+Produced by {bf:{help siman analyse}}  which calculates performance measures including Monte Carlo error, 
+for use with {bf:{help siman lollyplot}} and {bf:{help siman nestloop}}.  Please note, this will usually be appended to the estimates data set.
 
-{pstd}For troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
+{pstd}For troubleshooting and limitations, see {help siman setup##limitations:troubleshooting and limitations}.
 
 
 {marker examples}{...}
@@ -108,7 +108,7 @@ for use with {bf:{help siman_lollyplot:siman lollyplot}} and {bf:{help siman_nes
 
 {title:Details}{marker details}
 
-{pstd}{bf:{help siman_analyse:siman analyse}} requires the additional program {help simsum}.
+{pstd}{bf:{help siman analyse}} requires the additional program {help simsum}.
 
 
 {title:References}{marker refs}

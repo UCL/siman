@@ -19,9 +19,13 @@
 [{cmd:,}
 {it:options}]
 
-{pstd}Available performance measures are listed in {help siman_analyse##perfmeas:performance measures}.
+{pstd}{it:performancemeasures} are any performance measures that have been calculated by {help siman analyse}. See {help siman analyse##perfmeas:performance measures}.
 
-{synoptset 25 tabbed}{...}
+{pstd}
+{opt if} must be applied to {bf:dgm}, {bf:target} and/or {bf:method} only. 
+
+
+{synoptset 28 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Options controlling the main graph}
@@ -30,7 +34,7 @@
 will display its values on the graph in descending order.{p_end}
 {synopt:{opt stag:ger(#)}}horizontally staggers the main graphs for different methods.  Default # is 0. Try {cmd:stagger(0.05)} to make the lines more distinct.{p_end}
 {synopt:{opt c:onnect(string)}}controls how the main graph and descriptor graph are connected. 
-Default is {cmd:connect(J)} which shows each performance measure value as a horizontal line with vertical joins (as described by {help siman_nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}). 
+Default is {cmd:connect(J)} which shows each performance measure value as a horizontal line with vertical joins (as described by {help siman nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}). 
 An alternative is {cmd:connect(L)} which shows each performance measure value at a point with diagonal joins.{p_end}
 {synopt:{opt noref:line}}prevents display of reference lines for certain performance measures (coverage, bias, relprec and relerror).{p_end}
 {synopt:{opt lev:el}}specifies where the reference line for performance measure coverage will be drawn.{p_end}
@@ -60,15 +64,15 @@ We find these especially useful: {cmd:ylabel()} to stop the y-labels extending t
 
 {synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata format. 
 The graph name is {it:namestub} with the target and performance measures appended.{p_end}
-
 {synopt:{opt exp:ort}{it:(format[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified, and the file name is the same as for {cmd:saving()} with the appropriate filetype.{p_end}
+
 
 {marker description}{...}
 {title:Description}
 
 {pstd}
-{cmd:siman nestloop} draws a nested loop plot of performance measures data.
+{cmd:siman nestloop} draws a nested loop plot of performance measures data ({help siman nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}).
 One graph is drawn for each combination of target and performance measure.
 Each graph presents the simulation results for all data generating mechanisms and all methods in one plot. 
 
@@ -77,9 +81,9 @@ The performance measure is split by method and is stacked according to the level
 The nested loop plot loops through nested data-generating mechanisms and plots results for different methods on top of each other in a full factorial design.
 
 {pstd}The user can select a subset of performance measures to be graphed using the 
-performance measures listed in {help siman_analyse##perfmeas:performance measures}.
-If no performance measures are specified, then graphs will be drawn for {help siman_analyse##bias:bias}, {help siman_analyse##empse:empse} and {help siman_analyse##cover:coverage}; 
-except that if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for {help siman_analyse##mean:mean}, {help siman_analyse##empse:empse} and {help siman_analyse##relerror:relerror}.
+performance measures listed in {help siman analyse##perfmeas:performance measures}.
+If no performance measures are specified, then graphs will be drawn for {help siman analyse##bias:bias}, {help siman analyse##empse:empse} and {help siman analyse##cover:coverage}; 
+except that if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for {help siman analyse##mean:mean}, {help siman analyse##empse:empse} and {help siman analyse##relerror:relerror}.
 
 {pstd}
 The user can specify {it:if} within the {cmd:siman lollyplot} syntax. 
@@ -88,13 +92,11 @@ If the {it:if} condition is applied to other variables, an error "no observation
 
 {pstd}
 We recommend to sort the simulation dataset in such a way that the simulation parameter with the largest influence on the criterion 
-of interest is considered first, and so forth.  Further guidance can be found in {help siman_nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}.
+of interest is considered first, and so forth.  Further guidance can be found in {help siman nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}.
 
 {pstd}
 {help siman setup} and {help siman analyse} need to be run first before {bf:siman nestloop}.
 
-{pstd}
-For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
 
 {marker example}{...}
 {title:Example}

@@ -82,8 +82,6 @@ other option to split the graphs with the {bf:by} option is by target, so the {b
 {pstd}
 {help siman setup} needs to be run first before {bf:siman comparemethodsscatter}.
 
-{pstd}
-For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
 
 {marker examples}{...}
 {title:Examples}

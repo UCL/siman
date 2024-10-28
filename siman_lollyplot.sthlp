@@ -21,7 +21,11 @@
 [{cmd:,}
 {it:options}]
 
-{pstd}Available performance measures are listed in {help siman_analyse##perfmeas:performance measures}.
+{pstd}{it:performancemeasures} are any performance measures that have been calculated by {help siman analyse}. See {help siman analyse##perfmeas:performance measures}.
+
+{pstd}
+{opt if} must be applied to {bf:dgm}, {bf:target} and/or {bf:method} only. 
+
 
 {synoptset 25 tabbed}{...}
 {synopthdr}
@@ -52,15 +56,15 @@ The default is {cmd:dgmtitle(on)} with one DGM variable and {cmd:dgmtitle(off)} 
 
 {syntab:General graph options}
 
-{synopt:{opt bygr:aphoptions(string)}}Graph options which need to be placed within the {cmd:by()} option.{p_end}
+{synopt:{opt bygr:aphoptions(string)}}graph options which need to be placed within the {cmd:by()} option.{p_end}
 
-{synopt:{opt name(string)}}Stub for graph name, to which "_" and the target name are appended.{p_end}
+{synopt:{opt name(string)}}stub for graph name, to which "_" and the target name are appended.{p_end}
 
-{synopt:{it:graph_options}}Most of the valid options for {help scatter:scatter} are available.{p_end}
+{synopt:{it:graph_options}}most of the valid options for {help scatter:scatter} are available.{p_end}
 
 {syntab:Advanced graph options}
 
-{synopt:{opt pause}}Pauses before drawing each graph, allowing the user to retrieve and edit each graph command before running it. 
+{synopt:{opt pause}}pauses before drawing each graph, allowing the user to retrieve and edit each graph command before running it. 
 Requires {help pause} to be on.
 
 {syntab:Saving options}
@@ -83,26 +87,25 @@ intervals as two numbers within parentheses).
 The graph shows several performance measures (as rows of panels) and several data generating mechanisms (as columns).
 One graph is drawn for each target.
 
-{pstd}For more background, see {help siman_lollyplot##reference:Morris et al, 2019}.
+{pstd}For more background, see {help siman lollyplot##reference:Morris et al, 2019}.
 
 {pstd}The user can select a subset of performance measures to be graphed using the 
-performance measures listed in {help siman_analyse##perfmeas:performance measures}.
-If no performance measures are specified, then graphs will be drawn for {help siman_analyse##bias:bias}, {help siman_analyse##empse:empse} and {help siman_analyse##cover:coverage}; 
-except that if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for {help siman_analyse##mean:mean}, {help siman_analyse##empse:empse} and {help siman_analyse##relerror:relerror}.
+performance measures listed in {help siman analyse##perfmeas:performance measures}.
+If no performance measures are specified, then graphs will be drawn for {help siman analyse##bias:bias}, {help siman analyse##empse:empse} and {help siman analyse##cover:coverage}; 
+except that if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for {help siman analyse##mean:mean}, {help siman analyse##empse:empse} and {help siman analyse##relerror:relerror};
+and that if there is no {bf:se} variable, then {help siman analyse##cover:coverage} or {help siman analyse##relerror:relerror} is dropped.
 
 {pstd}
 The user can specify {it:if} within the {cmd:siman lollyplot} syntax. 
-The {it:if} condition should only apply to {bf:dgm}, {bf:target} and {bf:method}.  
+The {it:if} condition must only apply to {bf:dgm}, {bf:target} and {bf:method}.  
 If the {it:if} condition is applied to other variables, an error "no observations" is likely.
 
 {pstd}
-Please note that {help siman_setup:siman setup} and {help siman_analyse:siman analyse} need to be run first before {bf:siman lollyplot}.
+Please note that {help siman setup} and {help siman analyse} need to be run first before {bf:siman lollyplot}.
 
 {pstd}
 If {cmd:siman lollyplot} fails with the error "Too many sersets", try again after typing {cmd:serset clear}.
 
-{pstd}
-For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
 
 {marker examples}{...}
 {title:Examples}
@@ -113,9 +116,10 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 
 {phang}. {stata  siman analyse, notable}
 
-{phang}. {stata  siman lollyplot, scheme(economist) bygr(title("Simulation results"))}
+{phang}. {stata  siman lollyplot}
 
 {phang}. {stata  siman lollyplot modelse power cover if estimand=="beta"}
+
 
 {marker reference}{...}
 {title:Reference}
@@ -123,6 +127,7 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {pstd}
 Morris TP, White IR, Crowther MJ. Using simulation studies to evaluate statistical methods. Statistics in Medicine. 2019; 38: 2074– 2102. 
 {browse "https://doi.org/10.1002/sim.8086"}
+
 
 {marker authors}{...}
 {title:Authors}

@@ -30,7 +30,7 @@
 {pstd}
 {p_end}
 {synopt:{opt if/in}}  The user can specify {it:if} and {it:in} within the siman blandaltman syntax. If they do not, but have already specified 
-an {it:if/in} during {help siman_setup:siman setup}, then the {it:if/in} from {help siman_setup:siman setup} will be used.
+an {it:if/in} during {help siman setup}, then the {it:if/in} from {help siman setup} will be used.
 The {bf:if} option should only be applied to {bf:dgm} and {bf:target}, use the {bf: methlist()} option to subset on method.
 The {it:if} option is not allowed to be used on 
 {bf:repetition} and an error message will be issued if the user tries to do so.
@@ -73,10 +73,10 @@ compared with a comparator.  If there are more than 2 methods in the data set, f
 as the reference, and the {bf:siman blandaltman} plots will be created for method B - method A and method C - method A.  
 
 {pstd}
-Please note that {help siman_setup:siman setup} needs to be run first before {bf:siman blandaltman}.
+{help siman setup} needs to be run first before {bf:siman blandaltman}.
 
 {pstd}
-For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
+For further troubleshooting and limitations, see {help siman setup##limitations:troubleshooting and limitations}.
 
 {marker examples}{...}
 {title:Examples}

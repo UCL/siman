@@ -46,10 +46,10 @@ from analysing multiple simulated data sets with data relating to different stat
 for each simulated data set.  The {cmd:siman scatter} plots help the user to look for bivariate outliers.
 
 {pstd}
-Please note that {help siman_setup:siman setup} needs to be run first before siman scatter.
+{help siman setup} needs to be run first before {cmd:siman scatter}.
 
 {pstd}
-For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
+For further troubleshooting and limitations, see {help siman setup##limitations:troubleshooting and limitations}.
 
 
 {marker example}{...}

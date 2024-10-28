@@ -64,7 +64,7 @@ confidence intervals for percent coverage and 95% confidence intervals for indiv
 (or type I error), true θ is used for the null value.
 
 {pstd}
-For each data-generating mechanism and method, the confidence intervals are fractional-centile-ranked (see {help siman_zipplot##Morris19:Morris et al., 2019)}. 
+For each data-generating mechanism and method, the confidence intervals are fractional-centile-ranked (see {help siman zipplot##Morris19:Morris et al., 2019)}. 
 This ranking is used for the vertical axis and is plotted against the intervals themselves. Intervals which cover the true value 
 are coverers (at the bottom); those which do not cover are called non-coverers (at the top). Both coverers and non-coverers are 
 shown on the plot, along with the point estimates.
@@ -75,9 +75,6 @@ The zipplot provides a means of understanding any issues with coverage by viewin
 It must have defined a true variable by {bf:true()}, an estimate variable by {bf:estimate()},
 and either a standard error by {bf:se()} or a confidence interval by {bf:lci()} and {bf:uci()}. 
 
-{pstd}
-For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
- 
 
 {marker examples}{...}
 {title:Examples}

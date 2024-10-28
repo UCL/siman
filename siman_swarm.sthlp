@@ -62,16 +62,16 @@ The {cmd: siman swarm} graphs help to inspect the distribution and,
 in particular, to look for outliers in the data.
 
 {pstd}
-{help siman_setup:siman setup} needs to be run first before {cmd:siman swarm}.
+{help siman setup} needs to be run first before {cmd:siman swarm}.
 
 {pstd}
-{cmd:siman swarm} requires a {bf:method} variable/values in the estimates dataset defined in the {help siman_setup:siman setup} syntax by {bf:method()}. 
+{cmd:siman swarm} requires a {bf:method} variable/values in the estimates dataset defined in the {help siman setup} syntax by {bf:method()}. 
  
 {pstd}
 {cmd:siman swarm} requires at least 2 methods to compare.
 
 {pstd}
-For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
+For further troubleshooting and limitations, see {help siman setup##limitations:troubleshooting and limitations}.
 
 
 {marker examples}{...}
