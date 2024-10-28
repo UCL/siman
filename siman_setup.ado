@@ -108,6 +108,10 @@ if r(N)>0 {
 	}
 	keep if `touse'
 }
+if _N==0 {
+	di as error "no observations"
+	exit 2000
+}
 
 /*** UNDERSTAND DGM ***/
 

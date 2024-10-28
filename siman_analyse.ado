@@ -118,13 +118,16 @@ if "`preserve'" != "nopreserve" preserve
 * put all variables in their original order in local allnames
 qui unab allnames : *
 
-* save current data
+* save current data, to be appended to simsum output
 tempfile estimatesdata 
 qui save `estimatesdata'
 
 * get correct data
 qui keep if `touse' & `rep'>0
-
+if _N==0 {
+	di as error "no observations"
+	exit 2000
+}
 
 * if the data has been reshaped, method could be in string format, otherwise numeric. Need to know what format it is in for the append later
 local methodstringindi = 0
