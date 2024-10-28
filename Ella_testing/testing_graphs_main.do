@@ -274,7 +274,7 @@ siman_blandaltman, methlist(3/7) name("ba_test6", replace)
 **********************************************************
 clear all
 prog drop _all
-use nestloop/res.dta, clear
+use data/res.dta, clear
 keep v1 theta rho pc k exppeto expg2 var2peto var2g2
 siman setup, rep(v1) dgm(theta rho pc k) method(peto g2) estimate(exp) se(var2) true(theta)
 

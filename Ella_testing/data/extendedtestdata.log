@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  C:\ian\git\siman\Ella_testing\data\extendedtestdata.log
   log type:  text
- opened on:   9 Oct 2024, 09:15:56
+ opened on:  28 Oct 2024, 16:47:47
 
 . /*
 > extendedtestdata.do
@@ -30,13 +30,13 @@
 > Implementation: 1000 repetitions
 > These settings chosen to make both nestloop and trellis sensible
 > 
+> Output: simulation data file extendedtestdata.dta
+>         with non-integer dgmvars
+> 
 > IW 27mar2023: created
 > IW 15dec2023: postfile renamed extendedtestdata.dta, and create extendedtestdata2.dta
 > IW 09oct2024: add true to extendedtestdata.dta
-> 
-> Produces two data files:
->         extendedtestdata - simulation results with non-integer dgmvars
->         extendedtestdata2 - the same but with non-integer dgmvars encoded as integers
+> IW 28oct2024: remove extendedtestdata2.dta
 > */
 . 
 . * set up
@@ -115,102 +115,12 @@
 . 
 . * store true value
 . gen true = 1 if estimand=="mean0"
-(72,000 missing values generated)
+variable true already defined
+r(110);
 
-. replace true = 1+beta if estimand=="mean1"
-(36,000 real changes made)
-
-. replace true = beta if estimand=="effect"
-(36,000 real changes made)
-
-. 
-. save `filename', replace
-file extendedtestdata.dta saved
-
-. 
-. * siman setup requires beta, pmiss to be integer
-. rename beta _beta
-
-. gen beta=string(_beta)
-
-. sencode beta, replace
-
-. rename pmiss _pmiss
-
-. gen pmiss=string(_pmiss)
-
-. sencode pmiss, replace
-
-. drop _pmiss _beta
-
-. order beta pmiss
-
-. 
-. * save
-. save `filename'2, replace
-file extendedtestdata2.dta saved
-
-. 
-. * view DGMvars
-. table beta pmiss mech
-
-----------------------------------------
-            |             mech          
-            |    MCAR     MNAR     Total
-------------+---------------------------
-beta        |                           
-  0         |                           
-    pmiss   |                           
-      .2    |   9,000    9,000    18,000
-      .4    |   9,000    9,000    18,000
-      Total |  18,000   18,000    36,000
-  .25       |                           
-    pmiss   |                           
-      .2    |   9,000    9,000    18,000
-      .4    |   9,000    9,000    18,000
-      Total |  18,000   18,000    36,000
-  .5        |                           
-    pmiss   |                           
-      .2    |   9,000    9,000    18,000
-      .4    |   9,000    9,000    18,000
-      Total |  18,000   18,000    36,000
-  Total     |                           
-    pmiss   |                           
-      .2    |  27,000   27,000    54,000
-      .4    |  27,000   27,000    54,000
-      Total |  54,000   54,000   108,000
-----------------------------------------
-
-. * view estimands
-. tab1 estimand
-
--> tabulation of estimand  
-
-   estimand |      Freq.     Percent        Cum.
-------------+-----------------------------------
-     effect |     36,000       33.33       33.33
-      mean0 |     36,000       33.33       66.67
-      mean1 |     36,000       33.33      100.00
-------------+-----------------------------------
-      Total |    108,000      100.00
-
-. * view methods
-. tab1 method 
-
--> tabulation of method  
-
-     method |      Freq.     Percent        Cum.
-------------+-----------------------------------
-        CCA |     36,000       33.33       33.33
-    MeanImp |     36,000       33.33       66.67
-      Noadj |     36,000       33.33      100.00
-------------+-----------------------------------
-      Total |    108,000      100.00
-
-. 
 end of do-file
       name:  <unnamed>
        log:  C:\ian\git\siman\Ella_testing\data\extendedtestdata.log
   log type:  text
- closed on:   9 Oct 2024, 09:15:57
+ closed on:  28 Oct 2024, 16:47:47
 ----------------------------------------------------------------------------------------------------

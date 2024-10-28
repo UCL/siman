@@ -8,7 +8,7 @@ capture log close
 log using test_ovletter , replace text nomsg
 
 * Estimates data from our letter to the editor about not fixing complete dataset
-use est_ovletter, clear
+use data/est_ovletter, clear
 
 simsum b , true(true) id(rep) method(analysis) by(dgm fixed_seed) se(se) df(df) ref("Complete data") cover
 

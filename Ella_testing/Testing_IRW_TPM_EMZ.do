@@ -148,7 +148,7 @@ siman nestloop
 
 
 * examples in paper
-use "https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta", clear
+use "https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simpaper1.dta", clear
 siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
 set scheme mrc
 
@@ -166,7 +166,7 @@ siman zipplot
 * siman nestloop - no because only one dgmvar
 
 
-use $testpath/nestloop/res.dta, clear
+use $testpath/data/res.dta, clear
 drop expfem exprem expmh msefem mserem msemh msepeto mseg2 mselimf covfem covrem covmh covpeto covg2 covlimf msepeters covpeters expexpect mseexpect covexpect msetrimfill covtrimfill biasfem biasrem biasmh biaspeto biaspeters biassfem biassrem biasg2 biaslimf biaslimr biasexpect biastrimfill var2fem var2rem var2mh var2expect
 
 siman setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)

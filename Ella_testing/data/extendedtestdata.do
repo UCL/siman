@@ -24,13 +24,13 @@ Performance measures: everything
 Implementation: 1000 repetitions
 These settings chosen to make both nestloop and trellis sensible
 
+Output: simulation data file extendedtestdata.dta
+	with non-integer dgmvars
+
 IW 27mar2023: created
 IW 15dec2023: postfile renamed extendedtestdata.dta, and create extendedtestdata2.dta
 IW 09oct2024: add true to extendedtestdata.dta
-
-Produces two data files:
-	extendedtestdata - simulation results with non-integer dgmvars
-	extendedtestdata2 - the same but with non-integer dgmvars encoded as integers
+IW 28oct2024: remove extendedtestdata2.dta
 */
 
 * set up
@@ -89,33 +89,18 @@ if `run' {
 	postclose ian
 }
 
-// make extendedtestdata2 in format required for siman setup
-
-use `filename', clear
 
 * store true value
+use `filename', clear
 gen true = 1 if estimand=="mean0"
 replace true = 1+beta if estimand=="mean1"
 replace true = beta if estimand=="effect"
-
 save `filename', replace
 
-* siman setup requires beta, pmiss to be integer
-rename beta _beta
-gen beta=string(_beta)
-sencode beta, replace
-rename pmiss _pmiss
-gen pmiss=string(_pmiss)
-sencode pmiss, replace
-drop _pmiss _beta
-order beta pmiss
-
-* save
-save `filename'2, replace
 
 * view DGMvars
 table beta pmiss mech
 * view estimands
-tab1 estimand
+tab1e estimand
 * view methods
-tab1 method 
+tab1e method 
