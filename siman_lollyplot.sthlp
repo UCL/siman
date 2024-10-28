@@ -28,7 +28,7 @@
 {synoptline}
 {syntab:Specific graph options}
 
-{synopt:{opt labf:ormat(string)}}defines formats for the marker labels for (i) numeric performance measures (e.g. bias), (ii) percentage performance measures (e.g. coverage), and (iii) count performance measures (e.g. bsims). 
+{synopt:{opt labf:ormat(string)}}defines formats for the marker labels for (i) numeric performance measures (e.g. bias), (ii) percentage performance measures (e.g. coverage), and (iii) count performance measures (e.g. estreps). 
 Alternatively, {cmd:labformat(none)} removes the marker labels.
 
 {synopt:{opt col:ors(string)}}specifies colours for the graphs: one per method.

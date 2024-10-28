@@ -65,6 +65,10 @@ if "`analyserun'"=="0" | "`analyserun'"=="" {
 	exit 498
 }
 
+* Allow bsims and sesims for estreps and sereps
+local anything = subinstr("`anything'","bsims", "estreps",.)
+local anything = subinstr("`anything'","sesims","sereps", .)
+
 * check performance measures
 qui levelsof _perfmeascode, local(allpms) clean 
 if "`anything'"=="" {

@@ -105,6 +105,10 @@ if _rc == 9 {
 }
 drop `min' `max'
 
+* Change estreps and sereps to bsims and sesims for simsum
+local anything = subinstr("`anything'","estreps","bsims",.)
+local anything = subinstr("`anything'","sereps","sesims",.)
+
 * END OF PARSING
 
 
