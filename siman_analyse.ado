@@ -227,16 +227,9 @@ local optionlistreshape `optionlist'
 local exclude "`true'"
 local optionlistreshape: list optionlistreshape - exclude
 
-if `methodstringindi'==1  {
-	`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodvalues'") string
-}
-else if `methodstringindi'==0 & `methodnature' == 0 {
-	`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodvalues'")
-	* restore number format to method
-	label value `method' `methodvallabel'
-}
-else if `methodstringindi'==0 & `methodnature' == 1 {
-	`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodvalues'")
+if `methodstringindi'==1 local stringopt string
+`qui' reshape long `optionlistreshape', i(`dgm' `target' _perfmeasnum) j(`method' "`methodvalues'") `stringopt'
+if `methodstringindi'==0 {
 	* restore number format to method
 	label value `method' `methodvallabel'
 }
