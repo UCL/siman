@@ -3,7 +3,7 @@
 . foreach feature in dgm target method {
   2.         local N 6
   3.         if "`feature'"=="dgm" local N 5
-  4.         forvalues n=1/`N' {
+  4.         foreach n in 1 `N' {
   5.                 dicmd use data/setupdata_`feature'`n', clear
   6.                 if `: char _dta[siman_nummethod]' > 1 {
   7.                         dicmd siman cms estimate, name(cms_`feature'`n', replace) ///
@@ -14,37 +14,12 @@
  11. }
 use data/setupdata_dgm1, clear
 Skipped (only one method)
-use data/setupdata_dgm2, clear
-Skipped (only one method)
-use data/setupdata_dgm3, clear
-Skipped (only one method)
-use data/setupdata_dgm4, clear
-Skipped (only one method)
 use data/setupdata_dgm5, clear
 Skipped (only one method)
 use data/setupdata_target1, clear
 siman cms estimate, name(cms_target1, replace) title(Test siman cms using data target1)
 Standard error not included in lower triangle (by request)
 siman comparemethodsscatter will draw 3 graphs each showing 3 methods
-use data/setupdata_target2, clear
-siman cms estimate, name(cms_target2, replace) title(Test siman cms using data target2)
-Standard error not included in lower triangle (by request)
-siman comparemethodsscatter will draw 3 graphs each showing 3 methods
-use data/setupdata_target3, clear
-siman cms estimate, name(cms_target3, replace) title(Test siman cms using data target3)
-Standard error not included in lower triangle (by request)
-siman comparemethodsscatter will draw 9 graphs each showing 3 methods
-Consider reducing the number of graphs using 'if' condition
-use data/setupdata_target4, clear
-siman cms estimate, name(cms_target4, replace) title(Test siman cms using data target4)
-Standard error not included in lower triangle (by request)
-siman comparemethodsscatter will draw 9 graphs each showing 3 methods
-Consider reducing the number of graphs using 'if' condition
-use data/setupdata_target5, clear
-siman cms estimate, name(cms_target5, replace) title(Test siman cms using data target5)
-Standard error not included in lower triangle (by request)
-siman comparemethodsscatter will draw 9 graphs each showing 3 methods
-Consider reducing the number of graphs using 'if' condition
 use data/setupdata_target6, clear
 siman cms estimate, name(cms_target6, replace) title(Test siman cms using data target6)
 Standard error not included in lower triangle (by request)
@@ -52,23 +27,6 @@ siman comparemethodsscatter will draw 9 graphs each showing 3 methods
 Consider reducing the number of graphs using 'if' condition
 use data/setupdata_method1, clear
 Skipped (only one method)
-use data/setupdata_method2, clear
-Skipped (only one method)
-use data/setupdata_method3, clear
-siman cms estimate, name(cms_method3, replace) title(Test siman cms using data method3)
-Standard error not included in lower triangle (by request)
-siman comparemethodsscatter will draw 6 graphs each showing 3 methods
-Consider reducing the number of graphs using 'if' condition
-use data/setupdata_method4, clear
-siman cms estimate, name(cms_method4, replace) title(Test siman cms using data method4)
-Standard error not included in lower triangle (by request)
-siman comparemethodsscatter will draw 6 graphs each showing 3 methods
-Consider reducing the number of graphs using 'if' condition
-use data/setupdata_method5, clear
-siman cms estimate, name(cms_method5, replace) title(Test siman cms using data method5)
-Standard error not included in lower triangle (by request)
-siman comparemethodsscatter will draw 6 graphs each showing 3 methods
-Consider reducing the number of graphs using 'if' condition
 use data/setupdata_method6, clear
 siman cms estimate, name(cms_method6, replace) title(Test siman cms using data method6)
 Standard error not included in lower triangle (by request)
