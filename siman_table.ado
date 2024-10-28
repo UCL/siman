@@ -1,5 +1,6 @@
+*!	version 0.11.2	28oct2024	
+*	version 0.11.2	28oct2024	IW use concise table by default & implement new noconcise option
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
-*!	version 0.11.1	21oct2024	
 *	version 0.8.3   3apr2024
 *  version 0.8.3    3apr2024 IW ignore method if methodcreated
 *                  14feb2024 IW allow new performance measure (pctbias) from simsum
@@ -16,7 +17,9 @@
 
 program define siman_table
 version 15
-syntax [anything] [if], [Column(varlist) Row(varlist) debug]
+syntax [anything] [if], [Column(varlist) /// documented option 
+	Row(varlist) debug pause noCONcise /// undocumented options
+	]
 
 // PARSING
 
@@ -29,6 +32,8 @@ if "`analyserun'"=="0" | "`analyserun'"=="" {
 	di as error "siman analyse has not been run. Please use siman analyse first before siman table."
 	exit 498
 }
+
+if "`concise'"=="" local concise concise
 
 // PREPARE DATA
 
@@ -133,13 +138,17 @@ if wordcount("`by'")>4 {
 
 
 * display the table
-local tablecommand tabdisp `row' `column' `if', by(`by') c(`estimate' `se') stubwidth(20)
+local tablecommand tabdisp `row' `column' `if', by(`by') c(`estimate' `se') stubwidth(20) `concise'
 if !mi("`debug'") {
 	di as input "Debug: table features:"
 	di "    column:  `column'"
 	di "    row:     `row'"
 	di "    by:      `by'"
 	di `"    command: `tablecommand'"'
+}
+if !mi("`pause'") {
+	global F9 `tablecommand'
+	pause Press F9 to recall, optionally edit and run the table command
 }
 `tablecommand'
 
