@@ -28,7 +28,7 @@
 {pstd}
 {p_end}
 
-{synopt:{opt if}} can be applied to {bf:dgm}, {bf:target} and {bf:method} only.
+{synopt:{opt if}} should be applied to {bf:dgm}, {bf:target} and {bf:method} only.
 
 {pstd}
 {p_end}
@@ -39,11 +39,11 @@
 {pstd}
 As per {help simsum:simsum}.  If none of the following options are specified, then all available performance measures are estimated.
 
-{marker bsims}{synopt:{opt bsims}}the number of repetitions with non-missing point estimates.
+{marker estsims}{synopt:{opt estreps}}the number of repetitions with non-missing point estimates (called {opt bsims} by {help simsum}).
 
-{marker sesims}{synopt:{opt sesims} }the number of repetitions with non-missing standard errors.
+{marker sesims}{synopt:{opt sereps} }the number of repetitions with non-missing standard errors (called {opt sesims} by {help simsum}).
 
-{marker bias}{synopt:{opt bias} }the bias in the point estimates.
+{marker bias}{synopt:{opt bias} }the bias of the point estimates.
 
 {marker mean}{synopt:{opt mean} }the average (mean) of the point estimates.
 
@@ -52,11 +52,11 @@ As per {help simsum:simsum}.  If none of the following options are specified, th
 {marker relprec}{synopt:{opt relprec} }the relative precision 
 -- the percentage improvement in precision for this analysis method compared with the reference analysis method.
 Precision is the inverse square of the empirical standard error. 
-This calculation is slow: omitting it can reduce run time by up to 90%.
+This calculation can be slow: omitting it can reduce run time by up to 90%.
 
-{marker mse}{synopt:{opt mse} }the mean squared error.
+{marker mse}{synopt:{opt mse} }the mean squared error of the point estimates.
 
-{marker rmse}{synopt:{opt rmse} }the root mean squared error.
+{marker rmse}{synopt:{opt rmse} }the root mean squared error of the point estimates.
  
 {marker modelse}{synopt:{opt modelse} }the model-based standard error - more precisely, the average of the model-based standard errors across repetitions. 
 
@@ -92,12 +92,24 @@ to replace the existing performance measures in the data set.
 {pstd}
 
 {pstd}
-{cmd:siman analyse} takes the imported estimates data from {bf:{help siman_setup:siman setup}} and creates performance measures data using the program {help simsum:simsum}.  By default {cmd:siman analyse}
-will append the performance measures to the estimates data set, with the performance measure names listed in the {bf:repetition} column.
-{cmd:siman analyse} requires that both {opt est} and {opt se} have been specified in {cmd:siman setup}.
+{cmd:siman analyse} takes the estimates data from {help siman setup} and creates performance measures data using the program {help simsum}.  
+{cmd:siman analyse} requires that an {bf:estimate} variable has been specified in {cmd:siman setup}.
 
 {pstd}
-Additionally the performance measure code (as listed above) and the dataset (estimates or performance) will be listed for each dataset row.
+We use 'the {bf:estimate} variable' etc. to mean the variable specified in the {opt estimate()} of {cmd:siman setup}.
+
+{pstd}
+By default, {cmd:siman analyse} appends the performance measures to the estimates data set. 
+The performance measure names (e.g. "Non-missing point estimates") are stored as labels for the {bf:rep} variable, and their codes (e.g. "estreps") are stored in a new string variable _perfmeascode.
+The performance estimates are stored in the {bf:estimate} variable.
+A new variable _dataset indicates whether each row is estimates data or performance data.
+
+{pstd}
+Monte Carlo standard errors (MSCEs) of the performance estimates are stored in the {bf:se} variable. 
+If no {bf:se} variable was specified, then they are stored in a new variable _se.
+MSCEs quantify the simulation uncertainty.  
+They provide an estimate of the standard error of the performance estimate, as a finite number of repetitions are used.
+For example, for the performance measure bias, the Monte-Carlo standard error shows the uncertainty around the estimate of the bias.
 
 {pstd}
 If {opt if} is used, performance measures are calculated for this subset only, but all estimates data are retained (unless {opt perfonly} is also used). 
@@ -105,16 +117,9 @@ Subsequent performance graphs ({cmd:siman lollyplot} and {cmd:siman nestloop}) w
 but estimates graphs will be unrestricted.
 
 {pstd}
-{cmd:siman analyse} will also calculate Monte-Carlo standard errors (mcses).  MSCEs quantify a measure of the simulation uncertainty.  They provide an estimate of the standard error of the performance measure, as a finite number of 
-repetitions are used.  For example, for the performance measure bias, the Monte-Carlo standard error would show the uncertainty around the estimate of the bias of all of the estimates over all of the repetitions 
-(i.e. for all in the estimates data set).
-
-{pstd}
 The {bf:labelsof} package (by Ben Jann) is required by {bf:siman analyse}.
 It can be installed by {stata ssc install labelsof}.
 
-{pstd}
-For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
 
 {marker examples}{...}
 {title:Examples}
@@ -133,7 +138,7 @@ Run for method 2 only:
 
 {phang}. {stata "siman analyse if method==2, replace"}
 
-{pstd}To only calculate the performance measures bias and model-based standard error, and discard the estimates data:
+{pstd}Calculate only the performance measures bias and model-based standard error, and discard the estimates data:
 
 {phang}. {stata "siman analyse bias modelse, replace perfonly"}
 
