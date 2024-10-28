@@ -262,7 +262,7 @@ if mi("`target'") {
 }
 cap confirm string var `target'
 if _rc {
-	if !mi("`: value label `target'") decode `target', gen(`target'char)
+	if !mi("`: value label `target''") decode `target', gen(`target'char)
 	else gen `target'char = string(`target')
 	drop `target'
 	rename `target'char `target'
