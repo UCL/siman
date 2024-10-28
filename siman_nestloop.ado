@@ -301,7 +301,7 @@ else local scenarioaxis xla(none) xtitle("") // default is no labels, no title
 
 foreach thispm of local pmlist { // loop over PMs
 	* nicer names for PMs (same as in lollyplot)
-	if "`thispm'"=="bsims" local thispm2 "Est reps"
+	if "`thispm'"=="estreps" local thispm2 "Est. reps"
 	if "`thispm'"=="bias" local thispm2 "Bias"
 	if "`thispm'"=="ciwidth" local thispm2 "CI width"
 	if "`thispm'"=="cover" local thispm2 "Coverage"
@@ -314,7 +314,7 @@ foreach thispm of local pmlist { // loop over PMs
 	if "`thispm'"=="relerror" local thispm2 "% error in SE"
 	if "`thispm'"=="relprec" local thispm2 "% precision gain"
 	if "`thispm'"=="rmse" local thispm2 "RMSE"
-	if "`thispm'"=="sesims" local thispm2 "SE reps"
+	if "`thispm'"=="sereps" local thispm2 "SE reps"
 
 	foreach thistarget of local targetlist { // loop over targets
 
