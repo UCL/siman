@@ -1,0 +1,39 @@
+----------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\ian\git\siman\Ella_testing\testing_graphs_main_which.log
+  log type:  text
+ opened on:  28 Oct 2024, 16:15:56
+
+. siman which
+C:\ian\git\siman\siman.ado
+*!      version 0.11.1  21oct2024
+*!      Type -siman which- to see versions of siman's subprograms
+C:\ian\git\siman\siman_setup.ado
+*!      version 0.11.2  24oct2024       
+C:\ian\git\siman\siman_describe.ado
+*!      version 0.11.1  21oct2024       
+C:\ian\git\siman\siman_analyse.ado
+*!      version 0.11    21oct2024               
+C:\ian\git\siman\siman_table.ado
+*!      version 0.11.2  28oct2024       
+C:\ian\git\siman\siman_lollyplot.ado
+*!      version 0.11.2  25oct2024       IW 
+C:\ian\git\siman\siman_zipplot.ado
+*!      version 0.11.1  21oct2024       
+C:\ian\git\siman\siman_comparemethodsscatter.ado
+*!      version 0.11.2  24oct2024       
+C:\ian\git\siman\siman_blandaltman.ado
+*!      version 0.11.2  24oct2024       
+C:\ian\git\siman\siman_swarm.ado
+*!      version 0.11.2  25oct2024       IW 
+C:\ian\git\siman\siman_scatter.ado
+*!      version 0.11.2  24oct2024       
+C:\ian\git\siman\siman_nestloop.ado
+*!      version 0.11.2  25oct2024       IW 
+
+. log close
+      name:  <unnamed>
+       log:  C:\ian\git\siman\Ella_testing\testing_graphs_main_which.log
+  log type:  text
+ closed on:  28 Oct 2024, 16:15:56
+----------------------------------------------------------------------------------------------------
