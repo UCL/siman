@@ -1,6 +1,7 @@
 /*
 test_cms.do
 IW 25jun2024
+Fewer graphs for faster run, 28oct2024
 */
 
 local filename test_cms
@@ -21,7 +22,7 @@ log using `filename', replace text nomsg
 foreach feature in dgm target method {
 	local N 6
 	if "`feature'"=="dgm" local N 5
-	forvalues n=1/`N' {
+	foreach n in 1 `N' {
 		dicmd use data/setupdata_`feature'`n', clear
 		if `: char _dta[siman_nummethod]' > 1 {
 			dicmd siman cms estimate, name(cms_`feature'`n', replace) ///
