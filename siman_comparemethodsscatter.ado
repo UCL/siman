@@ -290,10 +290,10 @@ forvalues g = 1/`ngraphs' {
 					if "`equality'"=="noequality" local eqgraph
 					else local eqgraph (function x, range(`min' `max') sort lcolor(gs10))
 					`dicmd' twoway ///
-						`eqgraph' /// line of equality
 						(scatter ``stat''`j' ``stat''`k' if `group'==`g', ///
 							ms(o) mlc(white%1) msize(tiny) ///
 							`subgraphoptions' nodraw) ///
+						`eqgraph' /// line of equality
 						, xtitle("") ytitle("") legend(off) ///
 						name(graph`j'`k', replace) // scatterplot of methods
 				}
