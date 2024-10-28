@@ -91,7 +91,7 @@ if !mi(`"`name'"') {
 	local name = trim("`name'")
 }
 else {
-	local name simannestloop
+	local name nestloop
 	local nameopts , replace
 }
 if wordcount("`name'_something")>1 {
