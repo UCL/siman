@@ -322,7 +322,8 @@ restore, not
 
 * Set indicator so that user can determine if siman analyse has been run (e.g. for use in siman lollyplot)
 local analyserun = 1
-local allthings `allthings' analyserun secreated
+local analyseif `if'
+local allthings `allthings' analyserun analyseif secreated
 * de-duplicate
 local allthings : list uniq allthings
 

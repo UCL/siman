@@ -352,6 +352,7 @@ if mi("`truetype'") {
 		gen _true = `true'
 		local true _true
 		local truetype variable
+		local truecreated 1
 	}
 }
 if mi("`truetype'") {
@@ -547,7 +548,7 @@ local allthings `allthings' method methodcreated methodnature nummethod valmetho
 * Estimates
 local allthings `allthings' estimate se df p rep lci uci 
 * True values
-local allthings `allthings' true 
+local allthings `allthings' true truecreated
 * Data formats
 local format long-long
 local nformat 1 // keep for now, until all graphs cope without

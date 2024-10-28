@@ -95,7 +95,7 @@ di as text "  Number of targets:" as result _col(`colwidth') "`numtarget'"
 di as text "  Target values:" as result _col(`colwidth') `"`valtarget'"' _newline
 
 di as text "Methods"
-di as text "  Variable containing methods:" as result _col(`colwidth') "`method'"
+di as text "  Variable containing methods:" as result _col(`colwidth') "`method'" cond("`methodcreated'"=="1", " (created)", "")
 di as text "  Number of methods:" as result _col(`colwidth') "`nummethod'"
 
 di as text "  Method values:" as result _col(`colwidth') "`valmethod'"
@@ -103,15 +103,20 @@ di as text "  Method values:" as result _col(`colwidth') "`valmethod'"
 di as text _newline "Repetition-level output"
 local descriptiontype variable // fix after removing this char from setup
 di as text "  Point estimate `descriptiontype':" as result _col(`colwidth') cond( !mi("`estimate'"), "`estimate'", "N/A")
-di as text "  SE `descriptiontype':" as result _col(`colwidth') cond( !mi("`se'"), "`se'", "N/A")
+di as text "  SE `descriptiontype':" as result _col(`colwidth') cond( !mi("`se'"), "`se'", "N/A") cond("`secreated'"=="1", " (created)", "")
 di as text "  df `descriptiontype':" as result _col(`colwidth') cond( !mi("`df'"), "`df'", "N/A")
 di as text "  Conf. limit `descriptiontype's:" as result _col(`colwidth') cond( !mi("`lci'"), "`lci'", "N/A") cond( !mi("`uci'"), " `uci'", cond( !mi("`lci'"), " N/A", ""))
 di as text "  p-value `descriptiontype':" as result _col(`colwidth') cond( !mi("`p'"), "`p'", "N/A")
 if "`truetype'" == "string" {
-	di as text "  True value variable:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
+	di as text "  True value variable:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A") cond("`truecreated'"=="1", " (created)", "")
 }
 else di as text "  True value:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
+di as text _newline "Estimates data" as result _col(`colwidth') cond(_rc,"in data","not in data")
+di as text "Performance estimates" as result _col(`colwidth') cond("`analyserun'"=="1","in data","not in data")
+if !mi("`analyseif'") di as text "  Restricted to:" as result _col(`colwidth') "`analyseif'"
+cap assert `rep'<=0
 di as text "_____________________________________________________"
+
 
 
 end
