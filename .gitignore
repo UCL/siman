@@ -12,5 +12,5 @@
 ._*
 .Trashes
 
-Ella_testing/data/setupdata*.dta
-Ella_testing/*_which.log
+testing/data/setupdata*.dta
+testing/*_which.log
