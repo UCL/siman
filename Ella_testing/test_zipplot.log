@@ -106,6 +106,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . siman zip if mech==1 & float(pmiss)==float(0.2) & estimand=="effect", noncov(lcol(red)) cov(lcol(b
@@ -154,6 +157,9 @@ Repetition-level output
   Conf. limit variables:          lower upper
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . siman zip if mech==1 & float(pmiss)==float(0.2) & estimand=="effect", noncov(lcol(red)) cov(lcol(b

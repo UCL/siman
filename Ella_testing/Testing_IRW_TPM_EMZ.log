@@ -56,7 +56,10 @@ Repetition-level output
   df variable:                    N/A
   Conf. limit variables:          N/A
   p-value variable:               N/A
-  True value variable:            _true
+  True value variable:            _true (created)
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . 
@@ -385,6 +388,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . assert "`: char _dta[siman_nummethod]'" == "3"
@@ -428,6 +434,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . assert "`: char _dta[siman_nummethod]'" == "3"
@@ -488,6 +497,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . * NB setup has coded beta as 1/2/3
@@ -2255,7 +2267,10 @@ Repetition-level output
   df variable:                    N/A
   Conf. limit variables:          N/A
   p-value variable:               N/A
-  True value variable:            _true
+  True value variable:            _true (created)
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . set scheme mrc
@@ -2325,6 +2340,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            theta
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . 

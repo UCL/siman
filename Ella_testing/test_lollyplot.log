@@ -3110,6 +3110,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            mytrue
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . siman analyse, notable
@@ -3156,6 +3159,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . siman analyse, notable
@@ -3336,6 +3342,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . siman analyse, notable
@@ -3425,6 +3434,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . 

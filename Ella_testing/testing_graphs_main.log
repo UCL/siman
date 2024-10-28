@@ -62,6 +62,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . siman comparemethodsscatter if estimand=="beta" & dgm==2
@@ -375,7 +378,10 @@ Repetition-level output
   df variable:                    N/A
   Conf. limit variables:          N/A
   p-value variable:               N/A
-  True value variable:            _true
+  True value variable:            _true (created)
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . * has made target string
@@ -658,6 +664,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            N/A
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . * graphs
@@ -869,7 +878,7 @@ Targets
   Target values:                  1; 2
 
 Methods
-  Variable containing methods:    _method
+  Variable containing methods:    _method (created)
   Number of methods:              1
   Method values:                  1
 
@@ -880,6 +889,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . 
@@ -953,6 +965,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 .  
@@ -1124,6 +1139,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 .  
@@ -1434,6 +1452,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            N/A
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . siman comparemethodsscatter if target=="beta" & dgm==1, methlist(3 7) name("cms_test6", replace) 
@@ -1495,6 +1516,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            theta
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . 

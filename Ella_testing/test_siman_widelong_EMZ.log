@@ -45,6 +45,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . 
@@ -393,6 +396,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . siman analyse bias ciwidth cover power, level(80) debug
@@ -531,6 +537,9 @@ Repetition-level output
   Conf. limit variables:          lower upper
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . siman analyse ciwidth cover power, debug
@@ -667,6 +676,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               pvalue
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . siman analyse ciwidth power, level(80) debug
@@ -780,6 +792,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               pvalue
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . siman analyse ciwidth power, debug // NB default level
@@ -892,6 +907,9 @@ Repetition-level output
   Conf. limit variables:          N/A
   p-value variable:               N/A
   True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
 _____________________________________________________
 
 . siman analyse bias
