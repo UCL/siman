@@ -1,18 +1,19 @@
 /*****************************************************************
 Testing all siman programs and graphs with different data formats
-NOTE: to be run in "Ella_testing" folder
+NOTE: to be run in "testing" folder
 Ella 21mar2023
 Latest update Ian 22aug2023
 23aug2023 temporarily commented out all -siman cms- (slow and failing)
 20dec2023 removed 2 instances of non-reproducible record selection
 3apr2024  removed tests with excessive numbers of graphs and panels: 
 			reduced from 40 to 2 minutes
+28/10/2024 IW rename testing_graphs_main -> test_graphs_main
 *****************************************************************/
 
 * switch on detail if want to run all graphs
 global detail = 1
 
-local filename testing_graphs_main
+local filename test_graphs_main
 
 prog drop _all
 cd $testpath

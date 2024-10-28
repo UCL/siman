@@ -1,11 +1,13 @@
 /*********************************************************************************************
 Testing siman setup and analyse for all different permutation of the data (>100 combinations)
-NOTE: to be run in "Ella_testing" folder
-Ella 14novar2023
+NOTE: to be run in "testing" folder
+Ella 14nov2023
 14Feb2024 IW Remove arbitrary selection of records from the tests with DGM/Target missing, to avoid unnecessary flagging of changes with previous 
+28oct2024 IW rename testing_graphs_matrix -> test_all_inputs 
+
 ************************************************************************************************/
 
-local filename testing_graphs_matrix
+local filename test_all_inputs
 
 prog drop _all
 cd $testpath
@@ -401,7 +403,7 @@ siman analyse
 
 * Test -analyse if-
 *******************
-use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear
+use https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simlongESTPM_longE_longM.dta, clear
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
 siman analyse, notable 

@@ -1,14 +1,15 @@
 /*
-Testing_IRW_TPM_EMZ.do
+test_graphs_mixed.do
 Short testing file for discussion
 3apr2024 Removed tests with excessive numbers of graphs and panels: reduced from 8 to 2 minutes
 25jul2024 Updates for revised setup
+28/10/2024 IW rename Testing_IRW_TPM_EMZ -> test_graphs_mixed 
 */
 
 * switch on detail if want to run all graphs
 global detail = 1
 
-local filename Testing_IRW_TPM_EMZ
+local filename test_graphs_mixed
 
 prog drop _all
 cd $testpath
@@ -148,7 +149,7 @@ siman nestloop
 
 
 * examples in paper
-use "https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simpaper1.dta", clear
+use "https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simpaper1.dta", clear
 siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
 set scheme mrc
 

@@ -5,7 +5,7 @@ IW 6aug2024
 */
 
 clear all
-cd "C:\ian\git\siman\Ella_testing"
+cd "C:\ian\git\siman\testing"
 use data/extendedtestdata, clear
 siman setup, rep(re) dgm(beta pmiss mech) target(estimand) method(method) estimate(b) se(se) true(true)
 

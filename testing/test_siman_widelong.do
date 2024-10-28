@@ -3,9 +3,10 @@ Test reading in from wide-long format, and statistics options
 EMZ 06/11/2023
 IW added tests of siman analyse, ref() replace 12/3/2024
 IW test siman analyse if but not siman reshape 11/6/2024
+28/10/2024 IW rename test_siman_widelong_EMZ -> test_siman_widelong
 */
 
-local filename test_siman_widelong_EMZ
+local filename test_siman_widelong
 
 prog drop _all
 cd $testpath
