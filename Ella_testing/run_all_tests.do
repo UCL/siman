@@ -36,6 +36,7 @@ local testfiles ///
 	test_setup_dgm			/// test all formats of DGM
 	test_setup_target		/// test all formats of target
 	test_setup_method		/// test all formats of method
+	test_error_messages		/// error messages
 	test_siman_widelong_EMZ /// from wide-long
 	testing_graphs_matrix   /// from all formats and var types
 	/// test graphs command by command
@@ -55,6 +56,6 @@ foreach testfile of local testfiles {
 }
 
 // ALSO 
-// run "Testing error messages.do" by hand to check error messages
+// run "view_graphs.do" by hand to check graphs look right
 
 di as result "*** SIMAN HAS PASSED ALL THE TESTS ***"
