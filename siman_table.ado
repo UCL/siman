@@ -1,5 +1,5 @@
 *!	version 0.11.2	28oct2024	
-*	version 0.11.2	28oct2024	IW use concise table by default & implement new noconcise option
+*	version 0.11.2	28oct2024	IW implement new concise option
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
 *	version 0.8.3   3apr2024
 *  version 0.8.3    3apr2024 IW ignore method if methodcreated
@@ -18,7 +18,7 @@
 program define siman_table
 version 15
 syntax [anything] [if], [Column(varlist) /// documented option 
-	Row(varlist) debug pause noCONcise /// undocumented options
+	Row(varlist) debug pause CONcise /// undocumented options
 	]
 
 // PARSING
@@ -32,8 +32,6 @@ if "`analyserun'"=="0" | "`analyserun'"=="" {
 	di as error "siman analyse has not been run. Please use siman analyse first before siman table."
 	exit 498
 }
-
-if "`concise'"=="" local concise concise
 
 // PREPARE DATA
 
