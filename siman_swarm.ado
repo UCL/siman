@@ -1,4 +1,5 @@
-*!	version 0.11.2	25oct2024	IW 
+*!	version 0.11.3	25oct2024	
+*	version 0.11.3	25oct2024	IW/TM allow only 1 method
 *	version 0.11.2	25oct2024	IW Default by() ignores non-varying variables
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
 *	version 0.11	21oct2024	IW fix y-scale when rep is not 1,2,3,... (e.g. res.dta)
@@ -86,7 +87,7 @@ tempvar meantouse
 egen `meantouse' = mean(`touse'), by(`dgm' `target' `method')
 cap assert inlist(`meantouse',0,1)
 if _rc {
-	di as error "{p 0 2}Warning: this 'if' condition cuts across dgm, target and method. It is safest to subset only on dgm, target and method.{p_end}"
+	di as error "{p 0 2}Warning: this 'if'/'in' condition cuts across dgm, target and/or method. It is safest to subset only on dgm, target and/or method.{p_end}"
 }
 drop `meantouse'
 qui keep if `touse'
@@ -96,10 +97,6 @@ if mi("`method'") local nummethodnew = 1
 else {
 	qui tab `method'
 	local nummethodnew = `r(r)'
-}
-if `nummethodnew' < 2 {
-	di as error "{p 0 2}siman swarm requires at least 2 methods to compare{p_end}"
-	exit 498
 }
 
 * store method names in locals mlabel`i'
