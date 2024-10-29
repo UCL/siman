@@ -272,6 +272,8 @@ siman_blandaltman, methlist(3/7) name("ba_test6", replace)
   
 **********************************************************
 * DGM defined by multiple variables with multiple levels
+* The data have 5 dgmvars, 
+*   but one (tau2) is ignored in the code below
 **********************************************************
 clear all
 prog drop _all
