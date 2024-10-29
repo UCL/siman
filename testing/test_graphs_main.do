@@ -11,7 +11,7 @@ Latest update Ian 22aug2023
 *****************************************************************/
 
 * switch on detail if want to run all graphs
-global detail = 1
+global detail 1
 
 local filename test_graphs_main
 
@@ -276,8 +276,8 @@ siman_blandaltman, methlist(3/7) name("ba_test6", replace)
 clear all
 prog drop _all
 use data/res.dta, clear
-keep v1 theta rho pc k exppeto expg2 var2peto var2g2
-siman setup, rep(v1) dgm(theta rho pc k) method(peto g2) estimate(exp) se(var2) true(theta)
+keep v1 theta rho pc k exppeto expg2 var2peto var2g2 tau2
+siman setup, rep(v1) dgm(theta rho pc k tau2) method(peto g2) estimate(exp) se(var2) true(theta)
 
 * graphs
 local useit4 theta==1 & rho==1 & k==5 // flags just 4 dgms
@@ -294,7 +294,7 @@ if ${detail} == 1 siman comparemethodsscatter if `useit1', title("testtitle") su
 
 if ${detail} == 1 siman blandaltman if `useit1', ytitle("test y-title") xtitle("test x-title") name("ba_test7", replace) 
 
-siman analyse
+siman analyse, force
 
 siman lollyplot if `useit4', xtitle("test x-title") name("lollyplot_test7", replace)
 * without -if k==5- you get "too many sersets" error
