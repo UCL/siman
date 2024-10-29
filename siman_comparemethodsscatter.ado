@@ -1,4 +1,5 @@
-*!	version 0.11.2	24oct2024	
+*!	version 0.11.3	29oct2024	
+*	version 0.11.3	29oct2024	IW/TM aspect(1) not suppressed by other subgraphoptions
 *	version 0.11.2	24oct2024	handle extra variables by using keep before reshape
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
 *	version 0.10.1	8aug2024	IW Tidy up graph titles
@@ -79,7 +80,9 @@ foreach thing of local anything {
 
 if !mi("`debug'") local dicmd dicmd
 
-if mi("`subgraphoptions'") local subgraphoptions aspect(1) graphregion(margin(zero)) plotregion(margin(zero))
+if strpos(`"`subgraphoptions'"',"aspect(")==0 local subgraphoptions aspect(1) `subgraphoptions'
+if strpos(`"`subgraphoptions'"',"aspectratio(")==0 local subgraphoptions aspect(1) `subgraphoptions'
+local subgraphoptions graphregion(margin(zero)) plotregion(margin(zero)) `subgraphoptions'
 
 if !mi("`matrix'") & !mi("`combine'") {
 	di as error "Can't have both matrix and combine"
