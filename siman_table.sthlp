@@ -16,7 +16,7 @@
 {phang}
 {cmdab:siman table} [{it:performancemeasures}] [if], [column({it:varname})]
 
-{pstd}{it:performancemeasures} are any {help siman analyse##perfmeas:performance measures} calculated by {help siman analyse} and {help simsum:simsum}. If not specified, all available performance measures are calculated.
+{pstd}{it:performancemeasures} are the names of {help siman analyse##perfmeas:measures} for which performance has been calculated by {help siman analyse}. If not specified, performance is estimated for all measures that can be.
 
 {pstd}
 {opt if} should be applied to {bf:dgm}, {bf:target} and/or {bf:method} only.

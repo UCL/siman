@@ -24,7 +24,7 @@ if !mi("`chars'") {
 	}
 	if !mi("`saving'") {
 		tempname post
-		cap postclose `post'
+		cap postclose `post' //line always unnecessary bc `post' is a tempname?
 		local maxl1 0
 		local maxl2 0
 		foreach thing of local allthings {

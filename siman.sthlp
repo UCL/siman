@@ -19,39 +19,39 @@
 
 {pstd}Get started
 
-{p2col:{bf:{help siman setup}}}set up data in the format required by siman, with the user’s raw simulation data (estimates data set)
+{p2col:{bf:{help siman setup}}}set up data in the format required by siman, using the user’s raw simulation data (so-called ‘estimates data set’)
 
-{pstd}Analyses
+{pstd}Analyses to estimate performance
 
-{p2col:{bf:{help siman analyse}}}creates performance measures data set from the estimates data set, and can hold both in memory
+{p2col:{bf:{help siman analyse}}}creates performance statistics data set from the estimates data set, and can hold both in memory
 
-{pstd}Descriptive tables and figures
+{pstd}Descriptive tables of results
 
-{p2col:{bf:{help siman describe}}}tabulates imported estimates data
+{p2col:{bf:{help siman describe}}}provides a summary table of the estimates data imported by {help siman setup}.
 
-{p2col:{bf:{help siman table}}}tabulates computed performance measures data
+{p2col:{bf:{help siman table}}}tabulates performance statistics
 
-{pstd}Graphs of results: Estimates data
+{pstd}Descriptive graphs of results using estimates data
 
-{p2col:{bf:{help siman scatter}}}scatter plot: plots the estimate versus the standard error
+{p2col:{bf:{help siman scatter}}}scatter plots of standard error against point estimate
 
-{p2col:{bf:{help siman comparemethodsscatter}}}scatter compare methods plot: comparison of estimates and standard errors between methods for each repetition
+{p2col:{bf:{help siman comparemethodsscatter}}}scatter plot of point estimates and/or standard errors obtained from different methods when multiple methods have been applied to the same simulated data sets
 
-{p2col:{bf:{help siman swarm}}}swarm plot: either the estimates or the standard error data by method
+{p2col:{bf:{help siman swarm}}}swarm plot of estimates or the standard errors, for different methods, by data-generating mechanisms
 
-{p2col:{bf:{help siman blandaltman}}}bland altman plot: shows the difference of the estimate compared to the mean of the estimate (or likewise for the  standard error) with a selected method as the comparator
+{p2col:{bf:{help siman blandaltman}}}Bland–Altman plot of difference between methods vs. mean of methods, for point estimates or standard errors
 
-{p2col:{bf:{help siman zipplot}}}zipplot plot: shows all of the confidence intervals for each data-generating mechanism and analysis method
+{p2col:{bf:{help siman zipplot}}}zip plot showing confidence intervals for each data-generating mechanism and analysis method
 
-{pstd}Graphs of results: Performance measures data
+{pstd}Graphs of performance statistics
 
-{p2col:{bf:{help siman lollyplot}}}lollyplot plot: shows the performance for measures of interest with monte Carlo 95% confidence intervals 
+{p2col:{bf:{help siman lollyplot}}}lollyplot of performance statistics with Monte Carlo confidence intervals
 
-{p2col:{bf:{help siman nestloop}}}nestloop plot: plots the results of a full factorial simulation study
+{p2col:{bf:{help siman nestloop}}}nested-loop plot of performance statistics the results of a (factorial) simulation study
 
 {pstd}Utilities
 
-{p2col:{bf:siman which}}report the version number and date for each siman subcommand
+{p2col:{bf:siman which}}reports the version number and date for each siman subcommand
 
 {pstd}Subcommands may be abbreviated to 3 or more characters, and {cmd:comparemethodsscatter} may be abbreviated to {cmd:cms}.
 
@@ -60,22 +60,21 @@
 {title:Description}
 
 {pstd}
-{cmd:siman} is a suite of programs for importing estimates data, analysing the results of simulation studies and graphing the data. 
+{cmd:siman} is a suite of programs for the analysis of simulation studies, importing estimates data, analysing the results of simulation studies and graphing the data. 
 
 
 {marker formats}{...}
 {title:Data and formats}
 
-{pstd}There are 2 data set types that siman uses: 
+{pstd}There are two data set types that {cmd:siman} uses: 
 
-{pstd}{bf:Estimates data set.}
-Contains summaries of results from individual repetitions of a simulation experiment.  
+{pstd}{bf:Estimates data set.}{p_end}
+{pstd}Contains summaries of results from individual repetitions of a simulation experiment. 
 Such data may consist of, for example, parameter estimates, standard errors, degrees of freedom, 
 confidence intervals, an indicator of rejection of a hypothesis, and more.
 
-{pstd}{bf:Performance measures data set.}
-Produced by {bf:{help siman analyse}}  which calculates performance measures including Monte Carlo error, 
-for use with {bf:{help siman lollyplot}} and {bf:{help siman nestloop}}.  Please note, this will usually be appended to the estimates data set.
+{pstd}{bf:Performance statistics data set.}{p_end}
+{pstd}Contains performance statistics, including Monte Carlo error, for performance measures of interest (computed by {bf:{help siman analyse}}). These can be visualised with {bf:{help siman lollyplot}} and {bf:{help siman nestloop}}. Note that the performance data set will usually be appended to the estimates data set.
 
 {pstd}For troubleshooting and limitations, see {help siman setup##limitations:troubleshooting and limitations}.
 
@@ -83,7 +82,7 @@ for use with {bf:{help siman lollyplot}} and {bf:{help siman nestloop}}.  Please
 {marker examples}{...}
 {title:Examples}
 
-{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
+{pstd} An example estimates data set with three data-generating mechanisms (MCAR, MAR, MNAR missing data) and three methods of analysis (Full, CCA, MI) with 1,000 repetitions is available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}, named simpaper1.dta.
 
 {phang} To plot the estimates data graphs, first load the data set in to {cmd: siman}.
 
@@ -101,9 +100,13 @@ for use with {bf:{help siman lollyplot}} and {bf:{help siman nestloop}}.  Please
 
 {phang}. {stata "siman zipplot"}
 
-{pstd} Then create performance measures:
+{pstd} Calculate all available performance statistics and Monte Carlo error:
 
 {phang}. {stata "siman analyse"}
+
+{phang}. {stata "siman lollyplot"}
+
+{phang}. {stata "siman nestloop"}
 
 
 {title:Details}{marker details}
@@ -116,14 +119,13 @@ for use with {bf:{help siman lollyplot}} and {bf:{help siman nestloop}}.  Please
 
 {phang}{marker Morris++19}Morris TP, White IR, Crowther MJ.
 Using simulation studies to evaluate statistical methods.
-Statistics in Medicine 2019; 38: 2074-2102.
-{browse "https://onlinelibrary.wiley.com/doi/10.1002/sim.8086"}
+Statistics in Medicine 2019; 38: 2074–2102. {browse "https://doi.org/10.1002/sim.8086":doi:10.1002/sim.8086}
 
 
 {title:Authors and updates}{marker updates}
 
-{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK. 
-Email {browse "mailto:e.marley-zagar@ucl.ac.uk":e.marley-zagar@ucl.ac.uk}.
+{pstd}Ella Marley-Zagar, ONS.
+Email {browse "mailto:Ella.Marley-Zagar@ons.gov.uk":Ella.Marley-Zagar@ons.gov.uk}.
 
 {pstd}Ian White, MRC Clinical  Trials Unit at UCL, London, UK. 
 Email {browse "mailto:ian.white@ucl.ac.uk":ian.white@ucl.ac.uk}.
@@ -131,6 +133,12 @@ Email {browse "mailto:ian.white@ucl.ac.uk":ian.white@ucl.ac.uk}.
 {pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK. 
 Email {browse "mailto:tim.morris@ucl.ac.uk":tim.morris@ucl.ac.uk}.
 
+
+{title:Acknowledgements}{marker acknowledgements}
+This work was funded by the Medical Research Council (grant MC_UU_00004/09).
+We gratefully acknowledge the following people who have tested and provided feedback on {cmd:siman}:
+Jan Ditzen, Jingyi Xuan, Kara Louise Royle.
+x
 
 {title:See Also}
 

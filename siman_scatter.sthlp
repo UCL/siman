@@ -8,7 +8,7 @@
 {title:Title}
 
 {phang}
-{bf:siman scatter} {hline 2} Scatter plot of point estimate versus standard error data.
+{bf:siman scatter} {hline 2} Scatter plot of standard errors against point estimates.
 
 
 {marker syntax}{...}
@@ -19,7 +19,7 @@
 [{cmd:,}
 {it:options}]
 
-{pstd}If no variables are specified, then the scatter graph will be drawn for  {it:estimate vs se}.  Alternatively the user can select {it:se vs estimate} by typing {bf:siman scatter} {it:se estimate}.
+{pstd}If no variables are specified, then the scatter graph will be drawn for  {it:se vs. estimate}.  Alternatively the user can select {it:se vs estimate} by typing {bf:siman scatter} {it:se estimate}.
 
 {pstd}The {it:if} and {it:in} conditions are usually applied only to {bf:dgm}, {bf:target} and {bf:method}.  If they are applied otherwise, e.g. to {bf:repetition}, a warning is issued.
 
@@ -28,25 +28,26 @@
 {synoptline}
 {syntab:Main}
 
-{synopt:{opt by(string)}}  specifies the nesting of the variables, with the default being all of {bf:dgm target method} that vary within the selected data.
+{synopt:{opt by(varlist)}}specifies the nesting of the variables, with the default being all of {bf:dgm target method} that vary within the selected data.
 
 {syntab:Graph options}
 
-{synopt:{it:graphoptions}}Most of the valid options for {help scatter:scatter} are available.
+{synopt:{it:graphoptions}}most of the options for {help scatter:twoway scatter} are available.
 
-{synopt:{opt bygr:aphoptions(string)}}  graph options for the nesting of the graphs due to the {it:by} option
+{synopt:{opt bygr:aphoptions(string)}}graph options for the nesting of the graphs due to the {it:by} option. For example, 
+
+{synoptline}
 
 
 {marker description}{...}
 {title:Description}
 
 {pstd}
-{cmd:siman scatter} draws a scatter plot of the point estimates data versus the standard error data, the results of which are 
-from analysing multiple simulated data sets with data relating to different statistics (e.g. point estimate) 
-for each simulated data set.  The {cmd:siman scatter} plots help the user to look for bivariate outliers.
+{cmd:siman scatter} draws a scatterplot of the point estimate data versus standard error from the estimates data.
+The {cmd:siman scatter} plots help the user to see the estimates produced by individual repetitions and are useful for identifying bivariate outliers.
 
 {pstd}
-{help siman setup} needs to be run first before {cmd:siman scatter}.
+{help siman setup} must be run before {cmd:siman scatter}.
 
 {pstd}
 For further troubleshooting and limitations, see {help siman setup##limitations:troubleshooting and limitations}.
@@ -63,7 +64,9 @@ For further troubleshooting and limitations, see {help siman setup##limitations:
 
 {phang}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
 
-{phang}. {stata `"siman scatter, ytitle("test y-title") xtitle("test x-title") scheme(s2mono) by(dgm) bygraphoptions(title("main-title"))"'}
+{phang}. {stata `"siman scatter"'}
+
+{phang}. {stata `"siman scatter, by(method dgm) ytitle("SE(β)") xtitle("β") scheme(s2mono) bygraphoptions(title("SE vs. point estimate") cols(4) noiyaxes noixaxes holes(2 7 12))"'}
 
 {marker authors}{...}
 {title:Authors}
@@ -72,11 +75,10 @@ For further troubleshooting and limitations, see {help siman setup##limitations:
 Email: {browse "mailto:e.marley-zagar@ucl.ac.uk":Ella Marley-Zagar}
 
 {pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
+Email: {browse "mailto:ian.white@ucl.ac.uk":ian.white@ucl.ac.uk}
 
 {pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
-Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
+Email: {browse "mailto:tim.morris@ucl.ac.uk":tim.morris@ucl.ac.uk}
 
 {pstd}{helpb siman: Return to main help page for siman}
-
 

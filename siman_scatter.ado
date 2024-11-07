@@ -34,7 +34,7 @@ if "`setuprun'"!="1" {
 	di as error "siman_setup needs to be run before siman scatter"
 	exit 498
 }
-	
+
 * if estimate or se are missing, give error message as program requires them for the graph(s)
 if mi("`estimate'") | mi("`se'") | "`secreated'"=="1" {
     di as error "{p 0 2}siman scatter requires both estimate and se to have been declared in siman setup{p_end}"
@@ -111,7 +111,7 @@ if mi("`by'") { // i.e. if none of dgm target method varies
 	local npanels 1
 }
 else {
-	local byoption by(`by', ixaxes `bygraphoptions' `dgmmissingok') 
+	local byoption by(`by', `bygraphoptions' `dgmmissingok') 
 	* count how many panels will be created
 	tempvar unique
 	egen `unique' = tag(`by'), `dgmmissingok'
