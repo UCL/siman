@@ -1,4 +1,5 @@
-*!	version 0.11.3	29oct2024	
+*!	version 0.11.4	11nov2024	
+*	version 0.11.4	11nov2024	IW correct handling of aspect()
 *	version 0.11.3	29oct2024	IW/TM aspect(1) not suppressed by other subgraphoptions
 *	version 0.11.2	24oct2024	handle extra variables by using keep before reshape
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
@@ -80,8 +81,7 @@ foreach thing of local anything {
 
 if !mi("`debug'") local dicmd dicmd
 
-if strpos(`"`subgraphoptions'"',"aspect(")==0 local subgraphoptions aspect(1) `subgraphoptions'
-if strpos(`"`subgraphoptions'"',"aspectratio(")==0 local subgraphoptions aspect(1) `subgraphoptions'
+if strpos(`"`subgraphoptions'"',"aspect(")==0 & strpos(`"`subgraphoptions'"',"aspectratio(")==0 local subgraphoptions aspect(1) `subgraphoptions'
 local subgraphoptions graphregion(margin(zero)) plotregion(margin(zero)) `subgraphoptions'
 
 if !mi("`matrix'") & !mi("`combine'") {
