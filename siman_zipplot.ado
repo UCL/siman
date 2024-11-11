@@ -1,5 +1,6 @@
+*!	version 0.11.2	11nov2024	
+*	version 0.11.2	11nov2024	IW handle case of no byvar
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; drop PMs
-*!	version 0.11.1	21oct2024	
 * version 0.10 19jul2024	IW align with new setup; respect true but don't separate graphs by true; respect cilevel; allow ci instead of se
 *							align versioning with siman.ado
 *  version 1.9 22apr2024
@@ -91,8 +92,14 @@ if mi("`by'") {
 		cap assert `var'==`var'[1]
 		if _rc local by `by' `var'
 	}
-	if !mi("`debug'") di as input "Debug: graphing by: `by'"
 }
+if mi("`by'") {
+	tempvar by
+	gen `by' = 1
+	if !mi("`debug'") di as input "Debug: graphing by: nothing"
+	local bycreated 1
+}
+else if !mi("`debug'") di as input "Debug: graphing by: `by'"
 
 * create confidence intervals, if not already there
 local level2 = 1/2+`level'/200
@@ -173,6 +180,8 @@ if `ymin'<=5 local ylab ylab(5 50 95)
 else if `ymin'<=50 local ylab ylab(50 95)
 else if `ymin'<=95 local ylab ylab(95)
 else local ylab
+if "`bycreated'"!="1" local byopt by(`by', ixaxes noxrescale iscale(*.9) `bygraphoptions' `dgmmissingok')
+else local byopt `bygraphoptions' `dgmmissingok'
 #delimit ;
 local graph_cmd twoway
 	(rspike `lci' `uci' `rank' if !`covers' & `rank'>=`ymin', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions') // non-covering CIs
@@ -185,7 +194,7 @@ local graph_cmd twoway
 	xtitle("`level'% confidence intervals")
 	ytitle("Centile")
 	`ylab'
-	by(`by', ixaxes noxrescale iscale(*.9) `bygraphoptions' `dgmmissingok')
+	`byopt'
 	legend(order(1 "Non-coverers" 2 "Coverers"))
 	`scheme'
 	`options'
