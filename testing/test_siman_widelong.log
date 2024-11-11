@@ -1024,7 +1024,7 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 
 . 
 . di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
-*** SIMAN HAS PASSED ALL THE TESTS IN test_siman_widelong_EMZ.do ***
+*** SIMAN HAS PASSED ALL THE TESTS IN test_siman_widelong.do ***
 
 . 
 . log close

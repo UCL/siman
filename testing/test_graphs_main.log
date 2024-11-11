@@ -900,13 +900,6 @@ _____________________________________________________
 siman scatter will draw 1 graph with 2 panels
 
 . 
-. cap siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_test4", r
-> eplace)
-
-. assert _rc == 498
-
-. * siman swarm can not be run without method as required
-. 
 . siman zipplot, legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") noncoveroptions
 > (pstyle(p3)) ///
 > coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_
@@ -1479,12 +1472,14 @@ Consider reducing the number of graphs/panels using 'if' condition or 'by' optio
 .   
 . **********************************************************
 . * DGM defined by multiple variables with multiple levels
+. * The data have 5 dgmvars, 
+. *   but one (tau2) is ignored in the code below
 . **********************************************************
 . clear all
 
 . prog drop _all
 
-. use nestloop/res.dta, clear
+. use data/res.dta, clear
 
 . keep v1 theta rho pc k exppeto expg2 var2peto var2g2
 
@@ -10484,7 +10479,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 . 
 . 
 . di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
-*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN testing_graphs_main.do ***
+*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN test_graphs_main.do ***
 
 . 
 . log close

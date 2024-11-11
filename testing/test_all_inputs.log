@@ -12820,8 +12820,8 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 . 
 . * Test -analyse if-
 . *******************
-. use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.
-> dta, clear
+. use https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simlongESTPM_longE_longM.dta, cle
+> ar
 
 . siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
@@ -12881,7 +12881,7 @@ siman analyse has run successfully
 . 
 . 
 . di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
-*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN testing_graphs_matrix.do ***
+*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN test_all_inputs.do ***
 
 . 
 . log close

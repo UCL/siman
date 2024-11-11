@@ -2239,7 +2239,7 @@ siman nestloop will draw 3 graphs (3 targets * 1 performance measures)
 . 
 . 
 . * examples in paper
-. use "https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta", clear
+. use "https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simpaper1.dta", clear
 (simcheck99 data from Analysis\Simulations\simcheck\missing confounder code)
 
 . siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
@@ -2301,7 +2301,7 @@ siman zipplot will draw 1 graph with 9 panels
 . * siman nestloop - no because only one dgmvar
 . 
 . 
-. use $testpath/nestloop/res.dta, clear
+. use $testpath/data/res.dta, clear
 
 . drop expfem exprem expmh msefem mserem msemh msepeto mseg2 mselimf covfem covrem covmh covpeto cov
 > g2 covlimf msepeters covpeters expexpect mseexpect covexpect msetrimfill covtrimfill biasfem biasr
@@ -2360,7 +2360,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
-*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN Testing_IRW_TPM_EMZ.do ***
+*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN test_graphs_mixed.do ***
 
 . 
 . log close
