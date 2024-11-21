@@ -1,4 +1,5 @@
-*!	version 0.11.2	25oct2024	IW 
+*!	version 0.11.3	21nov2024	
+*	version 0.11.3	21nov2024	IW Graph drawing moved to new standalone nestloop
 *	version 0.11.2	25oct2024	IW improve saving() and export() options
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; make -if- work correctly
 *	version 0.10.1	26jun2024	IW added saving() and export() options
@@ -25,8 +26,11 @@ version 15
 
 * siman_nestloop [performancemeasures] [if] [, *]
 // PARSE
-syntax [anything] [if], ///
-	[DGMOrder(string) ///
+syntax [anything] [if], [DGMOrder(string) ///
+	NAMe(string) SAVing(string) EXPort(string) /// twoway options for overall graph
+	*]
+/*
+	[ ///
 	STAGger(real 0) Connect(string) noREFline LEVel(cilevel) /// control main graph
 	DGSIze(real 0.3) DGGAp(real 0) /// control sizing of descriptor graph
 	DGINnergap(real 3) DGCOlor(string) /// control descriptor graph
@@ -34,8 +38,8 @@ syntax [anything] [if], ///
 	debug pause nodg force /// undocumented
 	LColor(string) LPattern(string) LSTYle(string) LWidth(string) /// twoway options for main graph
 	METHLEGend(string) SCENariolabel * /// other graph options
-	NAMe(string) SAVing(string) EXPort(string) /// twoway options for overall graph
 	] 
+*/
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -117,38 +121,15 @@ if !mi(`"`export'"') {
 	}
 }
 
-* graph option parsing
-if `dgsize'<=0 | `dgsize'>=1 {
-	di as error "dgsize() must be >0 and <1"
-	exit 498
-}
-if `dggap'<0 | `dggap'>=1 {
-	di as error "dggap() must be >=0 and <1"
-	exit 498
-}
-if mi("`connect'") local connect J // could be L
-if mi("`dgcolor'") local dgcolor gs4
-if mi("`dgpattern'") local dgpattern solid
-if mi("`dglabsize'") local dglabsize vsmall
-
-local cilevel `level'
-
-if "`methlegend'"=="item" local methlegitem "`method': "
-else if "`methlegend'"=="title" local methlegtitle title(`method')
-else if "`methlegend'"!="" {
-	di as error "Syntax: methlegend(item|title)"
-	exit 198
-}
-
-* mark sample
-marksample touse, novarlist
-
 *** END OF PARSING ***
 
 preserve
 
 * keep performance measures only
 qui drop if `rep'>0
+
+* mark sample
+marksample touse, novarlist
 
 * check if/in conditions
 tempvar meantouse
@@ -192,28 +173,6 @@ if !mi("`dgmorder'") {
 	local dgm `dgmnew'
 }
 
-* create a variable `scenario' that uniquely identifies each of the dgm combinations
-tempvar scenario
-* option to order dgms and the direction of each dgm (e.g. lowest to highest etc)	
-if !mi("`dgmorder'") {
-    qui gsort `dgmorder', gen(`scenario')
-}
-else qui gsort `dgm', gen(`scenario')
-summ `scenario', meanonly
-local nscenarios = r(max)
-if `nscenarios'==1 {
-	di as error "siman nestloop requires more than 1 dgm combination"
-	exit 498
-}
-if upper("`connect'") != "L" {
-	tempvar new
-	qui expand 2 if `scenario'==`nscenarios', gen(`new')
-	qui replace `scenario'=`scenario'+1 if `new'
-	drop `new'
-	qui replace `scenario' = `scenario'-0.5
-}
-label var `scenario' "Scenario"
-
 * drop variables that we're not going to use
 if !mi("`se'`df'`lci'`uci'`p'") qui drop `se' `df' `lci' `uci' `p' 
 
@@ -236,22 +195,9 @@ foreach thismethod of local methodlist {
 	if !mi("`debug'") di as input `"Debug: method `i': numeric value `m`i'', label `mlab`i''"'
 }
 
-
 ************************
 * DRAW NESTED LOOP GRAPH
 ************************
-
-if `nmethods'==1 & `stagger'>0 {
-	di as error "Stagger(`stagger') ignored: only one method"
-	local stagger 0
-}
-
-* If true has been entered as a single number, create a variable to be used in the graphs
-capture confirm number `true'
-if !_rc {
-	qui gen true = `true'
-	local true "true"
-}
 
 * sort out target as an existing string variable
 if mi("`target'") {
@@ -289,19 +235,9 @@ foreach descriptor of local dgm {
 	local ++ndescriptors 
 }
 
-*sort data ready for graphs
-qui sort `scenario'
-
-local nmethodlabelsplus1 = `nmethods' + 1
-
-* set up staggered versions of `scenario' 
-if `stagger'>0  {
-	forvalues k = 1 / `nmethods' {
-		gen `scenario'`k' = `scenario' + `stagger'*(2*`k'-1-`nmethods')/(`nmethods'-1)
-	}
-}
-if !mi("`scenariolabel'") local scenarioaxis xla(1/`nscenarios') xtitle("Scenario")
-else local scenarioaxis xla(none) xtitle("") // default is no labels, no title
+* process options
+if !mi("`dgmorder'") local options descriptors_order(`dgmorder') `options'
+if !mi("`dgmmissingok'") local options missing `options'
 
 foreach thispm of local pmlist { // loop over PMs
 	* nicer names for PMs (same as in lollyplot)
@@ -320,8 +256,25 @@ foreach thispm of local pmlist { // loop over PMs
 	if "`thispm'"=="rmse" local thispm2 "RMSE"
 	if "`thispm'"=="sereps" local thispm2 "SE reps"
 
+	* reference lines
+	if "`refline'"!="norefline" {
+		if "`thispm'"=="cover" local ref `cilevel'
+		else if inlist("`thispm'", "bias", "relprec", "relerror") local ref 0
+		else local ref
+		if !mi("`ref'") local options yline(`ref',lcol(gs12)) `options'
+	}
+
+	if "`thispm'" =="mean" & !mi("`true'") local trueopt true(`true')
+	else local trueopt
+	
 	foreach thistarget of local targetlist { // loop over targets
 
+local nameopt name(`name'_`thistarget'_`thispm'`nameopts')
+if !mi("`saving'") local savingopt saving(`"`saving'_`thistarget'_`thispm'"'`savingopts')
+
+dicmd nestloop `estimate' if `target'=="`thistarget'" & _perfmeascode=="`thispm'", descriptors(`dgm') method(`method') `trueopt' `nameopt' `savingopt' `options' ytitle(`thispm2')
+
+/*
 		* range of upper part
 		local min .
 		local max .
@@ -437,14 +390,6 @@ foreach thispm of local pmlist { // loop over PMs
 			if `istruevar' local legend `legend' `k' `"True"'
 			else local legend `legend' `k' `"`methlegitem'`mlab`k''"'
 		}
-		* reference lines
-		if "`refline'"!="norefline" {
-			if "`thispm'"=="cover" local ref `cilevel'
-			else if inlist("`thispm'", "bias", "relprec", "relerror") local ref 0
-			else local ref
-			if !mi("`ref'") local yline yline(`ref',lcol(gs12))
-		}
-
 		// draw main graph
 		if "`targetcreated'"!="true" {
 			local note note(`target'=`thistarget')
@@ -470,18 +415,18 @@ foreach thispm of local pmlist { // loop over PMs
 			pause Press F9 to recall, optionally edit and run the graph command
 		}
 		`graph_cmd'
+*/
 		if !mi("`export'") {
-			local graphexportcmd graph export `"`saving'`targetname'_`thispm'.`exporttype'"'`exportopts'
+			local graphexportcmd graph export `"`saving'_`thistarget'_`thispm'.`exporttype'"'`exportopts'
 			if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
 			cap noi `graphexportcmd'
 			if _rc di as error "Error in export() option"
 		}
-
 	} // end of loop over targets
 
 } // end of main loop of PMs
 
-qui drop `scenario'
+*qui drop `scenario'
 restore
 
 end
