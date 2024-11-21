@@ -279,7 +279,7 @@ if "`labformat'"!="none" {
 	if mi("`labformat3'") local labformat3 %6.0f
 	tempvar thelab
 	qui gen `thelab' = string(`estimate',"`labformat1'")
-	qui replace `thelab' = string(`estimate',"`labformat2'") if inlist(_perfmeascode, "relprec", "relerr", "power", "cover")
+	qui replace `thelab' = string(`estimate',"`labformat2'") if inlist(_perfmeascode, "pctbias", "relprec", "relerr", "power", "cover")
 	qui replace `thelab' = string(`estimate',"`labformat3'") if inlist(_perfmeascode, "estreps", "sereps")
 	local mlabel mlabel(`thelab')
 }
