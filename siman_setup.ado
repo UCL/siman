@@ -1,4 +1,5 @@
-*!	version 0.11.2	24oct2024	
+*!	version 0.11.3	21nov2024	
+*	version 0.11.3	21nov2024	IW sencode method if it's string and contains spaces etc. 
 *	version 0.11.2	24oct2024	IW improve handling of fractional dgmvar and created method
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; don't save char methodvalues
 *	version 0.11	09oct2024	IW allow non-integer dgmvar; allow extra variables; new sep() option for wide formats; new check for true constant within dgm & target
@@ -89,6 +90,12 @@ if mi("`estimate'") &  mi("`se'") & mi("`lci'") & mi("`uci'") {
 * produce a warning message if no est and no se contained in dataset
 if mi("`estimate'") &  mi("`se'") {
 	di as text "{p 0 2}Warning: no estimates or SEs, siman's output will be limited{p_end}"
+}
+
+cap which sencode
+if _rc {
+	di as error `"{p 0 2}sencode needs to be installed to run siman setup. Please use {stata "ssc install sencode"}"'
+	exit 498
 }
 
 /*** END OF PARSING ***/
@@ -214,7 +221,7 @@ local nmethod: word count `method'
 cap confirm var `method'
 local methodisvar = _rc==0
 if `methodisvar' unab method : `method'
-if `nmethod'>1 | `methodisvar'==0 {
+if `nmethod'>1 | `methodisvar'==0 { // method is wide
 	local methodformat wide
 	local methodvalues `method'
 	cap numlist `"`method'"'
@@ -226,10 +233,17 @@ if `nmethod'>1 | `methodisvar'==0 {
 		label def methodlabel `++i' `"`thismethod'"', add
 	}
 }
-else if `nmethod'==1 & `methodisvar'==1 {
+else if `nmethod'==1 & `methodisvar'==1 { //method is long
 	local methodformat long
 	qui levelsof `method', local(methodvalues) clean
 	local longvars `longvars' `method'
+	* encode method if it contains spaces, hyphens etc. (to protect siman analyse)
+	cap confirm string var method
+	if _rc==0 {
+		cap assert regexm(`method',"^[a-zA-Z0-9_]*$")
+		di as text "{p 0 2}Warning: method variable " as result "`method'" as text " contains non-standard characters and has been converted from string to numeric. If you require its levels to be ordered differently, encode " as result "`method'" as text " as numeric before running -siman setup-.{p_end}"
+		if _rc sencode `method', replace
+	}
 }
 
 * check if method contains missing values
@@ -431,12 +445,6 @@ if !mi("`toofew'") {
 
 
 /*** WE'RE READY TO REFORMAT ***/
-cap which sencode
-if _rc {
-	di as error `"{p 0 2}sencode needs to be installed to run siman setup. Please use {stata "ssc install sencode"}"'
-	exit 498
-}
-
 if "`truetype'"=="stub" local truestub `true'
 
 if "`targetformat'"=="wide" & "`methodformat'"=="wide" & "`order'"=="method" { 
