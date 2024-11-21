@@ -240,9 +240,11 @@ else if `nmethod'==1 & `methodisvar'==1 { //method is long
 	* encode method if it contains spaces, hyphens etc. (to protect siman analyse)
 	cap confirm string var method
 	if _rc==0 {
-		cap assert regexm(`method',"^[a-zA-Z0-9_]*$")
-		di as text "{p 0 2}Warning: method variable " as result "`method'" as text " contains non-standard characters and has been converted from string to numeric. If you require its levels to be ordered differently, encode " as result "`method'" as text " as numeric before running -siman setup-.{p_end}"
-		if _rc sencode `method', replace
+		cap assert regexm(`method',"^[a-zA-Z0-9_]*$") // only char, num and underscore allowed
+		if _rc {
+			di as text "{p 0 2}Warning: method variable " as result "`method'" as text " contains non-standard characters and has been converted from string to numeric. If you require its levels to be ordered differently, encode " as result "`method'" as text " as numeric before running -siman setup-.{p_end}"
+			sencode `method', replace
+		}
 	}
 }
 
