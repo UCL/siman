@@ -73,7 +73,7 @@ forvalues dgmtype = 1/5 {
 	}
 
 	* save for testing siman graph commands
-	save data/setupdata_dgm`dgmtype', replace
+	qui save data/setupdata_dgm`dgmtype', replace
 
 	qui count if estimand=="effect"
 	local x = r(N)

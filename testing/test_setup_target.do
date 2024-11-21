@@ -99,7 +99,7 @@ forvalues targettype = 1/6 {
 	confirm `xconfirm'
 	
 	* save for testing siman graph commands
-	save data/setupdata_target`targettype', replace
+	qui save data/setupdata_target`targettype', replace
 
 	* check analyse with subsets
 	qui count if float(beta)==float(0.5)
