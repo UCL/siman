@@ -272,7 +272,7 @@ foreach thispm of local pmlist { // loop over PMs
 local nameopt name(`name'_`thistarget'_`thispm'`nameopts')
 if !mi("`saving'") local savingopt saving(`"`saving'_`thistarget'_`thispm'"'`savingopts')
 
-dicmd nestloop `estimate' if `target'=="`thistarget'" & _perfmeascode=="`thispm'", descriptors(`dgm') method(`method') `trueopt' `nameopt' `savingopt' `options' ytitle(`thispm2')
+nestloop `estimate' if `target'=="`thistarget'" & _perfmeascode=="`thispm'", descriptors(`dgm') method(`method') `trueopt' `nameopt' `savingopt' `options' ytitle(`thispm2')
 
 /*
 		* range of upper part
