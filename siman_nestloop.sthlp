@@ -130,12 +130,12 @@ of interest is considered first, and so forth.  Further guidance can be found in
 
 {phang}{marker ruckerschwarzer}Rücker G, Schwarzer G. 
 Presenting simulation results in a nested loop plot. BMC Med Res Methodol 14, 129 (2014). 
-{browse "doi:10.1186/1471-2288-14-129"}
+{browse "https://doi.org/10.1186/1471-2288-14-129":doi:10.1186/1471-2288-14-129}
 
 {phang}Latimer N, White I, Tilling K, Siebert U. 
 Improved two-stage estimation to adjust for treatment switching in randomised trials: 
 g-estimation to address time-dependent confounding. Statistical Methods in Medical Research. 2020;29(10):2900-2918. 
-{browse "doi:10.1177/0962280220912524"}
+{browse "https://doi.org/10.1177/0962280220912524":doi:10.1177/0962280220912524}
 
 {marker authors}{...}
 {title:Authors}

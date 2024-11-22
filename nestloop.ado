@@ -3,7 +3,7 @@ program define nestloop
 version 15
 * nestloop exp, descriptor(theta rho pc tau2 k) method(method) true(theta)
 // PARSE
-syntax varname [if], descriptors(string) method(varname) ///
+syntax varname [if], DESCriptors(string) METHod(varname) ///
 	[true(string) ///
 	STAGger(real 0) Connect(string) noREFline LEVel(cilevel) /// control main graph
 	DGSIze(real 0.3) DGGAp(real 0) /// control sizing of descriptor graph
