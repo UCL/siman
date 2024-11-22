@@ -1,5 +1,51 @@
 
 . 
+. *** Start with a test of the stand-alone nestloop.ado
+. 
+. use $testpath/data/res.dta, clear
+
+. drop v1
+
+. order theta rho pc tau2 k 
+
+. 
+. * reshape into format required by nestloop
+. reshape long exp mse cov bias var2, i(theta rho pc tau2 k) j(method) string
+(j = expect fem g2 limf limr mh peters peto rem sfem srem trimfill)
+(variable explimr not found)
+(variable mselimr not found)
+(variable covlimr not found)
+(variable var2limr not found)
+(variable expsfem not found)
+(variable msesfem not found)
+(variable covsfem not found)
+(variable var2sfem not found)
+(variable expsrem not found)
+(variable msesrem not found)
+(variable covsrem not found)
+(variable var2srem not found)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations              768   ->   9,216       
+Number of variables                  53   ->   11          
+j variable (12 values)                    ->   method
+xij variables:
+       expexpect expfem ... exptrimfill   ->   exp
+       mseexpect msefem ... msetrimfill   ->   mse
+       covexpect covfem ... covtrimfill   ->   cov
+    biasexpect biasfem ... biastrimfill   ->   bias
+    var2expect var2fem ... var2trimfill   ->   var2
+-----------------------------------------------------------------------------
+
+. 
+. * draw nestloop for 9 methods and 4*3*4*4*4 dgms
+. nestloop exp, descriptors(theta rho pc tau2 k) method(method) true(theta) legend(row(2)) dgsize(.2
+> 5)
+
+. 
+. 
+. *** Main tests of siman nestloop
 . use $testpath/data/extendedtestdata.dta, clear
 
 . 

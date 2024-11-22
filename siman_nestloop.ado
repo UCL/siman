@@ -25,21 +25,12 @@ program define siman_nestloop
 version 15
 
 * siman_nestloop [performancemeasures] [if] [, *]
+
 // PARSE
 syntax [anything] [if], [DGMOrder(string) ///
 	NAMe(string) SAVing(string) EXPort(string) /// twoway options for overall graph
+	debug force  /// undocumented
 	*]
-/*
-	[ ///
-	STAGger(real 0) Connect(string) noREFline LEVel(cilevel) /// control main graph
-	DGSIze(real 0.3) DGGAp(real 0) /// control sizing of descriptor graph
-	DGINnergap(real 3) DGCOlor(string) /// control descriptor graph
-	DGPAttern(string) DGLAbsize(string) DGSTyle(string) DGLWidth(string) /// control descriptor graph
-	debug pause nodg force /// undocumented
-	LColor(string) LPattern(string) LSTYle(string) LWidth(string) /// twoway options for main graph
-	METHLEGend(string) SCENariolabel * /// other graph options
-	] 
-*/
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -112,6 +103,8 @@ if !mi(`"`saving'"') {
 		exit 198
 	}
 }
+
+* parse optional export
 if !mi(`"`export'"') {
 	gettoken exporttype exportopts : export, parse(",")
 	local exporttype = trim("`exporttype'")
@@ -147,7 +140,7 @@ if _N==0 {
 	exit 2000
 }
 
-* If user has specified an order for dgm, use this order (so that siman_setup doesn't need to be re-run).  Take out -ve signs if there are any.
+* If user has specified an order for dgm, check it includes all dgmvars
 if !mi("`dgmorder'") {
 	local ndgmorder: word count `dgmorder'
 	qui tokenize `dgmorder'
@@ -170,7 +163,6 @@ if !mi("`dgmorder'") {
 		di as error "dgm missing from dgmorder(): `dgmmissing'"
 		exit 498
 	}
-	local dgm `dgmnew'
 }
 
 * drop variables that we're not going to use
@@ -182,17 +174,6 @@ if `methodnature'==2 {
 	rename `method' `method'0
 	encode `method'0, generate(`method')
 	drop `method'0
-}
-qui levelsof `method', local(methodlist)
-local nmethods = r(r)
-local i 0
-foreach thismethod of local methodlist {
-	local ++i
-	local m`i' = `thismethod' // numeric value of ith method
-	local mlab`i' : label (`method') `thismethod' // label of ith method
-	if substr("`mlab`i''",length("`mlab`i''"),1)=="_" /// remove final _
-		local mlab`i' = substr("`mlab`i''",1,length("`mlab`i''")-1)
-	if !mi("`debug'") di as input `"Debug: method `i': numeric value `m`i'', label `mlab`i''"'
 }
 
 ************************
@@ -222,21 +203,9 @@ local ntargets = r(r)
 local ngraphs = `ntargets'*`npms'
 di as text "siman nestloop will draw " as result `ngraphs' as text " graphs (" as result `ntargets' as text " targets * " as result `npms' as text " performance measures)"
 
-* resolve varlists in descriptors: can in principle allow continuous descriptors
-local ndescriptors 0
-local descriptors2
-foreach descriptor of local dgm {
-	local cts = substr("`descriptor'",1,2)=="c." 
-	if `cts' local descriptor = substr("`descriptor'",3,.)
-	local cts2 = cond(`cts',"c.","")
-	foreach desc2 of varlist `descriptor' {
-		local descriptors2 `descriptors2' `cts2'`desc2'
-	}
-	local ++ndescriptors 
-}
-
 * process options
-if !mi("`dgmorder'") local options descriptors_order(`dgmorder') `options'
+if !mi("`dgmorder'") local descriptorsopt descriptors(`dgmorder') 
+else local descriptorsopt descriptors(`dgm') 
 if !mi("`dgmmissingok'") local options missing `options'
 
 foreach thispm of local pmlist { // loop over PMs
@@ -269,164 +238,26 @@ foreach thispm of local pmlist { // loop over PMs
 	
 	foreach thistarget of local targetlist { // loop over targets
 
-local nameopt name(`name'_`thistarget'_`thispm'`nameopts')
-if !mi("`saving'") local savingopt saving(`"`saving'_`thistarget'_`thispm'"'`savingopts')
+		local nameopt name(`name'_`thistarget'_`thispm'`nameopts')
+		if !mi("`saving'") local savingopt saving(`"`saving'_`thistarget'_`thispm'"'`savingopts')
 
-nestloop `estimate' if `target'=="`thistarget'" & _perfmeascode=="`thispm'", descriptors(`dgm') method(`method') `trueopt' `nameopt' `savingopt' `options' ytitle(`thispm2')
-
-/*
-		* range of upper part
-		local min .
-		local max .
-		forvalues k = 1 / `nmethods' {
-			summ `estimate' if `target'=="`thistarget'" & `method'==`m`k'' & _perfmeascode=="`thispm'", meanonly
-			local min=min(`min',r(min))
-			local max=max(`max',r(max))
-		}
-		if "`thispm'" =="mean" & !mi("`true'") { // add true as another method
-			summ `true' if `target'=="`thistarget'", meanonly
-			local min=min(`min',r(min))
-			local max=max(`max',r(max))
-			local nmethods2 = `nmethods'+1
-		}
-		else local nmethods2 = `nmethods'
-		if `max'<=`min' {
-			di as smcl as text "{p 0 2}Warning: `thispm' does not vary for `target' `thistarget'{p_end}"
-			local min = `min'-1
-			local max = `max'+1
-		}
+		local nestloopcmd nestloop `estimate' if `target'=="`thistarget'" & _perfmeascode=="`thispm'", `descriptorsopt' method(`method') `trueopt' `nameopt' `savingopt' `options' ytitle(`thispm2') `debug'
 		
-		* CREATE GRAPH COMMAND FOR DESCRIPTOR LINES 
-		if "`dg'" != "nodg" {
-			* main graph goes from y = `min' to `max'
-			* `dgsize' defines fraction of graph given to legend
-			* `dggap' defines fraction of graph given to gap
-			* legends go from y = `lmin' to `lmax'
-			local fracsum = `dgsize' + `dggap'
-			local lmin = (`min'-`fracsum'*`max') / (1-`fracsum')
-			local lmax = `min' - `dggap'*(`max'-`lmin')
-			local step = (`lmax'-`lmin') / ((`dginnergap'+1)*`ndescriptors')
-			* if !mi("`debug'") di as input "Descriptor graph: lmax=`lmax', lmin=`lmin', step=`step'"
-			local j 0
-			local descriptor_labels_cmd
-			local factorlist
-			foreach var of local descriptors2 {
-				if substr("`var'",1,2)=="c." {
-					di as error "Sorry, this program does not yet handle continuous variables"
-					exit 498
-				}
-				qui levelsof `var', `dgmmissingok'
-				local thisdgmlevels = r(r)
-				if `thisdgmlevels'==1 {
-					if !mi("`debug'") di as smcl as input "{p 0 2}Warning: no variation for descriptor `var'{p_end}"
-					continue
-				}
-				tempvar S`var' // this is the variable containing the y-axis position for descriptor `var'
-				egen `S`var'' = group(`var'), label `dgmmissingok'
-				local ++j
-				qui replace `S`var'' = ( (`S`var''-1) / (`thisdgmlevels'-1) + (`dginnergap'+1)*(`j'-1)) * `step' + `lmin'
-				label var `S`var'' "y-value for descriptor `var'"
-				local Svarname_ypos = ( (`dginnergap'+1)*(`j' - 1)+2.2 ) * `step' + `lmin'
-				local factorlist `factorlist' `S`var''
-				local varlabel : variable label `var'
-				if mi("`varlabel'") local varlabel `var'
-				* get levels
-				local levels
-				local levelsnoquote
-				forvalues i=1/`=_N' {
-					if `var'==`var'[_n-1] continue
-					* format values if necessary
-					local format : format `var'
-					if mi("`format'") local level = `var'[`i']
-					else local level = string(`var'[`i'],"`format'")
-					* label value if necessary
-					local level : label (`var') `level' // use label if one exists
-					* round numeric variables to 2 d.p. for display on graph only
-					cap local level = round(`level', 0.01)
-					local level `""`level'""' // add quotes
-					* is it old or new?
-					local oldlevel : list level in levels
-					if !`oldlevel' {
-						if !mi(`"`levels'"') {
-							local levels `"`levels',"'
-							local levelsnoquote `"`levelsnoquote',"'
-						}
-						local levels `"`levels' `level'"'
-						local levelnoquote `level'
-						local levelsnoquote `levelsnoquote' `levelnoquote'
-					}
-				}
-				local levels`j' `levels'
-				local nextdgcolor : word `j' of `dgcolor'
-				if !mi("`nextdgcolor'") local thisdgcolor `nextdgcolor' // keeps previous color if msg
-				local descriptor_labels_cmd `descriptor_labels_cmd' ///
-					text(`Svarname_ypos' 1 `"`varlabel' (`levelsnoquote')"', ///
-					place(e) col(`thisdgcolor') size(`dglabsize') justification(left)) 
-				local order `order' `j'
-			}
-			local descriptor_graph_cmd ///
-				(line `factorlist' `scenario', c(`connect' ...) ///
-				lcol(`dgcolor' ...)	lpattern(`dgpattern' ...) lwidth(`dglwidth' ...) ///
-				lstyle(`dgstyle' ...) )
-		}
+		if !mi("`debug'") di as input `"Debug: `nestloopcmd'"'
 		
-		// CREATE MAIN GRAPH COMMAND
-		local main_graph_cmd
-		local legend
-*		foreach thismethod in `methodlist' `methodlist2' {
-		forvalues k = 1 / `nmethods2' {
-			local istruevar = `k'>`nmethods' // handle "true" (if present) differently from the methods
-			if `stagger'>0 local xvar `scenario'`k'
-			else local xvar `scenario'
-			if `istruevar' local thisgraphcmd line `true' `scenario' if `target'=="`thistarget'" & ///
-				_perfmeascode=="`thispm'", c(`connect')
-			else local thisgraphcmd line `estimate' `xvar' if `target'=="`thistarget'" & ///
-				`method'==`m`k'' & _perfmeascode=="`thispm'", c(`connect')
-			foreach thing in lcolor lpattern lstyle lwidth {
-				local this : word `k' of ``thing''
-				if !mi("`this'") local thisgraphcmd `thisgraphcmd' `thing'(`this')
-			}
-			local main_graph_cmd `main_graph_cmd' (`thisgraphcmd')
-			if `istruevar' local legend `legend' `k' `"True"'
-			else local legend `legend' `k' `"`methlegitem'`mlab`k''"'
-		}
-		// draw main graph
-		if "`targetcreated'"!="true" {
-			local note note(`target'=`thistarget')
-			local targetname _`thistarget'
-		}
-		if !mi("`saving'") local savingopt saving(`"`saving'`targetname'_`thispm'"'`savingopts')
-		if !mi("`debug'") & `ngraphs'>1 di as input "Debug: drawing graph for `target'=`thistarget', PM=`thispm'..."
-		local graph_cmd graph twoway 										///
-			`main_graph_cmd'												///
-			`descriptor_graph_cmd'											///
-			,																///
-			legend(pos(6) row(1) order(`legend') `methlegtitle')							///
-			ytitle("`thispm2'") 											///
-			`scenarioaxis' yla(,nogrid) 								///
-			`descriptor_labels_cmd'											///
-			name(`name'`targetname'_`thispm'`nameopts') `savingopt'	    	///
-			`note' `yline'													///
-			`options'
+		`nestloopcmd'
 
-		if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
-		if !mi("`pause'") {
-			global F9 `graph_cmd'
-			pause Press F9 to recall, optionally edit and run the graph command
-		}
-		`graph_cmd'
-*/
 		if !mi("`export'") {
 			local graphexportcmd graph export `"`saving'_`thistarget'_`thispm'.`exporttype'"'`exportopts'
 			if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
 			cap noi `graphexportcmd'
 			if _rc di as error "Error in export() option"
 		}
+
 	} // end of loop over targets
 
-} // end of main loop of PMs
+} // end of loop over PMs
 
-*qui drop `scenario'
 restore
 
 end

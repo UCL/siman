@@ -3,20 +3,26 @@ program define nestloop
 version 15
 * nestloop exp, descriptor(theta rho pc tau2 k) method(method) true(theta)
 // PARSE
-syntax varname [if], descriptors(varlist) method(varname) ///
-	[true(string) descriptors_order(string) ///
+syntax varname [if], descriptors(string) method(varname) ///
+	[true(string) ///
 	STAGger(real 0) Connect(string) noREFline LEVel(cilevel) /// control main graph
 	DGSIze(real 0.3) DGGAp(real 0) /// control sizing of descriptor graph
 	DGINnergap(real 3) DGCOlor(string) MISsing /// control descriptor graph
 	DGPAttern(string) DGLAbsize(string) DGSTyle(string) DGLWidth(string) /// control descriptor graph
-	debug pause nodg force /// undocumented
 	LColor(string) LPattern(string) LSTYle(string) LWidth(string) /// twoway options for main graph
 	METHLEGend(string) SCENariolabel * /// other graph options
 	NAMe(string) SAVing(string) EXPort(string) /// twoway options for overall graph
+	debug pause nodg /// undocumented
 	] 
 
 * parse varname
 local estimate `varlist'
+
+* parse descriptors
+local descriptors_order `descriptors'
+local descriptors : subinstr local descriptors "-" "", all
+local descriptors : subinstr local descriptors "+" "", all
+unab descriptors : `descriptors'
 
 * graph option parsing
 if `dgsize'<=0 | `dgsize'>=1 {
@@ -74,15 +80,17 @@ label var `scenario' "Scenario"
 ************************
 * DRAW NESTED LOOP GRAPH
 ************************
-qui levelsof `method'
-local nmethods = r(r)
 cap confirm string variable `method'
 local methodstring = (_rc==0)
+qui levelsof `method'
+local nmethods = r(r)
 forvalues i=1/`nmethods' {
 	local m`i' : word `i' of `r(levels)'
 	if `methodstring' local m2`i' `""`m`i''""'
-	else local m2`i' `m`i''
-	local m`i' : label (`method') `m`i''
+	else {
+		local m2`i' `m`i''
+		local m`i' : label (`method') `m`i''
+	}
 }
 
 if `nmethods'==1 & `stagger'>0 {
@@ -109,11 +117,6 @@ foreach descriptor of local descriptors {
 	}
 	local ++ndescriptors 
 }
-
-*sort data ready for graphs
-qui sort `scenario'
-
-local nmethodlabelsplus1 = `nmethods' + 1
 
 * set up staggered versions of `scenario' 
 if `stagger'>0  {
