@@ -16,10 +16,25 @@ set linesize 100
 // START TESTING
 log using `filename'_which, replace text
 siman which
+which nestloop
 log close
 
 log using `filename', replace text nomsg
 
+*** Start with a test of the stand-alone nestloop.ado
+
+use $testpath/data/res.dta, clear
+drop v1
+order theta rho pc tau2 k 
+
+* reshape into format required by nestloop
+reshape long exp mse cov bias var2, i(theta rho pc tau2 k) j(method) string
+
+* draw nestloop for 9 methods and 4*3*4*4*4 dgms
+nestloop exp, descriptors(theta rho pc tau2 k) method(method) true(theta) legend(row(2)) dgsize(.25)
+
+
+*** Main tests of siman nestloop
 use $testpath/data/extendedtestdata.dta, clear
 
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)

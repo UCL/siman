@@ -12820,8 +12820,8 @@ NOTE: Where there are 2 entries in the table, the first entry is the performance
 . 
 . * Test -analyse if-
 . *******************
-. use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.
-> dta, clear
+. use https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simlongESTPM_longE_longM.dta, cle
+> ar
 
 . siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
@@ -12880,8 +12880,156 @@ siman analyse has run successfully
 
 . 
 . 
+. * Test handling of string method containing spaces and hyphens
+. **************************************************************
+. use $testpath/data/extendedtestdata, clear
+
+. keep if float(pmiss)==float(0.2) & beta==0 & estimand=="effect"
+(102,000 observations deleted)
+
+. drop beta pmiss estimand
+
+. replace meth="Mean Imp" if meth=="MeanImp"
+(2,000 real changes made)
+
+. replace meth="No-adj" if meth=="Noadj"
+(2,000 real changes made)
+
+. siman setup, rep(re) dgm(mech) method(method) estimate(b) se(se) true(true)
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: method variable method contains non-standard characters and has been converted from string
+  to numeric. If you require its levels to be ordered differently, encode method as numeric before
+  running -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       mech (2) 
+  Total number of DGMs:           2
+
+Targets
+  Variable containing targets:    N/A
+  Number of targets:              1
+  Target values:                  
+
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  No-adj; CCA; Mean Imp
+
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
+
+Estimates data                    in data
+Performance estimates             not in data
+_____________________________________________________
+
+. siman ana
+siman analyse has run successfully
+
+------------------------------------------------------
+mech and performance |             method             
+measure              |    No-adj        CCA   Mean Imp
+---------------------+--------------------------------
+MCAR                 |
+             estreps |      1000       1000       1000
+                     |                                
+                     | 
+              sereps |      1000       1000       1000
+                     |                                
+                     | 
+                bias | -.0034964   .0025341   .0021761
+                     |  .0060434   .0050018   .0048248
+                     | 
+             pctbias |                                
+                     |                                
+                     | 
+                mean | -.0034964   .0025341   .0021761
+                     |  .0060434   .0050018   .0048248
+                     | 
+               empse |  .1911095   .1581701   .1525731
+                     |  .0042755   .0035386   .0034133
+                     | 
+             relprec |             45.98752    56.8948
+                     |             7.240335    6.37195
+                     | 
+                 mse |  .0364985   .0249992     .02326
+                     |  .0015959   .0010772   .0009486
+                     | 
+                rmse |  .1910459   .1581113   .1525123
+                     |  .0041767   .0034066     .00311
+                     | 
+             modelse |  .2002325   .1590372   .1556693
+                     |  .0003076   .0003068   .0002637
+                     | 
+             ciwidth |  .7839791   .6222619   .6093404
+                     |  .0012007   .0011989   .0010317
+                     | 
+            relerror |  4.773726   .5482441   2.029298
+                     |  2.349504   2.257802    2.28912
+                     | 
+               cover |        96       95.6       96.4
+                     |  .6196774   .6485677   .5891009
+                     | 
+               power |         4        4.4        3.6
+                     |  .6196774   .6485677    .589101
+---------------------+--------------------------------
+MNAR                 |
+             estreps |      1000       1000       1000
+                     |                                
+                     | 
+              sereps |      1000       1000       1000
+                     |                                
+                     | 
+                bias |  .0063999   .0051652   .0069042
+                     |  .0062144   .0050357   .0049677
+                     | 
+             pctbias |                                
+                     |                                
+                     | 
+                mean |  .0063999   .0051652   .0069042
+                     |  .0062144   .0050357   .0049677
+                     | 
+               empse |  .1965152   .1592432   .1570932
+                     |  .0043964   .0035626   .0035145
+                     | 
+             relprec |             52.28957   56.48661
+                     |             7.547182   5.964027
+                     | 
+                 mse |  .0386206   .0253597   .0247013
+                     |  .0017162   .0011447   .0010991
+                     | 
+                rmse |  .1965211   .1592474   .1571664
+                     |  .0043665   .0035942   .0034967
+                     | 
+             modelse |  .1997631   .1586639   .1575551
+                     |  .0003192   .0002984   .0002747
+                     | 
+             ciwidth |  .7820668   .6208577   .6166729
+                     |  .0012456   .0011663    .001073
+                     | 
+            relerror |  1.652786  -.3638003   .2940331
+                     |  2.279957   2.236912   2.250566
+                     | 
+               cover |      95.5       95.3       95.8
+                     |  .6555532   .6692606   .6343183
+                     | 
+               power |       4.5        4.7        4.2
+                     |  .6555532   .6692608   .6343185
+------------------------------------------------------
+NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the
+  second entry is its Monte Carlo error.
+
+. 
 . di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
-*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN testing_graphs_matrix.do ***
+*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN test_all_inputs.do ***
 
 . 
 . log close

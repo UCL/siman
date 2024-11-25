@@ -79,7 +79,7 @@
  71.         }
  72. 
 .         * save for testing siman graph commands
-.         save data/setupdata_method`methodtype', replace
+.         qui save data/setupdata_method`methodtype', replace
  73. 
 .         qui count if float(beta)==float(0.5)
  74.         local x = r(N)
@@ -93,33 +93,27 @@
 methodtype = 1
 (90,000 observations deleted)
 (12,000 observations deleted)
-file data/setupdata_method1.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 2
 (90,000 observations deleted)
 (12,000 observations deleted)
-file data/setupdata_method2.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 3
 (90,000 observations deleted)
-file data/setupdata_method3.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 4
 (90,000 observations deleted)
-file data/setupdata_method4.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 5
 (90,000 observations deleted)
-file data/setupdata_method5.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 methodtype = 6
 (90,000 observations deleted)
-file data/setupdata_method6.dta saved
 siman analyse has run successfully
 siman analyse has run successfully
 

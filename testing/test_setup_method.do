@@ -101,7 +101,7 @@ forvalues methodtype = 1/6 {
 	}
 
 	* save for testing siman graph commands
-	save data/setupdata_method`methodtype', replace
+	qui save data/setupdata_method`methodtype', replace
 
 	qui count if float(beta)==float(0.5)
 	local x = r(N)

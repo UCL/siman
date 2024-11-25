@@ -415,6 +415,16 @@ su est if dgm==1 & estimand=="beta" & rep<0 & method==2 & _perfmeascode!="relpre
 assert reldif(`ref', r(mean)) < 1E-10
 
 
+* Test handling of string method containing spaces and hyphens
+**************************************************************
+use $testpath/data/extendedtestdata, clear
+keep if float(pmiss)==float(0.2) & beta==0 & estimand=="effect"
+drop beta pmiss estimand
+replace meth="Mean Imp" if meth=="MeanImp"
+replace meth="No-adj" if meth=="Noadj"
+siman setup, rep(re) dgm(mech) method(method) estimate(b) se(se) true(true)
+siman ana
+
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 
 log close

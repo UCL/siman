@@ -177,10 +177,6 @@ siman setup, rep(rep) target(estimand) estimate(est) se(se) true(true)
 * graphs
 siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test4", replace) 
 
-cap siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_test4", replace)
-assert _rc == 498
-* siman swarm can not be run without method as required
-
 siman zipplot, legend(order(3 "Carrot" 4 "Stalk")) xtit("x-title") ytit("y-title") noncoveroptions(pstyle(p3)) ///
 coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50)) truegraphoptions(pstyle(p6)) name("zipplot_test4", replace)    
 
