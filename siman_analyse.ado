@@ -30,7 +30,7 @@
 program define siman_analyse
 version 15
 
-syntax [anything] [if], [PERFONLY REPlace /// documented options
+syntax [anything] [if], [PERFonly REPlace /// documented options
 	ref(string) * /// simsum options
 	noTABle force debug pause nopreserve /// undocumented options
 	]
