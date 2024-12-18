@@ -1,4 +1,5 @@
-*!	version 0.11.2	25oct2024	IW 
+*!	version 0.11.3	18dec2024	
+*	version 0.11.3	18dec2024	IW add reference lines for pctbias
 *	version 0.11.2	25oct2024	IW new saving() and export() options
 *	version 0.11.2	24oct2024	IW make default PMs work if no se
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; correct coding of non-integer dgmvars; nicer names for PMs
@@ -259,7 +260,7 @@ qui replace `estimate' = 0 if _perfmeascode=="relprec" & mi(`estimate')
 * generate ref variable - gives vertical dashed line when a reference value exists
 tempvar ref
 qui gen `ref'=.
-qui replace `ref' = 0 if inlist(_perfmeascode, "bias", "relerror", "relprec")
+qui replace `ref' = 0 if inlist(_perfmeascode, "bias", "pctbias", "relerror", "relprec")
 qui replace `ref' = $S_level if _perfmeascode=="cover"
 if `refpower'>=0 qui replace `ref' = `refpower' if _perfmeascode=="power"
 if !mi("`true'") qui replace `ref' = `true' if _perfmeascode=="mean"

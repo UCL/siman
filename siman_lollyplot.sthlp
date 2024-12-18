@@ -110,15 +110,22 @@ If {cmd:siman lollyplot} fails with the error "Too many sersets", try again afte
 {marker examples}{...}
 {title:Examples}
 
+{pstd} Load and set up the data and compute performance measures
+
 {phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
 
 {phang}. {stata  siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)}
 
 {phang}. {stata  siman analyse, notable}
 
+{pstd}Default lollyplot graphs
+
 {phang}. {stata  siman lollyplot}
 
-{phang}. {stata  siman lollyplot modelse power cover if estimand=="beta"}
+{pstd}Tailored lollyplot graphs: 
+here we select which performance measures are displayed, draw the graph for only one estimand, and round the labels for modelse to 3 decimal places
+
+{phang}. {stata  siman lollyplot modelse power cover if estimand=="beta", labf(%6.3f)}
 
 
 {marker reference}{...}
