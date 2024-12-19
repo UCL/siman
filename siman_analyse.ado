@@ -30,9 +30,9 @@
 program define siman_analyse
 version 15
 
-syntax [anything] [if], [PERFonly REPlace /// documented options
+syntax [anything] [if], [PERFonly REPlace noTABle /// documented options
 	ref(string) * /// simsum options
-	noTABle force debug pause nopreserve /// undocumented options
+	force debug pause nopreserve /// undocumented options
 	]
 local simsumoptions `options'
 if "`debug'"!="" di as input `"Debug: options to pass to simsum: `options'"'

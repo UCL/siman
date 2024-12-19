@@ -23,7 +23,7 @@
 {pstd}{it:performancemeasures} are described {help siman analyse##perfmeas:below}.
 
 {pstd}
-{opt if} should be applied to {bf:dgm}, {bf:target} and {bf:method} only.
+{opt if} should be applied to {bf:dgm}, {bf:target} and {bf:method} only; otherwise a warning is issued.
 
 
 {synoptset 20 tabbed}{...}
@@ -33,10 +33,10 @@
 {synopt:{opt perf:only} }the output data set should contain only performance measures. 
 By default it contains the performance measures and the estimates data.
 
-{pstd}
-{p_end}
 {synopt:{opt rep:lace} }replace any performance measures that have already been calculated.
 This is needed if the user has previously run {cmd:siman analyse}.
+
+{synopt:{opt notab:le}}do not output the table of calculated performance measures.
 
 {synopt:{it:simsum_options}}Any options for {help simsum}, e.g. {cmd:ref()} to specify the reference method for calculating relative precision.
 
@@ -99,7 +99,6 @@ If no performance measures are specified, then all available performance measure
 {marker relprec}{synopt:{opt relprec} }the relative precision 
 -- the percentage improvement in precision for this analysis method compared with the reference analysis method.
 Precision is the inverse square of the empirical standard error. 
-This calculation can be slow: omitting it can reduce run time by up to 90%.
 
 {marker mse}{synopt:{opt mse} }the mean squared error of the point estimates.
 
@@ -128,10 +127,11 @@ This calculation can be slow: omitting it can reduce run time by up to 90%.
 
 {phang}. {stata "siman analyse"}
 
-{pstd}
-Calculate performance measures for method 2 only:
+{pstd}After {cmd:siman setup}, run siman analyse, but don't print the default table and instead print a customised table:
 
-{phang}. {stata "siman analyse if method==2, replace"}
+{phang}. {stata "siman analyse, notable"}
+
+{phang}. {stata `"siman table if estimand=="beta", column(dgm method)"'}
 
 {pstd}Calculate only the performance measures bias and model-based standard error, and discard the estimates data:
 
