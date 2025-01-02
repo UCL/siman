@@ -1,4 +1,5 @@
-*!	version 0.11.2	24oct2024	
+*!	version 0.11.3	02jan2025	
+*	version 0.11.3	02jan2025	IW specify estimate/se as variables, not keywords
 *	version 0.11.2	24oct2024	IW improve graph titles and note
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
 *	version 0.10	24jun2024	IW Correct handling of if/in
@@ -32,7 +33,7 @@
 program define siman_blandaltman
 version 15
 
-syntax [anything] [if][in] [, ///
+syntax [varlist(max=2 default=none)] [if][in] [, ///
 	Methlist(string) BY(varlist) BYGRaphoptions(string) name(string) * /// documented options
 	debug pause /// undocumented options
 	]
@@ -42,24 +43,26 @@ foreach thing in `_dta[siman_allthings]' {
 }
 
 if "`setuprun'"!="1" {
-	di as error "siman_setup needs to be run first."
+	di as error "siman setup needs to be run first."
 	exit 498
 }
 
 * if statistics are not specified, run graphs for estimate only
 * only allow estimate or se to be specified
 foreach thing of local anything {
-	if ("`thing'"!="estimate" & "`thing'"!="se") {
-		di as error "only estimate or se allowed"
-		exit 498
-	}
-	if mi("``thing''") {
+	if "`thing'"=="`estimate'" local anything2 `anything2' estimate
+	else if "`thing'"=="`se'" local anything2 `anything2' se
+	else if mi("``thing''") {
 		di as error "`thing'() was not specified in siman setup"
 		exit 498
 	}
+	else {
+		di as error "only estimate variable and/or se variable allowed"
+		exit 498
+	}
 }
-if "`anything'"=="" local statlist estimate
-else local statlist `anything'
+if "`anything2'"=="" local statlist estimate
+else local statlist `anything2'
 local nstats : word count `statlist'
 
 * parse name
