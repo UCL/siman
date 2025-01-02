@@ -543,10 +543,10 @@ Performance estimates             not in data
 _____________________________________________________
 
 . siman analyse ciwidth cover power, debug
-Debug: options to pass to simsum: 
+Debug: options to pass to simsum: level(95)
 Debug: method values are 1 2
 Debug: running command: simsum est , true(true) se(se) df() lci(lower) uci(upper) p() method(method)
->  id(rep) by(true dgm estimand) max(20) ciwidth cover power clear mcse gen(_perfmeas)
+>  id(rep) by(true dgm estimand) max(20) ciwidth cover power clear mcse gen(_perfmeas)  level(95)
 
 Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
@@ -798,10 +798,10 @@ Performance estimates             not in data
 _____________________________________________________
 
 . siman analyse ciwidth power, debug // NB default level
-Debug: options to pass to simsum: 
+Debug: options to pass to simsum: level(95)
 Debug: method values are 1 2
 Debug: running command: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(
-> rep) by(true dgm estimand) max(20) ciwidth power clear mcse gen(_perfmeas)
+> rep) by(true dgm estimand) max(20) ciwidth power clear mcse gen(_perfmeas)  level(95)
 
 Data                               Wide   ->   Long
 -----------------------------------------------------------------------------

@@ -24,13 +24,13 @@ foreach feature in dgm target method {
 	forvalues n=1/`N' {
 		dicmd use data/setupdata_`feature'`n', clear
 		if `: char _dta[siman_nummethod]' > 1 {
-			dicmd siman bland estimate, name(bland_`feature'`n', replace) bygr(title(Test siman bland using data `feature'`n'))
+			dicmd siman bland b, name(bland_`feature'`n', replace) bygr(title(Test siman bland using data `feature'`n'))
 		}
 		else di as text "Skipped (only one method)"
 	}
 }
 
-siman bland estimate, by(method beta) subtitle(,size(vsmall)) name(g,replace)
+siman bland b, by(method beta) subtitle(,size(vsmall)) name(g,replace)
 foreach graph in g_1_estimate g_2_estimate {
 	qui graph describe `graph'
 }
