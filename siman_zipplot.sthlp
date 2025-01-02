@@ -82,7 +82,7 @@ and either a standard error by {bf:se()} or a confidence interval by {bf:lci()} 
 
 {pstd}Load the data set in to {cmd: siman}
 
-{phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
+{phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simpaper1.dta, clear"}
 
 {phang}. {stata  "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
 

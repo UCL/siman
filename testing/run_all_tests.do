@@ -44,8 +44,8 @@ local testfiles ///
 	test_scatter test_swarm test_zipplot test_lollyplot test_nestloop test_bland test_cms ///
 	/// test graphs in mixed ways
 	test_graphs_mixed	    /// various graph tests: 2 minutes
-	test_graphs_main     	// test graphs from all formats and var types: 2 minutes
-	
+	test_graphs_main     	/// test graphs from all formats and var types: 2 minutes
+	test_helpfiles			// help files only: very fast
 
 foreach testfile of local testfiles {
 	cap noi do "`testfile'.do"

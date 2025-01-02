@@ -111,7 +111,7 @@ If {cmd:siman lollyplot} fails with the error "Too many sersets", try again afte
 
 {pstd} Load and set up the data and compute performance measures
 
-{phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
+{phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simlongESTPM_longE_longM.dta, clear"}
 
 {phang}. {stata  siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)}
 

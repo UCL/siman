@@ -227,7 +227,7 @@ Targets {it:beta} and {it:gamma} and methods {it:1} and {it:2} appear differentl
 {pstd}{bf:Data in format 1} (long-long: long target, long method).
 Each feature is stored as a variable: targets (estimand), methods (method), estimate (est), standard error (se) and true value (true).  
 
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simlongESTPM_longE_longM.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)"}
 
@@ -235,14 +235,14 @@ Each feature is stored as a variable: targets (estimand), methods (method), esti
 Here the target is the variable estimand but methods are wide, e.g. est_1 is the estimate for method 1. 
 Note the underscore separating est and method in the variable name: we remove it by the {cmd:sep(_)} option.
 
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_wideM1.dta, clear"}
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simlongESTPM_longE_wideM1.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(1 2) sep(_) estimate(est) se(se) true(true)"}
 
 {pstd}{bf:Data in format 3} (wide-long: wide target, long method). 
 Here the method is the variable method but the targets are wide, e.g. estbeta is the estimate of beta.
 
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_wideE_longM.dta, clear"}
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simlongESTPM_wideE_longM.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(method) estimate(est) se(se) true(true)"}
 
@@ -251,7 +251,7 @@ Here there is one set of variables for each target and method: e.g. est1beta is 
 The methods appear before the targets in the variable names, so {cmd:order(method)} is needed.
 There is a single variable true because in these data its value is constant.
 
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_wideE_wideM1.dta, clear"}
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simlongESTPM_wideE_wideM1.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(1 2) estimate(est) se(se) true(true) order(method)"}
 

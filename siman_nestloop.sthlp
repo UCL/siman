@@ -102,7 +102,7 @@ of interest is considered first, and so forth.  Further guidance can be found in
 
 {pstd}Read and set up data
 
-{phang}. {stata "use extendedtestdata2, clear"}
+{phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/extendedtestdata, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)"}
 

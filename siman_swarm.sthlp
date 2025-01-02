@@ -78,7 +78,7 @@ For further troubleshooting and limitations, see {help siman setup##limitations:
 
 {phang}Load the data set in to {cmd:siman}
 
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simpaper1.dta, clear"}
 
 {phang}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
 

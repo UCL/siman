@@ -88,7 +88,7 @@ The performance measures data sety is usually appended to the estimates data set
 
 {phang} Open the data set and set it up in {cmd:siman}
 
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simpaper1.dta, clear"}
 
 {phang}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
 

@@ -54,7 +54,7 @@ This is a stand-alone program. Please see {help siman nestloop} for a descriptio
 
 {pstd}Read and set up data
 
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/dev/testing/data/res.dta, clear"}
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/res.dta, clear"}
 
 {pstd}Reshape into format required by nestloop
 
