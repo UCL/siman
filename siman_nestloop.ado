@@ -1,4 +1,5 @@
-*!	version 0.11.3	21nov2024	
+*!	version 0.11.4	02jan2025	
+*	version 0.11.4	02jan2025	IW use new char cilevel = the level at which coverage was computed
 *	version 0.11.3	21nov2024	IW Graph drawing moved to new standalone nestloop
 *	version 0.11.2	25oct2024	IW improve saving() and export() options
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; make -if- work correctly

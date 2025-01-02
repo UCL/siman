@@ -1,4 +1,5 @@
-*!	version 0.11.2	11nov2024	
+*!	version 0.11.3	02jan2025	
+*	version 0.11.3	02jan2025	IW new coverlevel() option
 *	version 0.11.2	11nov2024	IW handle case of no byvar
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; drop PMs
 * version 0.10 19jul2024	IW align with new setup; respect true but don't separate graphs by true; respect cilevel; allow ci instead of se
@@ -35,7 +36,7 @@ version 15
 
 syntax [if][in] [, * BY(varlist) ///
 	NONCOVeroptions(string) COVeroptions(string) SCAtteroptions(string) ///
-	TRUEGRaphoptions(string) BYGRaphoptions(string) SCHeme(passthru) ymin(integer 0) name(passthru) Level(cilevel) ///
+	TRUEGRaphoptions(string) BYGRaphoptions(string) SCHeme(passthru) ymin(integer 0) name(passthru) Level(cilevel) COVERLevel(cilevel) ///
 	debug pause /// undocumented
 	]
 
@@ -44,7 +45,7 @@ foreach thing in `_dta[siman_allthings]' {
 }
 
 if "`setuprun'"!="1" {
-	di as error "siman_setup needs to be run first."
+	di as error "siman setup needs to be run first."
 	exit 498
 }
 
@@ -142,11 +143,12 @@ drop `zstat'
 qui bysort `by': gen double `rank' = 100*(1 - _n/_N)
 
 * Create MC conf. int. for coverage
+local coverlevel2 = 1/2+`coverlevel'/200
 tempvar cov ncov covlb covub
 qui egen `cov' = mean(`covers'), by(`by')
 qui egen `ncov' = count(`covers'), by(`by')
-gen `covlb' = 100 * (`cov' - invnorm(`level2')*sqrt(`cov'*(1-`cov')/`ncov'))
-gen `covub' = 100 * (`cov' + invnorm(`level2')*sqrt(`cov'*(1-`cov')/`ncov'))
+gen `covlb' = 100 * (`cov' - invnorm(`coverlevel2')*sqrt(`cov'*(1-`cov')/`ncov'))
+gen `covub' = 100 * (`cov' + invnorm(`coverlevel2')*sqrt(`cov'*(1-`cov')/`ncov'))
 qui bysort `by': replace `covlb' = . if _n>1
 qui bysort `by': replace `covub' = . if _n>1
 drop `cov' `ncov'

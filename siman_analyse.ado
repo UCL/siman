@@ -1,4 +1,5 @@
-*!	version 0.11	21oct2024		
+*!	version 0.11.1	02jan2025	
+*	version 0.11.1	02jan2025	IW new char cilevel = the level at which coverage was computed
 *	version 0.11	21oct2024		IW make analyse work correctly with if
 *	version 0.9.1	14jun2024		IW remove code for nformat!=1 and nmethod!=1
 * version 0.9		11jun2024		IW assume data are longlong, don't let 'if' delete data, tidy up chars
@@ -31,11 +32,12 @@ program define siman_analyse
 version 15
 
 syntax [anything] [if], [PERFonly REPlace noTABle /// documented options
-	ref(string) * /// simsum options
+	ref(string) level(cilevel) * /// simsum options
 	force debug pause nopreserve /// undocumented options
 	]
-local simsumoptions `options'
-if "`debug'"!="" di as input `"Debug: options to pass to simsum: `options'"'
+local simsumoptions level(`level') `options'
+local cilevel `level'
+if "`debug'"!="" di as input `"Debug: options to pass to simsum: `simsumoptions'"'
 if "`debug'"=="" local qui qui
 
 capture which simsum.ado
@@ -319,7 +321,7 @@ restore, not
 * Set indicator so that user can determine if siman analyse has been run (e.g. for use in siman lollyplot)
 local analyserun = 1
 local analyseif `if'
-local allthings `allthings' analyserun analyseif secreated
+local allthings `allthings' analyserun analyseif secreated cilevel
 * de-duplicate
 local allthings : list uniq allthings
 

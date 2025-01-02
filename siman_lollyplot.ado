@@ -1,4 +1,5 @@
-*!	version 0.11.3	18dec2024	
+*!	version 0.11.4	02jan2025	
+*	version 0.11.4	02jan2025	IW use new char cilevel = the level at which coverage was computed
 *	version 0.11.3	18dec2024	IW add reference lines for pctbias
 *	version 0.11.2	25oct2024	IW new saving() and export() options
 *	version 0.11.2	24oct2024	IW make default PMs work if no se
@@ -261,7 +262,7 @@ qui replace `estimate' = 0 if _perfmeascode=="relprec" & mi(`estimate')
 tempvar ref
 qui gen `ref'=.
 qui replace `ref' = 0 if inlist(_perfmeascode, "bias", "pctbias", "relerror", "relprec")
-qui replace `ref' = $S_level if _perfmeascode=="cover"
+qui replace `ref' = `cilevel' if _perfmeascode=="cover"
 if `refpower'>=0 qui replace `ref' = `refpower' if _perfmeascode=="power"
 if !mi("`true'") qui replace `ref' = `true' if _perfmeascode=="mean"
 
