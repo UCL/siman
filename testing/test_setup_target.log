@@ -1,0 +1,125 @@
+
+. 
+. forvalues targettype = 1/6 {
+  2.         di as input "targettype = `targettype'"
+  3.         use data/extendedtestdata, clear
+  4.         keep if float(pmiss)==float(0.2) & mech=="MCAR"
+  5.         drop pmiss mech
+  6.         if `targettype'==1 { // no target var
+  7.                 keep if estimand=="effect"
+  8.                 drop estimand
+  9.                 local targetopt
+ 10.                 local xnumtarget 1
+ 11.                 local xtarget
+ 12.                 local xtargetnature .
+ 13.                 local xvaltarget
+ 14.                 local xconfirm new var estimand
+ 15.         }
+ 16.         if `targettype'==2 { // 1 target, string
+ 17.                 keep if estimand=="effect"
+ 18.                 local targetopt target(estimand)
+ 19.                 local xnumtarget 1
+ 20.                 local xtarget estimand
+ 21.                 local xtargetnature 2
+ 22.                 local xvaltarget effect
+ 23.                 local xconfirm string var estimand
+ 24.         }
+ 25.         if `targettype'==3 { // 3 targets, string
+ 26.                 local targetopt target(estimand)
+ 27.                 local xnumtarget 3
+ 28.                 local xtarget estimand
+ 29.                 local xtargetnature 2
+ 30.                 local xvaltarget effect; mean0; mean1
+ 31.                 local xconfirm string var estimand
+ 32.         }
+ 33.         if `targettype'==4 { // 3 targets, num-labelled
+ 34.                 sencode estimand, replace
+ 35.                 local targetopt target(estimand)
+ 36.                 local xnumtarget 3
+ 37.                 local xtarget estimand
+ 38.                 local xtargetnature 1
+ 39.                 local xvaltarget effect; mean0; mean1
+ 40.                 local xconfirm numeric var estimand
+ 41.         }
+ 42.         if `targettype'==5 { // 3 targets, numeric, wide
+ 43.                 sencode estimand, replace
+ 44.                 qui reshape wide b se true, i(rep beta method) j(estimand)
+ 45.                 local targetopt target(1 2 3)
+ 46.                 local xnumtarget 3
+ 47.                 local xtarget target
+ 48.                 local xtargetnature 0
+ 49.                 local xvaltarget 1 2 3
+ 50.                 local xconfirm numeric var target
+ 51.         }
+ 52.         if `targettype'==6 { // 3 targets, string, wide
+ 53.                 qui reshape wide b se true, i(rep beta method) j(estimand) string
+ 54.                 local targetopt target(effect mean0 mean1)
+ 55.                 local xnumtarget 3
+ 56.                 local xtarget target
+ 57.                 local xtargetnature 1
+ 58.                 local xvaltarget effect mean0 mean1
+ 59.                 local xconfirm numeric var target
+ 60.         }
+ 61.         qui siman setup, rep(re) dgm(beta) `targetopt' method(meth) estimate(b) se(se) true(tru
+> e)
+ 62.         
+.         * check chars
+.         foreach thing in numtarget target targetnature valtarget {
+ 63.                 local xx `: char _dta[siman_`thing']'
+ 64.                 cap assert "`x`thing''" == "`xx'"
+ 65.                 if _rc {
+ 66.                         di as error "Error with targettype = `targettype':"
+ 67.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
+ 68.                         exit _rc
+ 69.                 }
+ 70.         }
+ 71.         
+.         * check name and type of target variable
+.         confirm `xconfirm'
+ 72.         
+.         * save for testing siman graph commands
+.         qui save data/setupdata_target`targettype', replace
+ 73. 
+.         * check analyse with subsets
+.         qui count if float(beta)==float(0.5)
+ 74.         local x = r(N)
+ 75.         siman analyse if float(beta)==float(0.25), notable
+ 76.         qui count if float(beta)==float(0.5)
+ 77.         assert `x' == r(N)
+ 78.         siman analyse if float(beta)==float(0), notable replace
+ 79.         qui count if float(beta)==float(0.5)
+ 80.         assert `x' == r(N)
+ 81. }
+targettype = 1
+(81,000 observations deleted)
+(18,000 observations deleted)
+siman analyse has run successfully
+siman analyse has run successfully
+targettype = 2
+(81,000 observations deleted)
+(18,000 observations deleted)
+siman analyse has run successfully
+siman analyse has run successfully
+targettype = 3
+(81,000 observations deleted)
+siman analyse has run successfully
+siman analyse has run successfully
+targettype = 4
+(81,000 observations deleted)
+siman analyse has run successfully
+siman analyse has run successfully
+targettype = 5
+(81,000 observations deleted)
+siman analyse has run successfully
+siman analyse has run successfully
+targettype = 6
+(81,000 observations deleted)
+siman analyse has run successfully
+siman analyse has run successfully
+
+. 
+. di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
+*** SIMAN HAS PASSED ALL THE TESTS IN test_setup_target.do ***
+
+. 
+. log close

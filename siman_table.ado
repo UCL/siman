@@ -1,4 +1,7 @@
-*! version 0.8.3   3apr2024
+*!	version 0.11.2	28oct2024	
+*	version 0.11.2	28oct2024	IW implement new concise option
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
+*	version 0.8.3   3apr2024
 *  version 0.8.3    3apr2024 IW ignore method if methodcreated
 *                  14feb2024 IW allow new performance measure (pctbias) from simsum
 *  version 0.8.2   20dec2023   IW add row() option (undocumented at present)
@@ -12,44 +15,37 @@
 *  version 0.2   11June2020    IW  changes to output format
 *  version 0.1   08June2020    Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
 
-capture program drop siman_table
-program define siman_table, rclass
+program define siman_table
 version 15
-syntax [anything] [if], [Column(varlist) Row(varlist) debug]
+syntax [anything] [if], [Column(varlist) /// documented option 
+	Row(varlist) debug pause CONcise /// undocumented options
+	]
 
 // PARSING
 
 foreach thing in `_dta[siman_allthings]' {
-    local `thing' : char _dta[siman_`thing']
+	local `thing' : char _dta[siman_`thing']
 }
 
 * check if siman analyse has been run, if not produce an error message
-if "`simananalyserun'"=="0" | "`simananalyserun'"=="" {
-	di as error "siman analyse has not been run.  Please use siman_analyse first before siman_table."
+if "`analyserun'"=="0" | "`analyserun'"=="" {
+	di as error "siman analyse has not been run. Please use siman analyse first before siman table."
 	exit 498
-	}
+}
 
 // PREPARE DATA
 
 preserve
 
-* reshape data to long-long format for output display
-if `nformat'!=1 {
-	qui siman_reshape, longlong                    
-	foreach thing in `_dta[siman_allthings]' {
-		local `thing' : char _dta[siman_`thing']
-		}
-	}
-
 * remove underscores from variables est_ and se_ for long-long format
 foreach val in `estimate' `se' {
-   if strpos("`val'","_")!=0 {
-	   if substr("`val'",strlen("`val'"),1)=="_" {
-		   local l = substr("`val'", 1,strlen("`val'","_") - 1)    
-		   local `l'vars = "`l'"
-		   }
-       }
-   }
+	if strpos("`val'","_")!=0 {
+		if substr("`val'",strlen("`val'"),1)=="_" {
+			local l = substr("`val'", 1,strlen("`val'","_") - 1)    
+			local `l'vars = "`l'"
+		}
+	}
+}
 
 
 * choose sample
@@ -59,12 +55,11 @@ marksample touse
 
 
 * if the 'if' condition varies within dgm, method and target then write error
-if `dgmcreated' local dgm
 cap bysort `dgm' `method' `target' : assert `touse'==`touse'[1] 
 if _rc {
 	di as error "'if' can only be used for dgm, method and target."
 	exit 498
-	}
+}
 
 
 * if performance measures are not specified then display table for all of them, otherwise only display for selected subset
@@ -82,7 +77,7 @@ if "`anything'"!="" {
 
 
 * re-order performance measures for display in the table as per simsum
-local perfvar = "bsims sesims bias pctbias mean empse relprec mse rmse modelse ciwidth relerror cover power"
+local perfvar = "estreps sereps bias pctbias mean empse relprec mse rmse modelse ciwidth relerror cover power"
 qui gen _perfmeascodeorder=.
 local p = 0
 foreach perf of local perfvar {
@@ -98,29 +93,28 @@ rename _perfmeascodeorder _perfmeascode
 
 
 * sort out numbers of variables to be tabulated, and their levels
-if `dgmcreated' local dgm
 if `methodcreated' local method
 * identify non-varying dgm
 foreach onedgmvar in `dgm' {
-	summ `onedgmvar' `if', meanonly
-	if r(min)<r(max) local newdgmvar `newdgmvar' `onedgmvar'
-	else if !mi("`debug'") di as error "Ignoring non-varying dgmvar: `onedgmvar'"
-	}
+	qui levelsof `onedgmvar' `if', `dgmmissingok'
+	if r(r)>1 local newdgmvar `newdgmvar' `onedgmvar'
+	else if !mi("`debug'") di as input "Debug: ignoring non-varying dgmvar: `onedgmvar'"
+}
 local dgm `newdgmvar'
 local myfactors _perfmeascode `dgm' `target' `method'
-if !mi("`debug'") di as input "Factors to display: `myfactors'"
+if !mi("`debug'") di as input "Debug: factors to display: `myfactors'"
 tempvar group
 foreach thing in dgm target method {
 	local n`thing'vars = wordcount("``thing''")
 	if !mi("`thing'") {
-		egen `group' = group(``thing'')
+		egen `group' = group(``thing''), `dgmmissingok'
 		qui levelsof `group'
 		local n`thing'levels = r(r)
-		}
+    }
 	else n`thing'levels = 1
-	if !mi("`debug'") di "`n`thing'levels' levels, `thing': `n`thing'vars' variables (``thing'')"
+	if !mi("`debug'") di as input "Debug: `thing' has `n`thing'levels' levels, `n`thing'vars' variables (``thing'')"
 	drop `group'
-	}
+}
 
 
 * decide what to put in columns
@@ -142,12 +136,17 @@ if wordcount("`by'")>4 {
 
 
 * display the table
-local tablecommand tabdisp `row' `column' `if', by(`by') c(`estimate' `se') stubwidth(20)
+local tablecommand tabdisp `row' `column' `if', by(`by') c(`estimate' `se') stubwidth(20) `concise'
 if !mi("`debug'") {
-	di "Table column: `column'"
-	di "Table row: `row'"
-	di "Table by: `by'"
-	di "Table command: `tablecommand'"
+	di as input "Debug: table features:"
+	di "    column:  `column'"
+	di "    row:     `row'"
+	di "    by:      `by'"
+	di `"    command: `tablecommand'"'
+}
+if !mi("`pause'") {
+	global F9 `tablecommand'
+	pause Press F9 to recall, optionally edit and run the table command
 }
 `tablecommand'
 

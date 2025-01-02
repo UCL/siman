@@ -1,7 +1,6 @@
 {smcl}
-{* *! version 1.3 21nov2022}{...}
+{* *! version 0.10 19jul2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
-{vieweralsosee "labelsof (if installed)" "labelsof"}{...}
 {viewerjumpto "Syntax" "siman_zipplot##syntax"}{...}
 {viewerjumpto "Description" "siman_zipplot##description"}{...}
 {viewerjumpto "Examples" "siman_zipplot##examples"}{...}
@@ -21,104 +20,87 @@
 [{cmd:,}
 {it:options}]
 
-{synoptset 30 tabbed}{...}
+{pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
+
+{synoptset 26 tabbed}{...}
 {synopthdr}
 {synoptline}
-{syntab:Main}
 
-{pstd}
-{p_end}
-{synopt:{opt if/in}}  The user can specify {it:if} and {it:in} within the siman zipplot syntax. If they do not, but have already specified 
-an {it:if/in} during {help siman_setup:siman setup}, then the {it:if/in} from {help siman_setup:siman setup} will be used.
-The {it:if} option will only apply to {bf:dgm}, {bf:target} and {bf:method}.  The {it:if} option is not allowed to be used on 
-{bf:repetition} and an error message will be issued if the user tries to do so.
-
-{pstd}
-{p_end}
-{synopt:{opt by(string)}}  specifies the nesting of the variables, with the default being {bf:by(dgm method)} if there is only one true value, and
+{synopt:{opt by(string)}}specifies the nesting of the variables, with the default being {bf:by(dgm method)} if there is only one true value, and
 {bf:by(dgm target method)} where there are different true values per target.
 
-{syntab:Graph options}
-{pstd}
-{p_end}
+{synopt:{opt noncov:eroptions(string)}}graph options for the non-coverers 
 
-{pstd}{it:For the siman zipplot graph user-inputted options, most of the valid options for {help scatter:scatter} are available.}
+{synopt:{opt cov:eroptions(string)}}graph options for the coverers 
 
+{synopt:{opt sca:tteroptions(string)}}graph options for the scatter plot of the point estimates
 
-{pstd}
-{p_end}
-{synopt:{opt noncov:eroptions(string)}}  graph options for the non-coverers 
+{synopt:{opt truegr:aphoptions(string)}}graph options for the true value(s)
 
-{pstd}
-{p_end}
-{synopt:{opt cov:eroptions(string)}}  graph options for the coverers 
+{synopt:{opt sch:eme(string)}}changes the graph scheme
 
-{pstd}
-{p_end}
-{synopt:{opt sca:tteroptions(string)}} graph options for the scatter plot of the point estimates
+{synopt:{opt l:evel(cilevel)}}changes the level for the confidence intervals in the zipplot. 
+The default is the current system default confidence level.
 
-{pstd}
-{p_end}
-{synopt:{opt truegr:aphoptions(string)}}  graph options for the true value(s)
+{synopt:{opt coverl:evel(cilevel)}}changes the level for the confidence interval around the coverage. 
+The default is the current system default confidence level.
 
-{pstd}
-{p_end}
-{synopt:{opt bygr:aphoptions(string)}}  graph options for the nesting of the graphs due to the {it:by} option
+{synopt:{opt ymin(pct)}}omits the lowest {it:pct}% of the confidence intervals from the zipplot
 
-{pstd}
-{p_end}
-{synopt:{opt sch:eme(string)}}  to change the graph scheme
+{synopt:{it:graph_options}}options for {help scatter} that do not go inside its {cmd:by()} option.
+
+{synopt:{opt bygr:aphoptions(string)}}options for {help scatter} that go inside its {cmd:by()} option.
 
 
 {marker description}{...}
 {title:Description}
 
 {pstd}
-{cmd:siman zipplot} draws a "zip plot" plot of the confidence interval coverage for each data-generating mechanism 
-and analysis method in the estimates dataset. Both Monte Carlo 
-confidence intervals for percent coverage and 95% confidence intervals for individual repetitions are shown. For coverage 
-(or type I error), true θ is used for the null value.
+{cmd:siman zipplot} draws a "zip plot"  (see {help siman zipplot##Morris19:Morris et al, 2019})
+of the confidence intervals for each data-generating mechanism, target and analysis method in the estimates dataset. 
 
 {pstd}
-For each data-generating mechanism and method, the confidence intervals are fractional-centile-ranked (see {help siman_zipplot##Morris19:Morris et al., 2019)}. 
+For each data-generating mechanism and method, the confidence intervals are fractional-centile-ranked. 
 This ranking is used for the vertical axis and is plotted against the intervals themselves. Intervals which cover the true value 
 are coverers (at the bottom); those which do not cover are called non-coverers (at the top). Both coverers and non-coverers are 
 shown on the plot, along with the point estimates.
 The zipplot provides a means of understanding any issues with coverage by viewing the confidence intervals directly.  
 
 {pstd}
-Please note that {help siman_setup:siman setup} needs to be run first before siman zipplot.
+The overall coverage and its confidence interval (also at the given level) are shown with horizontal lines. 
 
 {pstd}
-The {cmd:labelsof} package (by Ben Jann) is required by siman zipplot, which can be installed by clicking: {stata ssc install labelsof}
+{help siman setup} must be run first before siman zipplot. 
+It must have defined a true variable by {bf:true()}, an estimate variable by {bf:estimate()},
+and either a standard error by {bf:se()} or a confidence interval by {bf:lci()} and {bf:uci()}. 
 
-{pstd}
-siman zipplot requires a true variable in the estimates dataset defined in the {help siman_setup:siman setup} syntax by {bf:true()}. 
-
-{pstd}
-For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
- 
 
 {marker examples}{...}
 {title:Examples}
 
-{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
+{pstd} An example estimates data set with 3 DGMs (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
 
-{pstd} To plot the zipplot, first load the data set in to {cmd: siman}.
+{pstd}Load the data set in to {cmd: siman}
 
 {phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
 
 {phang}. {stata  "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
 
+{pstd}Simple zipplot
+
 {phang}. {stata  `"siman zipplot"'}
 
-{pstd} To plot the graphs split by dgm only:
+{pstd}Evaluate 50% confidence intervals
+
+{phang}. {stata  `"siman zipplot, level(50)"'}
+
+{pstd}Draw the zipplot split by dgm only
 
 {phang}. {stata  `"siman zipplot, by(dgm)"'}
 
-{pstd} To change the colour scheme, legend and titles in the display:
+{pstd}Change the colour scheme, legend and titles in the display
 
-{phang}. {stata  `"siman zipplot, scheme(scheme(economist)) legend(order(4 "Covering" 3 "Not covering")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) coveroptions(pstyle(p4)) scatteroptions(mcol(grey%50))"'}
+{phang}. {stata  `"siman zipplot, scheme(economist) legend(order(1 "Not covering" 2 "Covering")) xtit("x-title") ytit("y-title") ylab(0 40 100) noncoveroptions(pstyle(p3)) coveroptions(pstyle(p4)) scatteroptions(mcol(gray%50))"'}
 
 {marker reference}{...}
 {title:Reference}
@@ -131,7 +113,6 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {title:Authors}
 
 {pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:e.marley-zagar@ucl.ac.uk":Ella Marley-Zagar}
 
 {pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
@@ -139,9 +120,6 @@ Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 {pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
-{pstd}{helpb siman: Return to main help page for siman}
 
-{title:See Also}
-
-{pstd}{help labelsof} (if installed)
+{p}{helpb siman: Return to main help page for siman}
 

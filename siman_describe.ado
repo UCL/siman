@@ -1,4 +1,8 @@
-*! version 0.5.1   13mar2024
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
+*!	version 0.11.1	21oct2024	
+*	version 0.7	14jun2024	IW streamline for longlong only; calculate #dgms without assuming factorial; remove commented out code
+* version 0.6   8may2024	IW no longer removes underscores from display
+* version 0.5.1   13mar2024
 *  version 0.5.1 13mar2024     IW new undocumented sort option 
 *  version 0.5   17oct2022     EMZ minor change to table for when method values have a mix of undersocres after them e.g. X Y_
 *  version 0.4   21july2022    EMZ change how dgms are displayed in the table
@@ -7,8 +11,7 @@
 *  version 0.1   04June2020    Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
 //  Some edits from Tim Morris to draft version 06oct2019
 
-capture program drop siman_describe
-program define siman_describe, rclass
+program define siman_describe
 version 15
 
 syntax, [Chars Sort SAVing(string)]
@@ -40,6 +43,9 @@ if !mi("`chars'") {
 	exit
 }
 
+if !mi("`sort'") di as error "sort ignored: chars not specified"
+if !mi("`saving'") di as error "saving(`saving') ignored: chars not specified"
+
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
@@ -47,124 +53,73 @@ foreach thing in `_dta[siman_allthings]' {
 local titlewidth 20
 local colwidth 35
 
-* remove underscores from the end of method and target labels if there are any (for aesthetic purposes in the output table)
-if strpos("`valmethod'","_")!=0 {
-    tokenize "`valmethod'"
-        forvalues k=1/`nummethod' {
-            if  substr("``k''",strlen("``k''"),1)=="_" {
-            local l = substr("``k''", 1,strlen("``k''","_") - 1)
-            if "`k'"=="1" local valmethod "`l'"
-            else if "`k'">"1" local valmethod "`valmethod'" " " "`l'"
-            }
-			else {
-				if "`k'"=="1" local valmethod "``k''"
-				else if "`k'">"1" local valmethod "`valmethod'" " " "``k''"
-			}	
-    }
-}
-
-if strpos("`valtarget'","_")!=0 {
-    tokenize "`valtarget'"
-        forvalues p=1/`numtarget' {
-            if  substr("``p''",strlen("``p''"),1)=="_" {
-            local q = substr("``p''", 1,strlen("``p''","_") - 1)
-            if "`p'"=="1" local valtarget "`q'"
-            else if "`q'">"1" local valtarget "`valtarget'" " " "`q'"
-            }
-    }
-}
-
-* remove underscores from variables (e.g. est_ se_) if long-long format
-if `nformat'==1 {
-
-    foreach val in `estimate' `se' `df' `lci' `uci' `p' `true' {
-
-        if strpos("`val'","_")!=0 {
-                if substr("`val'",strlen("`val'"),1)=="_" {
-                    local l = substr("`val'", 1,strlen("`val'","_") - 1)    
-                    local `l'vars = "`l'"
-                }
-        }
-    }
-}
-
-	char _dta[siman_estimate] `estimate'
-	char _dta[siman_se] `se'
-	
 * determine if true variable is numeric or string, for output table text
 cap confirm number `true' 
 if _rc local truetype "string"
 else local truetype "numeric"
 
 * For dgm description
-local dgmcount: word count `dgm'
-qui tokenize `dgm'
-if `dgmcreated' == 0 {
+if !mi("`dgm'") {
+	local dgmcount: word count `dgm'
+	qui tokenize `dgm'
 	forvalues j = 1/`dgmcount' {
-		qui tab ``j''
+		qui tab ``j'', `dgmmissingok'
 		local nlevels = r(r)
 		local dgmvarsandlevels `"`dgmvarsandlevels'"' `"``j''"' `" (`nlevels') "'
-		if `j' == 1 local totaldgmnum = `nlevels'
-		else local totaldgmnum = `totaldgmnum'*`nlevels'
 	}
+	* Count DGMs
+	preserve
+	tempvar first
+	bysort `dgm': gen `first' = _n==1
+	qui count if `first'
+	local totaldgmnum = r(N)
+	drop `first'
+	restore
 }
-else if `dgmcreated' == 1 {
-	local totaldgmnum 1
+else {
 	local dgmvarsandlevels N/A
+	local totaldgmnum 1
 }
 
-    di as text _newline _col(`titlewidth') "SUMMARY OF DATA"
-    di as text "_____________________________________________________" _newline
+* For target description
+if mi("`target'") local target N/A
 
-    di as text "Data-generating mechanism (DGM)"
-//	if `dgmcount' == 1 di as text "The total number of dgms is: " as result _col(`colwidth') "`totaldgmnum'" 
-//	else di as text "The total number of dgm vars is: " as result _col(`colwidth') "`totaldgmnum'"
-    di as text "  DGM variables (# levels): " as result _col(`colwidth') `"`dgmvarsandlevels'"'
-    di as text "  Total number of DGMs: " as result _col(`colwidth') "`totaldgmnum'" _newline
+* Print summary of data
+di as text _newline _col(`titlewidth') "SUMMARY OF DATA"
+di as text "_____________________________________________________" _newline
 
-//  di as text "The siman format is:" as result _col(`colwidth') "`format'" 
-    di as text "Targets"
-//  di as text "The format for targets is:" as result _col(`colwidth') cond(inlist(`nformat',1,3),"long","wide")
-    di as text "  Variable containing targets:" as result _col(`colwidth') "`target'"
-    di as text "  Number of targets:" as result _col(`colwidth') "`numtarget'"
-    if (`nformat'==1 & `ntarget'==0 & `nmethod'==0 ) {
-        di as text "  Target values:" as result _col(`colwidth') "`valtarget'" _newline
-    }
-    else if (`nformat'==1 & `ntarget'==0 & `nmethod'!=0) | (`nformat'==2) {
-        di as text "  Target values:" as result _col(`colwidth') `"`valtarget'"' _newline
-    }
-    else if (`nformat'==1 & `ntarget'!=0 & `nmethod'!=0) | (`nformat'==3) | (`nformat'==1 & `ntarget'!=0 & `nmethod'==0) {
-        di as text "  Target values:" as result _col(`colwidth') "`valtarget'" _newline
-    }
-    
-    di as text "Methods"
-//	di as text "The format for methods is:" as result _col(`colwidth') cond(inlist(`nformat',1,4),"long","wide")
-    di as text "  Variable containing methods:" as result _col(`colwidth') "`method'"
-    di as text "  Number of methods:" as result _col(`colwidth') "`nummethod'"
+di as text "Data-generating mechanism (DGM)"
+di as text "  DGM variables (# levels): " as result _col(`colwidth') `"`dgmvarsandlevels'"'
+di as text "  Total number of DGMs: " as result _col(`colwidth') "`totaldgmnum'" _newline
 
-    if (`nformat'==1 & `ntarget'==0 & `nmethod'==0) {
-        di as text "  Method values:" as result _col(`colwidth') "`valmethod'"
-    }
-	else if (`nformat'==1 & `ntarget'!=0 & `nmethod'!=0) | (`nformat'==1 & `ntarget'==0 & `nmethod'!=0) | (`nformat'==3) | (`nformat'==2) {
-		di as text "  Method values:" as result _col(`colwidth') "`valmethod'"
-	}
-	else if (`nformat'==1 & `ntarget'!=0 & `nmethod'==0)  {
-		di as text "  Method values:" as result _col(`colwidth') `"`valmethod'"'
-	}
+di as text "Targets"
+di as text "  Variable containing targets:" as result _col(`colwidth') "`target'"
+di as text "  Number of targets:" as result _col(`colwidth') "`numtarget'"
+di as text "  Target values:" as result _col(`colwidth') `"`valtarget'"' _newline
 
-    di as text _newline "Repetition-level output"
-//	if "`estimate'"!="" di as result "Estimates are contained in the dataset"
-//	else if "`estimate'"=="" di as result "Estimates are not contained in the dataset"
-    di as text "  Point estimate `descriptiontype':" as result _col(`colwidth') cond( !mi("`estimate'"), "`estimate'", "N/A")
-    di as text "  SE `descriptiontype':" as result _col(`colwidth') cond( !mi("`se'"), "`se'", "N/A")
-    di as text "  df `descriptiontype':" as result _col(`colwidth') cond( !mi("`df'"), "`df'", "N/A")
-    di as text "  Conf. limit `descriptiontype's:" as result _col(`colwidth') cond( !mi("`lci'"), "`lci'", "N/A") cond( !mi("`uci'"), " `uci'", cond( !mi("`lci'"), " N/A", ""))
-    di as text "  p-value `descriptiontype':" as result _col(`colwidth') cond( !mi("`p'"), "`p'", "N/A")
-	if "`truetype'" == "string" {
-		di as text "  True value variable:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
-	}
-	else di as text "  True value:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
-    di as text "_____________________________________________________"
+di as text "Methods"
+di as text "  Variable containing methods:" as result _col(`colwidth') "`method'" cond("`methodcreated'"=="1", " (created)", "")
+di as text "  Number of methods:" as result _col(`colwidth') "`nummethod'"
+
+di as text "  Method values:" as result _col(`colwidth') "`valmethod'"
+
+di as text _newline "Repetition-level output"
+local descriptiontype variable // fix after removing this char from setup
+di as text "  Point estimate `descriptiontype':" as result _col(`colwidth') cond( !mi("`estimate'"), "`estimate'", "N/A")
+di as text "  SE `descriptiontype':" as result _col(`colwidth') cond( !mi("`se'"), "`se'", "N/A") cond("`secreated'"=="1", " (created)", "")
+di as text "  df `descriptiontype':" as result _col(`colwidth') cond( !mi("`df'"), "`df'", "N/A")
+di as text "  Conf. limit `descriptiontype's:" as result _col(`colwidth') cond( !mi("`lci'"), "`lci'", "N/A") cond( !mi("`uci'"), " `uci'", cond( !mi("`lci'"), " N/A", ""))
+di as text "  p-value `descriptiontype':" as result _col(`colwidth') cond( !mi("`p'"), "`p'", "N/A")
+if "`truetype'" == "string" {
+	di as text "  True value variable:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A") cond("`truecreated'"=="1", " (created)", "")
+}
+else di as text "  True value:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
+di as text _newline "Estimates data" as result _col(`colwidth') cond(_rc,"in data","not in data")
+di as text "Performance estimates" as result _col(`colwidth') cond("`analyserun'"=="1","in data","not in data")
+if !mi("`analyseif'") di as text "  Restricted to:" as result _col(`colwidth') "`analyseif'"
+cap assert `rep'<=0
+di as text "_____________________________________________________"
+
 
 
 end

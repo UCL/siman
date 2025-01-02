@@ -1,0 +1,125 @@
+
+. 
+. forvalues methodtype = 1/6 {
+  2.         di as input "methodtype = `methodtype'"
+  3.         use data/extendedtestdata, clear
+  4.         keep if float(pmiss)==float(0.2) & estimand=="effect"
+  5.         drop pmiss estimand
+  6.         if `methodtype'==1 { // no method var
+  7.                 keep if method=="CCA"
+  8.                 drop method
+  9.                 local methodopt
+ 10.                 * x* locals are correct values against which to test chars
+.                 local xmethod _method
+ 11.                 local xmethodcreated 1
+ 12.                 local xmethodnature 0
+ 13.                 local xnummethod 1
+ 14.                 local xvalmethod 1
+ 15.         }
+ 16.         if `methodtype'==2 { // 1 method, string
+ 17.                 keep if method=="CCA"
+ 18.                 local methodopt method(method)
+ 19. 
+.                 local xmethod method
+ 20.                 local xmethodcreated 0
+ 21.                 local xmethodnature 2
+ 22.                 local xnummethod 1
+ 23.                 local xvalmethod CCA
+ 24.         }
+ 25.         if `methodtype'==3 { // 3 methods, string
+ 26.                 local methodopt method(method)
+ 27. 
+.                 local xmethod method
+ 28.                 local xmethodcreated 0
+ 29.                 local xmethodnature 2
+ 30.                 local xnummethod 3
+ 31.                 local xvalmethod CCA; MeanImp; Noadj
+ 32.         }
+ 33.         if `methodtype'==4 { // 3 methods, num-labelled
+ 34.                 sencode method, gsort(method) replace
+ 35.                 local methodopt method(method)
+ 36.         
+.                 local xmethod method
+ 37.                 local xmethodcreated 0
+ 38.                 local xmethodnature 1
+ 39.                 local xnummethod 3
+ 40.                 local xvalmethod CCA; MeanImp; Noadj
+ 41.         }
+ 42.         if `methodtype'==5 { // 3 methods, numeric, wide
+ 43.                 sencode method, gsort(method) replace
+ 44.                 qui reshape wide b se, i(rep beta mech true) j(method)
+ 45.                 char _dta[__JValLab] // needed to stop Stata remembering method names
+ 46.                 local methodopt method(1 2 3)
+ 47. 
+.                 local xmethod method
+ 48.                 local xmethodcreated 0
+ 49.                 local xmethodnature 0
+ 50.                 local xnummethod 3
+ 51.                 local xvalmethod 1; 2; 3
+ 52.         }
+ 53.         if `methodtype'==6 { // 3 methods, string, wide
+ 54.                 qui reshape wide b se, i(rep beta mech true) j(method) string
+ 55.                 local methodopt method(CCA MeanImp Noadj)
+ 56. 
+.                 local xmethod method
+ 57.                 local xmethodcreated 0
+ 58.                 local xmethodnature 1
+ 59.                 local xnummethod 3
+ 60.                 local xvalmethod CCA; MeanImp; Noadj
+ 61.         }
+ 62.         qui siman setup, rep(re) dgm(beta mech) `methodopt' estimate(b) se(se) true(true)
+ 63.         foreach thing in method methodcreated methodnature nummethod valmethod {
+ 64.                 local xx `: char _dta[siman_`thing']'
+ 65.                 cap assert "`x`thing''" == "`xx'"
+ 66.                 if _rc {
+ 67.                         di as error "Error with methodtype = `methodtype':"
+ 68.                         di "_dta[siman_`thing'] = `xx' but should be `x`thing''"
+ 69.                         exit _rc
+ 70.                 }
+ 71.         }
+ 72. 
+.         * save for testing siman graph commands
+.         qui save data/setupdata_method`methodtype', replace
+ 73. 
+.         qui count if float(beta)==float(0.5)
+ 74.         local x = r(N)
+ 75.         siman analyse if float(beta)==float(0.25), notable
+ 76.         qui count if float(beta)==float(0.5)
+ 77.         assert `x' == r(N)
+ 78.         siman analyse if float(beta)==float(0), notable replace
+ 79.         qui count if float(beta)==float(0.5)
+ 80.         assert `x' == r(N)
+ 81. }
+methodtype = 1
+(90,000 observations deleted)
+(12,000 observations deleted)
+siman analyse has run successfully
+siman analyse has run successfully
+methodtype = 2
+(90,000 observations deleted)
+(12,000 observations deleted)
+siman analyse has run successfully
+siman analyse has run successfully
+methodtype = 3
+(90,000 observations deleted)
+siman analyse has run successfully
+siman analyse has run successfully
+methodtype = 4
+(90,000 observations deleted)
+siman analyse has run successfully
+siman analyse has run successfully
+methodtype = 5
+(90,000 observations deleted)
+siman analyse has run successfully
+siman analyse has run successfully
+methodtype = 6
+(90,000 observations deleted)
+siman analyse has run successfully
+siman analyse has run successfully
+
+. 
+. di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
+*** SIMAN HAS PASSED ALL THE TESTS IN test_setup_method.do ***
+
+. 
+. log close

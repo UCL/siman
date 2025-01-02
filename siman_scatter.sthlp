@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.3 15aug2023}{...}
+{* *! version 0.10 18jun2024}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_scatter##syntax"}{...}
 {viewerjumpto "Description" "siman_scatter##description"}{...}
@@ -15,64 +15,57 @@
 {title:Syntax}
 
 {p 8 17 2}
-{cmdab:siman scatter} [{it:estimands}] {ifin}
+{cmdab:siman scatter} [{it:varlist}] {ifin}
 [{cmd:,}
 {it:options}]
 
-{pstd}If no variables are specified, then the scatter graph will be drawn for the {it:estimands:} {it:estimate vs se}.  Alternatively the user can select {it:se vs estimate} by typing {bf:siman scatter,} {it:se estimate}.
+{pstd}If no variables are specified, then the scatter graph is drawn for {it:estimate vs se}.  Alternatively the user can select {it:se vs estimate} by typing {bf:siman scatter} {it:se estimate}.
 
-{synoptset 20 tabbed}{...}
+{pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
+
+
+{synoptset 25 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Main}
 
-{pstd}
-{p_end}
-{synopt:{opt if/in}}  The user can specify {it:if} and {it:in} within the siman scatter syntax. If they do not, but have already specified 
-an {it:if/in} during {help siman_setup:siman setup}, then the {it:if/in} from {help siman_setup:siman setup} will be used.
-The {it:if} option will only apply to {bf:dgm}, {bf:target} and {bf:method}.  The {it:if} option is not allowed to be used on 
-{bf:repetition} and an error message will be issued if the user tries to do so.
-
-{pstd}
-{p_end}
-{synopt:{opt by(string)}}  specifies the nesting of the variables, with the default being {bf:by(dgm target method)}
+{synopt:{opt by(string)}}specifies an alternative to the default, which is to draw the graph {bf:by(dgm target method)}. This option is typically used to overlay DGMs, targets and/or methods.
 
 {syntab:Graph options}
-{pstd}
-{p_end}
 
-{pstd}{it:For the siman scatter graph user-inputted options, most of the valid options for {help scatter:scatter} are available.}
+{synopt:{it:graph_options}}options for {help scatter} that do not go inside the {cmd:by()} option.
 
-{pstd}
-{p_end}
-{synopt:{opt bygr:aphoptions(string)}}  graph options for the nesting of the graphs due to the {it:by} option
+{synopt:{opt bygr:aphoptions(string)}}options for {help scatter} that go inside the {cmd:by()} option.
 
 
 {marker description}{...}
 {title:Description}
 
 {pstd}
-{cmd:siman scatter} draws a scatter plot of the point estimates data versus the standard error data, the results of which are 
-from analysing multiple simulated data sets with data relating to different statistics (e.g. point estimate) 
-for each simulated data set.  The {cmd:siman scatter} plots help the user to look for bivariate outliers.
+{cmd:siman scatter} draws a scatter plot of the point estimates versus their standard errors, typically separating out the DGMs, targets and methods. 
+Each observation represents one repetition.
+The {cmd:siman scatter} plots help the user to look for bivariate outliers.
 
 {pstd}
-Please note that {help siman_setup:siman setup} needs to be run first before siman scatter.
-
-{pstd}
-For further troubleshooting and limitations, see {help siman_setup##limitations:troubleshooting and limitations}.
+{help siman setup} needs to be run first before {cmd:siman scatter}.
 
 
 {marker example}{...}
 {title:Example}
 
-{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
+{pstd} An example estimates data set with 3 DGMs (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
 
-{phang} To plot the scatter graph, first load the data set in to {cmd: siman}.
+{phang}Load the data set in to {cmd:siman}
 
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/simpaper1.dta, clear"}
 
 {phang}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
+
+{phang}Plot the default scatter plot.
+
+{phang}. {stata `"siman scatter"'}
+
+{phang}Customise the scatter plot.
 
 {phang}. {stata `"siman scatter, ytitle("test y-title") xtitle("test x-title") scheme(s2mono) by(dgm) bygraphoptions(title("main-title"))"'}
 
@@ -80,7 +73,6 @@ For further troubleshooting and limitations, see {help siman_setup##limitations:
 {title:Authors}
 
 {pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:e.marley-zagar@ucl.ac.uk":Ella Marley-Zagar}
 
 {pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
@@ -88,6 +80,5 @@ Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 {pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
-{pstd}{helpb siman: Return to main help page for siman}
 
-
+{p}{helpb siman: Return to main help page for siman}
