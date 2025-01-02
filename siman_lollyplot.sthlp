@@ -10,7 +10,7 @@
 {title:Title}
 
 {phang}
-{bf:siman lollyplot} {hline 2} lollipop plot of performance measures data.
+{bf:siman lollyplot} {hline 2} Lollipop plot of performance measures data.
 
 
 {marker syntax}{...}
@@ -23,11 +23,10 @@
 
 {pstd}{it:performancemeasures} are any performance measures that have been calculated by {help siman analyse}. See {help siman analyse##perfmeas:performance measures}.
 
-{pstd}
-{opt if} must be applied to {bf:dgm}, {bf:target} and/or {bf:method} only. 
+{pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
 
 
-{synoptset 25 tabbed}{...}
+{synoptset 28 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Specific graph options}
@@ -60,7 +59,7 @@ The default is {cmd:dgmtitle(on)} with one DGM variable and {cmd:dgmtitle(off)} 
 
 {synopt:{opt name(string)}}stub for graph name, to which "_" and the target name are appended.{p_end}
 
-{synopt:{it:graph_options}}most of the valid options for {help scatter:scatter} are available.{p_end}
+{synopt:{it:graph_options}}most of the valid options for {help twoway} are available.{p_end}
 
 {syntab:Advanced graph options}
 
@@ -140,7 +139,6 @@ Morris TP, White IR, Crowther MJ. Using simulation studies to evaluate statistic
 {title:Authors}
 
 {pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:e.marley-zagar@ucl.ac.uk":Ella Marley-Zagar}
 
 {pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
@@ -149,5 +147,4 @@ Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
 
-{pstd}{helpb siman: Return to main help page for siman}
-
+{p}{helpb siman: Return to main help page for siman}

@@ -43,6 +43,9 @@ if !mi("`chars'") {
 	exit
 }
 
+if !mi("`sort'") di as error "sort ignored: chars not specified"
+if !mi("`saving'") di as error "saving(`saving') ignored: chars not specified"
+
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }

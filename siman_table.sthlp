@@ -19,7 +19,7 @@
 {pstd}{it:performancemeasures} are any {help siman analyse##perfmeas:performance measures} calculated by {help siman analyse} and {help simsum:simsum}. If not specified, all available performance measures are calculated.
 
 {pstd}
-{opt if} should be applied to {bf:dgm}, {bf:target} and/or {bf:method} only.
+{opt if} must be applied to {bf:dgm}, {bf:target} and/or {bf:method} only.
 
 {synoptset 20 tabbed}{...}
 {synopthdr}
@@ -32,35 +32,36 @@
 {title:Description}
 
 {pstd}
-{cmd:siman table} uses the inbuilt Stata program {help tabdisp:tabdisp} to provide a summary of the performance measures created by {bf:{help siman analyse}}.
-The output table lists the estimand(s) split by dgms, targets, methods and performance measures.
+{cmd:siman table} uses the inbuilt Stata program {help tabdisp:tabdisp} to display the performance measures created by {bf:{help siman analyse}},
+split by dgms, targets and methods.
 
 {pstd}
 If {opt column()} is not specified, the column variable is decided as follows.
 If there is more than one method, then method is placed in the columns.
-Otherwise, if there is more than one target, target is placed in the columns.
+Otherwise, if there is more than one target, then target is placed in the columns.
 Otherwise, the first dgm variable is placed in the columns.
 All the other variables are then placed in the rows.
-However, if this leaves more than four ariables in thge rows, {cmd:siman table} exits with error.
+However, if this leaves more than four variables in the rows, then {cmd:siman table} exits with error.
 
 {pstd}
 Where there are 2 entries per row in the table, the first entry is the performance measure value, 
-and the second is the Monte Carlo Standard Error (MCSE).  
+and the second is its Monte Carlo Standard Error (MCSE).  
 MSCEs quantify the simulation uncertainty.  
 They provide an estimate of the standard error of the performance estimate, as a finite number of repetitions are used.  
-For example, for the performance measure bias, the Monte-Carlo standard error shows the uncertainty around the estimate of the bias.
+For example, for the performance measure bias, the Monte Carlo standard error shows the uncertainty around the estimate of the bias.
 
 {pstd}
-{cmd:siman table} is called automatically by {bf:{help siman analyse}}, 
-but can also be called on its own once the performance measures data 
+{cmd:siman table} is called automatically by {bf:{help siman analyse}} (unless the {cmd:notable} option is used), 
+but it can also be called on its own once the performance measures data 
 has been created by the {bf:siman} suite.
+
+{pstd}For examples, see {bf:{help siman analyse##examples:siman analyse}}.
 
 
 {marker authors}{...}
 {title:Authors}
 
 {pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:e.marley-zagar@ucl.ac.uk":Ella Marley-Zagar}
 
 {pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}

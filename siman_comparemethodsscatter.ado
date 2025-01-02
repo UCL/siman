@@ -59,7 +59,7 @@ foreach thing in `_dta[siman_allthings]' {
 }
 
 if "`setuprun'"!="1" {
-	di as error "siman_setup needs to be run first."
+	di as error "siman setup needs to be run first."
 	exit 498
 }
 

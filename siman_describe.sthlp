@@ -8,7 +8,7 @@
 {title:Title}
 
 {phang}
-{bf:siman describe} {hline 2} Describes the status of the simulation data
+{bf:siman describe} {hline 2} Describes the simulation data
 
 
 {marker syntax}{...}
@@ -16,6 +16,22 @@
 
 {phang}
 {cmd:siman describe} 
+[{cmd:,}
+{it:options}]
+
+{pstd}The options are mainly intended for programmers.
+
+
+{synoptset 25 tabbed}{...}
+{synopthdr}
+{synoptline}
+
+{synopt:{opt ch:ars}}lists the characteristics created by {bf:{help siman setup}} and explained {bf:{help siman setup##chars:here}}.{p_end}
+
+{synopt:{opt s:ort}}is used with {opt chars}: it sorts the characteristics alphabetically before listing.{p_end}
+
+{synopt:{opt sav:ing(filename)}}is used with {opt chars}: it saves the characteristics to the file specified.{p_end}
+
 
 
 {marker description}{...}
@@ -30,7 +46,6 @@
 {title:Authors}
 
 {pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:e.marley-zagar@ucl.ac.uk":Ella Marley-Zagar}
 
 {pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}

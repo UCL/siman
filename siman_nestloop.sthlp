@@ -21,8 +21,7 @@
 
 {pstd}{it:performancemeasures} are any performance measures that have been calculated by {help siman analyse}. See {help siman analyse##perfmeas:performance measures}.
 
-{pstd}
-{opt if} must be applied to {bf:dgm}, {bf:target} and/or {bf:method} only. 
+{pstd}The {it:if} condition should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
 
 
 {synoptset 28 tabbed}{...}
@@ -141,7 +140,6 @@ g-estimation to address time-dependent confounding. Statistical Methods in Medic
 {title:Authors}
 
 {pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:e.marley-zagar@ucl.ac.uk":Ella Marley-Zagar}
 
 {pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
@@ -149,5 +147,5 @@ Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 {pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
-{pstd}{helpb siman: Return to main help page for siman}
 
+{p}{helpb siman: Return to main help page for siman}

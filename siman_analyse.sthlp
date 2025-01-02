@@ -11,7 +11,7 @@
 {title:Title}
 
 {phang}
-{bf:siman analyse} {hline 2} Creates performance measures from data imported by the {bf:siman suite}, using the program {help simsum:simsum}
+{bf:siman analyse} {hline 2} Estimates performance measures from simulation estimates data
 
 
 {marker syntax}{...}
@@ -22,15 +22,14 @@
 
 {pstd}{it:performancemeasures} are described {help siman analyse##perfmeas:below}.
 
-{pstd}
-{opt if} should be applied to {bf:dgm}, {bf:target} and {bf:method} only; otherwise a warning is issued.
+{pstd}The {it:if} condition should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
 
 
 {synoptset 20 tabbed}{...}
 {synopthdr}
 {synoptline}
 
-{synopt:{opt perf:only} }the output data set should contain only performance measures. 
+{synopt:{opt perf:only} }include only performance measures in the output data set. 
 By default it contains the performance measures and the estimates data.
 
 {synopt:{opt rep:lace} }replace any performance measures that have already been calculated.
@@ -38,7 +37,7 @@ This is needed if the user has previously run {cmd:siman analyse}.
 
 {synopt:{opt notab:le}}do not output the table of calculated performance measures.
 
-{synopt:{it:simsum_options}}Any options for {help simsum}, e.g. {cmd:ref()} to specify the reference method for calculating relative precision.
+{synopt:{it:simsum_options}}any options for {help simsum}, e.g. {cmd:ref()} to specify the reference method for calculating relative precision.
 
 {synoptline}
 {p2colreset}{...}
@@ -51,7 +50,7 @@ This is needed if the user has previously run {cmd:siman analyse}.
 
 {pstd}
 {cmd:siman analyse} takes the estimates data from {help siman setup} and creates performance measures data using the program {help simsum}.  
-{cmd:siman analyse} requires that an {bf:estimate} variable has been specified in {cmd:siman setup}.
+{cmd:siman analyse} requires that the {bf:estimate} variable has been specified in {cmd:siman setup}.
 (We use 'the {bf:estimate} variable' etc. to mean the variable specified in the {opt estimate()} of {cmd:siman setup}.)
 
 {pstd}
@@ -62,10 +61,10 @@ A new variable _dataset indicates whether each row is estimates data or performa
 
 {pstd}
 Monte Carlo standard errors (MSCEs) of the performance estimates are stored in the {bf:se} variable. 
-If no {bf:se} variable was specified, then they are stored in a new variable _se.
+If no {bf:se} variable was specified in {cmd:siman setup}, then they are stored in a new variable _se.
 MSCEs quantify the simulation uncertainty.  
 They provide an estimate of the standard error of the performance estimate, as a finite number of repetitions are used.
-For example, for the performance measure bias, the Monte-Carlo standard error shows the uncertainty around the estimate of the bias.
+For example, for the performance measure bias, the Monte Carlo standard error shows the uncertainty around the estimate of the bias.
 
 {pstd}
 If {opt if} is used, performance measures are calculated for this subset only, but all estimates data are retained (unless {opt perfonly} is also used). 

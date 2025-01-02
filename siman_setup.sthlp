@@ -28,16 +28,16 @@ Each result relates to one simulation combination of data generating method ({bf
 {pstd}The input data can be in any of these formats:
 
 {pstd}
-(1) long-long format (i.e. long targets, long methods): one record per repetition, target and method.
+(1) long-long format (long targets, long methods): one record per repetition, target and method.
 
 {pstd}
-(2) long-wide format (i.e. long targets, wide methods): one record per repetition and target.
+(2) long-wide format (long targets, wide methods): one record per repetition and target.
 
 {pstd}
-(3) wide-long format (i.e. wide targets, long methods): one record per repetition and method.
+(3) wide-long format (wide targets, long methods): one record per repetition and method.
 
 {pstd}
-(4) wide-wide format (i.e. wide targets, wide methods): one record per repetition.
+(4) wide-wide format (wide targets, wide methods): one record per repetition.
 
 
 {marker syntax}{...}
@@ -138,13 +138,14 @@ Options for data in any input format:
 {synopt:{opt lci(varname|stub_varname)}}the lower confidence interval variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
 {synopt:{opt uci(varname|stub_varname)}}the upper confidence interval variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
 {synopt:{opt p(varname|stub_varname)}}the P-value variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
-{synopt:{opt true(#|varname|stub_varname)}}the true value of each target, given as a number, as the variable name (data format 1/3), or as the name of its stub (data formats 2/4). The true value should be the same for all methods: this is assumed in data formats 2/3 and must be true in data formats 1/4. {p_end}
-{synopt:{opt ord:er(varname)}}if in wide-wide format, this must be either {it:target} or {it:method}, 
+{synopt:{opt true(#|varname|stub_varname)}}the true value of each target, given as a number, as the variable name (data format 1/3), or as the name of its stub (data formats 2/4). 
+The true value should be the same for all methods: this is assumed in data formats 2/3 and must be true in data formats 1/4. {p_end}
+{synopt:{opt ord:er(varname)}}only needed in wide-wide format: this must be either {it:target} or {it:method}, 
 denoting that either the target stub is first or the method stub is first in the variable names. {p_end}
-{synopt:{opt clear}}to clear the existing data held in memory: only needed with {cmd:if} or {cmd:in} conditions. {p_end}
+{synopt:{opt clear}}clears the existing data held in memory: only needed with {cmd:if} or {cmd:in} conditions. {p_end}
 {synopt:{opt sep(string)}}a separator within wide-format variable names. 
 For example, if variables est_beta and est_gamma hold the estimates for targets  beta and gamma, you could code {cmd:estimate(est) sep(_) target(beta gamma)} instead of {cmd:estimate(est) target(_beta _gamma)}. {p_end}
-{synopt:{opt dgmmi:ssingok}}dgm variables may contain missing values. {p_end}
+{synopt:{opt dgmmi:ssingok}}the dgm variables may contain missing values. {p_end}
 
 
 {marker description}{...}
@@ -156,9 +157,9 @@ For example, if variables est_beta and est_gamma hold the estimates for targets 
 {pstd}
 The raw simulation data set must include a numeric variable, {opt rep(varname)}, which indexes the repetitions of the simulation experiment.  
 Other variables of interest that are typically specified to describe the repetition are
-the data generating mechanism ({opt dgm});
-the {opt target} which identifies different quantities that can be estimated in the analysis; and
-the {opt method} which identifies different methods of analysis.
+one or more variables identifying the data generating mechanism ({opt dgm});
+the {opt target} which identifies the different quantities that can be estimated in the analysis; and
+the {opt method} which identifies the different methods of analysis.
 Results of the analysis typically include the {opt estimate} and its standard error ({opt se}).
  
 {pstd}
@@ -169,7 +170,7 @@ Four data set formats are permitted by the siman suite as detailed {help siman s
 {cmd:siman setup} checks the data, reformats it if necessary,
 and attaches characteristics to the data set: these characteristics are read by every other {bf:siman} command.  
 The {bf:siman} estimates data set is held in memory.
-A summary of the data set up is printed, and can be repeated using  {bf:{help siman describe}}. 
+A summary of the data setup is printed, and can be repeated using  {bf:{help siman describe}}. 
 
 
 {marker outputdata}{...}
@@ -205,9 +206,7 @@ two targets (beta, gamma), and two methods of analysis (A, B).
 {marker limitations}{...}
 {title:Troubleshooting and limitations}
 
-{pstd}If the method variable is not specified, then {cmd:siman setup} will create a variable {bf:_method} in the dataset with a value of 1 in order that all the other {bf: siman} programs can run.
-
-{pstd}Dgm can contain missing values, but the graphs may show unexpected behaviour.
+{pstd}If the method variable is not specified, then {cmd:siman setup} creates a variable {bf:_method} in the dataset with a value of 1 in order that all the other {bf: siman} programs can run.
 
 {pstd}Selecting on dgm variables with non-integer values can cause problems. 
 For example, {cmd:siman scatter if pmiss==0.2} may show no observations.
@@ -263,7 +262,7 @@ There is a single variable true because in these data its value is constant.
 {title:Characteristics stored by siman setup}
 
 {pstd}Each characteristic {cmd:{it:char}} in the list below is stored as characteristic {cmd:_dta[siman_{it:char}]}.
-The characteristics can be viewed using {cmd:siman describe, char}.
+The characteristics can be viewed using {cmd:siman describe, chars}.
 
 {synoptset 20 tabbed}{...}
 {pstd}DGMs{p_end}
@@ -273,7 +272,7 @@ The characteristics can be viewed using {cmd:siman describe, char}.
 
 {pstd}Targets{p_end}
 {synopt:{opt target}}Variable name for targets. Values: varname or empty. {p_end}
-{synopt:{opt numtarget}}Number of targets. Values: integer {p_end}
+{synopt:{opt numtarget}}Number of targets. Values: integer. {p_end}
 {synopt:{opt targetnature}}Nature of target variable: 0=numeric unlabelled, 1=numeric labelled, 2=string. Values: ./0/1/2. {p_end}
 {synopt:{opt valtarget}}Names of targets, using value labels if they exist. {p_end}
 
@@ -309,7 +308,6 @@ to hold Monte Carlo standard errors. Values: missing or 1. {p_end}
 {title:Authors}
 
 {pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:e.marley-zagar@ucl.ac.uk":Ella Marley-Zagar}
 
 {pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}

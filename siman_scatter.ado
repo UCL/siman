@@ -31,7 +31,7 @@ foreach thing in `_dta[siman_allthings]' {
 }
 
 if "`setuprun'"!="1" {
-	di as error "siman_setup needs to be run before siman scatter"
+	di as error "siman setup needs to be run before siman scatter"
 	exit 498
 }
 	

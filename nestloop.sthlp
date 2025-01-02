@@ -79,7 +79,6 @@ Presenting simulation results in a nested loop plot. BMC Med Res Methodol 14, 12
 {title:Authors}
 
 {pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:e.marley-zagar@ucl.ac.uk":Ella Marley-Zagar}
 
 {pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
@@ -87,5 +86,5 @@ Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 {pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
-{pstd}{helpb siman: Return to main help page for siman}
 
+{p}{helpb siman: Return to main help page for siman}
