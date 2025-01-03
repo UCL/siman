@@ -1,4 +1,5 @@
-*!	version 0.11.3	25oct2024	
+*!	version 0.11.4	2jan2025	
+*	version 0.11.4	2jan2025	IW correct the count of #panels	
 *	version 0.11.3	25oct2024	IW/TM allow only 1 method
 *	version 0.11.2	25oct2024	IW Default by() ignores non-varying variables
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
@@ -153,7 +154,7 @@ forvalues g = 1/`nummethodnew' {
 * Count how many graphs will be created
 if !mi("`by'") {
 	tempvar first
-	bysort `dgm' `target': gen `first' = _n==1
+	bysort `by': gen `first' = _n==1
 	qui count if `first'
 	local npanels = r(N)
 	drop `first'
