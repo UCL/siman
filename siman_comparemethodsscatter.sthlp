@@ -30,7 +30,6 @@
 {synoptset 25 tabbed}{...}
 {synopthdr}
 {synoptline}
-
 {synopt:{opt com:bine}}forces use of the slower 'combine' method: the graph is made by combining individual graphs, potentially showing both estimate and SE. This is the default with 2 or 3 methods.
 
 {synopt:{opt mat:rix}}forces use of the faster 'matrix' method: the graph is made by {help graph matrix}, showing only estimate or SE. This is the default with more than 3 methods.
@@ -46,7 +45,8 @@ But the option {bf: methlist(D B)} would also change the ordering of the graphs.
 
 {synopt:{opt subgr:aphoptions(string)}}is relevant with the combine method: it changes the format of the constituent scatter graphs.
 For example, to use the red plotting symbol with the combine method, use {bf:subgr(mcol(red))}; with the matrix method, use 
-{bf:mcol(red)}.
+{bf:mcol(red)}.{p_end}
+{synoptline}
 
 
 {marker description}{...}

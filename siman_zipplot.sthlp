@@ -25,9 +25,14 @@
 {synoptset 26 tabbed}{...}
 {synopthdr}
 {synoptline}
+{syntab:Main}
 
-{synopt:{opt by(string)}}specifies the nesting of the variables, with the default being {bf:by(dgm method)} if there is only one true value, and
-{bf:by(dgm target method)} where there are different true values per target.
+{synopt:{opt by(varlist)}}specifies the variable(s) defining the scatterplot panels. 
+The default is to draw the graph {cmd:by(}{it:dgmvars target method}{cmd:)}. 
+Specifying for example {cmd:by(}{it:target method}{cmd:)} will overlay DGMs.
+We advise against using this option.
+
+{syntab:Graph options}
 
 {synopt:{opt noncov:eroptions(string)}}graph options for the non-coverers 
 
@@ -47,9 +52,10 @@ The default is the current system default confidence level.
 
 {synopt:{opt ymin(pct)}}omits the lowest {it:pct}% of the confidence intervals from the zipplot
 
-{synopt:{it:graph_options}}options for {help scatter} that do not go inside its {cmd:by()} option.
+{synopt:{opt bygr:aphoptions(string)}}options for {help twoway} that go inside its {cmd:by()} option.
 
-{synopt:{opt bygr:aphoptions(string)}}options for {help scatter} that go inside its {cmd:by()} option.
+{synopt:{it:graph_options}}options for {help twoway} that do not go inside its {cmd:by()} option.{p_end}
+{synoptline}
 
 
 {marker description}{...}

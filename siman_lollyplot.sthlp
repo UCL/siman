@@ -73,6 +73,7 @@ The graph name is {it:namestub} with the target name appended.{p_end}
 
 {synopt:{opt exp:ort}{it:(format[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified, and the file name is the same as for {cmd:saving()} with the appropriate filetype.{p_end}
+{synoptline}
 
 
 {marker description}{...}

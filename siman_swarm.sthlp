@@ -29,7 +29,10 @@
 {synoptline}
 {syntab:Main}
 
-{synopt:{opt by(string)}}specifies the nesting of the variables, with the default being {bf:by(dgm target)}. 
+{synopt:{opt by(varlist)}}specifies the variable(s) defining the scatterplot panels. 
+The default is to draw the graph {cmd:by(}{it:dgmvars target}{cmd:)}. 
+Specifying for example {cmd:by(}{it:target}{cmd:)} will overlay DGMs.
+Each panel displays all methods, so do not include {it:method} in {cmd:by()}.
 
 {syntab:Graph options}
 
@@ -45,7 +48,8 @@
 
 {synopt:{opt name(string)}}the stub for the graph name, to which is appended "_estimate" or "_se". Default is "simanswarm"
 
-{synopt:{it:graph_options}}siman swarm attempts to allocate graph options as {opt scatteroptions()}, {opt phoptions()} or {opt graphoptions()}.
+{synopt:{it:graph_options}}siman swarm attempts to allocate graph options as {opt scatteroptions()}, {opt phoptions()} or {opt graphoptions()}.{p_end}
+{synoptline}
 
 
 {marker description}{...}

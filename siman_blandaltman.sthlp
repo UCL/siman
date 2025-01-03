@@ -28,6 +28,14 @@
 {synoptset 25 tabbed}{...}
 {synopthdr}
 {synoptline}
+{syntab:Main}
+
+{synopt:{opt by(varlist)}}specifies the variable(s) defining the scatterplot panels. 
+The default is to draw the graph {cmd:by(}{it:method}{cmd:)}, with one graph per DGM and target.
+Specifying for example {cmd:by(}{it:target method}{cmd:)} will combine the different targets into the same graph.
+Do not exclude {it:method} from the {cmd:by()} option.
+
+{syntab:Graph options}
 
 {synopt:{it:graph_options}}options for {help scatter} that do not go inside its {cmd:by()} option.
 
@@ -40,10 +48,8 @@ Note that the value needs to be entered in to {bf: methlist()} and not the label
 (if these are different).  For example if method is a numeric labelled variable with values 1, 2, 3 and corresponding labels A, B, and C, then 
 {bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)}.  The {bf: methlist()} option needs to be specified to subset on methods, 
 using <= and >= will not work.  The components of {bf: methlist()}  need to be written out in full, for example {bf: methlist(1 2 3 4)} and not
-{bf: methlist(1/4)}.
-
-{synopt:{opt by(string)}}This option may yield unsatisfactory graphs.
-The default is {cmd:by(}{it:method}{cmd:)}, which draws one panel per method and one graph per target and DGM.
+{bf: methlist(1/4)}.{p_end}
+{synoptline}
 
 
 {marker description}{...}

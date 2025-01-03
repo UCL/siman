@@ -29,13 +29,16 @@
 {synoptline}
 {syntab:Main}
 
-{synopt:{opt by(string)}}specifies an alternative to the default, which is to draw the graph {bf:by(dgm target method)}. This option is typically used to overlay DGMs, targets and/or methods.
+{synopt:{opt by(varlist)}}specifies the variable(s) defining the scatterplot panels. 
+The default is to draw the graph {cmd:by(}{it:dgmvars target method}{cmd:)}. 
+Specifying for example {cmd:by(}{it:target method}{cmd:)} will overlay DGMs.
 
 {syntab:Graph options}
 
 {synopt:{it:graph_options}}options for {help scatter} that do not go inside the {cmd:by()} option.
 
-{synopt:{opt bygr:aphoptions(string)}}options for {help scatter} that go inside the {cmd:by()} option.
+{synopt:{opt bygr:aphoptions(string)}}options for {help scatter} that go inside the {cmd:by()} option.{p_end}
+{synoptline}
 
 
 {marker description}{...}
