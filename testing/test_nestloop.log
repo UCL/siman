@@ -656,8 +656,7 @@ Performance measures not in data: rhubarb
 . 
 . * only one dgm
 . cap noi siman nestloop bias if float(beta)==0 & float(pmiss)==float(0.2) & mech==1
-siman nestloop will draw 3 graphs (3 targets * 1 performance measures)
-siman nestloop requires more than 1 descriptor combination
+siman nestloop requires at least 2 dgms
 
 . assert _rc == 498
 

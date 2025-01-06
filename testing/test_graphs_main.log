@@ -69,6 +69,7 @@ _____________________________________________________
 
 . siman comparemethodsscatter if estimand=="beta" & dgm==2
 siman comparemethodsscatter will draw 1 graph showing 2 methods
+Graph cms_1 is for dgm=2, estimand=beta
 
 . * graphs
 . siman scatter, ytitle("test y-title") xtitle("test x-title") name("scatter_test1", replace) 
@@ -94,6 +95,10 @@ siman zipplot will draw 1 graph with 8 panels
 >  
 siman comparemethodsscatter will draw 4 graphs each showing 2 methods
 Consider reducing the number of graphs using 'if' condition
+Graph cms_test1_1 is for dgm=1, estimand=beta
+Graph cms_test1_2 is for dgm=1, estimand=gamma
+Graph cms_test1_3 is for dgm=2, estimand=beta
+Graph cms_test1_4 is for dgm=2, estimand=gamma
 
 . 
 . siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test1", replace) 
@@ -407,6 +412,10 @@ siman zipplot will draw 1 graph with 8 panels
 >  
 siman comparemethodsscatter will draw 4 graphs each showing 2 methods
 Consider reducing the number of graphs using 'if' condition
+Graph cms_test2_1 is for dgm=D1, target=1
+Graph cms_test2_2 is for dgm=D1, target=2
+Graph cms_test2_3 is for dgm=D2, target=1
+Graph cms_test2_4 is for dgm=D2, target=2
 
 . 
 . siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test2", replace)        
@@ -692,6 +701,10 @@ siman swarm will draw 1 graph with 4 panels
 >  
 siman comparemethodsscatter will draw 4 graphs each showing 2 methods
 Consider reducing the number of graphs using 'if' condition
+Graph cms_test3_1 is for dgm=1, estimand=beta
+Graph cms_test3_2 is for dgm=1, estimand=gamma
+Graph cms_test3_3 is for dgm=2, estimand=beta
+Graph cms_test3_4 is for dgm=2, estimand=gamma
 
 . 
 . siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test3", replace) 
@@ -984,6 +997,8 @@ siman zipplot will draw 1 graph with 4 panels
 . siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cms_test5", replace)
 >  
 siman comparemethodsscatter will draw 2 graphs each showing 2 methods
+Graph cms_test5_1 is for dgm=1
+Graph cms_test5_2 is for dgm=2
 
 . 
 . siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test5", replace) 
@@ -1157,6 +1172,8 @@ siman zipplot will draw 1 graph with 8 panels
 . siman comparemethodsscatter if estimand=="beta", title("testtitle") subgr(xtit("testaxis")) name("
 > cms_test5a", replace) 
 siman comparemethodsscatter will draw 2 graphs each showing 2 methods
+Graph cms_test5a_1 is for dgm=1, estimand=beta
+Graph cms_test5a_2 is for dgm=., estimand=beta
 
 . 
 . siman blandaltman if estimand=="beta", ytitle("test y-title") xtitle("test x-title") name("ba_test
@@ -1452,16 +1469,19 @@ _____________________________________________________
 
 . siman comparemethodsscatter if target=="beta" & dgm==1, methlist(3 7) name("cms_test6", replace) 
 siman comparemethodsscatter will draw 1 graph showing 2 methods
+Graph cms_test6_1 is for dgm=1, target=beta
 
 . siman comparemethodsscatter if target=="beta" & dgm==1, methlist(3/7) combine name("cms_test6a", r
 > eplace) 
 siman comparemethodsscatter will draw 1 graph showing 5 methods
+Graph cms_test6a_1 is for dgm=1, target=beta
 
 . siman comparemethodsscatter if target=="beta" & dgm==1
 Warning: with 10 methods compared, this plot may be too dense to read.  If you find it unreadable,
   you can choose the methods to compare using -siman comparemethodsscatter, methlist(a b)- where a
   and b are the methods you are particularly interested to compare.
 siman comparemethodsscatter will draw 1 graph showing 10 methods
+Graph cms_1 is for dgm=1, target=beta
 
 . siman_blandaltman, methlist(3/7) name("ba_test6", replace)
 siman blandaltman will draw 4 graphs each with 4 panels
@@ -1542,6 +1562,7 @@ siman swarm will draw 1 graph with 4 panels
 . if ${detail} == 1 siman comparemethodsscatter if `useit1', title("testtitle") subgr(xtit("testaxis
 > ")) name("cms_test7", replace) 
 siman comparemethodsscatter will draw 1 graph showing 2 methods
+Graph cms_test7_1 is for theta=1, rho=no, pc=5%, k=5
 
 . * this sometimes fails with error 111 "series 0 not found" from -graph combine-
 . 

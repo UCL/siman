@@ -20,11 +20,23 @@ use data/setupdata_target1, clear
 siman cms estimate, name(cms_target1, replace) title(Test siman cms using data target1)
 Standard error not included in lower triangle (by request)
 siman comparemethodsscatter will draw 3 graphs each showing 3 methods
+Graph cms_target1_1 is for beta=0
+Graph cms_target1_2 is for beta=.25
+Graph cms_target1_3 is for beta=.5
 use data/setupdata_target6, clear
 siman cms estimate, name(cms_target6, replace) title(Test siman cms using data target6)
 Standard error not included in lower triangle (by request)
 siman comparemethodsscatter will draw 9 graphs each showing 3 methods
 Consider reducing the number of graphs using 'if' condition
+Graph cms_target6_1 is for beta=0, target=effect
+Graph cms_target6_2 is for beta=0, target=mean0
+Graph cms_target6_3 is for beta=0, target=mean1
+Graph cms_target6_4 is for beta=.25, target=effect
+Graph cms_target6_5 is for beta=.25, target=mean0
+Graph cms_target6_6 is for beta=.25, target=mean1
+Graph cms_target6_7 is for beta=.5, target=effect
+Graph cms_target6_8 is for beta=.5, target=mean0
+Graph cms_target6_9 is for beta=.5, target=mean1
 use data/setupdata_method1, clear
 Skipped (only one method)
 use data/setupdata_method6, clear
@@ -32,6 +44,12 @@ siman cms estimate, name(cms_method6, replace) title(Test siman cms using data m
 Standard error not included in lower triangle (by request)
 siman comparemethodsscatter will draw 6 graphs each showing 3 methods
 Consider reducing the number of graphs using 'if' condition
+Graph cms_method6_1 is for beta=0, mech=MCAR
+Graph cms_method6_2 is for beta=0, mech=MNAR
+Graph cms_method6_3 is for beta=.25, mech=MCAR
+Graph cms_method6_4 is for beta=.25, mech=MNAR
+Graph cms_method6_5 is for beta=.5, mech=MCAR
+Graph cms_method6_6 is for beta=.5, mech=MNAR
 
 . 
 . di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"

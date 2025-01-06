@@ -108,6 +108,10 @@ siman swarm will draw 1 graph with 2 panels
 . siman comparemethodsscatter 
 siman comparemethodsscatter will draw 4 graphs each showing 2 methods
 Consider reducing the number of graphs using 'if' condition
+Graph cms_1 is for dgm=1, estimand=beta
+Graph cms_2 is for dgm=1, estimand=gamma
+Graph cms_3 is for dgm=2, estimand=beta
+Graph cms_4 is for dgm=2, estimand=gamma
 
 . * 1 graph per dgm and target, comparing methods
 . serset clear
@@ -116,6 +120,8 @@ Consider reducing the number of graphs using 'if' condition
 
 . if ${detail} == 1 siman comparemethodsscatter if estimand == 1
 siman comparemethodsscatter will draw 2 graphs each showing 2 methods
+Graph cms_1 is for dgm=1, estimand=beta
+Graph cms_2 is for dgm=2, estimand=beta
 
 . * metlist option too
 . 
@@ -544,6 +550,7 @@ siman swarm will draw 1 graph with 1 panels
 . siman comparemethodsscatter if betastring==1 & float(pmiss)==float(0.2) & mech == 2 & estimand=="e
 > ffect"
 siman comparemethodsscatter will draw 1 graph showing 3 methods
+Graph cms_1 is for betastring=0, pmiss=.2, mech=MNAR, estimand=effect
 
 . * one graph per target, comparing methods
 . 
@@ -2288,6 +2295,7 @@ siman swarm will draw 1 graph with 3 panels
 
 . siman comparemethodsscatter if dgm==1
 siman comparemethodsscatter will draw 1 graph showing 3 methods
+Graph cms_1 is for dgm=MCAR
 
 . 
 . siman blandaltman 
