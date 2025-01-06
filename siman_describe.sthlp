@@ -26,10 +26,8 @@
 {synopthdr}
 {synoptline}
 {synopt:{opt ch:ars}}lists the characteristics created by {bf:{help siman setup}} and explained {bf:{help siman setup##chars:here}}.{p_end}
-
-{synopt:{opt s:ort}}is used with {opt chars}: it sorts the characteristics alphabetically before listing.{p_end}
-
-{synopt:{opt sav:ing(filename)}}is used with {opt chars}: it saves the characteristics to the file specified.{p_end}
+{* {synopt:{opt s:ort}}is used with {opt chars}: it sorts the characteristics alphabetically before listing.{p_end}}{...}
+{* {synopt:{opt sav:ing(filename)}}is used with {opt chars}: it saves the characteristics to the file specified.{p_end}}{...}
 {synoptline}
 
 

@@ -14,7 +14,9 @@
 program define siman_describe
 version 15
 
-syntax, [Chars Sort SAVing(string)]
+syntax, [Chars ///
+	Sort SAVing(string) /// undocumented
+	]
 
 if !mi("`chars'") {
 	local allthings : char _dta[siman_allthings]
