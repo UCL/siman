@@ -30,23 +30,11 @@ version 15
 // PARSE
 syntax [anything] [if], [DGMOrder(string) ///
 	NAMe(string) SAVing(string) EXPort(string) /// twoway options for overall graph
-	debug force  /// undocumented
+	debug /// undocumented
 	*]
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
-}
-
-* Check DGMs are in the dataset, if not produce an error message
-if "`dgm'"=="" {
-	di as error "siman nestloop requires at least 2 dgm variables."
-	exit 498
-}
-	
-* If only 1 dgm in the dataset, produce error message as nothing will be graphed
-if `ndgmvars'==1 {
-	di as error "siman nestloop expects at least 2 dgm variables."
-	if mi("`force'") exit 498
 }
 
 * check if siman analyse has been run, if not produce an error message
@@ -141,6 +129,16 @@ if _N==0 {
 	exit 2000
 }
 
+* Check there is >1 DGM
+tempvar dgmcombo
+egen `dgmcombo' = group(`dgm')
+cap assert `dgmcombo' == 1
+if !_rc {
+	di as error "siman nestloop requires at least 2 dgms"
+	exit 498
+}
+drop `dgmcombo'
+	
 * If user has specified an order for dgm, check it includes all dgmvars
 if !mi("`dgmorder'") {
 	local ndgmorder: word count `dgmorder'

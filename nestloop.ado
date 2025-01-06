@@ -65,7 +65,7 @@ else qui gsort `descriptors', gen(`scenario')
 summ `scenario', meanonly
 local nscenarios = r(max)
 if `nscenarios'==1 {
-	di as error "siman nestloop requires more than 1 descriptor combination"
+	di as error "nestloop requires more than 1 descriptor combination"
 	exit 498
 }
 if upper("`connect'") != "L" {
