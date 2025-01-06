@@ -1,4 +1,5 @@
-*!	version 0.11.4	11nov2024	
+*!	version 0.11.5	06jan2025	
+*	version 0.11.5	06jan2025	IW new collapse() option
 *	version 0.11.4	11nov2024	IW correct handling of aspect()
 *	version 0.11.3	29oct2024	IW/TM aspect(1) not suppressed by other subgraphoptions
 *	version 0.11.2	24oct2024	handle extra variables by using keep before reshape
@@ -48,8 +49,8 @@
 program define siman_comparemethodsscatter
 version 16
 
-syntax [anything] [if][in] [, COMbine MATrix METHlist(string) ///
-	noEQuality SUBGRaphoptions(string) * ///
+syntax [anything] [if][in] [, COMbine MATrix COLLapse(varlist) /// main options
+	METHlist(string) noEQuality SUBGRaphoptions(string) * /// graph options
 	name(string) /// standard options handled differently
 	half debug /// undocumented options
 	]
@@ -211,8 +212,13 @@ if !mi("`debug'") di as input "Debug: reshape successful"
 
 
 * IDENTIFY 'OVER' VARIABLE
-
-if mi("`over'") local over `dgm' `target' 
+local allvars `dgm' `target' 
+local over : list allvars - collapse
+local ouch : list collapse - allvars
+if !mi("`ouch'") {
+	di as error "collapse() variable(s) are not in dgm or target: `ouch' "
+	exit 498
+}
 local over2 = cond(mi("`over'"),"[nothing]","`over'")
 if !mi("`debug'") di as input "Debug: Graphing over `over2' and by `method'"
 local novers : word count `over'
@@ -245,7 +251,9 @@ forvalues g = 1/`ngraphs' {
 	}
 	if !mi("`notetext'") local notetextopt note("Graphs for `notetext'") 
 	else local notetextopt 
-	if !mi("`debug'") di as input `"--> Debug: Drawing graph `g': `notetext'"'
+	di as text `"Graph "' as result `"`name'_`g'"' as text `" is for "' as result `"`notetext'"' _c
+	if !mi("`collapse'") di `", collapsing over `collapse'"' _c
+	di
 
 	if "`type'"=="combine" {
 
@@ -306,8 +314,12 @@ forvalues g = 1/`ngraphs' {
 		`dicmd' cap graph combine `graphlist', name(`name'_`g',replace) ///
 			`notetextopt' title("") cols(`nmethods') `esttitle' `setitle' ///
 			`options'	
-		if _rc==111 di as error `"{p 0 2}siman comparemethodsscatter called graph combine, which failed. Try {stata "serset clear"} and {stata "graph drop _all"}{p_end}"'
-		if _rc exit _rc
+		if _rc {
+			di as error `"{p 0 2}siman comparemethodsscatter called graph combine, which failed with error "' _rc ". {p_end}"
+			if _rc==111 di as error `"Try {stata "serset clear"} and {stata "graph drop _all"}"'
+			if _rc==198 & !mi(`"`options'"') di as error `"{p 0 2}Were options -`options'- correct?{p_end}"'
+			exit _rc
+		}
 		
 		* drop constituent graphs - need capture since there may be duplicates
 		foreach graph of local graphlist {

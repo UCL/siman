@@ -30,22 +30,28 @@
 {synoptset 25 tabbed}{...}
 {synopthdr}
 {synoptline}
-{synopt:{opt com:bine}}forces use of the slower 'combine' method: the graph is made by combining individual graphs, potentially showing both estimate and SE. This is the default with 2 or 3 methods.
+{syntab:Main}
+{synopt:{opt com:bine}}forces use of the slower 'combine' method: the graph is made by combining individual graphs, potentially showing both estimate and SE. This is the default with 2 or 3 methods.{p_end}
+{synopt:{opt mat:rix}}forces use of the faster 'matrix' method: the graph is made by {help graph matrix}, showing only estimate or SE. This is the default with more than 3 methods.{p_end}
+{synopt:{opt coll:apse(varlist)}}collapses the graphs over the specified variables.
+By default, one graph is drawn per DGM and target. 
+For example, in a setting with DGM defined by {cmd:dgmvar1 dgmvar2} and target defined by {cmd:targetvar}, 
+specifying {cmd:collapse(dgmvar1)} would draw one graph for each value of {cmd:dgmvar2} and {cmd:target},
+overlaying estimates or standard errors for different values of {cmd:dgmvar1}.{p_end}
 
-{synopt:{opt mat:rix}}forces use of the faster 'matrix' method: the graph is made by {help graph matrix}, showing only estimate or SE. This is the default with more than 3 methods.
-
+{syntab:Graph options}
 {synopt:{opt meth:list(string)}}specifies a subgroup of methods, and their order, to be graphed.
 For example, in a dataset with methods A, B, C and D, the option {bf: methlist(B D)}, which would plot graphs for B vs. D, the same as using {bf:if method=="B" | method=="D"}. 
 But the option {bf: methlist(D B)} would also change the ordering of the graphs.
-{it:string} may be a numlist if method is numeric.
-
-{synopt:{opt noeq:uality}}does not draw the line of equality when the combine method is used. The line of equality is never drawn when the matrix method is used.
-
-{synopt:{it:graph_options}}most of the valid options for {help graph combine:graph combine} are available.
-
+{it:string} may be a numlist if method is numeric.{p_end}
+{synopt:{opt noeq:uality}}does not draw the line of equality when the combine method is used. The line of equality is never drawn when the matrix method is used.{p_end}
+{synopt:{it:graph_options}}other options for {help graph combine} if the {cmd:combine} method is used, 
+or {help graph matrix} if the {cmd:matrix} method is used, .{p_end}
 {synopt:{opt subgr:aphoptions(string)}}is relevant with the combine method: it changes the format of the constituent scatter graphs.
 For example, to use the red plotting symbol with the combine method, use {bf:subgr(mcol(red))}; with the matrix method, use 
 {bf:mcol(red)}.{p_end}
+{synopt:{opt name(string)}}specifies the stub of the graph names.
+Graphs will be named {it:string}_1, {it:string}_2 etc.{p_end}
 {synoptline}
 
 
