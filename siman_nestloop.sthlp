@@ -28,7 +28,6 @@
 {synopthdr}
 {synoptline}
 {syntab:Options controlling the main graph}
-
 {synopt:{opt dgmo:rder(string)}}defines the order of data generating mechanisms for the nested loop plot. A negative sign in front of the variable name 
 will display its values on the graph in descending order.{p_end}
 {synopt:{opt stag:ger(#)}}horizontally staggers the main graphs for different methods.  Default # is 0. Try {cmd:stagger(0.05)} to make the lines more distinct.{p_end}
@@ -39,7 +38,6 @@ An alternative is {cmd:connect(L)} which shows each performance measure value at
 {synopt:{opt lev:el}}specifies where the reference line for performance measure coverage will be drawn.{p_end}
 
 {syntab:Options controlling the descriptor graph}
-
 {synopt:{opt dgsi:ze(#)}}defines the vertical size of the descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.35.{p_end}
 {synopt:{opt dgga:p(#)}}defines the vertical size of the gap between the main graph and the descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.{p_end}
 {synopt:{opt dgin:nergap(#)}}controls the vertical spacing between the  descriptor graphs.  Default # is 3.{p_end}
@@ -50,7 +48,6 @@ An alternative is {cmd:connect(L)} which shows each performance measure value at
 {synopt:{opt dglw:idth(string)}}controls the width(s) of the descriptor graph.{p_end}
 
 {syntab:Other graph options}
-
 {synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
 {synopt:{opt scena:riolabel}}labels the horizontal axis with scenario numbers. 
 The default is an unlabelled axis, since the descriptor graphs describe the scenarios.{p_end}
@@ -60,7 +57,6 @@ We find these especially useful: {cmd:ylabel()} to stop the y-labels extending t
 {cmd:legend(pos(6) row(1))} or {cmd:legend(pos(3) col(1))}.{p_end}
 
 {syntab:Saving options}
-
 {synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata format. 
 The graph name is {it:namestub} with the target and performance measures appended.{p_end}
 {synopt:{opt exp:ort}{it:(format[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 

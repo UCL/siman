@@ -259,7 +259,7 @@ There is a single variable true because in these data its value is constant.
 
 
 {marker chars}{...}
-{title:Characteristics stored by siman setup}
+{title:Characteristics stored by siman setup (for use by programmers in debugging)}
 
 {pstd}Each characteristic {cmd:{it:char}} in the list below is stored as characteristic {cmd:_dta[siman_{it:char}]}.
 The characteristics can be viewed using {cmd:siman describe, chars}.

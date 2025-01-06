@@ -30,47 +30,32 @@
 {synopthdr}
 {synoptline}
 {syntab:Specific graph options}
-
 {synopt:{opt labf:ormat(string)}}defines formats for the marker labels for (i) numeric performance measures (e.g. bias), (ii) percentage performance measures (e.g. coverage), and (iii) count performance measures (e.g. estreps). 
-Alternatively, {cmd:labformat(none)} removes the marker labels.
-
-{synopt:{opt col:ors(string)}}specifies colours for the graphs: one per method.
-
-{synopt:{opt ms:ymbol(string)}}specifies marker symbols for the graphs: one per method, or one for all methods.
-	
-{synopt:{opt refp:ower(string)}}draws a reference line for power. Default is no reference line for power.
-
+Alternatively, {cmd:labformat(none)} removes the marker labels.{p_end}
+{synopt:{opt col:ors(string)}}specifies colours for the graphs: one per method.{p_end}
+{synopt:{opt ms:ymbol(string)}}specifies marker symbols for the graphs: one per method, or one for all methods.{p_end}	
+{synopt:{opt refp:ower(string)}}draws a reference line for power. Default is no reference line for power.{p_end}
 {synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
-
 {synopt:{opt dgms:how}}shows in the top title the values of any DGM variables that are constant within the 'if' condition. The default is not to show them.{p_end}
-
 {synopt:{opt dgmti:tle}{cmd:(on|off)}}controls whether the top title shows the names of the DGM variables.
 The default is {cmd:dgmtitle(on)} with one DGM variable and {cmd:dgmtitle(off)} with more than one DGM variable.{p_end}
 
 {syntab:Calculation options}
-
-{synopt:{opt l:evel(#)}}sets the level for confidence intervals. Default is the current level (see {help level}).
-
+{synopt:{opt l:evel(#)}}sets the level for confidence intervals. Default is the current level (see {help level}).{p_end}
 {synopt:{opt logit}}calculates confidence intervals for power and coverage on the logit scale. This is only important with small numbers of repetitions: it ensures that confidence intervals lie between 0 and 100.
 
 {syntab:General graph options}
-
 {synopt:{opt bygr:aphoptions(string)}}graph options which need to be placed within the {cmd:by()} option.{p_end}
-
 {synopt:{opt name(string)}}stub for graph name, to which "_" and the target name are appended.{p_end}
-
 {synopt:{it:graph_options}}most of the valid options for {help twoway} are available.{p_end}
 
 {syntab:Advanced graph options}
-
 {synopt:{opt pause}}pauses before drawing each graph, allowing the user to retrieve and edit each graph command before running it. 
 Requires {help pause} to be on.
 
 {syntab:Saving options}
-
 {synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata format. 
 The graph name is {it:namestub} with the target name appended.{p_end}
-
 {synopt:{opt exp:ort}{it:(format[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified, and the file name is the same as for {cmd:saving()} with the appropriate filetype.{p_end}
 {synoptline}

@@ -29,13 +29,10 @@
 {synopthdr}
 {synoptline}
 {synopt:{opt perf:only} }include only performance measures in the output data set. 
-By default it contains the performance measures and the estimates data.
-
+By default it contains the performance measures and the estimates data.{p_end}
 {synopt:{opt rep:lace} }replace any performance measures that have already been calculated.
-This is needed if the user has previously run {cmd:siman analyse}.
-
-{synopt:{opt notab:le}}do not output the table of calculated performance measures.
-
+This is needed if the user has previously run {cmd:siman analyse}.{p_end}
+{synopt:{opt notab:le}}do not output the table of calculated performance measures.{p_end}
 {synopt:{it:simsum_options}}any options for {help simsum}, e.g. {cmd:ref()} to specify the reference method for calculating relative precision.{p_end}
 {synoptline}
 {p2colreset}{...}

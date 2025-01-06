@@ -28,26 +28,18 @@
 {synopthdr}
 {synoptline}
 {syntab:Main}
-
 {synopt:{opt by(varlist)}}specifies the variable(s) defining the scatterplot panels. 
 The default is to draw the graph {cmd:by(}{it:dgmvars target}{cmd:)}. 
 Specifying for example {cmd:by(}{it:target}{cmd:)} will overlay DGMs.
 Each panel displays all methods, so do not include {it:method} in {cmd:by()}.
 
 {syntab:Graph options}
-
-{synopt:{opt nomean}}do not add the mean to the graph
-
-{synopt:{opt meangr:aphoptions(string)}}options for {help scatter} to be applied to the mean: e.g. mcolor()
-
-{synopt:{opt sc:atteroptions(string)}}options for {help scatter} to be applied to the scatterplot: e.g. msymbol(), moclor()
-
-{synopt:{opt bygr:aphoptions(string)}}graph options for the overall graph that need to be within the {it:by} option: e.g. title(), note(), row(), col()
-
-{synopt:{opt graphop:tions(string)}}graph options for the overall graph that need to be outside the {it:by} option: e.g. xtitle(), ytitle(). This must not include {opt name()}.
-
-{synopt:{opt name(string)}}the stub for the graph name, to which is appended "_estimate" or "_se". Default is "simanswarm"
-
+{synopt:{opt nomean}}do not add the mean to the graph{p_end}
+{synopt:{opt meangr:aphoptions(string)}}options for {help scatter} to be applied to the mean: e.g. mcolor(){p_end}
+{synopt:{opt sc:atteroptions(string)}}options for {help scatter} to be applied to the scatterplot: e.g. msymbol(), moclor(){p_end}
+{synopt:{opt bygr:aphoptions(string)}}graph options for the overall graph that need to be within the {it:by} option: e.g. title(), note(), row(), col(){p_end}
+{synopt:{opt graphop:tions(string)}}graph options for the overall graph that need to be outside the {it:by} option: e.g. xtitle(), ytitle(). This must not include {opt name()}.{p_end}
+{synopt:{opt name(string)}}the stub for the graph name, to which is appended "_estimate" or "_se". Default is "simanswarm"{p_end}
 {synopt:{it:graph_options}}siman swarm attempts to allocate graph options as {opt scatteroptions()}, {opt phoptions()} or {opt graphoptions()}.{p_end}
 {synoptline}
 

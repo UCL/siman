@@ -28,15 +28,12 @@
 {synopthdr}
 {synoptline}
 {syntab:Main}
-
 {synopt:{opt by(varlist)}}specifies the variable(s) defining the scatterplot panels. 
 The default is to draw the graph {cmd:by(}{it:dgmvars target method}{cmd:)}. 
 Specifying for example {cmd:by(}{it:target method}{cmd:)} will overlay DGMs.
 
 {syntab:Graph options}
-
-{synopt:{it:graph_options}}options for {help scatter} that do not go inside the {cmd:by()} option.
-
+{synopt:{it:graph_options}}options for {help scatter} that do not go inside the {cmd:by()} option.{p_end}
 {synopt:{opt bygr:aphoptions(string)}}options for {help scatter} that go inside the {cmd:by()} option.{p_end}
 {synoptline}
 

@@ -29,7 +29,6 @@
 {synopthdr}
 {synoptline}
 {syntab:Options specific to this stand-alone program}
-
 {synopt:{opt desc:riptors(evarlist)}}defines the descriptor variables for the nested loop plot. 
 A negative sign in front of the variable name 
 will display its values on the graph in descending order.{p_end}
@@ -37,7 +36,6 @@ will display its values on the graph in descending order.{p_end}
 One line will be drawn for each value of this variable.
 
 {syntab:Options shared with siman nestloop}
-
 {synopt:{opt options}}are any options for {help siman nestloop} except {cmd:dgmorder()}.
 
 

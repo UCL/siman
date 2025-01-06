@@ -118,11 +118,19 @@ The performance measures data sety is usually appended to the estimates data set
 
 {title:References}{marker refs}
 
-
 {phang}{marker Morris++19}Morris TP, White IR, Crowther MJ.
 Using simulation studies to evaluate statistical methods.
 Statistics in Medicine 2019; 38: 2074-2102.
 {browse "https://onlinelibrary.wiley.com/doi/10.1002/sim.8086"}
+
+
+{title:Acknowledgements}{marker acks}
+
+{phang}We thank the following colleagues for their help in testing the {cmd:siman} suite:{break}
+Jingyi Xuan (UCL),
+Kara-Louise Royle (University of Leeds),
+Matthew Smith (LSHTM),
+Jan Ditzen (Free University of Bozen-Bolzano).
 
 
 {title:Authors and updates}{marker updates}

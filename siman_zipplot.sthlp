@@ -26,34 +26,23 @@
 {synopthdr}
 {synoptline}
 {syntab:Main}
-
 {synopt:{opt by(varlist)}}specifies the variable(s) defining the scatterplot panels. 
 The default is to draw the graph {cmd:by(}{it:dgmvars target method}{cmd:)}. 
 Specifying for example {cmd:by(}{it:target method}{cmd:)} will overlay DGMs.
 We advise against using this option.
 
 {syntab:Graph options}
-
-{synopt:{opt noncov:eroptions(string)}}graph options for the non-coverers 
-
-{synopt:{opt cov:eroptions(string)}}graph options for the coverers 
-
-{synopt:{opt sca:tteroptions(string)}}graph options for the scatter plot of the point estimates
-
-{synopt:{opt truegr:aphoptions(string)}}graph options for the true value(s)
-
-{synopt:{opt sch:eme(string)}}changes the graph scheme
-
+{synopt:{opt noncov:eroptions(string)}}graph options for the non-coverers {p_end}
+{synopt:{opt cov:eroptions(string)}}graph options for the coverers {p_end}
+{synopt:{opt sca:tteroptions(string)}}graph options for the scatter plot of the point estimates{p_end}
+{synopt:{opt truegr:aphoptions(string)}}graph options for the true value(s){p_end}
+{synopt:{opt sch:eme(string)}}changes the graph scheme{p_end}
 {synopt:{opt l:evel(cilevel)}}changes the level for the confidence intervals in the zipplot. 
-The default is the current system default confidence level.
-
+The default is the current system default confidence level.{p_end}
 {synopt:{opt coverl:evel(cilevel)}}changes the level for the confidence interval around the coverage. 
-The default is the current system default confidence level.
-
-{synopt:{opt ymin(pct)}}omits the lowest {it:pct}% of the confidence intervals from the zipplot
-
-{synopt:{opt bygr:aphoptions(string)}}options for {help twoway} that go inside its {cmd:by()} option.
-
+The default is the current system default confidence level.{p_end}
+{synopt:{opt ymin(pct)}}omits the lowest {it:pct}% of the confidence intervals from the zipplot{p_end}
+{synopt:{opt bygr:aphoptions(string)}}options for {help twoway} that go inside its {cmd:by()} option.{p_end}
 {synopt:{it:graph_options}}options for {help twoway} that do not go inside its {cmd:by()} option.{p_end}
 {synoptline}
 

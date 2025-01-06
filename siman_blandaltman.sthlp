@@ -29,18 +29,14 @@
 {synopthdr}
 {synoptline}
 {syntab:Main}
-
 {synopt:{opt by(varlist)}}specifies the variable(s) defining the scatterplot panels. 
 The default is to draw the graph {cmd:by(}{it:method}{cmd:)}, with one graph per DGM and target.
 Specifying for example {cmd:by(}{it:target method}{cmd:)} will combine the different targets into the same graph.
 Do not exclude {it:method} from the {cmd:by()} option.
 
 {syntab:Graph options}
-
-{synopt:{it:graph_options}}options for {help scatter} that do not go inside its {cmd:by()} option.
-
-{synopt:{opt bygr:aphoptions(string)}}options for {help scatter} that go inside its {cmd:by()} option.
-
+{synopt:{it:graph_options}}options for {help scatter} that do not go inside its {cmd:by()} option.{p_end}
+{synopt:{opt bygr:aphoptions(string)}}options for {help scatter} that go inside its {cmd:by()} option.{p_end}
 {synopt:{opt m:ethlist(string)}}display the graphs for a subgroup of methods.  
 For example, in a dataset with methods A, B, C and D, if the user would like to compare 
 methods A and C, they would enter {bf: methlist(A C)}, which would plot graphs for the difference C - A.
