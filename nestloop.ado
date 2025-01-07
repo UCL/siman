@@ -1,10 +1,12 @@
-*!	version 0.11.3	21nov2024	IW New standalone, called by siman_nestloop of same version number
+*!  version 0.12.0	7jan2025
+*   version 0.12.0	7jan2025	TM improved how 'true' line is drawn and introduced new option 'trueoptions()'
+*   version 0.11.3	21nov2024	IW New standalone, called by siman_nestloop of same version number
 program define nestloop
 version 15
 * nestloop exp, descriptor(theta rho pc tau2 k) method(method) true(theta)
 // PARSE
 syntax varname [if], DESCriptors(string) METHod(varname) ///
-	[true(string) ///
+	[true(string) TRUEOPTions(string) ///
 	STAGger(real 0) Connect(string) noREFline LEVel(cilevel) /// control main graph
 	DGSIze(real 0.3) DGGAp(real 0) /// control sizing of descriptor graph
 	DGINnergap(real 3) DGCOlor(string) MISsing /// control descriptor graph
@@ -13,7 +15,7 @@ syntax varname [if], DESCriptors(string) METHod(varname) ///
 	METHLEGend(string) SCENariolabel * /// other graph options
 	NAMe(string) SAVing(string) EXPort(string) /// twoway options for overall graph
 	debug pause nodg /// undocumented
-	] 
+	]
 
 * parse varname
 local estimate `varlist'
@@ -218,21 +220,27 @@ if "`dg'" != "nodg" {
 }
 
 // CREATE MAIN GRAPH COMMAND
-local main_graph_cmd
-local legend
-forvalues k = 1 / `nmethods2' {
-	local istruevar = `k'>`nmethods' // handle "true" (if present) differently from the methods
+if !mi("`true'") {
+	local main_graph_cmd (line `true' `scenario', c(`connect') lc(gs10) lw(medthick) `trueopts')
+	local legend `legend' 1 `"True"'
+}
+else {
+	local main_graph_cmd
+	local legend
+}
+forvalues k = 1 / `nmethods' {
+	//local istruevar = `k'>`nmethods' // handle "true" (if present) differently from the methods
 	if `stagger'>0 local xvar `scenario'`k'
 	else local xvar `scenario'
-	if `istruevar' local thisgraphcmd line `true' `scenario', c(`connect')
-	else local thisgraphcmd line `estimate' `xvar' if `method'==`m2`k'', c(`connect')
+	//if `istruevar' local thisgraphcmd line `true' `scenario', c(`connect')
+	local thisgraphcmd line `estimate' `xvar' if `method'==`m2`k'', c(`connect')
 	foreach thing in lcolor lpattern lstyle lwidth {
 		local this : word `k' of ``thing''
 		if !mi("`this'") local thisgraphcmd `thisgraphcmd' `thing'(`this')
 	}
 	local main_graph_cmd `main_graph_cmd' (`thisgraphcmd')
-	if `istruevar' local legend `legend' `k' `"True"'
-	else local legend `legend' `k' `"`methlegitem'`m`k''"'
+	//if `istruevar' local legend `legend' `k' `"True"'
+	local legend `legend' `=`k'+1' `"`methlegitem'`m`k''"'
 }
 local ytitle : var label `estimate'
 if mi("`ytitle'") local ytitle `estimate'

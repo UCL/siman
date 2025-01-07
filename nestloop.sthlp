@@ -34,11 +34,14 @@
 A negative sign in front of the variable name 
 will display its values on the graph in descending order.{p_end}
 {synopt:{opt meth:od(varname)}}defines the method variable. 
-One line will be drawn for each value of this variable.
+One line will be drawn for each value of this variable.{p_end}
+{synopt:{opt true(#|varname)}}gives the value to be used as a background reference line. Can be string or {p_end}
+{synopt:{opt trueopt:ions(string)}}controls the appearance of the reference line.
 
 {syntab:Options shared with siman nestloop}
 
-{synopt:{opt options}}are any options for {help siman nestloop} except {cmd:dgmorder()}.
+{synopt:{opt options}}are any options for {help siman nestloop} except {cmd:dgmorder()}.{p_end}
+{synoptline}
 
 
 {marker description}{...}
