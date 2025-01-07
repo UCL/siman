@@ -10,7 +10,7 @@
 {title:Title}
 
 {phang}
-{bf:siman lollyplot} {hline 2} Lollipop plot of performance measures data.
+{bf:siman lollyplot} {hline 2} Lollipop plot of performance measures data
 
 
 {marker syntax}{...}

@@ -8,7 +8,7 @@
 {title:Title}
 
 {phang}
-{bf:siman swarm} {hline 2} Swarm plot of estimates data.
+{bf:siman swarm} {hline 2} Swarm plot of estimates data
 
 
 {marker syntax}{...}

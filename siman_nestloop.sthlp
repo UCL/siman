@@ -9,7 +9,7 @@
 {title:Title}
 
 {phang}
-{bf:siman nestloop} {hline 2} Nested loop plot of performance measures data.
+{bf:siman nestloop} {hline 2} Nested loop plot of performance measures data
 
 {marker syntax}{...}
 {title:Syntax}

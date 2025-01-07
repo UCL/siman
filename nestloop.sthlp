@@ -9,7 +9,7 @@
 {title:Title}
 
 {phang}
-{bf:nestloop} {hline 2} Nested loop plot of performance measures data.
+{bf:nestloop} {hline 2} Nested loop plot of performance measures data
 
 
 {marker syntax}{...}
@@ -36,7 +36,8 @@ will display its values on the graph in descending order.{p_end}
 One line will be drawn for each value of this variable.
 
 {syntab:Options shared with siman nestloop}
-{synopt:{opt options}}are any options for {help siman nestloop} except {cmd:dgmorder()}.
+{synopt:{opt options}}are any options for {help siman nestloop} except {cmd:dgmorder()}.{p_end}
+{synoptline}
 
 
 {marker description}{...}

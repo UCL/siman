@@ -9,7 +9,7 @@
 {title:Title}
 
 {phang}
-{bf:siman zipplot} {hline 2} Zip plot of the confidence interval coverage for each data-generating mechanism and analysis method in the estimates data.
+{bf:siman zipplot} {hline 2} Zip plot of the confidence interval coverage for each data-generating mechanism and analysis method in the estimates data
 
 
 {marker syntax}{...}

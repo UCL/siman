@@ -9,7 +9,7 @@
 {title:Title}
 
 {phang}
-{bf:siman blandaltman} {hline 2} Bland-Altman plot comparing methods of estimates or standard error data.
+{bf:siman blandaltman} {hline 2} Bland-Altman plot comparing methods of estimates or standard error data
 
 
 {marker syntax}{...}

@@ -9,7 +9,7 @@
 {title:Title}
 
 {phang}
-{bf:siman comparemethodsscatter} {hline 2} Scatter plot comparing estimates and/or standard error data for different methods.
+{bf:siman comparemethodsscatter} {hline 2} Scatter plot comparing estimates and/or standard error data for different methods
 
 
 {marker syntax}{...}

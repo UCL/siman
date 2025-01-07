@@ -8,7 +8,7 @@
 {title:Title}
 
 {phang}
-{bf:siman scatter} {hline 2} Scatter plot of point estimate versus standard error data.
+{bf:siman scatter} {hline 2} Scatter plot of point estimate versus standard error data
 
 
 {marker syntax}{...}
