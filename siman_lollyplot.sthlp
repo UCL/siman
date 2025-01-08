@@ -50,9 +50,9 @@ The default is {cmd:dgmtitle(on)} with one DGM variable and {cmd:dgmtitle(off)} 
 
 {syntab:Calculation options}
 
-{synopt:{opt l:evel(#)}}sets the level for confidence intervals. Default is the current level (see {help level}).
+{synopt:{opt l:evel(#)}}sets the level for Monte Carlo confidence intervals. Default is the current level (taken from c(level); see {help level}).
 
-{synopt:{opt logit}}calculates confidence intervals for power and coverage on the logit scale. This is only important with small numbers of repetitions: it ensures that confidence intervals lie between 0 and 100.
+{synopt:{opt logit}}calculates Monte Carlo confidence intervals for power and coverage on the logit scale. This ensures that Monte Carlo confidence intervals lie between 0 and 100 (typically only important with small numbers of repetitions).
 
 {syntab:General graph options}
 
@@ -80,10 +80,9 @@ The graph name is {it:namestub} with the target name appended.{p_end}
 {title:Description}
 
 {pstd}
-{cmd:siman lollyplot} draws a lollipop plot of performance measures data.  
-Each panel shows the estimated values of one performance measure with one data generating mechanism for all methods.
-Monte Carlo confidence intervals are represented via parentheses (a visual cue due to the usual presentation of 
-intervals as two numbers within parentheses).
+{cmd:siman lollyplot} draws a so-called lollipop plot of performance statistics.
+Each panel shows the estimated performance for different methods. Panels are separated for each performance measure and data-generating mechanism.
+Monte Carlo confidence intervals are represented via parentheses (a visual cue due to the typical presentation of intervals as two numbers within parentheses).
 The graph shows several performance measures (as rows of panels) and several data generating mechanisms (as columns).
 One graph is drawn for each target.
 
@@ -92,16 +91,16 @@ One graph is drawn for each target.
 {pstd}The user can select a subset of performance measures to be graphed using the 
 performance measures listed in {help siman analyse##perfmeas:performance measures}.
 If no performance measures are specified, then graphs will be drawn for {help siman analyse##bias:bias}, {help siman analyse##empse:empse} and {help siman analyse##cover:coverage}; 
-except that if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for {help siman analyse##mean:mean}, {help siman analyse##empse:empse} and {help siman analyse##relerror:relerror};
+an exception is if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for {help siman analyse##mean:mean}, {help siman analyse##empse:empse} and {help siman analyse##relerror:relerror};
 and that if there is no {bf:se} variable, then {help siman analyse##cover:coverage} or {help siman analyse##relerror:relerror} is dropped.
 
 {pstd}
 The user can specify {it:if} within the {cmd:siman lollyplot} syntax. 
-The {it:if} condition must only apply to {bf:dgm}, {bf:target} and {bf:method}.  
+The {it:if} condition must only apply to {bf:dgm}, {bf:target} and/or {bf:method}.  
 If the {it:if} condition is applied to other variables, an error "no observations" is likely.
 
 {pstd}
-Please note that {help siman setup} and {help siman analyse} need to be run first before {bf:siman lollyplot}.
+Please note that {help siman setup} and {help siman analyse} need to be run before {bf:siman lollyplot}.
 
 {pstd}
 If {cmd:siman lollyplot} fails with the error "Too many sersets", try again after typing {cmd:serset clear}.

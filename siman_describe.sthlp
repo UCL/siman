@@ -20,7 +20,6 @@
 {synopthdr}
 {synoptline}
 {synopt:{opt c:hars}}lists the contents of characteristics created by {help siman setup}.{p_end}
-{synopt:{opt s:ort(varname)}}specified that […].{p_end}
 {synopt:{opt sav:ing(filename, replace)}}specifies that […] will be saved to a new dataset.{p_end}
 {synoptline}
 

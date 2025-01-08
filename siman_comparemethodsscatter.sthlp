@@ -55,29 +55,29 @@ For example, to use the red plotting symbol with the combine method, use {bf:sub
 {title:Description}
 
 {pstd}
-{cmd:siman comparemethodsscatter} draws sets of scatter plots comparing the point estimates data or standard error data for various methods, where each point represents one repetition. The data pairs come from the same repetition 
-(i.e. they are estimated in the same simulated dataset) and are compared to the line of equality.  
-These graphs help the user to look for correlations between methods and any systematic differences. Where more
-than two methods are compared, a graph of every method versus every other is plotted.
+{cmd:siman comparemethodsscatter} draws sets of scatter plots comparing the point estimates (or standard errors) for various methods, where each point represents one repetition. It is assumed that data are paired in that they come from the same repetition,
+i.e. they were estimated using the same simulated dataset, and are compared to the line of equality.
+These graphs help the user to look for correlations between methods and any systematic differences.
+Where more than two methods are compared, a graph comparing each pair of methods is plotted.
 
 {pstd}
-The default graphing approach for 2 or 3 methods, "combine", plots both the estimate {it:and} the standard error. 
+The default graphing approach for two or three methods, "combine", plots both the estimate {it:and} the standard error.
 The upper triangle displays the estimates, the lower triangle displays the standard errors.  
 The default graphing approach for more than 3 methods, "matrix", plots either the estimate {it:or} the standard error depending on 
-which the user specifies, with the default being estimate if no variables are specified.  The graph for the larger 
-number of methods is plotted using the {help graph matrix} command. The default approach can be changed with the {cmd:combine} and {cmd:matrix} options.
+which the user specifies, with the default being estimate if no variables are specified. The graph for the larger number of methods is plotted using the {help graph matrix} command.
+The default approach can be changed with the {cmd:combine} and {cmd:matrix} options.
 
 {pstd}
-If there are many methods in the data set and the user wishes to compare subsets of methods, then this can be 
-achieved by using the {bf: methlist()} option.  
-Note that the value needs to be entered in {bf: methlist()} and not the label 
-(if these are different).  
-For example if method is a numeric labelled variable with values 1, 2, 3 and corresponding labels A, B, and C, then 
-{bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)}.  
+If there are many methods in the data set and the user wishes to compare subsets of methods,
+this can be achieved using the {bf: methlist()} option.  
+Note that the value and not the label needs to be entered in {bf: methlist()} 
+(if these are different).
+For example if method is a numeric labelled variable with values 1, 2, 3 and corresponding labels A, B, and C,
+then {bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)}.  
 
 {pstd}
-The graphs are split out by dgm (one graph per dgm) and they compare the methods to each other.  Therefore the only 
-other option to split the graphs with the {bf:by} option is by target, so the {bf:by(varlist)} option will only allow {bf:by(target)}.
+The graphs are split out by dgm (one graph per dgm) and they compare the methods to each other.
+Therefore the only other option to split the graphs with the {bf:by} option is by target, so the {bf:by(varlist)} option will only allow {bf:by(target)}.
 
 {pstd}
 {help siman setup} needs to be run first before {bf:siman comparemethodsscatter}.

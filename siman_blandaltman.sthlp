@@ -9,7 +9,7 @@
 {title:Title}
 
 {phang}
-{bf:siman blandaltman} {hline 2} Bland-Altman plot comparing methods of estimates or standard error data.
+{bf:siman blandaltman} {hline 2} Bland–Altman plot comparing point estimates or standard errors for pairs of methods.
 
 
 {marker syntax}{...}
@@ -22,14 +22,14 @@
 
 {pstd}If no variables are specified, then the {bf: blandaltman} graph will be drawn for {it:estimates} only.  Alternatively the user can select {it:se} or {it:estimate se}.
 
-{synoptset 20 tabbed}{...}
+{synoptset 19 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Main}
 
 {pstd}
 {p_end}
-{synopt:{opt if/in}}  The user can specify {it:if} and {it:in} within the siman blandaltman syntax. If they do not, but have already specified 
+{synopt:{opt if/in}}The user can specify {it:if} and {it:in} within the siman blandaltman syntax. If they do not, but have already specified 
 an {it:if/in} during {help siman setup}, then the {it:if/in} from {help siman setup} will be used.
 The {bf:if} option should only be applied to {bf:dgm} and {bf:target}, use the {bf: methlist()} option to subset on method.
 The {it:if} option is not allowed to be used on 
@@ -49,31 +49,30 @@ for method.
 
 {pstd}
 {p_end}
-{synopt:{opt bygr:aphoptions(string)}}  graph options for the nesting of the graphs due to the {it:by} option.
+{synopt:{opt bygr:aphoptions(string)}}graph options for the nesting of the graphs due to the {it:by} option.
 
 {pstd}
 {p_end}
-{synopt:{opt m:ethlist(string)}}  if the user would like to display the graphs for a subgroup of methods, these methods can be specified in {bf: methlist()}.  For example, in a dataset with methods A, B, C and D if the user would like to compare 
+{synopt:{opt m:ethlist(string)}}to display the graphs only for a subgroup of methods, these can be specified in {bf: methlist()}. For example, in a dataset with methods A, B, C and D if the user would like to compare 
 methods A and C, they would enter {bf: methlist(A C)}, which would plot graphs for the difference C - A.
-Note that the value needs to be entered in to {bf: methlist()} and not the label 
-(if these are different).  For example if method is a numeric labelled variable with values 1, 2, 3 and corresponding labels A, B, and C, then 
-{bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)}.  The {bf: methlist()} option needs to be specified to subset on methods, 
-using <= and >= will not work.  The components of {bf: methlist()}  need to be written out in full, for example {bf: methlist(1 2 3 4)} and not
-{bf: methlist(1/4)}.
+Note that the value needs to be entered in to {bf: methlist()} and not its label 
+(if these are different). For example, if method is a numeric labelled variable with values 1, 2, 3 and corresponding labels A, B, and C, then 
+{bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)} (note siman blandaltman will use the labels). The {bf: methlist()} option needs to be specified to subset on methods, 
+using <= and >= will not work. The components of {bf: methlist()}  need to be written out in full, for example {bf: methlist(1 2 3 4)} and not as a numlist such as {bf: methlist(1/4)}.
 
 
 {marker description}{...}
 {title:Description}
 
 {pstd}
-{cmd:siman blandaltman} draws a Bland-Altman plot comparing estimates and/or standard error data from different methods.  The Bland-Altman plot shows the difference of the estimate compared to the mean of the estimate (or likewise for 
-the standard error) with a selected method as the comparator.  
-The plots show the limits of agreement, that is, a plot of the difference versus the mean of each method 
-compared with a comparator.  If there are more than 2 methods in the data set, for example methods A B and C, then the first method will be taken 
-as the reference, and the {bf:siman blandaltman} plots will be created for method B - method A and method C - method A.  
+{cmd:siman blandaltman} draws a Bland–Altman plots comparing estimates and/or standard error data from different methods.
+The plot is of the difference between two methods versus the mean the two methods. It is assumed that data are paired in that they come from the same repetition,
+i.e. they were estimated using the same simulated dataset.
+Where there are more than two methods in the data set, for example if methods A B and C are specified by {opt methlist(A B C)}, the first method, A, will be taken 
+as the reference, and the {bf:siman blandaltman} plots will be created for method B versus method A and method C versus method A.
 
 {pstd}
-{help siman setup} needs to be run first before {bf:siman blandaltman}.
+{help siman setup} needs to be run before {bf:siman blandaltman} can be run.
 
 {pstd}
 For further troubleshooting and limitations, see {help siman setup##limitations:troubleshooting and limitations}.
@@ -81,7 +80,7 @@ For further troubleshooting and limitations, see {help siman setup##limitations:
 {marker examples}{...}
 {title:Examples}
 
-{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
+{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1,000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
 
 {pstd} To plot the Bland-Altman graph, first load the data set in to {cmd: siman}.
 
