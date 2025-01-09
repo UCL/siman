@@ -121,6 +121,7 @@ of interest is considered first, and so forth.  Further guidance can be found in
 
 {phang}. {stata `"siman nestloop relerror if estimand=="effect", dgsize(.4) dggap(.1) dgcol(green orange purple) dgpatt(dash solid =) dglabsize(medium) dglwidth(*2)"'}
 
+
 {marker references}{...}
 {title:References}
 
@@ -132,6 +133,7 @@ Presenting simulation results in a nested loop plot. BMC Med Res Methodol 14, 12
 Improved two-stage estimation to adjust for treatment switching in randomised trials: 
 g-estimation to address time-dependent confounding. Statistical Methods in Medical Research. 2020;29(10):2900-2918. 
 {browse "https://doi.org/10.1177/0962280220912524":doi:10.1177/0962280220912524}
+
 
 {marker authors}{...}
 {title:Authors}
