@@ -19,22 +19,20 @@
 [{cmd:,}
 {it:options}]
 
-{pstd}If no variables are specified, then the scatter graph will be drawn for  {it:se vs. estimate}.  Alternatively the user can select {it:se vs estimate} by typing {bf:siman scatter} {it:se estimate}.
+{pstd}If no variables are specified, the scatterplot will be drawn for  {it:se vs. estimate}. Alternatively
+the user can select {it:se vs estimate} by typing {bf:siman scatter} {it:se estimate}.
 
-{pstd}The {it:if} and {it:in} conditions are usually applied only to {bf:dgm}, {bf:target} and {bf:method}.  If they are applied otherwise, e.g. to {bf:repetition}, a warning is issued.
+{pstd}The {it:if} and {it:in} conditions are usually applied only to {bf:dgm}, {bf:target} and {bf:method}. If they are applied otherwise, e.g. to {bf:repetition}, a warning is issued.
 
 {synoptset 20 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Main}
-
-{synopt:{opt by(varlist)}}specifies the nesting of the variables, with the default being all of {bf:dgm target method} that vary within the selected data.
+{synopt:{opt by(varlist)}}specifies the nesting of the variables, with the default being all of {bf:dgm}, {bf:target} and {bf:method} that vary within the selected data.
 
 {syntab:Graph options}
-
-{synopt:{it:graphoptions}}most of the options for {help scatter:twoway scatter} are available.
-
-{synopt:{opt bygr:aphoptions(string)}}graph options for the nesting of the graphs due to the {it:by} option. For example, 
+{synopt:{it:graphoptions}}most {help scatter:twoway scatter} options are available.{p_end}
+{synopt:{opt bygr:aphoptions(string)}}graph options for the nesting of the graphs due to the {it:by} option.{p_end}
 
 {synoptline}
 
@@ -43,8 +41,8 @@
 {title:Description}
 
 {pstd}
-{cmd:siman scatter} draws a scatterplot of the point estimate data versus standard error from the estimates data.
-The {cmd:siman scatter} plots help the user to see the estimates produced by individual repetitions and are useful for identifying bivariate outliers.
+{cmd:siman scatter} draws a scatterplot of point estimates versus standard errors from the "estimates data". The
+{cmd:siman scatter} plots help the user to see the estimates produced by individual repetitions and are useful for identifying bivariate outliers.
 
 {pstd}
 {help siman setup} must be run before {cmd:siman scatter}.
@@ -72,7 +70,6 @@ For further troubleshooting and limitations, see {help siman setup##limitations:
 {title:Authors}
 
 {pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:e.marley-zagar@ucl.ac.uk":Ella Marley-Zagar}
 
 {pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":ian.white@ucl.ac.uk}

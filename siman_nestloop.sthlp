@@ -9,7 +9,7 @@
 {title:Title}
 
 {phang}
-{bf:siman nestloop} {hline 2} Nested loop plot of performance measures data.
+{bf:siman nestloop} {hline 2} Nested loop plot of performance statistics.
 
 {marker syntax}{...}
 {title:Syntax}
@@ -19,25 +19,25 @@
 [{cmd:,}
 {it:options}]
 
-{pstd}{it:performancemeasures} are any performance measures that have been calculated by {help siman analyse}. See {help siman analyse##perfmeas:performance measures}.
+{pstd}{it:performancemeasures} are any measures for which performance has been calculated by {help siman analyse}. See {help siman analyse##perfmeas:performance measures}.
 
 {pstd}
-{opt if} must be applied to {bf:dgm}, {bf:target} and/or {bf:method} only. 
+{opt if} conditions may only be applied to {bf:dgm}, {bf:target} and/or {bf:method}.
 
 
-{synoptset 28 tabbed}{...}
+{synoptset 21 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Options controlling the main graph}
 
-{synopt:{opt dgmo:rder(string)}}defines the order of data generating mechanisms for the nested loop plot. A negative sign in front of the variable name 
-will display its values on the graph in descending order.{p_end}
-{synopt:{opt stag:ger(#)}}horizontally staggers the main graphs for different methods.  Default # is 0. Try {cmd:stagger(0.05)} to make the lines more distinct.{p_end}
+{synopt:{opt dgmo:rder(string)}}defines the order of data generating mechanisms for the nested-loop plot. A negative sign in front of the variable name 
+will sort its values on the graph in descending order.{p_end}
+{synopt:{opt stag:ger(#)}}horizontally staggers the lines for different methods.  Default # is 0. Try {cmd:stagger(0.05)} to make overlapping lines more distinct.{p_end}
 {synopt:{opt c:onnect(string)}}controls how the main graph and descriptor graph are connected. 
-Default is {cmd:connect(J)} which shows each performance measure value as a horizontal line with vertical joins (as described by {help siman nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}). 
-An alternative is {cmd:connect(L)} which shows each performance measure value at a point with diagonal joins.{p_end}
-{synopt:{opt noref:line}}prevents display of reference lines for certain performance measures (coverage, bias, relprec and relerror).{p_end}
-{synopt:{opt lev:el}}specifies where the reference line for performance measure coverage will be drawn.{p_end}
+Default is {cmd:connect(stairstep)}, which shows each performance statistic as a horizontal line with vertical joins (as described by {help siman nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}). 
+An alternative is {cmd:connect(ascending)}, which connects performance statistics with diagonal lines.{p_end}
+{synopt:{opt noref:line}}suppresses display of reference lines for certain performance measures (coverage, bias, relprec and relerror).{p_end}
+{synopt:{opt lev:el}}specifies where the reference line for performance measure "coverage" will be drawn.{p_end}
 
 {syntab:Options controlling the descriptor graph}
 
@@ -62,7 +62,7 @@ We find these especially useful: {cmd:ylabel()} to stop the y-labels extending t
 
 {syntab:Saving options}
 
-{synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata format. 
+{synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata’s .gph format.
 The graph name is {it:namestub} with the target and performance measures appended.{p_end}
 {synopt:{opt exp:ort}{it:(format[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified, and the file name is the same as for {cmd:saving()} with the appropriate filetype.{p_end}
@@ -73,23 +73,22 @@ The graph name is {it:namestub} with the target and performance measures appende
 {title:Description}
 
 {pstd}
-{cmd:siman nestloop} draws a nested loop plot of performance measures data ({help siman nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}).
-One graph is drawn for each combination of target and performance measure.
-Each graph presents the simulation results for all data generating mechanisms and all methods in one plot. 
+{cmd:siman nestloop} draws a nested-loop plot of performance statistics ({help siman nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}). One
+graph is drawn for each combination of target and performance measure. Each
+graph presents the simulation results for all data-generating mechanisms and all methods in one plot. 
 
 {pstd}
-The performance measure is split by method and is stacked according to the levels of the data generating mechanisms along the horizontal axis. 
-The nested loop plot loops through nested data-generating mechanisms and plots results for different methods on top of each other in a full factorial design.
+The performance measure is split by method and is stacked according to the levels of the data generating mechanisms along the horizontal
+axis. The nested-loop plot loops through nested data-generating mechanisms and plots results for different methods on top of each other in a full factorial design.
 
-{pstd}The user can select a subset of performance measures to be graphed using the 
-performance measures listed in {help siman analyse##perfmeas:performance measures}.
-If no performance measures are specified, then graphs will be drawn for {help siman analyse##bias:bias}, {help siman analyse##empse:empse} and {help siman analyse##cover:coverage}; 
-except that if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for {help siman analyse##mean:mean}, {help siman analyse##empse:empse} and {help siman analyse##relerror:relerror}.
+{pstd}The user can select a subset of performance measures to be graphed from those listed in {help siman analyse##perfmeas:performance measures}.
+If no performance measures are specified, then the default choice is {help siman analyse##bias:bias}, {help siman analyse##empse:empse} and {help siman analyse##cover:coverage};
+however, if {cmd:true()} was not specified in {help siman setup}, graphs will be drawn for {help siman analyse##mean:mean}, {help siman analyse##empse:empse} and {help siman analyse##relerror:relerror}.
 
 {pstd}
-The user can specify {it:if} within the {cmd:siman lollyplot} syntax. 
-The {it:if} condition should only apply to {bf:dgm}, {bf:target} and {bf:method}.  
-If the {it:if} condition is applied to other variables, an error "no observations" is likely.
+The user can specify {it:if} within the {cmd:siman nestloop} syntax. The
+{it:if} condition should only apply to {bf:dgm}, {bf:target} and {bf:method}; if
+the condition is applied to other variables, an error "no observations" is likely.
 
 {pstd}
 We recommend to sort the simulation dataset in such a way that the simulation parameter with the largest influence on the criterion 
@@ -110,7 +109,7 @@ of interest is considered first, and so forth.  Further guidance can be found in
 
 {phang}. {stata "siman analyse, notable"}
 
-{pstd}Simple use of nestloop, focussing on one performance measure (% error in model-based standard error)
+{pstd}Simple use of nestloop, focusing on one performance measure (% error in model-based standard error)
 
 {phang}. {stata "siman nestloop relerror"}
 
@@ -129,14 +128,13 @@ of interest is considered first, and so forth.  Further guidance can be found in
 {marker references}{...}
 {title:References}
 
-{phang}{marker ruckerschwarzer}Rücker G, Schwarzer G. 
-Presenting simulation results in a nested loop plot. BMC Med Res Methodol 14, 129 (2014). 
-{browse "https://doi.org/10.1186/1471-2288-14-129":doi:10.1186/1471-2288-14-129}
+{phang}{marker ruckerschwarzer}Rücker G, Schwarzer G. Presenting
+simulation results in a nested loop plot. BMC
+Medical Research Methodology. 2014;14:129. {browse "https://doi.org/10.1186/1471-2288-14-129":doi:10.1186/1471-2288-14-129}
 
-{phang}Latimer N, White I, Tilling K, Siebert U. 
-Improved two-stage estimation to adjust for treatment switching in randomised trials: 
-g-estimation to address time-dependent confounding. Statistical Methods in Medical Research. 2020;29(10):2900-2918. 
-{browse "https://doi.org/10.1177/0962280220912524":doi:10.1177/0962280220912524}
+{phang}Latimer N, White I, Tilling K, Siebert U. Improved
+two-stage estimation to adjust for treatment switching in randomised trials: g-estimation
+to address time-dependent confounding. Statistical Methods in Medical Research. 2020;29(10):2900–2918. {browse "https://doi.org/10.1177/0962280220912524":doi:10.1177/0962280220912524}
 
 {marker authors}{...}
 {title:Authors}
