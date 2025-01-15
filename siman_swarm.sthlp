@@ -26,34 +26,30 @@
 {synopthdr}
 {synoptline}
 {syntab:Main}
-{synopt:{opt by(string)}}  specifies the nesting of the variables, with the default being {bf:by(dgm target)}. 
+{synopt:{opt by(string)}}  specifies the nesting of the variables, with the default being {bf:by(dgm target)}.
 
 {syntab:Graph options}
 
 {pstd}
-{it:Note: for the siman swarm graph user-inputted options, most of the valid options for {help scatter:scatter} are available.}
-
-{synopt:{opt sc:atteroptions(string)}}  options for {help scatter} to be applied to the scatterplot: e.g. msymbol(), moclor()
-
-{synopt:{opt bygr:aphoptions(string)}}  graph options for the overall graph that need to be within the {it:by} option: e.g. title(), note(), row(), col()
-
-{synopt:{opt nomean}} do not add the mean to the graph
-
-{synopt:{opt meangr:aphoptions(string)}}  options for {help scatter} to be applied to the mean: e.g. mcolor()
-
-{synopt:{opt graphop:tions(string)}}  graph options for the overall graph that need to be outside the {it:by} option: e.g. xtitle(), ytitle(). This must not include name().
-
-{synopt:{opt name(string)}}  the stub for the graph name, to which "_estimate" or "_se" is appended. Default name is "swarm".
-
-{synopt:graph options}  {cmd:siman swarm} will attempt to allocate graph options as scatteroptions, bygraphoptions or graphoptions.
-
+{it:Note: for the siman swarm graph user-inputted options, most of the valid options for {help scatter:scatter} are available.}{p_end}
+{synopt:{opt sc:atteroptions(string)}}  options for {help scatter} to be applied to the scatterplot: e.g. msymbol(), mcolor(){p_end}
+{synopt:{opt bygr:aphoptions(string)}}  graph options for the overall graph that need to be within the {it:by} option: e.g. title(), note(), row(), col(){p_end}
+{synopt:{opt nomean}} do not add the mean to the graph{p_end}
+{synopt:{opt meangr:aphoptions(string)}} options for {help scatter} to be applied to the mean: e.g. mcolor(){p_end}
+{synopt:{opt graphop:tions(string)}}  graph options for the overall graph that need to be outside the {it:by} option: e.g. xtitle(), ytitle(). This must not include name().{p_end}
+{synopt:{opt name(string)}} the stub for the graph name, to which "_estimate" or "_se" is appended. Default name is "swarm".{p_end}
+{synopt:graph options}  {cmd:siman swarm} will attempt to allocate graph options as scatteroptions, bygraphoptions or graphoptions.{p_end}
 {synoptline}
+
 
 {marker description}{...}
 {title:Description}
 
 {pstd}
-{cmd:siman swarm} draws a so-called ‘swarm plot’ of the estimates or the standard error data by method, the results of which are from analysing multiple simulated data sets. The horizontal axis is either the point estimate or SE estimate, and the vertical axis is repetition number, to provide some separation between the points. The sample mean for each panel is also plotted, as a vertical pipe by default. The {cmd: siman swarm} graphs help to inspect the distribution and, in particular, spot outliers in the data.
+{cmd:siman swarm} provides so-called ‘swarm plots’ of the repetition-level estimates or standard errors arising from each method. The point estimates or SE estimates are on the horizontal dimension, and repetition number on the vertical dimension. This enables us to look at the distribution of these estimates. The {cmd: siman swarm} graphs help to inspect distributions. While this could be done using a histogram or density plot, graphing repetition number serves two more important purposes. First, we are able to spot outliers. Second, we can verifying that estimates are not dependent across repetitions. For example, in the past this has helped us to spot an issue in which a researcher was accidentally adding data from one repetition to data from all previous repetitions, rather than correctly separating data from each repetition.
+
+{pstd}
+A mean for each panel is plotted, by default as a vertical pipe. This can be suppressed with the {opt nomean} option. Note: for standard error estimates, the root-mean of the squared standard errors is plotted (i.e. not the simple mean of the standard errors).
 
 {pstd}
 {help siman setup} needs to be run before {cmd:siman swarm} can be used.
@@ -80,11 +76,11 @@ For further troubleshooting and limitations, see {help siman setup##limitations:
 
 {phang}. {stata `"siman swarm, scheme(economist) row(1) name("swarm", replace)"'}
 
+
 {marker authors}{...}
 {title:Authors}
 
 {pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:e.marley-zagar@ucl.ac.uk":Ella Marley-Zagar}
 
 {pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
@@ -94,7 +90,4 @@ Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
 
 {pstd}{helpb siman: Return to main help page for siman}
-
-
-{title:See also}
 

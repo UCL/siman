@@ -130,7 +130,6 @@ Options for data in any input format:
 {synoptset 28 tabbed}{...}
 {synopthdr}
 {synoptline}
-
 {synopt:{opt r:ep(varname)}}numeric variable identifying repetitions: required. {p_end}
 {synopt:{opt dgm(varlist)}}variable(s) identifying the data generating mechanism. {p_end}
 {synopt:{opt tar:get(varname|values)}}the target variable name (data formats 1/3) or values (data formats 2/4). {p_end}
@@ -148,6 +147,7 @@ denoting that either the target stub is first or the method stub is first in the
 {synopt:{opt sep(string)}}a separator within wide-format variable names. 
 For example, if variables est_beta and est_gamma hold the estimates for targets  beta and gamma, you could code {cmd:estimate(est) sep(_) target(beta gamma)} instead of {cmd:estimate(est) target(_beta _gamma)}. {p_end}
 {synopt:{opt dgmmi:ssingok}}dgm variables may contain missing values. {p_end}
+{synoptline}
 
 
 {marker description}{...}
@@ -322,4 +322,7 @@ Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
 {pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
+
+
+{pstd}{helpb siman: Return to main help page for siman}
 

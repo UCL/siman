@@ -26,39 +26,33 @@
 {synopthdr}
 {synoptline}
 {syntab:Main}
-
 {pstd}
 {p_end}
-{synopt:{opt if/in}}The user can specify {it:if} and {it:in} within the siman blandaltman syntax. If they do not, but have already specified 
-an {it:if/in} during {help siman setup}, then the {it:if/in} from {help siman setup} will be used.
-The {bf:if} option should only be applied to {bf:dgm} and {bf:target}, use the {bf: methlist()} option to subset on method.
-The {it:if} option is not allowed to be used on 
-{bf:repetition} and an error message will be issued if the user tries to do so.
-
-{pstd}
-{p_end}
-{synopt:{opt by(string)}}  specifies the nesting of the variables, only {bf:by(dgm)} is allowed for {cmd: siman blandaltman} for 
-example when dgm is defined by more than one variable.  The user is able to use the {it:if} statement to filter on target, and {bf: methlist()}
-for method.
+{synopt:{opt if/in}} The user can specify {help if} and/or {help in} within the siman
+blandaltman syntax. If they do not, but specified {ifin} conditions during {help siman setup},
+these will be inherited from {help siman setup}. The {bf:if} option should only be applied to
+{bf:dgm} and {bf:target}, use the {bf: methlist()} option to subset on method. The {help if}
+condition is not allowed on {bf:repetition} and an error message will be issued if the user tries to do so.{p_end}
+{synopt:{opt by(string)}} specifies the nesting of the variables, only {bf:by(dgm)}
+is allowed for {cmd: siman blandaltman} for example when dgm is defined by more than one
+variable. The user is able to use the {it:if} statement to filter on target, and {bf: methlist()} for method.{p_end}
+{synopt:{opt name(string)}} the stub for the graph name, to which "_#_estimate" or "_#_se"
+is appended (depending on whether {cmd:siman blandaltman estimate} or {cmd:siman blandaltman se} has been used). Default stub is "blandaltman".{p_end}
 
 {syntab:Graph options}
-{pstd}
-{p_end}
 
-{pstd}{it:For the siman blandaltman graph user-inputted options, most of the valid options for {help scatter:scatter} are available.}
+{pstd}{it:Note: For the siman blandaltman graph user-inputted options, most of the valid options for {help scatter:scatter} are available.}
 
 {pstd}
 {p_end}
-{synopt:{opt bygr:aphoptions(string)}}graph options for the nesting of the graphs due to the {it:by} option.
-
-{pstd}
-{p_end}
+{synopt:{opt bygr:aphoptions(string)}}graph options for the nesting of the graphs due to the {it:by} option.{p_end}
 {synopt:{opt m:ethlist(string)}}to display the graphs only for a subgroup of methods, these can be specified in {bf: methlist()}. For example, in a dataset with methods A, B, C and D if the user would like to compare 
 methods A and C, they would enter {bf: methlist(A C)}, which would plot graphs for the difference C - A.
 Note that the value needs to be entered in to {bf: methlist()} and not its label 
 (if these are different). For example, if method is a numeric labelled variable with values 1, 2, 3 and corresponding labels A, B, and C, then 
 {bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)} (note siman blandaltman will use the labels). The {bf: methlist()} option needs to be specified to subset on methods, 
-using <= and >= will not work. The components of {bf: methlist()}  need to be written out in full, for example {bf: methlist(1 2 3 4)} and not as a numlist such as {bf: methlist(1/4)}.
+using <= and >= will not work. The components of {bf: methlist()}  need to be written out in full, for example {bf: methlist(1 2 3 4)} and not as a numlist such as {bf: methlist(1/4)}.{p_end}
+{synoptline}
 
 
 {marker description}{...}
@@ -113,8 +107,6 @@ Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 {pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
-{marker seealso}{...}
-{title:See Also}
 
 {pstd}{helpb siman: Return to main help page for siman}
 

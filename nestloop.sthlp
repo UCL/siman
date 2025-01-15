@@ -16,7 +16,7 @@
 {title:Syntax}
 
 {phang}
-{cmdab:nestloop} {it:varname} [if]
+{cmdab:nestloop} {it:varname} [{help if}]
 [{cmd:,}
 {opt desc:riptors(evarlist)}
 {opt meth:od(varname)}

@@ -28,7 +28,7 @@
 {pstd}
 {p_end}
 
-{synopt:{opt if}} should be applied to {bf:dgm}, {bf:target} and {bf:method} only.
+{synopt:we advise that {opt if}} be applied only to variables defining {bf:dgm}, {bf:target} and {bf:method}.
 
 {pstd}
 {p_end}
@@ -155,4 +155,6 @@ Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 {pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
+
+{pstd}{helpb siman: Return to main help page for siman}
 

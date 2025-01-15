@@ -29,7 +29,6 @@
 {synopthdr}
 {synoptline}
 {syntab:Options controlling the main graph}
-
 {synopt:{opt dgmo:rder(string)}}defines the order of data generating mechanisms for the nested-loop plot. A negative sign in front of the variable name 
 will sort its values on the graph in descending order.{p_end}
 {synopt:{opt stag:ger(#)}}horizontally staggers the lines for different methods.  Default # is 0. Try {cmd:stagger(0.05)} to make overlapping lines more distinct.{p_end}
@@ -40,7 +39,6 @@ An alternative is {cmd:connect(ascending)}, which connects performance statistic
 {synopt:{opt lev:el}}specifies where the reference line for performance measure "coverage" will be drawn.{p_end}
 
 {syntab:Options controlling the descriptor graph}
-
 {synopt:{opt dgsi:ze(#)}}defines the vertical size of the descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.35.{p_end}
 {synopt:{opt dgga:p(#)}}defines the vertical size of the gap between the main graph and the descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.{p_end}
 {synopt:{opt dgin:nergap(#)}}controls the vertical spacing between the  descriptor graphs.  Default # is 3.{p_end}
@@ -51,17 +49,16 @@ An alternative is {cmd:connect(ascending)}, which connects performance statistic
 {synopt:{opt dglw:idth(string)}}controls the width(s) of the descriptor graph.{p_end}
 
 {syntab:Other graph options}
-
 {synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
 {synopt:{opt scena:riolabel}}labels the horizontal axis with scenario numbers. 
 The default is an unlabelled axis, since the descriptor graphs describe the scenarios.{p_end}
+{synopt:{opt name(string)}} the stub for the graph name, to which "_" followed by the target name and "_" followed by the performance measure name is appended. Default name is "nestloop". For example, with two targets, beta and gamma, and two performance measures, bias and relerror, defauly graph names would be "nestloop_beta_bias", "nestloop_gamma_bias", "nestloop_beta_relerror" and "nestloop_gamma_relerror.{p_end}
 {synopt:{it:graph_options}}Most of the valid options for {help line:line} are available.
 We find these especially useful: {cmd:ylabel()} to stop the y-labels extending to the descriptor graph; 
 {cmd:legend()} to arrange legends in a single row or column, e.g.
 {cmd:legend(pos(6) row(1))} or {cmd:legend(pos(3) col(1))}.{p_end}
 
 {syntab:Saving options}
-
 {synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata’s .gph format.
 The graph name is {it:namestub} with the target and performance measures appended.{p_end}
 {synopt:{opt exp:ort}{it:(format[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
@@ -125,16 +122,19 @@ of interest is considered first, and so forth.  Further guidance can be found in
 
 {phang}. {stata `"siman nestloop relerror if estimand=="effect", dgsize(.4) dggap(.1) dgcol(green orange purple) dgpatt(dash solid =) dglabsize(medium) dglwidth(*2)"'}
 
+
 {marker references}{...}
 {title:References}
 
 {phang}{marker ruckerschwarzer}Rücker G, Schwarzer G. Presenting
-simulation results in a nested loop plot. BMC
-Medical Research Methodology. 2014;14:129. {browse "https://doi.org/10.1186/1471-2288-14-129":doi:10.1186/1471-2288-14-129}
+simulation results in a nested loop plot. BMC Medical Research Methodology. 2014;14:129.
+{browse "https://doi.org/10.1186/1471-2288-14-129":doi:10.1186/1471-2288-14-129}
 
-{phang}Latimer N, White I, Tilling K, Siebert U. Improved
-two-stage estimation to adjust for treatment switching in randomised trials: g-estimation
-to address time-dependent confounding. Statistical Methods in Medical Research. 2020;29(10):2900–2918. {browse "https://doi.org/10.1177/0962280220912524":doi:10.1177/0962280220912524}
+{phang}Latimer N, White I, Tilling K, Siebert U. Improved two-stage estimation
+to adjust for treatment switching in randomised trials: g-estimation to address
+time-dependent confounding. Statistical Methods in Medical Research. 2020;29(10):2900–2918.
+{browse "https://doi.org/10.1177/0962280220912524":doi:10.1177/0962280220912524}
+
 
 {marker authors}{...}
 {title:Authors}
@@ -147,6 +147,12 @@ Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
 {pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
+
+
+{title:See Also}
+
+{pstd}{help nestloop} (standalone command for nested loop plots, installed with siman)
+
 
 {pstd}{helpb siman: Return to main help page for siman}
 

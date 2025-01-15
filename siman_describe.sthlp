@@ -16,7 +16,7 @@
 {phang}
 {cmd:siman describe} , [ chars sort SAVing(string) ]
 
-{synoptset 20 tabbed}{...}
+{synoptset 17 tabbed}{...}
 {synopthdr}
 {synoptline}
 {synopt:{opt c:hars}}lists the contents of characteristics created by {help siman setup}.{p_end}
@@ -29,7 +29,12 @@
 {pstd}
 
 {pstd}
-{cmd:siman describe} provides a summary of the data previously imported by {bf:{help siman setup}}, and whether estimates data and performance estimates are in the dataset.
+{cmd:siman describe} provides a summary of the data previously imported by {bf:{help siman setup}},
+and whether estimates data and performance estimates are in the dataset.
+
+{pstd}
+The command is called by siman setup and provides the user with a check  that they have
+correctly input the structure of their simulation study and that siman has understood it.
 
 
 {marker examples}{...}
@@ -47,7 +52,6 @@
 {phang}. {stata "siman describe"}
 
 
-
 {marker authors}{...}
 {title:Authors}
 
@@ -59,4 +63,7 @@ Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
 {pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
+
+
+{pstd}{helpb siman: Return to main help page for siman}
 

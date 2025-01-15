@@ -28,12 +28,10 @@ the user can select {it:se vs estimate} by typing {bf:siman scatter} {it:se esti
 {synopthdr}
 {synoptline}
 {syntab:Main}
-{synopt:{opt by(varlist)}}specifies the nesting of the variables, with the default being all of {bf:dgm}, {bf:target} and {bf:method} that vary within the selected data.
-
+{synopt:{opt by(varlist)}}specifies the nesting of the variables, with the default being all of {bf:dgm}, {bf:target} and {bf:method} that vary within the selected data.{p_end}
 {syntab:Graph options}
 {synopt:{it:graphoptions}}most {help scatter:twoway scatter} options are available.{p_end}
 {synopt:{opt bygr:aphoptions(string)}}graph options for the nesting of the graphs due to the {it:by} option.{p_end}
-
 {synoptline}
 
 
@@ -66,6 +64,7 @@ For further troubleshooting and limitations, see {help siman setup##limitations:
 
 {phang}. {stata `"siman scatter, by(method dgm) ytitle("SE(β)") xtitle("β") scheme(s2mono) bygraphoptions(title("SE vs. point estimate") cols(4) noiyaxes noixaxes holes(2 7 12))"'}
 
+
 {marker authors}{...}
 {title:Authors}
 
@@ -76,6 +75,7 @@ Email: {browse "mailto:ian.white@ucl.ac.uk":ian.white@ucl.ac.uk}
 
 {pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":tim.morris@ucl.ac.uk}
+
 
 {pstd}{helpb siman: Return to main help page for siman}
 

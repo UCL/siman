@@ -116,16 +116,14 @@ confidence intervals, an indicator of rejection of a hypothesis, and more.
 
 {title:References}{marker refs}
 
-
-{phang}{marker Morris++19}Morris TP, White IR, Crowther MJ.
-Using simulation studies to evaluate statistical methods.
-Statistics in Medicine 2019; 38: 2074–2102. {browse "https://doi.org/10.1002/sim.8086":doi:10.1002/sim.8086}
+{phang}{marker Morris19}Morris TP, White IR, Crowther MJ. Using simulation studies
+to evaluate statistical methods. Statistics in Medicine 2019; 38: 2074–2102.
+{browse "https://doi.org/10.1002/sim.8086":doi:10.1002/sim.8086"}
 
 
 {title:Authors and updates}{marker updates}
 
 {pstd}Ella Marley-Zagar, ONS.
-Email {browse "mailto:Ella.Marley-Zagar@ons.gov.uk":Ella.Marley-Zagar@ons.gov.uk}.
 
 {pstd}Ian White, MRC Clinical  Trials Unit at UCL, London, UK. 
 Email {browse "mailto:ian.white@ucl.ac.uk":ian.white@ucl.ac.uk}.
@@ -135,12 +133,14 @@ Email {browse "mailto:tim.morris@ucl.ac.uk":tim.morris@ucl.ac.uk}.
 
 
 {title:Acknowledgements}{marker acknowledgements}
-This work was funded by the Medical Research Council (grant MC_UU_00004/09).
-We gratefully acknowledge the following people who have tested and provided feedback on {cmd:siman}:
-Jan Ditzen, Jingyi Xuan, Kara Louise Royle.
+{pstd}This work was funded by the Medical Research Council (grant MC_UU_00004/09).
+
+{pstd}We gratefully acknowledge the following people who have tested and provided feedback on {cmd:siman}:
+Jan Ditzen, Jingyi Xuan, Kara Louise Royle, Matthew Smith.
 x
 
 {title:See Also}
 
-{pstd}{help simsum} (if installed)
+{pstd}{help simsum} (installed with siman)
+{pstd}{help nestloop} (installed with siman)
 

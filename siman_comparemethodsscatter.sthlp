@@ -20,10 +20,10 @@
 [{cmd:,}
 {it:options}]
 
-{pstd}The scatter graph can display {it:both} estimate and se with the slower 'combine' method.
-With the faster 'matrix' method, the user can select {it:either} estimate or se.
+{pstd}The scatter graph can display {it:both} estimate and se with the slower "combine"
+method. With the faster "matrix" method, the user can select {it:either} estimate or se.
 
-{pstd}The subcommand {cmd:comparemethodsscatter} may be abbreviated to 3 or more characters or to {cmd:cms}.
+{pstd}The subcommand {cmd:comparemethodsscatter} may be abbreviated to three or more characters (e.g. {cmd:com}) or to {cmd:cms}.
 
 {pstd}
 The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not to {bf:repetition}. A warning is issued if this is breached.
@@ -32,23 +32,19 @@ The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:ta
 {synoptset 25 tabbed}{...}
 {synopthdr}
 {synoptline}
-
-{synopt:{opt com:bine}}forces use of the 'combine' method: the graph is made by combining individual graphs, potentially showing both estimate and SE. This is the default for 2 or 3 methods.
-
-{synopt:{opt mat:rix}}forces use of the 'matrix' method: the graph is made by {help graph matrix}, showing only estimate or SE. This is the default for more than 3 methods.
-
+{synopt:{opt com:bine}}forces use of the "combine" method: the graph is made by combining individual graphs, potentially showing both estimate and SE. This is the default for 2 or 3 methods.{p_end}
+{synopt:{opt mat:rix}}forces use of the "matrix" method: the graph is made by {help graph matrix}, showing only estimate or SE. This is the default for more than 3 methods.{p_end}
 {synopt:{opt meth:list(string)}}specifies a subgroup of methods, and their order, to be graphed.
 For example, in a dataset with methods A, B, C and D, the option {bf: methlist(B D)}, which would plot graphs for B vs. D, the same as using {bf:if method=="B" | method=="D"}. 
 But the option {bf: methlist(D B)} would also change the ordering of the graphs.
-{it:string} may be a numlist if method is numeric.
-
-{synopt:{opt noeq:uality}}does not draw the line of equality when the combine method is used. The line of equality is never drawn when the matrix method is used.
-
-{synopt:{it:graph_options}}most of the valid options for {help graph combine:graph combine} are available.
-
-{synopt:{opt subgr:aphoptions(string)}}to change the format of the constituent scatter graphs, which are drawn if and only if the combine method is used.
-For example, to use the red plotting symbol with the combine method, use {bf:subgr(mcol(red))}; with the matrix method, use 
-{bf:mcol(red)}.
+{it:string} may be a numlist if method is numeric.{p_end}
+{synopt:{opt noeq:uality}}does not draw the line of equality when the combine method is used. The line of equality is never drawn when the matrix method is used.{p_end}
+{synopt:{opt name(string)}}  the stub for the graph name, to which "_#" is appended. Default is "cms".{p_end}
+{synopt:{it:graph_options}}most options for {help graph combine:graph combine} are available.{p_end}
+{synopt:{opt subgr:aphoptions(string)}}to change the format of the constituent scatter graphs, which are drawn
+if and only if the "combine" method is used. For example, to use the red plotting symbol with the "combine" method,
+use {bf:subgr(mcol(red))}; with the matrix method, use {bf:mcol(red)}.{p_end}
+{synoptline}
 
 
 {marker description}{...}
@@ -96,11 +92,11 @@ Therefore the only other option to split the graphs with the {bf:by} option is b
 
 {pstd} To display the {bf: cms} graphs by a specific dgm {it:MAR}, where dgm is defined by more than one variable:
 
-{phang}. {stata  `"siman comparemethodsscatter if dgm ==2"'}
+{phang}. {stata  "siman comparemethodsscatter if dgm ==2"}
 
-{pstd} Or alternatively, to subset based on the dgm value label:
+{pstd} Or alternatively, to subset based on the dgm value {bf:label}:
 
-{phang}. {stata  `"siman comparemethodsscatter if dgm =="MAR": dgm"'}
+{phang}. {stata  `"siman comparemethodsscatter if dgm =="MAR":dgm"'}
 
 {pstd} To display {bf: cms} graphs for the standard errors with the difference of methods 3 ({it:MI}) - 1 ({it:Full}) only, and changing the graph options:
 
@@ -117,13 +113,6 @@ Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
 {pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
-
-
-{pstd}{helpb siman: Return to main help page for siman}
-
-{marker seealso}{...}
-{title:See Also}
-
 
 
 {pstd}{helpb siman: Return to main help page for siman}

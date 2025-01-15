@@ -169,7 +169,13 @@ if `npanels'>15 di "{p 0 2}Consider reducing the number of panels using 'if' con
 foreach el of local statlist { // estimate and/or se
 	local graph_cmd twoway (scatter newidrep ``el'', msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `scatteroptions')
 	if "`mean'"!="nomean" {
-		qui egen mean`el' = mean(``el''), by(`by' `method')
+		if "`el'"=="estimate" qui egen mean`el' = mean(``el''), by(`by' `method')
+		if "`el'"=="se" {
+			tempvar sesq
+			qui gen `sesq' = ``el''^2
+			qui egen mean`el' = mean(`sesq'), by(`by' `method')
+			qui replace mean`el' = sqrt(mean`el')
+		}
 		local graph_cmd `graph_cmd' (scatter newidrep mean`el', msym(|) msize(huge) mcol(orange) `meangraphoptions')
 	}
 	local nameopt name(`name'_`el', `replace')

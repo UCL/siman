@@ -1,4 +1,4 @@
-*!	version 0.11.1	21oct2024
+*!	version 0.11.2	15jan2025
 *!	Type -siman which- to see versions of siman's subprograms
 * version 0.10 25jul2024  IW parsing doesn't break -siman cms se- or -siman anal,repl-
 * version 0.9  14jun2024  IW remove reshape
@@ -13,6 +13,7 @@ IW 17sep2019
 version 13
 gettoken subcmd 0 : 0, parse(" ,")
 if "`subcmd'"=="cms" local subcmd comparemethodsscatter
+if "`subcmd'"=="comparemethodscatter" local subcmd comparemethodsscatter
 syntax [anything] [if] [in], [which *]
 
 // LOAD SAVED SIMAN PARAMETERS
