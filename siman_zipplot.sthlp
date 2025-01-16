@@ -36,11 +36,15 @@ We advise against using this option.
 {synopt:{opt cov:eroptions(string)}}graph options for the coverers {p_end}
 {synopt:{opt sca:tteroptions(string)}}graph options for the scatter plot of the point estimates{p_end}
 {synopt:{opt truegr:aphoptions(string)}}graph options for the true value(s){p_end}
-{synopt:{opt l:evel(cilevel)}}changes the level for the confidence intervals in the zipplot. 
-The default is the current system default confidence level.{p_end}
-{synopt:{opt coverl:evel(cilevel)}}changes the level for the confidence interval around the coverage. 
-The default is the current system default confidence level.{p_end}
-{synopt:{opt ymin(pct)}}omits the lowest {it:pct}% of the confidence intervals from the zipplot{p_end}
+{synopt:{opt l:evel(#)}}changes the level for the confidence intervals calculated for the zip 
+plot. # is any number between 10.00 and 99.99 (see {help level}). The 
+default is the current system default confidence level. However,
+if the user specified {opt lci()} and {opt uci()} in {cmd:siman setup}, 
+then this option only changes how the confidence intervals are described in the zip plot.{p_end}
+{synopt:{opt coverl:evel(#)}}changes the level for the Monte Carlo confidence interval around the 
+coverage. # is any number between 10.00 and 99.99 (see {help level}). The 
+default is the current system default confidence level.{p_end}
+{synopt:{opt ymin(pct)}}omits the lowest {it:pct}% of the confidence intervals from the zip plot{p_end}
 {synopt:{opt bygr:aphoptions(string)}}options for {help twoway} that go inside its {cmd:by()} option.{p_end}
 {synopt:{it:graph_options}}options for {help twoway} that do not go inside its {cmd:by()} option.{p_end}
 {synoptline}
@@ -71,7 +75,7 @@ intervals directly.
 The overall coverage and its confidence interval (also at the given level) are shown with horizontal lines. 
 
 {pstd}
-{help siman setup} must be run first before siman zipplot. 
+{help siman setup} must be run first before {cmd:siman zipplot}. 
 It must have defined a true variable by {bf:true()}, an estimate variable by {bf:estimate()},
 and either a standard error by {bf:se()} or a confidence interval by {bf:lci()} and {bf:uci()}. 
 
@@ -90,7 +94,7 @@ with 1,000 repetitions.
 
 {phang}. {stata  "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
 
-{pstd}Simple zipplot
+{pstd}Simple zip plot
 
 {phang}. {stata  `"siman zipplot"'}
 
@@ -98,7 +102,7 @@ with 1,000 repetitions.
 
 {phang}. {stata  `"siman zipplot, level(50)"'}
 
-{pstd}Draw the zipplot split by dgm only
+{pstd}Draw the zip plot split by dgm only
 
 {phang}. {stata  `"siman zipplot, by(dgm)"'}
 

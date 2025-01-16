@@ -20,24 +20,17 @@
 {phang}
 {cmdab:siman analyse} [{it:performancemeasures}] [if], [{it:perfonly replace}]
 
+{pstd} We advise that {opt if} be applied only to variables defining {bf:dgm}, {bf:target} and {bf:method}.
+
 
 {synoptset 20 tabbed}{...}
 {synopthdr}
 {synoptline}
-{syntab:Main}
-{pstd}
-{p_end}
-
-{synopt:we advise that {opt if}} be applied only to variables defining {bf:dgm}, {bf:target} and {bf:method}.
-
-{pstd}
-{p_end}
-
 {marker perfmeas}{...}
-{syntab:Performance measure options:}
+{syntab:Performance measure options (as for {help simsum:simsum})}
 
 {pstd}
-As per {help simsum:simsum}.  If none of the following options are specified, then all available performance measures are estimated.
+If none of the following options are specified, then all available performance measures are estimated.
 
 {marker estsims}{synopt:{opt estreps}}the number of repetitions with non-missing point estimates (called {opt bsims} by {help simsum}).
 
@@ -69,7 +62,7 @@ This calculation can be slow: omitting it can reduce run time by up to 90%.
 {marker power}{synopt:{opt power} }the power to reject the null hypothesis that the true parameter is zero, at the specified level.
 
 {marker addopts}{...}
-{syntab:Additional options:}
+{syntab:Additional options}
 
 {pstd}
 {p_end}
@@ -81,7 +74,8 @@ This calculation can be slow: omitting it can reduce run time by up to 90%.
 {synopt:{opt rep:lace} }if {cmd:siman analyse} has already been run and the user specifies it again then they must use the replace option, 
 to replace the existing performance measures in the data set.
 
-{synopt:{it:simsum_options}}Any options for {help simsum}.
+{synopt:{it:simsum_options}}Any options for {help simsum}, such as {cmd:level()} 
+to specify the nominal confidence level, or {cmd:ref()} to specify the reference method.
 
 {synoptline}
 {p2colreset}{...}
