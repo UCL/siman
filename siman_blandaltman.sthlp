@@ -9,7 +9,8 @@
 {title:Title}
 
 {phang}
-{bf:siman blandaltman} {hline 2} Bland-Altman plot comparing methods of estimates or standard error data
+{bf:siman blandaltman} {hline 2} Bland–Altman plot comparing point estimates or standard errors for pairs of methods.
+
 
 
 {marker syntax}{...}
@@ -59,7 +60,7 @@ compared with a comparator.  If there are more than 2 methods in the data set, f
 as the reference, and the {bf:siman blandaltman} plots will be created for method B - method A and method C - method A.  
 
 {pstd}
-{help siman setup} needs to be run first before {bf:siman blandaltman}.
+{help siman setup} needs to be run before {bf:siman blandaltman} can be run.
 
 {pstd}
 For further troubleshooting and limitations, see {help siman setup##limitations:troubleshooting and limitations}.
@@ -67,7 +68,7 @@ For further troubleshooting and limitations, see {help siman setup##limitations:
 {marker examples}{...}
 {title:Examples}
 
-{pstd} An example estimates data set with 3 DGMs (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
+{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1,000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
 
 {pstd}Load the data set in to {cmd: siman}.
 
@@ -109,3 +110,4 @@ Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
 
 {p}{helpb siman: Return to main help page for siman}
+

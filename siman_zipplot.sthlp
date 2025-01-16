@@ -9,7 +9,7 @@
 {title:Title}
 
 {phang}
-{bf:siman zipplot} {hline 2} Zip plot of the confidence interval coverage for each data-generating mechanism and analysis method in the estimates data
+{bf:siman zipplot} {hline 2} zip plot of confidence interval coverage for each data-generating mechanism, target and analysis method in the estimates data
 
 
 {marker syntax}{...}
@@ -20,7 +20,7 @@
 [{cmd:,}
 {it:options}]
 
-{pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
+{pstd}Any {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
 
 {synoptset 26 tabbed}{...}
 {synopthdr}
@@ -36,7 +36,6 @@ We advise against using this option.
 {synopt:{opt cov:eroptions(string)}}graph options for the coverers {p_end}
 {synopt:{opt sca:tteroptions(string)}}graph options for the scatter plot of the point estimates{p_end}
 {synopt:{opt truegr:aphoptions(string)}}graph options for the true value(s){p_end}
-{synopt:{opt sch:eme(string)}}changes the graph scheme{p_end}
 {synopt:{opt l:evel(cilevel)}}changes the level for the confidence intervals in the zipplot. 
 The default is the current system default confidence level.{p_end}
 {synopt:{opt coverl:evel(cilevel)}}changes the level for the confidence interval around the coverage. 
@@ -51,15 +50,22 @@ The default is the current system default confidence level.{p_end}
 {title:Description}
 
 {pstd}
-{cmd:siman zipplot} draws a "zip plot"  (see {help siman zipplot##Morris19:Morris et al, 2019})
-of the confidence intervals for each data-generating mechanism, target and analysis method in the estimates dataset. 
+{cmd:siman zipplot} draws a so-called "zip plot" (see {help siman zipplot##Morris19:Morris et al, 2019}) of the confidence intervals for
+each data-generating mechanism, target and analysis method in the estimates
+dataset. 95% (or other level) confidence intervals for individual repetitions are plotted
+according to whether or not they cover the true value, along with a Monte Carlo
+confidence interval for percent coverage. For coverage (or type I error),
+true θ is used for the null value.
 
 {pstd}
-For each data-generating mechanism and method, the confidence intervals are fractional-centile-ranked. 
-This ranking is used for the vertical axis and is plotted against the intervals themselves. Intervals which cover the true value 
-are coverers (at the bottom); those which do not cover are called non-coverers (at the top). Both coverers and non-coverers are 
-shown on the plot, along with the point estimates.
-The zipplot provides a means of understanding any issues with coverage by viewing the confidence intervals directly.  
+For each data-generating mechanism and method, the confidence intervals are ranked
+and displayed as a fractional-centile (see {help siman zipplot##Morris19:Morris et al., 2019)}. This
+ranking is used for the vertical axis and is plotted against the
+intervals themselves. Intervals that cover the true value are ‘coverers’ (at the bottom);
+intervals which do not are called ‘non-coverers’ (at the top). Both coverers and
+non-coverers are shown on the plot, along with the point estimates. The zip plot
+provides a means of understanding any issues with coverage by viewing the confidence
+intervals directly.  
 
 {pstd}
 The overall coverage and its confidence interval (also at the given level) are shown with horizontal lines. 
@@ -73,7 +79,10 @@ and either a standard error by {bf:se()} or a confidence interval by {bf:lci()} 
 {marker examples}{...}
 {title:Examples}
 
-{pstd} An example estimates data set with 3 DGMs (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
+{pstd} An example estimates data set, named simpaper1.dta, available on the
+{cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here},
+contains results for three dgms (MCAR, MAR, MNAR) and three methods (Full, CCA, MI)
+with 1,000 repetitions.
 
 {pstd}Load the data set in to {cmd: siman}
 
@@ -101,8 +110,10 @@ and either a standard error by {bf:se()} or a confidence interval by {bf:lci()} 
 {title:Reference}
 {pstd}
 
-{phang}{marker Morris19}Morris, T. P., White, I. R., & Crowther, M. J. (2019). Using simulation studies to evaluate statistical methods. Statistics in Medicine, 38 (11), 2074-2102. doi:10.1002/sim.8086.
-{browse "https://discovery.ucl.ac.uk/id/eprint/10066118/"}
+{phang}{marker Morris19}Morris TP, White IR, Crowther MJ. Using simulation studies
+to evaluate statistical methods. Statistics in Medicine 2019; 38: 2074–2102.
+{browse "https://doi.org/10.1002/sim.8086":doi:10.1002/sim.8086"}
+
 
 {marker authors}{...}
 {title:Authors}

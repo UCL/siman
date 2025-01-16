@@ -22,7 +22,7 @@
 
 {pstd}{it:varlist} may only include {it:estimate}, {it:se} or (with the slower 'combine' method) both.
 
-{pstd}The subcommand {cmd:comparemethodsscatter} may be abbreviated to 3 or more characters or to {cmd:cms}.
+{pstd}The subcommand {cmd:comparemethodsscatter} may be abbreviated to three or more characters (e.g. {cmd:com}) or to {cmd:cms}.
 
 {pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
 
@@ -31,8 +31,8 @@
 {synopthdr}
 {synoptline}
 {syntab:Main}
-{synopt:{opt com:bine}}forces use of the slower 'combine' method: the graph is made by combining individual graphs, potentially showing both estimate and SE. This is the default with 2 or 3 methods.{p_end}
-{synopt:{opt mat:rix}}forces use of the faster 'matrix' method: the graph is made by {help graph matrix}, showing only estimate or SE. This is the default with more than 3 methods.{p_end}
+{synopt:{opt com:bine}}forces use of the slower "combine" method: the graph is made by combining individual graphs, potentially showing both estimate and SE. This is the default with 2 or 3 methods.{p_end}
+{synopt:{opt mat:rix}}forces use of the faster "matrix" method: the graph is made by {help graph matrix}, showing only estimate or SE. This is the default with more than 3 methods.{p_end}
 {synopt:{opt coll:apse(varlist)}}collapses the graphs over the specified variables.
 By default, one graph is drawn per DGM and target. 
 For example, in a setting with DGM defined by {cmd:dgmvar1 dgmvar2} and target defined by {cmd:targetvar}, 
@@ -45,13 +45,11 @@ For example, in a dataset with methods A, B, C and D, the option {bf: methlist(B
 But the option {bf: methlist(D B)} would also change the ordering of the graphs.
 {it:string} may be a numlist if method is numeric.{p_end}
 {synopt:{opt noeq:uality}}does not draw the line of equality when the combine method is used. The line of equality is never drawn when the matrix method is used.{p_end}
-{synopt:{it:graph_options}}other options for {help graph combine} if the {cmd:combine} method is used, 
-or {help graph matrix} if the {cmd:matrix} method is used, .{p_end}
-{synopt:{opt subgr:aphoptions(string)}}is relevant with the combine method: it changes the format of the constituent scatter graphs.
-For example, to use the red plotting symbol with the combine method, use {bf:subgr(mcol(red))}; with the matrix method, use 
-{bf:mcol(red)}.{p_end}
-{synopt:{opt name(string)}}specifies the stub of the graph names.
-Graphs will be named {it:string}_1, {it:string}_2 etc.{p_end}
+{synopt:{opt name(string)}}  the stub for the graph name, to which "_#" is appended. Default is "cms".{p_end}
+{synopt:{it:graph_options}}most options for {help graph combine:graph combine} are available.{p_end}
+{synopt:{opt subgr:aphoptions(string)}}to change the format of the constituent scatter graphs, which are drawn
+if and only if the "combine" method is used. For example, to use the red plotting symbol with the "combine" method,
+use {bf:subgr(mcol(red))}; with the matrix method, use {bf:mcol(red)}.{p_end}
 {synoptline}
 
 
@@ -59,26 +57,27 @@ Graphs will be named {it:string}_1, {it:string}_2 etc.{p_end}
 {title:Description}
 
 {pstd}
-{cmd:siman comparemethodsscatter} draws sets of scatter plots comparing the point estimates or standard errors between various methods, where each point represents one repetition. 
-The data pairs come from the same repetition 
-(i.e. they are estimated in the same simulated dataset) and are compared to the line of equality.  
-These graphs help the user to look for correlations between methods and any systematic differences. 
-Where more than two methods are compared, a graph of every method versus every other is plotted.
+{cmd:siman comparemethodsscatter} draws sets of scatter plots comparing the point estimates (or standard errors) for various methods, where each point represents one repetition. It is assumed that data are paired in that they come from the same repetition,
+i.e. they were estimated using the same simulated dataset, and are compared to the line of equality.
+These graphs help the user to look for correlations between methods and any systematic differences.
+Where more than two methods are compared, a graph comparing each pair of methods is plotted.
 
 {pstd}
-The default graphing approach for 2 or 3 methods, "combine", plots both the estimate {it:and} the standard error. 
+The default graphing approach for two or three methods, "combine", plots both the estimate {it:and} the standard error.
 The upper triangle displays the estimates, the lower triangle displays the standard errors.  
-The default graphing approach for more than 3 methods, "matrix", plots {it:either} the estimate {it:or} the standard error depending on 
-which the user specifies, with the default being the estimate if no variables are specified.  The graph larger 
-numbers of methods is plotted using the {help graph matrix} command. The default approach can be changed with the {cmd:combine} and {cmd:matrix} options.
+The default graphing approach for more than 3 methods, "matrix", 
+plots {it:either} the estimate {it:or} the standard error depending on 
+which the user specifies, with the default being estimate if no variables are specified. The 
+graph for the larger number of methods is plotted using the {help graph matrix} command. The 
+default approach can be changed with the {cmd:combine} and {cmd:matrix} options.
 
 {pstd}
-If there are many methods in the data set and the user wishes to compare subsets of methods, then this can be 
-achieved by using the {bf: methlist()} option.  
-Note that the value needs to be entered in {bf: methlist()} and not the label 
-(if these are different).  
-For example if method is a numeric labelled variable with values 1, 2, 3 and corresponding labels A, B, and C, then 
-{bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)}.  
+If there are many methods in the data set and the user wishes to compare subsets of methods,
+this can be achieved using the {bf: methlist()} option.  
+Note that the value and not the label needs to be entered in {bf: methlist()} 
+(if these are different).
+For example if method is a numeric labelled variable with values 1, 2, 3 and corresponding labels A, B, and C,
+then {bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)}.  
 
 {pstd}
 {help siman setup} needs to be run first before {bf:siman comparemethodsscatter}.
@@ -101,11 +100,11 @@ For example if method is a numeric labelled variable with values 1, 2, 3 and cor
 
 {pstd}Draw only the graph for a specific dgm
 
-{phang}. {stata  `"siman comparemethodsscatter if dgm ==2"'}
+{phang}. {stata  "siman comparemethodsscatter if dgm ==2"}
 
-{pstd}The same, using the dgm value label
+{pstd} Or alternatively, to subset based on the dgm value {bf:label}:
 
-{phang}. {stata  `"siman comparemethodsscatter if dgm =="MAR": dgm"'}
+{phang}. {stata  `"siman comparemethodsscatter if dgm =="MAR":dgm"'}
 
 {pstd}Compare only methods 1 ({it:Full}) and 3 ({it:MI}), and change the graph options
 
@@ -124,3 +123,4 @@ Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
 
 {p}{helpb siman: Return to main help page for siman}
+

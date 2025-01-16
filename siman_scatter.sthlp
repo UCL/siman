@@ -8,7 +8,7 @@
 {title:Title}
 
 {phang}
-{bf:siman scatter} {hline 2} Scatter plot of point estimate versus standard error data
+{bf:siman scatter} {hline 2} Scatter plot of standard errors against point estimates
 
 
 {marker syntax}{...}
@@ -19,9 +19,11 @@
 [{cmd:,}
 {it:options}]
 
-{pstd}If no variables are specified, then the scatter graph is drawn for {it:estimate vs se}.  Alternatively the user can select {it:se vs estimate} by typing {bf:siman scatter} {it:se estimate}.
+{pstd}If no variables are specified, the scatterplot will be drawn for  {it:se vs. estimate}. Alternatively
+the user can select {it:estimate vs. se} by typing {bf:siman scatter} {it:estimate se}.
 
-{pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
+{pstd}The {it:if} and {it:in} conditions are usually applied only to {bf:dgm}, {bf:target} and 
+{bf:method}. If they are applied otherwise, e.g. to {bf:repetition}, a warning is issued.
 
 
 {synoptset 25 tabbed}{...}
@@ -42,12 +44,12 @@ Specifying for example {cmd:by(}{it:target method}{cmd:)} will overlay DGMs.
 {title:Description}
 
 {pstd}
-{cmd:siman scatter} draws a scatter plot of the point estimates versus their standard errors, typically separating out the DGMs, targets and methods. 
+{cmd:siman scatter} draws a scatter plot of the standard errors versus point estimates, typically separating out the DGMs, targets and methods. 
 Each observation represents one repetition.
 The {cmd:siman scatter} plots help the user to look for bivariate outliers.
 
 {pstd}
-{help siman setup} needs to be run first before {cmd:siman scatter}.
+{help siman setup} must be run before {cmd:siman scatter}.
 
 
 {marker example}{...}
@@ -75,10 +77,11 @@ The {cmd:siman scatter} plots help the user to look for bivariate outliers.
 {pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
 
 {pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
+Email: {browse "mailto:ian.white@ucl.ac.uk":ian.white@ucl.ac.uk}
 
 {pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
-Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
+Email: {browse "mailto:tim.morris@ucl.ac.uk":tim.morris@ucl.ac.uk}
 
 
 {p}{helpb siman: Return to main help page for siman}
+

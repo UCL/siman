@@ -21,11 +21,11 @@
 {title:Input data formats}
 
 {pstd}
-The input data for {cmd:siman setup} is an estimates data set.  
-This contains the results from analysing multiple simulated data sets, each one termed a repetition ({bf:rep}).
+The input data for {cmd:siman setup} is a so-called "estimates data set".  
+This contains the results from analysing multiple simulated data sets, with each one termed a "repetition" ({bf:rep}).
 Each result relates to one simulation combination of data generating method ({bf:dgm}), {bf:target} and {bf:method}.
   
-{pstd}The input data can be in any of these formats:
+{pstd}The input data can be in any of the following formats (using "long" and "wide" as {help reshape} does):
 
 {pstd}
 (1) long-long format (long targets, long methods): one record per repetition, target and method.
@@ -38,6 +38,9 @@ Each result relates to one simulation combination of data generating method ({bf
 
 {pstd}
 (4) wide-wide format (wide targets, wide methods): one record per repetition.
+
+{pstd}
+Where there are multiple data-generating mechanisms, these should always be held in a long format.
 
 
 {marker syntax}{...}
@@ -124,7 +127,7 @@ Options for data in any input format:
 {opt dgmmi:ssingok}
 
  
-{synoptset 35 tabbed}{...}
+{synoptset 28 tabbed}{...}
 {synopthdr}
 {synoptline}
 {synopt:{opt r:ep(varname)}}numeric variable identifying repetitions: required. {p_end}
@@ -144,7 +147,7 @@ denoting that either the target stub is first or the method stub is first in the
 {synopt:{opt clear}}clears the existing data held in memory: only needed with {cmd:if} or {cmd:in} conditions. {p_end}
 {synopt:{opt sep(string)}}a separator within wide-format variable names. 
 For example, if variables est_beta and est_gamma hold the estimates for targets  beta and gamma, you could code {cmd:estimate(est) sep(_) target(beta gamma)} instead of {cmd:estimate(est) target(_beta _gamma)}. {p_end}
-{synopt:{opt dgmmi:ssingok}}the dgm variables may contain missing values. {p_end}
+{synopt:{opt dgmmi:ssingok}}dgm variables may contain missing values. {p_end}
 {synoptline}
 
 
@@ -206,13 +209,15 @@ two targets (beta, gamma), and two methods of analysis (A, B).
 {marker limitations}{...}
 {title:Troubleshooting and limitations}
 
-{pstd}If the method variable is not specified, then {cmd:siman setup} creates a variable {bf:_method} in the dataset with a value of 1 in order that all the other {bf: siman} programs can run.
+{pstd}If the method variable (or value) is not specified (e.g. if there is only one), then {cmd:siman setup} will create a variable {bf:_method} in the dataset with a value of 1 in order that other {bf: siman} programs can run.
+
+{pstd}{bf:dgm} can contain missing values if the {opt dgmmissingok} option is used.
 
 {pstd}Selecting on dgm variables with non-integer values can cause problems. 
 For example, {cmd:siman scatter if pmiss==0.2} may show no observations.
 We recommend {cmd:siman scatter if float(pmiss)==float(0.2)} to be safe.
 
-{pstd}'Estimates' data containing just p-values are not currently allowed.
+{pstd}"Estimates" data consisting only of p-values are not currently allowed.
 
 
 {marker examples}{...}
@@ -220,36 +225,40 @@ We recommend {cmd:siman scatter if float(pmiss)==float(0.2)} to be safe.
 {pstd}
 
 {pstd}
-We will use an estimates dataset in different formats.
-It contains 1000 repetitions (variable rep = 1-1000) for each of two dgms (variable dgm = 1/2).
-Targets {it:beta} and {it:gamma} and methods {it:1} and {it:2} appear differently in different formats, as do the estimate, standard error and true value.
+We will use an estimates dataset in different formats. It
+contains 1,000 repetitions (variable rep = 1–1,000) for each of two dgms
+(variable dgm = 1/2). Targets {it:beta} and {it:gamma} and methods {it:1} and {it:2}
+appear differently in different formats, as do the estimate, standard error and true value.
 
-{pstd}{bf:Data in format 1} (long-long: long target, long method).
-Each feature is stored as a variable: targets (estimand), methods (method), estimate (est), standard error (se) and true value (true).  
+{pstd}{bf:Data in format 1} (long-long: long target, long method). Each
+feature is stored as a variable: targets (estimand), methods (method),
+estimate (est), standard error (se) and true value (true).  
 
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simlongESTPM_longE_longM.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)"}
 
-{pstd}{bf:Data in format 2} (long-wide: long target, wide method). 
-Here the target is the variable estimand but methods are wide, e.g. est_1 is the estimate for method 1. 
-Note the underscore separating est and method in the variable name: we remove it by the {cmd:sep(_)} option.
+{pstd}{bf:Data in format 2} (long-wide: long target, wide method). Here the target
+is the variable estimand but methods are wide, e.g. est_1 is the estimate for
+method 1. Note the underscore separating est and method in the variable name: we
+remove it by the {cmd:sep(_)} option.
 
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simlongESTPM_longE_wideM1.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(1 2) sep(_) estimate(est) se(se) true(true)"}
 
-{pstd}{bf:Data in format 3} (wide-long: wide target, long method). 
-Here the method is the variable method but the targets are wide, e.g. estbeta is the estimate of beta.
+{pstd}{bf:Data in format 3} (wide-long: wide target, long method). Here the method
+is the variable method but the targets are wide, e.g. estbeta is the estimate of beta.
 
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simlongESTPM_wideE_longM.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(method) estimate(est) se(se) true(true)"}
 
-{pstd}{bf:Data in format 4} (wide-wide: wide target, wide method).
-Here there is one set of variables for each target and method: e.g. est1beta is the estimate for method 1 and target beta. 
-The methods appear before the targets in the variable names, so {cmd:order(method)} is needed.
-There is a single variable true because in these data its value is constant.
+{pstd}{bf:Data in format 4} (wide-wide: wide target, wide method). Here there is
+one set of variables for each target and method: e.g. est1beta is the estimate
+for method 1 and target beta. The methods appear before the targets in the
+variable names, so {cmd:order(method)} is needed. There is a single variable true
+because in these data its value is constant.
 
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simlongESTPM_wideE_wideM1.dta, clear"}
 
@@ -316,4 +325,5 @@ Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
 
+{p}{helpb siman: Return to main help page for siman}
 
