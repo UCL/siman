@@ -55,7 +55,8 @@ The {cmd:siman scatter} plots help the user to look for bivariate outliers.
 {marker example}{...}
 {title:Example}
 
-{pstd} An example estimates data set with 3 DGMs (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
+{pstd} An example estimates data set with 3 DGMs (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) 
+with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
 
 {phang}Load the data set in to {cmd:siman}
 

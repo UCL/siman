@@ -1,4 +1,5 @@
-*!	version 0.11.4	02jan2025	
+*!	version 0.11.5	11mar2025	
+*	version 0.11.5	11mar2025	IW/TM make norefline option work
 *	version 0.11.4	02jan2025	IW use new char cilevel = the level at which coverage was computed
 *	version 0.11.3	21nov2024	IW Graph drawing moved to new standalone nestloop
 *	version 0.11.2	25oct2024	IW improve saving() and export() options
@@ -30,7 +31,7 @@ version 15
 // PARSE
 syntax [anything] [if], [DGMOrder(string) ///
 	NAMe(string) SAVing(string) EXPort(string) /// twoway options for overall graph
-	debug /// undocumented
+	debug noREFline /// undocumented
 	*]
 
 foreach thing in `_dta[siman_allthings]' {

@@ -1,4 +1,5 @@
-*!	version 0.11.2	28oct2024	
+*!	version 0.11.3	11mar2025	
+*	version 0.11.3	11mar2025	IW catch no valid PMs; don't show PM if only one; new nomcse option; pass options to tabdisp; remove stubwidth(20)
 *	version 0.11.2	28oct2024	IW implement new concise option
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
 *	version 0.8.3   3apr2024
@@ -17,8 +18,9 @@
 
 program define siman_table
 version 15
-syntax [anything] [if], [Column(varlist) /// documented option 
-	Row(varlist) debug pause CONcise /// undocumented options
+syntax [anything] [if], [Column(varlist max=2) noMCse mcci Level(cilevel) /// documented option 
+	* /// tabdisp options
+	Row(varlist) debug pause tabdisp /// undocumented options
 	]
 
 // PARSING
@@ -68,13 +70,18 @@ if "`anything'"!="" {
 	gen `keep' = 0
 	foreach thing of local anything {
 		qui count if _perfmeascode == "`thing'" 
-		if r(N)==0 di as smcl as text "{p 0 2}Warning: performance measure not found: `thing'{p_end}"
+		if r(N)==0 di as smcl as text "{p 0 2}Warning: ignoring invalid/missing performance measure: `thing'{p_end}"
 		qui replace `keep' = 1 if _perfmeascode == "`thing'" 
 		}
 	qui keep if `keep'
 	drop `keep'
 }
-
+qui tab _perfmeascode if `rep'<0
+local npms = r(r)
+if `npms'==0 {
+	di as error "No valid performance measures specified"
+	exit 498
+}
 
 * re-order performance measures for display in the table as per simsum
 local perfvar = "estreps sereps bias pctbias mean empse relprec mse rmse modelse ciwidth relerror cover power"
@@ -101,7 +108,8 @@ foreach onedgmvar in `dgm' {
 	else if !mi("`debug'") di as input "Debug: ignoring non-varying dgmvar: `onedgmvar'"
 }
 local dgm `newdgmvar'
-local myfactors _perfmeascode `dgm' `target' `method'
+local myfactors `dgm' `target' `method'
+if `npms'>1 local myfactors _perfmeascode `myfactors'
 if !mi("`debug'") di as input "Debug: factors to display: `myfactors'"
 tempvar group
 foreach thing in dgm target method {
@@ -125,7 +133,7 @@ if "`column'"=="" {
 }
 local myfactors : list myfactors - column
 if "`row'"=="" {
-	if !strpos("`column'","perfmeas") local row _perfmeascode
+	if !strpos("`column'","perfmeas") & `npms'>1 local row _perfmeascode
 	else local row : word 1 of `myfactors'
 }
 local by : list myfactors - row
@@ -134,9 +142,19 @@ if wordcount("`by'")>4 {
 	
 }
 
-
 * display the table
-local tablecommand tabdisp `row' `column' `if', by(`by') c(`estimate' `se') stubwidth(20) `concise'
+if "`mcci'" == "mcci" {
+	tempvar lcivar ucivar
+	local zcrit = invnorm((1/2+`level'/200))
+	qui gen `lcivar' = `estimate' - `zcrit'*`se'
+	qui gen `ucivar' = `estimate' + `zcrit'*`se'
+}
+if "`mcse'" == "nomcse" {
+	drop `se'
+	local se
+}
+local tablecommand tabdisp `row' `column' `if', by(`by') c(`estimate' `se' `lcivar' `ucivar') `options'
+* in version>=17, could have: table (`row') (`column') (`by') `if', stat(sum `estimate' `se' `lcivar' `ucivar') `options'
 if !mi("`debug'") {
 	di as input "Debug: table features:"
 	di "    column:  `column'"
@@ -150,11 +168,18 @@ if !mi("`pause'") {
 }
 `tablecommand'
 
+* print the cilevel
+qui count if inlist(_perfmeascode,"cover":perfl,"power":perfl)
+if r(N) di as text "Note: coverage and power calculated at `level'% level"
 
-* if mcses are reported, print the following note
-cap assert missing(`se')  
-if _rc {
-	di as smcl as text "{p 0 2}{it: NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the second entry is its Monte Carlo error.}{p_end}"
+* if mcses or mccis are reported, print the following note
+cap assert mi("`mcse'") | !mi("`mcci'") 
+if !_rc {
+	di as smcl as text "{p 0 2}Note: where there are multiple entries in the table, they are the estimated performance measure, followed by"
+	if mi("`mcse'") di "its Monte Carlo error"
+	if mi("`mcse'") & !mi("`mcci'") di "and"
+	if !mi("`mcci'") di "its Monte Carlo `level'% confidence limits"
+	di "{p_end}"
 }
 
 restore

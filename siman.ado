@@ -25,7 +25,7 @@ foreach thing in `_dta[siman_allthings]' {
 * subcmds requiring data not to be set
 local subcmds0 setup 
 * subcmds requiring data to be set
-local subcmds1 describe analyse analyze table lollyplot zipplot comparemethodsscatter blandaltman swarm scatter nestloop
+local subcmds1 describe analyse analyze table scatter comparemethodsscatter swarm blandaltman zipplot lollyplot nestloop
 * subcmds not minding whether data are set
 local subcmds2 
 * all known subcommands

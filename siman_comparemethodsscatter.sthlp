@@ -24,15 +24,18 @@
 
 {pstd}The subcommand {cmd:comparemethodsscatter} may be abbreviated to three or more characters (e.g. {cmd:com}) or to {cmd:cms}.
 
-{pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
+{pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and 
+{bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
 
 
 {synoptset 25 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Main}
-{synopt:{opt com:bine}}forces use of the slower "combine" method: the graph is made by combining individual graphs, potentially showing both estimate and SE. This is the default with 2 or 3 methods.{p_end}
-{synopt:{opt mat:rix}}forces use of the faster "matrix" method: the graph is made by {help graph matrix}, showing only estimate or SE. This is the default with more than 3 methods.{p_end}
+{synopt:{opt com:bine}}forces use of the slower "combine" method: the graph is made by combining 
+individual graphs, potentially showing both estimate and SE. This is the default with 2 or 3 methods.{p_end}
+{synopt:{opt mat:rix}}forces use of the faster "matrix" method: the graph is made by {help graph matrix}, 
+showing only estimate or SE. This is the default with more than 3 methods.{p_end}
 {synopt:{opt coll:apse(varlist)}}collapses the graphs over the specified variables.
 By default, one graph is drawn per DGM and target. 
 For example, in a setting with DGM defined by {cmd:dgmvar1 dgmvar2} and target defined by {cmd:targetvar}, 
@@ -41,10 +44,12 @@ overlaying estimates or standard errors for different values of {cmd:dgmvar1}.{p
 
 {syntab:Graph options}
 {synopt:{opt meth:list(string)}}specifies a subgroup of methods, and their order, to be graphed.
-For example, in a dataset with methods A, B, C and D, the option {bf: methlist(B D)}, which would plot graphs for B vs. D, the same as using {bf:if method=="B" | method=="D"}. 
+For example, in a dataset with methods A, B, C and D, the option {bf: methlist(B D)}, which would plot 
+graphs for B vs. D, the same as using {bf:if method=="B" | method=="D"}. 
 But the option {bf: methlist(D B)} would also change the ordering of the graphs.
 {it:string} may be a numlist if method is numeric.{p_end}
-{synopt:{opt noeq:uality}}does not draw the line of equality when the combine method is used. The line of equality is never drawn when the matrix method is used.{p_end}
+{synopt:{opt noeq:uality}}does not draw the line of equality when the combine method is used. The line of equality 
+is never drawn when the matrix method is used.{p_end}
 {synopt:{opt name(string)}}  the stub for the graph name, to which "_#" is appended. Default is "cms".{p_end}
 {synopt:{it:graph_options}}most options for {help graph combine:graph combine} are available.{p_end}
 {synopt:{opt subgr:aphoptions(string)}}to change the format of the constituent scatter graphs, which are drawn
@@ -57,7 +62,8 @@ use {bf:subgr(mcol(red))}; with the matrix method, use {bf:mcol(red)}.{p_end}
 {title:Description}
 
 {pstd}
-{cmd:siman comparemethodsscatter} draws sets of scatter plots comparing the point estimates (or standard errors) for various methods, where each point represents one repetition. It is assumed that data are paired in that they come from the same repetition,
+{cmd:siman comparemethodsscatter} draws sets of scatter plots comparing the point estimates (or standard errors) 
+for various methods, where each point represents one repetition. It is assumed that data are paired in that they come from the same repetition,
 i.e. they were estimated using the same simulated dataset, and are compared to the line of equality.
 These graphs help the user to look for correlations between methods and any systematic differences.
 Where more than two methods are compared, a graph comparing each pair of methods is plotted.
@@ -86,7 +92,8 @@ then {bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)}
 {marker examples}{...}
 {title:Examples}
 
-{pstd} An example estimates data set with 3 DGMs (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 repetitions named simpaper1.dta available on the {cmd: siman} {browse "https://github.com/UCL/siman/":GitHub repository}.
+{pstd} An example estimates data set with 3 DGMs (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1000 
+repetitions named simpaper1.dta available on the {cmd: siman} {browse "https://github.com/UCL/siman/":GitHub repository}.
 
 {pstd}Load the data set in to {cmd:siman}
 

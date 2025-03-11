@@ -292,12 +292,12 @@ if ${detail} == 1 siman comparemethodsscatter if `useit1', title("testtitle") su
 
 if ${detail} == 1 siman blandaltman if `useit1', ytitle("test y-title") xtitle("test x-title") name("ba_test7", replace) 
 
-siman analyse, force
+siman analyse, force notable
 
 siman lollyplot if `useit4', xtitle("test x-title") name("lollyplot_test7", replace)
 * without -if k==5- you get "too many sersets" error
 
-siman nestloop mean, dgmorder(-theta rho -pc -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") name("nestloop_test7", replace)
+siman nestloop mean, dgmorder(-theta rho -pc -k tau2) ylabel(0.2 0.5 1) ytitle("Odds ratio") name("nestloop_test7", replace)
 
 
 /*

@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.11.1 21oct2024}{...}
+{* *! version 0.11.4 11mar2025}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "Main simsum help page" "simsum"}{...}
 {viewerjumpto "Syntax" "siman_lollyplot##syntax"}{...}
@@ -55,8 +55,9 @@ command before running it. Requires {help pause} to be on.{p_end}
 {syntab:Saving options}
 {synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata format. The
 graph name is {it:namestub} with the target name appended.{p_end}
-{synopt:{opt exp:ort}{it:(format[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
-{cmd:saving()} must also be specified, and the file name is the same as for {cmd:saving()} with the appropriate filetype.{p_end}
+{synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
+{cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} with the appropriate 
+filetype, which must be one of the suffices listed in {help graph export}.{p_end}
 {synoptline}
 
 
@@ -74,9 +75,13 @@ One graph is drawn for each target.
 
 {pstd}The user can select a subset of performance measures to be graphed using the 
 performance measures listed in {help siman analyse##perfmeas:performance measures}.
-If no performance measures are specified, then graphs will be drawn for {help siman analyse##bias:bias}, {help siman analyse##empse:empse} and {help siman analyse##cover:coverage}; 
-an exception is if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for {help siman analyse##mean:mean}, {help siman analyse##empse:empse} and {help siman analyse##relerror:relerror};
+If no performance measures are specified, then graphs will be drawn for {help siman analyse##bias:bias}, 
+{help siman analyse##empse:empse} and {help siman analyse##cover:coverage}; 
+an exception is if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for 
+{help siman analyse##mean:mean}, {help siman analyse##empse:empse} and {help siman analyse##relerror:relerror};
 and that if there is no {bf:se} variable, then {help siman analyse##cover:coverage} or {help siman analyse##relerror:relerror} is dropped.
+
+{pstd} Reference lines are drawn for performance measures where this is appropriate: e.g. at 0 for bias, but not for empirical SE.
 
 {pstd}
 The user can specify {it:if} within the {cmd:siman lollyplot} syntax. 

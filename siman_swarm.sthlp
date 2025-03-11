@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.10 19jul2024}{...}
+{* *! version 0.11.4 11mar2025}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_swarm##syntax"}{...}
 {viewerjumpto "Description" "siman_swarm##description"}{...}
@@ -19,9 +19,11 @@
 [{cmd:,}
 {it:options}]
 
-{pstd}When [estimate|se] is not specified, this is equivalent to {cmd:siman swarm estimate}. When both [estimate] and [se] are specified, {cmd:siman swarm} will draw a graph for each.
+{pstd}When [estimate|se] is not specified, this is equivalent to {cmd:siman swarm estimate}. When 
+both [estimate] and [se] are specified, {cmd:siman swarm} will draw a graph for each.
 
-{pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
+{pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and 
+{bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
 
 
 {synoptset 26 tabbed}{...}
@@ -38,7 +40,8 @@ Each panel displays all methods, so do not include {it:method} in {cmd:by()}.
 {synopt:{opt meangr:aphoptions(string)}}options for {help scatter} to be applied to the mean: e.g. mcolor(){p_end}
 {synopt:{opt sc:atteroptions(string)}}options for {help scatter} to be applied to the scatterplot: e.g. msymbol(), moclor(){p_end}
 {synopt:{opt bygr:aphoptions(string)}}graph options for the overall graph that need to be within the {it:by} option: e.g. title(), note(), row(), col(){p_end}
-{synopt:{opt graphop:tions(string)}}graph options for the overall graph that need to be outside the {it:by} option: e.g. xtitle(), ytitle(). This must not include {opt name()}.{p_end}
+{synopt:{opt graphop:tions(string)}}graph options for the overall graph that need to be outside the 
+{it:by} option: e.g. xtitle(), ytitle(). This must not include {opt name()}.{p_end}
 {synopt:{opt name(string)}} the stub for the graph name, to which "_estimate" or "_se" is appended. Default name is "swarm".{p_end}
 {synopt:{it:graph_options}}siman swarm attempts to allocate graph options as {opt scatteroptions()}, {opt bygraphoptions()} or {opt graphoptions()}.{p_end}
 {synoptline}
@@ -48,16 +51,25 @@ Each panel displays all methods, so do not include {it:method} in {cmd:by()}.
 {title:Description}
 
 {pstd}
-{cmd:siman swarm} provides so-called ‘swarm plots’ of the repetition-level estimates or standard errors arising from each method. The point estimates or SE estimates are on the horizontal dimension, and repetition number on the vertical dimension. This enables us to look at the distribution of these estimates. The {cmd: siman swarm} graphs help to inspect distributions. While this could be done using a histogram or density plot, graphing repetition number serves two more important purposes. First, we are able to spot outliers. Second, we can verifying that estimates are not dependent across repetitions. For example, in the past this has helped us to spot an issue in which a researcher was accidentally adding data from one repetition to data from all previous repetitions, rather than correctly separating data from each repetition.
+{cmd:siman swarm} provides so-called ‘swarm plots’ of the repetition-level estimates or standard errors arising from each 
+method. The point estimates or SE estimates are on the horizontal dimension, and repetition number on the vertical 
+dimension. This enables us to look at the distribution of these estimates. The {cmd: siman swarm} graphs help to inspect 
+distributions. While this could be done using a histogram or density plot, graphing repetition number serves two more 
+important purposes. First, we are able to spot outliers. Second, we can verify that estimates are not dependent 
+across repetitions. For example, in the past this has helped us to spot an issue in which a researcher was accidentally 
+adding data from one repetition to data from all previous repetitions, rather than correctly separating data from each repetition.
 
 {pstd}
-A mean for each panel is plotted, by default as a vertical pipe. This can be suppressed with the {opt nomean} option. Note: for standard error estimates, the root-mean of the squared standard errors is plotted (i.e. not the simple mean of the standard errors).
+A mean for each panel is plotted, by default as a vertical pipe. This can be suppressed with the {opt nomean} 
+option. Note: for standard error estimates, the root-mean of the squared standard errors is plotted (i.e. not 
+the simple mean of the standard errors).
 
 {pstd}
 {help siman setup} needs to be run before {cmd:siman swarm} can be used.
 
 {pstd}
-{cmd:siman swarm} requires at least two methods to compare, so it requires a {it:method} variable in the estimates dataset. This must be specified in {help siman setup} using the {it:method()} option.
+{cmd:siman swarm} requires at least two methods to compare, so it requires a {it:method} variable in the estimates 
+dataset. This must be specified in {help siman setup} using the {it:method()} option.
 
 {pstd}
 For further troubleshooting and limitations, see {help siman setup##limitations:troubleshooting and limitations}.
@@ -66,7 +78,8 @@ For further troubleshooting and limitations, see {help siman setup##limitations:
 {marker examples}{...}
 {title:Examples}
 
-{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1,000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
+{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1,000 repetitions 
+named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
 
 {phang}Load the data set in to {cmd:siman}
 
