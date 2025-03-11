@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.10 19jul2024}{...}
+{* *! version 0.11.3 11mar2025}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_zipplot##syntax"}{...}
 {viewerjumpto "Description" "siman_zipplot##description"}{...}
@@ -9,7 +9,8 @@
 {title:Title}
 
 {phang}
-{bf:siman zipplot} {hline 2} zip plot of confidence interval coverage for each data-generating mechanism, target and analysis method in the estimates data
+{bf:siman zipplot} {hline 2} zip plot of confidence interval coverage for each data-generating 
+mechanism, target and analysis method in the estimates data
 
 
 {marker syntax}{...}
@@ -20,7 +21,8 @@
 [{cmd:,}
 {it:options}]
 
-{pstd}Any {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
+{pstd}Any {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and 
+{bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
 
 {synoptset 26 tabbed}{...}
 {synopthdr}
@@ -32,8 +34,8 @@ Specifying for example {cmd:by(}{it:target method}{cmd:)} will overlay DGMs.
 We advise against using this option.
 
 {syntab:Graph options}
-{synopt:{opt noncov:eroptions(string)}}graph options for the non-coverers {p_end}
-{synopt:{opt cov:eroptions(string)}}graph options for the coverers {p_end}
+{synopt:{opt noncov:eroptions(string)}}graph options for intervals that do not cover the true value {p_end}
+{synopt:{opt cov:eroptions(string)}}graph options for intervals that cover the true value {p_end}
 {synopt:{opt sca:tteroptions(string)}}graph options for the scatter plot of the point estimates{p_end}
 {synopt:{opt truegr:aphoptions(string)}}graph options for the true value(s){p_end}
 {synopt:{opt l:evel(#)}}changes the level for the confidence intervals calculated for the zip 
