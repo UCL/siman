@@ -32,7 +32,7 @@ program define siman_analyse
 version 15
 
 syntax [anything] [if], [PERFonly REPlace noTABle /// documented options
-	ref(string) level(cilevel) * /// simsum options
+	ref(string) Level(cilevel) * /// simsum options
 	force debug pause nopreserve /// undocumented options
 	]
 local simsumoptions level(`level') `options'

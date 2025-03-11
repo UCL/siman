@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.11.1 21oct2024}{...}
+{* *! version 0.11.5 11mar2025}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_nestloop##syntax"}{...}
 {viewerjumpto "Description" "siman_nestloop##description"}{...}
@@ -31,30 +31,39 @@
 {synopthdr}
 {synoptline}
 {syntab:Options controlling the main graph}
-{synopt:{opt dgmo:rder(string)}}defines the order of data generating mechanisms for the nested-loop plot. A negative sign in front of the variable name 
+{synopt:{opt dgmo:rder(string)}}defines the order of data generating mechanisms for the nested-loop 
+plot. A negative sign in front of the variable name 
 will sort its values on the graph in descending order.{p_end}
-{synopt:{opt stag:ger(#)}}horizontally staggers the lines for different methods.  Default # is 0. Try {cmd:stagger(0.05)} to make overlapping lines more distinct.{p_end}
+{synopt:{opt stag:ger(#)}}horizontally staggers the lines for different methods.  Default # is 0. Try 
+{cmd:stagger(0.05)} to make overlapping lines more distinct.{p_end}
 {synopt:{opt c:onnect(string)}}controls how the main graph and descriptor graph are connected. 
-Default is {cmd:connect(stairstep)}, which shows each performance statistic as a horizontal line with vertical joins (as described by {help siman nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}). 
+Default is {cmd:connect(stairstep)}, which shows each performance statistic as a horizontal line with 
+vertical joins (as described by {help siman nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}). 
 An alternative is {cmd:connect(ascending)}, which connects performance statistics with diagonal lines.{p_end}
-{synopt:{opt noref:line}}suppresses display of reference lines for certain performance measures (coverage, bias, relprec and relerror).{p_end}
-{synopt:{opt lev:el}}specifies where the reference line for performance measure "coverage" will be drawn.{p_end}
+{synopt:{opt noref:line}}suppresses display of reference lines for certain performance measures 
+(coverage, bias, relprec and relerror).{p_end}
 
 {syntab:Options controlling the descriptor graph}
-{synopt:{opt dgsi:ze(#)}}defines the vertical size of the descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.35.{p_end}
-{synopt:{opt dgga:p(#)}}defines the vertical size of the gap between the main graph and the descriptor graph, as a fraction of the whole vertical axis.  Default # is 0.{p_end}
+{synopt:{opt dgsi:ze(#)}}defines the vertical size of the descriptor graph, as a fraction of the 
+whole vertical axis.  Default # is 0.35.{p_end}
+{synopt:{opt dgga:p(#)}}defines the vertical size of the gap between the main graph and the descriptor 
+graph, as a fraction of the whole vertical axis.  Default # is 0.{p_end}
 {synopt:{opt dgin:nergap(#)}}controls the vertical spacing between the  descriptor graphs.  Default # is 3.{p_end}
 {synopt:{opt dgco:lor(string)}}controls the colour(s) for the descriptor graphs and their labels. Default is gs4.{p_end}
 {synopt:{opt dgpa:ttern(string)}}controls the pattern(s) for descriptor graph. Default is solid.{p_end}
 {synopt:{opt dgla:bsize(string)}}controls the size of the descriptor graph labels. Default is vsmall.{p_end}
 {synopt:{opt dgst:yle(string)}}controls the style(s) of the descriptor graph.{p_end}
-{synopt:{opt dglw:idth(string)}}controls the width(s) of the descriptor graph.{p_end}
+{synopt:{opt dglw:idth(string)}}controls the line width(s) of the descriptor graph.{p_end}
 
 {syntab:Other graph options}
-{synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
+{synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend 
+item or as the legend title. The default is neither.{p_end}
 {synopt:{opt scena:riolabel}}labels the horizontal axis with scenario numbers. 
 The default is an unlabelled axis, since the descriptor graphs describe the scenarios.{p_end}
-{synopt:{opt name(string)}} the stub for the graph name, to which "_" followed by the target name and "_" followed by the performance measure name is appended. Default name is "nestloop". For example, with two targets, beta and gamma, and two performance measures, bias and relerror, defauly graph names would be "nestloop_beta_bias", "nestloop_gamma_bias", "nestloop_beta_relerror" and "nestloop_gamma_relerror.{p_end}
+{synopt:{opt name(string)}} the stub for the graph name, to which "_" followed by the target name and 
+"_" followed by the performance measure name is appended. Default name is "nestloop". For example, 
+with two targets, beta and gamma, and two performance measures, bias and relerror, defauly graph 
+names would be "nestloop_beta_bias", "nestloop_gamma_bias", "nestloop_beta_relerror" and "nestloop_gamma_relerror.{p_end}
 {synopt:{it:graph_options}}Most of the valid options for {help line:line} are available.
 We find these especially useful: {cmd:ylabel()} to stop the y-labels extending to the descriptor graph; 
 {cmd:legend()} to arrange legends in a single row or column, e.g.
@@ -63,8 +72,9 @@ We find these especially useful: {cmd:ylabel()} to stop the y-labels extending t
 {syntab:Saving options}
 {synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata’s .gph format.
 The graph name is {it:namestub} with the target and performance measures appended.{p_end}
-{synopt:{opt exp:ort}{it:(format[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
-{cmd:saving()} must also be specified, and the file name is the same as for {cmd:saving()} with the appropriate filetype.{p_end}
+{synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
+{cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} with the appropriate 
+filetype, which must be one of the suffices listed in {help graph export}.{p_end}
 {synoptline}
 
 
@@ -77,12 +87,17 @@ graph is drawn for each combination of target and performance measure. Each
 graph presents the simulation results for all data-generating mechanisms and all methods in one plot. 
 
 {pstd}
-The performance measure is split by method and is stacked according to the levels of the data generating mechanisms along the horizontal
-axis. The nested-loop plot loops through nested data-generating mechanisms and plots results for different methods on top of each other in a full factorial design.
+The performance measure is split by method and is stacked according to the levels of the data 
+generating mechanisms along the horizontal
+axis. The nested-loop plot loops through nested data-generating mechanisms and plots results 
+for different methods on top of each other in a full factorial design.
 
-{pstd}The user can select a subset of performance measures to be graphed from those listed in {help siman analyse##perfmeas:performance measures}.
-If no performance measures are specified, then the default choice is {help siman analyse##bias:bias}, {help siman analyse##empse:empse} and {help siman analyse##cover:coverage};
-however, if {cmd:true()} was not specified in {help siman setup}, graphs will be drawn for {help siman analyse##mean:mean}, {help siman analyse##empse:empse} and {help siman analyse##relerror:relerror}.
+{pstd}The user can select a subset of performance measures to be graphed from those listed in 
+{help siman analyse##perfmeas:performance measures}.
+If no performance measures are specified, then the default choice is {help siman analyse##bias:bias}, 
+{help siman analyse##empse:empse} and {help siman analyse##cover:coverage};
+however, if {cmd:true()} was not specified in {help siman setup}, graphs will be drawn for 
+{help siman analyse##mean:mean}, {help siman analyse##empse:empse} and {help siman analyse##relerror:relerror}.
 
 {pstd}
 The user can specify {it:if} within the {cmd:siman nestloop} syntax. The

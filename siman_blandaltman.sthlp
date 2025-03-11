@@ -23,7 +23,8 @@
 
 {pstd}{it:varlist} may include {it:estimate} (the default), {it:se} or both.
 
-{pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
+{pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and 
+{bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
 
 
 {synoptset 25 tabbed}{...}
@@ -53,7 +54,9 @@ using <= and >= will not work.  The components of {bf: methlist()}  need to be w
 {title:Description}
 
 {pstd}
-{cmd:siman blandaltman} draws a {help siman_blandaltman##reference:Bland-Altman plot} comparing estimates and/or standard error data from different methods.  The Bland-Altman plot shows the difference of the estimate compared to the mean of the estimate (or likewise for 
+{cmd:siman blandaltman} draws a {help siman_blandaltman##reference:Bland-Altman plot} comparing estimates 
+and/or standard error data from different methods.  The Bland-Altman plot shows the difference of the 
+estimate compared to the mean of the estimate (or likewise for 
 the standard error) with a selected method as the comparator.  
 The plots show the limits of agreement, that is, a plot of the difference versus the mean of each method 
 compared with a comparator.  If there are more than 2 methods in the data set, for example methods A B and C, then the first method will be taken 
@@ -68,7 +71,8 @@ For further troubleshooting and limitations, see {help siman setup##limitations:
 {marker examples}{...}
 {title:Examples}
 
-{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1,000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
+{pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1,000 
+repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
 
 {pstd}Load the data set in to {cmd: siman}.
 

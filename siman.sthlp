@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.11 11oct2024}{...}
+{* *! version 0.11.2 11mar2025}{...}
 {vieweralsosee "simsum (if installed)" "simsum"}{...}
 {viewerjumpto "Syntax" "siman##syntax"}{...}
 {viewerjumpto "Description" "siman##description"}{...}
@@ -21,13 +21,11 @@
 
 {p2col:{bf:{help siman setup}}}set up data in the format required by siman, using the user’s raw simulation data (so-called ‘estimates data set’)
 
+{p2col:{bf:{help siman describe}}}provides a summary table of the estimates data imported by {help siman setup}
+
 {pstd}Analyses to estimate performance
 
 {p2col:{bf:{help siman analyse}}}creates performance statistics data set from the estimates data set, and can hold both in memory
-
-{pstd}Descriptive tables of results
-
-{p2col:{bf:{help siman describe}}}provides a summary table of the estimates data imported by {help siman setup}.
 
 {p2col:{bf:{help siman table}}}tabulates performance statistics
 
@@ -35,7 +33,8 @@
 
 {p2col:{bf:{help siman scatter}}}scatter plots of standard error against point estimate
 
-{p2col:{bf:{help siman comparemethodsscatter}}}scatter plot of point estimates and/or standard errors obtained from different methods when multiple methods have been applied to the same simulated data sets
+{p2col:{bf:{help siman comparemethodsscatter}}}scatter plot of point estimates and/or standard errors obtained 
+from different methods when multiple methods have been applied to the same simulated data sets
 
 {p2col:{bf:{help siman swarm}}}swarm plot of estimates or the standard errors, for different methods, by data-generating mechanisms
 
@@ -60,7 +59,8 @@
 {title:Description}
 
 {pstd}
-{cmd:siman} is a suite of programs for the analysis of simulation studies, importing estimates data, analysing the results of simulation studies and graphing the data. 
+{cmd:siman} is a suite of programs for the analysis of simulation studies, importing estimates data, 
+analysing the results of simulation studies and graphing the data. 
 
 
 {marker formats}{...}
@@ -74,7 +74,9 @@ Such data may consist of, for example, parameter estimates, standard errors, deg
 confidence intervals, an indicator of rejection of a hypothesis, and more.
 
 {pstd}{bf:Performance statistics data set.}{p_end}
-{pstd}Contains performance statistics, including Monte Carlo error, for performance measures of interest (computed by {bf:{help siman analyse}}). These can be visualised with {bf:{help siman lollyplot}} and {bf:{help siman nestloop}}. Note that the performance data set will usually be appended to the estimates data set.
+{pstd}Contains performance statistics, including Monte Carlo error, for performance measures of interest 
+(computed by {bf:{help siman analyse}}). These can be visualised with {bf:{help siman lollyplot}} and 
+{bf:{help siman nestloop}}. Note that the performance data set will usually be appended to the estimates data set.
 
 {pstd}For troubleshooting and limitations, see {help siman setup##limitations:troubleshooting and limitations}.
 
@@ -82,7 +84,9 @@ confidence intervals, an indicator of rejection of a hypothesis, and more.
 {marker examples}{...}
 {title:Examples}
 
-{pstd} An example estimates data set with three data-generating mechanisms (MCAR, MAR, MNAR missing data) and three methods of analysis (Full, CCA, MI) with 1,000 repetitions is available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}, named simpaper1.dta.
+{pstd} An example estimates data set with three data-generating mechanisms (MCAR, MAR, MNAR missing data) 
+and three methods of analysis (Full, CCA, MI) with 1,000 repetitions is available on the {cmd: siman} 
+GitHub repository {browse "https://github.com/UCL/siman/":here}, named simpaper1.dta.
 
 {phang} To plot the estimates data graphs, first load the data set in to {cmd: siman}.
 

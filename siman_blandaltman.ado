@@ -1,4 +1,5 @@
-*!	version 0.11.3	02jan2025	
+*!	version 0.11.4	11mar2025	
+*	version 0.11.4	11mar2025	IW/TM add transparency to plot
 *	version 0.11.3	02jan2025	IW specify estimate/se as variables, not keywords
 *	version 0.11.2	24oct2024	IW improve graph titles and note
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
@@ -229,7 +230,7 @@ forvalues g = 1/`novervalues' { // loop over graphs
 		else if "`stat'"=="se" local eltitle = "Standard errors (`se')" 
 		local elnote "stat=`stat'"
 		#delimit ;
-		local graph_cmd twoway (scatter diff`stat' mean`stat' if `group'==`g', `options')
+		local graph_cmd twoway (scatter diff`stat' mean`stat' if `group'==`g', mcolor(%30) mlc(white%1) mlwidth(vvvthin) msym(O) `options')
 		,
 		by(`by', note("`eltitle' for `notetext'", suffix) iscale(1.1) title("") norescale `bygraphoptions' `dgmmissingok')
 		yline(0, lp(l) lc(gs8))

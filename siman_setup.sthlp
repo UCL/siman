@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.11 14oct2024}{...}
+{* *! version 0.11.3 11mar2025}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Input data formats" "siman_setup##data"}{...}
 {viewerjumpto "Syntax" "siman_setup##syntax"}{...}
@@ -21,7 +21,7 @@
 {title:Input data formats}
 
 {pstd}
-The input data for {cmd:siman setup} is a so-called "estimates data set".  
+The input data for {cmd:siman setup} is a so-called "estimates data set", which must be in memory (in the current frame).  
 This contains the results from analysing multiple simulated data sets, with each one termed a "repetition" ({bf:rep}).
 Each result relates to one simulation combination of data generating method ({bf:dgm}), {bf:target} and {bf:method}.
   
@@ -131,22 +131,27 @@ Options for data in any input format:
 {synopthdr}
 {synoptline}
 {synopt:{opt r:ep(varname)}}numeric variable identifying repetitions: required. {p_end}
-{synopt:{opt dgm(varlist)}}variable(s) identifying the data generating mechanism. {p_end}
-{synopt:{opt tar:get(varname|values)}}the target variable name (data formats 1/3) or values (data formats 2/4). {p_end}
-{synopt:{opt meth:od(varname|values)}}the method variable name (data formats 1/4) or values (data formats 2/3). {p_end}
+{synopt:{opt dgm(varlist)}}variable(s) identifying the data generating mechanism. 
+Can be omitted if there is only one data generating mechanism.{p_end}
+{synopt:{opt tar:get(varname|values)}}the target variable name (data formats 1/3) or values (data formats 2/4). 
+Can be omitted if there is only one target.{p_end}
+{synopt:{opt meth:od(varname|values)}}the method variable name (data formats 1/4) or values (data formats 2/3). 
+Can be omitted if there is only one method.{p_end}
 {synopt:{opt est:imate(varname|stub_varname)}}the estimate variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
 {synopt:{opt se(varname|stub_varname)}}the standard error variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
 {synopt:{opt df(varname|stub_varname)}}the degrees of freedom variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
 {synopt:{opt lci(varname|stub_varname)}}the lower confidence interval variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
 {synopt:{opt uci(varname|stub_varname)}}the upper confidence interval variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
 {synopt:{opt p(varname|stub_varname)}}the P-value variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
-{synopt:{opt true(#|varname|stub_varname)}}the true value of each target, given as a number, as the variable name (data format 1/3), or as the name of its stub (data formats 2/4). 
+{synopt:{opt true(#|varname|stub_varname)}}the true value of each target, given as a number, 
+as the variable name (data format 1/3), or as the name of its stub (data formats 2/4). 
 The true value should be the same for all methods: this is assumed in data formats 2/3 and must be true in data formats 1/4. {p_end}
 {synopt:{opt ord:er(varname)}}only needed in wide-wide format: this must be either {it:target} or {it:method}, 
 denoting that either the target stub is first or the method stub is first in the variable names. {p_end}
 {synopt:{opt clear}}clears the existing data held in memory: only needed with {cmd:if} or {cmd:in} conditions. {p_end}
 {synopt:{opt sep(string)}}a separator within wide-format variable names. 
-For example, if variables est_beta and est_gamma hold the estimates for targets  beta and gamma, you could code {cmd:estimate(est) sep(_) target(beta gamma)} instead of {cmd:estimate(est) target(_beta _gamma)}. {p_end}
+For example, if variables est_beta and est_gamma hold the estimates for targets  beta and gamma, 
+you could code {cmd:estimate(est) sep(_) target(beta gamma)} instead of {cmd:estimate(est) target(_beta _gamma)}. {p_end}
 {synopt:{opt dgmmi:ssingok}}dgm variables may contain missing values. {p_end}
 {synoptline}
 
@@ -209,7 +214,8 @@ two targets (beta, gamma), and two methods of analysis (A, B).
 {marker limitations}{...}
 {title:Troubleshooting and limitations}
 
-{pstd}If the method variable (or value) is not specified (e.g. if there is only one), then {cmd:siman setup} will create a variable {bf:_method} in the dataset with a value of 1 in order that other {bf: siman} programs can run.
+{pstd}If the method variable (or value) is not specified (e.g. if there is only one), then {cmd:siman setup} 
+will create a variable {bf:_method} in the dataset with a value of 1 in order that other {bf: siman} programs can run.
 
 {pstd}{bf:dgm} can contain missing values if the {opt dgmmissingok} option is used.
 

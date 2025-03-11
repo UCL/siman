@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.9 28nov2023}{...}
+{* *! version 0.11.1 11mar2025}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "simsum (if installed)" "simsum"}{...}
 {vieweralsosee "labelsof (if installed)" "labelsof"}{...}
@@ -32,50 +32,37 @@
 {pstd}
 If none of the following options are specified, then all available performance measures are estimated.
 
-{marker estsims}{synopt:{opt estreps}}the number of repetitions with non-missing point estimates (called {opt bsims} by {help simsum}).
-
-{marker sesims}{synopt:{opt sereps} }the number of repetitions with non-missing standard errors (called {opt sesims} by {help simsum}).
-
-{marker bias}{synopt:{opt bias} }the bias of the point estimates.
-
-{marker mean}{synopt:{opt mean} }the average (mean) of the point estimates.
-
-{marker empse}{synopt:{opt empse} }the empirical standard error – standard deviation of the point estimates.
-
+{marker estsims}{synopt:{opt estreps}}the number of repetitions with non-missing point estimates (called {opt bsims} by {help simsum}).{p_end}
+{marker sesims}{synopt:{opt sereps} }the number of repetitions with non-missing standard errors (called {opt sesims} by {help simsum}).{p_end}
+{marker bias}{synopt:{opt bias} }the bias of the point estimates.{p_end}
+{marker mean}{synopt:{opt mean} }the average (mean) of the point estimates.{p_end}
+{marker empse}{synopt:{opt empse} }the empirical standard error – standard deviation of the point estimates.{p_end}
 {marker relprec}{synopt:{opt relprec} }the relative precision 
 – the percentage improvement in precision for this analysis method compared with the reference analysis method.
 Precision is the inverse square of the empirical standard error. 
-This calculation can be slow: omitting it can reduce run time by up to 90%.
-
-{marker mse}{synopt:{opt mse} }the mean squared error of the point estimates.
-
-{marker rmse}{synopt:{opt rmse} }the root mean squared error of the point estimates.
- 
-{marker modelse}{synopt:{opt modelse} }the model-based standard error (more precisely, the root-mean of the squared model-based standard errors across repetitions).
-
-{marker ciwidth}{synopt:{opt ciwidth} }the mean width of the confidence interval at the specified level.
-
-{marker relerror}{synopt:{opt relerror} }the relative error in the model-based standard error, using the empirical standard error as gold standard.
-
-{marker cover}{synopt:{opt cover} }the coverage of nominal confidence intervals at the specified level.
-
+This calculation can be slow: omitting it can reduce run time by up to 90%.{p_end}
+{marker mse}{synopt:{opt mse} }the mean squared error of the point estimates.{p_end}
+{marker rmse}{synopt:{opt rmse} }the root mean squared error of the point estimates.{p_end}
+{marker modelse}{synopt:{opt modelse} }the model-based standard error (more precisely, the root-mean of the squared model-based standard errors across repetitions).{p_end}
+{marker ciwidth}{synopt:{opt ciwidth} }the mean width of the confidence interval at the specified level.{p_end}
+{marker relerror}{synopt:{opt relerror} }the relative error in the model-based standard error, using the empirical standard error as gold standard.{p_end}
+{marker cover}{synopt:{opt cover} }the coverage of nominal confidence intervals at the specified level.{p_end}
 {marker power}{synopt:{opt power} }the power to reject the null hypothesis that the true parameter is zero, at the specified level.
 
 {marker addopts}{...}
 {syntab:Additional options}
 
-{pstd}
-{p_end}
-{synopt:{opt perfonly} }the program will automatically append the performance measures data to the estimates data, unless the user specifies 
-{it:perfonly} for performance measures only.
-
-{pstd}
-{p_end}
-{synopt:{opt rep:lace} }if {cmd:siman analyse} has already been run and the user specifies it again then they must use the replace option, 
-to replace the existing performance measures in the data set.
-
-{synopt:{it:simsum_options}}Any options for {help simsum}, such as {cmd:level()} 
-to specify the nominal confidence level, or {cmd:ref()} to specify the reference method.
+{synopt:{opt perfonly} }deletes the estimates data from memory, and only keeps the performance 
+statistics. This precludes subsequent use of descriptive graphs.{p_end}
+{synopt:{opt rep:lace} }if {cmd:siman analyse} has already been run and the user specifies it 
+again then they must use the replace option, 
+to replace the existing performance measures in the data set.{p_end}
+{synopt:{opt notab:le} }do not run {help siman table} after estimating the performance measures.{p_end}
+{synopt:{opt l:evel(#)}}specifies the confidence level for coverages and powers. The default is 
+the system default set by {help level:set level}. This option is passed to {help simsum}.{p_end}
+{synopt:{opt ref(method)}}specifies the reference method for calculating relative precisions. This 
+option is passed to {help simsum}.{p_end}
+{synopt:{it:simsum_options}}any other options for {help simsum}.
 
 {synoptline}
 {p2colreset}{...}
@@ -94,7 +81,8 @@ We use 'the {bf:estimate} variable' etc. to mean the variable specified in the {
 
 {pstd}
 By default, {cmd:siman analyse} appends performance statistics to the estimates data set. 
-The performance measure names (e.g. "Non-missing point estimates") are stored as labels for the {bf:rep} variable, and their codes (e.g. "estreps") are stored in a new string variable _perfmeascode.
+The performance measure names (e.g. "Non-missing point estimates") are stored as labels for the {bf:rep} variable, 
+and their codes (e.g. "estreps") are stored in a new string variable _perfmeascode.
 The performance statistics are stored in the {bf:estimate} variable.
 A new variable _dataset indicates whether each row is estimates data or performance data.
 
@@ -119,7 +107,7 @@ It can be installed using {stata ssc install labelsof}.
 {title:Examples}
 {pstd}
 
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/Ella_testing/data/simlongESTPM_longE_longM.dta, clear"}
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simlongESTPM_longE_longM.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)"}
 
