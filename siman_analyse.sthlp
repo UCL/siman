@@ -35,6 +35,7 @@ If none of the following options are specified, then all available performance m
 {marker estsims}{synopt:{opt estreps}}the number of repetitions with non-missing point estimates (called {opt bsims} by {help simsum}).{p_end}
 {marker sesims}{synopt:{opt sereps} }the number of repetitions with non-missing standard errors (called {opt sesims} by {help simsum}).{p_end}
 {marker bias}{synopt:{opt bias} }the bias of the point estimates.{p_end}
+{marker pctbias}{synopt:{opt pctbias} }the bias in the point estimates as a percentage of the true value.{p_end}
 {marker mean}{synopt:{opt mean} }the average (mean) of the point estimates.{p_end}
 {marker empse}{synopt:{opt empse} }the empirical standard error – standard deviation of the point estimates.{p_end}
 {marker relprec}{synopt:{opt relprec} }the relative precision 
