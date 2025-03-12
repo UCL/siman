@@ -15,12 +15,11 @@
 {title:Syntax}
 
 {p 8 17 2}
-{cmdab:siman swarm} [estimate|se] {ifin}
+{cmdab:siman swarm} [estimate] [se] {ifin}
 [{cmd:,}
 {it:options}]
 
-{pstd}When [estimate|se] is not specified, this is equivalent to {cmd:siman swarm estimate}. When 
-both [estimate] and [se] are specified, {cmd:siman swarm} will draw a graph for each.
+{pstd}If neither {cmd:estimate} nor {cmd:se} is specified, this is equivalent to {cmd:siman swarm estimate}. If both are specified, {cmd:siman swarm} will draw a graph for each.
 
 {pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and 
 {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
@@ -38,11 +37,11 @@ Each panel displays all methods, so do not include {it:method} in {cmd:by()}.
 {syntab:Graph options}
 {synopt:{opt nomean}}do not add the mean to the graph{p_end}
 {synopt:{opt meangr:aphoptions(string)}}options for {help scatter} to be applied to the mean: e.g. mcolor(){p_end}
-{synopt:{opt sc:atteroptions(string)}}options for {help scatter} to be applied to the scatterplot: e.g. msymbol(), moclor(){p_end}
+{synopt:{opt sc:atteroptions(string)}}options for {help scatter} to be applied to the scatterplot: e.g. msymbol(), mcolor(){p_end}
 {synopt:{opt bygr:aphoptions(string)}}graph options for the overall graph that need to be within the {it:by} option: e.g. title(), note(), row(), col(){p_end}
 {synopt:{opt graphop:tions(string)}}graph options for the overall graph that need to be outside the 
 {it:by} option: e.g. xtitle(), ytitle(). This must not include {opt name()}.{p_end}
-{synopt:{opt name(string)}} the stub for the graph name, to which "_estimate" or "_se" is appended. Default name is "swarm".{p_end}
+{synopt:{opt name(string)}}the stub for the graph name, to which "_estimate" or "_se" is appended. Default name is "swarm".{p_end}
 {synopt:{it:graph_options}}siman swarm attempts to allocate graph options as {opt scatteroptions()}, {opt bygraphoptions()} or {opt graphoptions()}.{p_end}
 {synoptline}
 
@@ -51,7 +50,7 @@ Each panel displays all methods, so do not include {it:method} in {cmd:by()}.
 {title:Description}
 
 {pstd}
-{cmd:siman swarm} provides so-called ‘swarm plots’ of the repetition-level estimates or standard errors arising from each 
+{cmd:siman swarm} provides so-called ‘swarm plots’ of the repetition-level estimates and/or standard errors arising from each 
 method. The point estimates or SE estimates are on the horizontal dimension, and repetition number on the vertical 
 dimension. This enables us to look at the distribution of these estimates. The {cmd: siman swarm} graphs help to inspect 
 distributions. While this could be done using a histogram or density plot, graphing repetition number serves two more 
@@ -61,7 +60,7 @@ adding data from one repetition to data from all previous repetitions, rather th
 
 {pstd}
 A mean for each panel is plotted, by default as a vertical pipe. This can be suppressed with the {opt nomean} 
-option. Note: for standard error estimates, the root-mean of the squared standard errors is plotted (i.e. not 
+option. For standard error estimates, the mean is calculated as the root-mean of the squared standard errors is plotted (i.e. not 
 the simple mean of the standard errors).
 
 {pstd}
@@ -69,7 +68,7 @@ the simple mean of the standard errors).
 
 {pstd}
 {cmd:siman swarm} requires at least two methods to compare, so it requires a {it:method} variable in the estimates 
-dataset. This must be specified in {help siman setup} using the {it:method()} option.
+dataset. This must be specified in {help siman setup} using the {cmd:method()} option.
 
 {pstd}
 For further troubleshooting and limitations, see {help siman setup##limitations:troubleshooting and limitations}.

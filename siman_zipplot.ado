@@ -1,4 +1,5 @@
-*!	version 0.11.3	02jan2025	
+*!	version 0.11.4	12mar2025	
+*!	version 0.11.4	12mar2025	IW bug fix - didn't generate CIs when dfvar was present but with missing value
 *	version 0.11.3	02jan2025	IW new coverlevel() option
 *	version 0.11.2	11nov2024	IW handle case of no byvar
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; drop PMs
@@ -104,16 +105,23 @@ else if !mi("`debug'") di as input "Debug: graphing by: `by'"
 
 * create confidence intervals, if not already there
 local level2 = 1/2+`level'/200
+tempvar critval
+if !mi("`df'") { // there's a df variable - but it may be missing
+	qui gen `critval' = invttail(`df', 1-`level2') if !mi(`df')
+	qui replace `critval' = invnorm(`level2') if mi(`df')
+}
+else gen `critval' = invnorm(`level2') // no df variable
 if mi("`lci'") {
 	tempvar lci
-	if !mi("`df'") gen `lci' = `estimate' - `se'*invttail(`df', `level2')
-	else gen `lci' = `estimate' - `se'*invnorm(`level2')
+	gen `lci' = `estimate' - `se'*`critval'
+	label var `lci' "lci"
 }
 if mi("`uci'") {
 	tempvar uci
-	if !mi("`df'") gen `uci' = `estimate' + `se'*invttail(`df', `level2')
-	else gen `uci' = `estimate' + `se'*invnorm(`level2')
+	gen `uci' = `estimate' + `se'*`critval'
+	label var `uci' "uci"
 }
+drop `critval'
 
 * store method names in locals mlabel`i'
 qui levelsof `method'
@@ -133,6 +141,7 @@ forvalues i = 1/`nummethodnew' {
 * create covering indicator
 tempvar covers
 gen byte `covers' = inrange(`true',`lci',`uci')
+label var `covers' "covers"
 		
 * create sort order
 tempvar zstat rank

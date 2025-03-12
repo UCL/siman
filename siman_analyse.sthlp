@@ -18,19 +18,17 @@
 {title:Syntax}
 
 {phang}
-{cmdab:siman analyse} [{it:performancemeasures}] [if], [{it:perfonly replace}]
+{cmdab:siman analyse} [{it:performancemeasures}] [if], [{it:options}]
 
 {pstd} We advise that {opt if} be applied only to variables defining {bf:dgm}, {bf:target} and {bf:method}.
 
 
 {synoptset 20 tabbed}{...}
-{synopthdr}
+{synopthdr:performancemeasures}
 {synoptline}
 {marker perfmeas}{...}
-{syntab:Performance measure options (as for {help simsum:simsum})}
-
-{pstd}
-If none of the following options are specified, then all available performance measures are estimated.
+{pstd}The performance measures are all those offered by {help simsum:simsum}.
+If none is specified, then all available performance measures are estimated.
 
 {marker estsims}{synopt:{opt estreps}}the number of repetitions with non-missing point estimates (called {opt bsims} by {help simsum}).{p_end}
 {marker sesims}{synopt:{opt sereps} }the number of repetitions with non-missing standard errors (called {opt sesims} by {help simsum}).{p_end}
@@ -48,10 +46,12 @@ This calculation can be slow: omitting it can reduce run time by up to 90%.{p_en
 {marker ciwidth}{synopt:{opt ciwidth} }the mean width of the confidence interval at the specified level.{p_end}
 {marker relerror}{synopt:{opt relerror} }the relative error in the model-based standard error, using the empirical standard error as gold standard.{p_end}
 {marker cover}{synopt:{opt cover} }the coverage of nominal confidence intervals at the specified level.{p_end}
-{marker power}{synopt:{opt power} }the power to reject the null hypothesis that the true parameter is zero, at the specified level.
+{marker power}{synopt:{opt power} }the power to reject the null hypothesis that the true parameter is zero, at the specified level.{p_end}
+{synoptline}
 
+{synopthdr}
+{synoptline}
 {marker addopts}{...}
-{syntab:Additional options}
 
 {synopt:{opt perfonly} }deletes the estimates data from memory, and only keeps the performance 
 statistics. This precludes subsequent use of descriptive graphs.{p_end}
@@ -63,8 +63,7 @@ to replace the existing performance measures in the data set.{p_end}
 the system default set by {help level:set level}. This option is passed to {help simsum}.{p_end}
 {synopt:{opt ref(method)}}specifies the reference method for calculating relative precisions. This 
 option is passed to {help simsum}.{p_end}
-{synopt:{it:simsum_options}}any other options for {help simsum}.
-
+{synopt:{it:simsum_options}}any other options for {help simsum}.{p_end}
 {synoptline}
 {p2colreset}{...}
 {p 4 6 2}
