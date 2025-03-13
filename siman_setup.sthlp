@@ -47,7 +47,7 @@ Where there are multiple data-generating mechanisms, these should always be held
 {title:Syntax}
 
 {p 8 12 2}
-{cmdab:siman setup}
+{cmdab:siman set:up}
 {ifin}
 {cmd:,}
 {opt r:ep(varname)}

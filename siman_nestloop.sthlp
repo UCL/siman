@@ -16,7 +16,7 @@
 {title:Syntax}
 
 {phang}
-{cmdab:siman nestloop} [{it:performancemeasures}] [if]
+{cmdab:siman nes:tloop} [{it:performancemeasures}] [if]
 [{cmd:,}
 {it:options}]
 

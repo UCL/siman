@@ -15,14 +15,14 @@
 {title:Syntax}
 
 {p 8 17 2}
-{cmdab:siman swarm} [estimate] [se] {ifin}
+{cmd:siman swarm} [estimate] [se] {ifin}
 [{cmd:,}
 {it:options}]
 
 {pstd}If neither {cmd:estimate} nor {cmd:se} is specified, this is equivalent to {cmd:siman swarm estimate}. If both are specified, {cmd:siman swarm} will draw a graph for each.
 
-{pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and 
-{bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
+{pstd}The {it:if} and {it:in} conditions should usually apply only to {it:dgm}, {it:target} and 
+{it:method}, and not e.g. to {it:repetition}. A warning is issued if this is breached.
 
 
 {synoptset 26 tabbed}{...}
@@ -36,7 +36,7 @@ Each panel displays all methods, so do not include {it:method} in {cmd:by()}.
 
 {syntab:Graph options}
 {synopt:{opt nomean}}do not add the mean to the graph{p_end}
-{synopt:{opt meangr:aphoptions(string)}}options for {help scatter} to be applied to the mean: e.g. mcolor(){p_end}
+{synopt:{opt meangr:aphoptions(string)}}options for {help scatter} to be applied to the mean: e.g. {cmd:mcolor()}{p_end}
 {synopt:{opt sc:atteroptions(string)}}options for {help scatter} to be applied to the scatterplot: e.g. msymbol(), mcolor(){p_end}
 {synopt:{opt bygr:aphoptions(string)}}graph options for the overall graph that need to be within the {it:by} option: e.g. title(), note(), row(), col(){p_end}
 {synopt:{opt graphop:tions(string)}}graph options for the overall graph that need to be outside the 

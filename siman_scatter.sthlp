@@ -15,7 +15,7 @@
 {title:Syntax}
 
 {p 8 17 2}
-{cmdab:siman scatter} [{it:varlist}] {ifin}
+{cmdab:siman sca:tter} [{it:varlist}] {ifin}
 [{cmd:,}
 {it:options}]
 

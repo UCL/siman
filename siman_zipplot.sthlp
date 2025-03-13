@@ -17,7 +17,7 @@ mechanism, target and analysis method in the estimates data
 {title:Syntax}
 
 {p 8 17 2}
-{cmdab:siman zipplot} {ifin}
+{cmdab:siman zip:plot} {ifin}
 [{cmd:,}
 {it:options}]
 

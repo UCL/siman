@@ -17,7 +17,7 @@
 {title:Syntax}
 
 {phang}
-{cmdab:siman lollyplot} [{it:performancemeasures}] [if]
+{cmdab:siman lol:lyplot} [{it:performancemeasures}] [if]
 [{cmd:,}
 {it:options}]
 

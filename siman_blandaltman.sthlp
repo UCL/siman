@@ -17,7 +17,7 @@
 {title:Syntax}
 
 {p 8 17 2}
-{cmdab:siman blandaltman} [{it:varlist}] {ifin}
+{cmdab:siman bla:ndaltman} [{it:varlist}] {ifin}
 [{cmd:,}
 {it:options}]
 

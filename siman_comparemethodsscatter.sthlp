@@ -16,7 +16,7 @@
 {title:Syntax}
 
 {phang}
-{cmdab:siman comparemethodsscatter} [{it:varlist}] {ifin} 
+{cmdab:siman com:paremethodsscatter} [{it:varlist}] {ifin} 
 [{cmd:,}
 {it:options}]
 

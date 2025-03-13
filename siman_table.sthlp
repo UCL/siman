@@ -15,7 +15,7 @@
 {title:Syntax}
 
 {phang}
-{cmdab:siman table} [{it:performancemeasures}] [if], [{it:options}]
+{cmdab:siman tab:le} [{it:performancemeasures}] [if], [{it:options}]
 
 {pstd}{it:performancemeasures} are the names of {help siman analyse##perfmeas:measures} 
 for which performance has been calculated by {help siman analyse}. If not specified, 

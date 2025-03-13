@@ -18,7 +18,7 @@
 {title:Syntax}
 
 {phang}
-{cmdab:siman analyse} [{it:performancemeasures}] [if], [{it:options}]
+{cmdab:siman ana:lyse} [{it:performancemeasures}] [if], [{it:options}]
 
 {pstd} We advise that {opt if} be applied only to variables defining {bf:dgm}, {bf:target} and {bf:method}.
 
