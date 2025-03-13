@@ -149,7 +149,7 @@ siman nestloop
 
 
 * examples in paper
-use "https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simpaper1.dta", clear
+use "https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simcheck.dta", clear
 siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
 set scheme mrc
 
