@@ -72,13 +72,13 @@ For further troubleshooting and limitations, see {help siman setup##limitations:
 {title:Examples}
 
 {pstd} An example estimates data set with 3 dgms (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) with 1,000 
-repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
+repetitions named simcheck.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
 
 {pstd}Load the data set in to {cmd: siman}.
 
-{phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simpaper1.dta, clear"}
+{phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simcheck.dta, clear"}
 
-{phang}. {stata  "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
+{phang}. {stata  "siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)"}
 
 {pstd}Draw the Bland-Altman graph for a specific dgm {it:MCAR}
 

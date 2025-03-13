@@ -56,13 +56,13 @@ The {cmd:siman scatter} plots help the user to look for bivariate outliers.
 {title:Example}
 
 {pstd} An example estimates data set with 3 DGMs (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) 
-with 1000 repetitions named simpaper1.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
+with 1000 repetitions named simcheck.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
 
 {phang}Load the data set in to {cmd:siman}
 
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simpaper1.dta, clear"}
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simcheck.dta, clear"}
 
-{phang}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
+{phang}. {stata "siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)"}
 
 {phang}Plot the default scatter plot.
 

@@ -86,13 +86,13 @@ confidence intervals, an indicator of rejection of a hypothesis, and more.
 
 {pstd} An example estimates data set with three data-generating mechanisms (MCAR, MAR, MNAR missing data) 
 and three methods of analysis (Full, CCA, MI) with 1,000 repetitions is available on the {cmd: siman} 
-GitHub repository {browse "https://github.com/UCL/siman/":here}, named simpaper1.dta.
+GitHub repository {browse "https://github.com/UCL/siman/":here}, named simcheck.dta.
 
 {phang} To plot the estimates data graphs, first load the data set in to {cmd: siman}.
 
-{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simpaper1.dta, clear"}
+{phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simcheck.dta, clear"}
 
-{phang}. {stata "siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)"}
+{phang}. {stata "siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)"}
 
 {phang}. {stata "siman scatter"}
 
