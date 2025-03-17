@@ -2257,10 +2257,13 @@ siman nestloop will draw 3 graphs (3 targets * 1 performance measures)
 . 
 . 
 . * examples in paper
-. use "https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simpaper1.dta", clear
-(simcheck99 data from Analysis\Simulations\simcheck\missing confounder code)
+. use "https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simcheck.dta", clear
+(Simulation results from simcheck99.do in paper doi:10.1093/ije/dyad134)
 
-. siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
+. siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) true(0)
+Warning: dgm variable dgm has been converted from string to numeric. If you require its levels to be
+  ordered differently, encode dgm as numeric before running -siman setup-.
+Warning: siman setup found unwanted variables: N df
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -2367,9 +2370,9 @@ _____________________________________________________
 . 
 . * siman analyse needs force option to cope with only 1 repetition per dgm [NB gets many lines of r
 > ed output, suppressed by cap], and notable option because siman table fails
-. cap siman analyse, force 
+. cap siman analyse, force notable
 
-. assert _rc == 198
+. assert _rc == 0
 
 . 
 . * Recreating Gerta's graph, Figure 2

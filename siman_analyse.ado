@@ -1,4 +1,5 @@
-*!	version 0.11.1	02jan2025	
+*!	version 0.11.2	17mar2025	
+*	version 0.11.2	17mar2025	doesn't call siman table if too many dgmvars
 *	version 0.11.1	02jan2025	IW new char cilevel = the level at which coverage was computed
 *	version 0.11	21oct2024		IW make analyse work correctly with if
 *	version 0.9.1	14jun2024		IW remove code for nformat!=1 and nmethod!=1
@@ -334,10 +335,13 @@ if `secreated' di as text "siman analyse has created variable _se to hold the MC
 di as text "siman analyse has run successfully"
 
 if "`table'"!="notable" {
-	cap noi siman_table
-	if _rc {
-		di as text "siman analyse has run successfully, but presenting the results using siman table has failed"
-		exit _rc
+	if `ndgmvars'>3 di as text "Too many dgmvars: skipping call to siman table"
+	else {
+		cap noi siman_table
+		if _rc {
+			di as text "siman analyse has run successfully, but presenting the results using siman table has failed"
+			exit _rc
+		}
 	}
 }
 

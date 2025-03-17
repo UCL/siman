@@ -1,4 +1,5 @@
-*!	version 0.11.3	11mar2025	
+*!	version 0.11.4	17mar2025	
+*	version 0.11.4	17mar2025	better fail if too many dgmvars
 *	version 0.11.3	11mar2025	IW catch no valid PMs; don't show PM if only one; new nomcse option; pass options to tabdisp; remove stubwidth(20)
 *	version 0.11.2	28oct2024	IW implement new concise option
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
@@ -139,7 +140,7 @@ if "`row'"=="" {
 local by : list myfactors - row
 if wordcount("`by'")>4 {
 	di as error "There are too many factors to display. Consider using an if condition for your dgm."
-	
+	exit 498
 }
 
 * display the table
@@ -154,7 +155,7 @@ if "`mcse'" == "nomcse" {
 	local se
 }
 local tablecommand tabdisp `row' `column' `if', by(`by') c(`estimate' `se' `lcivar' `ucivar') `options'
-* in version>=17, could have: table (`row') (`column') (`by') `if', stat(sum `estimate' `se' `lcivar' `ucivar') `options'
+* in version>=17, could have: table (`row') (`column') (`by') `if', stat(sum `estimate' `se' `lcivar' `ucivar') nototal `options'
 if !mi("`debug'") {
 	di as input "Debug: table features:"
 	di "    column:  `column'"
