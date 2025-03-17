@@ -1,5 +1,6 @@
-*!	version 0.12.1	13mar2025
-*	version 0.12.1	13mar2025	IW bug fix: graphs were mislabelled in legend
+*!	version 0.12.2	17mar2025	
+*	version 0.12.2	17mar2025	IW bug fix: graphs were mislabelled in legend with true()
+*	version 0.12.1	13mar2025	IW bug fix: graphs were mislabelled in legend if no true()
 *   version 0.12.0	7jan2025	TM improved how 'true' line is drawn and introduced new option 'trueoptions()'
 *   version 0.11.3	21nov2024	IW New standalone, called by siman_nestloop of same version number
 program define nestloop
@@ -221,9 +222,11 @@ if "`dg'" != "nodg" {
 }
 
 // CREATE MAIN GRAPH COMMAND
+local legno 0
 if !mi("`true'") {
 	local main_graph_cmd (line `true' `scenario', c(`connect') lc(gs10) lw(medthick) `trueopts')
-	local legend `legend' 1 `"True"'
+	local ++legno
+	local legend `legend' `legno' `"True"'
 }
 else {
 	local main_graph_cmd
@@ -241,7 +244,8 @@ forvalues k = 1 / `nmethods' {
 	}
 	local main_graph_cmd `main_graph_cmd' (`thisgraphcmd')
 	//if `istruevar' local legend `legend' `k' `"True"'
-	local legend `legend' `k' `"`methlegitem'`m`k''"'
+	local ++legno
+	local legend `legend' `legno' `"`methlegitem'`m`k''"'
 }
 local ytitle : var label `estimate'
 if mi("`ytitle'") local ytitle `estimate'
