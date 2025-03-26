@@ -19,12 +19,13 @@ if "$user"=="Ian" {
 	global codepath C:\ian\git\siman 
 	adopath ++ c:\ian\git\simsum\package
 }
-if "$user" == "tpm" & c(os)=="Windows" {
+else if "$user" == "tpm" & c(os)=="Windows" {
 	global codepath c:\git\simsum\package
 }
-if "$user" == "tpm" & c(os)=="MacOSX" {
+else if "$user" == "tpm" & c(os)=="MacOSX" {
 	global codepath /Users/timothymorris/Documents/GitHub/siman
 }
+else di as error "Warning: user not identified"
 
 // SETUP FOR ALL USERS
 global testpath $codepath/testing
@@ -38,6 +39,7 @@ local testfiles ///
 	test_setup_dgm			/// test all formats of DGM
 	test_setup_target		/// test all formats of target
 	test_setup_method		/// test all formats of method
+	test_ci					/// test handling of CIs
 	test_error_messages		/// error messages
 	test_siman_widelong 	/// from wide-long
 	test_all_inputs			/// from all formats and var types

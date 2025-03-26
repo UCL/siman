@@ -1,0 +1,206 @@
+
+. 
+. // Compare coverage by 3 methods
+. 
+. // (i) b, se, df 
+. use data/simcheck, clear
+(Simulation results from simcheck99.do in paper doi:10.1093/ije/dyad134)
+
+. qui siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)
+
+. siman ana cover, perf
+Warning: missing values in df()
+siman analyse has run successfully
+
+----------------------------------------
+Missing   |
+data      |            method           
+mechanism |     Full       CCA        MI
+----------+-----------------------------
+     MCAR |     94.9      94.7      94.7
+          | .6956938  .7084563  .7084563
+          | 
+      MAR |     93.5      94.9      94.4
+          | .7795832  .6956938  .7270762
+          | 
+     MNAR |     94.3      95.5      93.4
+          | .7331505  .6555532  .7851368
+----------------------------------------
+Note: coverage and power calculated at 95% level
+Note: where there are multiple entries in the table, they are the estimated performance measure,
+  followed by its Monte Carlo error
+
+. save z0, replace
+file z0.dta saved
+
+. 
+. // (ii) lci, uci 
+. use data/simcheck, clear
+(Simulation results from simcheck99.do in paper doi:10.1093/ije/dyad134)
+
+. gen zcrit = cond(mi(df),invnorm(.975),invt(df,.975))
+
+. gen lci = b-zcrit*se
+
+. gen uci = b+zcrit*se
+
+. qui siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0) lci(lci) uci(uci)
+
+. siman ana cover, perf
+Warning: missing values in df()
+siman analyse has run successfully
+
+----------------------------------------
+Missing   |
+data      |            method           
+mechanism |     Full       CCA        MI
+----------+-----------------------------
+     MCAR |     94.9      94.7      94.7
+          | .6956938  .7084563  .7084563
+          | 
+      MAR |     93.5      94.9      94.4
+          | .7795832  .6956938  .7270762
+          | 
+     MNAR |     94.3      95.5      93.4
+          | .7331505  .6555532  .7851368
+----------------------------------------
+Note: coverage and power calculated at 95% level
+Note: where there are multiple entries in the table, they are the estimated performance measure,
+  followed by its Monte Carlo error
+
+. save z1, replace
+file z1.dta saved
+
+. 
+. // (iii) lci only then uci only
+. use data/simcheck, clear
+(Simulation results from simcheck99.do in paper doi:10.1093/ije/dyad134)
+
+. gen zcrit = cond(mi(df),invnorm(.975),invt(df,.975))
+
+. gen lci = b-zcrit*se
+
+. gen uci = b+zcrit*se
+
+. qui siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0) lci(lci)
+
+. siman ana cover, perf
+Warning: missing values in df()
+siman analyse has run successfully
+
+----------------------------------------
+Missing   |
+data      |            method           
+mechanism |     Full       CCA        MI
+----------+-----------------------------
+     MCAR |     97.2      97.3      97.5
+          | .5216898  .5125521  .4937104
+          | 
+      MAR |     96.7      99.1      96.8
+          | .5648985  .2986472  .5565606
+          | 
+     MNAR |     97.9      97.7      96.2
+          | .4534202  .4740362  .6046158
+----------------------------------------
+Note: coverage and power calculated at 95% level
+Note: where there are multiple entries in the table, they are the estimated performance measure,
+  followed by its Monte Carlo error
+
+. save z2, replace
+file z2.dta saved
+
+. 
+. use data/simcheck, clear
+(Simulation results from simcheck99.do in paper doi:10.1093/ije/dyad134)
+
+. gen zcrit = cond(mi(df),invnorm(.975),invt(df,.975))
+
+. gen lci = b-zcrit*se
+
+. gen uci = b+zcrit*se
+
+. qui siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0) uci(uci)
+
+. siman ana cover, perf
+Warning: missing values in df()
+siman analyse has run successfully
+
+----------------------------------------
+Missing   |
+data      |            method           
+mechanism |     Full       CCA        MI
+----------+-----------------------------
+     MCAR |     97.7      97.4      97.2
+          | .4740362  .5032294  .5216898
+          | 
+      MAR |     96.8      95.8      97.6
+          | .5565606  .6343183  .4839836
+          | 
+     MNAR |     96.4      97.8      97.2
+          | .5891009  .4638531  .5216898
+----------------------------------------
+Note: coverage and power calculated at 95% level
+Note: where there are multiple entries in the table, they are the estimated performance measure,
+  followed by its Monte Carlo error
+
+. save z3, replace
+file z3.dta saved
+
+. 
+. use z1, clear
+(Simulation results from simcheck99.do in paper doi:10.1093/ije/dyad134)
+
+. drop zcrit lci uci
+
+. cf _all using z0
+
+. rename b b1
+
+. merge 1:1 _n using z2
+(label dgm already defined)
+(label indilab already defined)
+(label method already defined)
+(label _dataset already defined)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             0
+    Matched                                 9  (_merge==3)
+    -----------------------------------------
+
+. assert _merge==3
+
+. drop _merge
+
+. rename b b2
+
+. merge 1:1 _n using z3
+(label dgm already defined)
+(label indilab already defined)
+(label method already defined)
+(label _dataset already defined)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             0
+    Matched                                 9  (_merge==3)
+    -----------------------------------------
+
+. assert _merge==3
+
+. drop _merge
+
+. rename b b3
+
+. assert reldif(100-b1,100-b2+100-b3)<1E-5
+
+. 
+. di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
+*** SIMAN HAS PASSED ALL THE TESTS IN test_ci.do ***
+
+. 
+. forvalues i=0/3 {
+  2.         erase z`i'.dta
+  3. }
+
+. log close

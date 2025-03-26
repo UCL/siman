@@ -58,6 +58,10 @@ if _rc {
 		exit 498
 	}
 }
+if mi("`lci'")!=mi("`uci'") {
+	di as error "siman zipplot doesn't know how to draw one-sided CIs"
+	exit 498
+}
 
 * if true is missing, produce an error message
 if "`true'"=="" {
