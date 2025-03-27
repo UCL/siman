@@ -1,7 +1,9 @@
-*! 	v0.1 	28oct2024 	IW 	Rough starter
+*! 	v0.2 	27mar2025 	
+* 	v0.2 	27mar2025 	IW	Broaden to include missing dgm/target/method and all method types; test properly
+* 	v0.1 	28oct2024 	IW 	Rough starter
 
 prog def siman_import
-syntax, perf(varname) dgm(varlist) target(varname) method(varname) estimate(varname)
+syntax, perf(varname string) estimate(varname numeric) [dgm(varlist) target(varname) method(varname) se(varname numeric) true(varname numeric)]
 
 // Create locals to store characteristics
 
@@ -11,26 +13,43 @@ local ndgmvars : word count `dgm'
 local dgmmissingok 
  
 * TARGETS
-local target `target'
-qui levelsof `target', clean
-local numtarget = r(r)
-local targetnature 0
-local valtarget = r(levels)
+if !mi("`target'") {
+	qui levelsof `target', clean
+	local numtarget = r(r)
+	local targetnature 0
+	local valtarget = r(levels)
+}
 
 * METHODS
-local method `method'
-qui levelsof `method', clean
-local nummethod = r(r)
-local methodnature 2
-local valmethod = r(levels)
-local methodcreated 0
+if !mi("`method'") {
+	cap confirm string var `method'
+	if !_rc local methodnature 2
+	else local methodnature = !mi("`: value label `method''")
+	qui levelsof `method', clean
+	local nummethod = r(r)
+	if `methodnature'==1 { // 
+		foreach i in `r(levels)' {
+			local valmethod `valmethod' `: label (`method') `i''
+		}
+	}
+	else local valmethod = r(levels)
+	local methodcreated 0
+}
+
+* PMs - uses list from simsum of PMs allowed
+replace `perf' = "estreps" if `perf' == "bsims"
+replace `perf' = "sereps" if `perf' == "sesims"
+local pmsallowed estreps sereps bias pctbias mean empse relprec mse rmse modelse ciwidth relerror cover power 
+levelsof `perf', local(pmsindata) clean
+local pmsbad : list pmsindata - pmsallowed
+if !mi("`pmsbad'") {
+	di as error "Performance measures not allowed: `pmsbad'"
+	exit 498
+}
 
 * Estimates 
 local estimate `estimate'
 local se `se'
-
-* True values 
-local true 
 
 * Data formats 
 local setuprun 0
@@ -40,14 +59,16 @@ local analyserun 1
 local secreated 
 
 // Create rep variable
-encode _perfmeascode, gen(rep0)
+encode `perf', gen(rep0)
 gen _rep = - rep0
-labelit _rep _perfmeascode // IW command below
+labelit _rep `perf' // IW command below
 drop rep0
 local rep _rep
+rename `perf' _perfmeascode
 
 // Store as siman characteristics
-local allthings dgm ndgmvars dgmmissingok target numtarget targetnature valtarget method nummethod methodnature valmethod methodcreated estimate se df lci p rep uci true setuprun analyserun secreated allthings
+local cilevel $S_level
+local allthings dgm ndgmvars dgmmissingok target numtarget targetnature valtarget method nummethod methodnature valmethod methodcreated estimate se rep true setuprun analyserun secreated cilevel allthings
 foreach char of local allthings {
 	char _dta[siman_`char'] ``char''
 }

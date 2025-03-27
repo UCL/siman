@@ -31,6 +31,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
   followed by its Monte Carlo error
 
 . save z0, replace
+(file z0.dta not found)
 file z0.dta saved
 
 . 
@@ -69,6 +70,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
   followed by its Monte Carlo error
 
 . save z1, replace
+(file z1.dta not found)
 file z1.dta saved
 
 . 
@@ -107,6 +109,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
   followed by its Monte Carlo error
 
 . save z2, replace
+(file z2.dta not found)
 file z2.dta saved
 
 . 
@@ -144,6 +147,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
   followed by its Monte Carlo error
 
 . save z3, replace
+(file z3.dta not found)
 file z3.dta saved
 
 . 
