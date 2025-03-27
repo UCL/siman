@@ -1,5 +1,5 @@
-*! 	v0.2 	27mar2025 	
-* 	v0.2 	27mar2025 	IW	Broaden to include missing dgm/target/method and all method types; test properly
+*! 	v0.11	27mar2025 	
+* 	v0.11	27mar2025 	IW	Broaden to include missing dgm/target/method and all method types; test properly
 * 	v0.1 	28oct2024 	IW 	Rough starter
 
 prog def siman_import
@@ -115,7 +115,7 @@ forvalues i = `imin'/`imax' {
         else di as text "Using the first value, `2'=`value'"
       } 
       if "`value'"~="" local label `label' `i' "`value'"
-	  else if "`blanks"!="noblanks" local label `label' `i' " "
+	  else if "`blanks'"!="noblanks" local label `label' `i' " "
       cap assert `2'=="`value'" if `1'==`i'
       if _rc>0  {
          di as text "Warning: multiple values of `2' for `1'==`i' - but only outside if/in expression"
