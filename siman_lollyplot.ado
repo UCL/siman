@@ -1,4 +1,5 @@
-*!	version 0.11.4	02jan2025	
+*!	version 0.11.5	31mar2025	
+*	version 0.11.5	31mar2025	TM added mfcolors() and mlcolors() options
 *	version 0.11.4	02jan2025	IW use new char cilevel = the level at which coverage was computed
 *	version 0.11.3	18dec2024	IW add reference lines for pctbias
 *	version 0.11.2	25oct2024	IW new saving() and export() options
@@ -49,7 +50,7 @@ program define siman_lollyplot
 version 15
 
 syntax [anything] [if] [, ///
-	LABFormat(string) COLors(string) MSymbol(string)  ///
+	LABFormat(string) COLors(string) MFColors(string) MLColors(string) MSymbol(string)  ///
 	REFPower(real -1) METHLEGend(string) DGMShow DGMTItle(string) /// specific graph options
 	Level(cilevel) logit /// calculation options
 	BYGRaphoptions(string) name(string) * /// general graph options
@@ -244,16 +245,20 @@ local methodmax = r(max)+`rangeadd'
 
 * set labels, colours and symbols for methods
 local i 0
-foreach j of local methodlevels { 
+foreach j of local methodlevels {
 	local ++i
 	local label`i' : label (`method') `j' // defaults to `j' if no label
 	local mcol`i' : word `i' of `colors'
-	if mi("`mcoi`i'") local mcol`i' "scheme p`i'"
+	if mi("`mcol`i'") local mcol`i' "scheme p`i'"
+	local mfcol`i' : word `i' of `mfcolors'
+	if mi("`mfcol`i'") local mfcol`i' "white"
+	local mlcol`i' : word `i' of `mlcolors'
+	if mi("`mlcol`i'") local mlcol`i' "scheme p`i'"
 	local msym`i' : word `i' of `msymbol'
 	if mi("`msym`i'") & `i'==1 local msym`i' O
 	else if mi("`msym`i'") & `i'>1 local msym`i' `msym`=`i'-1'
 }
-
+noi di 
 * HANDLE PERFORMANCE MEASURES
 * relprec = 0 for reference method
 qui replace `estimate' = 0 if _perfmeascode=="relprec" & mi(`estimate')
@@ -363,7 +368,7 @@ foreach thistarget of local targetlevels {
 		* main marker
 		local graph_cmd `graph_cmd' scatter `method' `estimate' ///
 			if `method'==`thismethod' `andtargetcond', pstyle(p`i') mlabstyle(p`i') ///
-			mcol(`mcol`i'') msym(`msym`i'') `mlabel' mlabpos(12) mlabcol(`mcol`i'') ||
+			mcol(`mcol`i'') mfcol(`mfcol`i'') msym(`msym`i'') `mlabel' mlabpos(12) mlabcol(`mcol`i'') ||
 		* brackets for LCL and UCL
 		local graph_cmd `graph_cmd' scatter `method' `lci' ///
 			if `method'==`thismethod' `andtargetcond', pstyle(p`i') ///
