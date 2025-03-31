@@ -425,6 +425,18 @@ replace meth="No-adj" if meth=="Noadj"
 siman setup, rep(re) dgm(mech) method(method) estimate(b) se(se) true(true)
 siman ana
 
+
+* Check calculation works when SE is part-missing
+*************************************************
+use $testpath/data/simcheck, clear
+replace se = . if dgm=="MNAR" & method=="MI":method
+siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)
+tab dgm method, sum(se)
+siman ana estreps sereps mean modelse, perf 
+assert mi(b) if _p=="modelse" & dgm=="MNAR":dgm & method=="MI":method
+assert !mi(b) if _p=="mean" // this failed until 31/3/2025
+
+
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 
 log close
