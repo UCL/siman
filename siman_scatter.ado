@@ -1,4 +1,5 @@
-*!	version 0.11.2	24oct2024	
+*!	version 0.11.3	31mar2025	
+*	version 0.11.3	31mar2025	TM moved default placement of by() note to clock pos 11 to make more prominent (based on feedback)
 *	version 0.11.2	24oct2024	IW by default se on y not x axis; nicer labels
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
 *	version 0.10	18jun2024	IW Clean up handling of varlist, if/in, by
@@ -111,7 +112,7 @@ if mi("`by'") { // i.e. if none of dgm target method varies
 	local npanels 1
 }
 else {
-	local byoption by(`by', `bygraphoptions' `dgmmissingok') 
+	local byoption by(`by', note(,pos(11)) `bygraphoptions' `dgmmissingok') 
 	* count how many panels will be created
 	tempvar unique
 	egen `unique' = tag(`by'), `dgmmissingok'
@@ -137,5 +138,3 @@ if !mi("`pause'") {
 `graph_cmd'
 
 end
-
-

@@ -1,4 +1,5 @@
-*!	version 0.11.4	2jan2025	
+*!	version 0.11.5	31mar2025	
+*	version 0.11.5	31mar2025	TM moved default placement of by() note to clock pos 11 to make more prominent (based on feedback)
 *	version 0.11.4	2jan2025	IW correct the count of #panels	
 *	version 0.11.3	25oct2024	IW/TM allow only 1 method
 *	version 0.11.2	25oct2024	IW Default by() ignores non-varying variables
@@ -180,7 +181,7 @@ foreach el of local statlist { // estimate and/or se
 		local graph_cmd `graph_cmd' (scatter newidrep mean`el', msym(|) msize(huge) mcol(orange) `meangraphoptions')
 	}
 	local nameopt name(`name'_`el', `replace')
-	if !mi("`by'") local byopt by(`by', title("") noxrescale legend(off) `bygraphoptions' `dgmmissingok') 
+	if !mi("`by'") local byopt by(`by', title("") noxrescale legend(off) note(,pos(11)) `bygraphoptions' `dgmmissingok') 
 	else local byopt title("") legend(off) `bygraphoptions' `dgmmissingok'
 	local graph_cmd `graph_cmd', `byopt' ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions'
 
@@ -194,5 +195,3 @@ foreach el of local statlist { // estimate and/or se
 }
 
 end
-
-

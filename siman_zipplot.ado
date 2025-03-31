@@ -1,5 +1,6 @@
-*!	version 0.11.4	12mar2025	
-*!	version 0.11.4	12mar2025	IW bug fix - didn't generate CIs when dfvar was present but with missing value
+*!	version 0.11.5	31mar2025	
+*	version 0.11.5	31mar2025	TM moved default placement of by() note to clock pos 11 to make more prominent (based on feedback)
+*	version 0.11.4	12mar2025	IW bug fix - didn't generate CIs when dfvar was present but with missing value
 *	version 0.11.3	02jan2025	IW new coverlevel() option
 *	version 0.11.2	11nov2024	IW handle case of no byvar
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; drop PMs
@@ -195,8 +196,8 @@ if `ymin'<=5 local ylab ylab(5 50 95)
 else if `ymin'<=50 local ylab ylab(50 95)
 else if `ymin'<=95 local ylab ylab(95)
 else local ylab
-if "`bycreated'"!="1" local byopt by(`by', ixaxes noxrescale iscale(*.9) `bygraphoptions' `dgmmissingok')
-else local byopt `bygraphoptions' `dgmmissingok'
+if "`bycreated'"!="1" local byopt by(`by', ixaxes noxrescale iscale(*.9) note(,pos(11)) `bygraphoptions' `dgmmissingok')
+else local byopt note(,pos(11)) `bygraphoptions' `dgmmissingok'
 #delimit ;
 local graph_cmd twoway
 	(rspike `lci' `uci' `rank' if !`covers' & `rank'>=`ymin', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions') // non-covering CIs
