@@ -13282,6 +13282,45 @@ Note: where there are multiple entries in the table, they are the estimated perf
 
 . assert !mi(b) if _p=="mean" // this failed until 31/3/2025
 
+. * and check mcci option of table
+. siman table mean modelse, col(dgm method) mcci level(95) format(%6.4f)
+
+-----------------------------------------------------------------------------------------------
+performan |                          method and Missing data mechanism                         
+ce        | ---------- Full ---------    ---------- CCA ----------    ----------- MI ----------
+measure   |    MCAR      MAR     MNAR       MCAR      MAR     MNAR       MCAR      MAR     MNAR
+----------+------------------------------------------------------------------------------------
+     mean | -0.0000  -0.0169  -0.0064    -0.0075  -0.1601  -0.0302     0.0001  -0.0204   0.0486
+          |  0.0135   0.0137   0.0136     0.0163   0.0184   0.0170     0.0144   0.0146   0.0145
+          | -0.0264  -0.0438  -0.0331    -0.0395  -0.1961  -0.0635    -0.0280  -0.0490   0.0202
+          |  0.0264   0.0100   0.0203     0.0245  -0.1241   0.0032     0.0282   0.0083   0.0771
+          | 
+  modelse |  0.4096   0.4106   0.4073     0.4965   0.5484   0.5227     0.4335   0.4480         
+          |  0.0011   0.0012   0.0012     0.0018   0.0026   0.0023     0.0015   0.0017         
+          |  0.4074   0.4083   0.4051     0.4929   0.5433   0.5181     0.4306   0.4447         
+          |  0.4119   0.4129   0.4096     0.5000   0.5534   0.5272     0.4363   0.4513         
+-----------------------------------------------------------------------------------------------
+Note: where there are multiple entries in the table, they are the estimated performance measure,
+  followed by its Monte Carlo error and its Monte Carlo 95% confidence limits
+
+. siman table mean modelse, col(dgm method) nomcse mcci level(50) format(%6.4f)
+
+-----------------------------------------------------------------------------------------------
+performan |                          method and Missing data mechanism                         
+ce        | ---------- Full ---------    ---------- CCA ----------    ----------- MI ----------
+measure   |    MCAR      MAR     MNAR       MCAR      MAR     MNAR       MCAR      MAR     MNAR
+----------+------------------------------------------------------------------------------------
+     mean | -0.0000  -0.0169  -0.0064    -0.0075  -0.1601  -0.0302     0.0001  -0.0204   0.0486
+          | -0.0091  -0.0262  -0.0156    -0.0185  -0.1725  -0.0416    -0.0096  -0.0302   0.0388
+          |  0.0091  -0.0076   0.0028     0.0035  -0.1477  -0.0187     0.0098  -0.0105   0.0584
+          | 
+  modelse |  0.4096   0.4106   0.4073     0.4965   0.5484   0.5227     0.4335   0.4480         
+          |  0.4088   0.4098   0.4066     0.4953   0.5466   0.5211     0.4325   0.4468         
+          |  0.4104   0.4114   0.4081     0.4977   0.5501   0.5242     0.4345   0.4491         
+-----------------------------------------------------------------------------------------------
+Note: where there are multiple entries in the table, they are the estimated performance measure,
+  followed by its Monte Carlo 50% confidence limits
+
 . 
 . 
 . di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"

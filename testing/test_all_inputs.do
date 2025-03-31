@@ -435,6 +435,9 @@ tab dgm method, sum(se)
 siman ana estreps sereps mean modelse, perf 
 assert mi(b) if _p=="modelse" & dgm=="MNAR":dgm & method=="MI":method
 assert !mi(b) if _p=="mean" // this failed until 31/3/2025
+* and check mcci option of table
+siman table mean modelse, col(dgm method) mcci level(95) format(%6.4f)
+siman table mean modelse, col(dgm method) nomcse mcci level(50) format(%6.4f)
 
 
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
