@@ -23,12 +23,6 @@
 
 {p2col:{bf:{help siman describe}}}provides a summary table of the estimates data imported by {help siman setup}
 
-{pstd}Analyses to estimate performance
-
-{p2col:{bf:{help siman analyse}}}creates performance statistics data set from the estimates data set, and can hold both in memory
-
-{p2col:{bf:{help siman table}}}tabulates performance statistics
-
 {pstd}Descriptive graphs of results using estimates data
 
 {p2col:{bf:{help siman scatter}}}scatter plots of standard error against point estimate
@@ -41,6 +35,12 @@ from different methods when multiple methods have been applied to the same simul
 {p2col:{bf:{help siman blandaltman}}}Bland–Altman plot of difference between methods vs. mean of methods, for point estimates or standard errors
 
 {p2col:{bf:{help siman zipplot}}}zip plot showing confidence intervals for each data-generating mechanism and analysis method
+
+{pstd}Analyses to estimate performance
+
+{p2col:{bf:{help siman analyse}}}creates performance statistics data set from the estimates data set, and can hold both in memory
+
+{p2col:{bf:{help siman table}}}tabulates performance statistics
 
 {pstd}Graphs of performance statistics
 
