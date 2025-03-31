@@ -172,7 +172,7 @@ Results of the analysis typically include the {opt estimate} and its standard er
  
 {pstd}
 Four data set formats are permitted by the siman suite as detailed {help siman setup##data:above}.
-{cmd:siman setup} automatically reshapes the data into long-long format. 
+{cmd:siman setup} automatically reshapes the data into long-long format. It also converts {cmd:dgmvars} from string to numeric, or (if they have non-integer values) from float to double.
 
 {pstd}
 {cmd:siman setup} checks the data, reformats it if necessary,
