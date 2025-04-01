@@ -1,5 +1,6 @@
-*!	version 0.11.2	17mar2025	
-*	version 0.11.2	17mar2025	doesn't call siman table if too many dgmvars
+*!	version 0.11.3	01apr2025	
+*	version 0.11.3	01apr2025	IW calls simsum with new semissingok option
+*	version 0.11.2	17mar2025	IW doesn't call siman table if too many dgmvars
 *	version 0.11.1	02jan2025	IW new char cilevel = the level at which coverage was computed
 *	version 0.11	21oct2024		IW make analyse work correctly with if
 *	version 0.9.1	14jun2024		IW remove code for nformat!=1 and nmethod!=1
@@ -202,7 +203,7 @@ if !mi("`ref'") {
 }
 
 * RUN SIMSUM (LONG DATA)
-local simsumcmd simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') lci(`lci') uci(`uci') p(`p') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
+local simsumcmd simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') lci(`lci') uci(`uci') p(`p') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt' `semissingok'
 if !mi("`pause'") {
 	global F9 `simsumcmd'
 	pause
