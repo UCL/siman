@@ -1,4 +1,5 @@
-*!	version 0.11.5	31mar2025	
+*!	version 0.11.6	01apr2025	
+*!	version 0.11.6	01apr2025	TM added faint default gridlines at (0 100) [when no ymin is specified] or at (100) [when ymin(#) uses #<0]
 *	version 0.11.5	31mar2025	TM moved default placement of by() note to clock pos 11 to make more prominent (based on feedback)
 *	version 0.11.4	12mar2025	IW bug fix - didn't generate CIs when dfvar was present but with missing value
 *	version 0.11.3	02jan2025	IW new coverlevel() option
@@ -192,9 +193,10 @@ if `npanels' > 15 {
 tempvar truemax truemin
 gen `truemax'=100
 gen `truemin'=`ymin'
-if `ymin'<=5 local ylab ylab(5 50 95)
-else if `ymin'<=50 local ylab ylab(50 95)
-else if `ymin'<=95 local ylab ylab(95)
+if `ymin'<=5 local ylab ylab(5 50 95) ytick(0 100, tl(zero) grid glp(l))
+else if `ymin'<=50 local ylab ylab(50 95) ytick(100, tl(zero) grid glp(l))
+else if `ymin'<=75 local ylab ylab(75 95) ytick(100, tl(zero) grid glp(l))
+else if `ymin'<=95 local ylab ylab(95) ytick(100, tl(zero) grid glp(l))
 else local ylab
 if "`bycreated'"!="1" local byopt by(`by', ixaxes noxrescale iscale(*.9) note(,pos(11)) `bygraphoptions' `dgmmissingok')
 else local byopt note(,pos(11)) `bygraphoptions' `dgmmissingok'
@@ -204,8 +206,8 @@ local graph_cmd twoway
 	(rspike `lci' `uci' `rank' if  `covers' & `rank'>=`ymin', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions') // covering CIs
 	(scatter `rank' `estimate' if `rank'>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
 	(rspike `truemax' `truemin' `true', pstyle(p5) lw(thin) `truegraphoptions') // vertical line at true value
-	(rspike `lpoint' `rpoint' `covlb', hor lw(thin) pstyle(p5)) // MC CI for obs coverage
-	(rspike `lpoint' `rpoint' `covub', hor lw(thin) pstyle(p5))
+	(rspike `lpoint' `rpoint' `covlb', hor lw(thin) pstyle(p6)) // MC CI for obs coverage
+	(rspike `lpoint' `rpoint' `covub', hor lw(thin) pstyle(p6))
 	, 
 	xtitle("`level'% confidence intervals")
 	ytitle("Centile")
