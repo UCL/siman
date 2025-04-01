@@ -63,7 +63,7 @@ compared with a comparator.  If there are more than 2 methods in the data set, f
 as the reference, and the {bf:siman blandaltman} plots will be created for method B - method A and method C - method A.  
 
 {pstd}
-{help siman setup} needs to be run before {bf:siman blandaltman} can be run.
+{help siman setup} needs to be run before {bf:siman blandaltman} can be used.
 
 {pstd}
 For further troubleshooting and limitations, see {help siman setup##limitations:troubleshooting and limitations}.

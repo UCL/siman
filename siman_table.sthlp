@@ -59,6 +59,9 @@ repetitions. For example, for the performance measure bias, the Monte-Carlo
 standard error shows the uncertainty around estimated bias.
 
 {pstd}
+Both {help siman setup} and {help siman analyse} need to be run before {bf:siman table} can be used.
+
+{pstd}
 {cmd:siman table} is called automatically by {help siman analyse} but can
 be recalled once the performance statistics have been created by
 {help siman analyse}.

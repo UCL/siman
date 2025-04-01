@@ -89,7 +89,7 @@ The {it:if} condition must only apply to {bf:dgm}, {bf:target} and/or {bf:method
 If the {it:if} condition is applied to other variables, an error "no observations" is likely.
 
 {pstd}
-Please note that {help siman setup} and {help siman analyse} need to be run before {bf:siman lollyplot}.
+Both {help siman setup} and {help siman analyse} need to be run before {bf:siman lollyplot} can be used.
 
 {pstd}
 If {cmd:siman lollyplot} fails with the error "Too many sersets", try again after typing {cmd:serset clear}.

@@ -86,7 +86,7 @@ For example if method is a numeric labelled variable with values 1, 2, 3 and cor
 then {bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)}.  
 
 {pstd}
-{help siman setup} needs to be run first before {bf:siman comparemethodsscatter}.
+{help siman setup} needs to be run before {bf:siman comparemethodsscatter} can be used.
 
 
 {marker examples}{...}

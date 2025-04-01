@@ -49,7 +49,7 @@ Each observation represents one repetition.
 The {cmd:siman scatter} plots help the user to look for bivariate outliers.
 
 {pstd}
-{help siman setup} must be run before {cmd:siman scatter}.
+{help siman setup} needs to be run before {cmd:siman scatter} can be used.
 
 
 {marker example}{...}

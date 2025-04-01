@@ -36,8 +36,8 @@
 {pstd}
 
 {pstd}
-{cmd:siman describe} provides a summary of the data previously imported by {bf:{help siman setup}}, 
-and whether estimates data and performance estimates are in the dataset.
+{cmd:siman describe} provides a summary of the data previously imported by {help siman setup}, 
+and whether estimates data and performance estimates are in the dataset. Of course, {help siman setup} needs to be run before {bf:siman describe} can be used.
 
 
 {marker authors}{...}

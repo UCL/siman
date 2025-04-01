@@ -109,7 +109,7 @@ We recommend to sort the simulation dataset in such a way that the simulation pa
 of interest is considered first, and so forth.  Further guidance can be found in {help siman nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}.
 
 {pstd}
-{help siman setup} and {help siman analyse} need to be run first before {bf:siman nestloop}.
+Both {help siman setup} and {help siman analyse} need to be run before {bf:siman nestloop} can be used.
 
 
 {marker example}{...}

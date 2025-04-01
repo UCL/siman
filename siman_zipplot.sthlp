@@ -77,9 +77,9 @@ intervals directly.
 The overall coverage and its confidence interval (also at the given level) are shown with horizontal lines. 
 
 {pstd}
-{help siman setup} must be run first before {cmd:siman zipplot}. 
-It must have defined a true variable by {bf:true()}, an estimate variable by {bf:estimate()},
-and either a standard error by {bf:se()} or a confidence interval by {bf:lci()} and {bf:uci()}. 
+{help siman setup} must be run before {cmd:siman zipplot} can be used. It
+must have defined a true variable by {bf:true()}, an estimate variable by {bf:estimate()}, and
+either a standard error by {bf:se()} or a confidence interval by {bf:lci()} and {bf:uci()}. 
 
 
 {marker examples}{...}
