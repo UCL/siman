@@ -19,7 +19,7 @@
 
 program define siman_table
 version 15
-syntax [anything] [if], [Column(varlist max=2) noMCse mcci Level(cilevel) /// documented option 
+syntax [anything] [if], [Column(varlist max=2) noMCse mcci Level(cilevel) /// documented options 
 	* /// tabdisp options
 	Row(varlist) debug pause tabdisp /// undocumented options
 	]
@@ -177,7 +177,7 @@ if r(N) di as text "Note: coverage and power calculated at `level'% level"
 cap assert mi("`mcse'") | !mi("`mcci'") 
 if !_rc {
 	di as smcl as text "{p 0 2}Note: where there are multiple entries in the table, they are the estimated performance measure, followed by"
-	if mi("`mcse'") di "its Monte Carlo error"
+	if mi("`mcse'") di "its Monte Carlo standard error"
 	if mi("`mcse'") & !mi("`mcci'") di "and"
 	if !mi("`mcci'") di "its Monte Carlo `level'% confidence limits"
 	di "{p_end}"

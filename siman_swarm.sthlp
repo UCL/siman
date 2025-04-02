@@ -15,7 +15,7 @@
 {title:Syntax}
 
 {p 8 17 2}
-{cmd:siman swarm} [estimate] [se] {ifin}
+{cmd:siman swarm} [{cmd:estimate}] [{cmd:se}] {ifin}
 [{cmd:,}
 {it:options}]
 

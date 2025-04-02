@@ -30,6 +30,8 @@ performance is displayed for all available measures.
 {synopt:{opt c:olumn(varname)}}specifies one or two factors (i.e. which of {bf:dgm}, {bf:target} and/or {bf:method}) 
 to be placed in the columns.{p_end}
 {synopt:{opt nomc:se}}omit Monte Carlo standard errors from the table.{p_end}
+{synopt:{opt mcci}}add Monte Carlo confidence intervals to the table.{p_end}
+{synopt:{opt l:evel(#)}}specifies the level for Monte Carlo confidence intervals. Default is as explained in {help level}.{p_end}
 {synopt:{it:tabdisp_options}}many options for {help tabdisp}, e.g. {cmd:stubwidth(20)}.{p_end}
 {synoptline}
 
@@ -51,12 +53,12 @@ placed in the rows. However, if this leaves more than four ariables in the
 rows, {cmd:siman table} exits with error.
 
 {pstd}
-Where there are two entries per row in the table, the first entry is the
+Usually, there are two entries per row in the table: the first entry is the
 performance statistic and the second is its Monte Carlo Standard Error (MCSE).  
 MSCEs quantify the simulation uncertainty. They provide an estimate of the
 standard error of the performance statistic, due to a finite number of
-repetitions. For example, for the performance measure bias, the Monte-Carlo 
-standard error shows the uncertainty around estimated bias.
+repetitions. For example, for the performance measure bias, the Monte Carlo 
+standard error shows the uncertainty around the estimated bias.
 
 {pstd}
 {cmd:siman table} is called automatically by {help siman analyse} but can
