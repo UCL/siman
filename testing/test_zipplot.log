@@ -167,6 +167,51 @@ _____________________________________________________
 siman zipplot will draw 1 graph with 9 panels
 
 . 
+. // Check sensible answers when SE is systematically missing
+. use data/simcheck.dta, clear
+(Simulation results from simcheck99.do in paper doi:10.1093/ije/dyad134)
+
+. replace se = . if dgm=="MAR" & method==2
+(1,000 real changes made, 1,000 to missing)
+
+. siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)
+Warning: dgm variable dgm has been converted from string to numeric. If you require its levels to be
+  ordered differently, encode dgm as numeric before running -siman setup-.
+Warning: siman setup found unwanted variables: N
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (3) 
+  Total number of DGMs:           3
+
+Targets
+  Variable containing targets:    N/A
+  Number of targets:              1
+  Target values:                  
+
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  Full; CCA; MI
+
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    df
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true (created)
+
+Estimates data                    in data
+Performance estimates             not in data
+_____________________________________________________
+
+. siman zipplot
+siman zipplot will draw 1 graph with 9 panels
+
+. 
 . di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 *** SIMAN HAS PASSED ALL THE TESTS IN test_zipplot.do ***
 

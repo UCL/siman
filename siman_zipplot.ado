@@ -117,12 +117,12 @@ if !mi("`df'") { // there's a df variable - but it may be missing
 else gen `critval' = invnorm(`level2') // no df variable
 if mi("`lci'") {
 	tempvar lci
-	gen `lci' = `estimate' - `se'*`critval'
+	qui gen `lci' = `estimate' - `se'*`critval'
 	label var `lci' "lci"
 }
 if mi("`uci'") {
 	tempvar uci
-	gen `uci' = `estimate' + `se'*`critval'
+	qui gen `uci' = `estimate' + `se'*`critval'
 	label var `uci' "uci"
 }
 drop `critval'
@@ -149,8 +149,8 @@ label var `covers' "covers"
 		
 * create sort order
 tempvar zstat rank
-if !mi("`se'") gen float `zstat' = -abs(`estimate'-`true')/`se'
-else gen float `zstat' = -abs(`estimate'-`true')/abs(`uci'-`lci')
+if !mi("`se'") qui gen float `zstat' = -abs(`estimate'-`true')/`se'
+else qui gen float `zstat' = -abs(`estimate'-`true')/abs(`uci'-`lci')
 sort `by' `zstat' // check: was sorted by by true zstat
 drop `zstat'
 qui bysort `by': gen double `rank' = 100*(1 - _n/_N)
