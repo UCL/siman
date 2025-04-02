@@ -1,4 +1,5 @@
-*!	version 0.11.4	2jan2025	
+*!	version 0.11.5	2apr2025	
+*	version 0.11.5	2apr2025	IW graphs are now sorted by rep
 *	version 0.11.4	2jan2025	IW correct the count of #panels	
 *	version 0.11.3	25oct2024	IW/TM allow only 1 method
 *	version 0.11.2	25oct2024	IW Default by() ignores non-varying variables
@@ -132,12 +133,12 @@ if mi("`by'") {
 }
 
 * For a nicer presentation and better better use of space
-sort `by' `method'
+sort `by' `method' `rep' // 2/4/2025
 if !mi("`by'") by `by': gen newidrep = _n
 else gen newidrep = _n
 summ newidrep, meanonly
 local maxnewidrep = r(max)
-sort `method' `by'
+sort `method' `by' `rep' // 1/4/2025
 by `method': gen first = _n==1
 qui replace newidrep = newidrep + `gap'*`maxnewidrep'*sum(first)
 forvalues g = 1/`nummethodnew' {
