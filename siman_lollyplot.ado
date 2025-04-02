@@ -249,16 +249,16 @@ foreach j of local methodlevels {
 	local ++i
 	local label`i' : label (`method') `j' // defaults to `j' if no label
 	local mcol`i' : word `i' of `colors'
-	if mi("`mcol`i'") local mcol`i' "scheme p`i'"
+	if mi("`mcol`i''") local mcol`i' "scheme p`i'"
 	local mfcol`i' : word `i' of `mfcolors'
-	if mi("`mfcol`i'") local mfcol`i' "white"
+	if mi("`mfcol`i''") local mfcol`i' "white"
 	local mlcol`i' : word `i' of `mlcolors'
-	if mi("`mlcol`i'") local mlcol`i' "scheme p`i'"
+	if mi("`mlcol`i''") local mlcol`i' "scheme p`i'"
 	local msym`i' : word `i' of `msymbol'
-	if mi("`msym`i'") & `i'==1 local msym`i' O
-	else if mi("`msym`i'") & `i'>1 local msym`i' `msym`=`i'-1'
+	if mi("`msym`i''") & `i'==1 local msym`i' O
+	else if mi("`msym`i''") & `i'>1 local msym`i' `msym`=`i'-1''
 }
-noi di 
+
 * HANDLE PERFORMANCE MEASURES
 * relprec = 0 for reference method
 qui replace `estimate' = 0 if _perfmeascode=="relprec" & mi(`estimate')
