@@ -366,7 +366,7 @@ program define vercheck, sclass
 8may2015 - bug fix - handles missing values
 11mar2015 - bug fix - didn't search beyond first line
 */
-version 9.2
+version 15
 syntax name, [vermin(string) nofatal file ereturn return quietly message(string)]
 // Parsing
 local progname `namelist'

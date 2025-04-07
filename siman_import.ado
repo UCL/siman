@@ -87,7 +87,7 @@ end
 *! version 2.1 11feb2013  -  blank labels for empty strings
 * version 2 15dec2005  -  if, in, check for duplications
 prog def labelit
-version 9
+version 15
 syntax varlist(min=2 max=2) [if] [in], [modify usefirst noBLAnks]
 tokenize "`varlist'"
 confirm numeric variable `1'
