@@ -40,7 +40,7 @@ Alternatively, {cmd:labformat(none)} removes the marker labels.{p_end}
 {synopt:{opt dgmti:tle}{cmd:(on|off)}}controls whether the top title shows the names of the DGM variables.
 The default is {cmd:dgmtitle(on)} with one DGM variable and {cmd:dgmtitle(off)} with more than one DGM variable.{p_end}
 {syntab:Calculation options}
-{synopt:{opt l:evel(#)}}sets the level for Monte Carlo confidence intervals. Default is the current level (taken from c(level); see {help level}).{p_end}
+{synopt:{opt mcl:evel(#)}}sets the level for Monte Carlo confidence intervals. Default is the current level (taken from c(level); see {help level}).{p_end}
 {synopt:{opt logit}}calculates Monte Carlo confidence intervals for power and coverage on the logit scale. This
 ensures that Monte Carlo confidence intervals lie between 0 and 100 (typically only important with small numbers
 of repetitions).{p_end}
