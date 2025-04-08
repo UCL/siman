@@ -20,9 +20,10 @@
 
 program define siman_table
 * not versioned, so that we can use new -table- if available
-syntax [anything] [if], [Column(varlist) noMCse mcci MCLevel(cilevel) /// documented options 
+syntax [anything] [if], [Column(varlist) Row(varlist) TABDisp TABLe ///
+	noMCse mcci MCLevel(cilevel) /// documented options 
 	* /// tabdisp/table options
-	Row(varlist) debug pause TABDisp TABLe  /// undocumented options
+	debug pause  /// undocumented options
 	]
 
 // PARSING
@@ -154,10 +155,11 @@ if !mi("`tabdisp'") & `nfactors'>7 {
 if !mi("`debug'") di as input "Debug: factors to display: `myfactors'"
 
 * decide what to put in columns
-* default approach: columns = target method; rows = PM; by = DGMs
+* default approach: columns = method within target; rows = PM; by = DGMs
 * but drop anything that's single-valued across the data
 if "`column'"=="" { 
-	local column `target' `method'
+	if !mi("`table'") local column `target' `method'
+	else local column `method' `target' 
 	local column : list column - row
 }
 if "`row'"=="" {
@@ -205,7 +207,7 @@ if !mi("`pause'") {
 * print the cilevel
 qui count if inlist(_perfmeascode,"Cover":perfl,"Power":perfl)
 if r(N) di as text "Note: Coverage and Power calculated at `cilevel'% level"
-if !mi("`mcci'") di as text "Note: Monte Carlo CIs calculated at `mclevel'% level"
+if !mi("`mcci'") & !mi("`table'") di as text "Note: Monte Carlo CIs calculated at `mclevel'% level"
 
 * if mcses or mccis are reported, print the following note
 if (mi("`mcse'") | !mi("`mcci'")) & !mi("`tabdisp'") {

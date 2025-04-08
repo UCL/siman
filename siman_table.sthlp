@@ -27,12 +27,15 @@ performance is displayed for all available measures.
 {synoptset 20 tabbed}{...}
 {synopthdr}
 {synoptline}
-{synopt:{opt c:olumn(varname)}}specifies one or two factors (i.e. which of {bf:dgm}, {bf:target} and/or {bf:method}) 
-to be placed in the columns.{p_end}
+{synopt:{opt c:olumn(varlist)}}specifies factors (i.e. which of {bf:dgm}, {bf:target} and/or {bf:method}) 
+to be placed in the columns. Default is target and method.{p_end}
+{synopt:{opt r:ow(varlist)}}specifies factors (i.e. which of {bf:dgm}, {bf:target} and/or {bf:method}) to be placed in the rows. Default is performance measure.{p_end}
 {synopt:{opt nomc:se}}omit Monte Carlo standard errors from the table.{p_end}
 {synopt:{opt mcci}}add Monte Carlo confidence intervals to the table.{p_end}
-{synopt:{opt l:evel(#)}}specifies the level for Monte Carlo confidence intervals. Default is as explained in {help level}.{p_end}
-{synopt:{it:tabdisp_options}}many options for {help tabdisp}, e.g. {cmd:stubwidth(20)}.{p_end}
+{synopt:{opt mcl:evel(#)}}specifies the level for Monte Carlo confidence intervals. Default is as explained in {help level}.{p_end}
+{synopt:{opt tabd:isp}}use {help tabdisp} to create the table: this is the default in Stata versions < 17.{p_end}
+{synopt:{opt tabl:e}}use {help table} to create the table: this is the default in Stata versions 17+.{p_end}
+{synopt:{it:table options}}many options for {help tabdisp}, e.g. {cmd:stubwidth(20)}, or {help table}, e.g. {cmd:nformat(%6.3f)}.{p_end}
 {synoptline}
 
 
@@ -40,17 +43,10 @@ to be placed in the columns.{p_end}
 {title:Description}
 
 {pstd}
-{cmd:siman table} uses Stata’s {help tabdisp:tabdisp} to provide a summary 
-of the performance statistics produced by {bf:{help siman analyse}}.
+{cmd:siman table} summarises the performance statistics produced by {bf:{help siman analyse}}.
 The output table lists the estimand(s) split by dgms, targets, methods and performance measures.
-
-{pstd}
-If {opt column()} is not specified, the column variable is decided as
-follows. With more than one method, method is placed in the columns. Otherwise,
-if there is more than one target, target is placed in the columns. Otherwise,
-the first dgm variable is placed in the columns. All other variables are then
-placed in the rows. However, if this leaves more than four ariables in the
-rows, {cmd:siman table} exits with error.
+If you are running Stata 17 or higher, the default is to use {help table}.
+Otherwise, the default is to use {help tabdisp}.
 
 {pstd}
 Usually, there are two entries per row in the table: the first entry is the
@@ -75,20 +71,19 @@ be recalled once the performance statistics have been created by
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)"}
 
-{phang}. {stata "siman analyse, notable"}
+{phang}. {stata "siman analyse"}
 
 {pstd}Standard use:
 
 {phang}. {stata "siman table"}
 
-{pstd}The table is too long and narrow. Improve it by putting estimand as well 
-as method in the columns, and showing results for only dgm 1:
+{pstd}The table is too long. We could shorten it by selecting just three performance measures:
 
-{phang}. {stata "siman table if dgm==1, column(estimand method)"}
+{phang}. {stata "siman table bias empse modelse"}
 
-{pstd}Or shorten it by omitting Monte Carlo standard errors and giving more space for the names of the performance measures:
+{pstd}And we could choose to display 90% Monte Carlo confidence intervals:
 
-{phang}. {stata "siman table, column(estimand method) nomcse stubwidth(20)"}
+{phang}. {stata "siman table bias empse cover, nomcse mcci mclevel(90)"}
 
 
 
