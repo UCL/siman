@@ -1,4 +1,5 @@
-*!	version 0.11.3	01apr2025	
+*!	version 0.11.4	08apr2025	
+*	version 0.11.4	08apr2025	IW doesn't auto-call siman table
 *	version 0.11.3	01apr2025	IW calls simsum with new semissingok option
 *	version 0.11.2	17mar2025	IW doesn't call siman table if too many dgmvars
 *	version 0.11.1	02jan2025	IW new char cilevel = the level at which coverage was computed
@@ -37,8 +38,7 @@ syntax [anything] [if], [PERFonly REPlace noTABle /// documented options
 	ref(string) Level(cilevel) * /// simsum options
 	force debug pause nopreserve /// undocumented options
 	]
-local simsumoptions level(`level') `options'
-local cilevel `level'
+
 if "`debug'"!="" di as input `"Debug: options to pass to simsum: `simsumoptions'"'
 if "`debug'"=="" local qui qui
 
@@ -52,6 +52,9 @@ vercheck simsum, vermin(2.1.2) quietly message(`"{p 0 2}You can install the late
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
+
+local simsumoptions level(`level') `options'
+local cilevel `level' // overwrites current cilevel
 
 if "`method'"=="" {
 	di as error "The variable 'method' is missing so siman analyse can not be run. Please create a variable in your dataset called method containing the method value(s)."
@@ -335,6 +338,7 @@ if `secreated' di as text "siman analyse has created variable _se to hold the MC
 
 di as text "siman analyse has run successfully"
 
+/*
 if "`table'"!="notable" {
 	if `ndgmvars'>3 di as text "Too many dgmvars: skipping call to siman table"
 	else {
@@ -345,6 +349,7 @@ if "`table'"!="notable" {
 		}
 	}
 }
+*/
 
 end
 

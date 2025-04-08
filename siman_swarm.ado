@@ -1,4 +1,5 @@
-*!	version 0.11.5	2apr2025	
+*!	version 0.11.6	8apr2025	
+*	version 0.11.6	8apr2025	IW use Stata15 syntax
 *	version 0.11.5	2apr2025	IW graphs are now sorted by rep
 *	version 0.11.4	2jan2025	IW correct the count of #panels	
 *	version 0.11.3	25oct2024	IW/TM allow only 1 method
@@ -145,9 +146,9 @@ forvalues g = 1/`nummethodnew' {
 	* if `g'==1 qui gen newidrep = `rep' if `method' == `g'
 	* else qui replace newidrep = (`rep'-1)+ ceil((`g'-1)*`step') + 1 if `method' == `g'
 	qui tabstat newidrep if `method' == `g', s(p50) save
-	qui matrix list r(StatTotal) 
-	local median`g' = r(StatTotal)[1,1]
-	local ygraphvalue`g' = ceil(`median`g'')
+	tempname result
+	matrix `result' = r(StatTotal) 
+	local ygraphvalue`g' = ceil(`result'[1,1])
 	local labelvalues `labelvalues' `ygraphvalue`g'' "`mlabel`g''"
 	if `g'==`nummethodnew' label define newidreplab `labelvalues'
 }

@@ -10,7 +10,7 @@ program define siman
 adapted from network.ado
 IW 17sep2019
 */
-version 15
+
 gettoken subcmd 0 : 0, parse(" ,")
 if "`subcmd'"=="cms" local subcmd comparemethodsscatter
 if "`subcmd'"=="comparemethodscatter" local subcmd comparemethodsscatter

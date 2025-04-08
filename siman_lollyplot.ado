@@ -51,7 +51,7 @@ version 15
 syntax [anything] [if] [, ///
 	LABFormat(string) COLors(string) MSymbol(string)  ///
 	REFPower(real -1) METHLEGend(string) DGMShow DGMTItle(string) /// specific graph options
-	Level(cilevel) logit /// calculation options
+	MCLevel(cilevel) logit /// calculation options
 	BYGRaphoptions(string) name(string) * /// general graph options
 	pause SAVing(string) EXPort(string) /// advanced graph option
 	dgmwidth(int 30) pmwidth(int 24) debug rangeadd(real 0.2) /// undocumented options
@@ -288,7 +288,7 @@ if "`labformat'"!="none" {
 
 * confidence intervals
 tempvar lci uci l r
-local alpha2 = 1/2 - `level'/200
+local alpha2 = 1/2 - `mclevel'/200
 qui gen float `lci' = `estimate' + `se'*invnorm(`alpha2')
 qui gen float `uci' = `estimate' + `se'*invnorm(1-`alpha2')
 qui gen `l' = "("
