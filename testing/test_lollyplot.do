@@ -27,6 +27,7 @@ foreach feature in dgm target method {
 		dicmd use data/setupdata_`feature'`n', clear
 		if `: char _dta[siman_nummethod]' > 1 {
 			dicmd siman analyse
+			siman table
 			dicmd siman lollyplot, name(lollyplot_`feature'`n', replace) bygr(note(Test siman lollyplot using data `feature'`n')) legend(row(1)) 
 		}
 		else di as text "Skipped (only one method)"
@@ -44,7 +45,7 @@ foreach var in rep dgm estimand method est se true {
 }
 siman setup, rep(myrep) dgm(mydgm) target(myestimand) method(mymethod) ///
 	estimate(myest) se(myse) true(mytrue)
-siman analyse, notable
+siman analyse
 siman lol bias relprec power cover, refpower(10)  name(l`++i', replace)
 siman lol bias relprec power cover if myesti=="gamma", refpower(10) name(l`++i', replace)
 
@@ -53,7 +54,7 @@ use $testpath/data/simlongESTPM_longE_longM.dta, clear
 drop if esti=="gamma"
 drop esti
 siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
-siman analyse, notable
+siman analyse
 siman lol bias relprec power cover, refpower(10)  name(l`++i', replace)
 
 
@@ -64,7 +65,7 @@ use $testpath/data/simlongESTPM_longE_longM.dta, clear
 drop if esti=="gamma"
 drop esti
 qui siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true) 
-siman analyse, notable
+siman analyse
 siman lol bias relprec power cover, refpower(10) name(munlabelled,replace)
 
 * method is numeric labelled
@@ -74,7 +75,7 @@ drop esti
 label def method 1 "1good" 2 "2bad"
 label val method method
 qui siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true) 
-siman analyse, notable
+siman analyse
 siman lol bias relprec power cover, refpower(10) name(mlabelled,replace)
 
 * method is string
@@ -83,7 +84,7 @@ drop if esti=="gamma"
 gen methchar = cond(method==1,"1good","2bad")
 drop esti method
 qui siman setup, rep(rep) dgm(dgm) method(methchar) estimate(est) se(se) true(true) 
-siman analyse, notable
+siman analyse
 siman lol bias relprec power cover, refpower(10) name(mstring,replace) 
 graph export mstring.pdf, replace
 ** NB name(string) gives funny error
@@ -95,7 +96,7 @@ replace method = method+1
 gen methchar = cond(method==2,"1good","2bad")
 drop esti method
 qui siman setup, rep(rep) dgm(dgm) method(methchar) estimate(est) se(se) true(true) 
-siman analyse, notable
+siman analyse
 siman lol bias relprec power cover, refpower(10) name(mstringplus,replace) 
 * graph should be same as mstring
 graph export mstringplus.pdf, replace
@@ -110,7 +111,7 @@ label def method 1 "good" 2 "bad"
 label val method method
 drop esti 
 qui siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true) 
-siman analyse, notable
+siman analyse
 siman lol bias relprec power cover, refpower(10) name(mstringrev,replace) 
 * graph should be same as mstring
 graph export mstringrev.pdf, replace
@@ -125,7 +126,7 @@ foreach file in mstring.pdf mstringplus.pdf mstringrev.pdf result {
 use $testpath/data/extendedtestdata.dta, clear
 sencode met, replace
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
-siman analyse, notable
+siman analyse
 siman lol if esti=="effect" & float(beta)==float(0) & float(pmiss)==float(0.2), name(meth3,replace) legend(row(1)) col(red blue green) debug
 siman lol if esti=="effect" & float(beta)==float(0) & float(pmiss)==float(0.2) & meth!=1, name(meth2,replace) legend(row(1)) col(blue green) debug
 * Compare graphs meth3 and meth2
@@ -134,7 +135,7 @@ siman lol if esti=="effect" & float(beta)==float(0) & float(pmiss)==float(0.2) &
 use $testpath/data/extendedtestdata.dta, clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 
-siman analyse, notable
+siman analyse
 siman lol bias relprec power cover if float(beta)==float(0.5), labformat(none) ///
 	refpower(90) dgmwidth(35) pmwidth(20) legend(col(1)) name(l`++i', replace) ///
 	saving(mylolly, replace) export(pdf, replace)

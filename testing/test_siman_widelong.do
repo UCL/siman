@@ -38,8 +38,11 @@ siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) d
 
 * analyse works ok with ref and replace
 siman analyse, ref(CC)
+siman table
 siman analyse, ref(FULLDAT) replace 
+siman table
 siman analyse, ref(IMPALL) replace 
+siman table
 
 * check get error if true is not constant across methods
 use $testpath/data/msgbsl_inter_try_postfile.dta, clear
@@ -62,6 +65,7 @@ TEST LCI, UCI, P OPTIONS
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman analyse bias ciwidth cover power, level(80) debug
+siman table
 foreach pm in bias ciwidth cover power {
 	summ est if _perfmeascode=="`pm'"
 	local `pm'ref = r(mean)
@@ -73,6 +77,7 @@ gen lower = est - invnorm(.9)*se
 gen upper = est + invnorm(.9)*se
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) lci(lower) uci(upper)
 siman analyse ciwidth cover power, debug
+siman table
 summ est if _perfmeascode=="ciwidth"
 di `ciwidthref', r(mean),reldif(`ciwidthref', r(mean))
 assert reldif(`ciwidthref', r(mean))<1E-8
@@ -88,6 +93,7 @@ use $testpath/data/simlongESTPM_longE_longM.dta, clear
 gen pvalue = 2*normprob(-abs(est)/se)
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) p(pvalue)
 siman analyse ciwidth power, level(80) debug
+siman table
 summ est if _perfmeascode=="ciwidth"
 di `ciwidthref', r(mean),reldif(`ciwidthref', r(mean))
 assert reldif(`ciwidthref', r(mean))<1E-8
@@ -100,6 +106,7 @@ use $testpath/data/simlongESTPM_longE_longM.dta, clear
 gen pvalue = 2*normprob(-abs(est)/se)
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) p(pvalue)
 siman analyse ciwidth power, debug // NB default level
+siman table
 summ est if _perfmeascode=="ciwidth"
 di `ciwidthref', r(mean),reldif(`ciwidthref', r(mean))
 assert reldif(`ciwidthref', r(mean))>1E-2
@@ -112,12 +119,14 @@ use $testpath/data/simlongESTPM_longE_longM.dta, clear
 drop se
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) true(true)
 siman analyse bias
+siman table
 summ est if _perfmeascode=="bias"
 di `biasref', r(mean),reldif(`biasref', r(mean))
 assert reldif(`biasref', r(mean))<1E-8
 
 * test analyse with if
 siman analyse if dgm==2, replace
+siman table
 count if dgm==1
 assert r(N)==4000
 

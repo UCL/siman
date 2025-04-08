@@ -11,24 +11,24 @@
 . 
 . * reshape into format required by nestloop
 . reshape long exp mse cov bias var2, i(theta rho pc tau2 k) j(method) string
-(j = expect fem g2 limf limr mh peters peto rem sfem srem trimfill)
-(variable explimr not found)
-(variable mselimr not found)
-(variable covlimr not found)
-(variable var2limr not found)
-(variable expsfem not found)
-(variable msesfem not found)
-(variable covsfem not found)
-(variable var2sfem not found)
-(variable expsrem not found)
-(variable msesrem not found)
-(variable covsrem not found)
-(variable var2srem not found)
+(note: j = expect fem g2 limf limr mh peters peto rem sfem srem trimfill)
+(note: explimr not found)
+(note: mselimr not found)
+(note: covlimr not found)
+(note: var2limr not found)
+(note: expsfem not found)
+(note: msesfem not found)
+(note: covsfem not found)
+(note: var2sfem not found)
+(note: expsrem not found)
+(note: msesrem not found)
+(note: covsrem not found)
+(note: var2srem not found)
 
-Data                               Wide   ->   Long
+Data                               wide   ->   long
 -----------------------------------------------------------------------------
-Number of observations              768   ->   9,216       
-Number of variables                  53   ->   11          
+Number of obs.                      768   ->    9216
+Number of variables                  53   ->      11
 j variable (12 values)                    ->   method
 xij variables:
        expexpect expfem ... exptrimfill   ->   exp
@@ -88,7 +88,7 @@ Performance estimates             not in data
 _____________________________________________________
 
 . 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop bias, lcol(black red blue) 
@@ -143,7 +143,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop if estimand=="effect", lcol(black red blue) xtitle("") xlabel(none) stagger(0.03) 
@@ -211,7 +211,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 >  & rep>0, su(b) // CCA, MeanImp, Noadj
 
             |            Summary of b
-     method |        Mean   Std. dev.       Freq.
+     method |        Mean   Std. Dev.       Freq.
 ------------+------------------------------------
         CCA |   .00253414   .15817009       1,000
     MeanImp |   .00217613    .1525731       1,000
@@ -257,14 +257,14 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mstring,replace)
 siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . graph export mstring.pdf, replace
-file mstring.pdf saved as PDF format
+(file mstring.pdf written in PDF format)
 
 . 
 . * method is numeric labelled in alphabetical order
@@ -276,7 +276,7 @@ file mstring.pdf saved as PDF format
 >  & rep>0, su(b)
 
             |            Summary of b
-     method |        Mean   Std. dev.       Freq.
+     method |        Mean   Std. Dev.       Freq.
 ------------+------------------------------------
         CCA |   .00253414   .15817009       1,000
     MeanImp |   .00217613    .1525731       1,000
@@ -322,7 +322,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mlabalpha,replace)
@@ -338,7 +338,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 >  & rep>0, su(b)
 
             |            Summary of b
-     method |        Mean   Std. dev.       Freq.
+     method |        Mean   Std. Dev.       Freq.
 ------------+------------------------------------
       Noadj |  -.00349635   .19110948       1,000
         CCA |   .00253414   .15817009       1,000
@@ -384,7 +384,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mlabdata,replace)
@@ -400,7 +400,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 >  & rep>0, su(b)
 
             |            Summary of b
-     method |        Mean   Std. dev.       Freq.
+     method |        Mean   Std. Dev.       Freq.
 ------------+------------------------------------
         CCA |   .00253414   .15817009       1,000
     MeanImp |   .00217613    .1525731       1,000
@@ -414,7 +414,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 >  & rep>0, su(b)
 
             |            Summary of b
-     method |        Mean   Std. dev.       Freq.
+     method |        Mean   Std. Dev.       Freq.
 ------------+------------------------------------
           1 |   .00253414   .15817009       1,000
           2 |   .00217613    .1525731       1,000
@@ -460,7 +460,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(munlabelled,replace)
@@ -491,7 +491,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 > t" & rep>0, su(b)
 
             |            Summary of b
-   methchar |        Mean   Std. dev.       Freq.
+   methchar |        Mean   Std. Dev.       Freq.
 ------------+------------------------------------
         CCA |   .00253414   .15817009       1,000
     MeanImp |   .00217613    .1525731       1,000
@@ -537,7 +537,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(munlabplus10,replace)
@@ -546,7 +546,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 . 
 . * graph should be the same as mstring
 . graph export munlabplus10.pdf, replace
-file munlabplus10.pdf saved as PDF format
+(file munlabplus10.pdf written in PDF format)
 
 . !fc mstring.pdf munlabplus10.pdf > result
 
@@ -604,7 +604,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) stagger(0.0
@@ -706,7 +706,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop bias, name(sn4,replace)
@@ -757,20 +757,20 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop bias, name(sn5,replace) saving(sn5s , replace) export(pdf, replace)
 siman nestloop will draw 3 graphs (3 targets * 1 performance measures)
-(file sn5s_effect_bias.gph not found)
-file sn5s_effect_bias.gph saved
-file sn5s_effect_bias.pdf saved as PDF format
-(file sn5s_mean0_bias.gph not found)
-file sn5s_mean0_bias.gph saved
-file sn5s_mean0_bias.pdf saved as PDF format
-(file sn5s_mean1_bias.gph not found)
-file sn5s_mean1_bias.gph saved
-file sn5s_mean1_bias.pdf saved as PDF format
+(note: file sn5s_effect_bias.gph not found)
+(file sn5s_effect_bias.gph saved)
+(file sn5s_effect_bias.pdf written in PDF format)
+(note: file sn5s_mean0_bias.gph not found)
+(file sn5s_mean0_bias.gph saved)
+(file sn5s_mean0_bias.pdf written in PDF format)
+(note: file sn5s_mean1_bias.gph not found)
+(file sn5s_mean1_bias.gph saved)
+(file sn5s_mean1_bias.pdf written in PDF format)
 
 . foreach target in effect mean0 mean1 {
   2.         erase sn5s_`target'_bias.gph

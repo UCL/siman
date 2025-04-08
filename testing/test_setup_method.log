@@ -83,10 +83,10 @@
  73. 
 .         qui count if float(beta)==float(0.5)
  74.         local x = r(N)
- 75.         siman analyse if float(beta)==float(0.25), notable
+ 75.         siman analyse if float(beta)==float(0.25)
  76.         qui count if float(beta)==float(0.5)
  77.         assert `x' == r(N)
- 78.         siman analyse if float(beta)==float(0), notable replace
+ 78.         siman analyse if float(beta)==float(0), replace
  79.         qui count if float(beta)==float(0.5)
  80.         assert `x' == r(N)
  81. }

@@ -104,10 +104,10 @@ forvalues targettype = 1/6 {
 	* check analyse with subsets
 	qui count if float(beta)==float(0.5)
 	local x = r(N)
-	siman analyse if float(beta)==float(0.25), notable
+	siman analyse if float(beta)==float(0.25)
 	qui count if float(beta)==float(0.5)
 	assert `x' == r(N)
-	siman analyse if float(beta)==float(0), notable replace
+	siman analyse if float(beta)==float(0), replace
 	qui count if float(beta)==float(0.5)
 	assert `x' == r(N)
 }

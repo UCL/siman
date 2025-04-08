@@ -66,7 +66,7 @@ erase zres.dta
 // load data and do benchmark analysis
 use data/simcheck, clear
 siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)
-siman ana, perf notab
+siman ana, perf
 siman table, col(dgm method)
 siman lol, name(lolly1,replace)
 

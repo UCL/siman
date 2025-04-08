@@ -18,6 +18,7 @@ siman swarm if float(beta)==float(0) & float(pmiss)==float(0.2) & estim=="effect
 siman scatter if float(beta)==float(0) & float(pmiss)==float(0.2) & estim=="effect"
 
 siman analyse 
+siman table
 
 siman table bias empse cover if float(beta)==float(0) & float(pmiss)==float(0.2) & mech==1 & estim=="effect"
 siman lollyplot if float(beta)==float(0) & float(pmiss)==float(0.2) & estim=="effect", legend(row(1))
