@@ -23,6 +23,7 @@ clear all // avoids the "too many sersets" error
 
 // START TESTING
 log using `filename'_which, replace text
+version
 siman which
 log close
 
