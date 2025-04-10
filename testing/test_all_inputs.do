@@ -73,7 +73,7 @@ confirm new var _methodvar
 * and do the correct setup
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman analyse
-siman table
+siman table, tabdisp
 
 
 * DGM numeric with string labels, 1 var
@@ -94,7 +94,7 @@ rename method_str method
 drop true
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(0) 
 siman analyse
-siman table
+siman table, tabdisp
 
 
 * DGM string, 1 var
@@ -114,7 +114,7 @@ drop dgm true
 rename dgm_str dgm
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) 
 siman analyse
-siman table
+siman table, tabdisp
 
  
 * DGM missing
@@ -131,7 +131,7 @@ drop estimand
 rename estimand_num estimand
 siman setup, rep(rep) target(estimand) estimate(est) se(se) true(true)
 siman analyse
-siman table
+siman table, tabdisp
 
 * missing target
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
@@ -139,7 +139,7 @@ keep if estimand=="beta"
 drop estimand
 siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
 siman analyse 
-siman table
+siman table, tabdisp
 
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
@@ -148,7 +148,7 @@ use $testpath/data/extendedtestdata.dta, clear
 order beta pmiss
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman analyse
-siman table
+siman table, tabdisp
 
 *************************************************************************
 *************************************************************************
@@ -162,7 +162,7 @@ siman table
 use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
 siman setup, rep(rep) dgm(dgm) est(est) se(se) target(estimand) method(_1 _2) true(true)
 siman analyse
-siman table
+siman table, tabdisp
 
 * DGM numeric with string labels, 1 var
 *****************************************
@@ -176,7 +176,7 @@ drop estimand true
 rename target estimand
 siman setup, rep(rep) dgm(dgm) est(est) se(se) target(estimand) method(1 2) 
 siman analyse
-siman table
+siman table, tabdisp
 
 
 * DGM string, 1 var
@@ -192,7 +192,7 @@ rename estimand_new estimand
 rename dgm_new dgm
 siman setup, rep(rep) dgm(dgm) est(est) se(se) target(estimand) method(_1 _2) true(0.5)
 siman analyse
-siman table
+siman table, tabdisp
 
 * DGM missing
 ************** 
@@ -205,7 +205,7 @@ rename est_1 est
 rename se_1 se
 siman setup, rep(rep) est(est) se(se) target(estimand) true(true)
 siman analyse
-siman table
+siman table, tabdisp
 
 * Target missing
 ****************
@@ -214,7 +214,7 @@ drop if estimand == "gamma"
 drop estimand
 siman setup, rep(rep) dgm(dgm) est(est) se(se) method(_1 _2) true(true)
 siman analyse
-siman table
+siman table, tabdisp
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
@@ -225,7 +225,7 @@ reshape wide b se, i(rep mech pmiss beta estimand) j(method "Noadj" "CCA" "MeanI
 
 siman setup, rep(rep) dgm(beta pmiss mech) method(Noadj CCA MeanImp) target(estimand) est(b) se(se) true(true)
 siman analyse
-siman table
+siman table, tabdisp
 
 *************************************************************************
 *************************************************************************
@@ -252,7 +252,7 @@ drop n true
 rename (*_*) (**)
 siman setup, rep(rep) dgm(dgm) est(est) se(se) target(beta gamma) method(1 2) order(method)
 siman analyse
-siman table
+siman table, tabdisp
 
 * DGM string, 1 var
 ********************
@@ -264,7 +264,7 @@ drop dgm true
 rename dgm_new dgm
 siman setup, rep(rep) dgm(dgm) est(est) se(se) target(beta gamma) method(1_ 2_) true(0.5) order(method)
 siman analyse
-siman table
+siman table, tabdisp
 
 * DGM missing
 ************** 
@@ -276,7 +276,7 @@ drop if n==2
 drop n 
 siman setup, rep(rep) est(est) se(se) target(beta gamma) method(1_ 2_) true(true) order(method)
 siman analyse
-siman table
+siman table, tabdisp
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
@@ -290,7 +290,7 @@ reshape wide bNoadj seNoadj bCCA seCCA bMeanImp seMeanImp true, i(rep mech pmiss
 * data are now wide-wide
 siman setup, rep(rep) dgm(beta pmiss mech) method(Noadj CCA MeanImp) target(effect mean0 mean1) est(b) se(se) order(method) true(true)
 siman analyse
-siman table
+siman table, tabdisp
 
 *************************************************************************
 *************************************************************************
@@ -304,7 +304,7 @@ siman table
 use $testpath/data/simlongESTPM_wideE_wideM2.dta, clear
 siman setup, dgm(dgm) rep(rep) est(est) se(se) target(beta_ gamma_) method(1 2) true(true) order(target)
 siman analyse
-siman table
+siman table, tabdisp
 
 * DGM numeric with string labels, 1 var
 *****************************************
@@ -317,7 +317,7 @@ drop if n==2
 drop n true
 siman setup, dgm(dgm) rep(rep) est(est) se(se) target(beta_ gamma_) method(1 2) order(target)
 siman analyse
-siman table
+siman table, tabdisp
 
 * DGM string, 1 var
 ********************
@@ -329,7 +329,7 @@ drop dgm true
 rename dgm_new dgm
 siman setup, dgm(dgm) rep(rep) est(est) se(se) target(beta_ gamma_) method(1 2) true(0.5)  order(target) 
 siman analyse
-siman table
+siman table, tabdisp
 
 * DGM missing
 ************** 
@@ -340,7 +340,7 @@ drop if n==2
 drop n 
 siman setup, rep(rep) est(est) se(se) target(beta_ gamma_) method(1 2) true(true)  order(target) 
 siman analyse
-siman table
+siman table, tabdisp
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
@@ -352,7 +352,7 @@ reshape wide b se true, i(rep mech pmiss beta method) j(estimand "effect" "mean0
 reshape wide beffect seeffect bmean0 semean0 bmean1 semean1, i(rep mech pmiss beta) j(method "Noadj" "CCA" "MeanImp") string
 siman setup, rep(rep) dgm(beta pmiss mech) method(Noadj CCA MeanImp) target(effect mean0 mean1) est(b) se(se) order(target) true(true)
 siman analyse
-siman table
+siman table, tabdisp
 
 *************************************************************************
 *************************************************************************
@@ -366,7 +366,7 @@ siman table
 use $testpath/data/simlongESTPM_longM_wideE1.dta, clear
 siman setup, rep(rep) dgm(dgm) est(est) se(se) target(_beta _gamma) method(method) true(true)
 siman analyse
-siman table
+siman table, tabdisp
 
 * DGM numeric with string labels, 1 var
 *****************************************
@@ -380,7 +380,7 @@ drop method true
 rename method_new method
 siman setup, rep(rep) dgm(dgm) est(est) se(se) target(_beta _gamma) method(method)
 siman analyse
-siman table
+siman table, tabdisp
 
 
 * DGM string, 1 var
@@ -396,7 +396,7 @@ drop true dgm
 rename dgm_new dgm
 siman setup, rep(rep) dgm(dgm) est(est) se(se) target(beta_ gamma_) method(method) true(0.5)
 siman analyse
-siman table
+siman table, tabdisp
 
 
 * DGM missing
@@ -406,7 +406,7 @@ drop if dgm==2
 drop dgm
 siman setup, rep(rep) est(est) se(se) method(method) target(1 2) true(true)
 siman analyse
-siman table
+siman table, tabdisp
 
 * missing method
 use $testpath/data/simlongESTPM_longM_wideE.dta, clear
@@ -416,7 +416,7 @@ drop if n==2
 drop n
 siman setup, rep(rep) dgm(dgm) est(est) se(se) target(beta_ gamma_) true(true)
 siman analyse
-siman table
+siman table, tabdisp
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
@@ -426,7 +426,7 @@ order beta pmiss
 reshape wide b se true, i(rep mech pmiss beta method) j(estimand "effect" "mean0" "mean1") string
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(effect mean0 mean1) est(b) se(se) true(true)
 siman analyse
-siman table
+siman table, tabdisp
 
 
 * Test -analyse if-
@@ -452,7 +452,7 @@ replace meth="Mean Imp" if meth=="MeanImp"
 replace meth="No-adj" if meth=="Noadj"
 siman setup, rep(re) dgm(mech) method(method) estimate(b) se(se) true(true)
 siman ana
-siman table
+siman table, tabdisp
 
 
 * Check calculation works when SE is part-missing
@@ -465,8 +465,8 @@ siman ana estreps sereps mean modelse, perf
 assert mi(b) if _p=="modelse" & dgm=="MNAR":dgm & method=="MI":method
 assert !mi(b) if _p=="mean" // this failed until 31/3/2025
 * and check mcci option of table
-siman table mean modelse, col(dgm method) mcci mclevel(95) format(%6.4f)
-siman table mean modelse, col(dgm method) nomcse mcci mclevel(50) format(%6.4f)
+siman table mean modelse, col(dgm method) mcci mclevel(95) tabdisp format(%6.4f)
+siman table mean modelse, col(dgm method) nomcse mcci mclevel(50) tabdisp format(%6.4f)
 
 
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"

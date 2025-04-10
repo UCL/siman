@@ -8,4 +8,4 @@ replace se = . if method==2
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman analyse
 * problem: est is missing when se is missing
-siman table, col(estimand method)
+siman table, col(estimand method) tabdisp

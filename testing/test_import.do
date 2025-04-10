@@ -45,7 +45,7 @@ save zres, replace
 use zres, clear
 siman_import, dgm(theta tau2 k) target(target) method(method) estimate(est) perf(perfmeas)
 siman des
-siman table if theta==1 & tau2==0 & k==5, column(_perfmeas target)
+siman table if theta==1 & tau2==0 & k==5, column(_perfmeas target) tabdisp
 siman nes mean if target==1 & inlist(method,"peto" ,"g2")
 
 // test with different varnames
@@ -68,7 +68,7 @@ erase zres.dta
 use data/simcheck, clear
 siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)
 siman ana, perf
-siman table, col(dgm method)
+siman table, col(dgm method) tabdisp
 siman lol, name(lolly1,replace)
 
 // "export" "to non-siman-format
@@ -81,7 +81,7 @@ rename _perfmeascode pm
 // import to siman
 pda
 siman_import, perf(pm) dgm(dgm) method(method) estimate(b) se(se) true(true)
-siman table, col(dgm method)
+siman table, col(dgm method) tabdisp
 siman lol, name(lolly2,replace)
 
 * compare lolly1 and lolly2

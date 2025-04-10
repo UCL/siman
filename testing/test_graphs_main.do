@@ -81,7 +81,7 @@ siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cm
 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test1", replace) 
 
 siman analyse
-siman table
+siman table, tabdisp
 
 siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test1", replace)
 
@@ -120,7 +120,7 @@ siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cm
 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test2", replace)        
 
 siman analyse
-siman table                                 
+siman table, tabdisp
 
 siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test2", replace)
 
@@ -156,7 +156,7 @@ siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cm
 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test3", replace) 
 
 siman analyse
-siman table
+siman table, tabdisp
 
 siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test3", replace)
  
@@ -215,7 +215,7 @@ siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cm
 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test5", replace) 
 
 siman analyse
-siman table
+siman table, tabdisp
 
 siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test5")
  
@@ -239,7 +239,7 @@ siman comparemethodsscatter if estimand=="beta", title("testtitle") subgr(xtit("
 siman blandaltman if estimand=="beta", ytitle("test y-title") xtitle("test x-title") name("ba_test5a", replace) 
 
 siman analyse
-siman table
+siman table, tabdisp
 
 siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test5a", replace)
 

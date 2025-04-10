@@ -28,7 +28,7 @@ foreach feature in dgm target method {
 		dicmd use data/setupdata_`feature'`n', clear
 		if `: char _dta[siman_nummethod]' > 1 {
 			dicmd siman analyse
-			siman table
+			siman table, tabdisp
 			dicmd siman lollyplot, name(lollyplot_`feature'`n', replace) bygr(note(Test siman lollyplot using data `feature'`n')) legend(row(1)) 
 		}
 		else di as text "Skipped (only one method)"

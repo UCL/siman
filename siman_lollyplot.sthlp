@@ -115,6 +115,13 @@ here we select which performance measures are displayed, draw the graph for only
 
 {phang}. {stata  siman lollyplot modelse power cover if estimand=="beta", labf(%6.3f)}
 
+{pstd}Saving the graphs: this command names the graphs as mylolly_beta and mylolly_gamma
+(for the two targets beta and gamma). It saves them to disk in Stata format as
+mylolly_beta.gph and mylolly_gamma.gph, and exports them in JPEG format as
+mylolly_beta.jpg and mylolly_gamma.jpg.
+
+{phang}. {stata siman lollyplot, name(mylolly) saving(mylolly) export(jpg)}
+
 
 {marker reference}{...}
 {title:Reference}

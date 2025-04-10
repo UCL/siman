@@ -97,7 +97,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -262,7 +262,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -430,7 +430,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -562,7 +562,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------
 Performan |
@@ -658,7 +658,7 @@ _____________________________________________________
 . siman analyse 
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------
 dgm and   |
@@ -805,7 +805,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 ----------------------------------------------------------------------------------------------------
 beta,    |
@@ -1405,7 +1405,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -1557,7 +1557,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -1682,7 +1682,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -1834,7 +1834,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------
 Performan |
@@ -1931,7 +1931,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------
 dgm and   |
@@ -2039,10 +2039,10 @@ Note: where there are multiple entries in the table, they are the estimated perf
 . * reshape to long-wide format
 . reshape wide b se, i(rep mech pmiss beta estimand) j(method "Noadj" "CCA" "MeanImp") string
 
-Data                               long   ->   wide
+Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of obs.                   108000   ->   36000
-Number of variables                   9   ->      12
+Number of observations          108,000   ->   36,000      
+Number of variables                   9   ->   12          
 j variable (3 values)            method   ->   (dropped)
 xij variables:
                                       b   ->   bNoadj bCCA bMeanImp
@@ -2091,7 +2091,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 ----------------------------------------------------------------------------------------------------
 beta,    |
@@ -2743,7 +2743,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -2863,7 +2863,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -3010,7 +3010,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 Performan |              target and method              
@@ -3074,10 +3074,10 @@ Note: where there are multiple entries in the table, they are the estimated perf
 . * reshape method to wide
 . reshape wide b se, i(rep mech pmiss beta estimand) j(method "Noadj" "CCA" "MeanImp") string
 
-Data                               long   ->   wide
+Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of obs.                   108000   ->   36000
-Number of variables                   9   ->      12
+Number of observations          108,000   ->   36,000      
+Number of variables                   9   ->   12          
 j variable (3 values)            method   ->   (dropped)
 xij variables:
                                       b   ->   bNoadj bCCA bMeanImp
@@ -3088,10 +3088,10 @@ xij variables:
 . reshape wide bNoadj seNoadj bCCA seCCA bMeanImp seMeanImp true, i(rep mech pmiss beta) j(estimand 
 > "effect" "mean0" "mean1") string
 
-Data                               long   ->   wide
+Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of obs.                    36000   ->   12000
-Number of variables                  12   ->      25
+Number of observations           36,000   ->   12,000      
+Number of variables                  12   ->   25          
 j variable (3 values)          estimand   ->   (dropped)
 xij variables:
                                  bNoadj   ->   bNoadjeffect bNoadjmean0 bNoadjmean1
@@ -3145,7 +3145,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 ----------------------------------------------------------------------------------------------------
 beta,    |
@@ -3746,7 +3746,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -3895,7 +3895,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -4015,7 +4015,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -4161,7 +4161,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 Performan |              target and method              
@@ -4224,10 +4224,10 @@ Note: where there are multiple entries in the table, they are the estimated perf
 . * reshape target to wide
 . reshape wide b se true, i(rep mech pmiss beta method) j(estimand "effect" "mean0" "mean1") string
 
-Data                               long   ->   wide
+Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of obs.                   108000   ->   36000
-Number of variables                   9   ->      14
+Number of observations          108,000   ->   36,000      
+Number of variables                   9   ->   14          
 j variable (3 values)          estimand   ->   (dropped)
 xij variables:
                                       b   ->   beffect bmean0 bmean1
@@ -4239,10 +4239,10 @@ xij variables:
 . reshape wide beffect seeffect bmean0 semean0 bmean1 semean1, i(rep mech pmiss beta) j(method "Noad
 > j" "CCA" "MeanImp") string
 
-Data                               long   ->   wide
+Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of obs.                    36000   ->   12000
-Number of variables                  14   ->      25
+Number of observations           36,000   ->   12,000      
+Number of variables                  14   ->   25          
 j variable (3 values)            method   ->   (dropped)
 xij variables:
                                 beffect   ->   beffectNoadj beffectCCA beffectMeanImp
@@ -4294,7 +4294,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 ----------------------------------------------------------------------------------------------------
 beta,    |
@@ -4894,7 +4894,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -5045,7 +5045,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -5170,7 +5170,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -5313,7 +5313,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 Performan |              target and method              
@@ -5415,7 +5415,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------
 dgm and   |
@@ -5523,10 +5523,10 @@ Note: where there are multiple entries in the table, they are the estimated perf
 . * reshape in to wide-long format
 . reshape wide b se true, i(rep mech pmiss beta method) j(estimand "effect" "mean0" "mean1") string
 
-Data                               long   ->   wide
+Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of obs.                   108000   ->   36000
-Number of variables                   9   ->      14
+Number of observations          108,000   ->   36,000      
+Number of variables                   9   ->   14          
 j variable (3 values)          estimand   ->   (dropped)
 xij variables:
                                       b   ->   beffect bmean0 bmean1
@@ -5575,7 +5575,7 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 ----------------------------------------------------------------------------------------------------
 beta,    |
@@ -6173,7 +6173,7 @@ siman analyse has run successfully
 
 . su est if dgm==1 & estimand=="beta" & rep<0 & method==2 & _perfmeascode!="relprec"
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
+    Variable |        Obs        Mean    Std. dev.       Min        Max
 -------------+---------------------------------------------------------
          est |         12    175.1337    386.2543  -.0025973       1000
 
@@ -6185,7 +6185,7 @@ siman analyse has run successfully
 
 . su est if dgm==1 & estimand=="beta" & rep<0 & method==2 & _perfmeascode!="relprec"
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
+    Variable |        Obs        Mean    Std. dev.       Min        Max
 -------------+---------------------------------------------------------
          est |         12    175.1337    386.2543  -.0025973       1000
 
@@ -6247,7 +6247,7 @@ _____________________________________________________
 . siman ana
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 -------------------------------------------
 mech and  |
@@ -6422,7 +6422,7 @@ siman analyse has run successfully
 . assert !mi(b) if _p=="mean" // this failed until 31/3/2025
 
 . * and check mcci option of table
-. siman table mean modelse, col(dgm method) mcci mclevel(95) format(%6.4f)
+. siman table mean modelse, col(dgm method) mcci mclevel(95) tabdisp format(%6.4f)
 
 -----------------------------------------------------------------------------------------------
 Performan |                          method and Missing data mechanism                         
@@ -6442,7 +6442,7 @@ measure   |    MCAR      MAR     MNAR       MCAR      MAR     MNAR       MCAR   
 Note: where there are multiple entries in the table, they are the estimated performance measure,
   followed by its Monte Carlo standard error and its Monte Carlo 95% confidence limits
 
-. siman table mean modelse, col(dgm method) nomcse mcci mclevel(50) format(%6.4f)
+. siman table mean modelse, col(dgm method) nomcse mcci mclevel(50) tabdisp format(%6.4f)
 
 -----------------------------------------------------------------------------------------------
 Performan |                          method and Missing data mechanism                         

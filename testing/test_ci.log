@@ -13,7 +13,7 @@ Warning: missing values in df()
 siman analyse has run successfully
 
 . save z0, replace
-(note: file z0.dta not found)
+(file z0.dta not found)
 file z0.dta saved
 
 . 
@@ -34,7 +34,7 @@ Warning: missing values in df()
 siman analyse has run successfully
 
 . save z1, replace
-(note: file z1.dta not found)
+(file z1.dta not found)
 file z1.dta saved
 
 . 
@@ -55,7 +55,7 @@ Warning: missing values in df()
 siman analyse has run successfully
 
 . save z2, replace
-(note: file z2.dta not found)
+(file z2.dta not found)
 file z2.dta saved
 
 . 
@@ -75,7 +75,7 @@ Warning: missing values in df()
 siman analyse has run successfully
 
 . save z3, replace
-(note: file z3.dta not found)
+(file z3.dta not found)
 file z3.dta saved
 
 . 
@@ -94,10 +94,10 @@ file z3.dta saved
 (label indilab already defined)
 (label dgm already defined)
 
-    Result                           # of obs.
+    Result                      Number of obs
     -----------------------------------------
-    not matched                             0
-    matched                                 9  (_merge==3)
+    Not matched                             0
+    Matched                                 9  (_merge==3)
     -----------------------------------------
 
 . assert _merge==3
@@ -112,10 +112,10 @@ file z3.dta saved
 (label indilab already defined)
 (label dgm already defined)
 
-    Result                           # of obs.
+    Result                      Number of obs
     -----------------------------------------
-    not matched                             0
-    matched                                 9  (_merge==3)
+    Not matched                             0
+    Matched                                 9  (_merge==3)
     -----------------------------------------
 
 . assert _merge==3

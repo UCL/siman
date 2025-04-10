@@ -79,7 +79,7 @@ if ${detail} == 1 siman zipplot, by(estimand)
 if ${detail} == 1 siman zipplot, by(method) 
 
 siman analyse
-siman table
+siman table, tabdisp
 
 siman lollyplot
 

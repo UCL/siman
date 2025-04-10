@@ -18,8 +18,8 @@ siman swarm if float(beta)==float(0) & float(pmiss)==float(0.2) & estim=="effect
 siman scatter if float(beta)==float(0) & float(pmiss)==float(0.2) & estim=="effect"
 
 siman analyse 
-siman table
+siman table, tabdisp
 
-siman table bias empse cover if float(beta)==float(0) & float(pmiss)==float(0.2) & mech==1 & estim=="effect"
+siman table bias empse cover if float(beta)==float(0) & float(pmiss)==float(0.2) & mech==1 & estim=="effect", tabdisp
 siman lollyplot if float(beta)==float(0) & float(pmiss)==float(0.2) & estim=="effect", legend(row(1))
 siman nestloop if estim=="effect", legend(row(1)) stagger(.05) lcol(red blue green)
