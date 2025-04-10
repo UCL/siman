@@ -1,4 +1,5 @@
-*!	version 0.11.5	08apr2025	
+*!	version 0.11.6	10apr2025	
+*	version 0.11.6	10apr2025	IW correct table footnote
 *	version 0.11.5	08apr2025	IW no version, call tabdisp or table according to Stata version, new default arrangement of variables
 *	version 0.11.4	17mar2025	IW better fail if too many dgmvars
 *	version 0.11.3	11mar2025	IW catch no valid PMs; don't show PM if only one; new nomcse option; pass options to tabdisp; remove stubwidth(20)
@@ -205,8 +206,12 @@ if !mi("`pause'") {
 `tablecommand'
 
 * print the cilevel
-qui count if inlist(_perfmeascode,"Cover":perfl,"Power":perfl)
-if r(N) di as text "Note: Coverage and Power calculated at `cilevel'% level"
+qui count if _perfmeascode == "Cover":perfl
+local hascover = r(N)>0
+qui count if _perfmeascode == "Power":perfl
+local haspower = r(N)>0
+local covpow = cond(`hascover',"Coverage","")+cond(`hascover'&`haspower'," and ","")+cond(`haspower',"Power","")
+if `hascover' | `haspower' di as text "Note: `covpow' calculated at `cilevel'% level"
 if !mi("`mcci'") & !mi("`table'") di as text "Note: Monte Carlo CIs calculated at `mclevel'% level"
 
 * if mcses or mccis are reported, print the following note
