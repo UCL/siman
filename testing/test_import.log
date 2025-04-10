@@ -239,7 +239,7 @@ trimfill  |
       Mse |  .0661193           
     Cover |         1           
 --------------------------------
-Note: Coverage and Power calculated at 95% level
+Note: Coverage calculated at 95% level
 Note: where there are multiple entries in the table, they are the estimated performance measure,
   followed by its Monte Carlo standard error
 
