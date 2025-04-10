@@ -3,7 +3,7 @@
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_nestloop##syntax"}{...}
 {viewerjumpto "Description" "siman_nestloop##description"}{...}
-{viewerjumpto "Example" "siman_nestloop##example"}{...}
+{viewerjumpto "Examples" "siman_nestloop##examples"}{...}
 {viewerjumpto "References" "siman_nestloop##references"}{...}
 {viewerjumpto "Authors" "siman_nestloop##authors"}{...}
 {title:Title}
@@ -112,8 +112,8 @@ of interest is considered first, and so forth.  Further guidance can be found in
 {help siman setup} and {help siman analyse} need to be run first before {bf:siman nestloop}.
 
 
-{marker example}{...}
-{title:Example}
+{marker examples}{...}
+{title:Examples}
 
 {pstd}Read and set up data
 

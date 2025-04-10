@@ -3,7 +3,7 @@
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_scatter##syntax"}{...}
 {viewerjumpto "Description" "siman_scatter##description"}{...}
-{viewerjumpto "Example" "siman_scatter##examples"}{...}
+{viewerjumpto "Examples" "siman_scatter##examples"}{...}
 {viewerjumpto "Authors" "siman_scatter##authors"}{...}
 {title:Title}
 
@@ -52,8 +52,8 @@ The {cmd:siman scatter} plots help the user to look for bivariate outliers.
 {help siman setup} must be run before {cmd:siman scatter}.
 
 
-{marker example}{...}
-{title:Example}
+{marker examples}{...}
+{title:Examples}
 
 {pstd} An example estimates data set with 3 DGMs (MCAR, MAR, MNAR) and 3 methods (Full, CCA, MI) 
 with 1000 repetitions named simcheck.dta available on the {cmd: siman} GitHub repository {browse "https://github.com/UCL/siman/":here}.
