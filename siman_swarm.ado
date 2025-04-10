@@ -1,7 +1,7 @@
-*!	version 0.11.6	8apr2025	
-*	version 0.11.6	8apr2025	IW use Stata15 syntax
-*	version 0.11.5	2apr2025	IW graphs are now sorted by rep
-*	version 0.11.4	2jan2025	IW correct the count of #panels	
+*!	version 0.11.6	08apr2025	
+*	version 0.11.6	08apr2025	IW use Stata15 syntax
+*	version 0.11.5	02apr2025	IW graphs are now sorted by rep
+*	version 0.11.4	02jan2025	IW correct the count of #panels	
 *	version 0.11.3	25oct2024	IW/TM allow only 1 method
 *	version 0.11.2	25oct2024	IW Default by() ignores non-varying variables
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option

@@ -1,5 +1,5 @@
 *!	version 0.11.4	12mar2025	
-*!	version 0.11.4	12mar2025	IW bug fix - didn't generate CIs when dfvar was present but with missing value
+*	version 0.11.4	12mar2025	IW bug fix - didn't generate CIs when dfvar was present but with missing value
 *	version 0.11.3	02jan2025	IW new coverlevel() option
 *	version 0.11.2	11nov2024	IW handle case of no byvar
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; drop PMs

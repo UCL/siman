@@ -1,5 +1,5 @@
-*!	version 0.11.5	8apr2025	
-*	version 0.11.5	8apr2025	IW no version, call tabdisp or table according to Stata version, new default arrangement of variables
+*!	version 0.11.5	08apr2025	
+*	version 0.11.5	08apr2025	IW no version, call tabdisp or table according to Stata version, new default arrangement of variables
 *	version 0.11.4	17mar2025	IW better fail if too many dgmvars
 *	version 0.11.3	11mar2025	IW catch no valid PMs; don't show PM if only one; new nomcse option; pass options to tabdisp; remove stubwidth(20)
 *	version 0.11.2	28oct2024	IW implement new concise option
