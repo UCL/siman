@@ -1,9 +1,10 @@
-*! 	v0.11	27mar2025 	
+*! 	v0.11.1	11apr2025 	
+* 	v0.11.1	11apr2025 	IW remove unwanted output, add level(), call siman describe
 * 	v0.11	27mar2025 	IW	Broaden to include missing dgm/target/method and all method types; test properly
 * 	v0.1 	28oct2024 	IW 	Rough starter
 
 prog def siman_import
-syntax, perf(varname string) estimate(varname numeric) [dgm(varlist) target(varname) method(varname) se(varname numeric) true(varname numeric)]
+syntax, Perf(varname string) ESTimate(varname numeric) [Dgm(varlist) Target(varname) Method(varname) se(varname numeric) True(varname numeric) Level(real 0)]
 
 // Create locals to store characteristics
 
@@ -37,14 +38,23 @@ if !mi("`method'") {
 }
 
 * PMs - uses list from simsum of PMs allowed
-replace `perf' = "estreps" if `perf' == "bsims"
-replace `perf' = "sereps" if `perf' == "sesims"
+qui replace `perf' = "estreps" if `perf' == "bsims"
+qui replace `perf' = "sereps" if `perf' == "sesims"
 local pmsallowed estreps sereps bias pctbias mean empse relprec mse rmse modelse ciwidth relerror cover power 
-levelsof `perf', local(pmsindata) clean
+qui levelsof `perf', local(pmsindata) clean
 local pmsbad : list pmsindata - pmsallowed
 if !mi("`pmsbad'") {
 	di as error "Performance measures not allowed: `pmsbad'"
 	exit 498
+}
+local pmsneedlevel cover power
+local pmsneedlevel : list pmsindata & pmsneedlevel
+if !mi("`pmsneedlevel'") { // set characteristic cilevel
+	if `level'==0 {
+		local level $S_level
+		di as text "Assuming coverage/power were calculated at `level'% level"
+	}
+	local cilevel `level'
 }
 
 * Estimates 
@@ -64,14 +74,15 @@ gen _rep = - rep0
 labelit _rep `perf' // IW command below
 drop rep0
 local rep _rep
-rename `perf' _perfmeascode
+qui rename `perf' _perfmeascode
 
 // Store as siman characteristics
-local cilevel $S_level
 local allthings dgm ndgmvars dgmmissingok target numtarget targetnature valtarget method nummethod methodnature valmethod methodcreated estimate se rep true setuprun analyserun secreated cilevel allthings
 foreach char of local allthings {
 	char _dta[siman_`char'] ``char''
 }
+
+siman describe
 
 end
 

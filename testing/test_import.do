@@ -43,21 +43,20 @@ save zres, replace
 
 // test with all going well
 use zres, clear
-siman_import, dgm(theta tau2 k) target(target) method(method) estimate(est) perf(perfmeas)
-siman des
+siman import, dgm(theta tau2 k) target(target) method(method) estimate(est) perf(perfmeas)
 siman table if theta==1 & tau2==0 & k==5, column(_perfmeas target) tabdisp
 siman nes mean if target==1 & inlist(method,"peto" ,"g2")
 
 // test with different varnames
 use zres, clear
 rename (theta tau2 k target method est perfmeas) (my=)
-siman_import, dgm(mytheta mytau2 myk) target(mytarget) method(mymethod) estimate(myest) perf(myperfmeas)
+siman import, dgm(mytheta mytau2 myk) target(mytarget) method(mymethod) estimate(myest) perf(myperfmeas)
 
 // test with wrong PM name
 use zres, clear
 replace perfmeas="meav" if perfmeas=="mean"
 tab perfmeas
-cap noi siman_import, dgm(theta tau2 k) target(target) method(method) estimate(est) perf(perfmeas)
+cap noi siman import, dgm(theta tau2 k) target(target) method(method) estimate(est) perf(perfmeas)
 cap assert _rc==498
 
 erase zres.dta
@@ -72,7 +71,11 @@ siman table, col(dgm method) tabdisp
 siman lol, name(lolly1,replace)
 
 // "export" "to non-siman-format
-siman_unset
+* could use siman_unset
+local allthings : char _dta[siman_allthings]
+foreach thing in `allthings' {
+    char _dta[siman_`thing']
+}
 keep if rep<0
 drop rep _dataset N df
 rename _true true
@@ -80,11 +83,14 @@ rename _perfmeascode pm
 
 // import to siman
 pda
-siman_import, perf(pm) dgm(dgm) method(method) estimate(b) se(se) true(true)
+siman import, perf(pm) dgm(dgm) method(method) estimate(b) se(se) true(true)
 siman table, col(dgm method) tabdisp
 siman lol, name(lolly2,replace)
 
 * compare lolly1 and lolly2
 * compare results for both runs
+
+
+di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 
 log close

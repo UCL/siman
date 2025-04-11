@@ -25,7 +25,7 @@
 
 {pstd}Descriptive graphs of results using estimates data
 
-{p2col:{bf:{help siman scatter}}}scatter plots of standard error against point estimate
+{p2col:{bf:{help siman scatter}}}scatter plot of standard error against point estimate
 
 {p2col:{bf:{help siman comparemethodsscatter}}}scatter plot of point estimates and/or standard errors obtained 
 from different methods when multiple methods have been applied to the same simulated data sets
@@ -40,9 +40,9 @@ from different methods when multiple methods have been applied to the same simul
 
 {p2col:{bf:{help siman analyse}}}creates performance statistics data set from the estimates data set, and can hold both in memory
 
-{p2col:{bf:{help siman table}}}tabulates performance statistics
+{pstd}Graphs and tables of performance statistics
 
-{pstd}Graphs of performance statistics
+{p2col:{bf:{help siman table}}}tabulates performance statistics
 
 {p2col:{bf:{help siman lollyplot}}}lollyplot of performance statistics with Monte Carlo confidence intervals
 
@@ -51,6 +51,8 @@ from different methods when multiple methods have been applied to the same simul
 {pstd}Utilities
 
 {p2col:{bf:siman which}}reports the version number and date for each siman subcommand
+
+{p2col:{bf:{help siman import}}}imports a user's dataset of performance statistics, bypassing {help siman setup} and {help siman analyse}
 
 {pstd}Subcommands may be abbreviated to 3 or more characters, and {cmd:comparemethodsscatter} may be abbreviated to {cmd:cms}.
 

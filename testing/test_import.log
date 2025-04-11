@@ -80,12 +80,8 @@ file zres.dta saved
 . // test with all going well
 . use zres, clear
 
-. siman_import, dgm(theta tau2 k) target(target) method(method) estimate(est) perf(perfmeas)
-(0 real changes made)
-(0 real changes made)
-bias cover mean mse
-
-. siman des
+. siman import, dgm(theta tau2 k) target(target) method(method) estimate(est) perf(perfmeas)
+Assuming coverage/power were calculated at 95% level
 
                    SUMMARY OF DATA
 _____________________________________________________
@@ -252,11 +248,38 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . rename (theta tau2 k target method est perfmeas) (my=)
 
-. siman_import, dgm(mytheta mytau2 myk) target(mytarget) method(mymethod) estimate(myest) perf(myper
+. siman import, dgm(mytheta mytau2 myk) target(mytarget) method(mymethod) estimate(myest) perf(myper
 > fmeas)
-(0 real changes made)
-(0 real changes made)
-bias cover mean mse
+Assuming coverage/power were calculated at 95% level
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       mytheta (4) mytau2 (4) myk (3) 
+  Total number of DGMs:           48
+
+Targets
+  Variable containing targets:    mytarget
+  Number of targets:              2
+  Target values:                  1 2
+
+Methods
+  Variable containing methods:    mymethod
+  Number of methods:              12
+  Method values:                  expect fem g2 limf limr mh peters peto rem sfem srem trimfill
+
+Repetition-level output
+  Point estimate variable:        myest
+  SE variable:                    N/A
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            N/A
+
+Estimates data                    not in data
+Performance estimates             in data
+_____________________________________________________
 
 . 
 . // test with wrong PM name
@@ -276,10 +299,7 @@ bias cover mean mse
 ------------+-----------------------------------
       Total |      2,880      100.00
 
-. cap noi siman_import, dgm(theta tau2 k) target(target) method(method) estimate(est) perf(perfmeas)
-(0 real changes made)
-(0 real changes made)
-bias cover meav mse
+. cap noi siman import, dgm(theta tau2 k) target(target) method(method) estimate(est) perf(perfmeas)
 Performance measures not allowed: meav
 
 . cap assert _rc==498
@@ -391,7 +411,12 @@ siman lollyplot will draw 1 graph with 9 panels (3 PMs by 3 DGMs)
 
 . 
 . // "export" "to non-siman-format
-. siman_unset
+. * could use siman_unset
+. local allthings : char _dta[siman_allthings]
+
+. foreach thing in `allthings' {
+  2.     char _dta[siman_`thing']
+  3. }
 
 . keep if rep<0
 (0 observations deleted)
@@ -406,10 +431,37 @@ siman lollyplot will draw 1 graph with 9 panels (3 PMs by 3 DGMs)
 . // import to siman
 . pda
 
-. siman_import, perf(pm) dgm(dgm) method(method) estimate(b) se(se) true(true)
-(0 real changes made)
-(0 real changes made)
-bias ciwidth cover empse estreps mean modelse mse pctbias power relerror relprec rmse sereps
+. siman import, perf(pm) dgm(dgm) method(method) estimate(b) se(se) true(true)
+Assuming coverage/power were calculated at 95% level
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (3) 
+  Total number of DGMs:           3
+
+Targets
+  Variable containing targets:    N/A
+  Number of targets:              
+  Target values:                  
+
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  Full CCA MI
+
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
+
+Estimates data                    not in data
+Performance estimates             in data
+_____________________________________________________
 
 . siman table, col(dgm method) tabdisp
 
@@ -471,5 +523,10 @@ siman lollyplot will draw 1 graph with 9 panels (3 PMs by 3 DGMs)
 . 
 . * compare lolly1 and lolly2
 . * compare results for both runs
+. 
+. 
+. di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
+*** SIMAN HAS PASSED ALL THE TESTS IN test_import.do ***
+
 . 
 . log close
