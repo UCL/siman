@@ -131,19 +131,22 @@ rename _perfmeascodeorder _perfmeascode
 
 * sort out numbers of variables to be tabulated, and their levels
 if `methodcreated' local method
-* identify non-varying dgm - NB keep if varying in data but not in sample
+* identify non-varying dgm
+* NB for table, keep if varying in data even if constant in sample
+*    for tabdisp, keep if varying in sample
+local ifset = cond(mi("`tabdisp'"),"","if `touse'")
 if !mi("`dgm'") {
 	foreach onedgmvar in `dgm' {
-		qui levelsof `onedgmvar', `dgmmissingok'
+		qui levelsof `onedgmvar' `ifset', `dgmmissingok'
 		if r(r)>1 local newdgmvars `newdgmvars' `onedgmvar'
 	}
 }
 if !mi("`target'") {
-	qui levelsof `target'
+	qui levelsof `target' `ifset'
 	if r(r)==1 local target
 }
 if !mi("`method'") {
-	qui levelsof `method'
+	qui levelsof `method' `ifset'
 	if r(r)==1 local method
 }
 
@@ -167,7 +170,18 @@ if "`row'"=="" {
 	local row _perfmeascode
 	local row : list row - column
 }
+else if !mi("`tabdisp'") {
+	local nrowvars = wordcount("`row'")>1 
+	if `nrowvars'>1 { // move other rowvars to by
+		local nrowvars =  wordcount("`row'")
+		local row : word `nrowvars' of "`row'"
+	}
+}
 local by : list myfactors - column
+if mi("`row'") {
+	local nbyvars = wordcount("`by'")
+	local row : word `nbyvars' of "`by'"
+}
 local by : list by - row
 if wordcount("`by'")>4 & !mi("`tabdisp'") {
 	di as error "There are too many factors to display. Consider using an if condition for your dgm."
