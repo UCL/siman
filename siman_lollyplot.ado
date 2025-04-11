@@ -258,7 +258,6 @@ foreach j of local methodlevels {
 	if mi("`msym`i''") & `i'==1 local msym`i' O
 	else if mi("`msym`i''") & `i'>1 local msym`i' `msym`=`i'-1''
 }
-
 * HANDLE PERFORMANCE MEASURES
 * relprec = 0 for reference method
 qui replace `estimate' = 0 if _perfmeascode=="relprec" & mi(`estimate')
@@ -364,11 +363,12 @@ foreach thistarget of local targetlevels {
 	local i 1
 	local graphorder
 	foreach thismethod of local methodlevels {
+		di "mfcol`i' = `mfcol`i''"
 		local graphorder `graphorder' `=4*`i'-3' "`methlegitem'`label`i''"
-		* main marker
-		local graph_cmd `graph_cmd' scatter `method' `estimate' ///
-			if `method'==`thismethod' `andtargetcond', pstyle(p`i') mlabstyle(p`i') ///
-			mcol(`mcol`i'') mfcol(`mfcol`i'') msym(`msym`i'') `mlabel' mlabpos(12) mlabcol(`mcol`i'') ||
+		* line from ref to main marker
+		local graph_cmd `graph_cmd' rspike `estimate' `ref' `method' ///
+			if `method'==`thismethod' `andtargetcond', pstyle(p`i') ///
+			horiz lcol(`mcol`i'') ||
 		* brackets for LCL and UCL
 		local graph_cmd `graph_cmd' scatter `method' `lci' ///
 			if `method'==`thismethod' `andtargetcond', pstyle(p`i') ///
@@ -376,10 +376,10 @@ foreach thistarget of local targetlevels {
 		local graph_cmd `graph_cmd' scatter `method' `uci' ///
 			if `method'==`thismethod' `andtargetcond', pstyle(p`i') ///
 			mlabcol(`mcol`i'') msym(i) mlab(`r') mlabpos(0) ||
-		* line from ref to main marker
-		local graph_cmd `graph_cmd' rspike `estimate' `ref' `method' ///
-			if `method'==`thismethod' `andtargetcond', pstyle(p`i') ///
-			horiz lcol(`mcol`i'') ||
+		* main marker
+		local graph_cmd `graph_cmd' scatter `method' `estimate' ///
+			if `method'==`thismethod' `andtargetcond', pstyle(p`i') mlabstyle(p`i') ///
+			mcol(`mcol`i'') mfcol(`mfcol`i'') msym(`msym`i'') `mlabel' mlabpos(12) mlabcol(`mcol`i'') ||
 		local ++i
 	}
 	if !mi("`saving'") local savingopt saving(`"`saving'_`thistargetname'"'`savingopts')
