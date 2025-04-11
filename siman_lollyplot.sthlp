@@ -40,7 +40,7 @@ Alternatively, {cmd:labformat(none)} removes the marker labels.{p_end}
 {synopt:{opt dgmti:tle}{cmd:(on|off)}}controls whether the top title shows the names of the DGM variables.
 The default is {cmd:dgmtitle(on)} with one DGM variable and {cmd:dgmtitle(off)} with more than one DGM variable.{p_end}
 {syntab:Calculation options}
-{synopt:{opt l:evel(#)}}sets the level for Monte Carlo confidence intervals. Default is the current level (taken from c(level); see {help level}).{p_end}
+{synopt:{opt mcl:evel(#)}}sets the level for Monte Carlo confidence intervals. Default is the current level (taken from c(level); see {help level}).{p_end}
 {synopt:{opt logit}}calculates Monte Carlo confidence intervals for power and coverage on the logit scale. This
 ensures that Monte Carlo confidence intervals lie between 0 and 100 (typically only important with small numbers
 of repetitions).{p_end}
@@ -114,6 +114,13 @@ If {cmd:siman lollyplot} fails with the error "Too many sersets", try again afte
 here we select which performance measures are displayed, draw the graph for only one estimand, and round the labels for modelse to 3 decimal places
 
 {phang}. {stata  siman lollyplot modelse power cover if estimand=="beta", labf(%6.3f)}
+
+{pstd}Saving the graphs: this command names the graphs as mylolly_beta and mylolly_gamma
+(for the two targets beta and gamma). It saves them to disk in Stata format as
+mylolly_beta.gph and mylolly_gamma.gph, and exports them in JPEG format as
+mylolly_beta.jpg and mylolly_gamma.jpg.
+
+{phang}. {stata siman lollyplot, name(mylolly) saving(mylolly) export(jpg)}
 
 
 {marker reference}{...}

@@ -23,7 +23,7 @@
 ******************************************************************************************************************************************************
 
 program define siman_scatter
-version 16
+version 15
 
 syntax [varlist(default=none max=2)] [if][in] [, BY(varlist) BYGRaphoptions(string) name(passthru) debug pause *]
 

@@ -12,25 +12,8 @@
 Warning: missing values in df()
 siman analyse has run successfully
 
-----------------------------------------
-Missing   |
-data      |            method           
-mechanism |     Full       CCA        MI
-----------+-----------------------------
-     MCAR |     94.9      94.7      94.7
-          | .6956938  .7084563  .7084563
-          | 
-      MAR |     93.5      94.9      94.4
-          | .7795832  .6956938  .7270762
-          | 
-     MNAR |     94.3      95.5      93.4
-          | .7331505  .6555532  .7851368
-----------------------------------------
-Note: coverage and power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo error
-
 . save z0, replace
+(file z0.dta not found)
 file z0.dta saved
 
 . 
@@ -50,25 +33,8 @@ file z0.dta saved
 Warning: missing values in df()
 siman analyse has run successfully
 
-----------------------------------------
-Missing   |
-data      |            method           
-mechanism |     Full       CCA        MI
-----------+-----------------------------
-     MCAR |     94.9      94.7      94.7
-          | .6956938  .7084563  .7084563
-          | 
-      MAR |     93.5      94.9      94.4
-          | .7795832  .6956938  .7270762
-          | 
-     MNAR |     94.3      95.5      93.4
-          | .7331505  .6555532  .7851368
-----------------------------------------
-Note: coverage and power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo error
-
 . save z1, replace
+(file z1.dta not found)
 file z1.dta saved
 
 . 
@@ -88,25 +54,8 @@ file z1.dta saved
 Warning: missing values in df()
 siman analyse has run successfully
 
-----------------------------------------
-Missing   |
-data      |            method           
-mechanism |     Full       CCA        MI
-----------+-----------------------------
-     MCAR |     97.2      97.3      97.5
-          | .5216898  .5125521  .4937104
-          | 
-      MAR |     96.7      99.1      96.8
-          | .5648985  .2986472  .5565606
-          | 
-     MNAR |     97.9      97.7      96.2
-          | .4534202  .4740362  .6046158
-----------------------------------------
-Note: coverage and power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo error
-
 . save z2, replace
+(file z2.dta not found)
 file z2.dta saved
 
 . 
@@ -125,25 +74,8 @@ file z2.dta saved
 Warning: missing values in df()
 siman analyse has run successfully
 
-----------------------------------------
-Missing   |
-data      |            method           
-mechanism |     Full       CCA        MI
-----------+-----------------------------
-     MCAR |     97.7      97.4      97.2
-          | .4740362  .5032294  .5216898
-          | 
-      MAR |     96.8      95.8      97.6
-          | .5565606  .6343183  .4839836
-          | 
-     MNAR |     96.4      97.8      97.2
-          | .5891009  .4638531  .5216898
-----------------------------------------
-Note: coverage and power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo error
-
 . save z3, replace
+(file z3.dta not found)
 file z3.dta saved
 
 . 
@@ -157,10 +89,10 @@ file z3.dta saved
 . rename b b1
 
 . merge 1:1 _n using z2
-(label dgm already defined)
-(label indilab already defined)
-(label method already defined)
 (label _dataset already defined)
+(label method already defined)
+(label indilab already defined)
+(label dgm already defined)
 
     Result                      Number of obs
     -----------------------------------------
@@ -175,10 +107,10 @@ file z3.dta saved
 . rename b b2
 
 . merge 1:1 _n using z3
-(label dgm already defined)
-(label indilab already defined)
-(label method already defined)
 (label _dataset already defined)
+(label method already defined)
+(label indilab already defined)
+(label dgm already defined)
 
     Result                      Number of obs
     -----------------------------------------

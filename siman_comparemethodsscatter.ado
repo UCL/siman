@@ -47,7 +47,7 @@
 ******************************************************************************************************************************************************
 
 program define siman_comparemethodsscatter
-version 16
+version 15
 
 syntax [anything] [if][in] [, COMbine MATrix COLLapse(varlist) /// main options
 	METHlist(string) noEQuality SUBGRaphoptions(string) * /// graph options

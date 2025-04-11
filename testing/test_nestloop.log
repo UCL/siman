@@ -88,7 +88,7 @@ Performance estimates             not in data
 _____________________________________________________
 
 . 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop bias, lcol(black red blue) 
@@ -143,7 +143,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop if estimand=="effect", lcol(black red blue) xtitle("") xlabel(none) stagger(0.03) 
@@ -257,7 +257,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mstring,replace)
@@ -322,7 +322,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mlabalpha,replace)
@@ -384,7 +384,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mlabdata,replace)
@@ -460,7 +460,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(munlabelled,replace)
@@ -537,7 +537,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(munlabplus10,replace)
@@ -604,7 +604,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) stagger(0.0
@@ -706,7 +706,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop bias, name(sn4,replace)
@@ -757,7 +757,7 @@ Estimates data                    in data
 Performance estimates             not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop bias, name(sn5,replace) saving(sn5s , replace) export(pdf, replace)

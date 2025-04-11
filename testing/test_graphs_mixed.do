@@ -18,6 +18,7 @@ set linesize 100
 
 // START TESTING
 log using `filename'_which, replace text
+version
 siman which
 log close
 
@@ -78,6 +79,7 @@ if ${detail} == 1 siman zipplot, by(estimand)
 if ${detail} == 1 siman zipplot, by(method) 
 
 siman analyse
+siman table, tabdisp
 
 siman lollyplot
 
@@ -172,8 +174,8 @@ drop expfem exprem expmh msefem mserem msemh msepeto mseg2 mselimf covfem covrem
 
 siman setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)
 
-* siman analyse needs force option to cope with only 1 repetition per dgm [NB gets many lines of red output, suppressed by cap], and notable option because siman table fails
-cap siman analyse, force notable
+* siman analyse needs force option to cope with only 1 repetition per dgm [NB gets many lines of red output, suppressed by cap]
+cap siman analyse, force
 assert _rc == 0
 
 * Recreating Gerta's graph, Figure 2

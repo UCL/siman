@@ -1,5 +1,5 @@
 *!	version 0.11.6	01apr2025	
-*!	version 0.11.6	01apr2025	TM added faint default gridlines at (0 100) [when no ymin is specified] or at (100) [when ymin(#) uses #<0]
+*	version 0.11.6	01apr2025	TM added faint default gridlines at (0 100) [when no ymin is specified] or at (100) [when ymin(#) uses #<0]
 *	version 0.11.5	31mar2025	TM moved default placement of by() note to clock pos 11 to make more prominent (based on feedback)
 *	version 0.11.4	12mar2025	IW bug fix - didn't generate CIs when dfvar was present but with missing value
 *	version 0.11.3	02jan2025	IW new coverlevel() option
@@ -119,12 +119,12 @@ if !mi("`df'") { // there's a df variable - but it may be missing
 else gen `critval' = invnorm(`level2') // no df variable
 if mi("`lci'") {
 	tempvar lci
-	gen `lci' = `estimate' - `se'*`critval'
+	qui gen `lci' = `estimate' - `se'*`critval'
 	label var `lci' "lci"
 }
 if mi("`uci'") {
 	tempvar uci
-	gen `uci' = `estimate' + `se'*`critval'
+	qui gen `uci' = `estimate' + `se'*`critval'
 	label var `uci' "uci"
 }
 drop `critval'
@@ -151,8 +151,8 @@ label var `covers' "covers"
 		
 * create sort order
 tempvar zstat rank
-if !mi("`se'") gen float `zstat' = -abs(`estimate'-`true')/`se'
-else gen float `zstat' = -abs(`estimate'-`true')/abs(`uci'-`lci')
+if !mi("`se'") qui gen float `zstat' = -abs(`estimate'-`true')/`se'
+else qui gen float `zstat' = -abs(`estimate'-`true')/abs(`uci'-`lci')
 sort `by' `zstat' // check: was sorted by by true zstat
 drop `zstat'
 qui bysort `by': gen double `rank' = 100*(1 - _n/_N)

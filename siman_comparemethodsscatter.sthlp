@@ -44,9 +44,9 @@ overlaying estimates or standard errors for different values of {cmd:dgmvar1}.{p
 
 {syntab:Graph options}
 {synopt:{opt meth:list(string)}}specifies a subgroup of methods, and their order, to be graphed.
-For example, in a dataset with methods A, B, C and D, the option {bf: methlist(B D)}, which would plot 
-graphs for B vs. D, the same as using {bf:if method=="B" | method=="D"}. 
-But the option {bf: methlist(D B)} would also change the ordering of the graphs.
+For example, in a dataset with methods A, B, C and D, the option {cmd:methlist(B D)}, which would plot 
+graphs for B vs. D, the same as using {cmd:if method=="B" | method=="D"};
+but the option {cmd:methlist(D B)} would also change the ordering of the graphs.
 {it:string} may be a numlist if method is numeric.{p_end}
 {synopt:{opt noeq:uality}}does not draw the line of equality when the combine method is used. The line of equality 
 is never drawn when the matrix method is used.{p_end}

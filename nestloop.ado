@@ -1,4 +1,4 @@
-*!	version 0.12.2	17mar2025	
+*!	version 0.12.3	31mar2025	IW legend() is parsed, giving better defaults and handling of pos() rows() cols(); lcolor() etc. respect = and ..
 *	version 0.12.2	17mar2025	IW bug fix: graphs were mislabelled in legend with true()
 *	version 0.12.1	13mar2025	IW bug fix: graphs were mislabelled in legend if no true()
 *   version 0.12.0	7jan2025	TM improved how 'true' line is drawn and introduced new option 'trueoptions()'
@@ -13,7 +13,7 @@ syntax varname [if], DESCriptors(string) METHod(varname) ///
 	DGSIze(real 0.3) DGGAp(real 0) /// control sizing of descriptor graph
 	DGINnergap(real 3) DGCOlor(string) MISsing /// control descriptor graph
 	DGPAttern(string) DGLAbsize(string) DGSTyle(string) DGLWidth(string) /// control descriptor graph
-	LColor(string) LPattern(string) LSTYle(string) LWidth(string) /// twoway options for main graph
+	LColor(string) LPattern(string) LSTYle(string) LWidth(string) legend(string) /// twoway options for main graph
 	METHLEGend(string) SCENariolabel * /// other graph options
 	NAMe(string) SAVing(string) EXPort(string) /// twoway options for overall graph
 	debug pause nodg /// undocumented
@@ -50,6 +50,8 @@ else if "`methlegend'"!="" {
 	di as error "Syntax: methlegend(item|title)"
 	exit 198
 }
+
+local graphoptions `options'
 
 *** END OF PARSING ***
 
@@ -226,11 +228,11 @@ local legno 0
 if !mi("`true'") {
 	local main_graph_cmd (line `true' `scenario', c(`connect') lc(gs10) lw(medthick) `trueopts')
 	local ++legno
-	local legend `legend' `legno' `"True"'
+	local legendorder `legendorder' `legno' `"True"'
 }
 else {
 	local main_graph_cmd
-	local legend
+	local legendorder
 }
 forvalues k = 1 / `nmethods' {
 	//local istruevar = `k'>`nmethods' // handle "true" (if present) differently from the methods
@@ -239,16 +241,32 @@ forvalues k = 1 / `nmethods' {
 	//if `istruevar' local thisgraphcmd line `true' `scenario', c(`connect')
 	local thisgraphcmd line `estimate' `xvar' if `method'==`m2`k'', c(`connect')
 	foreach thing in lcolor lpattern lstyle lwidth {
-		local this : word `k' of ``thing''
+		if "`repeat`thing''"=="yes" local this `previous`thing''
+		else {
+			local this : word `k' of ``thing''
+			if "`this'"=="..." local this ..
+			if "`this'"==".." local repeat`thing' yes
+			if "`previous`thing''"==".." | "`this'"==".." | "`this'"=="=" local this `previous`thing''
+			else local previous`thing' `this'
+			}
 		if !mi("`this'") local thisgraphcmd `thisgraphcmd' `thing'(`this')
 	}
 	local main_graph_cmd `main_graph_cmd' (`thisgraphcmd')
-	//if `istruevar' local legend `legend' `k' `"True"'
+	//if `istruevar' local legendorder `legendorder' `k' `"True"'
 	local ++legno
-	local legend `legend' `legno' `"`methlegitem'`m`k''"'
+	local legendorder `legendorder' `legno' `"`methlegitem'`m`k''"'
 }
 local ytitle : var label `estimate'
 if mi("`ytitle'") local ytitle `estimate'
+
+// PARSE LEGEND
+local 0 , `legend'
+syntax, [POSition(int 6) Cols(int 0) Rows(int 0) *]
+local legendopts `options' position(`position')
+if `rows'>0 local legendopts `legendopts' rows(`rows') // rows overrides cols in Stata
+else if `cols'>0 local legendopts `legendopts' cols(`cols')
+else if inlist(`position',2,3,4,8,9,10) local legendopts `legendopts' cols(1)
+else local legendopts `legendopts' rows(1)
 
 // draw main graph
 if !mi("`saving'") local savingopt saving(`saving'`savingopts')
@@ -256,13 +274,13 @@ local graph_cmd graph twoway 										///
 	`main_graph_cmd'												///
 	`descriptor_graph_cmd'											///
 	,																///
-	legend(pos(6) row(1) order(`legend') `methlegtitle')			///
+	legend(order(`legendorder') `methlegtitle' `legendopts')		///
 	ytitle(`ytitle')												///
 	`scenarioaxis' yla(,nogrid) 									///
 	`descriptor_labels_cmd'											///
 	name(`name'`nameopts') `savingopt'	    						///
 	`note' `yline'													///
-	`options'
+	`graphoptions'
 
 if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 if !mi("`pause'") {

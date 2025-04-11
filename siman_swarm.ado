@@ -1,6 +1,7 @@
-*!	version 0.11.5	31mar2025	
-*	version 0.11.5	31mar2025	TM moved default placement of by() note to clock pos 11 to make more prominent (based on feedback)
-*	version 0.11.4	2jan2025	IW correct the count of #panels	
+*!	version 0.11.8	08apr2025	
+*	version 0.11.7	08apr2025	IW use Stata15 syntax
+*	version 0.11.6	02apr2025	IW graphs are now sorted by rep
+*	version 0.11.5	31mar2025	TM moved default placement of by() note to clock pos *	 version 0.11.4	 02jan2025   IW correct the count of #panels	
 *	version 0.11.3	25oct2024	IW/TM allow only 1 method
 *	version 0.11.2	25oct2024	IW Default by() ignores non-varying variables
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
@@ -32,7 +33,7 @@
 
 
 program define siman_swarm
-version 16
+version 15
 
 syntax [anything] [if][in] [, * nomean MEANGRaphoptions(string) BY(varlist) BYGRaphoptions(string) GRAPHOPtions(string) SCatteroptions(string) name(string) msymbol(passthru) msize(passthru) mcolor(passthru) title(passthru) note(passthru) row(passthru) col(passthru) xtitle(passthru) ytitle(passthru) debug pause gap(real .1)]
 
@@ -133,21 +134,21 @@ if mi("`by'") {
 }
 
 * For a nicer presentation and better better use of space
-sort `by' `method'
+sort `by' `method' `rep' // 2/4/2025
 if !mi("`by'") by `by': gen newidrep = _n
 else gen newidrep = _n
 summ newidrep, meanonly
 local maxnewidrep = r(max)
-sort `method' `by'
+sort `method' `by' `rep' // 1/4/2025
 by `method': gen first = _n==1
 qui replace newidrep = newidrep + `gap'*`maxnewidrep'*sum(first)
 forvalues g = 1/`nummethodnew' {
 	* if `g'==1 qui gen newidrep = `rep' if `method' == `g'
 	* else qui replace newidrep = (`rep'-1)+ ceil((`g'-1)*`step') + 1 if `method' == `g'
 	qui tabstat newidrep if `method' == `g', s(p50) save
-	qui matrix list r(StatTotal) 
-	local median`g' = r(StatTotal)[1,1]
-	local ygraphvalue`g' = ceil(`median`g'')
+	tempname result
+	matrix `result' = r(StatTotal) 
+	local ygraphvalue`g' = ceil(`result'[1,1])
 	local labelvalues `labelvalues' `ygraphvalue`g'' "`mlabel`g''"
 	if `g'==`nummethodnew' label define newidreplab `labelvalues'
 }

@@ -13,6 +13,7 @@ graph drop _all
 
 // START TESTING
 log using `filename'_which, replace text
+version
 siman which
 log close
 
@@ -38,6 +39,12 @@ gen upper=b+invnorm(.975)*se
 drop se
 siman setup, rep(re) estimate(b) dgm(beta pmi mech) target(esti) method(meth) lci(lower) uci(upper) true(true)
 siman zip if mech==1 & float(pmiss)==float(0.2) & estimand=="effect", noncov(lcol(red)) cov(lcol(blue)) sca(mcol(red)) truegr(lcol(green)) bygr(row(3)) scheme(s1color) name(g2,replace)
+
+// Check sensible answers when SE is systematically missing
+use data/simcheck.dta, clear
+replace se = . if dgm=="MAR" & method==2
+siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)
+siman zipplot
 
 di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 

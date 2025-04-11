@@ -1,4 +1,6 @@
-*!	version 0.11.2	15jan2025
+*!	version 0.11.3	11apr2025
+*	version 0.11.3	11apr2025	IW add siman import
+*	version 0.11.2	15jan2025
 *!	Type -siman which- to see versions of siman's subprograms
 * version 0.10 25jul2024  IW parsing doesn't break -siman cms se- or -siman anal,repl-
 * version 0.9  14jun2024  IW remove reshape
@@ -10,7 +12,7 @@ program define siman
 adapted from network.ado
 IW 17sep2019
 */
-version 13
+
 gettoken subcmd 0 : 0, parse(" ,")
 if "`subcmd'"=="cms" local subcmd comparemethodsscatter
 if "`subcmd'"=="comparemethodscatter" local subcmd comparemethodsscatter
@@ -23,7 +25,7 @@ foreach thing in `_dta[siman_allthings]' {
 
 // Known siman subcommands
 * subcmds requiring data not to be set
-local subcmds0 setup 
+local subcmds0 setup import
 * subcmds requiring data to be set
 local subcmds1 describe analyse analyze table scatter comparemethodsscatter swarm blandaltman zipplot lollyplot nestloop
 * subcmds not minding whether data are set

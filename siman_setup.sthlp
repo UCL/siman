@@ -56,6 +56,9 @@ Where there are multiple data-generating mechanisms, these should always be held
 ]
 
 {pstd}
+Data not meeting any {it:if} and {it:in} conditions are deleted, and the {cmd:clear} option is required to approve this.
+
+{pstd}
 Options for input data in long-long format (data format 1):
 
 {pmore}
@@ -112,7 +115,7 @@ Options for input data in wide-wide format (data format 4):
 {opt uci(stub_varname)}
 {opt p(stub_varname)}
 {opt true(#|stub_varname)}
-{opt ord:er(varname)}
+{opt ord:er(string)}
 {opt sep(string)}
 
 {pstd}
@@ -146,11 +149,11 @@ Can be omitted if there is only one method.{p_end}
 {synopt:{opt true(#|varname|stub_varname)}}the true value of each target, given as a number, 
 as the variable name (data format 1/3), or as the name of its stub (data formats 2/4). 
 The true value should be the same for all methods: this is assumed in data formats 2/3 and must be true in data formats 1/4. {p_end}
-{synopt:{opt ord:er(varname)}}only needed in wide-wide format: this must be either {it:target} or {it:method}, 
+{synopt:{opt ord:er(string)}}only needed in wide-wide format: {it:string} must be either {it:target} or {it:method}, 
 denoting that either the target stub is first or the method stub is first in the variable names. {p_end}
 {synopt:{opt clear}}clears the existing data held in memory: only needed with {cmd:if} or {cmd:in} conditions. {p_end}
 {synopt:{opt sep(string)}}a separator within wide-format variable names. 
-For example, if variables est_beta and est_gamma hold the estimates for targets  beta and gamma, 
+For example, if variables {cmd:est_beta} and {cmd:est_gamma} hold the estimates for targets {cmd:beta} and {cmd:gamma}, 
 you could code {cmd:estimate(est) sep(_) target(beta gamma)} instead of {cmd:estimate(est) target(_beta _gamma)}. {p_end}
 {synopt:{opt dgmmi:ssingok}}dgm variables may contain missing values. {p_end}
 {synoptline}
@@ -172,7 +175,7 @@ Results of the analysis typically include the {opt estimate} and its standard er
  
 {pstd}
 Four data set formats are permitted by the siman suite as detailed {help siman setup##data:above}.
-{cmd:siman setup} automatically reshapes the data into long-long format. 
+{cmd:siman setup} automatically reshapes the data into long-long format. It also converts {cmd:dgmvars} from string to numeric, or (if they have non-integer values) from float to double.
 
 {pstd}
 {cmd:siman setup} checks the data, reformats it if necessary,

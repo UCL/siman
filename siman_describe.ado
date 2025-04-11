@@ -1,5 +1,6 @@
-*	version 0.11.1	21oct2024	IW implement new dgmmissingok option
-*!	version 0.11.1	21oct2024	
+*!	version 0.11.2	27mar2025
+*	version 0.11.2	27mar2025	IW correct reporting of whether estimates in data
+*	version 0.11.1	21oct2024	IW implement new dgmmissingok option	
 *	version 0.7	14jun2024	IW streamline for longlong only; calculate #dgms without assuming factorial; remove commented out code
 * version 0.6   8may2024	IW no longer removes underscores from display
 * version 0.5.1   13mar2024
@@ -116,10 +117,10 @@ if "`truetype'" == "string" {
 	di as text "  True value variable:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A") cond("`truecreated'"=="1", " (created)", "")
 }
 else di as text "  True value:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
+cap assert `rep'<=0
 di as text _newline "Estimates data" as result _col(`colwidth') cond(_rc,"in data","not in data")
 di as text "Performance estimates" as result _col(`colwidth') cond("`analyserun'"=="1","in data","not in data")
 if !mi("`analyseif'") di as text "  Restricted to:" as result _col(`colwidth') "`analyseif'"
-cap assert `rep'<=0
 di as text "_____________________________________________________"
 
 

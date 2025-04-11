@@ -40,6 +40,7 @@ local testfiles ///
 	test_setup_target		/// test all formats of target
 	test_setup_method		/// test all formats of method
 	test_ci					/// test handling of CIs
+	test_import				/// test import program
 	test_error_messages		/// error messages
 	test_siman_widelong 	/// from wide-long
 	test_all_inputs			/// from all formats and var types

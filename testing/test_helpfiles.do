@@ -10,3 +10,8 @@ foreach cmd in blandaltman comparemethodsscatter describe lollyplot nestloop sca
 	runhelpfile using siman_`cmd'.sthlp	
 }
 * analyse help file examples aren't set up for this
+
+* erase files created by help lollyplot
+foreach file in mylolly_beta.gph  mylolly_gamma.gph mylolly_beta.jpg  mylolly_gamma.jpg {
+	cap erase `file'
+}

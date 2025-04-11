@@ -3,7 +3,7 @@
 {vieweralsosee "siman" "siman"}{...}
 {viewerjumpto "Syntax" "nestloop##syntax"}{...}
 {viewerjumpto "Description" "nestloop##description"}{...}
-{viewerjumpto "Example" "nestloop##example"}{...}
+{viewerjumpto "Examples" "nestloop##examples"}{...}
 {viewerjumpto "References" "nestloop##references"}{...}
 {viewerjumpto "Authors" "nestloop##authors"}{...}
 {title:Title}
@@ -52,8 +52,8 @@ One line will be drawn for each value of this variable (unless any are excluded 
 This is a standalone program. See {help siman nestloop} for a description of the nested loop plot, and how to use it within the siman suite.
 
 
-{marker example}{...}
-{title:Example}
+{marker examples}{...}
+{title:Examples}
 
 {pstd}Read and set up data
 
