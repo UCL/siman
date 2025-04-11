@@ -18,24 +18,24 @@
 . 
 . * reshape long-long
 . reshape long `pmtarg', i(`dgmvars') j(method) string
-(note: j = expect fem g2 limf limr mh peters peto rem sfem srem trimfill)
-(note: explimr not found)
-(note: mselimr not found)
-(note: covlimr not found)
-(note: var2limr not found)
-(note: expsfem not found)
-(note: msesfem not found)
-(note: covsfem not found)
-(note: var2sfem not found)
-(note: expsrem not found)
-(note: msesrem not found)
-(note: covsrem not found)
-(note: var2srem not found)
+(j = expect fem g2 limf limr mh peters peto rem sfem srem trimfill)
+(variable explimr not found)
+(variable mselimr not found)
+(variable covlimr not found)
+(variable var2limr not found)
+(variable expsfem not found)
+(variable msesfem not found)
+(variable covsfem not found)
+(variable var2sfem not found)
+(variable expsrem not found)
+(variable msesrem not found)
+(variable covsrem not found)
+(variable var2srem not found)
 
-Data                               wide   ->   long
+Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
-Number of obs.                       48   ->     576
-Number of variables                  52   ->      10
+Number of observations               48   ->   576         
+Number of variables                  52   ->   10          
 j variable (12 values)                    ->   method
 xij variables:
        expexpect expfem ... exptrimfill   ->   exp
@@ -48,12 +48,12 @@ xij variables:
 . rename (`pmtarg') (est=)
 
 . reshape long est, i(`dgmvars' method) j(perfmeas) string
-(note: j = bias cov exp mse var2)
+(j = bias cov exp mse var2)
 
-Data                               wide   ->   long
+Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
-Number of obs.                      576   ->    2880
-Number of variables                  10   ->       7
+Number of observations              576   ->   2,880       
+Number of variables                  10   ->   7           
 j variable (5 values)                     ->   perfmeas
 xij variables:
              estbias estcov ... estvar2   ->   est
@@ -73,7 +73,7 @@ variable perfmeas was str4 now str5
 . 
 . * save for later
 . save zres, replace
-(note: file zres.dta not found)
+(file zres.dta not found)
 file zres.dta saved
 
 . 
@@ -116,7 +116,7 @@ Estimates data                    not in data
 Performance estimates             in data
 _____________________________________________________
 
-. siman table if theta==1 & tau2==0 & k==5, column(_perfmeas target)
+. siman table if theta==1 & tau2==0 & k==5, column(_perfmeas target) tabdisp
 
 --------------------------------
 Odds      |
@@ -332,7 +332,7 @@ _____________________________________________________
 Warning: missing values in df()
 siman analyse has run successfully
 
-. siman table, col(dgm method)
+. siman table, col(dgm method) tabdisp
 
 ----------------------------------------------------------------------------------------------------
 Performa |                             method and Missing data mechanism                            
@@ -411,7 +411,7 @@ siman lollyplot will draw 1 graph with 9 panels (3 PMs by 3 DGMs)
 (0 real changes made)
 bias ciwidth cover empse estreps mean modelse mse pctbias power relerror relprec rmse sereps
 
-. siman table, col(dgm method)
+. siman table, col(dgm method) tabdisp
 
 ----------------------------------------------------------------------------------------------------
 Performa |                             method and Missing data mechanism                            

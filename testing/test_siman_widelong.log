@@ -55,7 +55,7 @@ _____________________________________________________
 . siman analyse, ref(CC)
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 ----------------------------------------------------------------------------------------------------
 Performan |                                    target and method                                    
@@ -111,7 +111,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
 . siman analyse, ref(FULLDAT) replace 
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 ----------------------------------------------------------------------------------------------------
 Performan |                                    target and method                                    
@@ -167,7 +167,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
 . siman analyse, ref(IMPALL) replace 
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 ----------------------------------------------------------------------------------------------------
 Performan |                                    target and method                                    
@@ -288,10 +288,10 @@ Debug: running command: simsum est , true(true) se(se) df() lci() uci() p() meth
 > y(true dgm estimand) max(20) bias ciwidth cover power clear mcse gen(_perfmeas)  level(80)  semiss
 > ingok
 
-Data                               wide   ->   long
+Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
-Number of obs.                       16   ->      32
-Number of variables                   9   ->       8
+Number of observations               16   ->   32          
+Number of variables                   9   ->   8           
 j variable (2 values)                     ->   method
 xij variables:
                               est1 est2   ->   est
@@ -299,7 +299,7 @@ xij variables:
 -----------------------------------------------------------------------------
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -342,19 +342,19 @@ Note: where there are multiple entries in the table, they are the estimated perf
   3.         local `pm'ref = r(mean)
   4. }
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
+    Variable |        Obs        Mean    Std. dev.       Min        Max
 -------------+---------------------------------------------------------
          est |          8   -.0005364    .0047027  -.0058509   .0065072
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
+    Variable |        Obs        Mean    Std. dev.       Min        Max
 -------------+---------------------------------------------------------
          est |          8    .2651552    .0552666   .2014349   .3359915
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
+    Variable |        Obs        Mean    Std. dev.       Min        Max
 -------------+---------------------------------------------------------
          est |          8       80.15    1.606239       78.5       83.3
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
+    Variable |        Obs        Mean    Std. dev.       Min        Max
 -------------+---------------------------------------------------------
          est |          8       19.85    1.606238       16.7       21.5
 
@@ -405,10 +405,10 @@ Debug: running command: simsum est , true(true) se(se) df() lci(lower) uci(upper
 >  id(rep) by(true dgm estimand) max(20) ciwidth cover power clear mcse gen(_perfmeas)  level(95)  s
 > emissingok
 
-Data                               wide   ->   long
+Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
-Number of obs.                       12   ->      24
-Number of variables                   9   ->       8
+Number of observations               12   ->   24          
+Number of variables                   9   ->   8           
 j variable (2 values)                     ->   method
 xij variables:
                               est1 est2   ->   est
@@ -416,7 +416,7 @@ xij variables:
 -----------------------------------------------------------------------------
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 ----------------------------------------------------
 dgm and   |
@@ -450,7 +450,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
 
 . summ est if _perfmeascode=="ciwidth"
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
+    Variable |        Obs        Mean    Std. dev.       Min        Max
 -------------+---------------------------------------------------------
          est |          8    .2651552    .0552666   .2014349   .3359915
 
@@ -461,7 +461,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
 
 . summ est if _perfmeascode=="cover"
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
+    Variable |        Obs        Mean    Std. dev.       Min        Max
 -------------+---------------------------------------------------------
          est |          8       80.15    1.606239       78.5       83.3
 
@@ -472,7 +472,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
 
 . summ est if _perfmeascode=="power"
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
+    Variable |        Obs        Mean    Std. dev.       Min        Max
 -------------+---------------------------------------------------------
          est |          8       19.85    1.606238       16.7       21.5
 
@@ -525,10 +525,10 @@ Debug: method values are 1 2
 Debug: running command: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(
 > rep) by(true dgm estimand) max(20) ciwidth power clear mcse gen(_perfmeas)  level(80)  semissingok
 
-Data                               wide   ->   long
+Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
-Number of obs.                        8   ->      16
-Number of variables                   9   ->       8
+Number of observations                8   ->   16          
+Number of variables                   9   ->   8           
 j variable (2 values)                     ->   method
 xij variables:
                               est1 est2   ->   est
@@ -536,7 +536,7 @@ xij variables:
 -----------------------------------------------------------------------------
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 ----------------------------------------------------
 dgm and   |
@@ -564,7 +564,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
 
 . summ est if _perfmeascode=="ciwidth"
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
+    Variable |        Obs        Mean    Std. dev.       Min        Max
 -------------+---------------------------------------------------------
          est |          8    .2651552    .0552666   .2014349   .3359915
 
@@ -575,7 +575,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
 
 . summ est if _perfmeascode=="power"
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
+    Variable |        Obs        Mean    Std. dev.       Min        Max
 -------------+---------------------------------------------------------
          est |          8       19.85    1.606238       16.7       21.5
 
@@ -628,10 +628,10 @@ Debug: method values are 1 2
 Debug: running command: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(
 > rep) by(true dgm estimand) max(20) ciwidth power clear mcse gen(_perfmeas)  level(95)  semissingok
 
-Data                               wide   ->   long
+Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
-Number of obs.                        8   ->      16
-Number of variables                   9   ->       8
+Number of observations                8   ->   16          
+Number of variables                   9   ->   8           
 j variable (2 values)                     ->   method
 xij variables:
                               est1 est2   ->   est
@@ -639,7 +639,7 @@ xij variables:
 -----------------------------------------------------------------------------
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 ----------------------------------------------------
 dgm and   |
@@ -667,7 +667,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
 
 . summ est if _perfmeascode=="ciwidth"
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
+    Variable |        Obs        Mean    Std. dev.       Min        Max
 -------------+---------------------------------------------------------
          est |          8    .4055199     .084523   .3080681   .5138547
 
@@ -678,7 +678,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
 
 . summ est if _perfmeascode=="power"
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
+    Variable |        Obs        Mean    Std. dev.       Min        Max
 -------------+---------------------------------------------------------
          est |          8        4.65    .7910211        3.6        5.5
 
@@ -728,7 +728,7 @@ _____________________________________________________
 siman analyse has created variable _se to hold the MCSE
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -749,7 +749,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
 
 . summ est if _perfmeascode=="bias"
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
+    Variable |        Obs        Mean    Std. dev.       Min        Max
 -------------+---------------------------------------------------------
          est |          8   -.0005364    .0047027  -.0058509   .0065072
 
@@ -764,7 +764,7 @@ Note: where there are multiple entries in the table, they are the estimated perf
 siman analyse has created variable _se to hold the MCSE
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 Performan |             estimand and method             

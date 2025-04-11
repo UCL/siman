@@ -151,7 +151,7 @@ siman zipplot will draw 1 graph with 2 panels
 . siman analyse
 siman analyse has run successfully
 
-. siman table
+. siman table, tabdisp
 
 --------------------------------------------------------
 dgm and   |
@@ -264,12 +264,12 @@ siman lollyplot will draw 2 graphs with 6 panels (3 PMs by 2 DGMs)
 . use $testpath/data/extendedtestdata.dta, clear
 
 . reshape wide b se, i(rep beta pmiss mech estimand) j(method) string
-(note: j = CCA MeanImp Noadj)
+(j = CCA MeanImp Noadj)
 
-Data                               long   ->   wide
+Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of obs.                   108000   ->   36000
-Number of variables                   9   ->      12
+Number of observations          108,000   ->   36,000      
+Number of variables                   9   ->   12          
 j variable (3 values)            method   ->   (dropped)
 xij variables:
                                       b   ->   bCCA bMeanImp bNoadj

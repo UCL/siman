@@ -8,7 +8,7 @@
   5.                 dicmd use data/setupdata_`feature'`n', clear
   6.                 if `: char _dta[siman_nummethod]' > 1 {
   7.                         dicmd siman analyse
-  8.                         siman table
+  8.                         siman table, tabdisp
   9.                         dicmd siman lollyplot, name(lollyplot_`feature'`n', replace) bygr(note(
 > Test siman lollyplot using data `feature'`n')) legend(row(1)) 
  10.                 }
@@ -2195,7 +2195,7 @@ siman analyse has run successfully
 siman lollyplot will draw 1 graph with 8 panels (4 PMs by 2 DGMs)
 
 . graph export mstring.pdf, replace
-(file mstring.pdf written in PDF format)
+file mstring.pdf saved as PDF format
 
 . ** NB name(string) gives funny error
 . 
@@ -2222,7 +2222,7 @@ siman lollyplot will draw 1 graph with 8 panels (4 PMs by 2 DGMs)
 
 . * graph should be same as mstring
 . graph export mstringplus.pdf, replace
-(file mstringplus.pdf written in PDF format)
+file mstringplus.pdf saved as PDF format
 
 . !fc mstring.pdf mstringplus.pdf > result
 
@@ -2254,7 +2254,7 @@ siman lollyplot will draw 1 graph with 8 panels (4 PMs by 2 DGMs)
 
 . * graph should be same as mstring
 . graph export mstringrev.pdf, replace
-(file mstringrev.pdf written in PDF format)
+file mstringrev.pdf saved as PDF format
 
 . !fc mstring.pdf mstringplus.pdf > result
 
@@ -2412,15 +2412,15 @@ siman analyse has run successfully
 >         saving(mylolly, replace) export(pdf, replace)
 Ignoring non-varying dgm variable beta
 siman lollyplot will draw 3 graphs with 16 panels (4 PMs by 4 DGMs)
-(note: file mylolly_effect.gph not found)
-(file mylolly_effect.gph saved)
-(file mylolly_effect.pdf written in PDF format)
-(note: file mylolly_mean0.gph not found)
-(file mylolly_mean0.gph saved)
-(file mylolly_mean0.pdf written in PDF format)
-(note: file mylolly_mean1.gph not found)
-(file mylolly_mean1.gph saved)
-(file mylolly_mean1.pdf written in PDF format)
+(file mylolly_effect.gph not found)
+file mylolly_effect.gph saved
+file mylolly_effect.pdf saved as PDF format
+(file mylolly_mean0.gph not found)
+file mylolly_mean0.gph saved
+file mylolly_mean0.pdf saved as PDF format
+(file mylolly_mean1.gph not found)
+file mylolly_mean1.gph saved
+file mylolly_mean1.pdf saved as PDF format
 
 . foreach target in effect mean0 mean1 {
   2.         erase mylolly_`target'.gph
