@@ -1,4 +1,5 @@
-*!	version 0.11.6	10apr2025	
+*!	version 0.11.7	16apr2025	
+*	version 0.11.7	16apr2025	IW make rows and columns work correctly
 *	version 0.11.6	10apr2025	IW correct table footnote
 *	version 0.11.5	08apr2025	IW no version, call tabdisp or table according to Stata version, new default arrangement of variables
 *	version 0.11.4	17mar2025	IW better fail if too many dgmvars
@@ -150,7 +151,7 @@ if !mi("`method'") {
 	if r(r)==1 local method
 }
 
-local myfactors `newdgmvars' `target' `method'
+local myfactors `newdgmvars' `target' `method' _perfmeascode
 local nfactors = wordcount("`myfactors'") + (`npms'>1)
 if !mi("`tabdisp'") & `nfactors'>7 {
 	di as error "There are too many factors to display. Consider using an if condition for your dgm."
@@ -162,25 +163,28 @@ if !mi("`debug'") di as input "Debug: factors to display: `myfactors'"
 * default approach: columns = method within target; rows = PM; by = DGMs
 * but drop anything that's single-valued across the data
 if "`column'"=="" { 
-	if !mi("`table'") local column `target' `method'
-	else local column `method' `target' 
+	local column `target' `method'
 	local column : list column - row
+}
+if !mi("`tabdisp'") & wordcount("`column'")==2 { // tabdisp has fastest-varying first
+	local column `: word 2 of `column'' `: word 1 of `column''
 }
 if "`row'"=="" {
 	local row _perfmeascode
 	local row : list row - column
 }
-else if !mi("`tabdisp'") {
-	local nrowvars = wordcount("`row'")>1 
-	if `nrowvars'>1 { // move other rowvars to by
-		local nrowvars =  wordcount("`row'")
-		local row : word `nrowvars' of "`row'"
-	}
-}
 local by : list myfactors - column
+local by : list by - row
 if mi("`row'") {
 	local nbyvars = wordcount("`by'")
-	local row : word `nbyvars' of "`by'"
+	local row : word `nbyvars' of `by'
+	local by : list by - row
+}
+local nrowvars = wordcount("`row'")
+if !mi("`tabdisp'") & `nrowvars'>1 { // move other rowvars to by
+	local tomove : word 1 of `row'
+	local row : list row - tomove
+	local by : list by | tomove
 }
 local by : list by - row
 if wordcount("`by'")>4 & !mi("`tabdisp'") {
