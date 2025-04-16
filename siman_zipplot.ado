@@ -1,4 +1,5 @@
-*!	version 0.11.4	12mar2025	
+*!	version 0.11.5	16apr2025	
+*	version 0.11.5	16apr2025	IW undocumented nosort option
 *	version 0.11.4	12mar2025	IW bug fix - didn't generate CIs when dfvar was present but with missing value
 *	version 0.11.3	02jan2025	IW new coverlevel() option
 *	version 0.11.2	11nov2024	IW handle case of no byvar
@@ -38,7 +39,7 @@ version 15
 syntax [if][in] [, * BY(varlist) ///
 	NONCOVeroptions(string) COVeroptions(string) SCAtteroptions(string) ///
 	TRUEGRaphoptions(string) BYGRaphoptions(string) SCHeme(passthru) ymin(integer 0) name(passthru) Level(cilevel) COVERLevel(cilevel) ///
-	debug pause /// undocumented
+	debug pause noSOrt /// undocumented
 	]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -148,23 +149,28 @@ gen byte `covers' = inrange(`true',`lci',`uci')
 label var `covers' "covers"
 		
 * create sort order
-tempvar zstat rank
-if !mi("`se'") qui gen float `zstat' = -abs(`estimate'-`true')/`se'
-else qui gen float `zstat' = -abs(`estimate'-`true')/abs(`uci'-`lci')
-sort `by' `zstat' // check: was sorted by by true zstat
-drop `zstat'
+if mi("`sort'") {
+	tempvar zstat
+	if !mi("`se'") qui gen float `zstat' = -abs(`estimate'-`true')/`se'
+	else qui gen float `zstat' = -abs(`estimate'-`true')/abs(`uci'-`lci')
+	sort `by' `zstat' // check: was sorted by by true zstat
+	drop `zstat'
+}
+tempvar rank
 qui bysort `by': gen double `rank' = 100*(1 - _n/_N)
 
 * Create MC conf. int. for coverage
-local coverlevel2 = 1/2+`coverlevel'/200
-tempvar cov ncov covlb covub
-qui egen `cov' = mean(`covers'), by(`by')
-qui egen `ncov' = count(`covers'), by(`by')
-gen `covlb' = 100 * (`cov' - invnorm(`coverlevel2')*sqrt(`cov'*(1-`cov')/`ncov'))
-gen `covub' = 100 * (`cov' + invnorm(`coverlevel2')*sqrt(`cov'*(1-`cov')/`ncov'))
-qui bysort `by': replace `covlb' = . if _n>1
-qui bysort `by': replace `covub' = . if _n>1
-drop `cov' `ncov'
+if mi("`sort'") {
+	local coverlevel2 = 1/2+`coverlevel'/200
+	tempvar cov ncov covlb covub
+	qui egen `cov' = mean(`covers'), by(`by')
+	qui egen `ncov' = count(`covers'), by(`by')
+	gen `covlb' = 100 * (`cov' - invnorm(`coverlevel2')*sqrt(`cov'*(1-`cov')/`ncov'))
+	gen `covub' = 100 * (`cov' + invnorm(`coverlevel2')*sqrt(`cov'*(1-`cov')/`ncov'))
+	qui bysort `by': replace `covlb' = . if _n>1
+	qui bysort `by': replace `covub' = . if _n>1
+	drop `cov' `ncov'
+}
 
 * find range to plot over
 tempvar lpoint rpoint
@@ -191,10 +197,17 @@ if `npanels' > 15 {
 tempvar truemax truemin
 gen `truemax'=100
 gen `truemin'=`ymin'
-if `ymin'<=5 local ylab ylab(5 50 95)
-else if `ymin'<=50 local ylab ylab(50 95)
-else if `ymin'<=95 local ylab ylab(95)
-else local ylab
+if mi("`sort'") {
+	if `ymin'<=5 local ylab ylab(5 50 95)
+	else if `ymin'<=50 local ylab ylab(50 95)
+	else if `ymin'<=95 local ylab ylab(95)
+	else local ylab
+	local ytitle Centile
+}
+else {
+	local ylab ylab(none)
+	local ytitle 
+}
 if "`bycreated'"!="1" local byopt by(`by', ixaxes noxrescale iscale(*.9) `bygraphoptions' `dgmmissingok')
 else local byopt `bygraphoptions' `dgmmissingok'
 #delimit ;
@@ -203,11 +216,14 @@ local graph_cmd twoway
 	(rspike `lci' `uci' `rank' if  `covers' & `rank'>=`ymin', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions') // covering CIs
 	(scatter `rank' `estimate' if `rank'>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
 	(rspike `truemax' `truemin' `true', pstyle(p5) lw(thin) `truegraphoptions') // vertical line at true value
+	;
+if mi("`sort'") local graph_cmd `graph_cmd' 	
 	(rspike `lpoint' `rpoint' `covlb', hor lw(thin) pstyle(p5)) // MC CI for obs coverage
 	(rspike `lpoint' `rpoint' `covub', hor lw(thin) pstyle(p5))
-	, 
+	;
+local graph_cmd `graph_cmd', 
 	xtitle("`level'% confidence intervals")
-	ytitle("Centile")
+	ytitle("`ytitle'")
 	`ylab'
 	`byopt'
 	legend(order(1 "Non-coverers" 2 "Coverers"))

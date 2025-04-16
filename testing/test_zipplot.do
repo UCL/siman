@@ -46,6 +46,9 @@ replace se = . if dgm=="MAR" & method==2
 siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)
 siman zipplot
 
+// Check nosort option
+siman zipplot if rep<=40 & dgm==1, nosort name(zipns,replace) coveropt(lcol(blue)) noncoveropt(lcol(red))scatteropt(mcol(black) ms(S)) bygr(row(1)) xla(-2 0 2)
+
 di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 
 log close

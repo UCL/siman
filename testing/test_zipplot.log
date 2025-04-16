@@ -108,7 +108,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman zip if mech==1 & float(pmiss)==float(0.2) & estimand=="effect", noncov(lcol(red)) cov(lcol(b
@@ -159,7 +159,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman zip if mech==1 & float(pmiss)==float(0.2) & estimand=="effect", noncov(lcol(red)) cov(lcol(b
@@ -205,11 +205,19 @@ Repetition-level output
   True value variable:            _true (created)
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman zipplot
 siman zipplot will draw 1 graph with 9 panels
+
+. 
+. // Check nosort option
+. siman zipplot if rep<=40 & dgm==1, nosort name(zipns,replace) coveropt(lcol(blue)) noncoveropt(lco
+> l(red))scatteropt(mcol(black) ms(S)) bygr(row(1)) xla(-2 0 2)
+Warning: this 'if' condition cuts across dgm, target and method. It is safest to subset only on dgm,
+  target and method.
+siman zipplot will draw 1 graph with 3 panels
 
 . 
 . di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
