@@ -84,7 +84,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . 
@@ -140,7 +140,7 @@ Repetition-level output
   True value variable:            N/A
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman analyse
@@ -189,7 +189,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman analyse if mech!=2, notable
@@ -254,7 +254,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman analyse
@@ -319,7 +319,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman analyse
@@ -381,7 +381,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman analyse
@@ -457,7 +457,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman analyse
@@ -534,7 +534,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman analyse
@@ -601,7 +601,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman analyse
@@ -619,10 +619,12 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * incomplete dgmorder
-. cap noi siman nestloop bias if estimand=="mean0", dgmorder(pmiss beta) 
-dgm missing from dgmorder(): mech
+. siman nestloop bias if estimand=="mean0", dgmorder(pmiss beta) 
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
-. assert _rc == 498
+. * reverse dgmorder
+. siman nestloop bias if estimand=="mean0", dgmorder(pmiss beta) dgreverse
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . * bogus dgmorder
 . cap noi siman nestloop bias if estimand=="mean0", dgmorder(pmiss mech3 beta) 
@@ -703,7 +705,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman analyse
@@ -754,7 +756,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman analyse

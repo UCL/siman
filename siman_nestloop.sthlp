@@ -31,8 +31,9 @@
 {synopthdr}
 {synoptline}
 {syntab:Options controlling the main graph}
-{synopt:{opt dgmo:rder(string)}}defines the order of data generating mechanisms for the nested-loop 
-plot. A negative sign in front of the variable name 
+{synopt:{opt dgmo:rder(string)}}defines the order of data generating mechanism (DGM) variables for the nested-loop 
+plot. The right-most variable is fastest-changing. A 
+negative sign in front of the variable name 
 will sort its values on the graph in descending order.{p_end}
 {synopt:{opt stag:ger(#)}}horizontally staggers the lines for different methods.  Default # is 0. Try 
 {cmd:stagger(0.05)} to make overlapping lines more distinct.{p_end}
@@ -54,6 +55,9 @@ graph, as a fraction of the whole vertical axis.  Default # is 0.{p_end}
 {synopt:{opt dgla:bsize(string)}}controls the size of the descriptor graph labels. Default is vsmall.{p_end}
 {synopt:{opt dgst:yle(string)}}controls the style(s) of the descriptor graph.{p_end}
 {synopt:{opt dglw:idth(string)}}controls the line width(s) of the descriptor graph.{p_end}
+{synopt:{opt dgre:verse}}reverses the order of the descriptor graphs, so that the slowest-changing 
+(left-most) DGM variable is shown at the top. By default, the slowest-changing DGM variable is shown 
+at the bottom.{p_end}
 
 {syntab:Other graph options}
 {synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend 
@@ -92,12 +96,11 @@ generating mechanisms along the horizontal
 axis. The nested-loop plot loops through nested data-generating mechanisms and plots results 
 for different methods on top of each other in a full factorial design.
 
-{pstd}The user can select a subset of performance measures to be graphed from those listed in 
+{pstd}The user can select a set of performance measures to be graphed from those listed in 
 {help siman analyse##perfmeas:performance measures}.
-If no performance measures are specified, then the default choice is {help siman analyse##bias:bias}, 
-{help siman analyse##empse:empse} and {help siman analyse##cover:coverage};
+If no performance measures are specified, then the default choice is {help siman analyse##bias:bias};
 however, if {cmd:true()} was not specified in {help siman setup}, graphs will be drawn for 
-{help siman analyse##mean:mean}, {help siman analyse##empse:empse} and {help siman analyse##relerror:relerror}.
+{help siman analyse##mean:mean}.
 
 {pstd}
 The user can specify {it:if} within the {cmd:siman nestloop} syntax. The

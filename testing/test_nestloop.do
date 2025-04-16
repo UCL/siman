@@ -133,8 +133,9 @@ siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel
 siman nestloop bias if method=="CCA" & estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) name(sn2,replace)
 
 * incomplete dgmorder
-cap noi siman nestloop bias if estimand=="mean0", dgmorder(pmiss beta) 
-assert _rc == 498
+siman nestloop bias if estimand=="mean0", dgmorder(pmiss beta) 
+* reverse dgmorder
+siman nestloop bias if estimand=="mean0", dgmorder(pmiss beta) dgreverse
 * bogus dgmorder
 cap noi siman nestloop bias if estimand=="mean0", dgmorder(pmiss mech3 beta) 
 assert _rc == 111

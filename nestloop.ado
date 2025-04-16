@@ -1,4 +1,6 @@
-*!	version 0.12.3	31mar2025	IW legend() is parsed, giving better defaults and handling of pos() rows() cols(); lcolor() etc. respect = and ..
+*!	version 0.11.6	16apr2025	
+*	version 0.11.6	16apr2025	IW add dgreverse option; version number aligned with siman_nestloop
+*	version 0.12.3	31mar2025	IW legend() is parsed, giving better defaults and handling of pos() rows() cols(); lcolor() etc. respect = and ..
 *	version 0.12.2	17mar2025	IW bug fix: graphs were mislabelled in legend with true()
 *	version 0.12.1	13mar2025	IW bug fix: graphs were mislabelled in legend if no true()
 *   version 0.12.0	7jan2025	TM improved how 'true' line is drawn and introduced new option 'trueoptions()'
@@ -11,7 +13,7 @@ syntax varname [if], DESCriptors(string) METHod(varname) ///
 	[true(string) TRUEOPTions(string) ///
 	STAGger(real 0) Connect(string) noREFline LEVel(cilevel) /// control main graph
 	DGSIze(real 0.3) DGGAp(real 0) /// control sizing of descriptor graph
-	DGINnergap(real 3) DGCOlor(string) MISsing /// control descriptor graph
+	DGINnergap(real 3) DGCOlor(string) MISsing DGREverse /// control descriptor graph
 	DGPAttern(string) DGLAbsize(string) DGSTyle(string) DGLWidth(string) /// control descriptor graph
 	LColor(string) LPattern(string) LSTYle(string) LWidth(string) legend(string) /// twoway options for main graph
 	METHLEGend(string) SCENariolabel * /// other graph options
@@ -155,7 +157,7 @@ if "`dg'" != "nodg" {
 	* main graph goes from y = `min' to `max'
 	* `dgsize' defines fraction of graph given to legend
 	* `dggap' defines fraction of graph given to gap
-	* legends go from y = `lmin' to `lmax'
+	* descriptor graph lines go from y = `lmin' to `lmax'
 	local fracsum = `dgsize' + `dggap'
 	local lmin = (`min'-`fracsum'*`max') / (1-`fracsum')
 	local lmax = `min' - `dggap'*(`max'-`lmin')
@@ -178,9 +180,11 @@ if "`dg'" != "nodg" {
 		tempvar S`var' // this is the variable containing the y-axis position for descriptor `var'
 		egen `S`var'' = group(`var'), label `missing'
 		local ++j
-		qui replace `S`var'' = ( (`S`var''-1) / (`thisdglevels'-1) + (`dginnergap'+1)*(`j'-1)) * `step' + `lmin'
+		if mi("`dgreverse'") local jj = `j'-1
+		else local jj = `ndescriptors'-`j'
+		qui replace `S`var'' = ( (`S`var''-1) / (`thisdglevels'-1) + (`dginnergap'+1)*`jj') * `step' + `lmin'
 		label var `S`var'' "y-value for descriptor `var'"
-		local Svarname_ypos = ( (`dginnergap'+1)*(`j' - 1)+2.2 ) * `step' + `lmin'
+		local Svarname_ypos = ( (`dginnergap'+1)*`jj' + 2.2 ) * `step' + `lmin'
 		local factorlist `factorlist' `S`var''
 		local varlabel : variable label `var'
 		if mi("`varlabel'") local varlabel `var'
