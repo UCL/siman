@@ -28,7 +28,7 @@
 {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
 
 
-{synoptset 25 tabbed}{...}
+{synoptset 28 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Main}
@@ -50,12 +50,20 @@ but the option {cmd:methlist(D B)} would also change the ordering of the graphs.
 {it:string} may be a numlist if method is numeric.{p_end}
 {synopt:{opt noeq:uality}}does not draw the line of equality when the combine method is used. The line of equality 
 is never drawn when the matrix method is used.{p_end}
-{synopt:{opt name(string)}}  the stub for the graph name, to which "_#" is appended. Default is "cms".{p_end}
 {synopt:{it:graph_options}}most options for {help graph combine:graph combine} are available.{p_end}
 {synopt:{opt subgr:aphoptions(string)}}to change the format of the constituent scatter graphs, which are drawn
 if and only if the "combine" method is used. For example, to use the red plotting symbol with the "combine" method,
 use {bf:subgr(mcol(red))}; with the matrix method, use {bf:mcol(red)}.{p_end}
+
+{syntab:Saving options}
+{synopt:{opt name(string)}}the stub for the graph name, to which "_#" is appended, where # is the group number. Default is "cms".{p_end}
+{synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata’s .gph format.
+The graph name is {it:namestub} with "_#" appended, where # is the group number.{p_end}
+{synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
+{cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} with the appropriate 
+filetype, which must be one of the suffices listed in {help graph export}.{p_end}
 {synoptline}
+
 
 
 {marker description}{...}
@@ -116,6 +124,11 @@ repetitions named simcheck.dta available on the {cmd: siman} {browse "https://gi
 {pstd}Compare only methods 1 ({it:Full}) and 3 ({it:MI}), and change the graph options
 
 {phang}. {stata  `"siman comparemethodsscatter se, methlist(1 3) title("My title") name("cms", replace)"'}
+
+{pstd}Save graphs in Stata and pdf formats: file names will be mycms_#.gph and mycms_#.pdf for #=1,2,3
+
+{phang}. {stata  `"siman comparemethodsscatter, saving(mycms, replace) export(pdf, replace)"'}
+
 
 {marker authors}{...}
 {title:Authors}

@@ -253,6 +253,7 @@ foreach thispm of local pmlist { // loop over PMs
 			if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
 			cap noi `graphexportcmd'
 			if _rc di as error "Error in export() option"
+			exit _rc
 		}
 
 	} // end of loop over targets

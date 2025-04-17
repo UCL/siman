@@ -24,7 +24,7 @@ mechanism, target and analysis method in the estimates data
 {pstd}Any {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and 
 {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
 
-{synoptset 26 tabbed}{...}
+{synoptset 28 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Main}
@@ -48,7 +48,13 @@ coverage. # is any number between 10.00 and 99.99 (see {help level}). The
 default is the current system default confidence level.{p_end}
 {synopt:{opt ymin(pct)}}omits the lowest {it:pct}% of the confidence intervals from the zip plot{p_end}
 {synopt:{opt bygr:aphoptions(string)}}options for {help twoway} that go inside its {cmd:by()} option.{p_end}
-{synopt:{it:graph_options}}options for {help twoway} that do not go inside its {cmd:by()} option.{p_end}
+
+{syntab:Saving options}
+{synopt:{opt sav:ing}{it:(name[}{cmd:, replace}{it:])}}saves the graph to disk in Stata’s .gph format.
+The graph name is {it:name}.{p_end}
+{synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports the graph to disk in non-Stata format. 
+{cmd:saving()} must also be specified. The exported file name is the same as for {cmd:saving()} with the appropriate 
+filetype, which must be one of the suffices listed in {help graph export}.{p_end}
 {synoptline}
 
 

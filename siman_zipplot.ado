@@ -38,7 +38,7 @@ version 15
 
 syntax [if][in] [, * BY(varlist) ///
 	NONCOVeroptions(string) COVeroptions(string) SCAtteroptions(string) ///
-	TRUEGRaphoptions(string) BYGRaphoptions(string) SCHeme(passthru) ymin(integer 0) name(passthru) Level(cilevel) COVERLevel(cilevel) ///
+	TRUEGRaphoptions(string) BYGRaphoptions(string) SCHeme(passthru) ymin(integer 0) name(passthru) SAVing(string) EXPort(string) Level(cilevel) COVERLevel(cilevel) ///
 	debug pause noSOrt /// undocumented
 	]
 
@@ -71,6 +71,28 @@ if "`true'"=="" {
 }
 
 if mi("`name'") local name name(zipplot, replace)
+
+* parse optional saving (standard code)
+if !mi(`"`saving'"') {
+	gettoken saving savingopts : saving, parse(",")
+	local saving = trim("`saving'")
+	if strpos(`"`saving'"',".") & !strpos(`"`saving'"',".gph") {
+		di as error "Sorry, saving() must not contain a full stop"
+		exit 198
+	}
+}
+
+* parse optional export (standard code)
+if !mi(`"`export'"') {
+	gettoken exporttype exportopts : export, parse(",")
+	local exporttype = trim("`exporttype'")
+	if mi("`saving'") {
+		di as error "Please specify saving(filename) with export()"
+		exit 198
+	}
+}
+
+*** END OF PARSING ***
 
 /* Start preparations */
 
@@ -210,6 +232,7 @@ else {
 }
 if "`bycreated'"!="1" local byopt by(`by', ixaxes noxrescale iscale(*.9) `bygraphoptions' `dgmmissingok')
 else local byopt `bygraphoptions' `dgmmissingok'
+if !mi("`saving'") local savingopt saving(`"`saving'"'`savingopts')
 #delimit ;
 local graph_cmd twoway
 	(rspike `lci' `uci' `rank' if !`covers' & `rank'>=`ymin', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions') // non-covering CIs
@@ -230,6 +253,7 @@ local graph_cmd `graph_cmd',
 	`scheme'
 	`options'
 	`name'
+	`savingopt'
 ;
 #delimit cr
 
@@ -239,6 +263,14 @@ if !mi("`pause'") {
 	pause Press F9 to recall, optionally edit and run the graph command
 }
 `graph_cmd'
+
+if !mi("`export'") {
+	local graphexportcmd graph export `"`saving'.`exporttype'"'`exportopts'
+	if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
+	cap noi `graphexportcmd'
+	if _rc di as error "Error in export() option"
+	exit _rc
+}
 
 
 end

@@ -400,6 +400,7 @@ foreach thistarget of local targetlevels {
 		if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
 		cap noi `graphexportcmd'
 		if _rc di as error "Error in export() option"
+		exit _rc
 	}
 
 }

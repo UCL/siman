@@ -44,15 +44,17 @@ The default is {cmd:dgmtitle(on)} with one DGM variable and {cmd:dgmtitle(off)} 
 {synopt:{opt logit}}calculates Monte Carlo confidence intervals for power and coverage on the logit scale. This
 ensures that Monte Carlo confidence intervals lie between 0 and 100 (typically only important with small numbers
 of repetitions).{p_end}
+
 {syntab:General graph options}
 {synopt:{opt bygr:aphoptions(string)}}graph options which need to be placed within the {cmd:by()} option.{p_end}
-{synopt:{opt name(string)}}stub for graph name, to which "_" and the target name are appended. Default is "lolly".{p_end}
 {synopt:{it:graph_options}}most of the valid options for {help scatter:scatter} are available.{p_end}
 
-{syntab:Advanced graph options}
+{syntab:Advanced option}
 {synopt:{opt pause}}pauses before drawing each graph, allowing the user to retrieve and edit each graph
 command before running it. Requires {help pause} to be on.{p_end}
+
 {syntab:Saving options}
+{synopt:{opt name(string)}}stub for graph name, to which "_" and the target name are appended. Default is "lolly".{p_end}
 {synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata format. The
 graph name is {it:namestub} with the target name appended.{p_end}
 {synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
@@ -115,7 +117,7 @@ here we select which performance measures are displayed, draw the graph for only
 
 {phang}. {stata  siman lollyplot modelse power cover if estimand=="beta", labf(%6.3f)}
 
-{pstd}Saving the graphs: this command names the graphs as mylolly_beta and mylolly_gamma
+{pstd}Save lollyplot graphs to disk: this command names the graphs as mylolly_beta and mylolly_gamma
 (for the two targets beta and gamma). It saves them to disk in Stata format as
 mylolly_beta.gph and mylolly_gamma.gph, and exports them in JPEG format as
 mylolly_beta.jpg and mylolly_gamma.jpg.

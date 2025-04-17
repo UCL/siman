@@ -51,7 +51,7 @@ version 15
 
 syntax [anything] [if][in] [, COMbine MATrix COLLapse(varlist) /// main options
 	METHlist(string) noEQuality SUBGRaphoptions(string) * /// graph options
-	name(string) /// standard options handled differently
+	name(string) SAVing(string) EXPort(string) /// standard options handled differently
 	half debug /// undocumented options
 	]
 
@@ -104,12 +104,33 @@ if wordcount("`name'_something")>1 {
 	exit 498
 }
 
-* mark sample
-marksample touse, novarlist
+* parse optional saving (standard code)
+if !mi(`"`saving'"') {
+	gettoken saving savingopts : saving, parse(",")
+	local saving = trim("`saving'")
+	if strpos(`"`saving'"',".") & !strpos(`"`saving'"',".gph") {
+		di as error "Sorry, saving() must not contain a full stop"
+		exit 198
+	}
+}
+
+* parse optional export (standard code)
+if !mi(`"`export'"') {
+	gettoken exporttype exportopts : export, parse(",")
+	local exporttype = trim("`exporttype'")
+	if mi("`saving'") {
+		di as error "Please specify saving(filename) with export()"
+		exit 198
+	}
+}
 
 *** END OF PARSING ***
 
 *** START ANALYSIS ***
+
+* mark sample
+marksample touse, novarlist
+
 /* Approach is:
 code methods as 1,2,... with names in locals mlabel1,mlabel2,...
 reshape methods as wide
@@ -255,6 +276,8 @@ forvalues g = 1/`ngraphs' {
 	if !mi("`collapse'") di `", collapsing over `collapse'"' _c
 	di
 
+	if !mi("`saving'") local savingopt saving(`"`saving'_`g'"'`savingopts')
+
 	if "`type'"=="combine" {
 
 		* prepare
@@ -311,11 +334,11 @@ forvalues g = 1/`ngraphs' {
 				local graphlist `graphlist' graph`j'`k'
 			}
 		}
-		`dicmd' cap graph combine `graphlist', name(`name'_`g',replace) ///
+		`dicmd' cap noi graph combine `graphlist', name(`name'_`g'`nameopts') `savingopt' ///
 			`notetextopt' title("") cols(`nmethods') `esttitle' `setitle' ///
 			`options'	
 		if _rc {
-			di as error `"{p 0 2}siman comparemethodsscatter called graph combine, which failed with error "' _rc ". {p_end}"
+			if _rc!=1 di as error `"{p 0 2}siman comparemethodsscatter called graph combine, which failed with error "' _rc ". {p_end}"
 			if _rc==111 di as error `"Try {stata "serset clear"} and {stata "graph drop _all"}"'
 			if _rc==198 & !mi(`"`options'"') di as error `"{p 0 2}Were options -`options'- correct?{p_end}"'
 			exit _rc
@@ -335,9 +358,18 @@ forvalues g = 1/`ngraphs' {
 		}
 		`dicmd' graph matrix `varlist' if `group'==`g', `half' title("") note("") ///
 			ms(o) mlc(gs10) msize(tiny) ///
-			name(`name'_`g',replace) note("Graphs for stat=`statlist', `notetext'") ///
+			name(`name'_`g',replace) `savingopt' note("Graphs for stat=`statlist', `notetext'") ///
 			`options'
 	}
+
+	if !mi("`export'") {
+		local graphexportcmd graph export `"`saving'_`g'.`exporttype'"'`exportopts'
+		if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
+		cap noi `graphexportcmd'
+		if _rc di as error "Error in export() option"
+		exit _rc
+	}
+
 }
 
 end

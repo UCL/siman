@@ -27,7 +27,7 @@
 {bf:repetition}. A warning is issued if this is breached.
 
 
-{synoptset 21 tabbed}{...}
+{synoptset 28 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Options controlling the main graph}
@@ -64,18 +64,18 @@ at the bottom.{p_end}
 item or as the legend title. The default is neither.{p_end}
 {synopt:{opt scena:riolabel}}labels the horizontal axis with scenario numbers. 
 The default is an unlabelled axis, since the descriptor graphs describe the scenarios.{p_end}
-{synopt:{opt name(string)}} the stub for the graph name, to which "_" followed by the target name and 
-"_" followed by the performance measure name is appended. Default name is "nestloop". For example, 
-with two targets, beta and gamma, and two performance measures, bias and relerror, defauly graph 
-names would be "nestloop_beta_bias", "nestloop_gamma_bias", "nestloop_beta_relerror" and "nestloop_gamma_relerror.{p_end}
 {synopt:{it:graph_options}}Most of the valid options for {help line:line} are available.
 We find these especially useful: {cmd:ylabel()} to stop the y-labels extending to the descriptor graph; 
 {cmd:legend()} to arrange legends in a single row or column, e.g.
 {cmd:legend(pos(6) row(1))} or {cmd:legend(pos(3) col(1))}.{p_end}
 
 {syntab:Saving options}
+{synopt:{opt name(string)}}the stub for the graph name, to which "_" followed by the target name and 
+"_" followed by the performance measure name are appended. Default name is "nestloop". For example, 
+with two targets, beta and gamma, and two performance measures, bias and relerror, defauly graph 
+names would be "nestloop_beta_bias", "nestloop_gamma_bias", "nestloop_beta_relerror" and "nestloop_gamma_relerror.{p_end}
 {synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata’s .gph format.
-The graph name is {it:namestub} with the target and performance measures appended.{p_end}
+The graph name is {it:namestub} with the target and performance measures appended, as for {cmd:name()}.{p_end}
 {synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} with the appropriate 
 filetype, which must be one of the suffices listed in {help graph export}.{p_end}
@@ -141,6 +141,16 @@ of interest is considered first, and so forth.  Further guidance can be found in
 {pstd}Tailor the descriptor graph appearance
 
 {phang}. {stata `"siman nestloop relerror if estimand=="effect", dgsize(.4) dggap(.1) dgcol(green orange purple) dgpatt(dash solid =) dglabsize(medium) dglwidth(*2)"'}
+
+{pstd}Save nested loop graphs to disk. This 
+command will create 2 files for each of 3 estimands: my_effect_relerror.gph,
+my_effect_relerror.pdf,
+my_mean0_relerror.gph, 
+my_mean0_relerror.pdf, 
+my_mean1_relerror.gph, and 
+my_mean1_relerror.pdf.
+
+{phang}. {stata `"siman nestloop relerror, saving(my) export(pdf)"'}
 
 
 {marker references}{...}

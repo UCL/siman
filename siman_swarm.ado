@@ -35,7 +35,7 @@
 program define siman_swarm
 version 15
 
-syntax [anything] [if][in] [, * nomean MEANGRaphoptions(string) BY(varlist) BYGRaphoptions(string) GRAPHOPtions(string) SCatteroptions(string) name(string) msymbol(passthru) msize(passthru) mcolor(passthru) title(passthru) note(passthru) row(passthru) col(passthru) xtitle(passthru) ytitle(passthru) debug pause gap(real .1)]
+syntax [anything] [if][in] [, * nomean MEANGRaphoptions(string) BY(varlist) BYGRaphoptions(string) GRAPHOPtions(string) SCatteroptions(string) name(string) msymbol(passthru) msize(passthru) mcolor(passthru) title(passthru) note(passthru) row(passthru) col(passthru) xtitle(passthru) ytitle(passthru) debug pause gap(real .1) SAVing(string) EXPort(string)]
 
 * attempt to assign graph options correctly
 local scatteroptions `scatteroptions' `msymbol' `msize' `mcolor' `options'
@@ -74,6 +74,28 @@ if mi("`name'") {
 	local name swarm
 	local replace replace
 }
+
+* parse optional saving (standard code)
+if !mi(`"`saving'"') {
+	gettoken saving savingopts : saving, parse(",")
+	local saving = trim("`saving'")
+	if strpos(`"`saving'"',".") & !strpos(`"`saving'"',".gph") {
+		di as error "Sorry, saving() must not contain a full stop"
+		exit 198
+	}
+}
+
+* parse optional export (standard code)
+if !mi(`"`export'"') {
+	gettoken exporttype exportopts : export, parse(",")
+	local exporttype = trim("`exporttype'")
+	if mi("`saving'") {
+		di as error "Please specify saving(filename) with export()"
+		exit 198
+	}
+}
+
+*** END OF PARSING ***
 
 /* Start preparations */
 
@@ -182,9 +204,10 @@ foreach el of local statlist { // estimate and/or se
 		local graph_cmd `graph_cmd' (scatter newidrep mean`el', msym(|) msize(huge) mcol(orange) `meangraphoptions')
 	}
 	local nameopt name(`name'_`el', `replace')
+	if !mi("`saving'") local savingopt saving(`"`saving'_`el'"'`savingopts')
 	if !mi("`by'") local byopt by(`by', title("") noxrescale legend(off) `bygraphoptions' `dgmmissingok') 
 	else local byopt title("") legend(off) `bygraphoptions' `dgmmissingok'
-	local graph_cmd `graph_cmd', `byopt' ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions'
+	local graph_cmd `graph_cmd', `byopt' ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions' `savingopt'
 
 	if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 	if !mi("`pause'") {
@@ -193,6 +216,13 @@ foreach el of local statlist { // estimate and/or se
 	}
 	`graph_cmd'
 
+	if !mi("`export'") {
+		local graphexportcmd graph export `"`saving'_`el'.`exporttype'"'`exportopts'
+		if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
+		cap noi `graphexportcmd'
+		if _rc di as error "Error in export() option"
+		exit _rc
+	}
 }
 
 end
