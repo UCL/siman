@@ -1,4 +1,5 @@
-*!	version 0.11.6	16apr2025	
+*!	version 0.11.7	17apr2025	
+*	version 0.11.7	17apr2025	IW remove export() option: handled by siman_nestloop
 *	version 0.11.6	16apr2025	IW add dgreverse option; version number aligned with siman_nestloop
 *	version 0.12.3	31mar2025	IW legend() is parsed, giving better defaults and handling of pos() rows() cols(); lcolor() etc. respect = and ..
 *	version 0.12.2	17mar2025	IW bug fix: graphs were mislabelled in legend with true()
@@ -17,7 +18,7 @@ syntax varname [if], DESCriptors(string) METHod(varname) ///
 	DGPAttern(string) DGLAbsize(string) DGSTyle(string) DGLWidth(string) /// control descriptor graph
 	LColor(string) LPattern(string) LSTYle(string) LWidth(string) legend(string) /// twoway options for main graph
 	METHLEGend(string) SCENariolabel * /// other graph options
-	NAMe(string) SAVing(string) EXPort(string) /// twoway options for overall graph
+	NAMe(string) SAVing(string) /// twoway options for overall graph
 	debug pause nodg /// undocumented
 	]
 
@@ -292,12 +293,6 @@ if !mi("`pause'") {
 	pause Press F9 to recall, optionally edit and run the graph command
 }
 `graph_cmd'
-if !mi("`export'") {
-	local graphexportcmd graph export `"`saving'.`exporttype'"'`exportopts'
-	if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
-	cap noi `graphexportcmd'
-	if _rc di as error "Error in export() option"
-}
 
 restore
 

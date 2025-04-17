@@ -31,16 +31,16 @@
 {synoptline}
 {syntab:Options specific to this stand-alone program}
 
-{synopt:{opt desc:riptors(evarlist)}}Defines the descriptor variables for the nested loop plot.
+{synopt:{opt desc:riptors(evarlist)}}defines the descriptor variables for the nested loop plot.
 A negative sign in front of the variable name will display its values on the graph in descending order.{p_end}
-{synopt:{opt meth:od(varname)}}Defines the method variable. 
+{synopt:{opt meth:od(varname)}}defines the method variable. 
 One line will be drawn for each value of this variable (unless any are excluded through {help if} conditions).{p_end}
-{synopt:{opt true(#|varname)}}Gives the value # or variable to be used as a reference line in the background.{p_end}
-{synopt:{opt trueopt:ions(string)}}Controls the appearance of the reference line.
+{synopt:{opt true(#|varname)}}gives the value # or variable to be used as a reference line in the background.{p_end}
+{synopt:{opt trueopt:ions(string)}}controls the appearance of the reference line.
 
 {syntab:Options shared with siman nestloop}
 
-{synopt:{opt options}}are any options for {help siman nestloop} except {cmd:dgmorder()}.{p_end}
+{synopt:{it:options}}are any options for {help siman nestloop} except {cmd:dgmorder()} and {cmd:export()}.{p_end}
 {synoptline}
 
 
