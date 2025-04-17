@@ -168,6 +168,7 @@ siman zipplot will draw 1 graph with 9 panels
 
 . 
 . // Check sensible answers when SE is systematically missing
+. // Also check saving & export
 . use data/simcheck.dta, clear
 (Simulation results from simcheck99.do in paper doi:10.1093/ije/dyad134)
 
@@ -208,13 +209,30 @@ Estimates data                    in data
 Performance statistics            not in data
 _____________________________________________________
 
-. siman zipplot
+. siman zipplot, saving(myzip) export(tif)
 siman zipplot will draw 1 graph with 9 panels
+file myzip.gph saved
+file myzip.tif saved as TIFF format
+
+. cap noi siman zipplot, saving(myzip) export(tif)
+siman zipplot will draw 1 graph with 9 panels
+file myzip.gph already exists
+
+. assert _rc==602
+
+. siman zipplot, saving(myzip,replace) export(tif,replace)
+siman zipplot will draw 1 graph with 9 panels
+file myzip.gph saved
+file myzip.tif saved as TIFF format
+
+. erase myzip.gph
+
+. erase myzip.tif
 
 . 
 . // Check nosort option
-. siman zipplot if rep<=40 & dgm==1, nosort name(zipns,replace) coveropt(lcol(blue)) noncoveropt(lco
-> l(red))scatteropt(mcol(black) ms(S)) bygr(row(1)) xla(-2 0 2)
+. siman zipplot if rep<=40 & dgm==1, nosort name(zipns,replace) coveropt(lcol(blue)) ///
+>         noncoveropt(lcol(red))scatteropt(mcol(black) ms(S)) bygr(row(1)) xla(-2 0 2) 
 Warning: this 'if' condition cuts across dgm, target and method. It is safest to subset only on dgm,
   target and method.
 siman zipplot will draw 1 graph with 3 panels

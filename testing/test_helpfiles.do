@@ -11,7 +11,8 @@ foreach cmd in blandaltman comparemethodsscatter describe lollyplot nestloop sca
 }
 * analyse help file examples aren't set up for this
 
-* erase files created by help lollyplot
-foreach file in mylolly_beta.gph  mylolly_gamma.gph mylolly_beta.jpg  mylolly_gamma.jpg {
+* erase files created by help lollyplot and others
+foreach file in mylolly_beta.gph  mylolly_gamma.gph mylolly_beta.jpg  mylolly_gamma.jpg mycms_1.gph mycms_1.pdf mycms_2.gph mycms_2.pdf mycms_3.gph mycms_3.pdf my_effect_relerror.gph my_effect_relerror.pdf my_mean0_relerror.gph my_mean0_relerror.pdf my_mean1_relerror.gph my_mean1_relerror.pdf {
 	cap erase `file'
 }
+

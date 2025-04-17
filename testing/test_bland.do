@@ -31,10 +31,16 @@ foreach feature in dgm target method {
 	}
 }
 
-siman bland b, by(method beta) subtitle(,size(vsmall)) name(g,replace)
+siman bland b, by(method beta) subtitle(,size(vsmall)) name(g,replace) saving(mybland) export(jpg)
 foreach graph in g_1_estimate g_2_estimate {
 	qui graph describe `graph'
 }
+cap noi siman bland b, by(method beta) subtitle(,size(vsmall)) name(g,replace) saving(mybland) export(jpg)
+assert _rc==602
+erase mybland_1_estimate.gph
+erase mybland_1_estimate.jpg
+erase mybland_2_estimate.gph
+erase mybland_2_estimate.jpg
 
 
 di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"

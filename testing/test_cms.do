@@ -33,6 +33,13 @@ foreach feature in dgm target method {
 	}
 }
 
+use data/setupdata_method4, clear
+siman cms if beta==0, saving(mycms) export(pdf)
+erase mycms_1.gph
+erase mycms_1.pdf
+erase mycms_2.gph
+erase mycms_2.pdf
+
 di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 
 log close

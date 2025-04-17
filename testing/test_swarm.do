@@ -33,11 +33,13 @@ foreach feature in dgm target method {
 
 siman swarm estimate, nomean mcol(red) name(g1,replace)
 siman swarm se, meangr(mcol(pink)) name(g2,replace) row(3)
-siman swarm estimate se, bygr(note("I've changed the note")) name(g3,replace) by(mech beta) debug
+siman swarm estimate se, bygr(note("I've changed the note")) name(g3,replace) ///
+	by(mech beta) debug saving(myswarm) export(eps)
 foreach graph in g1_estimate g2_se g3_estimate g3_se {
 	qui graph describe `graph'
 }
-
+erase myswarm_estimate.gph
+erase myswarm_estimate.eps
 
 di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 

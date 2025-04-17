@@ -66,12 +66,31 @@ siman blandaltman will draw 6 graphs each with 2 panels
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
 
 . 
-. siman bland b, by(method beta) subtitle(,size(vsmall)) name(g,replace)
+. siman bland b, by(method beta) subtitle(,size(vsmall)) name(g,replace) saving(mybland) export(jpg)
 siman blandaltman will draw 2 graphs each with 6 panels
+file mybland_1_estimate.gph saved
+file mybland_1_estimate.jpg written in JPEG format
+file mybland_2_estimate.gph saved
+file mybland_2_estimate.jpg written in JPEG format
 
 . foreach graph in g_1_estimate g_2_estimate {
   2.         qui graph describe `graph'
   3. }
+
+. cap noi siman bland b, by(method beta) subtitle(,size(vsmall)) name(g,replace) saving(mybland) exp
+> ort(jpg)
+siman blandaltman will draw 2 graphs each with 6 panels
+file mybland_1_estimate.gph already exists
+
+. assert _rc==602
+
+. erase mybland_1_estimate.gph
+
+. erase mybland_1_estimate.jpg
+
+. erase mybland_2_estimate.gph
+
+. erase mybland_2_estimate.jpg
 
 . 
 . 

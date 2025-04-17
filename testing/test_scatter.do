@@ -27,6 +27,14 @@ foreach feature in dgm target method {
 	}
 }
 
+use data/setupdata_method1, clear
+siman scatter, saving(myscatter) export(png)
+cap noi siman scatter, saving(myscatter) export(png)
+assert _rc==602
+siman scatter, saving(myscatter,replace) export(png,replace)
+erase myscatter.gph
+erase myscatter.png
+
 di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 
 log close
