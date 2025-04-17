@@ -59,7 +59,7 @@ Repetition-level output
   True value variable:            _true (created)
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . 
@@ -311,7 +311,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . assert "`: char _dta[siman_nummethod]'" == "3"
@@ -357,7 +357,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . assert "`: char _dta[siman_nummethod]'" == "3"
@@ -420,7 +420,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . * NB setup has coded beta as 1/2/3
@@ -531,7 +531,7 @@ Repetition-level output
   True value variable:            _true (created)
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . set scheme mrc
@@ -604,7 +604,7 @@ Repetition-level output
   True value variable:            theta
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . 
