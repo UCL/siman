@@ -16,11 +16,13 @@
 {title:Syntax}
 
 {phang}
-{cmdab:siman com:paremethodsscatter} [{it:varlist}] {ifin} 
+{cmdab:siman com:paremethodsscatter} [{cmd:estimate}] [{cmd:se}] {ifin} 
 [{cmd:,}
 {it:options}]
 
-{pstd}{it:varlist} may only include {it:estimate}, {it:se} or (with the slower 'combine' method) both.
+{pstd}If neither {cmd:estimate} nor {cmd:se} is specified, then {cmd:estimate} is assumed. If 
+both are specified, then the estimates are compared in the top-right triangle and the SEs are compared in the
+bottom triangle, provided the combine method is used (see below).
 
 {pstd}The subcommand {cmd:comparemethodsscatter} may be abbreviated to three or more characters (e.g. {cmd:com}) or to {cmd:cms}.
 

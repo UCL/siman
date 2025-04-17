@@ -31,6 +31,7 @@ foreach feature in dgm target method {
 	}
 }
 
+use data/setupdata_method6, clear
 siman swarm estimate, nomean mcol(red) name(g1,replace)
 siman swarm se, meangr(mcol(pink)) name(g2,replace) row(3)
 siman swarm estimate se, bygr(note("I've changed the note")) name(g3,replace) ///
@@ -40,6 +41,8 @@ foreach graph in g1_estimate g2_se g3_estimate g3_se {
 }
 erase myswarm_estimate.gph
 erase myswarm_estimate.eps
+erase myswarm_se.gph
+erase myswarm_se.eps
 
 di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 

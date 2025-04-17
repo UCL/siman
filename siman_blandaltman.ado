@@ -34,7 +34,7 @@
 program define siman_blandaltman
 version 15
 
-syntax [varlist(max=2 default=none)] [if][in] [, ///
+syntax [anything] [if][in] [, ///
 	Methlist(string) BY(varlist) BYGRaphoptions(string) name(string) SAVing(string) EXPort(string) * /// documented options
 	debug pause /// undocumented options
 	]
@@ -51,14 +51,16 @@ if "`setuprun'"!="1" {
 * if statistics are not specified, run graphs for estimate only
 * only allow estimate or se to be specified
 foreach thing of local anything {
-	if "`thing'"=="`estimate'" local anything2 `anything2' estimate
-	else if "`thing'"=="`se'" local anything2 `anything2' se
-	else if mi("``thing''") {
-		di as error "`thing'() was not specified in siman setup"
-		exit 498
+	if "`thing'"=="estimate" local anything2 `anything2' estimate
+	else if "`thing'"=="se" {
+		if mi("`se'") {
+			di as error "se() was not specified in siman setup"
+			exit 498
+		}
+		local anything2 `anything2' se
 	}
 	else {
-		di as error "only estimate variable and/or se variable allowed"
+		di as error `"only "estimate" and/or "se" allowed"'
 		exit 498
 	}
 }
@@ -240,7 +242,10 @@ forvalues g = 1/`novervalues' { // loop over graphs
 		}
 	}
 
-	if !mi("`debug'") di as input `"--> Debug: drawing graph `g': `notetext'"'
+	if !mi("`notetext'") local notetextopt note("Graphs for `notetext'") 
+	else local notetextopt 
+	if `nstats'==1 di as text `"Graph "' as result `"`name'_`g'_`statlist'"' as text `" is for "' as result `"`notetext'"'
+	else di as text `"Graphs "' as result `"`name'_`g'_[`statlist']"' as text `" are for "' as result `"`notetext'"'
 	if `nmethods'>2 local panelnote ". Panels: `by'."
 
 	foreach stat in `statlist' { // loop over stats

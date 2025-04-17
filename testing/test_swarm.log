@@ -59,6 +59,8 @@ siman swarm estimate, name(swarm_method6, replace) bygr(title(Test siman swarm u
 siman swarm will draw 1 graph with 6 panels
 
 . 
+. use data/setupdata_method6, clear
+
 . siman swarm estimate, nomean mcol(red) name(g1,replace)
 siman swarm will draw 1 graph with 6 panels
 
@@ -92,6 +94,10 @@ file myswarm_se.eps saved as EPS format
 . erase myswarm_estimate.gph
 
 . erase myswarm_estimate.eps
+
+. erase myswarm_se.gph
+
+. erase myswarm_se.eps
 
 . 
 . di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"

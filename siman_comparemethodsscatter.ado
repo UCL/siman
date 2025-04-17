@@ -193,6 +193,12 @@ if mi("`statlist'") {
 	else if "`type'"=="matrix" local statlist estimate
 }
 local nstats : word count `statlist'
+if "`type'"=="matrix" & `nstats'>1 {
+	local ignored : word 2 of `statlist'
+	local statlist : word 1 of `statlist'
+	di as text "Matrix method can't display both estimate and se: ignoring `ignored'"
+	local nstats 1
+}
 if !mi("`debug'") di as input "Debug: statlist = `statlist'"
 local do_se = strpos("`statlist'","se")>0
 local do_estimate = strpos("`statlist'","estimate")>0

@@ -17,11 +17,11 @@
 {title:Syntax}
 
 {p 8 17 2}
-{cmdab:siman bla:ndaltman} [{it:varlist}] {ifin}
+{cmdab:siman bla:ndaltman} [{cmd:estimate}] [{cmd:se}] {ifin}
 [{cmd:,}
 {it:options}]
 
-{pstd}{it:varlist} may include {it:estimate} (the default), {it:se} or both.
+{pstd}If neither {cmd:estimate} nor {cmd:se} is specified, this is equivalent to {cmd:siman blandaltman estimate}. If both are specified, {cmd:siman blandaltman} will draw a graph for each.
 
 {pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and 
 {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
