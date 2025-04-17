@@ -125,7 +125,7 @@ foreach perf of local perfvar {
 }
 label define perfl `perflabels'
 label values _perfmeascodeorder perfl 
-label variable _perfmeascodeorder "Performance measure"
+label variable _perfmeascodeorder "Performance statistic"
 drop _perfmeascode
 rename _perfmeascodeorder _perfmeascode
 
