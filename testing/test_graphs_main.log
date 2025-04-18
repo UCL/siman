@@ -64,7 +64,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman comparemethodsscatter if estimand=="beta" & dgm==2
@@ -301,7 +301,7 @@ Repetition-level output
   True value variable:            _true (created)
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . * has made target string
@@ -505,7 +505,7 @@ Repetition-level output
   True value variable:            N/A
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . * graphs
@@ -679,7 +679,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . 
@@ -748,7 +748,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 .  
@@ -929,7 +929,7 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 .  
@@ -1159,7 +1159,7 @@ Repetition-level output
   True value variable:            N/A
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . siman comparemethodsscatter if target=="beta" & dgm==1, methlist(3 7) name("cms_test6", replace) 
@@ -1230,7 +1230,7 @@ Repetition-level output
   True value variable:            theta
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . 

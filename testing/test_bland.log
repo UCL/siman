@@ -6,8 +6,8 @@
   4.         forvalues n=1/`N' {
   5.                 dicmd use data/setupdata_`feature'`n', clear
   6.                 if `: char _dta[siman_nummethod]' > 1 {
-  7.                         dicmd siman bland b, name(bland_`feature'`n', replace) bygr(title(Test 
-> siman bland using data `feature'`n'))
+  7.                         dicmd siman bland estimate, name(bland_`feature'`n', replace) bygr(titl
+> e(Test siman bland using data `feature'`n'))
   8.                 }
   9.                 else di as text "Skipped (only one method)"
  10.         }
@@ -23,55 +23,144 @@ Skipped (only one method)
 use data/setupdata_dgm5, clear
 Skipped (only one method)
 use data/setupdata_target1, clear
-siman bland b, name(bland_target1, replace) bygr(title(Test siman bland using data target1))
+siman bland estimate, name(bland_target1, replace) bygr(title(Test siman bland using data target1))
 siman blandaltman will draw 3 graphs each with 2 panels
+Graph bland_target1_1_estimate is for beta=0
+Graph bland_target1_2_estimate is for beta=.25
+Graph bland_target1_3_estimate is for beta=.5
 use data/setupdata_target2, clear
-siman bland b, name(bland_target2, replace) bygr(title(Test siman bland using data target2))
+siman bland estimate, name(bland_target2, replace) bygr(title(Test siman bland using data target2))
 siman blandaltman will draw 3 graphs each with 2 panels
+Graph bland_target2_1_estimate is for beta=0, estimand=effect
+Graph bland_target2_2_estimate is for beta=.25, estimand=effect
+Graph bland_target2_3_estimate is for beta=.5, estimand=effect
 use data/setupdata_target3, clear
-siman bland b, name(bland_target3, replace) bygr(title(Test siman bland using data target3))
+siman bland estimate, name(bland_target3, replace) bygr(title(Test siman bland using data target3))
 siman blandaltman will draw 9 graphs each with 2 panels
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph bland_target3_1_estimate is for beta=0, estimand=effect
+Graph bland_target3_2_estimate is for beta=0, estimand=mean0
+Graph bland_target3_3_estimate is for beta=0, estimand=mean1
+Graph bland_target3_4_estimate is for beta=.25, estimand=effect
+Graph bland_target3_5_estimate is for beta=.25, estimand=mean0
+Graph bland_target3_6_estimate is for beta=.25, estimand=mean1
+Graph bland_target3_7_estimate is for beta=.5, estimand=effect
+Graph bland_target3_8_estimate is for beta=.5, estimand=mean0
+Graph bland_target3_9_estimate is for beta=.5, estimand=mean1
 use data/setupdata_target4, clear
-siman bland b, name(bland_target4, replace) bygr(title(Test siman bland using data target4))
+siman bland estimate, name(bland_target4, replace) bygr(title(Test siman bland using data target4))
 siman blandaltman will draw 9 graphs each with 2 panels
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph bland_target4_1_estimate is for beta=0, estimand=effect
+Graph bland_target4_2_estimate is for beta=0, estimand=mean0
+Graph bland_target4_3_estimate is for beta=0, estimand=mean1
+Graph bland_target4_4_estimate is for beta=.25, estimand=effect
+Graph bland_target4_5_estimate is for beta=.25, estimand=mean0
+Graph bland_target4_6_estimate is for beta=.25, estimand=mean1
+Graph bland_target4_7_estimate is for beta=.5, estimand=effect
+Graph bland_target4_8_estimate is for beta=.5, estimand=mean0
+Graph bland_target4_9_estimate is for beta=.5, estimand=mean1
 use data/setupdata_target5, clear
-siman bland b, name(bland_target5, replace) bygr(title(Test siman bland using data target5))
+siman bland estimate, name(bland_target5, replace) bygr(title(Test siman bland using data target5))
 siman blandaltman will draw 9 graphs each with 2 panels
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph bland_target5_1_estimate is for beta=0, target=1
+Graph bland_target5_2_estimate is for beta=0, target=2
+Graph bland_target5_3_estimate is for beta=0, target=3
+Graph bland_target5_4_estimate is for beta=.25, target=1
+Graph bland_target5_5_estimate is for beta=.25, target=2
+Graph bland_target5_6_estimate is for beta=.25, target=3
+Graph bland_target5_7_estimate is for beta=.5, target=1
+Graph bland_target5_8_estimate is for beta=.5, target=2
+Graph bland_target5_9_estimate is for beta=.5, target=3
 use data/setupdata_target6, clear
-siman bland b, name(bland_target6, replace) bygr(title(Test siman bland using data target6))
+siman bland estimate, name(bland_target6, replace) bygr(title(Test siman bland using data target6))
 siman blandaltman will draw 9 graphs each with 2 panels
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph bland_target6_1_estimate is for beta=0, target=effect
+Graph bland_target6_2_estimate is for beta=0, target=mean0
+Graph bland_target6_3_estimate is for beta=0, target=mean1
+Graph bland_target6_4_estimate is for beta=.25, target=effect
+Graph bland_target6_5_estimate is for beta=.25, target=mean0
+Graph bland_target6_6_estimate is for beta=.25, target=mean1
+Graph bland_target6_7_estimate is for beta=.5, target=effect
+Graph bland_target6_8_estimate is for beta=.5, target=mean0
+Graph bland_target6_9_estimate is for beta=.5, target=mean1
 use data/setupdata_method1, clear
 Skipped (only one method)
 use data/setupdata_method2, clear
 Skipped (only one method)
 use data/setupdata_method3, clear
-siman bland b, name(bland_method3, replace) bygr(title(Test siman bland using data method3))
+siman bland estimate, name(bland_method3, replace) bygr(title(Test siman bland using data method3))
 siman blandaltman will draw 6 graphs each with 2 panels
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph bland_method3_1_estimate is for beta=0, mech=MCAR
+Graph bland_method3_2_estimate is for beta=0, mech=MNAR
+Graph bland_method3_3_estimate is for beta=.25, mech=MCAR
+Graph bland_method3_4_estimate is for beta=.25, mech=MNAR
+Graph bland_method3_5_estimate is for beta=.5, mech=MCAR
+Graph bland_method3_6_estimate is for beta=.5, mech=MNAR
 use data/setupdata_method4, clear
-siman bland b, name(bland_method4, replace) bygr(title(Test siman bland using data method4))
+siman bland estimate, name(bland_method4, replace) bygr(title(Test siman bland using data method4))
 siman blandaltman will draw 6 graphs each with 2 panels
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph bland_method4_1_estimate is for beta=0, mech=MCAR
+Graph bland_method4_2_estimate is for beta=0, mech=MNAR
+Graph bland_method4_3_estimate is for beta=.25, mech=MCAR
+Graph bland_method4_4_estimate is for beta=.25, mech=MNAR
+Graph bland_method4_5_estimate is for beta=.5, mech=MCAR
+Graph bland_method4_6_estimate is for beta=.5, mech=MNAR
 use data/setupdata_method5, clear
-siman bland b, name(bland_method5, replace) bygr(title(Test siman bland using data method5))
+siman bland estimate, name(bland_method5, replace) bygr(title(Test siman bland using data method5))
 siman blandaltman will draw 6 graphs each with 2 panels
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph bland_method5_1_estimate is for beta=0, mech=MCAR
+Graph bland_method5_2_estimate is for beta=0, mech=MNAR
+Graph bland_method5_3_estimate is for beta=.25, mech=MCAR
+Graph bland_method5_4_estimate is for beta=.25, mech=MNAR
+Graph bland_method5_5_estimate is for beta=.5, mech=MCAR
+Graph bland_method5_6_estimate is for beta=.5, mech=MNAR
 use data/setupdata_method6, clear
-siman bland b, name(bland_method6, replace) bygr(title(Test siman bland using data method6))
+siman bland estimate, name(bland_method6, replace) bygr(title(Test siman bland using data method6))
 siman blandaltman will draw 6 graphs each with 2 panels
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph bland_method6_1_estimate is for beta=0, mech=MCAR
+Graph bland_method6_2_estimate is for beta=0, mech=MNAR
+Graph bland_method6_3_estimate is for beta=.25, mech=MCAR
+Graph bland_method6_4_estimate is for beta=.25, mech=MNAR
+Graph bland_method6_5_estimate is for beta=.5, mech=MCAR
+Graph bland_method6_6_estimate is for beta=.5, mech=MNAR
 
 . 
-. siman bland b, by(method beta) subtitle(,size(vsmall)) name(g,replace)
+. siman bland se, by(method beta) subtitle(,size(vsmall)) name(g,replace) saving(mybland) export(jpg
+> )
 siman blandaltman will draw 2 graphs each with 6 panels
+Graph g_1_se is for mech=MCAR
+file mybland_1_se.gph saved
+file mybland_1_se.jpg written in JPEG format
+Graph g_2_se is for mech=MNAR
+file mybland_2_se.gph saved
+file mybland_2_se.jpg written in JPEG format
 
-. foreach graph in g_1_estimate g_2_estimate {
+. foreach graph in g_1_se g_2_se {
   2.         qui graph describe `graph'
   3. }
+
+. cap noi siman bland se, by(method beta) subtitle(,size(vsmall)) name(g,replace) saving(mybland) ex
+> port(jpg)
+siman blandaltman will draw 2 graphs each with 6 panels
+Graph g_1_se is for mech=MCAR
+file mybland_1_se.gph already exists
+
+. assert _rc==602
+
+. erase mybland_1_se.gph
+
+. erase mybland_1_se.jpg
+
+. erase mybland_2_se.gph
+
+. erase mybland_2_se.jpg
 
 . 
 . 

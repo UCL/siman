@@ -1,4 +1,5 @@
-*!	version 0.11.5	11mar2025	
+*!	version 0.11.6	16apr2025	
+*	version 0.11.6	16apr2025	IW allow incomplete dgmorder()
 *	version 0.11.5	11mar2025	IW/TM make norefline option work
 *	version 0.11.4	02jan2025	IW use new char cilevel = the level at which coverage was computed
 *	version 0.11.3	21nov2024	IW Graph drawing moved to new standalone nestloop
@@ -160,8 +161,8 @@ if !mi("`dgmorder'") {
 		exit 498
 	}
 	if !mi("`dgmmissing'") {
-		di as error "dgm missing from dgmorder(): `dgmmissing'"
-		exit 498
+		* di as error "dgm missing from dgmorder(): `dgmmissing'"
+		local dgmorder `dgmorder' `dgmmissing'
 	}
 }
 
@@ -252,6 +253,7 @@ foreach thispm of local pmlist { // loop over PMs
 			if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
 			cap noi `graphexportcmd'
 			if _rc di as error "Error in export() option"
+			exit _rc
 		}
 
 	} // end of loop over targets

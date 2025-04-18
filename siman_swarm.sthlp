@@ -25,7 +25,7 @@
 {it:method}, and not e.g. to {it:repetition}. A warning is issued if this is breached.
 
 
-{synoptset 26 tabbed}{...}
+{synoptset 28 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Main}
@@ -41,9 +41,17 @@ Each panel displays all methods, so do not include {it:method} in {cmd:by()}.
 {synopt:{opt bygr:aphoptions(string)}}graph options for the overall graph that need to be within the {it:by} option: e.g. title(), note(), row(), col(){p_end}
 {synopt:{opt graphop:tions(string)}}graph options for the overall graph that need to be outside the 
 {it:by} option: e.g. xtitle(), ytitle(). This must not include {opt name()}.{p_end}
-{synopt:{opt name(string)}}the stub for the graph name, to which "_estimate" or "_se" is appended. Default name is "swarm".{p_end}
 {synopt:{it:graph_options}}siman swarm attempts to allocate graph options as {opt scatteroptions()}, {opt bygraphoptions()} or {opt graphoptions()}.{p_end}
+
+{syntab:Saving options}
+{synopt:{opt name(string)}}the stub for the graph name, to which "_estimate" or "_se" is appended. Default name is "swarm".{p_end}
+{synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves the graph(s) to disk in Stata’s .gph format.
+The graph name is {it:namestub} with the statistic name ("estimate" or "se") appended.{p_end}
+{synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
+{cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} with the appropriate 
+filetype, which must be one of the suffices listed in {help graph export}.{p_end}
 {synoptline}
+
 
 
 {marker description}{...}

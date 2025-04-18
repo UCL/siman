@@ -1,4 +1,5 @@
-*!	version 0.11.4	08apr2025	
+*!	version 0.11.5	17apr2025	IW remove notable option
+*	version 0.11.5	17apr2025	
 *	version 0.11.4	08apr2025	IW doesn't auto-call siman table
 *	version 0.11.3	01apr2025	IW calls simsum with new semissingok option
 *	version 0.11.2	17mar2025	IW doesn't call siman table if too many dgmvars
@@ -34,7 +35,7 @@
 program define siman_analyse
 version 15
 
-syntax [anything] [if], [PERFonly REPlace noTABle /// documented options
+syntax [anything] [if], [PERFonly REPlace /// documented options
 	ref(string) Level(cilevel) * /// simsum options
 	force debug pause nopreserve /// undocumented options
 	]
@@ -47,7 +48,7 @@ if _rc == 111 {
 	di as error `"simsum needs to be installed to run siman analyse. Please use {stata "ssc install simsum"}"'
 	exit 498
 }
-vercheck simsum, vermin(2.1.2) quietly message(`"{p 0 2}You can install the latest simsum using {stata "net from https://raw.githubusercontent.com/UCL/simsum/main/package/"}{p_end}"')
+vercheck simsum, vermin(2.2.3) quietly message(`"{p 0 2}You can install the latest simsum using {stata "net from https://raw.githubusercontent.com/UCL/simsum/main/package/"}{p_end}"')
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -337,19 +338,6 @@ foreach thing in `allthings' {
 if `secreated' di as text "siman analyse has created variable _se to hold the MCSE"
 
 di as text "siman analyse has run successfully"
-
-/*
-if "`table'"!="notable" {
-	if `ndgmvars'>3 di as text "Too many dgmvars: skipping call to siman table"
-	else {
-		cap noi siman_table
-		if _rc {
-			di as text "siman analyse has run successfully, but presenting the results using siman table has failed"
-			exit _rc
-		}
-	}
-}
-*/
 
 end
 

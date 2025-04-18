@@ -27,13 +27,16 @@ performance is displayed for all available measures.
 {synoptset 20 tabbed}{...}
 {synopthdr}
 {synoptline}
-{synopt:{opt c:olumn(varlist)}}specifies factors (i.e. which of {bf:dgm}, {bf:target} and/or {bf:method}) 
-to be placed in the columns. Default is target and method.{p_end}
-{synopt:{opt r:ow(varlist)}}specifies factors (i.e. which of {bf:dgm}, {bf:target} and/or {bf:method}) to be placed in the rows. Default is performance measure.{p_end}
+{synopt:{opt c:olumn(varlist)}}specifies factor(s) (i.e. which of {it:dgmvars}, {it:target}, {it:method} and {bf:_performancemeasure}) 
+to be placed in the columns. Default is target and method. The
+rightmost factor will be fastest-changing in the table. Only two variables may be specified when {help tabdisp} is used to create the table.{p_end}
+{synopt:{opt r:ow(varlist)}}specifies factor(s) (i.e. which of {it:dgmvars}, {it:target}, {it:method} and {bf:_performancemeasure})
+to be placed in the rows. Default is performance measure. The
+rightmost factor will be fastest-changing in the table.{p_end}
 {synopt:{opt nomc:se}}omit Monte Carlo standard errors from the table.{p_end}
 {synopt:{opt mcci}}add Monte Carlo confidence intervals to the table.{p_end}
 {synopt:{opt mcl:evel(#)}}specifies the level for Monte Carlo confidence intervals. Default is as explained in {help level}.{p_end}
-{synopt:{opt tabd:isp}}use {help tabdisp} to create the table: this is the default in Stata versions < 17.{p_end}
+{synopt:{opt tabd:isp}}use {help tabdisp} to create the table: this is the default, and required, in Stata versions < 17.{p_end}
 {synopt:{opt tabl:e}}use {help table} to create the table: this is the default in Stata versions 17+.{p_end}
 {synopt:{it:table options}}many options for {help tabdisp}, e.g. {cmd:stubwidth(20)}, or {help table}, e.g. {cmd:nformat(%6.3f)}.{p_end}
 {synoptline}
@@ -43,7 +46,7 @@ to be placed in the columns. Default is target and method.{p_end}
 {title:Description}
 
 {pstd}
-{cmd:siman table} summarises the performance statistics produced by {bf:{help siman analyse}}.
+{cmd:siman table} displays the performance statistics produced by {bf:{help siman analyse}}.
 The output table lists the estimand(s) split by dgms, targets, methods and performance measures.
 If you are running Stata 17 or higher, the default is to use {help table}.
 Otherwise, the default is to use {help tabdisp}.
@@ -80,14 +83,17 @@ be recalled once the performance statistics have been created by
 
 {phang}. {stata "siman table"}
 
-{pstd}The table is too long. We could shorten it by selecting just three performance measures:
+{pstd}The table is quite long. We could shorten it by selecting just three performance measures:
 
 {phang}. {stata "siman table bias empse modelse"}
 
-{pstd}And we could choose to display 90% Monte Carlo confidence intervals:
+{pstd}We could choose to display 90% Monte Carlo confidence intervals:
 
 {phang}. {stata "siman table bias empse cover, nomcse mcci mclevel(90)"}
 
+{pstd}We could rearrange the table rows and columns:
+
+{phang}. {stata "siman table bias empse modelse, col(estimand _p) row(dgm method)"}
 
 
 {marker authors}{...}

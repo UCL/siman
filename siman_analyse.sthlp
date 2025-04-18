@@ -58,7 +58,6 @@ statistics. This precludes subsequent use of descriptive graphs.{p_end}
 {synopt:{opt rep:lace} }if {cmd:siman analyse} has already been run and the user specifies it 
 again then they must use the replace option, 
 to replace the existing performance measures in the data set.{p_end}
-{synopt:{opt notab:le} }do not run {help siman table} after estimating the performance measures.{p_end}
 {synopt:{opt l:evel(#)}}specifies the confidence level for coverages and powers. The default is 
 the system default set by {help level:set level}. This option is passed to {help simsum}.{p_end}
 {synopt:{opt ref(method)}}specifies the reference method for calculating relative precisions. This 

@@ -17,17 +17,17 @@
 {title:Syntax}
 
 {p 8 17 2}
-{cmdab:siman bla:ndaltman} [{it:varlist}] {ifin}
+{cmdab:siman bla:ndaltman} [{cmd:estimate}] [{cmd:se}] {ifin}
 [{cmd:,}
 {it:options}]
 
-{pstd}{it:varlist} may include {it:estimate} (the default), {it:se} or both.
+{pstd}If neither {cmd:estimate} nor {cmd:se} is specified, this is equivalent to {cmd:siman blandaltman estimate}. If both are specified, {cmd:siman blandaltman} will draw a graph for each.
 
 {pstd}The {it:if} and {it:in} conditions should usually apply only to {bf:dgm}, {bf:target} and 
 {bf:method}, and not e.g. to {bf:repetition}. A warning is issued if this is breached.
 
 
-{synoptset 25 tabbed}{...}
+{synoptset 28 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Main}
@@ -47,6 +47,16 @@ Note that the value needs to be entered in to {bf: methlist()} and not the label
 {bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)}.  The {bf: methlist()} option needs to be specified to subset on methods, 
 using <= and >= will not work.  The components of {bf: methlist()}  need to be written out in full, for example {bf: methlist(1 2 3 4)} and not
 {bf: methlist(1/4)}.{p_end}
+
+{syntab:Saving options}
+{synopt:{opt name(string)}}the stub for the graph name, to which "_#_estimate" or "_#_se" is appended, 
+where # is the group number. Default name is "blandaltman".{p_end}
+{synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata’s .gph 
+format. The graph name is {it:namestub} with "_#_estimate" or "_#_se" appended, where # is the group number.{p_end}
+{synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata 
+format. {cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} 
+with the appropriate 
+filetype, which must be one of the suffices listed in {help graph export}.{p_end}
 {synoptline}
 
 

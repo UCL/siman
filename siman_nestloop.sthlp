@@ -27,12 +27,13 @@
 {bf:repetition}. A warning is issued if this is breached.
 
 
-{synoptset 21 tabbed}{...}
+{synoptset 28 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Options controlling the main graph}
-{synopt:{opt dgmo:rder(string)}}defines the order of data generating mechanisms for the nested-loop 
-plot. A negative sign in front of the variable name 
+{synopt:{opt dgmo:rder(string)}}defines the order of data generating mechanism (DGM) variables for the nested-loop 
+plot. The right-most variable is fastest-changing. A 
+negative sign in front of the variable name 
 will sort its values on the graph in descending order.{p_end}
 {synopt:{opt stag:ger(#)}}horizontally staggers the lines for different methods.  Default # is 0. Try 
 {cmd:stagger(0.05)} to make overlapping lines more distinct.{p_end}
@@ -54,24 +55,27 @@ graph, as a fraction of the whole vertical axis.  Default # is 0.{p_end}
 {synopt:{opt dgla:bsize(string)}}controls the size of the descriptor graph labels. Default is vsmall.{p_end}
 {synopt:{opt dgst:yle(string)}}controls the style(s) of the descriptor graph.{p_end}
 {synopt:{opt dglw:idth(string)}}controls the line width(s) of the descriptor graph.{p_end}
+{synopt:{opt dgre:verse}}reverses the order of the descriptor graphs, so that the slowest-changing 
+(left-most) DGM variable is shown at the top. By default, the slowest-changing DGM variable is shown 
+at the bottom.{p_end}
 
 {syntab:Other graph options}
 {synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend 
 item or as the legend title. The default is neither.{p_end}
 {synopt:{opt scena:riolabel}}labels the horizontal axis with scenario numbers. 
 The default is an unlabelled axis, since the descriptor graphs describe the scenarios.{p_end}
-{synopt:{opt name(string)}} the stub for the graph name, to which "_" followed by the target name and 
-"_" followed by the performance measure name is appended. Default name is "nestloop". For example, 
-with two targets, beta and gamma, and two performance measures, bias and relerror, defauly graph 
-names would be "nestloop_beta_bias", "nestloop_gamma_bias", "nestloop_beta_relerror" and "nestloop_gamma_relerror.{p_end}
 {synopt:{it:graph_options}}Most of the valid options for {help line:line} are available.
 We find these especially useful: {cmd:ylabel()} to stop the y-labels extending to the descriptor graph; 
 {cmd:legend()} to arrange legends in a single row or column, e.g.
 {cmd:legend(pos(6) row(1))} or {cmd:legend(pos(3) col(1))}.{p_end}
 
 {syntab:Saving options}
+{synopt:{opt name(string)}}the stub for the graph name, to which "_" followed by the target name and 
+"_" followed by the performance measure name are appended. Default name is "nestloop". For example, 
+with two targets, beta and gamma, and two performance measures, bias and relerror, defauly graph 
+names would be "nestloop_beta_bias", "nestloop_gamma_bias", "nestloop_beta_relerror" and "nestloop_gamma_relerror.{p_end}
 {synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata’s .gph format.
-The graph name is {it:namestub} with the target and performance measures appended.{p_end}
+The graph name is {it:namestub} with the target and performance measures appended, as for {cmd:name()}.{p_end}
 {synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} with the appropriate 
 filetype, which must be one of the suffices listed in {help graph export}.{p_end}
@@ -92,12 +96,11 @@ generating mechanisms along the horizontal
 axis. The nested-loop plot loops through nested data-generating mechanisms and plots results 
 for different methods on top of each other in a full factorial design.
 
-{pstd}The user can select a subset of performance measures to be graphed from those listed in 
+{pstd}The user can select a set of performance measures to be graphed from those listed in 
 {help siman analyse##perfmeas:performance measures}.
-If no performance measures are specified, then the default choice is {help siman analyse##bias:bias}, 
-{help siman analyse##empse:empse} and {help siman analyse##cover:coverage};
+If no performance measures are specified, then the default choice is {help siman analyse##bias:bias};
 however, if {cmd:true()} was not specified in {help siman setup}, graphs will be drawn for 
-{help siman analyse##mean:mean}, {help siman analyse##empse:empse} and {help siman analyse##relerror:relerror}.
+{help siman analyse##mean:mean}.
 
 {pstd}
 The user can specify {it:if} within the {cmd:siman nestloop} syntax. The
@@ -138,6 +141,16 @@ Both {help siman setup} and {help siman analyse} need to be run before {bf:siman
 {pstd}Tailor the descriptor graph appearance
 
 {phang}. {stata `"siman nestloop relerror if estimand=="effect", dgsize(.4) dggap(.1) dgcol(green orange purple) dgpatt(dash solid =) dglabsize(medium) dglwidth(*2)"'}
+
+{pstd}Save nested loop graphs to disk. This 
+command will create 2 files for each of 3 estimands: my_effect_relerror.gph,
+my_effect_relerror.pdf,
+my_mean0_relerror.gph, 
+my_mean0_relerror.pdf, 
+my_mean1_relerror.gph, and 
+my_mean1_relerror.pdf.
+
+{phang}. {stata `"siman nestloop relerror, saving(my) export(pdf)"'}
 
 
 {marker references}{...}

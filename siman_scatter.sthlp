@@ -26,7 +26,7 @@ the user can select {it:estimate vs. se} by typing {bf:siman scatter} {it:estima
 {bf:method}. If they are applied otherwise, e.g. to {bf:repetition}, a warning is issued.
 
 
-{synoptset 25 tabbed}{...}
+{synoptset 28 tabbed}{...}
 {synopthdr}
 {synoptline}
 {syntab:Main}
@@ -37,6 +37,13 @@ Specifying for example {cmd:by(}{it:target method}{cmd:)} will overlay DGMs.
 {syntab:Graph options}
 {synopt:{it:graph_options}}options for {help scatter} that do not go inside the {cmd:by()} option.{p_end}
 {synopt:{opt bygr:aphoptions(string)}}options for {help scatter} that go inside the {cmd:by()} option.{p_end}
+
+{syntab:Saving options}
+{synopt:{opt sav:ing}{it:(name[}{cmd:, replace}{it:])}}saves the graph to disk in Stata’s .gph format.
+The graph name is {it:name}.{p_end}
+{synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports the graph to disk in non-Stata format. 
+{cmd:saving()} must also be specified. The exported file name is the same as for {cmd:saving()} with the appropriate 
+filetype, which must be one of the suffices listed in {help graph export}.{p_end}
 {synoptline}
 
 

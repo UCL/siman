@@ -52,6 +52,26 @@ Graph cms_method6_5 is for beta=.5, mech=MCAR
 Graph cms_method6_6 is for beta=.5, mech=MNAR
 
 . 
+. use data/setupdata_method4, clear
+
+. siman cms if beta==0, saving(mycms) export(pdf)
+siman comparemethodsscatter will draw 2 graphs each showing 3 methods
+Graph cms_1 is for beta=0, mech=MCAR
+file mycms_1.gph saved
+file mycms_1.pdf saved as PDF format
+Graph cms_2 is for beta=0, mech=MNAR
+file mycms_2.gph saved
+file mycms_2.pdf saved as PDF format
+
+. erase mycms_1.gph
+
+. erase mycms_1.pdf
+
+. erase mycms_2.gph
+
+. erase mycms_2.pdf
+
+. 
 . di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 *** SIMAN HAS PASSED ALL THE TESTS IN test_cms.do ***
 

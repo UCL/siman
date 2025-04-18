@@ -1,4 +1,5 @@
-*!	version 0.11.2	27mar2025
+*!	version 0.11.3	11apr2025
+*	version 0.11.3	11apr2025   TM corrected wording 'performance estimates' to 'performance statistics'
 *	version 0.11.2	27mar2025	IW correct reporting of whether estimates in data
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option	
 *	version 0.7	14jun2024	IW streamline for longlong only; calculate #dgms without assuming factorial; remove commented out code
@@ -119,7 +120,7 @@ if "`truetype'" == "string" {
 else di as text "  True value:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
 cap assert `rep'<=0
 di as text _newline "Estimates data" as result _col(`colwidth') cond(_rc,"in data","not in data")
-di as text "Performance estimates" as result _col(`colwidth') cond("`analyserun'"=="1","in data","not in data")
+di as text "Performance statistics" as result _col(`colwidth') cond("`analyserun'"=="1","in data","not in data")
 if !mi("`analyseif'") di as text "  Restricted to:" as result _col(`colwidth') "`analyseif'"
 di as text "_____________________________________________________"
 
