@@ -234,10 +234,10 @@ if !mi("`mcci'") & !mi("`table'") di as text "Note: Monte Carlo CIs calculated a
 
 * if mcses or mccis are reported, print the following note
 if (mi("`mcse'") | !mi("`mcci'")) & !mi("`tabdisp'") {
-	di as smcl as text "{p 0 2}Note: where there are multiple entries in the table, they are the estimated performance measure, followed by"
-	if mi("`mcse'") di "its Monte Carlo standard error"
+	di as smcl as text "{p 0 2}Note: where there are multiple entries per performance measure, these are estimated performance, followed by"
+	if mi("`mcse'") di "Monte Carlo standard error"
 	if mi("`mcse'") & !mi("`mcci'") di "and"
-	if !mi("`mcci'") di "its Monte Carlo `mclevel'% confidence limits"
+	if !mi("`mcci'") di "Monte Carlo `mclevel'% confidence limits"
 	di "{p_end}"
 }
 
