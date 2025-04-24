@@ -34,6 +34,14 @@ reshape long exp mse cov bias var2, i(theta rho pc tau2 k) j(method) string
 * draw nestloop for 9 methods and 4*3*4*4*4 dgms
 nestloop exp, descriptors(theta rho pc tau2 k) method(method) true(theta) legend(row(2)) dgsize(.25)
 
+*** Reproduce nested loop plot in Rucker and Schwarzer 2014
+
+* log transform - sadly yscale(log) doesn't work
+gen logor = log(exp)
+gen logtheta=log(theta)
+mylabels .2 .5 1, myscale(log(@)) local(labels)
+keep if inlist(method,"peto","trimfill","peters","limf","limr")
+nestloop logor, descriptors(-theta rho -pc tau2 -k) method(method) true(logtheta) legend(col(1) ring(0) pos(9)) dgsize(.25) dgreverse debug ylabel(`labels') ytitle(Odds ratio) lcol(orange black blue gray lime) scheme(mrc)
 
 *** Main tests of siman nestloop
 use $testpath/data/extendedtestdata.dta, clear
@@ -55,7 +63,7 @@ siman nestloop if estimand=="effect", lcol(black red blue) xtitle("") xlabel(non
 * siman analyse with if
 use $testpath/data/extendedtestdata, clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
-siman analyse if mech!=2, notable
+siman analyse if mech!=2
 siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) stagger(0.03) 
 * Graph should ignore mech
 
