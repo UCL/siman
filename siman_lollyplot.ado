@@ -363,7 +363,6 @@ foreach thistarget of local targetlevels {
 	local i 1
 	local graphorder
 	foreach thismethod of local methodlevels {
-		di "pstyle`i' = p`i', `mcol`i'', `mfcol`i''"
 		local graphorder `graphorder' `=4*`i'' "`methlegitem'`label`i''"
 		* line from ref to main marker
 		local graph_cmd `graph_cmd' (rspike `estimate' `ref' `method' ///
@@ -379,7 +378,7 @@ foreach thistarget of local targetlevels {
 		* main marker
 		local graph_cmd `graph_cmd' (scatter `method' `estimate' ///
 			if `method'==`thismethod' `andtargetcond', pstyle(p`i') mlabstyle(p`i') ///
-			/*mcol(`mcol`i'') mfcol(`mfcol`i'') msym(`msym`i'')*/ `mlabel' mlabpos(12) /*mlabcol(`mcol`i'') */ )
+			msym(`msym`i'') /* mcol(`mcol`i'')*/ mfcol(`mfcol`i'') `mlabel' mlabpos(12) /*mlabcol(`mcol`i'') */ )
 		local ++i
 	}
 	if !mi("`saving'") local savingopt saving(`"`saving'_`thistargetname'"'`savingopts')
@@ -414,7 +413,7 @@ end
 
 
 
-	
+
 ******************* START OF PROGRAM PADDING ************************
 
 * separate out the given words to create a title of given width
