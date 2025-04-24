@@ -242,6 +242,7 @@ local graph_cmd twoway
 	(rspike `lci' `uci' `rank' if  `covers' & `rank'>=`ymin', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions') // covering CIs
 	(scatter `rank' `estimate' if `rank'>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
 	(rspike `truemax' `truemin' `true', pstyle(p5) lw(thin) `truegraphoptions') // vertical line at true value
+	;
 if mi("`sort'") local graph_cmd `graph_cmd' 	
 	(rspike `lpoint' `rpoint' `covlb', hor lw(thin) pstyle(p5)) // MC CI for obs coverage
 	(rspike `lpoint' `rpoint' `covub', hor lw(thin) pstyle(p5))
