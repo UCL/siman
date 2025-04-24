@@ -1,4 +1,5 @@
-*!	version 0.11.7	16apr2025	
+*!	version 0.11.8	24apr2025	
+*	version 0.11.8	24apr2025	IW better capitalisation of performance measures
 *	version 0.11.7	16apr2025	IW make rows and columns work correctly
 *	version 0.11.6	10apr2025	IW correct table footnote
 *	version 0.11.5	08apr2025	IW no version, call tabdisp or table according to Stata version, new default arrangement of variables
@@ -119,7 +120,10 @@ qui gen _perfmeascodeorder=.
 local p = 0
 foreach perf of local perfvar {
 	qui replace _perfmeascodeorder = `p' if _perfmeascode == "`perf'"
-	local Perf = strproper("`perf'")
+	if inlist("`perf'","mse","rmse") local Perf = upper("`perf'")
+	else if "`perf'"=="sereps" local Perf = "SEreps"
+	else if "`perf'"=="ciwidth" local Perf = "CIwidth"
+	else local Perf = strproper("`perf'")
 	local perflabels `perflabels' `p' "`Perf'"
 	local p = `p' + 1
 }
