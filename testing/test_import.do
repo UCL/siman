@@ -21,7 +21,7 @@ log using `filename', replace text nomsg
 
 // TEST WORKING ON THE NESTLOOP TEST DATA SET
 
-use "C:\ian\git\siman\testing\data\res.dta", clear
+use $testpath/data/res.dta, clear
 keep if pc==2 & rho==3
 drop pc rho
 local dgmvars theta tau2 k 
@@ -82,7 +82,7 @@ rename _true true
 rename _perfmeascode pm
 
 // import to siman
-pda
+program drop _all
 siman import, perf(pm) dgm(dgm) method(method) estimate(b) se(se) true(true)
 siman table, col(dgm method) tabdisp
 siman lol, name(lolly2,replace)
