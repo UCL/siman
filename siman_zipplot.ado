@@ -1,4 +1,8 @@
-*!	version 0.11.3	02jan2025	
+*!	version 0.11.7	16apr2025	
+*	version 0.11.7	16apr2025	IW undocumented nosort option
+*	version 0.11.6	01apr2025	TM added faint default gridlines at (0 100) [when no ymin is specified] or at (100) [when ymin(#) uses #<0]
+*	version 0.11.5	31mar2025	TM moved default placement of by() note to clock pos 11 to make more prominent (based on feedback)
+*	version 0.11.4	12mar2025	IW bug fix - didn't generate CIs when dfvar was present but with missing value
 *	version 0.11.3	02jan2025	IW new coverlevel() option
 *	version 0.11.2	11nov2024	IW handle case of no byvar
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; drop PMs
@@ -36,8 +40,8 @@ version 15
 
 syntax [if][in] [, * BY(varlist) ///
 	NONCOVeroptions(string) COVeroptions(string) SCAtteroptions(string) ///
-	TRUEGRaphoptions(string) BYGRaphoptions(string) SCHeme(passthru) ymin(integer 0) name(passthru) Level(cilevel) COVERLevel(cilevel) ///
-	debug pause /// undocumented
+	TRUEGRaphoptions(string) BYGRaphoptions(string) SCHeme(passthru) ymin(integer 0) name(passthru) SAVing(string) EXPort(string) Level(cilevel) COVERLevel(cilevel) ///
+	debug pause noSOrt /// undocumented
 	]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -57,6 +61,10 @@ if _rc {
 		exit 498
 	}
 }
+if mi("`lci'")!=mi("`uci'") {
+	di as error "siman zipplot doesn't know how to draw one-sided CIs"
+	exit 498
+}
 
 * if true is missing, produce an error message
 if "`true'"=="" {
@@ -65,6 +73,28 @@ if "`true'"=="" {
 }
 
 if mi("`name'") local name name(zipplot, replace)
+
+* parse optional saving (standard code)
+if !mi(`"`saving'"') {
+	gettoken saving savingopts : saving, parse(",")
+	local saving = trim("`saving'")
+	if strpos(`"`saving'"',".") & !strpos(`"`saving'"',".gph") {
+		di as error "Sorry, saving() must not contain a full stop"
+		exit 198
+	}
+}
+
+* parse optional export (standard code)
+if !mi(`"`export'"') {
+	gettoken exporttype exportopts : export, parse(",")
+	local exporttype = trim("`exporttype'")
+	if mi("`saving'") {
+		di as error "Please specify saving(filename) with export()"
+		exit 198
+	}
+}
+
+*** END OF PARSING ***
 
 /* Start preparations */
 
@@ -104,16 +134,23 @@ else if !mi("`debug'") di as input "Debug: graphing by: `by'"
 
 * create confidence intervals, if not already there
 local level2 = 1/2+`level'/200
+tempvar critval
+if !mi("`df'") { // there's a df variable - but it may be missing
+	qui gen `critval' = invttail(`df', 1-`level2') if !mi(`df')
+	qui replace `critval' = invnorm(`level2') if mi(`df')
+}
+else gen `critval' = invnorm(`level2') // no df variable
 if mi("`lci'") {
 	tempvar lci
-	if !mi("`df'") gen `lci' = `estimate' - `se'*invttail(`df', `level2')
-	else gen `lci' = `estimate' - `se'*invnorm(`level2')
+	qui gen `lci' = `estimate' - `se'*`critval'
+	label var `lci' "lci"
 }
 if mi("`uci'") {
 	tempvar uci
-	if !mi("`df'") gen `uci' = `estimate' + `se'*invttail(`df', `level2')
-	else gen `uci' = `estimate' + `se'*invnorm(`level2')
+	qui gen `uci' = `estimate' + `se'*`critval'
+	label var `uci' "uci"
 }
+drop `critval'
 
 * store method names in locals mlabel`i'
 qui levelsof `method'
@@ -133,25 +170,31 @@ forvalues i = 1/`nummethodnew' {
 * create covering indicator
 tempvar covers
 gen byte `covers' = inrange(`true',`lci',`uci')
+label var `covers' "covers"
 		
 * create sort order
-tempvar zstat rank
-if !mi("`se'") gen float `zstat' = -abs(`estimate'-`true')/`se'
-else gen float `zstat' = -abs(`estimate'-`true')/abs(`uci'-`lci')
-sort `by' `zstat' // check: was sorted by by true zstat
-drop `zstat'
+if mi("`sort'") {
+	tempvar zstat
+	if !mi("`se'") qui gen float `zstat' = -abs(`estimate'-`true')/`se'
+	else qui gen float `zstat' = -abs(`estimate'-`true')/abs(`uci'-`lci')
+	sort `by' `zstat' // check: was sorted by by true zstat
+	drop `zstat'
+}
+tempvar rank
 qui bysort `by': gen double `rank' = 100*(1 - _n/_N)
 
 * Create MC conf. int. for coverage
-local coverlevel2 = 1/2+`coverlevel'/200
-tempvar cov ncov covlb covub
-qui egen `cov' = mean(`covers'), by(`by')
-qui egen `ncov' = count(`covers'), by(`by')
-gen `covlb' = 100 * (`cov' - invnorm(`coverlevel2')*sqrt(`cov'*(1-`cov')/`ncov'))
-gen `covub' = 100 * (`cov' + invnorm(`coverlevel2')*sqrt(`cov'*(1-`cov')/`ncov'))
-qui bysort `by': replace `covlb' = . if _n>1
-qui bysort `by': replace `covub' = . if _n>1
-drop `cov' `ncov'
+if mi("`sort'") {
+	local coverlevel2 = 1/2+`coverlevel'/200
+	tempvar cov ncov covlb covub
+	qui egen `cov' = mean(`covers'), by(`by')
+	qui egen `ncov' = count(`covers'), by(`by')
+	gen `covlb' = 100 * (`cov' - invnorm(`coverlevel2')*sqrt(`cov'*(1-`cov')/`ncov'))
+	gen `covub' = 100 * (`cov' + invnorm(`coverlevel2')*sqrt(`cov'*(1-`cov')/`ncov'))
+	qui bysort `by': replace `covlb' = . if _n>1
+	qui bysort `by': replace `covub' = . if _n>1
+	drop `cov' `ncov'
+}
 
 * find range to plot over
 tempvar lpoint rpoint
@@ -178,29 +221,42 @@ if `npanels' > 15 {
 tempvar truemax truemin
 gen `truemax'=100
 gen `truemin'=`ymin'
-if `ymin'<=5 local ylab ylab(5 50 95)
-else if `ymin'<=50 local ylab ylab(50 95)
-else if `ymin'<=95 local ylab ylab(95)
-else local ylab
-if "`bycreated'"!="1" local byopt by(`by', ixaxes noxrescale iscale(*.9) `bygraphoptions' `dgmmissingok')
-else local byopt `bygraphoptions' `dgmmissingok'
+if mi("`sort'") {
+	if `ymin'<=5 local ylab ylab(5 50 95) ytick(0 100, tl(zero) grid glp(l))
+	else if `ymin'<=50 local ylab ylab(50 95) ytick(100, tl(zero) grid glp(l))
+	else if `ymin'<=75 local ylab ylab(75 95) ytick(100, tl(zero) grid glp(l))
+	else if `ymin'<=95 local ylab ylab(95) ytick(100, tl(zero) grid glp(l))
+	else local ylab
+	local ytitle Centile
+}
+else {
+	local ylab ylab(none)
+	local ytitle 
+}
+if "`bycreated'"!="1" local byopt by(`by', ixaxes noxrescale iscale(*.9) note(,pos(11)) `bygraphoptions' `dgmmissingok')
+else local byopt note(,pos(11)) `bygraphoptions' `dgmmissingok'
+if !mi("`saving'") local savingopt saving(`"`saving'"'`savingopts')
 #delimit ;
 local graph_cmd twoway
 	(rspike `lci' `uci' `rank' if !`covers' & `rank'>=`ymin', hor lw(medium) pstyle(p2) lcol(%30) `noncoveroptions') // non-covering CIs
 	(rspike `lci' `uci' `rank' if  `covers' & `rank'>=`ymin', hor lw(medium) pstyle(p1) lcol(%30) `coveroptions') // covering CIs
 	(scatter `rank' `estimate' if `rank'>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
 	(rspike `truemax' `truemin' `true', pstyle(p5) lw(thin) `truegraphoptions') // vertical line at true value
+	;
+if mi("`sort'") local graph_cmd `graph_cmd' 	
 	(rspike `lpoint' `rpoint' `covlb', hor lw(thin) pstyle(p5)) // MC CI for obs coverage
 	(rspike `lpoint' `rpoint' `covub', hor lw(thin) pstyle(p5))
-	, 
+	;
+local graph_cmd `graph_cmd', 
 	xtitle("`level'% confidence intervals")
-	ytitle("Centile")
+	ytitle("`ytitle'")
 	`ylab'
 	`byopt'
 	legend(order(1 "Non-coverers" 2 "Coverers"))
 	`scheme'
 	`options'
 	`name'
+	`savingopt'
 ;
 #delimit cr
 
@@ -210,6 +266,14 @@ if !mi("`pause'") {
 	pause Press F9 to recall, optionally edit and run the graph command
 }
 `graph_cmd'
+
+if !mi("`export'") {
+	local graphexportcmd graph export `"`saving'.`exporttype'"'`exportopts'
+	if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
+	cap noi `graphexportcmd'
+	if _rc di as error "Error in export() option"
+	exit _rc
+}
 
 
 end

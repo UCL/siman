@@ -44,6 +44,39 @@ xij variables:
 > 5)
 
 . 
+. *** Reproduce nested loop plot in Rucker and Schwarzer 2014
+. 
+. * log transform - sadly yscale(log) doesn't work
+. gen logor = log(exp)
+(2,304 missing values generated)
+
+. gen logtheta=log(theta)
+
+. mylabels .2 .5 1, myscale(log(@)) local(labels)
+-1.6094379124341 ".2" -.6931471805599453 ".5" 0 "1"
+
+. keep if inlist(method,"peto","trimfill","peters","limf","limr")
+(5,376 observations deleted)
+
+. nestloop logor, descriptors(-theta rho -pc tau2 -k) method(method) true(logtheta) legend(col(1) ri
+> ng(0) pos(9)) dgsize(.25) dgreverse debug ylabel(`labels') ytitle(Odds ratio) lcol(orange black bl
+> ue gray lime) scheme(mrc)
+Debug: graph command is: graph twoway (line logtheta __000001, c(J) lc(gs10) lw(medthick) ) (line lo
+> gor __000001 if method=="limf", c(J) lcolor(orange)) (line logor __000001 if method=="limr", c(J) 
+> lcolor(black)) (line logor __000001 if method=="peters", c(J) lcolor(blue)) (line logor __000001 i
+> f method=="peto", c(J) lcolor(gray)) (line logor __000001 if method=="trimfill", c(J) lcolor(lime)
+> ) (line __000003 __000004 __000005 __000006 __000007 __000001, c(J ...) lcol(gs4 ...) lpattern(sol
+> id ...) lwidth( ...) lstyle( ...) ) , legend(order(1 `"True"' 2 `"limf"' 3 `"limr"' 4 `"peters"' 5
+>  `"peto"' 6 `"trimfill"')  ring(0) position(9) cols(1)) ytitle(logor) xla(none) xtitle("") yla(,no
+> grid) text(-1.376291631311177 1 `"Odds Ratio (1, .75, .67, .5)"', place(e) col(gs4) size(vsmall) j
+> ustification(left)) text(-1.471202885756889 1 `"Selection (no, weak, moderate, strong)"', place(e)
+>  col(gs4) size(vsmall) justification(left)) text(-1.566114140202601 1 `"Control Event Proportion (
+> 30%, 20%, 10%, 5%)"', place(e) col(gs4) size(vsmall) justification(left)) text(-1.661025394648313 
+> 1 `"Heterogeneity (0, .05, .1, .2)"', place(e) col(gs4) size(vsmall) justification(left)) text(-1.
+> 755936649094025 1 `"Number of studies (20, 10, 5)"', place(e) col(gs4) size(vsmall) justification(
+> left)) name()    ylabel(   -1.6094379124341 ".2"  -.6931471805599453 ".5"                   0 "1" 
+> ) ytitle(Odds ratio) scheme(mrc)
+
 . 
 . *** Main tests of siman nestloop
 . use $testpath/data/extendedtestdata.dta, clear
@@ -84,11 +117,11 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
 . 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop bias, lcol(black red blue) 
@@ -140,10 +173,10 @@ Repetition-level output
   True value variable:            N/A
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop if estimand=="effect", lcol(black red blue) xtitle("") xlabel(none) stagger(0.03) 
@@ -189,10 +222,10 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
-. siman analyse if mech!=2, notable
+. siman analyse if mech!=2
 siman analyse has run successfully
 
 . siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) stagger(0.0
@@ -254,10 +287,10 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mstring,replace)
@@ -319,10 +352,10 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mlabalpha,replace)
@@ -381,10 +414,10 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(mlabdata,replace)
@@ -457,10 +490,10 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(munlabelled,replace)
@@ -534,10 +567,10 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop empse if estimand=="effect", name(munlabplus10,replace)
@@ -601,10 +634,10 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) stagger(0.0
@@ -619,10 +652,12 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * incomplete dgmorder
-. cap noi siman nestloop bias if estimand=="mean0", dgmorder(pmiss beta) 
-dgm missing from dgmorder(): mech
+. siman nestloop bias if estimand=="mean0", dgmorder(pmiss beta) 
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
-. assert _rc == 498
+. * reverse dgmorder
+. siman nestloop bias if estimand=="mean0", dgmorder(pmiss beta) dgreverse
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . * bogus dgmorder
 . cap noi siman nestloop bias if estimand=="mean0", dgmorder(pmiss mech3 beta) 
@@ -656,8 +691,7 @@ Performance measures not in data: rhubarb
 . 
 . * only one dgm
 . cap noi siman nestloop bias if float(beta)==0 & float(pmiss)==float(0.2) & mech==1
-siman nestloop will draw 3 graphs (3 targets * 1 performance measures)
-siman nestloop requires more than 1 descriptor combination
+siman nestloop requires at least 2 dgms
 
 . assert _rc == 498
 
@@ -704,10 +738,10 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop bias, name(sn4,replace)
@@ -755,10 +789,10 @@ Repetition-level output
   True value variable:            true
 
 Estimates data                    in data
-Performance estimates             not in data
+Performance statistics            not in data
 _____________________________________________________
 
-. siman analyse, notable
+. siman analyse
 siman analyse has run successfully
 
 . siman nestloop bias, name(sn5,replace) saving(sn5s , replace) export(pdf, replace)

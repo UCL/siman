@@ -1,4 +1,8 @@
-*!	version 0.11.1	02jan2025	
+*!	version 0.11.5	17apr2025	IW remove notable option
+*	version 0.11.5	17apr2025	
+*	version 0.11.4	08apr2025	IW doesn't auto-call siman table
+*	version 0.11.3	01apr2025	IW calls simsum with new semissingok option
+*	version 0.11.2	17mar2025	IW doesn't call siman table if too many dgmvars
 *	version 0.11.1	02jan2025	IW new char cilevel = the level at which coverage was computed
 *	version 0.11	21oct2024		IW make analyse work correctly with if
 *	version 0.9.1	14jun2024		IW remove code for nformat!=1 and nmethod!=1
@@ -31,12 +35,11 @@
 program define siman_analyse
 version 15
 
-syntax [anything] [if], [PERFonly REPlace noTABle /// documented options
-	ref(string) level(cilevel) * /// simsum options
+syntax [anything] [if], [PERFonly REPlace /// documented options
+	ref(string) Level(cilevel) * /// simsum options
 	force debug pause nopreserve /// undocumented options
 	]
-local simsumoptions level(`level') `options'
-local cilevel `level'
+
 if "`debug'"!="" di as input `"Debug: options to pass to simsum: `simsumoptions'"'
 if "`debug'"=="" local qui qui
 
@@ -45,11 +48,14 @@ if _rc == 111 {
 	di as error `"simsum needs to be installed to run siman analyse. Please use {stata "ssc install simsum"}"'
 	exit 498
 }
-vercheck simsum, vermin(2.1.2) quietly message(`"{p 0 2}You can install the latest simsum using {stata "net from https://raw.githubusercontent.com/UCL/simsum/main/package/"}{p_end}"')
+vercheck simsum, vermin(2.2.3) quietly message(`"{p 0 2}You can install the latest simsum using {stata "net from https://raw.githubusercontent.com/UCL/simsum/main/package/"}{p_end}"')
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
 }
+
+local simsumoptions level(`level') `options'
+local cilevel `level' // overwrites current cilevel
 
 if "`method'"=="" {
 	di as error "The variable 'method' is missing so siman analyse can not be run. Please create a variable in your dataset called method containing the method value(s)."
@@ -201,7 +207,7 @@ if !mi("`ref'") {
 }
 
 * RUN SIMSUM (LONG DATA)
-local simsumcmd simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') lci(`lci') uci(`uci') p(`p') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt'
+local simsumcmd simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') lci(`lci') uci(`uci') p(`p') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt' semissingok
 if !mi("`pause'") {
 	global F9 `simsumcmd'
 	pause
@@ -333,14 +339,6 @@ if `secreated' di as text "siman analyse has created variable _se to hold the MC
 
 di as text "siman analyse has run successfully"
 
-if "`table'"!="notable" {
-	cap noi siman_table
-	if _rc {
-		di as text "siman analyse has run successfully, but presenting the results using siman table has failed"
-		exit _rc
-	}
-}
-
 end
 
 
@@ -361,7 +359,7 @@ program define vercheck, sclass
 8may2015 - bug fix - handles missing values
 11mar2015 - bug fix - didn't search beyond first line
 */
-version 9.2
+version 15
 syntax name, [vermin(string) nofatal file ereturn return quietly message(string)]
 // Parsing
 local progname `namelist'

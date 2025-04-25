@@ -1,4 +1,5 @@
-*!	version 0.11.2	24oct2024	
+*!	version 0.11.3	31mar2025	
+*	version 0.11.3	31mar2025	TM moved default placement of by() note to clock pos 11 to make more prominent (based on feedback)
 *	version 0.11.2	24oct2024	IW by default se on y not x axis; nicer labels
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
 *	version 0.10	18jun2024	IW Clean up handling of varlist, if/in, by
@@ -22,9 +23,9 @@
 ******************************************************************************************************************************************************
 
 program define siman_scatter
-version 16
+version 15
 
-syntax [varlist(default=none max=2)] [if][in] [, BY(varlist) BYGRaphoptions(string) name(passthru) debug pause *]
+syntax [varlist(default=none max=2)] [if][in] [, BY(varlist) BYGRaphoptions(string) name(passthru) SAVing(string) EXPort(string) debug pause *]
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -34,12 +35,34 @@ if "`setuprun'"!="1" {
 	di as error "siman setup needs to be run before siman scatter"
 	exit 498
 }
-	
+
 * if estimate or se are missing, give error message as program requires them for the graph(s)
 if mi("`estimate'") | mi("`se'") | "`secreated'"=="1" {
     di as error "{p 0 2}siman scatter requires both estimate and se to have been declared in siman setup{p_end}"
 	exit 498
 }
+
+* parse optional saving (standard code)
+if !mi(`"`saving'"') {
+	gettoken saving savingopts : saving, parse(",")
+	local saving = trim("`saving'")
+	if strpos(`"`saving'"',".") & !strpos(`"`saving'"',".gph") {
+		di as error "Sorry, saving() must not contain a full stop"
+		exit 198
+	}
+}
+
+* parse optional export (standard code)
+if !mi(`"`export'"') {
+	gettoken exporttype exportopts : export, parse(",")
+	local exporttype = trim("`exporttype'")
+	if mi("`saving'") {
+		di as error "Please specify saving(filename) with export()"
+		exit 198
+	}
+}
+
+*** END OF PARSING ***
 
 * mark sample
 marksample touse, novarlist
@@ -111,7 +134,7 @@ if mi("`by'") { // i.e. if none of dgm target method varies
 	local npanels 1
 }
 else {
-	local byoption by(`by', ixaxes `bygraphoptions' `dgmmissingok') 
+	local byoption by(`by', note(,pos(11)) `bygraphoptions' `dgmmissingok') 
 	* count how many panels will be created
 	tempvar unique
 	egen `unique' = tag(`by'), `dgmmissingok'
@@ -126,8 +149,9 @@ if `npanels' > 15 {
 }
 
 if mi("`name'") local name name(scatter, replace)
+if !mi("`saving'") local savingopt saving(`"`saving'"'`savingopts')
 
-local graph_cmd twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) `byoption' `name' `options'
+local graph_cmd twoway scatter `varlist' `if', msym(o) msize(small) mcol(%30) `byoption' `name' `savingopt' `options'
 
 if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 if !mi("`pause'") {
@@ -136,6 +160,12 @@ if !mi("`pause'") {
 }
 `graph_cmd'
 
+if !mi("`export'") {
+	local graphexportcmd graph export `"`saving'.`exporttype'"'`exportopts'
+	if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
+	cap noi `graphexportcmd'
+	if _rc di as error "Error in export() option"
+	exit _rc
+}
+
 end
-
-

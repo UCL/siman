@@ -1,4 +1,6 @@
-*!	version 0.11.4	02jan2025	
+*!	version 0.11.6	16apr2025	
+*	version 0.11.6	16apr2025	IW allow incomplete dgmorder()
+*	version 0.11.5	11mar2025	IW/TM make norefline option work
 *	version 0.11.4	02jan2025	IW use new char cilevel = the level at which coverage was computed
 *	version 0.11.3	21nov2024	IW Graph drawing moved to new standalone nestloop
 *	version 0.11.2	25oct2024	IW improve saving() and export() options
@@ -30,23 +32,11 @@ version 15
 // PARSE
 syntax [anything] [if], [DGMOrder(string) ///
 	NAMe(string) SAVing(string) EXPort(string) /// twoway options for overall graph
-	debug force  /// undocumented
+	debug noREFline /// undocumented
 	*]
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
-}
-
-* Check DGMs are in the dataset, if not produce an error message
-if "`dgm'"=="" {
-	di as error "siman nestloop requires at least 2 dgm variables."
-	exit 498
-}
-	
-* If only 1 dgm in the dataset, produce error message as nothing will be graphed
-if `ndgmvars'==1 {
-	di as error "siman nestloop expects at least 2 dgm variables."
-	if mi("`force'") exit 498
 }
 
 * check if siman analyse has been run, if not produce an error message
@@ -141,6 +131,16 @@ if _N==0 {
 	exit 2000
 }
 
+* Check there is >1 DGM
+tempvar dgmcombo
+egen `dgmcombo' = group(`dgm')
+cap assert `dgmcombo' == 1
+if !_rc {
+	di as error "siman nestloop requires at least 2 dgms"
+	exit 498
+}
+drop `dgmcombo'
+	
 * If user has specified an order for dgm, check it includes all dgmvars
 if !mi("`dgmorder'") {
 	local ndgmorder: word count `dgmorder'
@@ -161,8 +161,8 @@ if !mi("`dgmorder'") {
 		exit 498
 	}
 	if !mi("`dgmmissing'") {
-		di as error "dgm missing from dgmorder(): `dgmmissing'"
-		exit 498
+		* di as error "dgm missing from dgmorder(): `dgmmissing'"
+		local dgmorder `dgmorder' `dgmmissing'
 	}
 }
 
@@ -253,6 +253,7 @@ foreach thispm of local pmlist { // loop over PMs
 			if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
 			cap noi `graphexportcmd'
 			if _rc di as error "Error in export() option"
+			exit _rc
 		}
 
 	} // end of loop over targets

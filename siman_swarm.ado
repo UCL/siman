@@ -1,5 +1,7 @@
-*!	version 0.11.4	2jan2025	
-*	version 0.11.4	2jan2025	IW correct the count of #panels	
+*!	version 0.11.8	08apr2025	
+*	version 0.11.7	08apr2025	IW use Stata15 syntax
+*	version 0.11.6	02apr2025	IW graphs are now sorted by rep
+*	version 0.11.5	31mar2025	TM moved default placement of by() note to clock pos *	 version 0.11.4	 02jan2025   IW correct the count of #panels	
 *	version 0.11.3	25oct2024	IW/TM allow only 1 method
 *	version 0.11.2	25oct2024	IW Default by() ignores non-varying variables
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
@@ -31,9 +33,9 @@
 
 
 program define siman_swarm
-version 16
+version 15
 
-syntax [anything] [if][in] [, * nomean MEANGRaphoptions(string) BY(varlist) BYGRaphoptions(string) GRAPHOPtions(string) SCatteroptions(string) name(string) msymbol(passthru) msize(passthru) mcolor(passthru) title(passthru) note(passthru) row(passthru) col(passthru) xtitle(passthru) ytitle(passthru) debug pause gap(real .1)]
+syntax [anything] [if][in] [, * nomean MEANGRaphoptions(string) BY(varlist) BYGRaphoptions(string) GRAPHOPtions(string) SCatteroptions(string) name(string) msymbol(passthru) msize(passthru) mcolor(passthru) title(passthru) note(passthru) row(passthru) col(passthru) xtitle(passthru) ytitle(passthru) debug pause gap(real .1) SAVing(string) EXPort(string)]
 
 * attempt to assign graph options correctly
 local scatteroptions `scatteroptions' `msymbol' `msize' `mcolor' `options'
@@ -72,6 +74,28 @@ if mi("`name'") {
 	local name swarm
 	local replace replace
 }
+
+* parse optional saving (standard code)
+if !mi(`"`saving'"') {
+	gettoken saving savingopts : saving, parse(",")
+	local saving = trim("`saving'")
+	if strpos(`"`saving'"',".") & !strpos(`"`saving'"',".gph") {
+		di as error "Sorry, saving() must not contain a full stop"
+		exit 198
+	}
+}
+
+* parse optional export (standard code)
+if !mi(`"`export'"') {
+	gettoken exporttype exportopts : export, parse(",")
+	local exporttype = trim("`exporttype'")
+	if mi("`saving'") {
+		di as error "Please specify saving(filename) with export()"
+		exit 198
+	}
+}
+
+*** END OF PARSING ***
 
 /* Start preparations */
 
@@ -132,21 +156,21 @@ if mi("`by'") {
 }
 
 * For a nicer presentation and better better use of space
-sort `by' `method'
+sort `by' `method' `rep' // 2/4/2025
 if !mi("`by'") by `by': gen newidrep = _n
 else gen newidrep = _n
 summ newidrep, meanonly
 local maxnewidrep = r(max)
-sort `method' `by'
+sort `method' `by' `rep' // 1/4/2025
 by `method': gen first = _n==1
 qui replace newidrep = newidrep + `gap'*`maxnewidrep'*sum(first)
 forvalues g = 1/`nummethodnew' {
 	* if `g'==1 qui gen newidrep = `rep' if `method' == `g'
 	* else qui replace newidrep = (`rep'-1)+ ceil((`g'-1)*`step') + 1 if `method' == `g'
 	qui tabstat newidrep if `method' == `g', s(p50) save
-	qui matrix list r(StatTotal) 
-	local median`g' = r(StatTotal)[1,1]
-	local ygraphvalue`g' = ceil(`median`g'')
+	tempname result
+	matrix `result' = r(StatTotal) 
+	local ygraphvalue`g' = ceil(`result'[1,1])
 	local labelvalues `labelvalues' `ygraphvalue`g'' "`mlabel`g''"
 	if `g'==`nummethodnew' label define newidreplab `labelvalues'
 }
@@ -170,13 +194,20 @@ if `npanels'>15 di "{p 0 2}Consider reducing the number of panels using 'if' con
 foreach el of local statlist { // estimate and/or se
 	local graph_cmd twoway (scatter newidrep ``el'', msymbol(o) msize(small) mcolor(%30) mlc(white%1) mlwidth(vvvthin) `scatteroptions')
 	if "`mean'"!="nomean" {
-		qui egen mean`el' = mean(``el''), by(`by' `method')
+		if "`el'"=="estimate" qui egen mean`el' = mean(``el''), by(`by' `method')
+		if "`el'"=="se" {
+			tempvar sesq
+			qui gen `sesq' = ``el''^2
+			qui egen mean`el' = mean(`sesq'), by(`by' `method')
+			qui replace mean`el' = sqrt(mean`el')
+		}
 		local graph_cmd `graph_cmd' (scatter newidrep mean`el', msym(|) msize(huge) mcol(orange) `meangraphoptions')
 	}
 	local nameopt name(`name'_`el', `replace')
-	if !mi("`by'") local byopt by(`by', title("") noxrescale legend(off) `bygraphoptions' `dgmmissingok') 
+	if !mi("`saving'") local savingopt saving(`"`saving'_`el'"'`savingopts')
+	if !mi("`by'") local byopt by(`by', title("") noxrescale legend(off) note(,pos(11)) `bygraphoptions' `dgmmissingok') 
 	else local byopt title("") legend(off) `bygraphoptions' `dgmmissingok'
-	local graph_cmd `graph_cmd', `byopt' ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions'
+	local graph_cmd `graph_cmd', `byopt' ytitle("") ylabel(`labelvalues', nogrid labsize(medium) angle(horizontal)) yscale(reverse) `nameopt' `graphoptions' `savingopt'
 
 	if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 	if !mi("`pause'") {
@@ -185,8 +216,13 @@ foreach el of local statlist { // estimate and/or se
 	}
 	`graph_cmd'
 
+	if !mi("`export'") {
+		local graphexportcmd graph export `"`saving'_`el'.`exporttype'"'`exportopts'
+		if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
+		cap noi `graphexportcmd'
+		if _rc di as error "Error in export() option"
+		exit _rc
+	}
 }
 
 end
-
-

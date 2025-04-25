@@ -54,6 +54,29 @@ siman scatter will draw 1 graph with 18 panels
 Consider reducing the number of panels using 'if' condition or 'by' option
 
 . 
+. use data/setupdata_method1, clear
+
+. siman scatter, saving(myscatter) export(png)
+siman scatter will draw 1 graph with 6 panels
+file myscatter.gph saved
+file myscatter.png saved as PNG format
+
+. cap noi siman scatter, saving(myscatter) export(png)
+siman scatter will draw 1 graph with 6 panels
+file myscatter.gph already exists
+
+. assert _rc==602
+
+. siman scatter, saving(myscatter,replace) export(png,replace)
+siman scatter will draw 1 graph with 6 panels
+file myscatter.gph saved
+file myscatter.png saved as PNG format
+
+. erase myscatter.gph
+
+. erase myscatter.png
+
+. 
 . di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 *** SIMAN HAS PASSED ALL THE TESTS IN test_scatter.do ***
 

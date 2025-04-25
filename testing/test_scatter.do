@@ -12,6 +12,7 @@ set linesize 100
 
 // START TESTING
 log using `filename'_which, replace text
+version
 siman which
 log close
 
@@ -25,6 +26,14 @@ foreach feature in dgm target method {
 		siman scatter, name(scatter_`feature'`n', replace) bygr(title(Test siman scatter using data `feature'`n'))
 	}
 }
+
+use data/setupdata_method1, clear
+siman scatter, saving(myscatter) export(png)
+cap noi siman scatter, saving(myscatter) export(png)
+assert _rc==602
+siman scatter, saving(myscatter,replace) export(png,replace)
+erase myscatter.gph
+erase myscatter.png
 
 di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 

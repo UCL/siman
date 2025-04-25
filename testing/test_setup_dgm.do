@@ -18,6 +18,7 @@ set linesize 100
 
 // START TESTING
 log using `filename'_which, replace text
+version
 siman which
 log close
 
@@ -77,10 +78,10 @@ forvalues dgmtype = 1/5 {
 
 	qui count if estimand=="effect"
 	local x = r(N)
-	siman analyse if estimand=="mean1", notable
+	siman analyse if estimand=="mean1"
 	qui count if estimand=="effect"
 	assert `x' == r(N)
-	siman analyse if estimand=="mean0", notable replace
+	siman analyse if estimand=="mean0", replace
 	qui count if estimand=="effect"
 	assert `x' == r(N)
 }

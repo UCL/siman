@@ -1,4 +1,10 @@
-*!	version 0.11.2	28oct2024	
+*!	version 0.11.8	24apr2025	
+*	version 0.11.8	24apr2025	IW better capitalisation of performance measures
+*	version 0.11.7	16apr2025	IW make rows and columns work correctly
+*	version 0.11.6	10apr2025	IW correct table footnote
+*	version 0.11.5	08apr2025	IW no version, call tabdisp or table according to Stata version, new default arrangement of variables
+*	version 0.11.4	17mar2025	IW better fail if too many dgmvars
+*	version 0.11.3	11mar2025	IW catch no valid PMs; don't show PM if only one; new nomcse option; pass options to tabdisp; remove stubwidth(20)
 *	version 0.11.2	28oct2024	IW implement new concise option
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
 *	version 0.8.3   3apr2024
@@ -16,9 +22,11 @@
 *  version 0.1   08June2020    Ella Marley-Zagar, MRC Clinical Trials Unit at UCL
 
 program define siman_table
-version 15
-syntax [anything] [if], [Column(varlist) /// documented option 
-	Row(varlist) debug pause CONcise /// undocumented options
+* not versioned, so that we can use new -table- if available
+syntax [anything] [if], [Column(varlist) Row(varlist) TABDisp TABLe ///
+	noMCse mcci MCLevel(cilevel) /// documented options 
+	* /// tabdisp/table options
+	debug pause  /// undocumented options
 	]
 
 // PARSING
@@ -30,6 +38,24 @@ foreach thing in `_dta[siman_allthings]' {
 * check if siman analyse has been run, if not produce an error message
 if "`analyserun'"=="0" | "`analyserun'"=="" {
 	di as error "siman analyse has not been run. Please use siman analyse first before siman table."
+	exit 498
+}
+
+* tabdisp vs table
+if c(stata_version)<17 & !mi("`table'") {
+	di as text "Stata version below 17: table option ignored"
+	local table
+}
+if !mi("`tabdisp'") & !mi("`table'") {
+	di as error "can't use both tabdisp and table options"
+	exit 498
+}
+if mi("`tabdisp'") & mi("`table'") {
+	if c(stata_version)<17 local tabdisp tabdisp
+	else local table table
+}
+if !mi("`tabdisp'") & wordcount("`column'")>2 {
+	di as error "column(): too many variables specified with tabdisp"
 	exit 498
 }
 
@@ -62,32 +88,48 @@ if _rc {
 }
 
 
+local perfvar = "estreps sereps bias pctbias mean empse relprec mse rmse modelse ciwidth relerror cover power"
 * if performance measures are not specified then display table for all of them, otherwise only display for selected subset
 if "`anything'"!="" {
 	tempvar keep
 	gen `keep' = 0
 	foreach thing of local anything {
+		local ok : list thing in perfvar
+		if !`ok' {
+			di as smcl as error "{p 0 2}Invalid performance measure: `thing'{p_end}"
+			exit 198
+		}
 		qui count if _perfmeascode == "`thing'" 
-		if r(N)==0 di as smcl as text "{p 0 2}Warning: performance measure not found: `thing'{p_end}"
+		if r(N)==0 di as smcl as text "{p 0 2}Performance measure not in data: `thing'{p_end}"
 		qui replace `keep' = 1 if _perfmeascode == "`thing'" 
 		}
 	qui keep if `keep'
 	drop `keep'
 }
 
+qui levelsof _perfmeascode if `rep'<0, clean
+if r(N)>0 local perfmeaslist = strproper(r(levels))
+local npms = r(r)
+if `npms'==0 {
+	di as error "No valid performance measures specified"
+	exit 498
+}
 
 * re-order performance measures for display in the table as per simsum
-local perfvar = "estreps sereps bias pctbias mean empse relprec mse rmse modelse ciwidth relerror cover power"
 qui gen _perfmeascodeorder=.
 local p = 0
 foreach perf of local perfvar {
 	qui replace _perfmeascodeorder = `p' if _perfmeascode == "`perf'"
-	local perflabels `perflabels' `p' "`perf'"
+	if inlist("`perf'","mse","rmse") local Perf = upper("`perf'")
+	else if "`perf'"=="sereps" local Perf = "SEreps"
+	else if "`perf'"=="ciwidth" local Perf = "CIwidth"
+	else local Perf = strproper("`perf'")
+	local perflabels `perflabels' `p' "`Perf'"
 	local p = `p' + 1
 }
 label define perfl `perflabels'
 label values _perfmeascodeorder perfl 
-label variable _perfmeascodeorder "performance measure"
+label variable _perfmeascodeorder "Performance statistic"
 drop _perfmeascode
 rename _perfmeascodeorder _perfmeascode
 
@@ -95,48 +137,83 @@ rename _perfmeascodeorder _perfmeascode
 * sort out numbers of variables to be tabulated, and their levels
 if `methodcreated' local method
 * identify non-varying dgm
-foreach onedgmvar in `dgm' {
-	qui levelsof `onedgmvar' `if', `dgmmissingok'
-	if r(r)>1 local newdgmvar `newdgmvar' `onedgmvar'
-	else if !mi("`debug'") di as input "Debug: ignoring non-varying dgmvar: `onedgmvar'"
+* NB for table, keep if varying in data even if constant in sample
+*    for tabdisp, keep if varying in sample
+local ifset = cond(mi("`tabdisp'"),"","if `touse'")
+if !mi("`dgm'") {
+	foreach onedgmvar in `dgm' {
+		qui levelsof `onedgmvar' `ifset', `dgmmissingok'
+		if r(r)>1 local newdgmvars `newdgmvars' `onedgmvar'
+	}
 }
-local dgm `newdgmvar'
-local myfactors _perfmeascode `dgm' `target' `method'
-if !mi("`debug'") di as input "Debug: factors to display: `myfactors'"
-tempvar group
-foreach thing in dgm target method {
-	local n`thing'vars = wordcount("``thing''")
-	if !mi("`thing'") {
-		egen `group' = group(``thing''), `dgmmissingok'
-		qui levelsof `group'
-		local n`thing'levels = r(r)
-    }
-	else n`thing'levels = 1
-	if !mi("`debug'") di as input "Debug: `thing' has `n`thing'levels' levels, `n`thing'vars' variables (``thing'')"
-	drop `group'
+if !mi("`target'") {
+	qui levelsof `target' `ifset'
+	if r(r)==1 local target
+}
+if !mi("`method'") {
+	qui levelsof `method' `ifset'
+	if r(r)==1 local method
 }
 
+local myfactors `newdgmvars' `target' `method' _perfmeascode
+local nfactors = wordcount("`myfactors'") + (`npms'>1)
+if !mi("`tabdisp'") & `nfactors'>7 {
+	di as error "There are too many factors to display. Consider using an if condition for your dgm."
+	exit 498
+}
+if !mi("`debug'") di as input "Debug: factors to display: `myfactors'"
 
 * decide what to put in columns
+* default approach: columns = method within target; rows = PM; by = DGMs
+* but drop anything that's single-valued across the data
 if "`column'"=="" { 
-	if `nmethodlevels'>1 local column `method'
-	else if `ntargetlevels'>1 local column `target'
-	else local column : word 1 of `dgm'
+	local column `target' `method'
+	local column : list column - row
 }
-local myfactors : list myfactors - column
+if !mi("`tabdisp'") & wordcount("`column'")==2 { // tabdisp has fastest-varying first
+	local column `: word 2 of `column'' `: word 1 of `column''
+}
 if "`row'"=="" {
-	if !strpos("`column'","perfmeas") local row _perfmeascode
-	else local row : word 1 of `myfactors'
+	local row _perfmeascode
+	local row : list row - column
 }
-local by : list myfactors - row
-if wordcount("`by'")>4 {
+local by : list myfactors - column
+local by : list by - row
+if mi("`row'") {
+	local nbyvars = wordcount("`by'")
+	local row : word `nbyvars' of `by'
+	local by : list by - row
+}
+local nrowvars = wordcount("`row'")
+if !mi("`tabdisp'") & `nrowvars'>1 { // move other rowvars to by
+	local tomove : word 1 of `row'
+	local row : list row - tomove
+	local by : list by | tomove
+}
+local by : list by - row
+if wordcount("`by'")>4 & !mi("`tabdisp'") {
 	di as error "There are too many factors to display. Consider using an if condition for your dgm."
-	
+	exit 498
 }
-
 
 * display the table
-local tablecommand tabdisp `row' `column' `if', by(`by') c(`estimate' `se') stubwidth(20) `concise'
+if "`mcci'" == "mcci" {
+	tempvar lcivar ucivar
+	local zcrit = invnorm((1/2+`mclevel'/200))
+	qui gen `lcivar' = `estimate' - `zcrit'*`se'
+	qui gen `ucivar' = `estimate' + `zcrit'*`se'
+	label var `lcivar' "Lower MC CI"
+	label var `ucivar' "Upper MC CI"
+}
+if "`mcse'" == "nomcse" {
+	drop `se'
+	local se
+}
+if !mi("`tabdisp'") local tablecommand tabdisp `row' `column' `if', by(`by') c(`estimate' `se' `lcivar' `ucivar') `options'
+else local tablecommand table (`row') (`column') (`by') `if', stat(mean `estimate' `se' `lcivar' `ucivar') nototal `options'
+if `npms'>1 label var `estimate' "Estimate"
+else label var `estimate' "`perfmeaslist'"
+if !mi("`se'") label var `se' "MCSE"
 if !mi("`debug'") {
 	di as input "Debug: table features:"
 	di "    column:  `column'"
@@ -150,11 +227,22 @@ if !mi("`pause'") {
 }
 `tablecommand'
 
+* print the cilevel
+qui count if _perfmeascode == "Cover":perfl
+local hascover = r(N)>0
+qui count if _perfmeascode == "Power":perfl
+local haspower = r(N)>0
+local covpow = cond(`hascover',"Coverage","")+cond(`hascover'&`haspower'," and ","")+cond(`haspower',"Power","")
+if `hascover' | `haspower' di as text "Note: `covpow' calculated at `cilevel'% level"
+if !mi("`mcci'") & !mi("`table'") di as text "Note: Monte Carlo CIs calculated at `mclevel'% level"
 
-* if mcses are reported, print the following note
-cap assert missing(`se')  
-if _rc {
-	di as smcl as text "{p 0 2}{it: NOTE: Where there are 2 entries in the table, the first entry is the performance measure and the second entry is its Monte Carlo error.}{p_end}"
+* if mcses or mccis are reported, print the following note
+if (mi("`mcse'") | !mi("`mcci'")) & !mi("`tabdisp'") {
+	di as smcl as text "{p 0 2}Note: where there are multiple entries per performance measure, these are estimated performance, followed by"
+	if mi("`mcse'") di "Monte Carlo standard error"
+	if mi("`mcse'") & !mi("`mcci'") di "and"
+	if !mi("`mcci'") di "Monte Carlo `mclevel'% confidence limits"
+	di "{p_end}"
 }
 
 restore

@@ -3,26 +3,27 @@
 {vieweralsosee "siman" "siman"}{...}
 {viewerjumpto "Syntax" "nestloop##syntax"}{...}
 {viewerjumpto "Description" "nestloop##description"}{...}
-{viewerjumpto "Example" "nestloop##example"}{...}
+{viewerjumpto "Examples" "nestloop##examples"}{...}
 {viewerjumpto "References" "nestloop##references"}{...}
 {viewerjumpto "Authors" "nestloop##authors"}{...}
 {title:Title}
 
 {phang}
-{bf:nestloop} {hline 2} Nested loop plot of performance measures data.
+{bf:nestloop} {hline 2} Nested loop plot of performance statistics
+
 
 
 {marker syntax}{...}
 {title:Syntax}
 
 {phang}
-{cmdab:nestloop} {it:varname} [if]
+{cmdab:nestloop} {it:varname} [{help if}]
 [{cmd:,}
 {opt desc:riptors(evarlist)}
 {opt meth:od(varname)}
 {it:options}]
 
-{pstd} The variable {it:varname} will be graphed against the descriptors, overlaying the different values of method.
+{pstd} The variable {it:varname} (a performance statistic) will be plotted against the descriptors, with a line for each value of the method variable.
 
 
 {synoptset 28 tabbed}{...}
@@ -30,27 +31,29 @@
 {synoptline}
 {syntab:Options specific to this stand-alone program}
 
-{synopt:{opt desc:riptors(evarlist)}}defines the descriptor variables for the nested loop plot. 
-A negative sign in front of the variable name 
-will display its values on the graph in descending order.{p_end}
+{synopt:{opt desc:riptors(evarlist)}}defines the descriptor variables for the nested loop plot.
+A negative sign in front of the variable name will display its values on the graph in descending order.{p_end}
 {synopt:{opt meth:od(varname)}}defines the method variable. 
-One line will be drawn for each value of this variable.
+One line will be drawn for each value of this variable (unless any are excluded through {help if} conditions).{p_end}
+{synopt:{opt true(#|varname)}}gives the value # or variable to be used as a reference line in the background.{p_end}
+{synopt:{opt trueopt:ions(string)}}controls the appearance of the reference line.
 
 {syntab:Options shared with siman nestloop}
 
-{synopt:{opt options}}are any options for {help siman nestloop} except {cmd:dgmorder()}.
+{synopt:{it:options}}are any options for {help siman nestloop} except {cmd:dgmorder()} and {cmd:export()}.{p_end}
+{synoptline}
 
 
 {marker description}{...}
 {title:Description}
 
 {pstd}
-{cmd:nestloop} draws a nested loop plot of performance measures data ({help nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}).
-This is a stand-alone program. Please see {help siman nestloop} for a description of the nested loop plot, and how to use it within the siman suite.
+{cmd:nestloop} draws a nested loop plot of performance statistics ({help nestloop##ruckerschwarzer:Rücker and Schwarzer, 2014}).
+This is a standalone program. See {help siman nestloop} for a description of the nested loop plot, and how to use it within the siman suite.
 
 
-{marker example}{...}
-{title:Example}
+{marker examples}{...}
+{title:Examples}
 
 {pstd}Read and set up data
 
@@ -62,7 +65,7 @@ This is a stand-alone program. Please see {help siman nestloop} for a descriptio
 
 {phang}. {stata "reshape long exp mse cov bias var2, i(theta rho pc tau2 k) j(method) string"}
 
-{pstd}Draw nestloop for 9 methods and 4*3*4*4*4 DGMs
+{pstd}Draw nested loop plot of exp for 9 methods and 4*3*4*4*4 DGMs (exp is the mean point estimate for each method and DGM)
 
 {phang}. {stata "nestloop exp, descriptors(theta rho pc tau2 k) method(method) true(theta) legend(row(2)) dgsize(.25)"}
 

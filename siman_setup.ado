@@ -1,4 +1,5 @@
-*!	version 0.11.3	21nov2024	
+*!	version 0.11.4	12mar2025	
+*	version 0.11.4	12mar2025	IW impose sensible sort order; dgmvar encoding respects order in data
 *	version 0.11.3	21nov2024	IW sencode method if it's string and contains spaces etc. 
 *	version 0.11.2	24oct2024	IW improve handling of fractional dgmvar and created method
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; don't save char methodvalues
@@ -131,9 +132,7 @@ if !mi("`dgm'") {
 		cap confirm numeric variable `var'
 		if _rc {
 			tempvar t`var'
-			encode `var', gen(`t`var'') label(`var')
-			drop `var'
-			rename `t`var'' `var'
+			sencode `var', replace label(`var')
 			qui compress `var'
 			di as text "{p 0 2}Warning: dgm variable " as result "`var'" as text " has been converted from string to numeric. If you require its levels to be ordered differently, encode " as result "`var'" as text " as numeric before running -siman setup-.{p_end}"
 		}
@@ -521,6 +520,10 @@ if !mi("`dgm'") & !mi("`true'") {
 		exit 498
 	}
 }
+
+
+/* SORT SUITABLY */
+sort `dgm' `rep' `target' `method'
 
 
 /* ASSIGN CHARACTERISTICS */

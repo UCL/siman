@@ -1,4 +1,5 @@
-*!	version 0.11.4	11nov2024	
+*!	version 0.11.5	06jan2025	
+*	version 0.11.5	06jan2025	IW new collapse() option
 *	version 0.11.4	11nov2024	IW correct handling of aspect()
 *	version 0.11.3	29oct2024	IW/TM aspect(1) not suppressed by other subgraphoptions
 *	version 0.11.2	24oct2024	handle extra variables by using keep before reshape
@@ -46,11 +47,11 @@
 ******************************************************************************************************************************************************
 
 program define siman_comparemethodsscatter
-version 16
+version 15
 
-syntax [anything] [if][in] [, COMbine MATrix METHlist(string) ///
-	noEQuality SUBGRaphoptions(string) * ///
-	name(string) /// standard options handled differently
+syntax [anything] [if][in] [, COMbine MATrix COLLapse(varlist) /// main options
+	METHlist(string) noEQuality SUBGRaphoptions(string) * /// graph options
+	name(string) SAVing(string) EXPort(string) /// standard options handled differently
 	half debug /// undocumented options
 	]
 
@@ -103,12 +104,33 @@ if wordcount("`name'_something")>1 {
 	exit 498
 }
 
-* mark sample
-marksample touse, novarlist
+* parse optional saving (standard code)
+if !mi(`"`saving'"') {
+	gettoken saving savingopts : saving, parse(",")
+	local saving = trim("`saving'")
+	if strpos(`"`saving'"',".") & !strpos(`"`saving'"',".gph") {
+		di as error "Sorry, saving() must not contain a full stop"
+		exit 198
+	}
+}
+
+* parse optional export (standard code)
+if !mi(`"`export'"') {
+	gettoken exporttype exportopts : export, parse(",")
+	local exporttype = trim("`exporttype'")
+	if mi("`saving'") {
+		di as error "Please specify saving(filename) with export()"
+		exit 198
+	}
+}
 
 *** END OF PARSING ***
 
 *** START ANALYSIS ***
+
+* mark sample
+marksample touse, novarlist
+
 /* Approach is:
 code methods as 1,2,... with names in locals mlabel1,mlabel2,...
 reshape methods as wide
@@ -171,6 +193,12 @@ if mi("`statlist'") {
 	else if "`type'"=="matrix" local statlist estimate
 }
 local nstats : word count `statlist'
+if "`type'"=="matrix" & `nstats'>1 {
+	local ignored : word 2 of `statlist'
+	local statlist : word 1 of `statlist'
+	di as text "Matrix method can't display both estimate and se: ignoring `ignored'"
+	local nstats 1
+}
 if !mi("`debug'") di as input "Debug: statlist = `statlist'"
 local do_se = strpos("`statlist'","se")>0
 local do_estimate = strpos("`statlist'","estimate")>0
@@ -211,8 +239,13 @@ if !mi("`debug'") di as input "Debug: reshape successful"
 
 
 * IDENTIFY 'OVER' VARIABLE
-
-if mi("`over'") local over `dgm' `target' 
+local allvars `dgm' `target' 
+local over : list allvars - collapse
+local ouch : list collapse - allvars
+if !mi("`ouch'") {
+	di as error "collapse() variable(s) are not in dgm or target: `ouch' "
+	exit 498
+}
 local over2 = cond(mi("`over'"),"[nothing]","`over'")
 if !mi("`debug'") di as input "Debug: Graphing over `over2' and by `method'"
 local novers : word count `over'
@@ -245,7 +278,11 @@ forvalues g = 1/`ngraphs' {
 	}
 	if !mi("`notetext'") local notetextopt note("Graphs for `notetext'") 
 	else local notetextopt 
-	if !mi("`debug'") di as input `"--> Debug: Drawing graph `g': `notetext'"'
+	di as text `"Graph "' as result `"`name'_`g'"' as text `" is for "' as result `"`notetext'"' _c
+	if !mi("`collapse'") di `", collapsing over `collapse'"' _c
+	di
+
+	if !mi("`saving'") local savingopt saving(`"`saving'_`g'"'`savingopts')
 
 	if "`type'"=="combine" {
 
@@ -303,11 +340,15 @@ forvalues g = 1/`ngraphs' {
 				local graphlist `graphlist' graph`j'`k'
 			}
 		}
-		`dicmd' cap graph combine `graphlist', name(`name'_`g',replace) ///
+		`dicmd' cap noi graph combine `graphlist', name(`name'_`g'`nameopts') `savingopt' ///
 			`notetextopt' title("") cols(`nmethods') `esttitle' `setitle' ///
 			`options'	
-		if _rc==111 di as error `"{p 0 2}siman comparemethodsscatter called graph combine, which failed. Try {stata "serset clear"} and {stata "graph drop _all"}{p_end}"'
-		if _rc exit _rc
+		if _rc {
+			if _rc!=1 di as error `"{p 0 2}siman comparemethodsscatter called graph combine, which failed with error "' _rc ". {p_end}"
+			if _rc==111 di as error `"Try {stata "serset clear"} and {stata "graph drop _all"}"'
+			if _rc==198 & !mi(`"`options'"') di as error `"{p 0 2}Were options -`options'- correct?{p_end}"'
+			exit _rc
+		}
 		
 		* drop constituent graphs - need capture since there may be duplicates
 		foreach graph of local graphlist {
@@ -323,9 +364,18 @@ forvalues g = 1/`ngraphs' {
 		}
 		`dicmd' graph matrix `varlist' if `group'==`g', `half' title("") note("") ///
 			ms(o) mlc(gs10) msize(tiny) ///
-			name(`name'_`g',replace) note("Graphs for stat=`statlist', `notetext'") ///
+			name(`name'_`g',replace) `savingopt' note("Graphs for stat=`statlist', `notetext'") ///
 			`options'
 	}
+
+	if !mi("`export'") {
+		local graphexportcmd graph export `"`saving'_`g'.`exporttype'"'`exportopts'
+		if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
+		cap noi `graphexportcmd'
+		if _rc di as error "Error in export() option"
+		exit _rc
+	}
+
 }
 
 end

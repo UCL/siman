@@ -11,7 +11,7 @@ Latest update Ian 22aug2023
 *****************************************************************/
 
 * switch on detail if want to run all graphs
-global detail = 1
+global detail 1
 
 local filename test_graphs_main
 
@@ -23,6 +23,7 @@ clear all // avoids the "too many sersets" error
 
 // START TESTING
 log using `filename'_which, replace text
+version
 siman which
 log close
 
@@ -80,6 +81,7 @@ siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cm
 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test1", replace) 
 
 siman analyse
+siman table, tabdisp
 
 siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test1", replace)
 
@@ -117,7 +119,8 @@ siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cm
 
 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test2", replace)        
 
-siman analyse                                 
+siman analyse
+siman table, tabdisp
 
 siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test2", replace)
 
@@ -153,6 +156,7 @@ siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cm
 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test3", replace) 
 
 siman analyse
+siman table, tabdisp
 
 siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test3", replace)
  
@@ -211,6 +215,7 @@ siman comparemethodsscatter, title("testtitle") subgr(xtit("testaxis")) name("cm
 siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test5", replace) 
 
 siman analyse
+siman table, tabdisp
 
 siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test5")
  
@@ -234,6 +239,7 @@ siman comparemethodsscatter if estimand=="beta", title("testtitle") subgr(xtit("
 siman blandaltman if estimand=="beta", ytitle("test y-title") xtitle("test x-title") name("ba_test5a", replace) 
 
 siman analyse
+siman table, tabdisp
 
 siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test5a", replace)
 
@@ -274,8 +280,8 @@ siman_blandaltman, methlist(3/7) name("ba_test6", replace)
 clear all
 prog drop _all
 use data/res.dta, clear
-keep v1 theta rho pc k exppeto expg2 var2peto var2g2
-siman setup, rep(v1) dgm(theta rho pc k) method(peto g2) estimate(exp) se(var2) true(theta)
+keep v1 theta rho pc k exppeto expg2 var2peto var2g2 tau2
+siman setup, rep(v1) dgm(theta rho pc k tau2) method(peto g2) estimate(exp) se(var2) true(theta)
 
 * graphs
 local useit4 theta==1 & rho==1 & k==5 // flags just 4 dgms
@@ -292,12 +298,12 @@ if ${detail} == 1 siman comparemethodsscatter if `useit1', title("testtitle") su
 
 if ${detail} == 1 siman blandaltman if `useit1', ytitle("test y-title") xtitle("test x-title") name("ba_test7", replace) 
 
-siman analyse
+siman analyse, force
 
 siman lollyplot if `useit4', xtitle("test x-title") name("lollyplot_test7", replace)
 * without -if k==5- you get "too many sersets" error
 
-siman nestloop mean, dgmorder(-theta rho -pc -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") name("nestloop_test7", replace)
+siman nestloop mean, dgmorder(-theta rho -pc -k tau2) ylabel(0.2 0.5 1) ytitle("Odds ratio") name("nestloop_test7", replace)
 
 
 /*

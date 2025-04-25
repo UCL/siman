@@ -1,4 +1,5 @@
-*!	version 0.11.3	02jan2025	
+*!	version 0.11.4	11mar2025	
+*	version 0.11.4	11mar2025	IW/TM add transparency to plot
 *	version 0.11.3	02jan2025	IW specify estimate/se as variables, not keywords
 *	version 0.11.2	24oct2024	IW improve graph titles and note
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option
@@ -33,8 +34,8 @@
 program define siman_blandaltman
 version 15
 
-syntax [varlist(max=2 default=none)] [if][in] [, ///
-	Methlist(string) BY(varlist) BYGRaphoptions(string) name(string) * /// documented options
+syntax [anything] [if][in] [, ///
+	Methlist(string) BY(varlist) BYGRaphoptions(string) name(string) SAVing(string) EXPort(string) * /// documented options
 	debug pause /// undocumented options
 	]
 
@@ -50,14 +51,16 @@ if "`setuprun'"!="1" {
 * if statistics are not specified, run graphs for estimate only
 * only allow estimate or se to be specified
 foreach thing of local anything {
-	if "`thing'"=="`estimate'" local anything2 `anything2' estimate
-	else if "`thing'"=="`se'" local anything2 `anything2' se
-	else if mi("``thing''") {
-		di as error "`thing'() was not specified in siman setup"
-		exit 498
+	if "`thing'"=="estimate" local anything2 `anything2' estimate
+	else if "`thing'"=="se" {
+		if mi("`se'") {
+			di as error "se() was not specified in siman setup"
+			exit 498
+		}
+		local anything2 `anything2' se
 	}
 	else {
-		di as error "only estimate variable and/or se variable allowed"
+		di as error `"only "estimate" and/or "se" allowed"'
 		exit 498
 	}
 }
@@ -79,10 +82,30 @@ if wordcount("`name'_something")>1 {
 	exit 498
 }
 
-* mark sample
-marksample touse, novarlist
+* parse optional saving (standard code)
+if !mi(`"`saving'"') {
+	gettoken saving savingopts : saving, parse(",")
+	local saving = trim("`saving'")
+	if strpos(`"`saving'"',".") & !strpos(`"`saving'"',".gph") {
+		di as error "Sorry, saving() must not contain a full stop"
+		exit 198
+	}
+}
+
+* parse optional export (standard code)
+if !mi(`"`export'"') {
+	gettoken exporttype exportopts : export, parse(",")
+	local exporttype = trim("`exporttype'")
+	if mi("`saving'") {
+		di as error "Please specify saving(filename) with export()"
+		exit 198
+	}
+}
 
 *** END OF PARSING ***
+
+* mark sample
+marksample touse, novarlist
 
 preserve
 
@@ -219,7 +242,10 @@ forvalues g = 1/`novervalues' { // loop over graphs
 		}
 	}
 
-	if !mi("`debug'") di as input `"--> Debug: drawing graph `g': `notetext'"'
+	if !mi("`notetext'") local notetextopt note("Graphs for `notetext'") 
+	else local notetextopt 
+	if `nstats'==1 di as text `"Graph "' as result `"`name'_`g'_`statlist'"' as text `" is for "' as result `"`notetext'"'
+	else di as text `"Graphs "' as result `"`name'_`g'_[`statlist']"' as text `" are for "' as result `"`notetext'"'
 	if `nmethods'>2 local panelnote ". Panels: `by'."
 
 	foreach stat in `statlist' { // loop over stats
@@ -228,12 +254,13 @@ forvalues g = 1/`novervalues' { // loop over graphs
 		if "`stat'"=="estimate" local eltitle = "Estimates (`estimate')"
 		else if "`stat'"=="se" local eltitle = "Standard errors (`se')" 
 		local elnote "stat=`stat'"
+		if !mi("`saving'") local savingopt saving(`"`saving'_`g'_`stat'"'`savingopts')
 		#delimit ;
-		local graph_cmd twoway (scatter diff`stat' mean`stat' if `group'==`g', `options')
+		local graph_cmd twoway (scatter diff`stat' mean`stat' if `group'==`g', mcolor(%30) mlc(white%1) mlwidth(vvvthin) msym(O) `options')
 		,
 		by(`by', note("`eltitle' for `notetext'", suffix) iscale(1.1) title("") norescale `bygraphoptions' `dgmmissingok')
 		yline(0, lp(l) lc(gs8))
-		name(`name'_`g'_`stat' `nameopts')
+		name(`name'_`g'_`stat'`nameopts') `savingopt'
 		ytitle(Difference of `method' from `mlabel1') xtitle(Average of `method' with `mlabel1')
 		;
 		#delimit cr
@@ -244,6 +271,15 @@ forvalues g = 1/`novervalues' { // loop over graphs
 			pause Press F9 to recall, optionally edit and run the graph command
 		}
 		`graph_cmd'
+
+		if !mi("`export'") {
+			local graphexportcmd graph export `"`saving'_`g'_`stat'.`exporttype'"'`exportopts'
+			if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
+			cap noi `graphexportcmd'
+			if _rc di as error "Error in export() option"
+			exit _rc
+		}
+
 	}
 }
 

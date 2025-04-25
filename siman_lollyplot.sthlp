@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.11.1 21oct2024}{...}
+{* *! version 0.11.4 11mar2025}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "Main simsum help page" "simsum"}{...}
 {viewerjumpto "Syntax" "siman_lollyplot##syntax"}{...}
@@ -10,14 +10,14 @@
 {title:Title}
 
 {phang}
-{bf:siman lollyplot} {hline 2} Lollipop plot of performance measures data.
+{bf:siman lollyplot} {hline 2} Lollipop plot of performance measures data
 
 
 {marker syntax}{...}
 {title:Syntax}
 
 {phang}
-{cmdab:siman lollyplot} [{it:performancemeasures}] [if]
+{cmdab:siman lol:lyplot} [{it:performancemeasures}] [if]
 [{cmd:,}
 {it:options}]
 
@@ -30,49 +30,36 @@
 {synopthdr}
 {synoptline}
 {syntab:Specific graph options}
-
 {synopt:{opt labf:ormat(string)}}defines formats for the marker labels for (i) numeric performance measures (e.g. bias), (ii) percentage performance measures (e.g. coverage), and (iii) count performance measures (e.g. estreps). 
-Alternatively, {cmd:labformat(none)} removes the marker labels.
-
-{synopt:{opt col:ors(string)}}specifies colours for the graphs: one per method.
-
-{synopt:{opt ms:ymbol(string)}}specifies marker symbols for the graphs: one per method, or one for all methods.
-	
-{synopt:{opt refp:ower(string)}}draws a reference line for power. Default is no reference line for power.
-
+Alternatively, {cmd:labformat(none)} removes the marker labels.{p_end}
+{synopt:{opt col:ors(string)}}specifies colours for the graphs: one per method.{p_end}
+{synopt:{opt ms:ymbol(string)}}specifies marker symbols for the graphs: one per method, or one for all methods.{p_end}
+{synopt:{opt refp:ower(string)}}draws a reference line for power. Default is no reference line for power.{p_end}
 {synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
-
 {synopt:{opt dgms:how}}shows in the top title the values of any DGM variables that are constant within the 'if' condition. The default is not to show them.{p_end}
-
 {synopt:{opt dgmti:tle}{cmd:(on|off)}}controls whether the top title shows the names of the DGM variables.
 The default is {cmd:dgmtitle(on)} with one DGM variable and {cmd:dgmtitle(off)} with more than one DGM variable.{p_end}
-
 {syntab:Calculation options}
-
-{synopt:{opt l:evel(#)}}sets the level for confidence intervals. Default is the current level (see {help level}).
-
-{synopt:{opt logit}}calculates confidence intervals for power and coverage on the logit scale. This is only important with small numbers of repetitions: it ensures that confidence intervals lie between 0 and 100.
+{synopt:{opt mcl:evel(#)}}sets the level for Monte Carlo confidence intervals. Default is the current level (taken from c(level); see {help level}).{p_end}
+{synopt:{opt logit}}calculates Monte Carlo confidence intervals for power and coverage on the logit scale. This
+ensures that Monte Carlo confidence intervals lie between 0 and 100 (typically only important with small numbers
+of repetitions).{p_end}
 
 {syntab:General graph options}
-
 {synopt:{opt bygr:aphoptions(string)}}graph options which need to be placed within the {cmd:by()} option.{p_end}
+{synopt:{it:graph_options}}most of the valid options for {help scatter:scatter} are available.{p_end}
 
-{synopt:{opt name(string)}}stub for graph name, to which "_" and the target name are appended.{p_end}
-
-{synopt:{it:graph_options}}most of the valid options for {help twoway} are available.{p_end}
-
-{syntab:Advanced graph options}
-
-{synopt:{opt pause}}pauses before drawing each graph, allowing the user to retrieve and edit each graph command before running it. 
-Requires {help pause} to be on.
+{syntab:Advanced option}
+{synopt:{opt pause}}pauses before drawing each graph, allowing the user to retrieve and edit each graph
+command before running it. Requires {help pause} to be on.{p_end}
 
 {syntab:Saving options}
-
-{synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata format. 
-The graph name is {it:namestub} with the target name appended.{p_end}
-
-{synopt:{opt exp:ort}{it:(format[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
-{cmd:saving()} must also be specified, and the file name is the same as for {cmd:saving()} with the appropriate filetype.{p_end}
+{synopt:{opt name(string)}}stub for graph name, to which "_" and the target name are appended. Default is "lolly".{p_end}
+{synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata format. The
+graph name is {it:namestub} with the target name appended.{p_end}
+{synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
+{cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} with the appropriate 
+filetype, which must be one of the suffices listed in {help graph export}.{p_end}
 {synoptline}
 
 
@@ -80,10 +67,9 @@ The graph name is {it:namestub} with the target name appended.{p_end}
 {title:Description}
 
 {pstd}
-{cmd:siman lollyplot} draws a lollipop plot of performance measures data.  
-Each panel shows the estimated values of one performance measure with one data generating mechanism for all methods.
-Monte Carlo confidence intervals are represented via parentheses (a visual cue due to the usual presentation of 
-intervals as two numbers within parentheses).
+{cmd:siman lollyplot} draws a so-called lollipop plot of performance statistics.
+Each panel shows the estimated performance for different methods. Panels are separated for each performance measure and data-generating mechanism.
+Monte Carlo confidence intervals are represented via parentheses (a visual cue due to the typical presentation of intervals as two numbers within parentheses).
 The graph shows several performance measures (as rows of panels) and several data generating mechanisms (as columns).
 One graph is drawn for each target.
 
@@ -91,17 +77,21 @@ One graph is drawn for each target.
 
 {pstd}The user can select a subset of performance measures to be graphed using the 
 performance measures listed in {help siman analyse##perfmeas:performance measures}.
-If no performance measures are specified, then graphs will be drawn for {help siman analyse##bias:bias}, {help siman analyse##empse:empse} and {help siman analyse##cover:coverage}; 
-except that if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for {help siman analyse##mean:mean}, {help siman analyse##empse:empse} and {help siman analyse##relerror:relerror};
+If no performance measures are specified, then graphs will be drawn for {help siman analyse##bias:bias}, 
+{help siman analyse##empse:empse} and {help siman analyse##cover:coverage}; 
+an exception is if {cmd:true()} was not specified in {help siman setup}, then graphs will be drawn for 
+{help siman analyse##mean:mean}, {help siman analyse##empse:empse} and {help siman analyse##relerror:relerror};
 and that if there is no {bf:se} variable, then {help siman analyse##cover:coverage} or {help siman analyse##relerror:relerror} is dropped.
+
+{pstd} Reference lines are drawn for performance measures where this is appropriate: e.g. at 0 for bias, but not for empirical SE.
 
 {pstd}
 The user can specify {it:if} within the {cmd:siman lollyplot} syntax. 
-The {it:if} condition must only apply to {bf:dgm}, {bf:target} and {bf:method}.  
+The {it:if} condition must only apply to {bf:dgm}, {bf:target} and/or {bf:method}.  
 If the {it:if} condition is applied to other variables, an error "no observations" is likely.
 
 {pstd}
-Please note that {help siman setup} and {help siman analyse} need to be run first before {bf:siman lollyplot}.
+Both {help siman setup} and {help siman analyse} need to be run before {bf:siman lollyplot} can be used.
 
 {pstd}
 If {cmd:siman lollyplot} fails with the error "Too many sersets", try again after typing {cmd:serset clear}.
@@ -116,7 +106,7 @@ If {cmd:siman lollyplot} fails with the error "Too many sersets", try again afte
 
 {phang}. {stata  siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)}
 
-{phang}. {stata  siman analyse, notable}
+{phang}. {stata  siman analyse}
 
 {pstd}Default lollyplot graphs
 
@@ -127,13 +117,20 @@ here we select which performance measures are displayed, draw the graph for only
 
 {phang}. {stata  siman lollyplot modelse power cover if estimand=="beta", labf(%6.3f)}
 
+{pstd}Save lollyplot graphs to disk: this command names the graphs as mylolly_beta and mylolly_gamma
+(for the two targets beta and gamma). It saves them to disk in Stata format as
+mylolly_beta.gph and mylolly_gamma.gph, and exports them in JPEG format as
+mylolly_beta.jpg and mylolly_gamma.jpg.
+
+{phang}. {stata siman lollyplot, name(mylolly) saving(mylolly) export(jpg)}
+
 
 {marker reference}{...}
 {title:Reference}
 
-{pstd}
-Morris TP, White IR, Crowther MJ. Using simulation studies to evaluate statistical methods. Statistics in Medicine. 2019; 38: 2074–2102. 
-{browse "https://doi.org/10.1002/sim.8086"}
+{phang}{marker Morris19}Morris TP, White IR, Crowther MJ. Using simulation studies
+to evaluate statistical methods. Statistics in Medicine 2019; 38: 2074–2102.
+{browse "https://doi.org/10.1002/sim.8086":doi:10.1002/sim.8086"}
 
 
 {marker authors}{...}
@@ -149,3 +146,4 @@ Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
 
 {p}{helpb siman: Return to main help page for siman}
+

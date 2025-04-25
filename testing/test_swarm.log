@@ -59,30 +59,46 @@ siman swarm estimate, name(swarm_method6, replace) bygr(title(Test siman swarm u
 siman swarm will draw 1 graph with 6 panels
 
 . 
+. use data/setupdata_method6, clear
+
 . siman swarm estimate, nomean mcol(red) name(g1,replace)
 siman swarm will draw 1 graph with 6 panels
 
 . siman swarm se, meangr(mcol(pink)) name(g2,replace) row(3)
 siman swarm will draw 1 graph with 6 panels
 
-. siman swarm estimate se, bygr(note("I've changed the note")) name(g3,replace) by(mech beta) debug
+. siman swarm estimate se, bygr(note("I've changed the note")) name(g3,replace) ///
+>         by(mech beta) debug saving(myswarm) export(eps)
 siman swarm will draw 2 graphs each with 6 panels
 Debug: graph command is: twoway (scatter newidrep b, msymbol(o) msize(small) mcolor(%30) mlc(white%1
 > ) mlwidth(vvvthin) ) (scatter newidrep meanestimate, msym(|) msize(huge) mcol(orange) ), by(mech b
-> eta, title("") noxrescale legend(off) note("I've changed the note") ) ytitle("") ylabel(801 "CCA" 
-> 2101 "MeanImp" 3401 "Noadj", nogrid labsize(medium) angle(horizontal)) yscale(reverse) name(g3_est
-> imate, replace)
+> eta, title("") noxrescale legend(off) note(,pos(11)) note("I've changed the note") ) ytitle("") yl
+> abel(801 "CCA" 2101 "MeanImp" 3401 "Noadj", nogrid labsize(medium) angle(horizontal)) yscale(rever
+> se) name(g3_estimate, replace)  saving(`"myswarm_estimate"')
+file myswarm_estimate.gph saved
+Debug: graph export `"myswarm_estimate.eps"'
+file myswarm_estimate.eps saved as EPS format
 Debug: graph command is: twoway (scatter newidrep se, msymbol(o) msize(small) mcolor(%30) mlc(white%
 > 1) mlwidth(vvvthin) ) (scatter newidrep meanse, msym(|) msize(huge) mcol(orange) ), by(mech beta, 
-> title("") noxrescale legend(off) note("I've changed the note") ) ytitle("") ylabel(801 "CCA" 2101 
-> "MeanImp" 3401 "Noadj", nogrid labsize(medium) angle(horizontal)) yscale(reverse) name(g3_se, repl
-> ace)
+> title("") noxrescale legend(off) note(,pos(11)) note("I've changed the note") ) ytitle("") ylabel(
+> 801 "CCA" 2101 "MeanImp" 3401 "Noadj", nogrid labsize(medium) angle(horizontal)) yscale(reverse) n
+> ame(g3_se, replace)  saving(`"myswarm_se"')
+file myswarm_se.gph saved
+Debug: graph export `"myswarm_se.eps"'
+file myswarm_se.eps saved as EPS format
 
 . foreach graph in g1_estimate g2_se g3_estimate g3_se {
   2.         qui graph describe `graph'
   3. }
 
-. 
+. erase myswarm_estimate.gph
+
+. erase myswarm_estimate.eps
+
+. erase myswarm_se.gph
+
+. erase myswarm_se.eps
+
 . 
 . di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
 *** SIMAN HAS PASSED ALL THE TESTS IN test_swarm.do ***

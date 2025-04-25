@@ -18,6 +18,7 @@ set linesize 100
 
 // START TESTING
 log using `filename'_which, replace text
+version
 siman which
 log close
 
@@ -78,6 +79,7 @@ if ${detail} == 1 siman zipplot, by(estimand)
 if ${detail} == 1 siman zipplot, by(method) 
 
 siman analyse
+siman table, tabdisp
 
 siman lollyplot
 
@@ -149,8 +151,8 @@ siman nestloop
 
 
 * examples in paper
-use "https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simpaper1.dta", clear
-siman setup, rep(repno) dgm(dgm) method(method) est(b) se(se) true(0)
+use "https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simcheck.dta", clear
+siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) true(0)
 set scheme mrc
 
 siman scatter 
@@ -172,9 +174,9 @@ drop expfem exprem expmh msefem mserem msemh msepeto mseg2 mselimf covfem covrem
 
 siman setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)
 
-* siman analyse needs force option to cope with only 1 repetition per dgm [NB gets many lines of red output, suppressed by cap], and notable option because siman table fails
-cap siman analyse, force 
-assert _rc == 198
+* siman analyse needs force option to cope with only 1 repetition per dgm [NB gets many lines of red output, suppressed by cap]
+cap siman analyse, force
+assert _rc == 0
 
 * Recreating Gerta's graph, Figure 2
 siman nestloop mean, dgmorder(-theta rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") xlabel(none) xtitle("")

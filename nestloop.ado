@@ -1,19 +1,26 @@
-*!	version 0.11.3	21nov2024	IW New standalone, called by siman_nestloop of same version number
+*!	version 0.11.7	17apr2025	
+*	version 0.11.7	17apr2025	IW remove export() option: handled by siman_nestloop
+*	version 0.11.6	16apr2025	IW add dgreverse option; version number aligned with siman_nestloop
+*	version 0.12.3	31mar2025	IW legend() is parsed, giving better defaults and handling of pos() rows() cols(); lcolor() etc. respect = and ..
+*	version 0.12.2	17mar2025	IW bug fix: graphs were mislabelled in legend with true()
+*	version 0.12.1	13mar2025	IW bug fix: graphs were mislabelled in legend if no true()
+*   version 0.12.0	7jan2025	TM improved how 'true' line is drawn and introduced new option 'trueoptions()'
+*   version 0.11.3	21nov2024	IW New standalone, called by siman_nestloop of same version number
 program define nestloop
 version 15
 * nestloop exp, descriptor(theta rho pc tau2 k) method(method) true(theta)
 // PARSE
 syntax varname [if], DESCriptors(string) METHod(varname) ///
-	[true(string) ///
+	[true(string) TRUEOPTions(string) ///
 	STAGger(real 0) Connect(string) noREFline LEVel(cilevel) /// control main graph
 	DGSIze(real 0.3) DGGAp(real 0) /// control sizing of descriptor graph
-	DGINnergap(real 3) DGCOlor(string) MISsing /// control descriptor graph
+	DGINnergap(real 3) DGCOlor(string) MISsing DGREverse /// control descriptor graph
 	DGPAttern(string) DGLAbsize(string) DGSTyle(string) DGLWidth(string) /// control descriptor graph
-	LColor(string) LPattern(string) LSTYle(string) LWidth(string) /// twoway options for main graph
+	LColor(string) LPattern(string) LSTYle(string) LWidth(string) legend(string) /// twoway options for main graph
 	METHLEGend(string) SCENariolabel * /// other graph options
-	NAMe(string) SAVing(string) EXPort(string) /// twoway options for overall graph
+	NAMe(string) SAVing(string) /// twoway options for overall graph
 	debug pause nodg /// undocumented
-	] 
+	]
 
 * parse varname
 local estimate `varlist'
@@ -47,6 +54,8 @@ else if "`methlegend'"!="" {
 	exit 198
 }
 
+local graphoptions `options'
+
 *** END OF PARSING ***
 
 preserve
@@ -65,7 +74,7 @@ else qui gsort `descriptors', gen(`scenario')
 summ `scenario', meanonly
 local nscenarios = r(max)
 if `nscenarios'==1 {
-	di as error "siman nestloop requires more than 1 descriptor combination"
+	di as error "nestloop requires more than 1 descriptor combination"
 	exit 498
 }
 if upper("`connect'") != "L" {
@@ -149,7 +158,7 @@ if "`dg'" != "nodg" {
 	* main graph goes from y = `min' to `max'
 	* `dgsize' defines fraction of graph given to legend
 	* `dggap' defines fraction of graph given to gap
-	* legends go from y = `lmin' to `lmax'
+	* descriptor graph lines go from y = `lmin' to `lmax'
 	local fracsum = `dgsize' + `dggap'
 	local lmin = (`min'-`fracsum'*`max') / (1-`fracsum')
 	local lmax = `min' - `dggap'*(`max'-`lmin')
@@ -172,9 +181,11 @@ if "`dg'" != "nodg" {
 		tempvar S`var' // this is the variable containing the y-axis position for descriptor `var'
 		egen `S`var'' = group(`var'), label `missing'
 		local ++j
-		qui replace `S`var'' = ( (`S`var''-1) / (`thisdglevels'-1) + (`dginnergap'+1)*(`j'-1)) * `step' + `lmin'
+		if mi("`dgreverse'") local jj = `j'-1
+		else local jj = `ndescriptors'-`j'
+		qui replace `S`var'' = ( (`S`var''-1) / (`thisdglevels'-1) + (`dginnergap'+1)*`jj') * `step' + `lmin'
 		label var `S`var'' "y-value for descriptor `var'"
-		local Svarname_ypos = ( (`dginnergap'+1)*(`j' - 1)+2.2 ) * `step' + `lmin'
+		local Svarname_ypos = ( (`dginnergap'+1)*`jj' + 2.2 ) * `step' + `lmin'
 		local factorlist `factorlist' `S`var''
 		local varlabel : variable label `var'
 		if mi("`varlabel'") local varlabel `var'
@@ -218,24 +229,49 @@ if "`dg'" != "nodg" {
 }
 
 // CREATE MAIN GRAPH COMMAND
-local main_graph_cmd
-local legend
-forvalues k = 1 / `nmethods2' {
-	local istruevar = `k'>`nmethods' // handle "true" (if present) differently from the methods
+local legno 0
+if !mi("`true'") {
+	local main_graph_cmd (line `true' `scenario', c(`connect') lc(gs10) lw(medthick) `trueopts')
+	local ++legno
+	local legendorder `legendorder' `legno' `"True"'
+}
+else {
+	local main_graph_cmd
+	local legendorder
+}
+forvalues k = 1 / `nmethods' {
+	//local istruevar = `k'>`nmethods' // handle "true" (if present) differently from the methods
 	if `stagger'>0 local xvar `scenario'`k'
 	else local xvar `scenario'
-	if `istruevar' local thisgraphcmd line `true' `scenario', c(`connect')
-	else local thisgraphcmd line `estimate' `xvar' if `method'==`m2`k'', c(`connect')
+	//if `istruevar' local thisgraphcmd line `true' `scenario', c(`connect')
+	local thisgraphcmd line `estimate' `xvar' if `method'==`m2`k'', c(`connect')
 	foreach thing in lcolor lpattern lstyle lwidth {
-		local this : word `k' of ``thing''
+		if "`repeat`thing''"=="yes" local this `previous`thing''
+		else {
+			local this : word `k' of ``thing''
+			if "`this'"=="..." local this ..
+			if "`this'"==".." local repeat`thing' yes
+			if "`previous`thing''"==".." | "`this'"==".." | "`this'"=="=" local this `previous`thing''
+			else local previous`thing' `this'
+			}
 		if !mi("`this'") local thisgraphcmd `thisgraphcmd' `thing'(`this')
 	}
 	local main_graph_cmd `main_graph_cmd' (`thisgraphcmd')
-	if `istruevar' local legend `legend' `k' `"True"'
-	else local legend `legend' `k' `"`methlegitem'`m`k''"'
+	//if `istruevar' local legendorder `legendorder' `k' `"True"'
+	local ++legno
+	local legendorder `legendorder' `legno' `"`methlegitem'`m`k''"'
 }
 local ytitle : var label `estimate'
 if mi("`ytitle'") local ytitle `estimate'
+
+// PARSE LEGEND
+local 0 , `legend'
+syntax, [POSition(int 6) Cols(int 0) Rows(int 0) *]
+local legendopts `options' position(`position')
+if `rows'>0 local legendopts `legendopts' rows(`rows') // rows overrides cols in Stata
+else if `cols'>0 local legendopts `legendopts' cols(`cols')
+else if inlist(`position',2,3,4,8,9,10) local legendopts `legendopts' cols(1)
+else local legendopts `legendopts' rows(1)
 
 // draw main graph
 if !mi("`saving'") local savingopt saving(`saving'`savingopts')
@@ -243,13 +279,13 @@ local graph_cmd graph twoway 										///
 	`main_graph_cmd'												///
 	`descriptor_graph_cmd'											///
 	,																///
-	legend(pos(6) row(1) order(`legend') `methlegtitle')			///
+	legend(order(`legendorder') `methlegtitle' `legendopts')		///
 	ytitle(`ytitle')												///
 	`scenarioaxis' yla(,nogrid) 									///
 	`descriptor_labels_cmd'											///
 	name(`name'`nameopts') `savingopt'	    						///
 	`note' `yline'													///
-	`options'
+	`graphoptions'
 
 if !mi("`debug'") di as input "Debug: graph command is: " as input `"`graph_cmd'"'
 if !mi("`pause'") {
@@ -257,12 +293,6 @@ if !mi("`pause'") {
 	pause Press F9 to recall, optionally edit and run the graph command
 }
 `graph_cmd'
-if !mi("`export'") {
-	local graphexportcmd graph export `"`saving'.`exporttype'"'`exportopts'
-	if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
-	cap noi `graphexportcmd'
-	if _rc di as error "Error in export() option"
-}
 
 restore
 

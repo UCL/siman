@@ -26,10 +26,8 @@
 {synopthdr}
 {synoptline}
 {synopt:{opt ch:ars}}lists the characteristics created by {bf:{help siman setup}} and explained {bf:{help siman setup##chars:here}}.{p_end}
-
-{synopt:{opt s:ort}}is used with {opt chars}: it sorts the characteristics alphabetically before listing.{p_end}
-
-{synopt:{opt sav:ing(filename)}}is used with {opt chars}: it saves the characteristics to the file specified.{p_end}
+{* {synopt:{opt s:ort}}is used with {opt chars}: it sorts the characteristics alphabetically before listing.{p_end}}{...}
+{* {synopt:{opt sav:ing(filename)}}is used with {opt chars}: it saves the characteristics to the file specified.{p_end}}{...}
 {synoptline}
 
 
@@ -38,7 +36,8 @@
 {pstd}
 
 {pstd}
-{cmd:siman describe} provides a summary of the data previously imported by {bf:{help siman setup}}, and whether estimates data and performance estimates are in the dataset.
+{cmd:siman describe} provides a summary of the data previously imported by {help siman setup}, 
+and whether estimates data and performance estimates are in the dataset. Of course, {help siman setup} needs to be run before {bf:siman describe} can be used.
 
 
 {marker authors}{...}
