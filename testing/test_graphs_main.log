@@ -104,6 +104,10 @@ Graph cms_test1_4 is for dgm=2, estimand=gamma
 . siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test1", replace) 
 siman blandaltman will draw 4 graphs each with 1 panel
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph ba_test1_1_estimate is for dgm=1, estimand=beta
+Graph ba_test1_2_estimate is for dgm=1, estimand=gamma
+Graph ba_test1_3_estimate is for dgm=2, estimand=beta
+Graph ba_test1_4_estimate is for dgm=2, estimand=gamma
 
 . 
 . siman analyse
@@ -115,13 +119,13 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-measure   |         1          2            1          2
+statistic |         1          2            1          2
 ----------+---------------------------------------------
 1         |
   Estreps |      1000       1000         1000       1000
           |                                             
           | 
-   Sereps |      1000       1000         1000       1000
+   SEreps |      1000       1000         1000       1000
           |                                             
           | 
      Bias | -.0043991  -.0025973     .0005151   .0056354
@@ -139,16 +143,16 @@ measure   |         1          2            1          2
   Relprec |         0   -50.8353            0  -49.33068
           |         0    2.28676            0   2.314097
           | 
-      Mse |  .0062594   .0126989     .0064839   .0128278
+      MSE |  .0062594   .0126989     .0064839   .0128278
           |  .0002881   .0006187     .0002847   .0005329
           | 
-     Rmse |  .0791165   .1126895     .0805229   .1132599
+     RMSE |  .0791165   .1126895     .0805229   .1132599
           |  .0018209   .0027454     .0017676   .0023524
           | 
   Modelse |  .0787452   .1136343     .0788425   .1140264
           |  .0001572   .0003405     .0001466   .0003426
           | 
-  Ciwidth |  .3080681   .4434751     .3085282   .4450112
+  CIwidth |  .3080681   .4434751     .3085282   .4450112
           |  .0006123   .0013217     .0005716   .0013243
           | 
  Relerror | -.3649609   .8147949    -2.133844   .7512448
@@ -164,7 +168,7 @@ measure   |         1          2            1          2
   Estreps |      1000       1000         1000       1000
           |                                             
           | 
-   Sereps |      1000       1000         1000       1000
+   SEreps |      1000       1000         1000       1000
           |                                             
           | 
      Bias | -.0046965  -.0058509     .0005948   .0065072
@@ -182,16 +186,16 @@ measure   |         1          2            1          2
   Relprec |         0  -47.59274            0  -49.33068
           |         0   2.430245            0   2.314097
           | 
-      Mse |  .0083703   .0159638     .0086452   .0171037
+      MSE |  .0083703   .0159638     .0086452   .0171037
           |  .0003797   .0007445     .0003795   .0007105
           | 
-     Rmse |  .0914893   .1263479     .0929798   .1307813
+     RMSE |  .0914893   .1263479     .0929798   .1307813
           |  .0020748   .0029462      .002041   .0027163
           | 
   Modelse |  .0910296   .1313619     .0910394   .1316664
           |  .0001752   .0003826     .0001693   .0003955
           | 
-  Ciwidth |   .356176   .5127883     .3562577   .5138547
+  CIwidth |   .356176   .5127883     .3562577   .5138547
           |   .000683   .0014841     .0006601   .0015292
           | 
  Relerror |  -.420924   4.028049    -2.133846    .751246
@@ -204,8 +208,8 @@ measure   |         1          2            1          2
           |  .6892024   .6485677     .7209369    .589101
 --------------------------------------------------------
 Note: Coverage and Power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . 
 . siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test1", replace)
@@ -336,6 +340,10 @@ Graph cms_test2_4 is for dgm=D2, target=2
 . siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test2", replace)        
 siman blandaltman will draw 4 graphs each with 1 panel
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph ba_test2_1_estimate is for dgm=D1, target=1
+Graph ba_test2_2_estimate is for dgm=D1, target=2
+Graph ba_test2_3_estimate is for dgm=D2, target=1
+Graph ba_test2_4_estimate is for dgm=D2, target=2
 
 . 
 . siman analyse
@@ -347,13 +355,13 @@ siman analyse has run successfully
 dgm and   |
 Performan |              target and method              
 ce        | --------- 1 --------    --------- 2 --------
-measure   |         A          B            A          B
+statistic |         A          B            A          B
 ----------+---------------------------------------------
 D1        |
   Estreps |      1000       1000         1000       1000
           |                                             
           | 
-   Sereps |      1000       1000         1000       1000
+   SEreps |      1000       1000         1000       1000
           |                                             
           | 
      Bias | -.0043991  -.0025973     .0005151   .0056354
@@ -371,16 +379,16 @@ D1        |
   Relprec |         0   -50.8353            0  -49.33068
           |         0    2.28676            0   2.314097
           | 
-      Mse |  .0062594   .0126989     .0064839   .0128278
+      MSE |  .0062594   .0126989     .0064839   .0128278
           |  .0002881   .0006187     .0002847   .0005329
           | 
-     Rmse |  .0791165   .1126895     .0805229   .1132599
+     RMSE |  .0791165   .1126895     .0805229   .1132599
           |  .0018209   .0027454     .0017676   .0023524
           | 
   Modelse |  .0787452   .1136343     .0788425   .1140264
           |  .0001572   .0003405     .0001466   .0003426
           | 
-  Ciwidth |  .3080681   .4434751     .3085282   .4450112
+  CIwidth |  .3080681   .4434751     .3085282   .4450112
           |  .0006123   .0013217     .0005716   .0013243
           | 
  Relerror | -.3649609   .8147949    -2.133844   .7512448
@@ -396,7 +404,7 @@ D2        |
   Estreps |      1000       1000         1000       1000
           |                                             
           | 
-   Sereps |      1000       1000         1000       1000
+   SEreps |      1000       1000         1000       1000
           |                                             
           | 
      Bias | -.0046965  -.0058509     .0005948   .0065072
@@ -414,16 +422,16 @@ D2        |
   Relprec |         0  -47.59274            0  -49.33068
           |         0   2.430245            0   2.314097
           | 
-      Mse |  .0083703   .0159638     .0086452   .0171037
+      MSE |  .0083703   .0159638     .0086452   .0171037
           |  .0003797   .0007445     .0003795   .0007105
           | 
-     Rmse |  .0914893   .1263479     .0929798   .1307813
+     RMSE |  .0914893   .1263479     .0929798   .1307813
           |  .0020748   .0029462      .002041   .0027163
           | 
   Modelse |  .0910296   .1313619     .0910394   .1316664
           |  .0001752   .0003826     .0001693   .0003955
           | 
-  Ciwidth |   .356176   .5127883     .3562577   .5138547
+  CIwidth |   .356176   .5127883     .3562577   .5138547
           |   .000683   .0014841     .0006601   .0015292
           | 
  Relerror |  -.420924   4.028049    -2.133846    .751246
@@ -436,8 +444,8 @@ D2        |
           |  .6892024   .6485677     .7209369    .589101
 --------------------------------------------------------
 Note: Coverage and Power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . 
 . siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test2", replace)
@@ -540,6 +548,10 @@ Graph cms_test3_4 is for dgm=2, estimand=gamma
 . siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test3", replace) 
 siman blandaltman will draw 4 graphs each with 1 panel
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph ba_test3_1_estimate is for dgm=1, estimand=beta
+Graph ba_test3_2_estimate is for dgm=1, estimand=gamma
+Graph ba_test3_3_estimate is for dgm=2, estimand=beta
+Graph ba_test3_4_estimate is for dgm=2, estimand=gamma
 
 . 
 . siman analyse
@@ -551,13 +563,13 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-measure   |         A          B            A          B
+statistic |         A          B            A          B
 ----------+---------------------------------------------
 1         |
   Estreps |      1000       1000         1000       1000
           |                                             
           | 
-   Sereps |      1000       1000         1000       1000
+   SEreps |      1000       1000         1000       1000
           |                                             
           | 
      Mean | -.0043991  -.0025973     .0005151   .0056354
@@ -572,7 +584,7 @@ measure   |         A          B            A          B
   Modelse |  .0787452   .1136343     .0788425   .1140264
           |  .0001572   .0003405     .0001466   .0003426
           | 
-  Ciwidth |  .3080681   .4434751     .3085282   .4450112
+  CIwidth |  .3080681   .4434751     .3085282   .4450112
           |  .0006123   .0013217     .0005716   .0013243
           | 
  Relerror | -.3649609   .8147949    -2.133844   .7512448
@@ -585,7 +597,7 @@ measure   |         A          B            A          B
   Estreps |      1000       1000         1000       1000
           |                                             
           | 
-   Sereps |      1000       1000         1000       1000
+   SEreps |      1000       1000         1000       1000
           |                                             
           | 
      Mean | -.0046965  -.0058509     .0005948   .0065072
@@ -600,7 +612,7 @@ measure   |         A          B            A          B
   Modelse |  .0910296   .1313619     .0910394   .1316664
           |  .0001752   .0003826     .0001693   .0003955
           | 
-  Ciwidth |   .356176   .5127883     .3562577   .5138547
+  CIwidth |   .356176   .5127883     .3562577   .5138547
           |   .000683   .0014841     .0006601   .0015292
           | 
  Relerror |  -.420924   4.028049    -2.133846    .751246
@@ -610,8 +622,8 @@ measure   |         A          B            A          B
           |  .6892024   .6485677     .7209369    .589101
 --------------------------------------------------------
 Note: Power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . 
 . siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test3", replace)
@@ -778,6 +790,8 @@ Graph cms_test5_2 is for dgm=2
 . 
 . siman blandaltman, ytitle("test y-title") xtitle("test x-title") name("ba_test5", replace) 
 siman blandaltman will draw 2 graphs each with 1 panel
+Graph ba_test5_1_estimate is for dgm=1
+Graph ba_test5_2_estimate is for dgm=2
 
 . 
 . siman analyse
@@ -789,13 +803,13 @@ siman analyse has run successfully
 dgm and   |
 Performan |
 ce        |        method       
-measure   |         1          2
+statistic |         1          2
 ----------+---------------------
 1         |
   Estreps |      1000       1000
           |                     
           | 
-   Sereps |      1000       1000
+   SEreps |      1000       1000
           |                     
           | 
      Bias | -.0043991  -.0025973
@@ -813,16 +827,16 @@ measure   |         1          2
   Relprec |         0   -50.8353
           |         0    2.28676
           | 
-      Mse |  .0062594   .0126989
+      MSE |  .0062594   .0126989
           |  .0002881   .0006187
           | 
-     Rmse |  .0791165   .1126895
+     RMSE |  .0791165   .1126895
           |  .0018209   .0027454
           | 
   Modelse |  .0787452   .1136343
           |  .0001572   .0003405
           | 
-  Ciwidth |  .3080681   .4434751
+  CIwidth |  .3080681   .4434751
           |  .0006123   .0013217
           | 
  Relerror | -.3649609   .8147949
@@ -838,7 +852,7 @@ measure   |         1          2
   Estreps |      1000       1000
           |                     
           | 
-   Sereps |      1000       1000
+   SEreps |      1000       1000
           |                     
           | 
      Bias | -.0046965  -.0058509
@@ -856,16 +870,16 @@ measure   |         1          2
   Relprec |         0  -47.59274
           |         0   2.430245
           | 
-      Mse |  .0083703   .0159638
+      MSE |  .0083703   .0159638
           |  .0003797   .0007445
           | 
-     Rmse |  .0914893   .1263479
+     RMSE |  .0914893   .1263479
           |  .0020748   .0029462
           | 
   Modelse |  .0910296   .1313619
           |  .0001752   .0003826
           | 
-  Ciwidth |   .356176   .5127883
+  CIwidth |   .356176   .5127883
           |   .000683   .0014841
           | 
  Relerror |  -.420924   4.028049
@@ -878,8 +892,8 @@ measure   |         1          2
           |  .6892024   .6485677
 --------------------------------
 Note: Coverage and Power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . 
 . siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test5")
@@ -959,6 +973,8 @@ Graph cms_test5a_2 is for dgm=., estimand=beta
 . siman blandaltman if estimand=="beta", ytitle("test y-title") xtitle("test x-title") name("ba_test
 > 5a", replace) 
 siman blandaltman will draw 2 graphs each with 1 panel
+Graph ba_test5a_1_estimate is for dgm=1, estimand=beta
+Graph ba_test5a_2_estimate is for dgm=., estimand=beta
 
 . 
 . siman analyse
@@ -970,13 +986,13 @@ siman analyse has run successfully
 dgm and   |
 Performan |                       estimand and method                       
 ce        | ------------ beta ------------    ------------ gamma -----------
-measure   |   First method  Method, second      First method  Method, second
+statistic |   First method  Method, second      First method  Method, second
 ----------+-----------------------------------------------------------------
 1         |
   Estreps |           1000            1000              1000            1000
           |                                                                 
           | 
-   Sereps |           1000            1000              1000            1000
+   SEreps |           1000            1000              1000            1000
           |                                                                 
           | 
      Bias |      -.0043991       -.0025973          .0005151        .0056354
@@ -994,16 +1010,16 @@ measure   |   First method  Method, second      First method  Method, second
   Relprec |              0        -50.8353                 0       -49.33068
           |              0         2.28676                 0        2.314097
           | 
-      Mse |       .0062594        .0126989          .0064839        .0128278
+      MSE |       .0062594        .0126989          .0064839        .0128278
           |       .0002881        .0006187          .0002847        .0005329
           | 
-     Rmse |       .0791165        .1126895          .0805229        .1132599
+     RMSE |       .0791165        .1126895          .0805229        .1132599
           |       .0018209        .0027454          .0017676        .0023524
           | 
   Modelse |       .0787452        .1136343          .0788425        .1140264
           |       .0001572        .0003405          .0001466        .0003426
           | 
-  Ciwidth |       .3080681        .4434751          .3085282        .4450112
+  CIwidth |       .3080681        .4434751          .3085282        .4450112
           |       .0006123        .0013217          .0005716        .0013243
           | 
  Relerror |      -.3649609        .8147949         -2.133844        .7512448
@@ -1019,7 +1035,7 @@ measure   |   First method  Method, second      First method  Method, second
   Estreps |           1000            1000              1000            1000
           |                                                                 
           | 
-   Sereps |           1000            1000              1000            1000
+   SEreps |           1000            1000              1000            1000
           |                                                                 
           | 
      Bias |      -.0046965       -.0058509          .0005948        .0065072
@@ -1037,16 +1053,16 @@ measure   |   First method  Method, second      First method  Method, second
   Relprec |              0       -47.59274                 0       -49.33068
           |              0        2.430245                 0        2.314097
           | 
-      Mse |       .0083703        .0159638          .0086452        .0171037
+      MSE |       .0083703        .0159638          .0086452        .0171037
           |       .0003797        .0007445          .0003795        .0007105
           | 
-     Rmse |       .0914893        .1263479          .0929798        .1307813
+     RMSE |       .0914893        .1263479          .0929798        .1307813
           |       .0020748        .0029462           .002041        .0027163
           | 
   Modelse |       .0910296        .1313619          .0910394        .1316664
           |       .0001752        .0003826          .0001693        .0003955
           | 
-  Ciwidth |        .356176        .5127883          .3562577        .5138547
+  CIwidth |        .356176        .5127883          .3562577        .5138547
           |        .000683        .0014841          .0006601        .0015292
           | 
  Relerror |       -.420924        4.028049         -2.133846         .751246
@@ -1059,8 +1075,8 @@ measure   |   First method  Method, second      First method  Method, second
           |       .6892024        .6485677          .7209369         .589101
 ----------------------------------------------------------------------------
 Note: Coverage and Power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . 
 . siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_test5a", replace)
@@ -1181,6 +1197,10 @@ Graph cms_1 is for dgm=1, target=beta
 . siman_blandaltman, methlist(3/7) name("ba_test6", replace)
 siman blandaltman will draw 4 graphs each with 4 panels
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph ba_test6_1_estimate is for dgm=1, target=beta
+Graph ba_test6_2_estimate is for dgm=1, target=gamma
+Graph ba_test6_3_estimate is for dgm=2, target=beta
+Graph ba_test6_4_estimate is for dgm=2, target=gamma
 
 . 
 .  
@@ -1273,6 +1293,10 @@ Graph cms_test7_4 is for theta=1, rho=no, pc=5%, k=5, tau2=.2
 > e("ba_test7", replace) 
 siman blandaltman will draw 4 graphs each with 1 panel
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph ba_test7_1_estimate is for theta=1, rho=no, pc=5%, k=5, tau2=0
+Graph ba_test7_2_estimate is for theta=1, rho=no, pc=5%, k=5, tau2=.05
+Graph ba_test7_3_estimate is for theta=1, rho=no, pc=5%, k=5, tau2=.1
+Graph ba_test7_4_estimate is for theta=1, rho=no, pc=5%, k=5, tau2=.2
 
 . 
 . siman analyse, force

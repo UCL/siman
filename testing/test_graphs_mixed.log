@@ -128,13 +128,21 @@ Graph cms_2 is for dgm=2, estimand=beta
 . siman blandaltman 
 siman blandaltman will draw 4 graphs each with 1 panel
 Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph blandaltman_1_estimate is for dgm=1, estimand=beta
+Graph blandaltman_2_estimate is for dgm=1, estimand=gamma
+Graph blandaltman_3_estimate is for dgm=2, estimand=beta
+Graph blandaltman_4_estimate is for dgm=2, estimand=gamma
 
 . * 1 graph per dgm and target combination, comparison of methods
 . if ${detail} == 1 siman blandaltman if dgm ==1
 siman blandaltman will draw 2 graphs each with 1 panel
+Graph blandaltman_1_estimate is for dgm=1, estimand=beta
+Graph blandaltman_2_estimate is for dgm=1, estimand=gamma
 
 . if ${detail} == 1 siman blandaltman if estimand == 2
 siman blandaltman will draw 2 graphs each with 1 panel
+Graph blandaltman_1_estimate is for dgm=1, estimand=gamma
+Graph blandaltman_2_estimate is for dgm=2, estimand=gamma
 
 . 
 . siman zipplot
@@ -157,13 +165,13 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-measure   |         A          B            A          B
+statistic |         A          B            A          B
 ----------+---------------------------------------------
 1         |
   Estreps |      1000       1000         1000       1000
           |                                             
           | 
-   Sereps |      1000       1000         1000       1000
+   SEreps |      1000       1000         1000       1000
           |                                             
           | 
      Bias | -.0043991  -.0025973     .0005151   .0056354
@@ -181,16 +189,16 @@ measure   |         A          B            A          B
   Relprec |         0   -50.8353            0  -49.33068
           |         0    2.28676            0   2.314097
           | 
-      Mse |  .0062594   .0126989     .0064839   .0128278
+      MSE |  .0062594   .0126989     .0064839   .0128278
           |  .0002881   .0006187     .0002847   .0005329
           | 
-     Rmse |  .0791165   .1126895     .0805229   .1132599
+     RMSE |  .0791165   .1126895     .0805229   .1132599
           |  .0018209   .0027454     .0017676   .0023524
           | 
   Modelse |  .0787452   .1136343     .0788425   .1140264
           |  .0001572   .0003405     .0001466   .0003426
           | 
-  Ciwidth |  .3080681   .4434751     .3085282   .4450112
+  CIwidth |  .3080681   .4434751     .3085282   .4450112
           |  .0006123   .0013217     .0005716   .0013243
           | 
  Relerror | -.3649609   .8147949    -2.133844   .7512448
@@ -206,7 +214,7 @@ measure   |         A          B            A          B
   Estreps |      1000       1000         1000       1000
           |                                             
           | 
-   Sereps |      1000       1000         1000       1000
+   SEreps |      1000       1000         1000       1000
           |                                             
           | 
      Bias | -.0046965  -.0058509     .0005948   .0065072
@@ -224,16 +232,16 @@ measure   |         A          B            A          B
   Relprec |         0  -47.59274            0  -49.33068
           |         0   2.430245            0   2.314097
           | 
-      Mse |  .0083703   .0159638     .0086452   .0171037
+      MSE |  .0083703   .0159638     .0086452   .0171037
           |  .0003797   .0007445     .0003795   .0007105
           | 
-     Rmse |  .0914893   .1263479     .0929798   .1307813
+     RMSE |  .0914893   .1263479     .0929798   .1307813
           |  .0020748   .0029462      .002041   .0027163
           | 
   Modelse |  .0910296   .1313619     .0910394   .1316664
           |  .0001752   .0003826     .0001693   .0003955
           | 
-  Ciwidth |   .356176   .5127883     .3562577   .5138547
+  CIwidth |   .356176   .5127883     .3562577   .5138547
           |   .000683   .0014841     .0006601   .0015292
           | 
  Relerror |  -.420924   4.028049    -2.133846    .751246
@@ -246,8 +254,8 @@ measure   |         A          B            A          B
           |  .6892024   .6485677     .7209369    .589101
 --------------------------------------------------------
 Note: Coverage and Power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . 
 . siman lollyplot
@@ -471,6 +479,9 @@ Graph cms_1 is for betastring=0, pmiss=.2, mech=MNAR, estimand=effect
 . 
 . siman blandaltman if betastring==1 & float(pmiss)==float(0.4) & mech == 2
 siman blandaltman will draw 3 graphs each with 2 panels
+Graph blandaltman_1_estimate is for betastring=0, pmiss=.4, mech=MNAR, estimand=effect
+Graph blandaltman_2_estimate is for betastring=0, pmiss=.4, mech=MNAR, estimand=mean0
+Graph blandaltman_3_estimate is for betastring=0, pmiss=.4, mech=MNAR, estimand=mean1
 
 . * 1 graph per combination of dgm levels and target, by method difference
 . 
@@ -554,6 +565,9 @@ Graph cms_1 is for dgm=MCAR
 . 
 . siman blandaltman 
 siman blandaltman will draw 3 graphs each with 2 panels
+Graph blandaltman_1_estimate is for dgm=MCAR
+Graph blandaltman_2_estimate is for dgm=MAR
+Graph blandaltman_3_estimate is for dgm=MNAR
 
 . 
 . siman zipplot

@@ -60,12 +60,12 @@ siman analyse has run successfully
 ----------------------------------------------------------------------------------------------------
 Performan |                                    target and method                                    
 ce        | ------------------ inter -----------------    ------------------ main ------------------
-measure   |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT     IMPALL     IMPBYZ
+statistic |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT     IMPALL     IMPBYZ
 ----------+-----------------------------------------------------------------------------------------
   Estreps |     10000      10000      10000      10000        10000      10000      10000      10000
           |                                                                                         
           | 
-   Sereps |     10000      10000      10000      10000        10000      10000      10000      10000
+   SEreps |     10000      10000      10000      10000        10000      10000      10000      10000
           |                                                                                         
           | 
      Bias |  .0059115   .0015333   .0052478   .0059115    -.0014899  -.0024519  -.0031501  -.0027479
@@ -83,16 +83,16 @@ measure   |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT  
   Relprec |         0   114.3421   1.187411          0            0     113.07   98.98207   89.73528
           |         0   3.189075   .2449551                       0    3.04416   2.833241   2.675898
           | 
-      Mse |  .0917805   .0428056   .0906964   .0917805     .0864773   .0405913   .0434687   .0455843
+      MSE |  .0917805   .0428056   .0906964   .0917805     .0864773   .0405913   .0434687   .0455843
           |  .0013657   .0006159   .0013496   .0013657     .0012391   .0005911   .0006277   .0006603
           | 
-     Rmse |  .3029529   .2068953   .3011585   .3029529     .2940703   .2014729   .2084914   .2135047
+     RMSE |  .3029529   .2068953   .3011585   .3029529     .2940703   .2014729   .2084914   .2135047
           |   .002254   .0014884   .0022407    .002254     .0021068    .001467   .0015053   .0015464
           | 
   Modelse |  .3048548   .2058274   .3062941   .3085094     .2922305   .2019903   .2079367    .211888
           |   .000532   .0002157   .0004706   .0004811     .0003659   .0001489   .0001678   .0001907
           | 
-  Ciwidth |  1.178335    .802491   1.187637   1.195883     1.136844   .7896402   .8125015   .8273879
+  CIwidth |  1.178335    .802491   1.187637   1.195883     1.136844   .7896402   .8125015   .8273879
           |  .0019894   .0008355   .0017631   .0017988     .0014074   .0005827     .00065   .0007282
           | 
  Relerror |  .6419234  -.5184007   1.715628   1.848428    -.6293141   .2592178  -.2596578   -.753965
@@ -105,8 +105,8 @@ measure   |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT  
           |   .389268   .4641564   .3814146   .3807351     .2358118   .2260177   .2283702   .2301147
 ----------------------------------------------------------------------------------------------------
 Note: Coverage and Power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . siman analyse, ref(FULLDAT) replace 
 siman analyse has run successfully
@@ -116,12 +116,12 @@ siman analyse has run successfully
 ----------------------------------------------------------------------------------------------------
 Performan |                                    target and method                                    
 ce        | ------------------ inter -----------------    ------------------ main ------------------
-measure   |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT     IMPALL     IMPBYZ
+statistic |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT     IMPALL     IMPBYZ
 ----------+-----------------------------------------------------------------------------------------
   Estreps |     10000      10000      10000      10000        10000      10000      10000      10000
           |                                                                                         
           | 
-   Sereps |     10000      10000      10000      10000        10000      10000      10000      10000
+   SEreps |     10000      10000      10000      10000        10000      10000      10000      10000
           |                                                                                         
           | 
      Bias |  .0059115   .0015333   .0052478   .0059115    -.0014899  -.0024519  -.0031501  -.0027479
@@ -139,16 +139,16 @@ measure   |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT  
   Relprec | -53.34562          0  -52.79164  -53.34562    -53.06707          0  -6.611879  -10.95167
           |  .6941441          0   .6991529   .6941441     .6705371          0   .5173771   .5893332
           | 
-      Mse |  .0917805   .0428056   .0906964   .0917805     .0864773   .0405913   .0434687   .0455843
+      MSE |  .0917805   .0428056   .0906964   .0917805     .0864773   .0405913   .0434687   .0455843
           |  .0013657   .0006159   .0013496   .0013657     .0012391   .0005911   .0006277   .0006603
           | 
-     Rmse |  .3029529   .2068953   .3011585   .3029529     .2940703   .2014729   .2084914   .2135047
+     RMSE |  .3029529   .2068953   .3011585   .3029529     .2940703   .2014729   .2084914   .2135047
           |   .002254   .0014884   .0022407    .002254     .0021068    .001467   .0015053   .0015464
           | 
   Modelse |  .3048548   .2058274   .3062941   .3085094     .2922305   .2019903   .2079367    .211888
           |   .000532   .0002157   .0004706   .0004811     .0003659   .0001489   .0001678   .0001907
           | 
-  Ciwidth |  1.178335    .802491   1.187637   1.195883     1.136844   .7896402   .8125015   .8273879
+  CIwidth |  1.178335    .802491   1.187637   1.195883     1.136844   .7896402   .8125015   .8273879
           |  .0019894   .0008355   .0017631   .0017988     .0014074   .0005827     .00065   .0007282
           | 
  Relerror |  .6419234  -.5184007   1.715628   1.848428    -.6293141   .2592178  -.2596578   -.753965
@@ -161,8 +161,8 @@ measure   |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT  
           |   .389268   .4641564   .3814146   .3807351     .2358118   .2260177   .2283702   .2301147
 ----------------------------------------------------------------------------------------------------
 Note: Coverage and Power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . siman analyse, ref(IMPALL) replace 
 siman analyse has run successfully
@@ -172,12 +172,12 @@ siman analyse has run successfully
 ----------------------------------------------------------------------------------------------------
 Performan |                                    target and method                                    
 ce        | ------------------ inter -----------------    ------------------ main ------------------
-measure   |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT     IMPALL     IMPBYZ
+statistic |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT     IMPALL     IMPBYZ
 ----------+-----------------------------------------------------------------------------------------
   Estreps |     10000      10000      10000      10000        10000      10000      10000      10000
           |                                                                                         
           | 
-   Sereps |     10000      10000      10000      10000        10000      10000      10000      10000
+   SEreps |     10000      10000      10000      10000        10000      10000      10000      10000
           |                                                                                         
           | 
      Bias |  .0059115   .0015333   .0052478   .0059115    -.0014899  -.0024519  -.0031501  -.0027479
@@ -195,16 +195,16 @@ measure   |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT  
   Relprec | -1.173477   111.8269          0  -1.173477    -49.74422       7.08          0  -4.647047
           |  .2392399   3.137143          0   .2392399     .7155758   .5932311          0     .30209
           | 
-      Mse |  .0917805   .0428056   .0906964   .0917805     .0864773   .0405913   .0434687   .0455843
+      MSE |  .0917805   .0428056   .0906964   .0917805     .0864773   .0405913   .0434687   .0455843
           |  .0013657   .0006159   .0013496   .0013657     .0012391   .0005911   .0006277   .0006603
           | 
-     Rmse |  .3029529   .2068953   .3011585   .3029529     .2940703   .2014729   .2084914   .2135047
+     RMSE |  .3029529   .2068953   .3011585   .3029529     .2940703   .2014729   .2084914   .2135047
           |   .002254   .0014884   .0022407    .002254     .0021068    .001467   .0015053   .0015464
           | 
   Modelse |  .3048548   .2058274   .3062941   .3085094     .2922305   .2019903   .2079367    .211888
           |   .000532   .0002157   .0004706   .0004811     .0003659   .0001489   .0001678   .0001907
           | 
-  Ciwidth |  1.178335    .802491   1.187637   1.195883     1.136844   .7896402   .8125015   .8273879
+  CIwidth |  1.178335    .802491   1.187637   1.195883     1.136844   .7896402   .8125015   .8273879
           |  .0019894   .0008355   .0017631   .0017988     .0014074   .0005827     .00065   .0007282
           | 
  Relerror |  .6419234  -.5184007   1.715628   1.848428    -.6293141   .2592178  -.2596578   -.753965
@@ -217,8 +217,8 @@ measure   |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT  
           |   .389268   .4641564   .3814146   .3807351     .2358118   .2260177   .2283702   .2301147
 ----------------------------------------------------------------------------------------------------
 Note: Coverage and Power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . 
 . * check get error if true is not constant across methods
@@ -305,13 +305,13 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-measure   |         1          2            1          2
+statistic |         1          2            1          2
 ----------+---------------------------------------------
 1         |
      Bias | -.0043991  -.0025973     .0005151   .0056354
           |  .0024993   .0035644     .0025476   .0035789
           | 
-  Ciwidth |  .2014349   .2899728     .2017357   .2909772
+  CIwidth |  .2014349   .2899728     .2017357   .2909772
           |  .0004004   .0008642     .0003738   .0008659
           | 
     Cover |      80.1       81.5         79.5       78.5
@@ -324,7 +324,7 @@ measure   |         1          2            1          2
      Bias | -.0046965  -.0058509     .0005948   .0065072
           |  .0028908   .0039932     .0029417   .0041326
           | 
-  Ciwidth |  .2328909   .3352942     .2329444   .3359915
+  CIwidth |  .2328909   .3352942     .2329444   .3359915
           |  .0004466   .0009704     .0004316   .0009999
           | 
     Cover |      80.3       83.3         79.5       78.5
@@ -334,8 +334,8 @@ measure   |         1          2            1          2
           |   1.25774   1.179453     1.276617   1.299134
 --------------------------------------------------------
 Note: Coverage and Power calculated at 80% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . foreach pm in bias ciwidth cover power {
   2.         summ est if _perfmeascode=="`pm'"
@@ -422,10 +422,10 @@ siman analyse has run successfully
 dgm and   |
 Performan |           estimand and method           
 ce        | ------ beta ------    ------ gamma -----
-measure   |        1         2           1         2
+statistic |        1         2           1         2
 ----------+-----------------------------------------
 1         |
-  Ciwidth | .2014349  .2899728    .2017357  .2909772
+  CIwidth | .2014349  .2899728    .2017357  .2909772
           | .0004004  .0008642    .0003738  .0008659
           | 
     Cover |     80.1      81.5        79.5      78.5
@@ -435,7 +435,7 @@ measure   |        1         2           1         2
           | 1.262533  1.227905    1.276617  1.299134
 ----------+-----------------------------------------
 2         |
-  Ciwidth | .2328909  .3352942    .2329444  .3359915
+  CIwidth | .2328909  .3352942    .2329444  .3359915
           | .0004466  .0009704    .0004316  .0009999
           | 
     Cover |     80.3      83.3        79.5      78.5
@@ -445,8 +445,8 @@ measure   |        1         2           1         2
           |  1.25774  1.179453    1.276617  1.299134
 ----------------------------------------------------
 Note: Coverage and Power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . summ est if _perfmeascode=="ciwidth"
 
@@ -542,25 +542,25 @@ siman analyse has run successfully
 dgm and   |
 Performan |           estimand and method           
 ce        | ------ beta ------    ------ gamma -----
-measure   |        1         2           1         2
+statistic |        1         2           1         2
 ----------+-----------------------------------------
 1         |
-  Ciwidth | .2014349  .2899728    .2017357  .2909772
+  CIwidth | .2014349  .2899728    .2017357  .2909772
           | .0004004  .0008642    .0003738  .0008659
           | 
     Power |     19.9      18.5        20.5      21.5
           | 1.262533  1.227905    1.276617  1.299134
 ----------+-----------------------------------------
 2         |
-  Ciwidth | .2328909  .3352942    .2329444  .3359915
+  CIwidth | .2328909  .3352942    .2329444  .3359915
           | .0004466  .0009704    .0004316  .0009999
           | 
     Power |     19.7      16.7        20.5      21.5
           |  1.25774  1.179453    1.276617  1.299134
 ----------------------------------------------------
 Note: Power calculated at 80% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . summ est if _perfmeascode=="ciwidth"
 
@@ -645,25 +645,25 @@ siman analyse has run successfully
 dgm and   |
 Performan |           estimand and method           
 ce        | ------ beta ------    ------ gamma -----
-measure   |        1         2           1         2
+statistic |        1         2           1         2
 ----------+-----------------------------------------
 1         |
-  Ciwidth | .3080681  .4434751    .3085282  .4450112
+  CIwidth | .3080681  .4434751    .3085282  .4450112
           | .0006123  .0013217    .0005716  .0013243
           | 
     Power |      5.3       4.3         5.5       3.6
           | .7084561  .6414905    .7209369   .589101
 ----------+-----------------------------------------
 2         |
-  Ciwidth |  .356176  .5127883    .3562577  .5138547
+  CIwidth |  .356176  .5127883    .3562577  .5138547
           |  .000683  .0014841    .0006601  .0015292
           | 
     Power |        5       4.4         5.5       3.6
           | .6892024  .6485677    .7209369   .589101
 ----------------------------------------------------
 Note: Power calculated at 95% level
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . summ est if _perfmeascode=="ciwidth"
 
@@ -734,7 +734,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-measure   |         1          2            1          2
+statistic |         1          2            1          2
 ----------+---------------------------------------------
 1         |
      Bias | -.0043991  -.0025973     .0005151   .0056354
@@ -744,8 +744,8 @@ measure   |         1          2            1          2
      Bias | -.0046965  -.0058509     .0005948   .0065072
           |  .0028908   .0039932     .0029417   .0041326
 --------------------------------------------------------
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . summ est if _perfmeascode=="bias"
 
@@ -769,7 +769,7 @@ siman analyse has run successfully
 --------------------------------------------------------
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-measure   |         1          2            1          2
+statistic |         1          2            1          2
 ----------+---------------------------------------------
   Estreps |      1000       1000         1000       1000
           |                                             
@@ -789,14 +789,14 @@ measure   |         1          2            1          2
   Relprec |         0  -47.59274            0  -49.33068
           |         0   2.430245            0   2.314097
           | 
-      Mse |  .0083703   .0159638     .0086452   .0171037
+      MSE |  .0083703   .0159638     .0086452   .0171037
           |  .0003797   .0007445     .0003795   .0007105
           | 
-     Rmse |  .0914893   .1263479     .0929798   .1307813
+     RMSE |  .0914893   .1263479     .0929798   .1307813
           |  .0020748   .0029462      .002041   .0027163
 --------------------------------------------------------
-Note: where there are multiple entries in the table, they are the estimated performance measure,
-  followed by its Monte Carlo standard error
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
 
 . count if dgm==1
   4,000
