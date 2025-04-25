@@ -124,7 +124,7 @@ Both {help siman setup} and {help siman analyse} need to be run before {bf:siman
 
 {phang}. {stata "siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)"}
 
-{phang}. {stata "siman analyse, notable"}
+{phang}. {stata "siman analyse"}
 
 {pstd}Simple use of nestloop, focusing on one performance measure (% error in model-based standard error)
 

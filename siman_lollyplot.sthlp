@@ -106,7 +106,7 @@ If {cmd:siman lollyplot} fails with the error "Too many sersets", try again afte
 
 {phang}. {stata  siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)}
 
-{phang}. {stata  siman analyse, notable}
+{phang}. {stata  siman analyse}
 
 {pstd}Default lollyplot graphs
 
