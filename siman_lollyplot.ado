@@ -249,11 +249,11 @@ foreach j of local methodlevels {
 	local ++i
 	local label`i' : label (`method') `j' // defaults to `j' if no label
 	local mcol`i' : word `i' of `colors'
-	if mi("`mcol`i''") local mcol`i' "p`i'"
+	/*if mi("`mcol`i''") local mcol`i' "p`i'"*/
 	local mfcol`i' : word `i' of `mfcolors'
 	if mi("`mfcol`i''") local mfcol`i' "white"
 	local mlcol`i' : word `i' of `mlcolors'
-	if mi("`mlcol`i''") local mlcol`i' "p`i'"
+	/*if mi("`mlcol`i''") local mlcol`i' "p`i'"*/
 	local msym`i' : word `i' of `msymbol'
 	if mi("`msym`i''") & `i'==1 local msym`i' O
 	else if mi("`msym`i''") & `i'>1 local msym`i' `msym`=`i'-1''
@@ -362,28 +362,28 @@ foreach thistarget of local targetlevels {
 	local graph_cmd twoway 
 	local i 1
 	local graphorder
+	local graph_cmd `graph_cmd' (line `method' `ref' `iftargetcond', ///
+		msym(i) c(l) col(gray) lpattern(l))
 	foreach thismethod of local methodlevels {
-		local graphorder `graphorder' `=4*`i'' "`methlegitem'`label`i''"
+		local graphorder `graphorder' `=4*`i'+1' "`methlegitem'`label`i''"
 		* line from ref to main marker
 		local graph_cmd `graph_cmd' (rspike `estimate' `ref' `method' ///
 			if `method'==`thismethod' `andtargetcond', pstyle(p`i'line) ///
-			horiz /*lcol(`mcol`i'')*/ )
+			horiz lcol(`mcol`i'') )
 		* brackets for LCL and UCL
 		local graph_cmd `graph_cmd' (scatter `method' `lci' ///
 			if `method'==`thismethod' `andtargetcond', pstyle(p`i') ///
-			/*mlabcol(`mcol`i'')*/ msym(i) mlab(`l') mlabpos(0) )
+			msym(i) mlab(`l') mlabcol("`mcol`i''") mlabpos(0) )
 		local graph_cmd `graph_cmd' (scatter `method' `uci' ///
 			if `method'==`thismethod' `andtargetcond', pstyle(p`i') ///
-			/*mlabcol(`mcol`i'')*/ msym(i) mlab(`r') mlabpos(0) )
+			msym(i) mlab(`r') mlabcol("`mcol`i''") mlabpos(0) )
 		* main marker
 		local graph_cmd `graph_cmd' (scatter `method' `estimate' ///
 			if `method'==`thismethod' `andtargetcond', pstyle(p`i') mlabstyle(p`i') ///
-			msym(`msym`i'') /* mcol(`mcol`i'')*/ mfcol(`mfcol`i'') `mlabel' mlabpos(12) /*mlabcol(`mcol`i'') */ )
+			msym(`msym`i'') mcol(`mcol`i'') mfcol(`mfcol`i'') `mlabel' mlabpos(12) mlabcol(`mcol`i'') )
 		local ++i
 	}
 	if !mi("`saving'") local savingopt saving(`"`saving'_`thistargetname'"'`savingopts')
-	local graph_cmd `graph_cmd' scatter `method' `ref' `iftargetcond', ///
-		msym(i) c(l) col(gray) lpattern(dash)
 	local graph_cmd `graph_cmd' , by(`pmvar' `dgmgroup', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions' `dgmmissingok') 
 	local graph_cmd `graph_cmd' subtitle("") ylab(none) ///
 		ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse range(`methodmin' `methodmax')) ///
