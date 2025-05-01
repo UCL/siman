@@ -6,33 +6,32 @@
 *	version 0.11.3	02jan2025	IW new coverlevel() option
 *	version 0.11.2	11nov2024	IW handle case of no byvar
 *	version 0.11.1	21oct2024	IW implement new dgmmissingok option; drop PMs
-* version 0.10 19jul2024	IW align with new setup; respect true but don't separate graphs by true; respect cilevel; allow ci instead of se
-*							align versioning with siman.ado
-*  version 1.9 22apr2024
-*  version 1.9 22apr2024     IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
-*  version 1.8.12 25oct2023  IW Added true value to note
-*  version 1.8.11 16oct2023  EMZ minor update to warning message (# graphs each of # panels)
-*  version 1.8.10 03oct2023  EMZ update to warning message when if/by conditions used
-*  version 1.8.9 02oct2023   EMZ bug fix so works with dgm == x when dgm defined >1 variable
-*  version 1.8.8 05sep2023   EMZ specified name used if true >1 value, named graph with suffix _x
-*  version 1.8.7 15aug2023   EMZ minor bug fix in name for when multiple graphs being printed out
-*  version 1.8.6 21july2023  IW suppress unwanted "obs dropped" message
-*  version 1.8.5 04july2023  EMZ major re-write for graphs when dgm is defined by > 1 variable, all combinations displayed on 1 graph. lpoint/rpoint not 
-*                            hard coded.
-*  version 1.8.4 16may2023   EMZ bug fix for multiple estimands with multiple targets, formatting to title
-*  version 1.8.3 27mar2023   EMZ minor bug fix for when missing method
-*  version 1.8.2 06mar2023   EMZ minor bug fix for when method is string
-*  version 1.8.2 02mar2023   EMZ fixed bug, now if dgm and method are numeric labelled string, the label values will be used in the graphs
-*  version 1.8.1 30jan2023   IW removed rows() and xsize() so they can be user-specified (in bygr() and outside, respectively)
-*  version 1.8   07nov2022   EMZ added to code so now allows graphs split out by every dgm variable and level if multiple dgm variables declared.
-*  version 1.7   05sep2022   EMZ added additional error message
-*  version 1.6   14july2022  EMZ fixed bug so name() allowed in call
-*  version 1.5   30june2022  EMZ fixed bug where axis crosses
-*  version 1.4   24mar2022   EMZ changes (suppress DGM=1 if no DGM/only 1 DGM)
-*  version 1.3   02mar2022   EMZ changes from IW further testing
-*  version 1.2   06jan2021   EMZ updates from IW testing (bug fixes)
-*  version 1.1   25Jan2021   Ella Marley-Zagar, MRC Clinical Trials Unit at UCL. Based on Tim Morris' simulation tutorial do file.
-* File to produce the zip plot
+*   version 0.10    19jul2024	IW align with new setup; respect true but don't separate graphs by true; respect cilevel; allow ci instead of se
+*							    align versioning with siman.ado
+*   version 0.9     22apr2024
+*   version 0.9     22apr2024   IW remove ifsetup and insetup, test if/in more efficiently, rely on preserve
+*   version 0.8.12  25oct2023   IW Added true value to note
+*   version 0.8.11  16oct2023   EMZ minor update to warning message (# graphs each of # panels)
+*   version 0.8.10  03oct2023   EMZ update to warning message when if/by conditions used
+*   version 0.8.9   02oct2023   EMZ bug fix so works with dgm == x when dgm defined >1 variable
+*   version 0.8.8   05sep2023   EMZ specified name used if true >1 value, named graph with suffix _x
+*   version 0.8.7   15aug2023   EMZ minor bug fix in name for when multiple graphs being printed out
+*   version 0.8.6   21july2023  IW suppress unwanted "obs dropped" message
+*   version 0.8.5   04july2023  EMZ major re-write for graphs when dgm is defined by > 1 variable, all combinations displayed on 1 graph. lpoint/rpoint not hard coded.
+*   version 0.8.4   16may2023   EMZ bug fix for multiple estimands with multiple targets, formatting to title
+*   version 0.8.3   27mar2023   EMZ minor bug fix for when missing method
+*   version 0.8.2   06mar2023   EMZ minor bug fix for when method is string
+*   version 0.8.2   02mar2023   EMZ fixed bug, now if dgm and method are numeric labelled string, the label values will be used in the graphs
+*   version 0.8.1   30jan2023   IW removed rows() and xsize() so they can be user-specified (in bygr() and outside, respectively)
+*   version 0.8     07nov2022   EMZ added to code so now allows graphs split out by every dgm variable and level if multiple dgm variables declared.
+*   version 0.7     05sep2022   EMZ added additional error message
+*   version 0.6     14july2022  EMZ fixed bug so name() allowed in call
+*   version 0.5     30june2022  EMZ fixed bug where axis crosses
+*   version 0.4     24mar2022   EMZ changes (suppress DGM=1 if no DGM/only 1 DGM)
+*   version 0.3     02mar2022   EMZ changes from IW further testing
+*   version 0.2     06jan2021   EMZ updates from IW testing (bug fixes)
+*   version 0.1     25Jan2021   Ella Marley-Zagar, MRC Clinical Trials Unit at UCL. Based on Tim Morris' simulation tutorial do file.
+* File to produce zip plots
 *******************************************************************************************************************************************************
 
 program define siman_zipplot
