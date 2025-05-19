@@ -43,6 +43,9 @@ plot. # is any number between 10.00 and 99.99 (see {help level}). The
 default is the current system default confidence level. However,
 if the user specified {opt lci()} and {opt uci()} in {cmd:siman setup}, 
 then this option only changes how the confidence intervals are described in the zip plot.{p_end}
+{synopt:{opt mc:error(string)}}controls appearance of the Monte Carlo confidence interval around the
+coverage. Admissable options are: i) options of {help twoway rspike}; and ii) "off",
+which suppressed the lines and overrides other options.{p_end}
 {synopt:{opt coverl:evel(#)}}changes the level for the Monte Carlo confidence interval around the 
 coverage. # is any number between 10.00 and 99.99 (see {help level}). The 
 default is the current system default confidence level.{p_end}
@@ -123,8 +126,8 @@ with 1,000 repetitions.
 {pstd}
 
 {phang}{marker Morris19}Morris TP, White IR, Crowther MJ. Using simulation studies
-to evaluate statistical methods. Statistics in Medicine 2019; 38: 2074–2102.
-{browse "https://doi.org/10.1002/sim.8086":doi:10.1002/sim.8086"}
+to evaluate statistical
+methods. Statistics in Medicine 2019; 38: 2074–2102. {browse "https://doi.org/10.1002/sim.8086":doi:10.1002/sim.8086}
 
 
 {marker authors}{...}

@@ -1,4 +1,5 @@
-*!	version 0.11.7	16apr2025	
+*!	version 0.11.8	16apr2025	
+*	version 0.11.8	16apr2025	TM added option mc() to control look of MC error
 *	version 0.11.7	16apr2025	IW undocumented nosort option
 *	version 0.11.6	01apr2025	TM added faint default gridlines at (0 100) [when no ymin is specified] or at (100) [when ymin(#) uses #<0]
 *	version 0.11.5	31mar2025	TM moved default placement of by() note to clock pos 11 to make more prominent (based on feedback)
@@ -39,7 +40,7 @@ version 15
 
 syntax [if][in] [, * BY(varlist) ///
 	NONCOVeroptions(string) COVeroptions(string) SCAtteroptions(string) ///
-	TRUEGRaphoptions(string) BYGRaphoptions(string) SCHeme(passthru) ymin(integer 0) name(passthru) SAVing(string) EXPort(string) Level(cilevel) COVERLevel(cilevel) ///
+	TRUEGRaphoptions(string) BYGRaphoptions(string) SCHeme(passthru) ymin(integer 0) name(passthru) SAVing(string) EXPort(string) Level(cilevel) COVERLevel(cilevel) MCerror(string) ///
 	debug pause noSOrt /// undocumented
 	]
 
@@ -92,6 +93,10 @@ if !mi(`"`export'"') {
 		exit 198
 	}
 }
+
+//if regexm(`"`mcerror'"',"off") local mcerror
+
+
 
 *** END OF PARSING ***
 
@@ -217,6 +222,7 @@ if `npanels' > 15 {
 * second two rspike plots: confidence intervals for individual reps
 * blue intervals cover, purple do not
 * scatter plot (white dots) are point estimates - probably unnecessary
+noi di "regegm on mcerror, off returns:" regexm(`"`mcerror'"',"off")
 tempvar truemax truemin
 gen `truemax'=100
 gen `truemin'=`ymin'
@@ -242,9 +248,9 @@ local graph_cmd twoway
 	(scatter `rank' `estimate' if `rank'>=`ymin', msym(p) mcol(white%30) `scatteroptions') // plots point estimates in white
 	(rspike `truemax' `truemin' `true', pstyle(p5) lw(thin) `truegraphoptions') // vertical line at true value
 	;
-if mi("`sort'") local graph_cmd `graph_cmd' 	
-	(rspike `lpoint' `rpoint' `covlb', hor lw(thin) pstyle(p5)) // MC CI for obs coverage
-	(rspike `lpoint' `rpoint' `covub', hor lw(thin) pstyle(p5))
+if mi("`sort'") & regexm(`"`mcerror'"',"off")==0 local graph_cmd `graph_cmd' 	
+	(rspike `lpoint' `rpoint' `covlb', hor lw(thin) pstyle(p5) `mcerror') // MC CI for est coverage
+	(rspike `lpoint' `rpoint' `covub', hor lw(thin) pstyle(p5) `mcerror')
 	;
 local graph_cmd `graph_cmd', 
 	xtitle("`level'% confidence intervals")
