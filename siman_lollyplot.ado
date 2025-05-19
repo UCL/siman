@@ -1,4 +1,5 @@
-*!  version 0.11.6  30apr2025
+*!  version 0.12.0  19may2025   TM added option to directly label methods on y-axis, and
+*                               extended methlegend option to allow "off", which suppresses the legend
 *   version 0.11.6  30apr2025   TM finished fixing pstyles and marker options
 *   version 0.11.5  31mar2025   TM added mfcolors() and mlcolors() options
 *   version 0.11.4  02jan2025   IW use new char cilevel = the level at which coverage was computed
@@ -50,7 +51,7 @@ version 15
 
 syntax [anything] [if] [, ///
     LABFormat(string) COLors(string) MFColors(string) MLColors(string) MSymbol(string)  ///
-    REFPower(real -1) METHLEGend(string) DGMShow DGMTItle(string) /// specific graph options
+    REFPower(real -1) METHLEGend(string) METHLABels DGMShow DGMTItle(string) /// specific graph options
     MCLevel(cilevel) logit /// calculation options
     BYGRaphoptions(string) name(string) * /// general graph options
     pause SAVing(string) EXPort(string) /// advanced graph option
@@ -113,11 +114,13 @@ if wordcount("`name'_something")>1 {
     exit 498
 }
 
-if "`methlegend'"=="item" local methlegitem "`method': "
-else if "`methlegend'"=="title" local methlegtitle title(`method')
-else if "`methlegend'"!="" {
-    di as error "Syntax: methlegend(item|title)"
-    exit 198
+if "`methlegend'"!="off" {
+    if "`methlegend'"=="item" local methlegitem "`method': "
+    else if "`methlegend'"=="title" local methlegtitle title(`method')
+    else if "`methlegend'"!="" {
+        di as error "Syntax: methlegend(item|title)"
+        exit 198
+    }
 }
 
 * require est() and se()
@@ -361,15 +364,19 @@ foreach thistarget of local targetlevels {
     local graph_cmd twoway 
     local i 1
     local graphorder
+    local ylab
     local graph_cmd `graph_cmd' (line `method' `ref' `iftargetcond', ///
         msym(i) c(l) col(gray) lpattern(l))
     foreach thismethod of local methodlevels {
-        local graphorder `graphorder' `=4*`i'+1' "`methlegitem'`label`i''"
+        if !mi("`methlabels'") noi di "Hello, `thismethod'!"
+        if "`methlabels'"!="" local ylab `ylab' `thismethod' "`label`i''"
+        if regexm("`methlegend'","off") local graphorder 0
+        if !regexm("`methlegend'","off") local graphorder `graphorder' `=4*`i'+1' "`methlegitem'`label`i''"
         * line from ref to main marker
         local graph_cmd `graph_cmd' (rspike `estimate' `ref' `method' ///
             if `method'==`thismethod' `andtargetcond', pstyle(p`i'line) ///
             horiz lcol(`mcol`i'') )
-        * brackets for LCL and UCL
+        * open and close parentheses for LCL and UCL
         local graph_cmd `graph_cmd' (scatter `method' `lci' ///
             if `method'==`thismethod' `andtargetcond', pstyle(p`i') ///
             msym(i) mlab(`l') mlabcol("`mcol`i''") mlabpos(0) )
@@ -382,11 +389,12 @@ foreach thistarget of local targetlevels {
             msym(`msym`i'') mcol(`mcol`i'') mfcol(`mfcol`i'') `mlabel' mlabpos(12) mlabcol(`mcol`i'') )
         local ++i
     }
+    di "ylab: " `ylab'
     if !mi("`saving'") local savingopt saving(`"`saving'_`thistargetname'"'`savingopts')
     local graph_cmd `graph_cmd' , by(`pmvar' `dgmgroup', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions' `dgmmissingok') 
-    local graph_cmd `graph_cmd' subtitle("") ylab(none) ///
+    local graph_cmd `graph_cmd' subtitle("") ylab(`ylab') ///
         ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse range(`methodmin' `methodmax')) ///
-        legend(col(1) order(`graphorder') `methlegtitle') `savingopt'
+        legend(cols(1) order(`graphorder') `methlegtitle') `savingopt'
     if `ntargetlevels'<=1 local graph_cmd `graph_cmd' name(`name'`nameopts')
     else local graph_cmd `graph_cmd' name(`name'_`thistargetname'`nameopts')
     local graph_cmd `graph_cmd' `options'

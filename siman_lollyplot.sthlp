@@ -35,7 +35,8 @@ Alternatively, {cmd:labformat(none)} removes the marker labels.{p_end}
 {synopt:{opt col:ors(string)}}specifies colours for the graphs: one per method.{p_end}
 {synopt:{opt ms:ymbol(string)}}specifies marker symbols for the graphs: one per method, or one for all methods.{p_end}
 {synopt:{opt refp:ower(string)}}draws a reference line for power. Default is no reference line for power.{p_end}
-{synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
+{synopt:{opt methleg:end}{cmd:(item|title|off)}}includes the name of the method variable in each legend item or as the legend title. The default is neither; off suppresses the legend altogether.{p_end}
+{synopt:{opt methlab:els}}asks siman lollyplot to label methods directly on the y-axis. This should usually be combined with methlegend(off), to avoid labelling twice.{p_end}
 {synopt:{opt dgms:how}}shows in the top title the values of any DGM variables that are constant within the 'if' condition. The default is not to show them.{p_end}
 {synopt:{opt dgmti:tle}{cmd:(on|off)}}controls whether the top title shows the names of the DGM variables.
 The default is {cmd:dgmtitle(on)} with one DGM variable and {cmd:dgmtitle(off)} with more than one DGM variable.{p_end}
