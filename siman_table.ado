@@ -1,4 +1,5 @@
-*!  version 0.11.8  24apr2025    
+*!  version 0.11.9  30may2025   
+*   version 0.11.9  30may2025   IW correct output if only 1 PM
 *   version 0.11.8  24apr2025   IW better capitalisation of performance measures
 *   version 0.11.7  16apr2025   IW make rows and columns work correctly
 *   version 0.11.6  10apr2025   IW correct table footnote
@@ -41,7 +42,7 @@ if "`analyserun'"=="0" | "`analyserun'"=="" {
 }
 
 * tabdisp vs table
-if c(stata_version)<17 & !mi("`table'") {
+if c(version)<17 & !mi("`table'") {
     di as text "Stata version below 17: table option ignored"
     local table
 }
@@ -50,7 +51,7 @@ if !mi("`tabdisp'") & !mi("`table'") {
     exit 498
 }
 if mi("`tabdisp'") & mi("`table'") {
-    if c(stata_version)<17 local tabdisp tabdisp
+    if c(version)<17 local tabdisp tabdisp
     else local table table
 }
 if !mi("`tabdisp'") & wordcount("`column'")>2 {
@@ -210,8 +211,7 @@ if "`mcse'" == "nomcse" {
 }
 if !mi("`tabdisp'") local tablecommand tabdisp `row' `column' `if', by(`by') c(`estimate' `se' `lcivar' `ucivar') `options'
 else local tablecommand table (`row') (`column') (`by') `if', stat(mean `estimate' `se' `lcivar' `ucivar') nototal `options'
-if `npms'>1 label var `estimate' "Estimate"
-else label var `estimate' "`perfmeaslist'"
+label var `estimate' "Estimate"
 if !mi("`se'") label var `se' "MCSE"
 if !mi("`debug'") {
     di as input "Debug: table features:"
