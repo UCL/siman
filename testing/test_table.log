@@ -1,0 +1,280 @@
+
+. 
+. use data/simcheck, clear
+(Simulation results from simcheck99.do in paper doi:10.1093/ije/dyad134)
+
+. siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)
+Warning: dgm variable dgm has been converted from string to numeric. If you require its levels to be
+  ordered differently, encode dgm as numeric before running -siman setup-.
+Warning: siman setup found unwanted variables: N
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (3) 
+  Total number of DGMs:           3
+
+Targets
+  Variable containing targets:    N/A
+  Number of targets:              1
+  Target values:                  
+
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  Full; CCA; MI
+
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    df
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true (created)
+
+Estimates data                    in data
+Performance statistics            not in data
+_____________________________________________________
+
+. siman analyse
+Warning: missing values in df()
+siman analyse has run successfully
+
+. foreach tabmethod in table tabdisp {
+  2.         dicmd siman table cover, row(dgm _perf) `tabmethod'
+  3.         dicmd siman table bias cover, row(dgm _perf) `tabmethod'
+  4.         dicmd siman table, col(method dgm) `tabmethod'
+  5. }
+siman table cover, row(dgm _perf) table
+
+---------------------------------------------------------
+                        |              method            
+                        |      Full        CCA         MI
+------------------------+--------------------------------
+Missing data mechanism  |                                
+  MCAR                  |                                
+    Performance measure |                                
+      Cover             |                                
+        Estimate        |      94.9       94.7       94.7
+        MCSE            |  .6956938   .7084563   .7084563
+  MAR                   |                                
+    Performance measure |                                
+      Cover             |                                
+        Estimate        |      93.5       94.9       94.4
+        MCSE            |  .7795832   .6956938   .7270762
+  MNAR                  |                                
+    Performance measure |                                
+      Cover             |                                
+        Estimate        |      94.3       95.5       93.4
+        MCSE            |  .7331505   .6555532   .7851368
+---------------------------------------------------------
+Note: Coverage calculated at 95% level
+siman table bias cover, row(dgm _perf) table
+
+------------------------------------------------------------
+                        |                method             
+                        |       Full         CCA          MI
+------------------------+-----------------------------------
+Missing data mechanism  |                                   
+  MCAR                  |                                   
+    Performance measure |                                   
+      Bias              |                                   
+        Estimate        |  -.0000126   -.0075347    .0000898
+        MCSE            |   .0134727    .0163235    .0143525
+      Cover             |                                   
+        Estimate        |       94.9        94.7        94.7
+        MCSE            |   .6956938    .7084563    .7084563
+  MAR                   |                                   
+    Performance measure |                                   
+      Bias              |                                   
+        Estimate        |  -.0168955    -.160113   -.0203649
+        MCSE            |   .0137363    .0183634    .0146205
+      Cover             |                                   
+        Estimate        |       93.5        94.9        94.4
+        MCSE            |   .7795832    .6956938    .7270762
+  MNAR                  |                                   
+    Performance measure |                                   
+      Bias              |                                   
+        Estimate        |  -.0063853   -.0301532    .0486318
+        MCSE            |   .0136254    .0170389    .0145317
+      Cover             |                                   
+        Estimate        |       94.3        95.5        93.4
+        MCSE            |   .7331505    .6555532    .7851368
+------------------------------------------------------------
+Note: Coverage calculated at 95% level
+siman table, col(method dgm) table
+
+--------------------------------------------------------------------------------------------------------------------------------
+                    |                                                    method                                                 
+                    |                 Full                                CCA                                  MI               
+                    |        Missing data mechanism              Missing data mechanism              Missing data mechanism     
+                    |       MCAR         MAR        MNAR        MCAR         MAR        MNAR        MCAR         MAR        MNAR
+--------------------+-----------------------------------------------------------------------------------------------------------
+Performance measure |                                                                                                           
+  Estreps           |                                                                                                           
+    Estimate        |       1000        1000        1000        1000        1000        1000        1000        1000        1000
+    MCSE            |          .           .           .           .           .           .           .           .           .
+  SEreps            |                                                                                                           
+    Estimate        |       1000        1000        1000        1000        1000        1000        1000        1000        1000
+    MCSE            |          .           .           .           .           .           .           .           .           .
+  Bias              |                                                                                                           
+    Estimate        |  -.0000126   -.0168955   -.0063853   -.0075347    -.160113   -.0301532    .0000898   -.0203649    .0486318
+    MCSE            |   .0134727    .0137363    .0136254    .0163235    .0183634    .0170389    .0143525    .0146205    .0145317
+  Pctbias           |                                                                                                           
+    Estimate        |          .           .           .           .           .           .           .           .           .
+    MCSE            |          .           .           .           .           .           .           .           .           .
+  Mean              |                                                                                                           
+    Estimate        |  -.0000126   -.0168955   -.0063853   -.0075347    -.160113   -.0301532    .0000898   -.0203649    .0486318
+    MCSE            |   .0134727    .0137363    .0136254    .0163235    .0183634    .0170389    .0143525    .0146205    .0145317
+  Empse             |                                                                                                           
+    Estimate        |   .4260444     .434379    .4308737    .5161938    .5807029    .5388181    .4538652    .4623407    .4595314
+    MCSE            |   .0095314    .0097179    .0096394    .0115482    .0129914    .0120544    .0101538    .0103434    .0102806
+  Relprec           |                                                                                                           
+    Estimate        |          0           0           0   -31.87852    -44.0462   -36.05369   -11.88377   -11.72998   -12.08366
+    MCSE            |          0           0           0    2.408183    2.292493     2.33216    1.713048    2.051793    1.881443
+  MSE               |                                                                                                           
+    Estimate        |   .1813323    .1887818    .1855072    .2662463    .3625148    .2909439    .2057876    .2139599     .213323
+    MCSE            |   .0090287    .0094203    .0089703    .0132095    .0179585    .0147555    .0097192    .0107484    .0102468
+  RMSE              |                                                                                                           
+    Estimate        |   .4258313    .4344903    .4307055    .5159907     .602092    .5393922    .4536382    .4625581     .461869
+    MCSE            |   .0106013    .0108407    .0104135    .0128002    .0149134    .0136779    .0107126    .0116185    .0110928
+  Modelse           |                                                                                                           
+    Estimate        |   .4096058    .4105874    .4073388    .4964768    .5483734    .5226676    .4334714    .4479698    .4341262
+    MCSE            |   .0011464    .0011822    .0011531    .0018082    .0025673    .0023293    .0014681    .0016925    .0015074
+  CIwidth           |                                                                                                           
+    Estimate        |   1.599708    1.603209    1.590864    1.934587    2.129348    2.032631    1.697258    1.761129    1.703247
+    MCSE            |   .0043573    .0044883    .0043296    .0067032    .0093101    .0081325    .0056927    .0068824    .0058471
+  Relerror          |                                                                                                           
+    Estimate        |  -3.858411   -5.477135   -5.462126   -3.819691   -5.567305     -2.9974   -4.493358   -3.108309   -5.528502
+    MCSE            |   2.167634    2.132093    2.131855     2.18006    2.158397    2.212767    2.161009    2.198344    2.138808
+  Cover             |                                                                                                           
+    Estimate        |       94.9        93.5        94.3        94.7        94.9        95.5        94.7        94.4        93.4
+    MCSE            |   .6956938    .7795832    .7331505    .7084563    .6956938    .6555532    .7084563    .7270762    .7851368
+  Power             |                                                                                                           
+    Estimate        |        5.1         6.5         5.7         5.3         5.1         4.5         5.3         5.6         6.6
+    MCSE            |   .6956939    .7795832    .7331507    .7084561    .6956939    .6555532    .7084561    .7270764    .7851369
+--------------------------------------------------------------------------------------------------------------------------------
+Note: Coverage and Power calculated at 95% level
+siman table cover, row(dgm _perf) tabdisp
+
+----------------------------------------
+Missing   |
+data      |
+mechanism |
+and       |
+Performan |
+ce        |            method           
+measure   |     Full       CCA        MI
+----------+-----------------------------
+MCAR      |
+    Cover |     94.9      94.7      94.7
+          | .6956938  .7084563  .7084563
+----------+-----------------------------
+MAR       |
+    Cover |     93.5      94.9      94.4
+          | .7795832  .6956938  .7270762
+----------+-----------------------------
+MNAR      |
+    Cover |     94.3      95.5      93.4
+          | .7331505  .6555532  .7851368
+----------------------------------------
+Note: Coverage calculated at 95% level
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
+siman table bias cover, row(dgm _perf) tabdisp
+
+-------------------------------------------
+Missing   |
+data      |
+mechanism |
+and       |
+Performan |
+ce        |             method             
+measure   |      Full        CCA         MI
+----------+--------------------------------
+MCAR      |
+     Bias | -.0000126  -.0075347   .0000898
+          |  .0134727   .0163235   .0143525
+          | 
+    Cover |      94.9       94.7       94.7
+          |  .6956938   .7084563   .7084563
+----------+--------------------------------
+MAR       |
+     Bias | -.0168955   -.160113  -.0203649
+          |  .0137363   .0183634   .0146205
+          | 
+    Cover |      93.5       94.9       94.4
+          |  .7795832   .6956938   .7270762
+----------+--------------------------------
+MNAR      |
+     Bias | -.0063853  -.0301532   .0486318
+          |  .0136254   .0170389   .0145317
+          | 
+    Cover |      94.3       95.5       93.4
+          |  .7331505   .6555532   .7851368
+-------------------------------------------
+Note: Coverage calculated at 95% level
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
+siman table, col(method dgm) tabdisp
+
+----------------------------------------------------------------------------------------------------
+Performa |                             method and Missing data mechanism                            
+nce      | ------------ Full ----------- ------------ CCA ------------ ------------- MI ------------
+measure  |      MCAR       MAR      MNAR      MCAR       MAR      MNAR      MCAR       MAR      MNAR
+---------+------------------------------------------------------------------------------------------
+ Estreps |      1000      1000      1000      1000      1000      1000      1000      1000      1000
+         |                                                                                          
+         | 
+  SEreps |      1000      1000      1000      1000      1000      1000      1000      1000      1000
+         |                                                                                          
+         | 
+    Bias | -.0000126 -.0168955 -.0063853 -.0075347  -.160113 -.0301532  .0000898 -.0203649  .0486318
+         |  .0134727  .0137363  .0136254  .0163235  .0183634  .0170389  .0143525  .0146205  .0145317
+         | 
+ Pctbias |                                                                                          
+         |                                                                                          
+         | 
+    Mean | -.0000126 -.0168955 -.0063853 -.0075347  -.160113 -.0301532  .0000898 -.0203649  .0486318
+         |  .0134727  .0137363  .0136254  .0163235  .0183634  .0170389  .0143525  .0146205  .0145317
+         | 
+   Empse |  .4260444   .434379  .4308737  .5161938  .5807029  .5388181  .4538652  .4623407  .4595314
+         |  .0095314  .0097179  .0096394  .0115482  .0129914  .0120544  .0101538  .0103434  .0102806
+         | 
+ Relprec |         0         0         0 -31.87852  -44.0462 -36.05369 -11.88377 -11.72998 -12.08366
+         |         0         0         0  2.408183  2.292493   2.33216  1.713048  2.051793  1.881443
+         | 
+     MSE |  .1813323  .1887818  .1855072  .2662463  .3625148  .2909439  .2057876  .2139599   .213323
+         |  .0090287  .0094203  .0089703  .0132095  .0179585  .0147555  .0097192  .0107484  .0102468
+         | 
+    RMSE |  .4258313  .4344903  .4307055  .5159907   .602092  .5393922  .4536382  .4625581   .461869
+         |  .0106013  .0108407  .0104135  .0128002  .0149134  .0136779  .0107126  .0116185  .0110928
+         | 
+ Modelse |  .4096058  .4105874  .4073388  .4964768  .5483734  .5226676  .4334714  .4479698  .4341262
+         |  .0011464  .0011822  .0011531  .0018082  .0025673  .0023293  .0014681  .0016925  .0015074
+         | 
+ CIwidth |  1.599708  1.603209  1.590864  1.934587  2.129348  2.032631  1.697258  1.761129  1.703247
+         |  .0043573  .0044883  .0043296  .0067032  .0093101  .0081325  .0056927  .0068824  .0058471
+         | 
+Relerror | -3.858411 -5.477135 -5.462126 -3.819691 -5.567305   -2.9974 -4.493358 -3.108309 -5.528502
+         |  2.167634  2.132093  2.131855   2.18006  2.158397  2.212767  2.161009  2.198344  2.138808
+         | 
+   Cover |      94.9      93.5      94.3      94.7      94.9      95.5      94.7      94.4      93.4
+         |  .6956938  .7795832  .7331505  .7084563  .6956938  .6555532  .7084563  .7270762  .7851368
+         | 
+   Power |       5.1       6.5       5.7       5.3       5.1       4.5       5.3       5.6       6.6
+         |  .6956939  .7795832  .7331507  .7084561  .6956939  .6555532  .7084561  .7270764  .7851369
+----------------------------------------------------------------------------------------------------
+Note: Coverage and Power calculated at 95% level
+Note: where there are multiple entries per performance measure, these are estimated performance,
+  followed by Monte Carlo standard error
+
+. 
+. 
+. 
+. di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
+*** SIMAN HAS PASSED ALL THE TESTS IN test_table.do ***
+
+. 
+. log close

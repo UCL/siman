@@ -20,7 +20,7 @@ log close
 
 log using `filename', replace text nomsg
 
-use simcheck, clear
+use data/simcheck, clear
 siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)
 siman analyse
 foreach tabmethod in table tabdisp {
