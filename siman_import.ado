@@ -5,7 +5,7 @@
 * Import dataset of performance statistics into siman format
 
 prog def siman_import
-syntax, Perf(varname string) ESTimate(varname numeric) [Dgm(varlist) Target(varname) Method(varname) se(varname numeric) True(varname numeric) Level(real 0)]
+syntax, Perf(varname string) ESTimate(varname numeric) [Dgm(varlist) TArget(varname) Method(varname) se(varname numeric) TRue(varname numeric) Level(real 0)]
 
 // Create locals to store characteristics
 

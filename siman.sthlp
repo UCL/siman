@@ -129,21 +129,22 @@ to evaluate statistical methods. Statistics in Medicine 2019; 38: 2074–2102.
 
 {title:Authors and updates}{marker updates}
 
-{pstd}Ella Marley-Zagar, ONS.
+{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK.{break}
 
-{pstd}Ian White, MRC Clinical  Trials Unit at UCL, London, UK. 
-Email {browse "mailto:ian.white@ucl.ac.uk":ian.white@ucl.ac.uk}.
+{pstd}Ian White, MRC Clinical Trials Unit at UCL, London, UK.{break}
+Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
-{pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK. 
-Email {browse "mailto:tim.morris@ucl.ac.uk":tim.morris@ucl.ac.uk}.
+{pstd}Tim Morris, MRC Clinical Trials Unit at UCL, London, UK.{break}
+Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
 
 {title:Acknowledgements}{marker acknowledgements}
+
 {pstd}This work was funded by the Medical Research Council (grant MC_UU_00004/09).
 
 {pstd}We gratefully acknowledge the following people who have tested and provided feedback on {cmd:siman}:
 Jan Ditzen, Jingyi Xuan, Kara Louise Royle, Matthew Smith.
-x
+
 
 {title:See Also}
 

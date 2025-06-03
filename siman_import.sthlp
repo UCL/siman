@@ -24,10 +24,10 @@ measure. The performance measure names must be taken from those listed in {help 
 {synopt:{opt est:imate(varname)}}numeric variable containing the values of the performance measures.{p_end}
 {syntab:Optional}
 {synopt:{opt d:gm(varlist)}}variable(s) defining the data generating mechanism. {p_end}
-{synopt:{opt t:arget(varname)}}variable defining the target or estimand. {p_end}
+{synopt:{opt ta:rget(varname)}}variable defining the target or estimand. {p_end}
 {synopt:{opt m:ethod(varname)}}variable defining the method of analysis.{p_end}
 {synopt:{opt se(varname)}}numeric variable containing the Monte Carlo standard errors of the performance measures.{p_end}
-{synopt:{opt t:rue(varname)}}numeric variable containing the true values.{p_end}
+{synopt:{opt tr:ue(varname)}}numeric variable containing the true values.{p_end}
 {synopt:{opt l:evel(#)}}specifies the confidence level at which any coverages and powers have been calculated. By default,
 {cmd:siman import} assumes they were calculated at
 the system default level set by {help level:set level}.{p_end}
@@ -85,12 +85,12 @@ requires some data reformatting to get the data into the long-long format requir
 {marker authors}{...}
 {title:Authors}
 
-{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
+{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK.{break}
 
-{pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
+{pstd}Ian White, MRC Clinical Trials Unit at UCL, London, UK.{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
-{pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
+{pstd}Tim Morris, MRC Clinical Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
 

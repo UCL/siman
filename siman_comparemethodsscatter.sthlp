@@ -5,7 +5,6 @@
 {viewerjumpto "Description" "siman_comparemethodsscatter##description"}{...}
 {viewerjumpto "Examples" "siman_comparemethodsscatter##examples"}{...}
 {viewerjumpto "Authors" "siman_comparemethodsscatter##authors"}{...}
-{viewerjumpto "See also" "siman_comparemethodsscatter##seealso"}{...}
 {title:Title}
 
 {phang}
@@ -135,14 +134,16 @@ repetitions named simcheck.dta available on the {cmd: siman} {browse "https://gi
 {marker authors}{...}
 {title:Authors}
 
-{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
+{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK.{break}
 
-{pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
+{pstd}Ian White, MRC Clinical Trials Unit at UCL, London, UK.{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
-{pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
+{pstd}Tim Morris, MRC Clinical Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
+
+{title:See Also}
 
 {p}{helpb siman: Return to main help page for siman}
 

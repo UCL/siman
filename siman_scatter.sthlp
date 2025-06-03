@@ -82,14 +82,15 @@ with 1000 repetitions named simcheck.dta available on the {cmd: siman} GitHub re
 {marker authors}{...}
 {title:Authors}
 
-{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
+{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK.{break}
 
-{pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:ian.white@ucl.ac.uk":ian.white@ucl.ac.uk}
+{pstd}Ian White, MRC Clinical Trials Unit at UCL, London, UK.{break}
+Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
-{pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
-Email: {browse "mailto:tim.morris@ucl.ac.uk":tim.morris@ucl.ac.uk}
+{pstd}Tim Morris, MRC Clinical Trials Unit at UCL, London, UK.{break} 
+Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
+
+{title:See Also}
 
 {p}{helpb siman: Return to main help page for siman}
-
