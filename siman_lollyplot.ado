@@ -1,4 +1,5 @@
-*!  version 0.11.6  30apr2025
+*!  version 0.11.7   05jun2025
+*  version 0.11.7   05jun2025   IW saving() doesn't have trailing underscore with 1 target
 *   version 0.11.6  30apr2025   TM finished fixing pstyles and marker options
 *   version 0.11.5  31mar2025   TM added mfcolors() and mlcolors() options
 *   version 0.11.4  02jan2025   IW use new char cilevel = the level at which coverage was computed
@@ -382,7 +383,11 @@ foreach thistarget of local targetlevels {
             msym(`msym`i'') mcol(`mcol`i'') mfcol(`mfcol`i'') `mlabel' mlabpos(12) mlabcol(`mcol`i'') )
         local ++i
     }
-    if !mi("`saving'") local savingopt saving(`"`saving'_`thistargetname'"'`savingopts')
+    if !mi("`saving'") {
+        if `ntargetlevels'<=1 local savingname `saving'
+        else local savingname `saving'_`thistargetname'
+        local savingopt saving(`"`savingname'"'`savingopts')
+    }
     local graph_cmd `graph_cmd' , by(`pmvar' `dgmgroup', note(`"`note'"') col(`ndgmlevels') xrescale title(`titlepadded', size(medium) just(center)) imargin(r=5) `bygraphoptions' `dgmmissingok') 
     local graph_cmd `graph_cmd' subtitle("") ylab(none) ///
         ytitle(`"`ytitlepadded'"', size(medium)) yscale(reverse range(`methodmin' `methodmax')) ///
@@ -399,7 +404,7 @@ foreach thistarget of local targetlevels {
     `graph_cmd'
 
     if !mi("`export'") {
-        local graphexportcmd graph export `"`saving'_`thistargetname'.`exporttype'"'`exportopts'
+        local graphexportcmd graph export `"`savingname'.`exporttype'"'`exportopts'
         if !mi("`debug'") di as input `"Debug: `graphexportcmd'"'
         cap noi `graphexportcmd'
         if _rc di as error "Error in export() option"
