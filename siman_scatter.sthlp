@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.10 18jun2024}{...}
+{* *! version 0.11.4 05jun2025}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_scatter##syntax"}{...}
 {viewerjumpto "Description" "siman_scatter##description"}{...}
@@ -15,12 +15,12 @@
 {title:Syntax}
 
 {p 8 17 2}
-{cmdab:siman sca:tter} [{it:varlist}] {ifin}
+{cmdab:siman sca:tter} [{cmd:se}|{cmd:estimate}] {ifin}
 [{cmd:,}
 {it:options}]
 
-{pstd}If no variables are specified, the scatterplot will be drawn for  {it:se vs. estimate}. Alternatively
-the user can select {it:estimate vs. se} by typing {bf:siman scatter} {it:estimate se}.
+{pstd}By default, standard error is plotted on the y-axis with point estimate on the x-axis. 
+If {cmd:estimate} is specified, this is reversed.
 
 {pstd}The {it:if} and {it:in} conditions are usually applied only to {bf:dgm}, {bf:target} and 
 {bf:method}. If they are applied otherwise, e.g. to {bf:repetition}, a warning is issued.

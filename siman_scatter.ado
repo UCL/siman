@@ -1,4 +1,5 @@
-*!  version 0.11.3   31mar2025    
+*!  version 0.11.4   05jun2025    
+*   version 0.11.4   05jun2025   IW syntax uses the words estimate|se not the variable names
 *   version 0.11.3   31mar2025   TM moved default placement of by() note to clock pos 11 to make more prominent (based on feedback)
 *   version 0.11.2   24oct2024   IW by default se on y not x axis; nicer labels
 *   version 0.11.1   21oct2024   IW implement new dgmmissingok option
@@ -24,7 +25,7 @@
 program define siman_scatter
 version 15
 
-syntax [varlist(default=none max=2)] [if][in] [, BY(varlist) BYGRaphoptions(string) name(passthru) SAVing(string) EXPort(string) debug pause *]
+syntax [anything] [if][in] [, BY(varlist) BYGRaphoptions(string) name(passthru) SAVing(string) EXPort(string) debug pause *]
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
@@ -61,6 +62,13 @@ if !mi(`"`export'"') {
     }
 }
 
+if mi("`anything'") local anything se
+if inlist("`anything'","se","se estimate","se est") local varlist `se' `estimate'
+else if inlist("`anything'","estimate","est","estimate se","est se") local varlist `estimate' `se' 
+else {
+    di as error "Syntax: siman scatter [estimate|se]"
+    exit 198
+}
 *** END OF PARSING ***
 
 * mark sample
@@ -87,24 +95,6 @@ qui keep if `touse'
 qui drop if `rep'<0
 if mi("`: variable label `estimate''") label var `estimate' "Estimates (`estimate')"
 if mi("`: variable label `se''") label var `se' "Standard errors (`se')"
-
-* if statistics are not specified, run graphs for estimate and se, otherwise run for alternative order
-local error 0
-if "`varlist'"=="" local varlist `se' `estimate'
-else {
-    local y1 : word 1 of `varlist'
-    if "`y1'"=="`estimate'" local y2needed `se'
-    else if "`y1'"=="`se'" local y2needed `estimate'
-    else local error 1
-    if "`y2'"=="" local y2 `y2needed'
-    else if "`y2'"!="se" local error 1
-    local varlist `y1' `y2'
-}
-* di as error "{p 0 2}{p_end}"
-if `error' {
-    di as error "{p 0 2}Syntax: siman scatter [`estimate' `se' | `se' `estimate']{p_end}"
-    exit 198
-}
 
 * For the purposes of the graphs below, if dgm is missing in the dataset then set
 * the number of dgms to be 1.
