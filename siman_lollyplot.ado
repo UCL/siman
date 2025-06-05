@@ -106,7 +106,7 @@ if !mi(`"`name'"') {
     local name = trim("`name'")
 }
 else {
-    local name lolly
+    local name lollyplot
     local nameopts , replace
 }
 if wordcount("`name'_something")>1 {

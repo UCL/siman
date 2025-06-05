@@ -70,15 +70,18 @@ We find these especially useful: {cmd:ylabel()} to stop the y-labels extending t
 {cmd:legend(pos(6) row(1))} or {cmd:legend(pos(3) col(1))}.{p_end}
 
 {syntab:Saving options}
-{synopt:{opt name(string)}}the stub for the graph name, to which "_" followed by the target name and 
-"_" followed by the performance measure name are appended. Default name is "nestloop". For example, 
+{synopt:{opt name}({it:namestub}[{cmd:, replace}])}the stub for the graph name, to which "_", the target name, 
+"_" and the performance measure are appended. Default is "nestloop". For example, 
 with two targets, beta and gamma, and two performance measures, bias and relerror, default graph 
-names would be "nestloop_beta_bias", "nestloop_gamma_bias", "nestloop_beta_relerror" and "nestloop_gamma_relerror.{p_end}
-{synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata’s .gph format.
-The graph name is {it:namestub} with the target and performance measures appended, as for {cmd:name()}.{p_end}
-{synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
+names would be "nestloop_beta_bias", "nestloop_gamma_bias", "nestloop_beta_relerror" and "nestloop_gamma_relerror".{p_end}
+{synopt:{opt sav:ing}({it:namestub}[{cmd:, replace}])}saves each graph to disk in Stata’s .gph format.
+The graph name is {it:namestub}, to which "_", the target name, 
+"_" and the performance measure are appended. Default is "nestloop". {p_end}
+{synopt:{opt exp:ort}({it:filetype}[{cmd:, replace}])}exports each graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} with the appropriate 
 filetype, which must be one of the suffices listed in {help graph export}.{p_end}
+{synopt:{opt pause}}pauses before drawing each graph, if {help pause} is on. The user can 
+press F9 to view the graph command, and may edit it to create more customised graphs.{p_end}
 {synoptline}
 
 

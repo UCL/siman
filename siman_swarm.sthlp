@@ -44,12 +44,15 @@ Each panel displays all methods, so do not include {it:method} in {cmd:by()}.
 {synopt:{it:graph_options}}siman swarm attempts to allocate graph options as {opt scatteroptions()}, {opt bygraphoptions()} or {opt graphoptions()}.{p_end}
 
 {syntab:Saving options}
-{synopt:{opt name(string)}}the stub for the graph name, to which "_estimate" or "_se" is appended. Default name is "swarm".{p_end}
-{synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves the graph(s) to disk in Stata’s .gph format.
-The graph name is {it:namestub} with the statistic name ("estimate" or "se") appended.{p_end}
-{synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
+{synopt:{opt name}({it:namestub}[{cmd:, replace}])}the stub for the graph name, to which "_estimate" or "_se" is appended. Default {it:namestub} is "swarm".{p_end}
+{synopt:{opt sav:ing}({it:namestub}[{cmd:, replace}])}saves the graph(s) to disk in Stata’s .gph format.
+The graph name is {it:namestub}, to which "_estimate" or "_se" is appended. Default 
+{it:namestub} is "swarm".{p_end}
+{synopt:{opt exp:ort}({it:filetype}[{cmd:, replace}])}exports each graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} with the appropriate 
 filetype, which must be one of the suffices listed in {help graph export}.{p_end}
+{synopt:{opt pause}}pauses before drawing each graph, if {help pause} is on. The user can 
+press F9 to view the graph command, and may edit it to create more customised graphs.{p_end}
 {synoptline}
 
 
