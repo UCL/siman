@@ -1,4 +1,4 @@
-*!  version 0.11.9  30may2025   
+*!  version 0.11.9   30may2025   
 *   version 0.11.9  30may2025   IW correct output if only 1 PM
 *   version 0.11.8  24apr2025   IW better capitalisation of performance measures
 *   version 0.11.7  16apr2025   IW make rows and columns work correctly
