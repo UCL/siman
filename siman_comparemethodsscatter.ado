@@ -1,4 +1,5 @@
-*!  version 0.11.5   06jan2025    
+*!  version 0.11.6   05jun2025    
+*   version 0.11.6   05jun2025    IW add pause option
 *   version 0.11.5   06jan2025   IW new collapse() option
 *   version 0.11.4   11nov2024   IW correct handling of aspect()
 *   version 0.11.3   29oct2024   IW/TM aspect(1) not suppressed by other subgraphoptions
@@ -47,7 +48,7 @@ version 15
 syntax [anything] [if][in] [, COMbine MATrix COLLapse(varlist) /// main options
     METHlist(string) noEQuality SUBGRaphoptions(string) * /// graph options
     name(string) SAVing(string) EXPort(string) /// standard options handled differently
-    half debug /// undocumented options
+    half debug pause /// undocumented options
     ]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -335,9 +336,14 @@ forvalues g = 1/`ngraphs' {
                 local graphlist `graphlist' graph`j'`k'
             }
         }
-        `dicmd' cap noi graph combine `graphlist', name(`name'_`g'`nameopts') `savingopt' ///
+		local graph_cmd graph combine `graphlist', name(`name'_`g'`nameopts') `savingopt' ///
             `notetextopt' title("") cols(`nmethods') `esttitle' `setitle' ///
-            `options'    
+            `options'  
+		if !mi("`pause'") {
+			global F9 `graph_cmd'
+			pause Press F9 to recall, optionally edit and run the graph command
+		}
+        `dicmd' cap noi `graph_cmd'
         if _rc {
             if _rc!=1 di as error `"{p 0 2}siman comparemethodsscatter called graph combine, which failed with error "' _rc ". {p_end}"
             if _rc==111 di as error `"Try {stata "serset clear"} and {stata "graph drop _all"}"'
@@ -357,10 +363,15 @@ forvalues g = 1/`ngraphs' {
             local varlist `varlist' ``statlist''`j'
             label var ``statlist''`j' "`mlabel`j''"
         }
-        `dicmd' graph matrix `varlist' if `group'==`g', `half' title("") note("") ///
+        local graph_cmd graph matrix `varlist' if `group'==`g', `half' title("") note("") ///
             ms(o) mlc(gs10) msize(tiny) ///
             name(`name'_`g',replace) `savingopt' note("Graphs for stat=`statlist', `notetext'") ///
             `options'
+		if !mi("`pause'") {
+			global F9 `graph_cmd'
+			pause Press F9 to recall, optionally edit and run the graph command
+		}
+		`dicmd' `graph_cmd'
     }
 
     if !mi("`export'") {
