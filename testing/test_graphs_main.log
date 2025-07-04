@@ -119,7 +119,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-statistic |         1          2            1          2
+measure   |         1          2            1          2
 ----------+---------------------------------------------
 1         |
   Estreps |      1000       1000         1000       1000
@@ -355,7 +355,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |              target and method              
 ce        | --------- 1 --------    --------- 2 --------
-statistic |         A          B            A          B
+measure   |         A          B            A          B
 ----------+---------------------------------------------
 D1        |
   Estreps |      1000       1000         1000       1000
@@ -563,7 +563,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-statistic |         A          B            A          B
+measure   |         A          B            A          B
 ----------+---------------------------------------------
 1         |
   Estreps |      1000       1000         1000       1000
@@ -803,7 +803,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |
 ce        |        method       
-statistic |         1          2
+measure   |         1          2
 ----------+---------------------
 1         |
   Estreps |      1000       1000
@@ -986,7 +986,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |                       estimand and method                       
 ce        | ------------ beta ------------    ------------ gamma -----------
-statistic |   First method  Method, second      First method  Method, second
+measure   |   First method  Method, second      First method  Method, second
 ----------+-----------------------------------------------------------------
 1         |
   Estreps |           1000            1000              1000            1000

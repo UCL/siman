@@ -60,7 +60,7 @@ siman analyse has run successfully
 ----------------------------------------------------------------------------------------------------
 Performan |                                    target and method                                    
 ce        | ------------------ inter -----------------    ------------------ main ------------------
-statistic |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT     IMPALL     IMPBYZ
+measure   |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT     IMPALL     IMPBYZ
 ----------+-----------------------------------------------------------------------------------------
   Estreps |     10000      10000      10000      10000        10000      10000      10000      10000
           |                                                                                         
@@ -116,7 +116,7 @@ siman analyse has run successfully
 ----------------------------------------------------------------------------------------------------
 Performan |                                    target and method                                    
 ce        | ------------------ inter -----------------    ------------------ main ------------------
-statistic |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT     IMPALL     IMPBYZ
+measure   |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT     IMPALL     IMPBYZ
 ----------+-----------------------------------------------------------------------------------------
   Estreps |     10000      10000      10000      10000        10000      10000      10000      10000
           |                                                                                         
@@ -172,7 +172,7 @@ siman analyse has run successfully
 ----------------------------------------------------------------------------------------------------
 Performan |                                    target and method                                    
 ce        | ------------------ inter -----------------    ------------------ main ------------------
-statistic |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT     IMPALL     IMPBYZ
+measure   |        CC    FULLDAT     IMPALL     IMPBYZ           CC    FULLDAT     IMPALL     IMPBYZ
 ----------+-----------------------------------------------------------------------------------------
   Estreps |     10000      10000      10000      10000        10000      10000      10000      10000
           |                                                                                         
@@ -305,7 +305,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-statistic |         1          2            1          2
+measure   |         1          2            1          2
 ----------+---------------------------------------------
 1         |
      Bias | -.0043991  -.0025973     .0005151   .0056354
@@ -422,7 +422,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |           estimand and method           
 ce        | ------ beta ------    ------ gamma -----
-statistic |        1         2           1         2
+measure   |        1         2           1         2
 ----------+-----------------------------------------
 1         |
   CIwidth | .2014349  .2899728    .2017357  .2909772
@@ -542,7 +542,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |           estimand and method           
 ce        | ------ beta ------    ------ gamma -----
-statistic |        1         2           1         2
+measure   |        1         2           1         2
 ----------+-----------------------------------------
 1         |
   CIwidth | .2014349  .2899728    .2017357  .2909772
@@ -645,7 +645,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |           estimand and method           
 ce        | ------ beta ------    ------ gamma -----
-statistic |        1         2           1         2
+measure   |        1         2           1         2
 ----------+-----------------------------------------
 1         |
   CIwidth | .3080681  .4434751    .3085282  .4450112
@@ -734,7 +734,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-statistic |         1          2            1          2
+measure   |         1          2            1          2
 ----------+---------------------------------------------
 1         |
      Bias | -.0043991  -.0025973     .0005151   .0056354
@@ -769,7 +769,7 @@ siman analyse has run successfully
 --------------------------------------------------------
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-statistic |         1          2            1          2
+measure   |         1          2            1          2
 ----------+---------------------------------------------
   Estreps |      1000       1000         1000       1000
           |                                             

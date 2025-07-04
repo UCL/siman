@@ -50,17 +50,17 @@ of repetitions).{p_end}
 {synopt:{opt bygr:aphoptions(string)}}graph options which need to be placed within the {cmd:by()} option.{p_end}
 {synopt:{it:graph_options}}most of the valid options for {help scatter:scatter} are available.{p_end}
 
-{syntab:Advanced option}
-{synopt:{opt pause}}pauses before drawing each graph, allowing the user to retrieve and edit each graph
-command before running it. Requires {help pause} to be on.{p_end}
-
 {syntab:Saving options}
-{synopt:{opt name(string)}}stub for graph name, to which "_" and the target name are appended. Default is "lolly".{p_end}
-{synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata format. The
-graph name is {it:namestub} with the target name appended.{p_end}
-{synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata format. 
+{synopt:{opt name}({it:namestub}[{cmd:, replace}])}stub for graph name, to which (if there are more than one 
+target) "_" and the target name are appended. Default is "lollyplot".{p_end}
+{synopt:{opt sav:ing}({it:namestub}[{cmd:, replace}])}saves each graph to disk in Stata format. The
+graph name is {it:namestub}, to which (if there are more than one 
+target) "_" and the target name are appended. Default is "lollyplot".{p_end}
+{synopt:{opt exp:ort}({it:filetype}[{cmd:, replace}])}exports each graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} with the appropriate 
 filetype, which must be one of the suffices listed in {help graph export}.{p_end}
+{synopt:{opt pause}}pauses before drawing each graph, if {help pause} is on. The user can 
+press F9 to view the graph command, and may edit it to create more customised graphs.{p_end}
 {synoptline}
 
 
@@ -137,14 +137,16 @@ to evaluate statistical methods. Statistics in Medicine 2019; 38: 2074–2102.
 {marker authors}{...}
 {title:Authors}
 
-{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
+{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK.{break}
 
-{pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
+{pstd}Ian White, MRC Clinical Trials Unit at UCL, London, UK.{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
-{pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
+{pstd}Tim Morris, MRC Clinical Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
+
+{title:See Also}
 
 {p}{helpb siman: Return to main help page for siman}
 

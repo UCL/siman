@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.10 18jun2024}{...}
+{* *! version 0.11.4 05jun2025}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_scatter##syntax"}{...}
 {viewerjumpto "Description" "siman_scatter##description"}{...}
@@ -15,12 +15,12 @@
 {title:Syntax}
 
 {p 8 17 2}
-{cmdab:siman sca:tter} [{it:varlist}] {ifin}
+{cmdab:siman sca:tter} [{cmd:se}|{cmd:estimate}] {ifin}
 [{cmd:,}
 {it:options}]
 
-{pstd}If no variables are specified, the scatterplot will be drawn for  {it:se vs. estimate}. Alternatively
-the user can select {it:estimate vs. se} by typing {bf:siman scatter} {it:estimate se}.
+{pstd}By default, standard error is plotted on the y-axis with point estimate on the x-axis. 
+If {cmd:estimate} is specified, this is reversed.
 
 {pstd}The {it:if} and {it:in} conditions are usually applied only to {bf:dgm}, {bf:target} and 
 {bf:method}. If they are applied otherwise, e.g. to {bf:repetition}, a warning is issued.
@@ -39,11 +39,14 @@ Specifying for example {cmd:by(}{it:target method}{cmd:)} will overlay DGMs.
 {synopt:{opt bygr:aphoptions(string)}}options for {help scatter} that go inside the {cmd:by()} option.{p_end}
 
 {syntab:Saving options}
-{synopt:{opt sav:ing}{it:(name[}{cmd:, replace}{it:])}}saves the graph to disk in Stata’s .gph format.
-The graph name is {it:name}.{p_end}
-{synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports the graph to disk in non-Stata format. 
+{synopt:{opt name}({it:name}[{cmd:, replace}])}the graph name. Default {it:name} is "scatter".{p_end}
+{synopt:{opt sav:ing}({it:name}[{cmd:, replace}])}saves the graph to disk in Stata’s .gph format.
+Default {it:name} is "scatter".{p_end}
+{synopt:{opt exp:ort}({it:filetype}[{cmd:, replace}])}exports the graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified. The exported file name is the same as for {cmd:saving()} with the appropriate 
 filetype, which must be one of the suffices listed in {help graph export}.{p_end}
+{synopt:{opt pause}}pauses before drawing the graph, if {help pause} is on. The user can 
+press F9 to view the graph command, and may edit it to create a more customised graph.{p_end}
 {synoptline}
 
 
@@ -82,14 +85,15 @@ with 1000 repetitions named simcheck.dta available on the {cmd: siman} GitHub re
 {marker authors}{...}
 {title:Authors}
 
-{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
+{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK.{break}
 
-{pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:ian.white@ucl.ac.uk":ian.white@ucl.ac.uk}
+{pstd}Ian White, MRC Clinical Trials Unit at UCL, London, UK.{break}
+Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
-{pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
-Email: {browse "mailto:tim.morris@ucl.ac.uk":tim.morris@ucl.ac.uk}
+{pstd}Tim Morris, MRC Clinical Trials Unit at UCL, London, UK.{break} 
+Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
+
+{title:See Also}
 
 {p}{helpb siman: Return to main help page for siman}
-

@@ -2,7 +2,7 @@
 . 
 . // TEST WORKING ON THE NESTLOOP TEST DATA SET
 . 
-. use "C:\ian\git\siman\testing\data\res.dta", clear
+. use $testpath/data/res.dta, clear
 
 . keep if pc==2 & rho==3
 (720 observations deleted)
@@ -115,7 +115,7 @@ _____________________________________________________
 . siman table if theta==1 & tau2==0 & k==5, column(_perfmeas target) tabdisp
 
 ----------------------------------------------------------------------------------------------------
-         |                             Performance statistic and target                             
+         |                              Performance measure and target                              
          | ------- Bias -------   ------- Mean -------   -------- MSE -------   ------- Cover ------
   method |         1          2           1          2           1          2           1          2
 ---------+------------------------------------------------------------------------------------------
@@ -252,10 +252,9 @@ siman analyse has run successfully
 . siman table, col(dgm method) tabdisp
 
 ----------------------------------------------------------------------------------------------------
-Performa |
-nce      |                             Missing data mechanism and method                            
-statisti | ------------ MCAR ----------- ------------ MAR ------------ ------------ MNAR -----------
-c        |      Full       CCA        MI      Full       CCA        MI      Full       CCA        MI
+Performa |                             Missing data mechanism and method                            
+nce      | ------------ MCAR ----------- ------------ MAR ------------ ------------ MNAR -----------
+measure  |      Full       CCA        MI      Full       CCA        MI      Full       CCA        MI
 ---------+------------------------------------------------------------------------------------------
  Estreps |      1000      1000      1000      1000      1000      1000      1000      1000      1000
          |                                                                                          
@@ -327,7 +326,7 @@ siman lollyplot will draw 1 graph with 9 panels (3 PMs by 3 DGMs)
 
 . 
 . // import to siman
-. pda
+. program drop _all
 
 . siman import, perf(pm) dgm(dgm) method(method) estimate(b) se(se) true(true)
 Assuming coverage/power were calculated at 95% level
@@ -364,10 +363,9 @@ _____________________________________________________
 . siman table, col(dgm method) tabdisp
 
 ----------------------------------------------------------------------------------------------------
-Performa |
-nce      |                             Missing data mechanism and method                            
-statisti | ------------ MCAR ----------- ------------ MAR ------------ ------------ MNAR -----------
-c        |      Full       CCA        MI      Full       CCA        MI      Full       CCA        MI
+Performa |                             Missing data mechanism and method                            
+nce      | ------------ MCAR ----------- ------------ MAR ------------ ------------ MNAR -----------
+measure  |      Full       CCA        MI      Full       CCA        MI      Full       CCA        MI
 ---------+------------------------------------------------------------------------------------------
  Estreps |      1000      1000      1000      1000      1000      1000      1000      1000      1000
          |                                                                                          

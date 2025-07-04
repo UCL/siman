@@ -241,8 +241,9 @@ forvalues g = 1/`novervalues' { // loop over graphs
 
     if !mi("`notetext'") local notetextopt note("Graphs for `notetext'") 
     else local notetextopt 
-    if `nstats'==1 di as text `"Graph "' as result `"`name'_`g'_`statlist'"' as text `" is for "' as result `"`notetext'"'
-    else di as text `"Graphs "' as result `"`name'_`g'_[`statlist']"' as text `" are for "' as result `"`notetext'"'
+    if `novervalues'>1 & `nstats'==1 di as text `"Graph "' as result `"`name'_`g'_`statlist'"' as text `" is for "' as result `"`notetext'"'
+    else if `novervalues'>1 di as text `"Graphs "' as result `"`name'_`g'_[`statlist']"' as text `" are for "' as result `"`notetext'"'
+    else if `nstats'>1 di as text `"Drawing graphs "' as result `"`name'_1_[`statlist']"'
     if `nmethods'>2 local panelnote ". Panels: `by'."
 
     foreach stat in `statlist' { // loop over stats

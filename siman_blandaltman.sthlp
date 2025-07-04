@@ -5,7 +5,6 @@
 {viewerjumpto "Description" "siman_blandaltman##description"}{...}
 {viewerjumpto "Examples" "siman_blandaltman##examples"}{...}
 {viewerjumpto "Authors" "siman_blandaltman##authors"}{...}
-{viewerjumpto "See also" "siman_blandaltman##seealso"}{...}
 {title:Title}
 
 {phang}
@@ -49,14 +48,16 @@ using <= and >= will not work.  The components of {bf: methlist()}  need to be w
 {bf: methlist(1/4)}.{p_end}
 
 {syntab:Saving options}
-{synopt:{opt name(string)}}the stub for the graph name, to which "_#_estimate" or "_#_se" is appended, 
-where # is the group number. Default name is "blandaltman".{p_end}
+{synopt:{opt name}({it:namestub}[{cmd:, replace}])}the stub for the graph name, to which "_#_estimate" or "_#_se" is appended, 
+where # is the group number. Default is "blandaltman".{p_end}
 {synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata’s .gph 
-format. The graph name is {it:namestub} with "_#_estimate" or "_#_se" appended, where # is the group number.{p_end}
-{synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports each graph to disk in non-Stata 
+format. The graph name is {it:namestub} with "_#_estimate" or "_#_se" appended, where # is the group number. Default is "blandaltman".{p_end}
+{synopt:{opt exp:ort}({it:filetype}[{cmd:, replace}])}exports each graph to disk in non-Stata 
 format. {cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} 
 with the appropriate 
 filetype, which must be one of the suffices listed in {help graph export}.{p_end}
+{synopt:{opt pause}}pauses before drawing each graph, if {help pause} is on. The user can 
+press F9 to view the graph command, and may edit it to create more customised graphs.{p_end}
 {synoptline}
 
 
@@ -114,14 +115,16 @@ Bland JM, Altman DG. Statistical methods for assessing agreement between two met
 {marker authors}{...}
 {title:Authors}
 
-{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
+{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK.{break}
 
-{pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
+{pstd}Ian White, MRC Clinical Trials Unit at UCL, London, UK.{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
-{pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
+{pstd}Tim Morris, MRC Clinical Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
+
+{title:See Also}
 
 {p}{helpb siman: Return to main help page for siman}
 

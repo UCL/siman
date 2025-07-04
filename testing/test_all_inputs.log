@@ -103,7 +103,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-statistic |         1          2            1          2
+measure   |         1          2            1          2
 ----------+---------------------------------------------
 1         |
   Estreps |      1000       1000         1000       1000
@@ -268,7 +268,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-statistic |         A          B            A          B
+measure   |         A          B            A          B
 ----------+---------------------------------------------
 D1        |
   Estreps |      1000       1000         1000       1000
@@ -436,7 +436,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | --------- 1 --------    --------- 2 --------
-statistic |         A          B            A          B
+measure   |         A          B            A          B
 ----------+---------------------------------------------
 1         |
   Estreps |      1000       1000         1000       1000
@@ -567,7 +567,7 @@ siman analyse has run successfully
 --------------------------------
 Performan |
 ce        |       estimand      
-statistic |         1          2
+measure   |         1          2
 ----------+---------------------
   Estreps |      1000       1000
           |                     
@@ -664,7 +664,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |
 ce        |        method       
-statistic |         1          2
+measure   |         1          2
 ----------+---------------------
 1         |
   Estreps |      1000       1000
@@ -811,10 +811,9 @@ siman analyse has run successfully
 beta,    |
 pmiss,   |
 mech and |
-Performa |
-nce      |                                    estimand and method                                   
-statisti | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
-c        |       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj
+Performa |                                    estimand and method                                   
+nce      | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
+measure  |       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj
 ---------+------------------------------------------------------------------------------------------
 0        |
 .2       |
@@ -1412,7 +1411,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-statistic |        _1         _2           _1         _2
+measure   |        _1         _2           _1         _2
 ----------+---------------------------------------------
 1         |
   Estreps |      1000       1000         1000       1000
@@ -1564,7 +1563,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | --------- 1 --------    --------- 2 --------
-statistic |         1          2            1          2
+measure   |         1          2            1          2
 ----------+---------------------------------------------
 MCAR      |
   Estreps |      1000       1000         1000       1000
@@ -1689,7 +1688,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |             estimand and method             
 ce        | ------- beta -------    ------- gamma ------
-statistic |        _1         _2           _1         _2
+measure   |        _1         _2           _1         _2
 ----------+---------------------------------------------
 1         |
   Estreps |      1000       1000         1000       1000
@@ -1840,7 +1839,7 @@ siman analyse has run successfully
 --------------------------------
 Performan |
 ce        |       estimand      
-statistic |      beta      gamma
+measure   |      beta      gamma
 ----------+---------------------
   Estreps |      1000       1000
           |                     
@@ -1938,7 +1937,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |
 ce        |        method       
-statistic |        _1         _2
+measure   |        _1         _2
 ----------+---------------------
 1         |
   Estreps |      1000       1000
@@ -2098,10 +2097,9 @@ siman analyse has run successfully
 beta,    |
 pmiss,   |
 mech and |
-Performa |
-nce      |                                    estimand and method                                   
-statisti | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
-c        |     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp
+Performa |                                    estimand and method                                   
+nce      | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
+measure  |     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp
 ---------+------------------------------------------------------------------------------------------
 0        |
 .2       |
@@ -2751,7 +2749,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |              target and method              
 ce        | ------- beta -------    ------- gamma ------
-statistic |         1          2            1          2
+measure   |         1          2            1          2
 ----------+---------------------------------------------
 MCAR      |
   Estreps |      1000       1000         1000       1000
@@ -2871,7 +2869,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |              target and method              
 ce        | ------- beta -------    ------- gamma ------
-statistic |        1_         2_           1_         2_
+measure   |        1_         2_           1_         2_
 ----------+---------------------------------------------
 1         |
   Estreps |      1000       1000         1000       1000
@@ -3017,7 +3015,7 @@ siman analyse has run successfully
 --------------------------------------------------------
 Performan |              target and method              
 ce        | ------- beta -------    ------- gamma ------
-statistic |        1_         2_           1_         2_
+measure   |        1_         2_           1_         2_
 ----------+---------------------------------------------
   Estreps |      1000       1000         1000       1000
           |                                             
@@ -3153,10 +3151,9 @@ siman analyse has run successfully
 beta,    |
 pmiss,   |
 mech and |
-Performa |
-nce      |                                     target and method                                    
-statisti | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
-c        |     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp
+Performa |                                     target and method                                    
+nce      | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
+measure  |     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp
 ---------+------------------------------------------------------------------------------------------
 0        |
 .2       |
@@ -3755,7 +3752,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |              target and method              
 ce        | ------- beta_ ------    ------ gamma_ ------
-statistic |         1          2            1          2
+measure   |         1          2            1          2
 ----------+---------------------------------------------
 1         |
   Estreps |      1000       1000         1000       1000
@@ -3904,7 +3901,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |              target and method              
 ce        | ------- beta_ ------    ------ gamma_ ------
-statistic |         1          2            1          2
+measure   |         1          2            1          2
 ----------+---------------------------------------------
 MCAR      |
   Estreps |      1000       1000         1000       1000
@@ -4024,7 +4021,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |              target and method              
 ce        | ------- beta_ ------    ------ gamma_ ------
-statistic |         1          2            1          2
+measure   |         1          2            1          2
 ----------+---------------------------------------------
 1         |
   Estreps |      1000       1000         1000       1000
@@ -4169,7 +4166,7 @@ siman analyse has run successfully
 --------------------------------------------------------
 Performan |              target and method              
 ce        | ------- beta_ ------    ------ gamma_ ------
-statistic |         1          2            1          2
+measure   |         1          2            1          2
 ----------+---------------------------------------------
   Estreps |      1000       1000         1000       1000
           |                                             
@@ -4303,10 +4300,9 @@ siman analyse has run successfully
 beta,    |
 pmiss,   |
 mech and |
-Performa |
-nce      |                                     target and method                                    
-statisti | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
-c        |     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp
+Performa |                                     target and method                                    
+nce      | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
+measure  |     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp
 ---------+------------------------------------------------------------------------------------------
 0        |
 .2       |
@@ -4904,7 +4900,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |              target and method              
 ce        | ------- _beta ------    ------ _gamma ------
-statistic |         1          2            1          2
+measure   |         1          2            1          2
 ----------+---------------------------------------------
 1         |
   Estreps |      1000       1000         1000       1000
@@ -5055,7 +5051,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |              target and method              
 ce        | ------- _beta ------    ------ _gamma ------
-statistic |         1          2            1          2
+measure   |         1          2            1          2
 ----------+---------------------------------------------
 MCAR      |
   Estreps |      1000       1000         1000       1000
@@ -5180,7 +5176,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |              target and method              
 ce        | ------- beta_ ------    ------ gamma_ ------
-statistic |   Method1    Method2      Method1    Method2
+measure   |   Method1    Method2      Method1    Method2
 ----------+---------------------------------------------
 1         |
   Estreps |      1000       1000         1000       1000
@@ -5322,7 +5318,7 @@ siman analyse has run successfully
 --------------------------------------------------------
 Performan |              target and method              
 ce        | --------- 1 --------    --------- 2 --------
-statistic |         A          B            A          B
+measure   |         A          B            A          B
 ----------+---------------------------------------------
   Estreps |      1000       1000         1000       1000
           |                                             
@@ -5425,7 +5421,7 @@ siman analyse has run successfully
 dgm and   |
 Performan |
 ce        |        target       
-statistic |     beta_     gamma_
+measure   |     beta_     gamma_
 ----------+---------------------
 1         |
   Estreps |      1000       1000
@@ -5585,10 +5581,9 @@ siman analyse has run successfully
 beta,    |
 pmiss,   |
 mech and |
-Performa |
-nce      |                                     target and method                                    
-statisti | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
-c        |       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj
+Performa |                                     target and method                                    
+nce      | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
+measure  |       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj
 ---------+------------------------------------------------------------------------------------------
 0        |
 .2       |
@@ -6258,7 +6253,7 @@ siman analyse has run successfully
 mech and  |
 Performan |
 ce        |             method             
-statistic |    No-adj        CCA   Mean Imp
+measure   |    No-adj        CCA   Mean Imp
 ----------+--------------------------------
 MCAR      |
   Estreps |      1000       1000       1000
@@ -6432,7 +6427,7 @@ siman analyse has run successfully
 -----------------------------------------------------------------------------------------------
 Performan |                          Missing data mechanism and method                         
 ce        | ---------- MCAR ---------    ---------- MAR ----------    ---------- MNAR ---------
-statistic |    Full      CCA       MI       Full      CCA       MI       Full      CCA       MI
+measure   |    Full      CCA       MI       Full      CCA       MI       Full      CCA       MI
 ----------+------------------------------------------------------------------------------------
      Mean | -0.0000  -0.0075   0.0001    -0.0169  -0.1601  -0.0204    -0.0064  -0.0302   0.0486
           |  0.0135   0.0163   0.0144     0.0137   0.0184   0.0146     0.0136   0.0170   0.0145
@@ -6452,7 +6447,7 @@ Note: where there are multiple entries per performance measure, these are estima
 -----------------------------------------------------------------------------------------------
 Performan |                          Missing data mechanism and method                         
 ce        | ---------- MCAR ---------    ---------- MAR ----------    ---------- MNAR ---------
-statistic |    Full      CCA       MI       Full      CCA       MI       Full      CCA       MI
+measure   |    Full      CCA       MI       Full      CCA       MI       Full      CCA       MI
 ----------+------------------------------------------------------------------------------------
      Mean | -0.0000  -0.0075   0.0001    -0.0169  -0.1601  -0.0204    -0.0064  -0.0302   0.0486
           | -0.0091  -0.0185  -0.0096    -0.0262  -0.1725  -0.0302    -0.0156  -0.0416   0.0388

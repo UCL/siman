@@ -1,0 +1,202 @@
+
+. 
+. 
+. // program to check that there are no chars starting "siman_"
+. prog def charcheck
+  1. local charlist : char _dta[]
+  2. local error 0
+  3. foreach char of local charlist {
+  4.         cap assert substr("`char'",1,6)!="siman_"
+  5.         if _rc {
+  6.                 char list _dta[`char']
+  7.                 local error 9
+  8.         }
+  9. }
+ 10. if `error' di as error "the above siman chars were set"
+ 11. exit `error'
+ 12. end
+
+. 
+. 
+. use data/simcheck, clear
+(Simulation results from simcheck99.do in paper doi:10.1093/ije/dyad134)
+
+. siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)
+Warning: dgm variable dgm has been converted from string to numeric. If you require its levels to be
+  ordered differently, encode dgm as numeric before running -siman setup-.
+Warning: siman setup found unwanted variables: N
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (3) 
+  Total number of DGMs:           3
+
+Targets
+  Variable containing targets:    N/A
+  Number of targets:              1
+  Target values:                  
+
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  Full; CCA; MI
+
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    df
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            _true (created)
+
+Estimates data                    in data
+Performance statistics            not in data
+_____________________________________________________
+
+. siman unset
+
+. charcheck
+
+. 
+. 
+. use data/extendedtestdata.dta, clear
+
+. siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
+> )
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       beta (3) pmiss (2) mech (2) 
+  Total number of DGMs:           12
+
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              3
+  Target values:                  effect; mean0; mean1
+
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  CCA; MeanImp; Noadj
+
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
+
+Estimates data                    in data
+Performance statistics            not in data
+_____________________________________________________
+
+. siman unset
+
+. charcheck
+
+. 
+. 
+. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+
+. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) ///
+>         estimate(est) se(se) true(true)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (2) 
+  Total number of DGMs:           2
+
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              2
+  Target values:                  beta; gamma
+
+Methods
+  Variable containing methods:    method
+  Number of methods:              2
+  Method values:                  1; 2
+
+Repetition-level output
+  Point estimate variable:        est
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
+
+Estimates data                    in data
+Performance statistics            not in data
+_____________________________________________________
+
+. siman unset
+
+. charcheck
+
+. 
+. 
+. use data/msgbsl_inter_try_postfile.dta, clear
+
+. rename inter binter
+
+. rename main bmain
+
+. gen trueinter=.3
+
+. gen truemain=0
+
+. siman setup, rep(i) target(inter main) method(method) est(b) se(se) true(true) dgm(parm1)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       parm1 (1) 
+  Total number of DGMs:           1
+
+Targets
+  Variable containing targets:    target
+  Number of targets:              2
+  Target values:                  inter main
+
+Methods
+  Variable containing methods:    method
+  Number of methods:              4
+  Method values:                  CC; FULLDAT; IMPALL; IMPBYZ
+
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
+
+Estimates data                    in data
+Performance statistics            not in data
+_____________________________________________________
+
+. siman unset
+
+. charcheck
+
+. 
+. 
+. 
+. di as result "*** SIMAN HAS PASSED ALL THE TESTS IN `filename'.do ***"
+*** SIMAN HAS PASSED ALL THE TESTS IN test_unset.do ***
+
+. 
+. log close

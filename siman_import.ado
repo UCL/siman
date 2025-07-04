@@ -1,11 +1,11 @@
-*!  v0.11.1   11apr2025     
+*!  version 0.11.1   11apr2025     
 *   v0.11.1   11apr2025  IW remove unwanted output, add level(), call siman describe
 *   v0.11     27mar2025  IW Broaden to include missing dgm/target/method and all method types; test properly
 *   v0.1      28oct2024  IW Rough starter
 * Import dataset of performance statistics into siman format
 
 prog def siman_import
-syntax, Perf(varname string) ESTimate(varname numeric) [Dgm(varlist) Target(varname) Method(varname) se(varname numeric) True(varname numeric) Level(real 0)]
+syntax, Perf(varname string) ESTimate(varname numeric) [Dgm(varlist) TArget(varname) Method(varname) se(varname numeric) TRue(varname numeric) Level(real 0)]
 
 // Create locals to store characteristics
 
@@ -95,8 +95,8 @@ end
 /******************************************************************************/
 
 
-*! version 2.2 13feb2018  -  label name is just var2 (otherwise can be too long)
-*! version 2.1 11feb2013  -  blank labels for empty strings
+* version 2.2 13feb2018  -  label name is just var2 (otherwise can be too long)
+* version 2.1 11feb2013  -  blank labels for empty strings
 * version 2 15dec2005  -  if, in, check for duplications
 prog def labelit
 version 15

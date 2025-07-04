@@ -53,11 +53,14 @@ default is the current system default confidence level.{p_end}
 {synopt:{opt bygr:aphoptions(string)}}options for {help twoway} that go inside its {cmd:by()} option.{p_end}
 
 {syntab:Saving options}
-{synopt:{opt sav:ing}{it:(name[}{cmd:, replace}{it:])}}saves the graph to disk in Stata’s .gph format.
-The graph name is {it:name}.{p_end}
-{synopt:{opt exp:ort}{it:(filetype[}{cmd:, replace}{it:])}}exports the graph to disk in non-Stata format. 
+{synopt:{opt name}({it:name}[{cmd:, replace}])}the graph name. Default {it:name} is "zipplot".{p_end}
+{synopt:{opt sav:ing}({it:name}[{cmd:, replace}])}saves the graph to disk in Stata’s .gph format.
+Default {it:name} is "zipplot".{p_end}
+{synopt:{opt exp:ort}({it:filetype}[{cmd:, replace}])}exports the graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified. The exported file name is the same as for {cmd:saving()} with the appropriate 
 filetype, which must be one of the suffices listed in {help graph export}.{p_end}
+{synopt:{opt pause}}pauses before drawing the graph, if {help pause} is on. The user can 
+press F9 to view the graph command, and may edit it to create a more customised graph.{p_end}
 {synoptline}
 
 
@@ -133,14 +136,16 @@ methods. Statistics in Medicine 2019; 38: 2074–2102. {browse "https://doi.org/
 {marker authors}{...}
 {title:Authors}
 
-{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
+{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK.{break}
 
-{pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
+{pstd}Ian White, MRC Clinical Trials Unit at UCL, London, UK.{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
-{pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
+{pstd}Tim Morris, MRC Clinical Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
+
+{title:See Also}
 
 {p}{helpb siman: Return to main help page for siman}
 

@@ -127,15 +127,16 @@ Run for method 2 only:
 {marker authors}{...}
 {title:Authors}
 
-{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL{break}
-Email: {browse "mailto:e.marley-zagar@ucl.ac.uk":Ella Marley-Zagar}
+{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK.{break}
 
-{pstd}Ian White, MRC Clinical Trials Unit at UCL{break}
+{pstd}Ian White, MRC Clinical Trials Unit at UCL, London, UK.{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
-{pstd}Tim Morris, MRC Clinical  Trials Unit at UCL, London, UK.{break} 
+{pstd}Tim Morris, MRC Clinical Trials Unit at UCL, London, UK.{break} 
 Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 
 
-{pstd}{helpb siman: Return to main help page for siman}
+{title:See Also}
+
+{p}{helpb siman: Return to main help page for siman}
 

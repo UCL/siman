@@ -67,7 +67,7 @@ file myscatter.gph already exists
 
 . assert _rc==602
 
-. siman scatter, saving(myscatter,replace) export(png,replace)
+. siman scatter estimate, saving(myscatter,replace) export(png,replace)
 siman scatter will draw 1 graph with 6 panels
 file myscatter.gph saved
 file myscatter.png saved as PNG format

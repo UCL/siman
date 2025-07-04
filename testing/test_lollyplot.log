@@ -33,7 +33,7 @@ siman analyse has run successfully
 beta and  |
 Performan |
 ce        |             method             
-statistic |       CCA    MeanImp      Noadj
+measure   |       CCA    MeanImp      Noadj
 ----------+--------------------------------
 0         |
   Estreps |      1000       1000       1000
@@ -179,7 +179,7 @@ siman analyse has run successfully
 beta and  |
 Performan |
 ce        |             method             
-statistic |       CCA    MeanImp      Noadj
+measure   |       CCA    MeanImp      Noadj
 ----------+--------------------------------
 0         |
   Estreps |      1000       1000       1000
@@ -323,10 +323,9 @@ siman analyse has run successfully
 
 ----------------------------------------------------------------------------------------------------
 beta and |
-Performa |
-nce      |                                    estimand and method                                   
-statisti | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
-c        |       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj
+Performa |                                    estimand and method                                   
+nce      | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
+measure  |       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj
 ---------+------------------------------------------------------------------------------------------
 0        |
  Estreps |      1000      1000      1000      1000      1000      1000      1000      1000      1000
@@ -470,10 +469,9 @@ siman analyse has run successfully
 
 ----------------------------------------------------------------------------------------------------
 beta and |
-Performa |
-nce      |                                    estimand and method                                   
-statisti | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
-c        |       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj
+Performa |                                    estimand and method                                   
+nce      | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
+measure  |       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj
 ---------+------------------------------------------------------------------------------------------
 0        |
  Estreps |      1000      1000      1000      1000      1000      1000      1000      1000      1000
@@ -617,10 +615,9 @@ siman analyse has run successfully
 
 ----------------------------------------------------------------------------------------------------
 beta and |
-Performa |
-nce      |                                     target and method                                    
-statisti | ------------- 1 ------------- ------------- 2 ------------- ------------- 3 -------------
-c        |       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj
+Performa |                                     target and method                                    
+nce      | ------------- 1 ------------- ------------- 2 ------------- ------------- 3 -------------
+measure  |       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj
 ---------+------------------------------------------------------------------------------------------
 0        |
  Estreps |      1000      1000      1000      1000      1000      1000      1000      1000      1000
@@ -764,10 +761,9 @@ siman analyse has run successfully
 
 ----------------------------------------------------------------------------------------------------
 beta and |
-Performa |
-nce      |                                     target and method                                    
-statisti | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
-c        |       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj
+Performa |                                     target and method                                    
+nce      | ----------- effect ---------- ----------- mean0 ----------- ----------- mean1 -----------
+measure  |       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj       CCA   MeanImp     Noadj
 ---------+------------------------------------------------------------------------------------------
 0        |
  Estreps |      1000      1000      1000      1000      1000      1000      1000      1000      1000
@@ -918,7 +914,7 @@ beta,     |
 mech and  |
 Performan |
 ce        |             method             
-statistic |       CCA    MeanImp      Noadj
+measure   |       CCA    MeanImp      Noadj
 ----------+--------------------------------
 0         |
 MCAR      |
@@ -1200,7 +1196,7 @@ beta,     |
 mech and  |
 Performan |
 ce        |             method             
-statistic |       CCA    MeanImp      Noadj
+measure   |       CCA    MeanImp      Noadj
 ----------+--------------------------------
 0         |
 MCAR      |
@@ -1482,7 +1478,7 @@ beta,     |
 mech and  |
 Performan |
 ce        |             method             
-statistic |         1          2          3
+measure   |         1          2          3
 ----------+--------------------------------
 0         |
 MCAR      |
@@ -1764,7 +1760,7 @@ beta,     |
 mech and  |
 Performan |
 ce        |             method             
-statistic |       CCA    MeanImp      Noadj
+measure   |       CCA    MeanImp      Noadj
 ----------+--------------------------------
 0         |
 MCAR      |
@@ -2324,22 +2320,25 @@ Performance measures not specified: defaulting to bias empse cover
 Ignoring non-varying dgm variable beta
 Ignoring non-varying dgm variable pmiss
 siman lollyplot will draw 1 graph with 6 panels (3 PMs by 2 DGMs)
-Debug: graph command is: twoway (rspike b __000003 method if method==1 , pstyle(p1line) horiz ) (sca
-> tter method __000005 if method==1 , pstyle(p1) msym(i) mlab(__000007) mlabpos(0) ) (scatter method
->  __000006 if method==1 , pstyle(p1) msym(i) mlab(__000008) mlabpos(0) ) (scatter method b if metho
-> d==1 , pstyle(p1) mlabstyle(p1) msym(O) mfcol(white) mlabel(__000004) mlabpos(12) ) (rspike b __00
-> 0003 method if method==2 , pstyle(p2line) horiz ) (scatter method __000005 if method==2 , pstyle(p
-> 2) msym(i) mlab(__000007) mlabpos(0) ) (scatter method __000006 if method==2 , pstyle(p2) msym(i) 
-> mlab(__000008) mlabpos(0) ) (scatter method b if method==2 , pstyle(p2) mlabstyle(p2) msym(O) mfco
-> l(white) mlabel(__000004) mlabpos(12) ) (rspike b __000003 method if method==3 , pstyle(p3line) ho
-> riz ) (scatter method __000005 if method==3 , pstyle(p3) msym(i) mlab(__000007) mlabpos(0) ) (scat
-> ter method __000006 if method==3 , pstyle(p3) msym(i) mlab(__000008) mlabpos(0) ) (scatter method 
-> b if method==3 , pstyle(p3) mlabstyle(p3) msym(O) mfcol(white) mlabel(__000004) mlabpos(12) ) scat
-> ter method __000003 , msym(i) c(l) col(gray) lpattern(dash) , by(__000009 __000002, note(`"Graphs 
-> by mech."') col(2) xrescale title(               mech=MCAR                              mech=MNAR 
->               , size(medium) just(center)) imargin(r=5)  ) subtitle("") ylab(none) ytitle(`"      
-> Coverage          Empirical SE              Bias          "', size(medium)) yscale(reverse range(.
-> 8 3.2)) legend(col(1) order(4 "Noadj" 8 "CCA" 12 "MeanImp") ) name(meth3,replace) legend(row(1))
+Debug: graph command is: twoway (line method __000003 , msym(i) c(l) col(gray) lpattern(l)) (rspike 
+> b __000003 method if method==1 , pstyle(p1line) horiz lcol(red) ) (scatter method __000005 if meth
+> od==1 , pstyle(p1) msym(i) mlab(__000007) mlabcol("red") mlabpos(0) ) (scatter method __000006 if 
+> method==1 , pstyle(p1) msym(i) mlab(__000008) mlabcol("red") mlabpos(0) ) (scatter method b if met
+> hod==1 , pstyle(p1) mlabstyle(p1) msym(O) mcol(red) mfcol(white) mlabel(__000004) mlabpos(12) mlab
+> col(red) ) (rspike b __000003 method if method==2 , pstyle(p2line) horiz lcol(blue) ) (scatter met
+> hod __000005 if method==2 , pstyle(p2) msym(i) mlab(__000007) mlabcol("blue") mlabpos(0) ) (scatte
+> r method __000006 if method==2 , pstyle(p2) msym(i) mlab(__000008) mlabcol("blue") mlabpos(0) ) (s
+> catter method b if method==2 , pstyle(p2) mlabstyle(p2) msym(O) mcol(blue) mfcol(white) mlabel(__0
+> 00004) mlabpos(12) mlabcol(blue) ) (rspike b __000003 method if method==3 , pstyle(p3line) horiz l
+> col(green) ) (scatter method __000005 if method==3 , pstyle(p3) msym(i) mlab(__000007) mlabcol("gr
+> een") mlabpos(0) ) (scatter method __000006 if method==3 , pstyle(p3) msym(i) mlab(__000008) mlabc
+> ol("green") mlabpos(0) ) (scatter method b if method==3 , pstyle(p3) mlabstyle(p3) msym(O) mcol(gr
+> een) mfcol(white) mlabel(__000004) mlabpos(12) mlabcol(green) ) , by(__000009 __000002, note(`"Gra
+> phs by mech."') col(2) xrescale title(               mech=MCAR                              mech=M
+> NAR               , size(medium) just(center)) imargin(r=5)  ) subtitle("") ylab(none) ytitle(`"  
+>     Coverage          Empirical SE              Bias          "', size(medium)) yscale(reverse ran
+> ge(.8 3.2)) legend(col(1) order(5 "Noadj" 9 "CCA" 13 "MeanImp") ) name(meth3,replace) legend(row(1
+> ))
 
 . siman lol if esti=="effect" & float(beta)==float(0) & float(pmiss)==float(0.2) & meth!=1, name(met
 > h2,replace) legend(row(1)) col(blue green) debug
@@ -2347,19 +2346,20 @@ Performance measures not specified: defaulting to bias empse cover
 Ignoring non-varying dgm variable beta
 Ignoring non-varying dgm variable pmiss
 siman lollyplot will draw 1 graph with 6 panels (3 PMs by 2 DGMs)
-Debug: graph command is: twoway (rspike b __000003 method if method==2 , pstyle(p1line) horiz ) (sca
-> tter method __000005 if method==2 , pstyle(p1) msym(i) mlab(__000007) mlabpos(0) ) (scatter method
->  __000006 if method==2 , pstyle(p1) msym(i) mlab(__000008) mlabpos(0) ) (scatter method b if metho
-> d==2 , pstyle(p1) mlabstyle(p1) msym(O) mfcol(white) mlabel(__000004) mlabpos(12) ) (rspike b __00
-> 0003 method if method==3 , pstyle(p2line) horiz ) (scatter method __000005 if method==3 , pstyle(p
-> 2) msym(i) mlab(__000007) mlabpos(0) ) (scatter method __000006 if method==3 , pstyle(p2) msym(i) 
-> mlab(__000008) mlabpos(0) ) (scatter method b if method==3 , pstyle(p2) mlabstyle(p2) msym(O) mfco
-> l(white) mlabel(__000004) mlabpos(12) ) scatter method __000003 , msym(i) c(l) col(gray) lpattern(
-> dash) , by(__000009 __000002, note(`"Graphs by mech."') col(2) xrescale title(               mech=
-> MCAR                              mech=MNAR               , size(medium) just(center)) imargin(r=5
-> )  ) subtitle("") ylab(none) ytitle(`"      Coverage          Empirical SE              Bias      
->     "', size(medium)) yscale(reverse range(1.8 3.2)) legend(col(1) order(4 "CCA" 8 "MeanImp") ) na
-> me(meth2,replace) legend(row(1))
+Debug: graph command is: twoway (line method __000003 , msym(i) c(l) col(gray) lpattern(l)) (rspike 
+> b __000003 method if method==2 , pstyle(p1line) horiz lcol(blue) ) (scatter method __000005 if met
+> hod==2 , pstyle(p1) msym(i) mlab(__000007) mlabcol("blue") mlabpos(0) ) (scatter method __000006 i
+> f method==2 , pstyle(p1) msym(i) mlab(__000008) mlabcol("blue") mlabpos(0) ) (scatter method b if 
+> method==2 , pstyle(p1) mlabstyle(p1) msym(O) mcol(blue) mfcol(white) mlabel(__000004) mlabpos(12) 
+> mlabcol(blue) ) (rspike b __000003 method if method==3 , pstyle(p2line) horiz lcol(green) ) (scatt
+> er method __000005 if method==3 , pstyle(p2) msym(i) mlab(__000007) mlabcol("green") mlabpos(0) ) 
+> (scatter method __000006 if method==3 , pstyle(p2) msym(i) mlab(__000008) mlabcol("green") mlabpos
+> (0) ) (scatter method b if method==3 , pstyle(p2) mlabstyle(p2) msym(O) mcol(green) mfcol(white) m
+> label(__000004) mlabpos(12) mlabcol(green) ) , by(__000009 __000002, note(`"Graphs by mech."') col
+> (2) xrescale title(               mech=MCAR                              mech=MNAR               ,
+>  size(medium) just(center)) imargin(r=5)  ) subtitle("") ylab(none) ytitle(`"      Coverage       
+>    Empirical SE              Bias          "', size(medium)) yscale(reverse range(1.8 3.2)) legend
+> (col(1) order(5 "CCA" 9 "MeanImp") ) name(meth2,replace) legend(row(1))
 
 . * Compare graphs meth3 and meth2
 . 

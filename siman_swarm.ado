@@ -1,4 +1,4 @@
-*!  version 0.11.8  08apr2025    
+*!  version 0.11.8   08apr2025    
 *   version 0.11.7  08apr2025   IW use Stata15 syntax
 *   version 0.11.6  02apr2025   IW graphs are now sorted by rep
 *   version 0.11.5  31mar2025   TM moved default placement of by() note to clock pos *     version 0.11.4     02jan2025   IW correct the count of #panels    
