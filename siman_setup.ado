@@ -1,4 +1,5 @@
-*!  version 0.11.4   12mar2025    
+*!  version 0.11.5   15jul2025    
+*   version 0.11.5   15jul2025    IW bug fix: one instance of method changed to `method'
 *   version 0.11.4   12mar2025   IW impose sensible sort order; dgmvar encoding respects order in data
 *   version 0.11.3   21nov2024   IW sencode method if it's string and contains spaces etc. 
 *   version 0.11.2   24oct2024   IW improve handling of fractional dgmvar and created method
