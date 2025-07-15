@@ -238,7 +238,7 @@ else if `nmethod'==1 & `methodisvar'==1 { //method is long
     qui levelsof `method', local(methodvalues) clean
     local longvars `longvars' `method'
     * encode method if it contains spaces, hyphens etc. (to protect siman analyse)
-    cap confirm string var method
+    cap confirm string var `method'
     if _rc==0 {
         cap assert regexm(`method',"^[a-zA-Z0-9_]*$") // only char, num and underscore allowed
         if _rc {
