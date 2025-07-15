@@ -6462,6 +6462,53 @@ Note: where there are multiple entries per performance measure, these are estima
 
 . 
 . 
+. * bug fixed 15/7/2025
+. *********************
+. use $testpath/data/extendedtestdata, clear
+
+. sencode method, gen(meth)
+
+. siman setup, rep(re) dgm(beta pmiss mech) method(meth) estimate(b) se(se) true(true) target(estima
+> nd)
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to double (0 real changes
+  made)
+Warning: dgm variable pmiss has non-integer values: converting from float to double (108,000 real
+  changes made)
+Warning: siman setup found unwanted variables: method
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       beta (3) pmiss (2) mech (2) 
+  Total number of DGMs:           12
+
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              3
+  Target values:                  effect; mean0; mean1
+
+Methods
+  Variable containing methods:    meth
+  Number of methods:              3
+  Method values:                  Noadj; CCA; MeanImp
+
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    N/A
+  Conf. limit variables:          N/A
+  p-value variable:               N/A
+  True value variable:            true
+
+Estimates data                    in data
+Performance statistics            not in data
+_____________________________________________________
+
+. 
+. 
 . di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 *** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN test_all_inputs.do ***
 
