@@ -38,13 +38,13 @@ exit `error'
 end
 
 
-use data/simcheck, clear
+use $testpath/data/simcheck, clear
 siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)
 siman unset
 charcheck
 
 
-use data/extendedtestdata.dta, clear
+use $testpath/data/extendedtestdata.dta, clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman unset
 charcheck
@@ -57,7 +57,7 @@ siman unset
 charcheck
 
 
-use data/msgbsl_inter_try_postfile.dta, clear
+use $testpath/data/msgbsl_inter_try_postfile.dta, clear
 rename inter binter
 rename main bmain
 gen trueinter=.3
