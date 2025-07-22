@@ -469,6 +469,13 @@ siman table mean modelse, col(dgm method) mcci mclevel(95) tabdisp format(%6.4f)
 siman table mean modelse, col(dgm method) nomcse mcci mclevel(50) tabdisp format(%6.4f)
 
 
+* bug fixed 15/7/2025
+*********************
+use $testpath/data/extendedtestdata, clear
+sencode method, gen(meth)
+siman setup, rep(re) dgm(beta pmiss mech) method(meth) estimate(b) se(se) true(true) target(estimand)
+
+
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 
 log close

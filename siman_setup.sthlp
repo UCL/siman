@@ -136,9 +136,9 @@ Options for data in any input format:
 {synopt:{opt r:ep(varname)}}numeric variable identifying repetitions: required. {p_end}
 {synopt:{opt dgm(varlist)}}variable(s) identifying the data generating mechanism. 
 Can be omitted if there is only one data generating mechanism.{p_end}
-{synopt:{opt tar:get(varname|values)}}the target variable name (data formats 1/3) or values (data formats 2/4). 
+{synopt:{opt tar:get(varname|values)}}the target variable name (data formats 1 and 2) or values (data formats 3 and 4). 
 Can be omitted if there is only one target.{p_end}
-{synopt:{opt meth:od(varname|values)}}the method variable name (data formats 1/4) or values (data formats 2/3). 
+{synopt:{opt meth:od(varname|values)}}the method variable name (data formats 1 and 3) or values (data formats 2 and 4). 
 Can be omitted if there is only one method.{p_end}
 {synopt:{opt est:imate(varname|stub_varname)}}the estimate variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
 {synopt:{opt se(varname|stub_varname)}}the standard error variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}

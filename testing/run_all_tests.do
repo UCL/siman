@@ -50,7 +50,7 @@ local testfiles ///
 	test_graphs_mixed	    /// various graph tests: 2 minutes
 	test_graphs_main     	/// test graphs from all formats and var types: 2 minutes
 	test_graph_names		/// test name() saving() and export() options for all graphs: 2 mins
-	test_helpfiles			// help files only: very fast
+	test_helpfiles			/// help files only: very fast
 	test_unset				// very fast
 
 foreach testfile of local testfiles {
