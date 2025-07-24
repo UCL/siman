@@ -1,5 +1,6 @@
-*!  version 0.11.5   15jul2025    
-*   version 0.11.5   15jul2025    IW bug fix: one instance of method changed to `method'
+*!  version 0.11.6   24jul2025   
+*   version 0.11.6   24jul2025   IW make estimate() required; new suboption method(,categorical)
+*   version 0.11.5   15jul2025   IW bug fix: one instance of method changed to `method'
 *   version 0.11.4   12mar2025   IW impose sensible sort order; dgmvar encoding respects order in data
 *   version 0.11.3   21nov2024   IW sencode method if it's string and contains spaces etc. 
 *   version 0.11.2   24oct2024   IW improve handling of fractional dgmvar and created method
@@ -45,9 +46,9 @@ program define siman_setup
 version 15
 
 syntax [if] [in], ///
-    Rep(varname numeric min=1 max=1) ///
-    [DGM(varlist) TARget(string) METHod(string) /// structure variables
-    ESTimate(name) SE(name) DF(name) LCI(name) UCI(name) P(name) /// estimation result variables
+    Rep(varname numeric min=1 max=1) ESTimate(name) ///
+	[DGM(varlist) TARget(string) METHod(string) /// structure variables
+    SE(name) DF(name) LCI(name) UCI(name) P(name) /// estimation result variables
     TRUE(string) ORDer(string) sep(string) DGMMIssingok /// other information
     CLEAR ///
     debug /// undocumented
@@ -82,17 +83,6 @@ foreach varname in _perfmeascode _pm _dataset _scenario _true {
         di as error "{p 0 2}siman would like to name a variable '`varname'', but that name already exists in your data. Please rename your variable `varname' as something else.{p_end}"
         exit 498
     }
-}
-
-* produce error message if no est, se, or ci contained in dataset
-if mi("`estimate'") &  mi("`se'") & mi("`lci'") & mi("`uci'") {
-    di as error "{p 0 2}No estimates, SEs, or confidence intervals specified. Need to specify at least one for siman to run.{p_end}"
-    exit 498
-}
-
-* produce a warning message if no est and no se contained in dataset
-if mi("`estimate'") &  mi("`se'") {
-    di as text "{p 0 2}Warning: no estimates or SEs, siman's output will be limited{p_end}"
 }
 
 cap which sencode
@@ -208,7 +198,6 @@ else {
 }
 
 /*** UNDERSTAND METHOD ***/
-
 local methodcreated 0
 if mi("`method'") {
     di as text "{p 0 2}Warning: no method specified. siman will assume there is only one method and create a variable _method. If this is a mistake, enter method() option in -siman setup-.{p_end}"
@@ -218,6 +207,30 @@ if mi("`method'") {
     local methodformat none
     local methodvalues
 }
+else if strpos("`method'",",") { // categorical suboption used
+    * convert numeric method to 1,2,... with current values as labels
+	local 0 `method'
+    syntax varname, [CATegorical]
+    local method `varlist'
+    if !mi("`categorical'") {
+        levelsof `method', local(methlevels)
+        local nmethlevels = r(r)
+        tempvar newmethod
+        gen `newmethod' = .
+        cap label drop `method'
+        if !_rc di as text "Warning: value label `method' has been changed"
+        forvalues i=1/`nmethlevels' {
+            local orig : word `i' of `methlevels'
+            replace `newmethod' = `i' if meth == `orig'
+            label def `method' `i' "`orig'", add
+        }
+        label val `newmethod' `method'
+        drop `method'
+        rename `newmethod' `method'
+        di as text `"`method' has been coded as 1..`methlevels' but retains its values `methlevels'"'
+    }
+}
+
 local nmethod: word count `method'
 cap confirm var `method'
 local methodisvar = _rc==0

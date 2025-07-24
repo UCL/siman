@@ -1,7 +1,9 @@
-*!  version 0.11.8   08apr2025    
+*!  version 0.11.8  24jul2025    
+*   version 0.11.8  24jul2025   IW fix method bugs: crashed when not 1,2,3,...; ylabels are now values not 1,2,3 
 *   version 0.11.7  08apr2025   IW use Stata15 syntax
 *   version 0.11.6  02apr2025   IW graphs are now sorted by rep
-*   version 0.11.5  31mar2025   TM moved default placement of by() note to clock pos *     version 0.11.4     02jan2025   IW correct the count of #panels    
+*   version 0.11.5  31mar2025   TM moved default placement of by() note to clock pos 
+*   version 0.11.4  02jan2025   IW correct the count of #panels    
 *   version 0.11.3  25oct2024   IW/TM allow only 1 method
 *   version 0.11.2  25oct2024   IW Default by() ignores non-varying variables
 *   version 0.11.1  21oct2024   IW implement new dgmmissingok option
@@ -117,22 +119,6 @@ if _rc {
 drop `meantouse'
 qui keep if `touse'
 
-* check number of methods (for example if the 'if' syntax has been used)
-if mi("`method'") local nummethodnew = 1
-else {
-    qui tab `method'
-    local nummethodnew = `r(r)'
-}
-
-* store method names in locals mlabel`i'
-qui levelsof `method'
-local methods = r(levels)
-forvalues i = 1/`nummethodnew' {
-    if `methodnature'==1 local mlabel`i' : label (`method') `i'
-    else if `methodnature'==2 local mlabel`i' : word `i' of `methods'
-    else local mlabel`i' `i'
-}
-
 * keeps estimates data only
 qui drop if `rep'<0
 
@@ -142,6 +128,18 @@ if `methodnature'==2 {
     encode `method', generate(`numericmethod')
     drop `method'
     rename `numericmethod' `method'
+	local methodnature 1
+}
+
+* check number of methods (for example if the 'if' syntax has been used)
+* NB setup ensures that `method' exists
+qui levelsof `method', local(methods)
+local nummethodnew = r(r)
+
+* store method names in locals mlabel`i'
+forvalues i = 1/`nummethodnew' {
+    if `methodnature'==1 local mlabel`i' : label (`method') `i'
+    else local mlabel`i' : word `i' of `methods'
 }
 
 * default 'by' is all varying among dgm target
@@ -164,16 +162,17 @@ local maxnewidrep = r(max)
 sort `method' `by' `rep' // 1/4/2025
 by `method': gen first = _n==1
 qui replace newidrep = newidrep + `gap'*`maxnewidrep'*sum(first)
+* find labels for y-axis
 forvalues g = 1/`nummethodnew' {
-    * if `g'==1 qui gen newidrep = `rep' if `method' == `g'
-    * else qui replace newidrep = (`rep'-1)+ ceil((`g'-1)*`step') + 1 if `method' == `g'
-    qui tabstat newidrep if `method' == `g', s(p50) save
+    local thismethodvalue : word `g' of `methods'
+    qui tabstat newidrep if `method' == `thismethodvalue', s(p50) save
+		// 24jul2025 changed from `g' to `thismethodvalue'
     tempname result
     matrix `result' = r(StatTotal) 
     local ygraphvalue`g' = ceil(`result'[1,1])
     local labelvalues `labelvalues' `ygraphvalue`g'' "`mlabel`g''"
-    if `g'==`nummethodnew' label define newidreplab `labelvalues'
 }
+label define newidreplab `labelvalues'
 
 * Count how many graphs will be created
 if !mi("`by'") {

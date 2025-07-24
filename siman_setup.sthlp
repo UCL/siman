@@ -119,7 +119,7 @@ Options for input data in wide-wide format (data format 4):
 {opt sep(string)}
 
 {pstd}
-In each format, at least one of {opt estimate()} and {opt se()} is required.
+In each format, {opt estimate()} is required.
 
 {pstd}
 Options for data in any input format:
@@ -130,7 +130,7 @@ Options for data in any input format:
 {opt dgmmi:ssingok}
 
  
-{synoptset 28 tabbed}{...}
+{synoptset 31 tabbed}{...}
 {synopthdr}
 {synoptline}
 {synopt:{opt r:ep(varname)}}numeric variable identifying repetitions: required. {p_end}
@@ -139,8 +139,9 @@ Can be omitted if there is only one data generating mechanism.{p_end}
 {synopt:{opt tar:get(varname|values)}}the target variable name (data formats 1 and 2) or values (data formats 3 and 4). 
 Can be omitted if there is only one target.{p_end}
 {synopt:{opt meth:od(varname|values)}}the method variable name (data formats 1 and 3) or values (data formats 2 and 4). 
-Can be omitted if there is only one method.{p_end}
-{synopt:{opt est:imate(varname|stub_varname)}}the estimate variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
+Can be omitted if there is only one method. A 
+suboption {cmd:method(}{it:varname}, {cmd:{ul:cat}egorical}{cmd:)} allows method values that are numerical to be treated as categorical.{p_end}
+{synopt:{opt est:imate(varname|stub_varname)}}is required. It defines the estimate variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
 {synopt:{opt se(varname|stub_varname)}}the standard error variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
 {synopt:{opt df(varname|stub_varname)}}the degrees of freedom variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
 {synopt:{opt lci(varname|stub_varname)}}the lower confidence interval variable name (data format 1) or the name of its stub (data formats 2-4). {p_end}
