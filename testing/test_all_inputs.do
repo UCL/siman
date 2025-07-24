@@ -476,6 +476,24 @@ sencode method, gen(meth)
 siman setup, rep(re) dgm(beta pmiss mech) method(meth) estimate(b) se(se) true(true) target(estimand)
 
 
+* bug fixed 24/7/2025: swarm failed when method wasn't coded 1, 2, ...
+**********************************************************************
+use $testpath/data/extendedtestdata, clear
+sencode method, gen(meth)
+drop if meth==1
+keep if beta==0 
+keep if pmiss==float(.2)
+siman setup, rep(re) dgm(mech) method(meth) estimate(b) se(se) true(true) target(estimand)
+siman scatter // works
+siman swarm // previously failed, now works
+siman cms // works
+siman blandaltman // works
+siman zipplot // works
+siman analyse // works
+siman table // works
+siman lollyplot // works
+siman nestloop
+
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 
 log close

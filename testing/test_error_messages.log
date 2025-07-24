@@ -35,67 +35,9 @@ true(true true2) not allowed with long target: must be true(#|var)
 . drop est se
 
 . cap noi siman setup, rep(rep) dgm(dgm) target(estimand) method(method) true(true)
-No estimates, SEs, or confidence intervals specified. Need to specify at least one for siman to run.
+option estimate() required
 
-. assert _rc==498
-
-. 
-. * all of est, se, ci and p missing in siman setup syntax
-. clear all
-
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
-
-. cap noi siman setup, rep(rep) dgm(dgm) target(estimand) method(method) 
-No estimates, SEs, or confidence intervals specified. Need to specify at least one for siman to run.
-
-. * error message as required
-. assert _rc==498
-
-. 
-. * warning if est and se missing
-. clear all
-
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
-
-. * just labelling lci as true for testing purposes, so have something in lci macro
-. siman setup, rep(rep) dgm(dgm) target(estimand) method(method) lci(true)
-Warning: no estimates or SEs, siman's output will be limited
-Warning: siman setup found unwanted variables: est se
-
-                   SUMMARY OF DATA
-_____________________________________________________
-
-Data-generating mechanism (DGM)
-  DGM variables (# levels):       dgm (2) 
-  Total number of DGMs:           2
-
-Targets
-  Variable containing targets:    estimand
-  Number of targets:              2
-  Target values:                  beta; gamma
-
-Methods
-  Variable containing methods:    method
-  Number of methods:              2
-  Method values:                  1; 2
-
-Repetition-level output
-  Point estimate variable:        N/A
-  SE variable:                    N/A
-  df variable:                    N/A
-  Conf. limit variables:          true N/A
-  p-value variable:               N/A
-  True value variable:            N/A
-
-Estimates data                    in data
-Performance statistics            not in data
-_____________________________________________________
-
-. * warning as required
-. cap noi siman ana
-siman analyse requires estimate() to have been declared in siman setup
-
-. assert _rc==498
+. assert _rc==198
 
 . 
 . log close

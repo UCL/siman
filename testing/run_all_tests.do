@@ -54,6 +54,7 @@ local testfiles ///
 	test_unset				// very fast
 
 foreach testfile of local testfiles {
+	cd $testpath
 	cap noi do "`testfile'.do"
 	if _rc {
 		di as error upper("siman failed in program `testfile'.do")

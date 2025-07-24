@@ -85,9 +85,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -250,9 +250,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            _true (created)
 
 Estimates data                    in data
@@ -418,10 +418,10 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
-  True value variable:            N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
+  True value variable:            -
 
 Estimates data                    in data
 Performance statistics            not in data
@@ -534,7 +534,7 @@ Warning: no method specified. siman will assume there is only one method and cre
 _____________________________________________________
 
 Data-generating mechanism (DGM)
-  DGM variables (# levels):       N/A
+  DGM variables (# levels):       -
   Total number of DGMs:           1
 
 Targets
@@ -550,9 +550,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -634,7 +634,7 @@ Data-generating mechanism (DGM)
   Total number of DGMs:           2
 
 Targets
-  Variable containing targets:    N/A
+  Variable containing targets:    -
   Number of targets:              1
   Target values:                  
 
@@ -646,9 +646,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -793,9 +793,9 @@ Methods
 Repetition-level output
   Point estimate variable:        b
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -1393,9 +1393,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -1545,10 +1545,10 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
-  True value variable:            N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
+  True value variable:            -
 
 Estimates data                    in data
 Performance statistics            not in data
@@ -1670,9 +1670,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            _true (created)
 
 Estimates data                    in data
@@ -1806,7 +1806,7 @@ Warning: no method specified. siman will assume there is only one method and cre
 _____________________________________________________
 
 Data-generating mechanism (DGM)
-  DGM variables (# levels):       N/A
+  DGM variables (# levels):       -
   Total number of DGMs:           1
 
 Targets
@@ -1822,9 +1822,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -1907,7 +1907,7 @@ Data-generating mechanism (DGM)
   Total number of DGMs:           2
 
 Targets
-  Variable containing targets:    N/A
+  Variable containing targets:    -
   Number of targets:              1
   Target values:                  
 
@@ -1919,9 +1919,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -2079,9 +2079,9 @@ Methods
 Repetition-level output
   Point estimate variable:        b
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -2681,9 +2681,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -2731,10 +2731,10 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
-  True value variable:            N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
+  True value variable:            -
 
 Estimates data                    in data
 Performance statistics            not in data
@@ -2851,9 +2851,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            _true (created)
 
 Estimates data                    in data
@@ -2982,7 +2982,7 @@ Note: where there are multiple entries per performance measure, these are estima
 _____________________________________________________
 
 Data-generating mechanism (DGM)
-  DGM variables (# levels):       N/A
+  DGM variables (# levels):       -
   Total number of DGMs:           1
 
 Targets
@@ -2998,9 +2998,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -3133,9 +3133,9 @@ Methods
 Repetition-level output
   Point estimate variable:        b
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -3734,9 +3734,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -3883,10 +3883,10 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
-  True value variable:            N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
+  True value variable:            -
 
 Estimates data                    in data
 Performance statistics            not in data
@@ -4003,9 +4003,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            _true (created)
 
 Estimates data                    in data
@@ -4133,7 +4133,7 @@ Note: where there are multiple entries per performance measure, these are estima
 _____________________________________________________
 
 Data-generating mechanism (DGM)
-  DGM variables (# levels):       N/A
+  DGM variables (# levels):       -
   Total number of DGMs:           1
 
 Targets
@@ -4149,9 +4149,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -4282,9 +4282,9 @@ Methods
 Repetition-level output
   Point estimate variable:        b
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -4882,9 +4882,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -5033,10 +5033,10 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
-  True value variable:            N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
+  True value variable:            -
 
 Estimates data                    in data
 Performance statistics            not in data
@@ -5158,9 +5158,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            _true (created)
 
 Estimates data                    in data
@@ -5285,7 +5285,7 @@ Note: where there are multiple entries per performance measure, these are estima
 _____________________________________________________
 
 Data-generating mechanism (DGM)
-  DGM variables (# levels):       N/A
+  DGM variables (# levels):       -
   Total number of DGMs:           1
 
 Targets
@@ -5301,9 +5301,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -5403,9 +5403,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -5563,9 +5563,9 @@ Methods
 Repetition-level output
   Point estimate variable:        b
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -6158,9 +6158,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -6223,7 +6223,7 @@ Data-generating mechanism (DGM)
   Total number of DGMs:           2
 
 Targets
-  Variable containing targets:    N/A
+  Variable containing targets:    -
   Number of targets:              1
   Target values:                  
 
@@ -6235,9 +6235,9 @@ Methods
 Repetition-level output
   Point estimate variable:        b
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -6368,7 +6368,7 @@ Data-generating mechanism (DGM)
   Total number of DGMs:           3
 
 Targets
-  Variable containing targets:    N/A
+  Variable containing targets:    -
   Number of targets:              1
   Target values:                  
 
@@ -6381,8 +6381,8 @@ Repetition-level output
   Point estimate variable:        b
   SE variable:                    se
   df variable:                    df
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            _true (created)
 
 Estimates data                    in data
@@ -6498,9 +6498,9 @@ Methods
 Repetition-level output
   Point estimate variable:        b
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -6508,6 +6508,203 @@ Performance statistics            not in data
 _____________________________________________________
 
 . 
+. 
+. * bug fixed 24/7/2025: swarm failed when method wasn't coded 1, 2, ...
+. **********************************************************************
+. use $testpath/data/extendedtestdata, clear
+
+. sencode method, gen(meth)
+
+. drop if meth==1
+(36,000 observations deleted)
+
+. keep if beta==0 
+(48,000 observations deleted)
+
+. keep if pmiss==float(.2)
+(12,000 observations deleted)
+
+. siman setup, rep(re) dgm(mech) method(meth) estimate(b) se(se) true(true) target(estimand)
+Warning: dgm variable mech has been converted from string to numeric. If you require its levels to
+  be ordered differently, encode mech as numeric before running -siman setup-.
+Warning: siman setup found unwanted variables: beta pmiss method
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       mech (2) 
+  Total number of DGMs:           2
+
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              3
+  Target values:                  effect; mean0; mean1
+
+Methods
+  Variable containing methods:    meth
+  Number of methods:              2
+  Method values:                  CCA; MeanImp
+
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
+  True value variable:            true
+
+Estimates data                    in data
+Performance statistics            not in data
+_____________________________________________________
+
+. siman scatter // works
+siman scatter will draw 1 graph with 12 panels
+
+. siman swarm // previously failed, now works
+siman swarm will draw 1 graph with 6 panels
+
+. siman cms // works
+siman comparemethodsscatter will draw 6 graphs each showing 2 methods
+Consider reducing the number of graphs using 'if' condition
+Graph cms_1 is for mech=MCAR, estimand=effect
+Graph cms_2 is for mech=MCAR, estimand=mean0
+Graph cms_3 is for mech=MCAR, estimand=mean1
+Graph cms_4 is for mech=MNAR, estimand=effect
+Graph cms_5 is for mech=MNAR, estimand=mean0
+Graph cms_6 is for mech=MNAR, estimand=mean1
+
+. siman blandaltman // works
+siman blandaltman will draw 6 graphs each with 1 panel
+Consider reducing the number of graphs/panels using 'if' condition or 'by' option
+Graph blandaltman_1_estimate is for mech=MCAR, estimand=effect
+Graph blandaltman_2_estimate is for mech=MCAR, estimand=mean0
+Graph blandaltman_3_estimate is for mech=MCAR, estimand=mean1
+Graph blandaltman_4_estimate is for mech=MNAR, estimand=effect
+Graph blandaltman_5_estimate is for mech=MNAR, estimand=mean0
+Graph blandaltman_6_estimate is for mech=MNAR, estimand=mean1
+
+. siman zipplot // works
+siman zipplot will draw 1 graph with 12 panels
+
+. siman analyse // works
+siman analyse has run successfully
+
+. siman table // works
+
+mech = MCAR
+------------------------------------------------------------------------------------------
+                    |                                estimand                             
+                    |         effect                 mean0                   mean1        
+                    |          meth                   meth                    meth        
+                    |       CCA    MeanImp         CCA     MeanImp         CCA     MeanImp
+--------------------+---------------------------------------------------------------------
+Performance measure |                                                                     
+  Estreps           |                                                                     
+    Estimate        |      1000       1000        1000        1000        1000        1000
+    MCSE            |         .          .           .           .           .           .
+  SEreps            |                                                                     
+    Estimate        |      1000       1000        1000        1000        1000        1000
+    MCSE            |         .          .           .           .           .           .
+  Bias              |                                                                     
+    Estimate        |  .0025341   .0021761   -.0043802   -.0038922   -.0018461    -.001716
+    MCSE            |  .0050018   .0048248    .0034357    .0039994    .0036401    .0040642
+  Pctbias           |                                                                     
+    Estimate        |         .          .   -.4380242   -.3892164   -.1846102   -.1716031
+    MCSE            |         .          .    .3435739    .3999397    .3640138    .4064189
+  Mean              |                                                                     
+    Estimate        |  .0025341   .0021761    .9956198    .9961078    .9981539     .998284
+    MCSE            |  .0050018   .0048248    .0034357    .0039994    .0036401    .0040642
+  Empse             |                                                                     
+    Estimate        |  .1581701   .1525731    .1086476     .126472    .1151113     .128521
+    MCSE            |  .0035386   .0034133    .0024306    .0028294    .0025753    .0028753
+  Relprec           |                                                                     
+    Estimate        |         0   7.471377           0   -26.20087           0   -19.77907
+    MCSE            |         0   3.958131           0    3.405392           0    3.561042
+  MSE               |                                                                     
+    Estimate        |  .0249992     .02326    .0118117    .0159943    .0132408    .0165041
+    MCSE            |  .0010772   .0009486    .0005087    .0007259    .0005738    .0007252
+  RMSE              |                                                                     
+    Estimate        |  .1581113   .1525123    .1086816    .1264687    .1150685    .1284681
+    MCSE            |  .0034066     .00311    .0023403      .00287    .0024935    .0028225
+  Modelse           |                                                                     
+    Estimate        |  .1590372   .1556693    .1124467    .1099436    .1124886    .1099436
+    MCSE            |  .0003068   .0002637    .0002233    .0001861    .0002289    .0001861
+  CIwidth           |                                                                     
+    Estimate        |  .6222619   .6093404    .4399201    .4303562    .4400418    .4303562
+    MCSE            |  .0011989   .0010317    .0008721     .000728    .0008935     .000728
+  Relerror          |                                                                     
+    Estimate        |  .5482441   2.029298    3.496694   -13.06887   -2.278399   -14.45476
+    MCSE            |  2.257802    2.28912    2.324521    1.950369    2.195239    1.919276
+  Cover             |                                                                     
+    Estimate        |      95.6       96.4          96        91.9        95.1        90.4
+    MCSE            |  .6485677   .5891009    .6196774    .8627803    .6826347    .9315792
+  Power             |                                                                     
+    Estimate        |       4.4        3.6         100         100         100         100
+    MCSE            |  .6485677    .589101           0           0           0           0
+------------------------------------------------------------------------------------------
+
+mech = MNAR
+------------------------------------------------------------------------------------------
+                    |                                estimand                             
+                    |         effect                  mean0                  mean1        
+                    |          meth                   meth                    meth        
+                    |        CCA    MeanImp        CCA     MeanImp         CCA     MeanImp
+--------------------+---------------------------------------------------------------------
+Performance measure |                                                                     
+  Estreps           |                                                                     
+    Estimate        |       1000       1000       1000        1000        1000        1000
+    MCSE            |          .          .          .           .           .           .
+  SEreps            |                                                                     
+    Estimate        |       1000       1000       1000        1000        1000        1000
+    MCSE            |          .          .          .           .           .           .
+  Bias              |                                                                     
+    Estimate        |   .0051652   .0069042   .0002823   -.0030683    .0054474    .0038359
+    MCSE            |   .0050357   .0049677   .0035256    .0039993    .0036017     .004159
+  Pctbias           |                                                                     
+    Estimate        |          .          .   .0282293   -.3068284    .5447446    .3835891
+    MCSE            |          .          .   .3525591    .3999281     .360167    .4158996
+  Mean              |                                                                     
+    Estimate        |   .0051652   .0069042   1.000282    .9969317    1.005447    1.003836
+    MCSE            |   .0050357   .0049677   .0035256    .0039993    .0036017     .004159
+  Empse             |                                                                     
+    Estimate        |   .1592432   .1570932    .111489    .1264684    .1138948     .131519
+    MCSE            |   .0035626   .0035145   .0024942    .0028293     .002548    .0029423
+  Relprec           |                                                                     
+    Estimate        |          0   2.755958          0   -22.28588           0   -25.00526
+    MCSE            |          0    3.92513          0    3.553124           0    3.301581
+  MSE               |                                                                     
+    Estimate        |   .0253597   .0247013   .0124174    .0159877    .0129887    .0172947
+    MCSE            |   .0011447   .0010991   .0005255    .0006866     .000604    .0007995
+  RMSE              |                                                                     
+    Estimate        |   .1592474   .1571664   .1114336    .1264424    .1139681    .1315092
+    MCSE            |   .0035942   .0034967   .0023581     .002715    .0026499    .0030398
+  Modelse           |                                                                     
+    Estimate        |   .1586639   .1575551   .1133514    .1112796     .113427    .1112796
+    MCSE            |   .0002984   .0002747   .0002246    .0001941    .0002256    .0001941
+  CIwidth           |                                                                     
+    Estimate        |   .6208577   .6166729   .4434629    .4355492    .4437514    .4355492
+    MCSE            |   .0011663    .001073   .0008774    .0007582    .0008817    .0007582
+  Relerror          |                                                                     
+    Estimate        |  -.3638003   .2940331   1.670485   -12.00996   -.4107688   -15.38898
+    MCSE            |   2.236912   2.250566   2.283466    1.974473    2.236787    1.898649
+  Cover             |                                                                     
+    Estimate        |       95.3       95.8       95.4        91.2        94.6        90.8
+    MCSE            |   .6692606   .6343183   .6624499    .8958573    .7147308    .9139802
+  Power             |                                                                     
+    Estimate        |        4.7        4.2        100         100         100         100
+    MCSE            |   .6692608   .6343185          0           0           0           0
+------------------------------------------------------------------------------------------
+Note: Coverage and Power calculated at 95% level
+
+. siman lollyplot // works
+Performance measures not specified: defaulting to bias empse cover
+siman lollyplot will draw 3 graphs with 6 panels (3 PMs by 2 DGMs)
+
+. siman nestloop
+Performance measures not specified: defaulting to bias
+siman nestloop will draw 3 graphs (3 targets * 1 performance measures)
+
 . 
 . di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 *** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN test_all_inputs.do ***

@@ -58,9 +58,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -299,9 +299,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            _true (created)
 
 Estimates data                    in data
@@ -507,10 +507,10 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
-  True value variable:            N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
+  True value variable:            -
 
 Estimates data                    in data
 Performance statistics            not in data
@@ -669,7 +669,7 @@ Warning: no method specified. siman will assume there is only one method and cre
 _____________________________________________________
 
 Data-generating mechanism (DGM)
-  DGM variables (# levels):       N/A
+  DGM variables (# levels):       -
   Total number of DGMs:           1
 
 Targets
@@ -685,9 +685,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -742,7 +742,7 @@ Data-generating mechanism (DGM)
   Total number of DGMs:           2
 
 Targets
-  Variable containing targets:    N/A
+  Variable containing targets:    -
   Number of targets:              1
   Target values:                  
 
@@ -754,9 +754,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -937,9 +937,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -1169,10 +1169,10 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
-  True value variable:            N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
+  True value variable:            -
 
 Estimates data                    in data
 Performance statistics            not in data
@@ -1232,7 +1232,7 @@ Data-generating mechanism (DGM)
   Total number of DGMs:           768
 
 Targets
-  Variable containing targets:    N/A
+  Variable containing targets:    -
   Number of targets:              1
   Target values:                  
 
@@ -1244,9 +1244,9 @@ Methods
 Repetition-level output
   Point estimate variable:        exp
   SE variable:                    var2
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            theta
 
 Estimates data                    in data

@@ -37,22 +37,6 @@ prog drop _all
 use $testpath/data/simlongESTPM_longE_longM.dta, clear
 drop est se
 cap noi siman setup, rep(rep) dgm(dgm) target(estimand) method(method) true(true)
-assert _rc==498
-
-* all of est, se, ci and p missing in siman setup syntax
-clear all
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
-cap noi siman setup, rep(rep) dgm(dgm) target(estimand) method(method) 
-* error message as required
-assert _rc==498
-
-* warning if est and se missing
-clear all
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
-* just labelling lci as true for testing purposes, so have something in lci macro
-siman setup, rep(rep) dgm(dgm) target(estimand) method(method) lci(true)
-* warning as required
-cap noi siman ana
-assert _rc==498
+assert _rc==198
 
 log close

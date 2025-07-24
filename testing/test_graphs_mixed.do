@@ -181,6 +181,34 @@ assert _rc == 0
 * Recreating Gerta's graph, Figure 2
 siman nestloop mean, dgmorder(-theta rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("Odds ratio") xlabel(none) xtitle("")
 
+
+// bug fixed 24/7/2025: graphs esp swarm and lollyplot when method is numeric and not 1,2,3
+* method = 2,3 labelled
+use $testpath/data/extendedtestdata, clear
+sencode method, gen(meth)
+drop if meth==1
+keep if beta==0 
+keep if pmiss==float(.2)
+siman setup, rep(re) dgm(mech) method(meth) estimate(b) se(se) true(true) target(estimand)
+siman scatter if estimand=="effect"
+siman swarm 
+siman analyse 
+siman lollyplot if estimand=="effect" 
+
+* method = 0, 5, 100 unlabelled
+use $testpath/data/extendedtestdata, clear
+gen meth = 0 if method=="CCA"
+replace meth = 5 if method=="MeanImp"
+replace meth = 100 if method=="Noadj"
+drop method
+keep if beta==0 
+keep if pmiss==float(.2)
+siman setup, rep(re) dgm(mech) method(meth, categorical) estimate(b) se(se) true(true) target(estimand)
+siman swarm 
+siman analyse 
+siman lollyplot if estimand=="effect" // yscale is not ideal but this is a user choice
+
+
 di as result "*** SIMAN GRAPHS HAVE PASSED ALL THE TESTS IN `filename'.do ***"
 
 log close

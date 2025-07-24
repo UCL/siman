@@ -41,9 +41,9 @@ Methods
 Repetition-level output
   Point estimate variable:        b
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -272,9 +272,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -389,9 +389,9 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
+  df variable:                    -
   Conf. limit variables:          lower upper
-  p-value variable:               N/A
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
@@ -510,8 +510,8 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
+  df variable:                    -
+  Conf. limit variables:          -
   p-value variable:               pvalue
   True value variable:            true
 
@@ -613,8 +613,8 @@ Methods
 Repetition-level output
   Point estimate variable:        est
   SE variable:                    se
-  df variable:                    N/A
-  Conf. limit variables:          N/A
+  df variable:                    -
+  Conf. limit variables:          -
   p-value variable:               pvalue
   True value variable:            true
 
@@ -714,10 +714,10 @@ Methods
 
 Repetition-level output
   Point estimate variable:        est
-  SE variable:                    N/A
-  df variable:                    N/A
-  Conf. limit variables:          N/A
-  p-value variable:               N/A
+  SE variable:                    -
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
   True value variable:            true
 
 Estimates data                    in data
