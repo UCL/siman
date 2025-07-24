@@ -82,12 +82,12 @@ if !mi("`dgm'") {
     restore
 }
 else {
-    local dgmvarsandlevels N/A
+    local dgmvarsandlevels -
     local totaldgmnum 1
 }
 
 * For target description
-if mi("`target'") local target N/A
+if mi("`target'") local target -
 
 * Print summary of data
 di as text _newline _col(`titlewidth') "SUMMARY OF DATA"
@@ -110,15 +110,15 @@ di as text "  Method values:" as result _col(`colwidth') "`valmethod'"
 
 di as text _newline "Repetition-level output"
 local descriptiontype variable // fix after removing this char from setup
-di as text "  Point estimate `descriptiontype':" as result _col(`colwidth') cond( !mi("`estimate'"), "`estimate'", "N/A")
-di as text "  SE `descriptiontype':" as result _col(`colwidth') cond( !mi("`se'"), "`se'", "N/A") cond("`secreated'"=="1", " (created)", "")
-di as text "  df `descriptiontype':" as result _col(`colwidth') cond( !mi("`df'"), "`df'", "N/A")
-di as text "  Conf. limit `descriptiontype's:" as result _col(`colwidth') cond( !mi("`lci'"), "`lci'", "N/A") cond( !mi("`uci'"), " `uci'", cond( !mi("`lci'"), " N/A", ""))
-di as text "  p-value `descriptiontype':" as result _col(`colwidth') cond( !mi("`p'"), "`p'", "N/A")
+di as text "  Point estimate `descriptiontype':" as result _col(`colwidth') cond( !mi("`estimate'"), "`estimate'", "-")
+di as text "  SE `descriptiontype':" as result _col(`colwidth') cond( !mi("`se'"), "`se'", "-") cond("`secreated'"=="1", " (created)", "")
+di as text "  df `descriptiontype':" as result _col(`colwidth') cond( !mi("`df'"), "`df'", "-")
+di as text "  Conf. limit `descriptiontype's:" as result _col(`colwidth') cond( !mi("`lci'"), "`lci'", "-") cond( !mi("`uci'"), " `uci'", cond( !mi("`lci'"), " -", ""))
+di as text "  p-value `descriptiontype':" as result _col(`colwidth') cond( !mi("`p'"), "`p'", "-")
 if "`truetype'" == "string" {
-    di as text "  True value variable:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A") cond("`truecreated'"=="1", " (created)", "")
+    di as text "  True value variable:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "-") cond("`truecreated'"=="1", " (created)", "")
 }
-else di as text "  True value:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "N/A")
+else di as text "  True value:" as result _col(`colwidth') cond( !mi("`true'"), "`true'", "-")
 cap assert `rep'<=0
 di as text _newline "Estimates data" as result _col(`colwidth') cond(_rc,"in data","not in data")
 di as text "Performance statistics" as result _col(`colwidth') cond("`analyserun'"=="1","in data","not in data")
