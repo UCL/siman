@@ -55,7 +55,7 @@ syntax [anything] [if] [, ///
     MCLevel(cilevel) logit /// calculation options
     BYGRaphoptions(string) name(string) * /// general graph options
     pause SAVing(string) EXPort(string) /// advanced graph option
-    dgmwidth(int 30) pmwidth(int 24) debug rangeadd(real 0.2) /// undocumented options
+    dgmwidth(int 30) pmwidth(int 24) debug rangeadd(real 0.2) by(string) /// undocumented options
     ]
 
 foreach thing in `_dta[siman_allthings]' {
@@ -152,6 +152,8 @@ if !mi(`"`export'"') {
 
 * mark sample
 marksample touse, novarlist
+
+if !mi("`by'") di as text "Warning: the by() option is not recommended and is likely to cause errors"
 
 *** END OF PARSING ***
 

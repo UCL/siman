@@ -46,8 +46,9 @@ ensures that Monte Carlo confidence intervals lie between 0 and 100 (typically o
 of repetitions).{p_end}
 
 {syntab:General graph options}
-{synopt:{opt bygr:aphoptions(string)}}graph options which need to be placed within the {cmd:by()} option.{p_end}
-{synopt:{it:graph_options}}most of the valid options for {help scatter:scatter} are available.{p_end}
+{synopt:{opt bygr:aphoptions(string)}}graph options which need to be placed within the {help by_option:by} option of {help graph twoway}.{p_end}
+{synopt:{it:graph_options}}most of the valid options for {help scatter:scatter} are available. However,
+do not use the {help by_option:by} option, as this is called automatically.{p_end}
 
 {syntab:Saving options}
 {synopt:{opt name}({it:namestub}[{cmd:, replace}])}stub for graph name, to which (if there are more than one 
