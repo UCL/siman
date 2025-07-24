@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.10.1 8aug2024}{...}
+{* *! version 1.0 24jul2025}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_comparemethodsscatter##syntax"}{...}
 {viewerjumpto "Description" "siman_comparemethodsscatter##description"}{...}

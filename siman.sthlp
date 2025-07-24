@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.11.2 11mar2025}{...}
+{* *! version 1.0 24jul2025}{...}
 {vieweralsosee "simsum (if installed)" "simsum"}{...}
 {viewerjumpto "Syntax" "siman##syntax"}{...}
 {viewerjumpto "Description" "siman##description"}{...}
@@ -143,7 +143,7 @@ Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
 {pstd}This work was funded by the Medical Research Council (grant MC_UU_00004/09).
 
 {pstd}We gratefully acknowledge the following people who have tested and provided feedback on {cmd:siman}:
-Jan Ditzen, Jingyi Xuan, Kara Louise Royle, Matthew Smith.
+Jan Ditzen, Jingyi Xuan, Kara Louise Royle, Matthew Smith, Tra My Pham, Nick Latimer, Matteo Quartagno.
 
 
 {title:See Also}

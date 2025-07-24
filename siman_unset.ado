@@ -1,3 +1,4 @@
+*!  version 1.0		24jul2025
 /*
 Undocumented utility to clear all characteristics set by -siman-
 IW 27mar2025

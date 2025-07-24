@@ -1,4 +1,4 @@
-*!  version 0.11.6   24jul2025   
+*!  version 1.0		24jul2025
 *   version 0.11.6   24jul2025   IW make estimate() required; new suboption method(,categorical)
 *   version 0.11.5   15jul2025   IW bug fix: one instance of method changed to `method'
 *   version 0.11.4   12mar2025   IW impose sensible sort order; dgmvar encoding respects order in data

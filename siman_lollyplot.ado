@@ -1,4 +1,4 @@
-*!  version 0.11.7   05jun2025
+*!  version 1.0		24jul2025
 *  version 0.11.7   05jun2025   IW saving() doesn't have trailing underscore with 1 target
 *   version 0.11.6  30apr2025   TM finished fixing pstyles and marker options
 *   version 0.11.5  31mar2025   TM added mfcolors() and mlcolors() options

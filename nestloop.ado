@@ -1,4 +1,4 @@
-*!	version 0.11.7	17apr2025	
+*!  version 1.0		24jul2025
 *	version 0.11.7	17apr2025	IW remove export() option: handled by siman_nestloop
 *	version 0.11.6	16apr2025	IW add dgreverse option; version number aligned with siman_nestloop
 *	version 0.12.3	31mar2025	IW legend() is parsed, giving better defaults and handling of pos() rows() cols(); lcolor() etc. respect = and ..

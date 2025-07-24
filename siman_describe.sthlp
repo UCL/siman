@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.4 27nov2023}{...}
+{* *! version 1.0 24jul2025}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_describe##syntax"}{...}
 {viewerjumpto "Data formats" "siman_describe##data"}{...}

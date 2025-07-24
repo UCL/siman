@@ -1,4 +1,4 @@
-*!  version 0.11.8  24jul2025    
+*!  version 1.0		24jul2025
 *   version 0.11.8  24jul2025   IW fix method bugs: crashed when not 1,2,3,...; ylabels are now values not 1,2,3 
 *   version 0.11.7  08apr2025   IW use Stata15 syntax
 *   version 0.11.6  02apr2025   IW graphs are now sorted by rep

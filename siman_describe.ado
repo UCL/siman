@@ -1,4 +1,4 @@
-*!  version 0.11.3   11apr2025
+*!  version 1.0		24jul2025
 *   version 0.11.3   11apr2025   TM corrected wording 'performance estimates' to 'performance statistics'
 *   version 0.11.2   27mar2025   IW correct reporting of whether estimates in data
 *   version 0.11.1   21oct2024   IW implement new dgmmissingok option    

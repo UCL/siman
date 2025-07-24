@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.11.4 11mar2025}{...}
+{* *! version 1.0 24jul2025}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {viewerjumpto "Syntax" "siman_swarm##syntax"}{...}
 {viewerjumpto "Description" "siman_swarm##description"}{...}

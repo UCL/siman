@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.11.1 21oct2024}{...}
+{* *! version 1.0 24jul2025}{...}
 {vieweralsosee "siman" "siman"}{...}
 {viewerjumpto "Syntax" "nestloop##syntax"}{...}
 {viewerjumpto "Description" "nestloop##description"}{...}

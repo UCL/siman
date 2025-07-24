@@ -1,4 +1,4 @@
-*!  version 0.11.5   17apr2025    
+*!  version 1.0		24jul2025
 *  version 0.11.5   17apr2025    IW remove notable option
 *  version 0.11.4   08apr2025    IW doesn't auto-call siman table
 *  version 0.11.3   01apr2025    IW calls simsum with new semissingok option

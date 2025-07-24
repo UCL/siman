@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.11.1 11mar2025}{...}
+{* *! version 1.0 24jul2025}{...}
 {vieweralsosee "Main siman help page" "siman"}{...}
 {vieweralsosee "simsum (if installed)" "simsum"}{...}
 {vieweralsosee "labelsof (if installed)" "labelsof"}{...}
