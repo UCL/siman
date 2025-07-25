@@ -45,7 +45,7 @@ overlaying estimates or standard errors for different values of {cmd:dgmvar1}.{p
 
 {syntab:Graph options}
 {synopt:{opt meth:list(string)}}specifies a subgroup of methods, and their order, to be graphed.
-For example, in a dataset with methods A, B, C and D, the option {cmd:methlist(B D)}, which would plot 
+For example, in a dataset with methods A, B, C and D, the option {cmd:methlist(B D)} would plot 
 graphs for B vs. D, the same as using {cmd:if method=="B" | method=="D"};
 but the option {cmd:methlist(D B)} would also change the ordering of the graphs.
 {it:string} may be a numlist if method is numeric.{p_end}

@@ -72,11 +72,14 @@ option is passed to {help simsum}.{p_end}
 {pstd}
 
 {pstd}
-{cmd:siman analyse} takes the estimates data from {help siman setup} and creates performance statistics for the performance measures specified using the program {help simsum}.  
+{cmd:siman analyse} takes the estimates data from {help siman setup} and creates performance statistics for the performance measures specified.  
 {cmd:siman analyse} requires that an {bf:estimate} variable has been specified in {cmd:siman setup}.
+We use 'the {bf:estimate} variable' etc. to mean the variable specified in the {opt estimate()} option of {cmd:siman setup}.
 
 {pstd}
-We use 'the {bf:estimate} variable' etc. to mean the variable specified in the {opt estimate()} of {cmd:siman setup}.
+{cmd:siman analyse} calls the program {help simsum} to calculate the performance 
+statistics. At least version 2.3 of {help simsum} is required and can be installed 
+using {stata ssc install simsum}.
 
 {pstd}
 By default, {cmd:siman analyse} appends performance statistics to the estimates data set. 
@@ -94,11 +97,11 @@ For example, for the performance measure bias, the Monte Carlo standard error sh
 
 {pstd}
 If the {opt if} option is used, performance statistics are calculated for this subset only, but all estimates data are retained (unless {opt perfonly} is also used).
-It follows that subsequent graphs of performance ({cmd:siman lollyplot} and {cmd:siman nestloop}) will therefore be restricted by this {opt if} subset, 
+It follows that subsequent graphs of performance ({cmd:siman lollyplot} and {cmd:siman nestloop}) will therefore be restricted to this {opt if} subset, 
 but estimates graphs will not be.
 
 {pstd}
-The {bf:labelsof} package (by Ben Jann) is required by {bf:siman analyse}.
+The {bf:labelsof} package (by Ben Jann) is required.
 It can be installed using {stata ssc install labelsof}.
 
 
