@@ -85,13 +85,7 @@ requires some data reformatting to get the data into the long-long format requir
 {marker authors}{...}
 {title:Authors}
 
-{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK.{break}
-
-{pstd}Ian White, MRC Clinical Trials Unit at UCL, London, UK.{break}
-Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
-
-{pstd}Tim Morris, MRC Clinical Trials Unit at UCL, London, UK.{break} 
-Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
+{pstd}See {help siman##updates:main help page for siman}.
 
 
 {title:See Also}

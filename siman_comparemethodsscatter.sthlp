@@ -69,7 +69,6 @@ press F9 to view the graph command, and may edit it to create more customised gr
 {synoptline}
 
 
-
 {marker description}{...}
 {title:Description}
 
@@ -137,13 +136,7 @@ repetitions named simcheck.dta available on the {cmd: siman} {browse "https://gi
 {marker authors}{...}
 {title:Authors}
 
-{pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK.{break}
-
-{pstd}Ian White, MRC Clinical Trials Unit at UCL, London, UK.{break}
-Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
-
-{pstd}Tim Morris, MRC Clinical Trials Unit at UCL, London, UK.{break} 
-Email: {browse "mailto:tim.morris@ucl.ac.uk":Tim Morris}
+{pstd}See {help siman##updates:main help page for siman}.
 
 
 {title:See Also}
