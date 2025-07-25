@@ -123,7 +123,7 @@ Both {help siman setup} and {help siman analyse} need to be run before {bf:siman
 
 {pstd}Read and set up data
 
-{phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/extendedtestdata, clear"}
+{phang}. {stata  "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/extendedtestdata.dta, clear"}
 
 {phang}. {stata "siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)"}
 
