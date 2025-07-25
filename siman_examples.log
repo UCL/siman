@@ -1,0 +1,208 @@
+--------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  c:\ian\git\siman\siman_examples.log
+  log type:  text
+ opened on:  24 Jul 2025, 19:10:16
+
+. /* 
+> siman demonstration for paper
+> IW 24jul2025
+> */
+. 
+. // OPEN DATA AND INTRODUCE SOME ERRORS
+. 
+. use simcheck, clear
+(Simulation results from simcheck99.do in paper doi:10.1093/ije/dyad134)
+
+. gen estimand = "logOR"
+
+. * changes to insert some errors
+. * dgms are repeated, for dgm=MNAR 
+. replace  b =  b[_n-300] if rep>100 & dgm=="MNAR"
+(2,700 real changes made)
+
+. replace se = se[_n-300] if rep>100 & dgm=="MNAR"
+(2,700 real changes made)
+
+. replace df = df[_n-300] if rep>100 & dgm=="MNAR"
+(900 real changes made)
+
+. * 1 in 3 of SEs are too small, for method=MI
+. replace se = se/2 if method==3 & mod(rep,3)==0
+(999 real changes made)
+
+. 
+. // RUN SIMAN SETUP
+. siman setup, rep(rep) dgm(dgm) method(method) target(estimand) est(b) se(se) d
+> f(df) true(0)
+Warning: dgm variable dgm has been converted from string to numeric. If you
+  require its levels to be ordered differently, encode dgm as numeric before
+  running -siman setup-.
+Warning: siman setup found unwanted variables: N
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       dgm (3) 
+  Total number of DGMs:           3
+
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              1
+  Target values:                  logOR
+
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  Full; CCA; MI
+
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    df
+  Conf. limit variables:          -
+  p-value variable:               -
+  True value variable:            _true (created)
+
+Estimates data                    in data
+Performance statistics            not in data
+_____________________________________________________
+
+. 
+. // GRAPHS OF ESTIMATES 
+. 
+. * siman swarm
+. siman swarm, row(1) xsize(5) ysize(3)
+Ignoring non-varying estimand
+siman swarm will draw 1 graph with 3 panels
+
+. 
+. * siman scatter
+. siman scatter, xsize(5) ysize(3)
+siman scatter will draw 1 graph with 9 panels
+
+. 
+. * siman cms
+. siman comparemethodsscatter if dgm == 3, xsize(4) ysize(3)
+siman comparemethodsscatter will draw 1 graph showing 3 methods
+Graph cms_1 is for dgm=MNAR, estimand=logOR
+
+. 
+. * siman blandaltman
+. siman blandaltman if dgm == 3, xsize(5) ysize(3)
+siman blandaltman will draw 1 graph with 2 panels
+
+. 
+. * siman zipplot
+. siman zipplot, xsize(5) ysize(5)
+siman zipplot will draw 1 graph with 9 panels
+
+. 
+. // COMPUTE PERFORMANCE ESTIMATES
+. 
+. use simcheck, clear
+(Simulation results from simcheck99.do in paper doi:10.1093/ije/dyad134)
+
+. qui siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)
+
+. siman analyse
+Warning: missing values in df()
+siman analyse has run successfully
+
+. siman table bias empse, row(_perf dgm) nformat(%6.3f)
+
+------------------------------------------------------
+                           |           method         
+                           |    Full      CCA       MI
+---------------------------+--------------------------
+Performance measure        |                          
+  Bias                     |                          
+    Missing data mechanism |                          
+      MCAR                 |                          
+        Estimate           |  -0.000   -0.008    0.000
+        MCSE               |   0.013    0.016    0.014
+      MAR                  |                          
+        Estimate           |  -0.017   -0.160   -0.020
+        MCSE               |   0.014    0.018    0.015
+      MNAR                 |                          
+        Estimate           |  -0.006   -0.030    0.049
+        MCSE               |   0.014    0.017    0.015
+  Empse                    |                          
+    Missing data mechanism |                          
+      MCAR                 |                          
+        Estimate           |   0.426    0.516    0.454
+        MCSE               |   0.010    0.012    0.010
+      MAR                  |                          
+        Estimate           |   0.434    0.581    0.462
+        MCSE               |   0.010    0.013    0.010
+      MNAR                 |                          
+        Estimate           |   0.431    0.539    0.460
+        MCSE               |   0.010    0.012    0.010
+------------------------------------------------------
+
+. 
+. // GRAPHS OF PERFORMANCE
+. 
+. * siman lollyplot
+. siman lollyplot, legend(row(1)) labformat(%6.3f %6.0f) xsize(5) ysize(3)
+Performance measures not specified: defaulting to bias empse cover
+siman lollyplot will draw 1 graph with 9 panels (3 PMs by 3 DGMs)
+
+. 
+. * siman nestloop
+. use extendedtestdata, clear
+
+. siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est
+> (b) se(se) true(true)
+Warning: dgm variable mech has been converted from string to numeric. If you
+  require its levels to be ordered differently, encode mech as numeric before
+  running -siman setup-.
+Warning: dgm variable beta has non-integer values: converting from float to
+  double (0 real changes made)
+Warning: dgm variable pmiss has non-integer values: converting from float to
+  double (108,000 real changes made)
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       beta (3) pmiss (2) mech (2) 
+  Total number of DGMs:           12
+
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              3
+  Target values:                  effect; mean0; mean1
+
+Methods
+  Variable containing methods:    method
+  Number of methods:              3
+  Method values:                  CCA; MeanImp; Noadj
+
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
+  True value variable:            true
+
+Estimates data                    in data
+Performance statistics            not in data
+_____________________________________________________
+
+. siman analyse
+siman analyse has run successfully
+
+. siman nestloop empse if estimand=="effect", stagger(.05) lcol(red green blue) 
+> xsize(5) ysize(3)
+siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
+
+. 
+end of do-file
+      name:  <unnamed>
+       log:  c:\ian\git\siman\siman_examples.log
+  log type:  text
+ closed on:  24 Jul 2025, 19:10:37
+--------------------------------------------------------------------------------

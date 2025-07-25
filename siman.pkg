@@ -33,3 +33,8 @@ f siman_setup.sthlp
 f siman_swarm.sthlp
 f siman_table.sthlp
 f siman_zipplot.sthlp
+
+f siman_examples.do
+f siman_examples.log
+f simcheck.dta
+f extendedtestdata.dta
