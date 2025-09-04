@@ -285,8 +285,7 @@ _____________________________________________________
 Debug: options to pass to simsum: 
 Debug: method values are 1 2
 Debug: running command: simsum est , true(true) se(se) df() lci() uci() p() method(method) id(rep) b
-> y(true dgm estimand) max(20) bias ciwidth cover power clear mcse gen(_perfmeas)  level(80)  semiss
-> ingok
+> y(true dgm estimand) bias ciwidth cover power clear mcse gen(_perfmeas)  level(80)  semissingok
 
 Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
@@ -402,8 +401,8 @@ _____________________________________________________
 Debug: options to pass to simsum: 
 Debug: method values are 1 2
 Debug: running command: simsum est , true(true) se(se) df() lci(lower) uci(upper) p() method(method)
->  id(rep) by(true dgm estimand) max(20) ciwidth cover power clear mcse gen(_perfmeas)  level(95)  s
-> emissingok
+>  id(rep) by(true dgm estimand) ciwidth cover power clear mcse gen(_perfmeas)  level(95)  semissing
+> ok
 
 Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
@@ -523,7 +522,7 @@ _____________________________________________________
 Debug: options to pass to simsum: 
 Debug: method values are 1 2
 Debug: running command: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(
-> rep) by(true dgm estimand) max(20) ciwidth power clear mcse gen(_perfmeas)  level(80)  semissingok
+> rep) by(true dgm estimand) ciwidth power clear mcse gen(_perfmeas)  level(80)  semissingok
 
 Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
@@ -626,7 +625,7 @@ _____________________________________________________
 Debug: options to pass to simsum: 
 Debug: method values are 1 2
 Debug: running command: simsum est , true(true) se(se) df() lci() uci() p(pvalue) method(method) id(
-> rep) by(true dgm estimand) max(20) ciwidth power clear mcse gen(_perfmeas)  level(95)  semissingok
+> rep) by(true dgm estimand) ciwidth power clear mcse gen(_perfmeas)  level(95)  semissingok
 
 Data                               Wide   ->   Long
 -----------------------------------------------------------------------------

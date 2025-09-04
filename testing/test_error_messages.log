@@ -40,4 +40,143 @@ option estimate() required
 . assert _rc==198
 
 . 
+. // Check extreme b and se are handled correctly
+. 
+. * fails with negative SE
+. use data/extendedtestdata, clear
+
+. keep if method=="CCA" & float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR"
+(105,000 observations deleted)
+
+. drop method beta pmiss mech
+
+. replace se = -10000 in 1
+(1 real change made)
+
+. cap noi siman setup, rep(re) target(estim) estimate(b) se(se) true(true)
+Warning: no method specified. siman will assume there is only one method and create a variable
+  _method. If this is a mistake, enter method() option in -siman setup-.
+Negative values of se found
+
+. assert _rc
+
+. 
+. * fails with large SE
+. use data/extendedtestdata, clear
+
+. keep if method=="CCA" & float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR"
+(105,000 observations deleted)
+
+. drop method beta pmiss mech
+
+. replace se = 10000 in 1
+(1 real change made)
+
+. siman setup, rep(re) target(estim) estimate(b) se(se) true(true)
+Warning: no method specified. siman will assume there is only one method and create a variable
+  _method. If this is a mistake, enter method() option in -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       -
+  Total number of DGMs:           1
+
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              3
+  Target values:                  effect; mean0; mean1
+
+Methods
+  Variable containing methods:    _method (created)
+  Number of methods:              1
+  Method values:                  1
+
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
+  True value variable:            true
+
+Estimates data                    in data
+Performance statistics            not in data
+_____________________________________________________
+
+. cap noi siman ana
+Error for method 1:  observation(s) have standardised estimate > 10 and  observation(s) have scaled 
+> SE > 100
+--> use dropbig option to drop these observation(s)
+--> use max() option to change acceptable limit of point estimates
+--> use semax() option to change acceptable limit of standard errors
+
+. assert _rc
+
+. 
+. * ... unless dropbig option is used
+. siman ana, dropbig
+siman analyse has run successfully
+
+. 
+. * fails with large beta
+. use data/extendedtestdata, clear
+
+. keep if method=="CCA" & float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR"
+(105,000 observations deleted)
+
+. drop method beta pmiss mech
+
+. replace b = 10000 in 1
+(1 real change made)
+
+. siman setup, rep(re) target(estim) estimate(b) se(se) true(true)
+Warning: no method specified. siman will assume there is only one method and create a variable
+  _method. If this is a mistake, enter method() option in -siman setup-.
+
+                   SUMMARY OF DATA
+_____________________________________________________
+
+Data-generating mechanism (DGM)
+  DGM variables (# levels):       -
+  Total number of DGMs:           1
+
+Targets
+  Variable containing targets:    estimand
+  Number of targets:              3
+  Target values:                  effect; mean0; mean1
+
+Methods
+  Variable containing methods:    _method (created)
+  Number of methods:              1
+  Method values:                  1
+
+Repetition-level output
+  Point estimate variable:        b
+  SE variable:                    se
+  df variable:                    -
+  Conf. limit variables:          -
+  p-value variable:               -
+  True value variable:            true
+
+Estimates data                    in data
+Performance statistics            not in data
+_____________________________________________________
+
+. cap noi siman ana
+Error for method 1:  observation(s) have standardised estimate > 10 and  observation(s) have scaled 
+> SE > 100
+--> use dropbig option to drop these observation(s)
+--> use max() option to change acceptable limit of point estimates
+--> use semax() option to change acceptable limit of standard errors
+
+. assert _rc
+
+. 
+. * ... unless dropbig option is used
+. siman ana, dropbig
+siman analyse has run successfully
+
+. 
 . log close
