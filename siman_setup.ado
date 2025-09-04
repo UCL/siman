@@ -1,4 +1,6 @@
-*!  version 1.0		24jul2025
+*!  version 1.0.1	24jul2025	
+*  version 1.0.1	24jul2025	IW check for negative SEs
+*  version 1.0		24jul2025
 *   version 0.11.6   24jul2025   IW make estimate() required; new suboption method(,categorical)
 *   version 0.11.5   15jul2025   IW bug fix: one instance of method changed to `method'
 *   version 0.11.4   12mar2025   IW impose sensible sort order; dgmvar encoding respects order in data
@@ -578,6 +580,13 @@ if !mi("`method'") {
 }
 local allthings `allthings' method methodcreated methodnature nummethod valmethod
 * Estimates
+if !mi("`se'") {
+	cap assert `se'>=0
+	if _rc {
+		di as error "Negative values of `se' found"
+		exit 498
+	}
+}
 local allthings `allthings' estimate se df p rep lci uci 
 * True values
 local allthings `allthings' true truecreated
