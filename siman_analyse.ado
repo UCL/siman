@@ -1,4 +1,6 @@
-*!  version 1.0		24jul2025
+*!  version 1.0.1	04sep2025
+*  version 1.0.1	04sep2025	IW can pass max() to simsum
+*  version 1.0		24jul2025
 *  version 0.11.5   17apr2025    IW remove notable option
 *  version 0.11.4   08apr2025    IW doesn't auto-call siman table
 *  version 0.11.3   01apr2025    IW calls simsum with new semissingok option
@@ -207,12 +209,12 @@ if !mi("`ref'") {
 }
 
 * RUN SIMSUM (LONG DATA)
-local simsumcmd simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') lci(`lci') uci(`uci') p(`p') method(`method') id(`rep') by(`truevariable' `dgm' `target') max(20) `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt' semissingok
+local simsumcmd simsum `estsimsum' `if', true(`true') se(`sesimsum') df(`df') lci(`lci') uci(`uci') p(`p') method(`method') id(`rep') by(`truevariable' `dgm' `target') `anything' clear mcse gen(_perfmeas) `force' `simsumoptions' `refopt' semissingok
 if !mi("`pause'") {
     global F9 `simsumcmd'
     pause
 }
-if !mi("`debug'") noi di as input "Debug: running command: `simsumcmd'"
+if !mi("`debug'") noi di as input `"Debug: running command: `simsumcmd'"'
 qui `simsumcmd'
 
 * switch from bsims and sesims (simsum) to estreps and sereps (siman)
