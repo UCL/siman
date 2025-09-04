@@ -129,10 +129,10 @@ drop `touse'
 * HANDLE METHODS
 * only analyse the methods that the user has requested
 if !mi("`methlist'") {
-    if !mi("`debug'") di as input "Debug: methlist = `methlist'"
+    if !mi("`debug'") di as input `"Debug: methlist = `methlist'"'
     cap numlist "`methlist'"
     if !_rc local methlist = r(numlist)
-    if !mi("`debug'") di as input "Debug: methlist = `methlist'"
+    if !mi("`debug'") di as input `"Debug: methlist = `methlist'"'
 
     tempvar tousemethod
     qui generate `tousemethod' = 0

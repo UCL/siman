@@ -39,4 +39,38 @@ drop est se
 cap noi siman setup, rep(rep) dgm(dgm) target(estimand) method(method) true(true)
 assert _rc==198
 
+// Check extreme b and se are handled correctly
+
+* fails with negative SE
+use data/extendedtestdata, clear
+keep if method=="CCA" & float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR"
+drop method beta pmiss mech
+replace se = -10000 in 1
+cap noi siman setup, rep(re) target(estim) estimate(b) se(se) true(true)
+assert _rc
+
+* fails with large SE
+use data/extendedtestdata, clear
+keep if method=="CCA" & float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR"
+drop method beta pmiss mech
+replace se = 10000 in 1
+siman setup, rep(re) target(estim) estimate(b) se(se) true(true)
+cap noi siman ana
+assert _rc
+
+* ... unless dropbig option is used
+siman ana, dropbig
+
+* fails with large beta
+use data/extendedtestdata, clear
+keep if method=="CCA" & float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR"
+drop method beta pmiss mech
+replace b = 10000 in 1
+siman setup, rep(re) target(estim) estimate(b) se(se) true(true)
+cap noi siman ana
+assert _rc
+
+* ... unless dropbig option is used
+siman ana, dropbig
+
 log close

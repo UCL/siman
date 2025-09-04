@@ -124,7 +124,7 @@ GitHub repository {browse "https://github.com/UCL/siman/":here}, named simcheck.
 
 {phang}{marker Morris19}Morris TP, White IR, Crowther MJ. Using simulation studies
 to evaluate statistical methods. Statistics in Medicine 2019; 38: 2074–2102.
-{browse "https://doi.org/10.1002/sim.8086":doi:10.1002/sim.8086"}
+{browse "https://doi.org/10.1002/sim.8086":doi:10.1002/sim.8086}
 
 
 {title:Authors and updates}{marker updates}
