@@ -1,4 +1,5 @@
-*!  version 1.0.1	24jul2025	
+*!  version 1.0.2	22sep2025	
+*  version 1.0.2	22sep2025	IW clearer error message if stubvar is also a varname; respects order of wide string methods again
 *  version 1.0.1	24jul2025	IW check for negative SEs
 *  version 1.0		24jul2025
 *   version 0.11.6   24jul2025   IW make estimate() required; new suboption method(,categorical)
@@ -243,10 +244,10 @@ if `nmethod'>1 | `methodisvar'==0 { // method is wide
     cap numlist `"`method'"'
     if _rc local methodstring string // when reshaping method as long, create it as string
     * create a value label for use after reshape
-    cap label drop methodlabel
+    local methodlabel
     local i 0
     foreach thismethod of local method {
-        label def methodlabel `++i' `"`thismethod'"', add
+        local methodlabel `methodlabel' `++i' `"`thismethod'"'
     }
 }
 else if `nmethod'==1 & `methodisvar'==1 { //method is long
@@ -284,7 +285,18 @@ if "`methodformat'"=="long" & "`targetformat'"=="long" {
         local simanvars `simanvars' ``simanvar''
     }
 }
-else local stubvars `estimate' `se' `df' `lci' `uci' `p' 
+else {
+	local stubvars `estimate' `se' `df' `lci' `uci' `p' 
+	* give clear error message if stubvar is also a varname
+	foreach thing in estimate se df lci uci p {
+		if mi("``thing''") continue
+		cap confirm new variable ``thing''
+		if _rc {
+			di as error "``thing'' can't be both a variable and a stub for `thing'"
+			exit 498
+		}
+	}
+}
 
 /*** CHECK WIDE VARIABLES EXIST, AND REMOVE SEPARATOR FROM VARNAME ***/
 
@@ -498,6 +510,7 @@ if "`targetformat'"=="wide" & "`methodformat'"=="wide" & "`order'"=="target" {
     local methodformat long
     local method method
     local longvars `longvars' `method'
+    label def methodlabel `methodlabel' // needs to come after reshape, else is lost
     if "`methodstring'"=="string" sencode method, label(methodlabel) replace
     else label value method // empty label can get used
 }
@@ -508,6 +521,7 @@ if "`targetformat'"=="long" & "`methodformat'"=="wide" {
     local methodformat long
     local method method
     local longvars `longvars' `method'
+    label def methodlabel `methodlabel' // needs to come after reshape, else is lost
     if "`methodstring'"=="string" sencode method, label(methodlabel) replace
     else label value method // empty label can get used
 }
