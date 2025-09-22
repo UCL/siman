@@ -9,7 +9,7 @@ updated 16/8/2023
 local filename test_nestloop
 
 prog drop _all
-cd $testpath
+cd "$testpath"
 cap log close
 set linesize 100
 
@@ -24,7 +24,7 @@ log using `filename', replace text nomsg
 
 *** Start with a test of the stand-alone nestloop.ado
 
-use $testpath/data/res.dta, clear
+use "$testpath/data/res.dta", clear
 drop v1
 order theta rho pc tau2 k 
 
@@ -44,7 +44,7 @@ keep if inlist(method,"peto","trimfill","peters","limf","limr")
 nestloop logor, descriptors(-theta rho -pc tau2 -k) method(method) true(logtheta) legend(col(1) ring(0) pos(9)) dgsize(.25) dgreverse debug ylabel(`labels') ytitle(Odds ratio) lcol(orange black blue gray lime) scheme(mrc)
 
 *** Main tests of siman nestloop
-use $testpath/data/extendedtestdata.dta, clear
+use "$testpath/data/extendedtestdata.dta", clear
 
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 
@@ -54,14 +54,14 @@ siman nestloop bias, lcol(black red blue)
 siman nestloop relerror if estimand=="mean1", dgmorder(beta pmiss -mech) stagger(0.05) dgsize(.4) dggap(.2) dgcol(green orange purple) dgpatt(dash solid =) dglabsize(medium) dglwidth(1) lcol(black red blue) lwidth(1) title(My nested loop plot) name(sn1,replace) xla(none) norefline
 
 * setup without true
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 drop true
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) 
 siman analyse
 siman nestloop if estimand=="effect", lcol(black red blue) xtitle("") xlabel(none) stagger(0.03) 
 
 * siman analyse with if
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman analyse if mech!=2
 siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) stagger(0.03) 
@@ -71,7 +71,7 @@ siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel
 // COMPARE METHOD AS UNLABELLED/LABELLED NUMERIC OR STRING
 
 * method is string (as in source data)
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 tab method if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR" & estimand=="effect" & rep>0, su(b) // CCA, MeanImp, Noadj
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman analyse
@@ -79,7 +79,7 @@ siman nestloop empse if estimand=="effect", name(mstring,replace)
 graph export mstring.pdf, replace
 
 * method is numeric labelled in alphabetical order
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 sencode method, gsort(method) replace // 1=CCA, 2=MeanImp, 3=Noadj
 tab method if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
@@ -87,7 +87,7 @@ siman analyse
 siman nestloop empse if estimand=="effect", name(mlabalpha,replace)
 
 * method is numeric labelled in data order
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 sencode method, replace // 1=Noadj, 2=CCA, 3=MeanImp
 tab method if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
@@ -95,7 +95,7 @@ siman analyse
 siman nestloop empse if estimand=="effect", name(mlabdata,replace)
 
 * method is numeric unlabelled in alphabetical order
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 sencode method, gsort(method) replace // order is alphabetical: CCA MeanImp Noadj 
 tab method if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR" & estimand=="effect" & rep>0, su(b)
 label val method // 1 [=Noadj], 2 [=CCA], 3 [=MeanImp]
@@ -107,7 +107,7 @@ siman nestloop empse if estimand=="effect", name(munlabelled,replace)
 ** NB name(string) gives funny error
 
 * method is not 1...
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 gen methchar = 11 if method == "CCA"
 replace methchar = 12 if method == "MeanImp"
 replace methchar = 13 if method == "Noadj"
@@ -132,7 +132,7 @@ foreach file in mstring.pdf munlabplus10.pdf result {
 
 // more tests with true
 * check mean 
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman analyse
 siman nestloop mean if estimand=="mean0", lcol(black red blue) xtitle("") xlabel(none) stagger(0.03)
@@ -165,7 +165,7 @@ cap noi siman nestloop bias if float(beta)==0 & float(pmiss)==float(0.2) & mech=
 assert _rc == 498
 
 * no target
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 keep if estimand=="mean0"
 drop estimand
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) est(b) se(se) true(true)
@@ -173,7 +173,7 @@ siman analyse
 siman nestloop bias, name(sn4,replace)
 
 * numeric target
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 encode estimand, gen(estinum)
 drop estimand
 siman setup, target(estinum) rep(rep) dgm(beta pmiss mech) method(method) est(b) se(se) true(true)

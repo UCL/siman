@@ -2,7 +2,7 @@
 . 
 . *** Start with a test of the stand-alone nestloop.ado
 . 
-. use $testpath/data/res.dta, clear
+. use "$testpath/data/res.dta", clear
 
 . drop v1
 
@@ -79,7 +79,7 @@ Debug: graph command is: graph twoway (line logtheta __000001, c(J) lc(gs10) lw(
 
 . 
 . *** Main tests of siman nestloop
-. use $testpath/data/extendedtestdata.dta, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
@@ -135,7 +135,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * setup without true
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . drop true
 
@@ -185,7 +185,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * siman analyse with if
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
@@ -238,7 +238,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 . // COMPARE METHOD AS UNLABELLED/LABELLED NUMERIC OR STRING
 . 
 . * method is string (as in source data)
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . tab method if float(beta)==float(0) & float(pmiss)==float(0.2) & mech=="MCAR" & estimand=="effect"
 >  & rep>0, su(b) // CCA, MeanImp, Noadj
@@ -301,7 +301,7 @@ file mstring.pdf saved as PDF format
 
 . 
 . * method is numeric labelled in alphabetical order
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . sencode method, gsort(method) replace // 1=CCA, 2=MeanImp, 3=Noadj
 
@@ -363,7 +363,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * method is numeric labelled in data order
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . sencode method, replace // 1=Noadj, 2=CCA, 3=MeanImp
 
@@ -425,7 +425,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * method is numeric unlabelled in alphabetical order
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . sencode method, gsort(method) replace // order is alphabetical: CCA MeanImp Noadj 
 
@@ -503,7 +503,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 . ** NB name(string) gives funny error
 . 
 . * method is not 1...
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . gen methchar = 11 if method == "CCA"
 (72,000 missing values generated)
@@ -597,7 +597,7 @@ FC: no differences encountered
 . 
 . // more tests with true
 . * check mean 
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
@@ -697,7 +697,7 @@ siman nestloop requires at least 2 dgms
 
 . 
 . * no target
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . keep if estimand=="mean0"
 (72,000 observations deleted)
@@ -749,7 +749,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
 . * numeric target
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . encode estimand, gen(estinum)
 

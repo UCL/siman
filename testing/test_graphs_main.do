@@ -16,7 +16,7 @@ global detail 1
 local filename test_graphs_main
 
 prog drop _all
-cd $testpath
+cd "$testpath"
 cap log close
 set linesize 100
 clear all // avoids the "too many sersets" error
@@ -63,7 +63,7 @@ log using `filename', replace text nomsg
 * DGM numeric, 1 var
 *********************
 * target long and string, method long and numeric, true variable 1 level
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman comparemethodsscatter if estimand=="beta" & dgm==2
 * graphs
@@ -90,7 +90,7 @@ siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_t
 *****************************************
 
 * target wide and numeric with string labels, method wide and string, true value
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 encode estimand, gen(estimand_num)
 drop estimand
 rename estimand_num estimand
@@ -128,7 +128,7 @@ siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_t
 * DGM string, 1 var
 ********************
 * target and method long numeric string labels, true missing
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 encode estimand, gen(estimand_num)
 drop estimand
 rename estimand_num estimand
@@ -164,7 +164,7 @@ siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_t
 * DGM missing
 ************** 
 * Target numeric, method missing, true > 1 level (different true values per target)
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 replace true=0.5 if estimand=="beta"
 keep if dgm==1 & method==1 // new 20dec2023 - reproducibly selects records
 drop dgm method
@@ -194,7 +194,7 @@ assert _rc == 498
 
 
 * now try with missing target
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 keep if estimand=="beta" // new 20dec2023 - reproducibly selects records
 drop estimand
 *bysort rep dgm method: gen repitionindi=_n
@@ -221,7 +221,7 @@ siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_t
  
  
 * dgm has missing values AND method labels have spaces
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 replace dgm=. if dgm==2
 label def mymethod 1 "First method" 2 "Method, second"
 label val method mymethod
@@ -249,7 +249,7 @@ siman lollyplot, xtitle("test x-title") ytitle("test y-title") name("lollyplot_t
 ****************************************************
 clear all
 prog drop _all
-use $testpath/data/bvsim_all_out.dta, clear
+use "$testpath/data/bvsim_all_out.dta", clear
 rename _dnum dnum
 drop simno hazard hazcens shape cens pmcar n truebeta truegamma corr mdm
 drop if _n>100
@@ -312,7 +312,7 @@ siman nestloop mean, dgmorder(-theta rho -pc -k tau2) ylabel(0.2 0.5 1) ytitle("
 
 clear all
 prog drop _all
-use $testpath/data/extendedtestdata.dta, clear
+use "$testpath/data/extendedtestdata.dta", clear
 order beta pmiss
 
 * create a string dgm var as well for testing

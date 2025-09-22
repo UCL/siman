@@ -6,7 +6,7 @@ IW 18jun2024
 local filename test_scatter
 
 prog drop _all
-cd $testpath
+cd "$testpath"
 cap log close
 set linesize 100
 

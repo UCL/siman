@@ -6,7 +6,7 @@ IW 27mar2025
 local filename test_import
 
 prog drop _all
-cd $testpath
+cd "$testpath"
 cap log close
 set linesize 100
 graph drop _all
@@ -21,7 +21,7 @@ log using `filename', replace text nomsg
 
 // TEST WORKING ON THE NESTLOOP TEST DATA SET
 
-use $testpath/data/res.dta, clear
+use "$testpath/data/res.dta", clear
 keep if pc==2 & rho==3
 drop pc rho
 local dgmvars theta tau2 k 

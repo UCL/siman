@@ -34,7 +34,7 @@
 . * DGM numeric, 1 var
 . *********************
 . * target long and string, method long and numeric, true variable 1 level
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
@@ -222,7 +222,7 @@ siman lollyplot will draw 2 graphs with 6 panels (3 PMs by 2 DGMs)
 . *****************************************
 . 
 . * target wide and numeric with string labels, method wide and string, true value
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . encode estimand, gen(estimand_num)
 
@@ -457,7 +457,7 @@ siman lollyplot will draw 2 graphs with 6 panels (3 PMs by 2 DGMs)
 . * DGM string, 1 var
 . ********************
 . * target and method long numeric string labels, true missing
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . encode estimand, gen(estimand_num)
 
@@ -635,7 +635,7 @@ siman lollyplot will draw 2 graphs with 6 panels (3 PMs by 2 DGMs)
 . * DGM missing
 . ************** 
 . * Target numeric, method missing, true > 1 level (different true values per target)
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . replace true=0.5 if estimand=="beta"
 (4,000 real changes made)
@@ -722,7 +722,7 @@ siman zipplot will draw 1 graph with 2 panels
 . 
 . 
 . * now try with missing target
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . keep if estimand=="beta" // new 20dec2023 - reproducibly selects records
 (4,000 observations deleted)
@@ -903,7 +903,7 @@ siman lollyplot will draw 1 graph with 6 panels (3 PMs by 2 DGMs)
 .  
 .  
 . * dgm has missing values AND method labels have spaces
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . replace dgm=. if dgm==2
 (4,000 real changes made, 4,000 to missing)
@@ -1092,7 +1092,7 @@ siman lollyplot will draw 2 graphs with 6 panels (3 PMs by 2 DGMs)
 
 . prog drop _all
 
-. use $testpath/data/bvsim_all_out.dta, clear
+. use "$testpath/data/bvsim_all_out.dta", clear
 
 . rename _dnum dnum
 
@@ -1325,7 +1325,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 > 
 > clear all
 > prog drop _all
-> use $testpath/data/extendedtestdata.dta, clear
+> use "$testpath/data/extendedtestdata.dta", clear
 > order beta pmiss
 > 
 > * create a string dgm var as well for testing

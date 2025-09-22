@@ -6,7 +6,7 @@ IW 26mar2025
 local filename test_ci
 
 prog drop _all
-cd $testpath
+cd "$testpath"
 cap log close
 set linesize 100
 

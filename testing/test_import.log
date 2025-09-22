@@ -2,7 +2,7 @@
 . 
 . // TEST WORKING ON THE NESTLOOP TEST DATA SET
 . 
-. use $testpath/data/res.dta, clear
+. use "$testpath/data/res.dta", clear
 
 . keep if pc==2 & rho==3
 (720 observations deleted)

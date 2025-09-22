@@ -12,7 +12,7 @@ global detail = 1
 local filename test_graphs_mixed
 
 prog drop _all
-cd $testpath
+cd "$testpath"
 cap log close
 set linesize 100
 
@@ -27,7 +27,7 @@ log using `filename', replace text nomsg
 
  
 * dgm defined by 1 variable
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 encode estimand, gen(estimand_num)
 drop estimand
 rename estimand_num estimand
@@ -89,21 +89,21 @@ siman lollyplot
 * testing setup and reshape via the chars (could be expanded)
 
 * setup data in LW - this is known to be correct (makes other programs work)
-use $testpath/data/extendedtestdata.dta, clear
+use "$testpath/data/extendedtestdata.dta", clear
 reshape wide b se, i(rep beta pmiss mech estimand) j(method) string
 siman setup, rep(rep) dgm(beta pmiss mech) method(CCA MeanImp Noadj) target(estimand) est(b) se(se) true(true)
 assert "`: char _dta[siman_nummethod]'" == "3"
 assert "`: char _dta[siman_valmethod]'" == "CCA; MeanImp; Noadj"
 
 * setup data in LL and reshape to LW
-use $testpath/data/extendedtestdata.dta, clear
+use "$testpath/data/extendedtestdata.dta", clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 assert "`: char _dta[siman_nummethod]'" == "3"
 assert "`: char _dta[siman_valmethod]'" == "CCA; MeanImp; Noadj"
 
 
 * dgm defined by >1 variable
-use $testpath/data/extendedtestdata.dta, clear
+use "$testpath/data/extendedtestdata.dta", clear
 order beta pmiss
 
 * create a string dgm var as well for testing
@@ -151,7 +151,7 @@ siman nestloop
 
 
 * examples in paper
-use "https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simcheck.dta", clear
+use "$testpath/data/simcheck.dta", clear
 siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) true(0)
 set scheme mrc
 
@@ -174,6 +174,10 @@ drop expfem exprem expmh msefem mserem msemh msepeto mseg2 mselimf covfem covrem
 
 siman setup, rep(v1) dgm(theta rho pc tau2 k) method(peto g2 limf peters trimfill) estimate(exp) se(var2) true(theta)
 
+* make sure method is coded in requested order
+local m1 : label (method) 1
+assert "`m1'" == "peto"
+
 * siman analyse needs force option to cope with only 1 repetition per dgm [NB gets many lines of red output, suppressed by cap]
 cap siman analyse, force
 assert _rc == 0
@@ -184,7 +188,7 @@ siman nestloop mean, dgmorder(-theta rho -pc tau2 -k) ylabel(0.2 0.5 1) ytitle("
 
 // bug fixed 24/7/2025: graphs esp swarm and lollyplot when method is numeric and not 1,2,3
 * method = 2,3 labelled
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 sencode method, gen(meth)
 drop if meth==1
 keep if beta==0 
@@ -196,7 +200,7 @@ siman analyse
 siman lollyplot if estimand=="effect" 
 
 * method = 0, 5, 100 unlabelled
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 gen meth = 0 if method=="CCA"
 replace meth = 5 if method=="MeanImp"
 replace meth = 100 if method=="Noadj"

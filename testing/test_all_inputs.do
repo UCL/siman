@@ -10,7 +10,7 @@ Ella 14nov2023
 local filename test_all_inputs
 
 prog drop _all
-cd $testpath
+cd "$testpath"
 cap log close
 set linesize 100
 
@@ -61,7 +61,7 @@ log using `filename', replace text nomsg
 * DGM numeric, 1 var
 *********************
 * target long and string, method long and numeric, true variable 1 level
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 * check that failed -siman setup- with no method() option doesn't leave unwanted _methodvar in data 
 cap noi siman setup, rep(rep) target(estimand) method(method) est(est) se(se) true(true)
 assert _rc==498
@@ -80,7 +80,7 @@ siman table, tabdisp
 *****************************************
 
 * target wide and numeric with string labels, method wide and string, true value
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 encode estimand, gen(estimand_num)
 drop estimand
 rename estimand_num estimand
@@ -100,7 +100,7 @@ siman table, tabdisp
 * DGM string, 1 var
 ********************
 * method long numeric string labels, target numeric, true missing
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 gen estimand_num = 1 if estimand == "beta"
 replace estimand_num = 2 if estimand == "gamma"
 drop estimand
@@ -120,7 +120,7 @@ siman table, tabdisp
 * DGM missing
 ************** 
 * Target numeric, method missing, true > 1 level (different true values per target)
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 replace true=0.5 if estimand=="beta" // the wrong true value, done only to test
 keep if method==1 & dgm==1
 drop dgm method
@@ -134,7 +134,7 @@ siman analyse
 siman table, tabdisp
 
 * missing target
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 keep if estimand=="beta"
 drop estimand
 siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
@@ -144,7 +144,7 @@ siman table, tabdisp
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
-use $testpath/data/extendedtestdata.dta, clear
+use "$testpath/data/extendedtestdata.dta", clear
 order beta pmiss
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman analyse
@@ -159,7 +159,7 @@ siman table, tabdisp
 * DGM numeric, 1 var
 *********************
 * target string, true variable 1 level
-use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
+use "$testpath/data/simlongESTPM_longE_wideM1.dta", clear
 siman setup, rep(rep) dgm(dgm) est(est) se(se) target(estimand) method(_1 _2) true(true)
 siman analyse
 siman table, tabdisp
@@ -167,7 +167,7 @@ siman table, tabdisp
 * DGM numeric with string labels, 1 var
 *****************************************
 * target numeric, true missing
-use $testpath/data/simlongESTPM_longE_wideM.dta, clear
+use "$testpath/data/simlongESTPM_longE_wideM.dta", clear
 label define dgmlabel 1 "MCAR" 2 "MNAR"
 label values dgm dgmlabel
 gen target = 1 if estimand == "beta"
@@ -183,7 +183,7 @@ siman table, tabdisp
 ********************
 * target numeric with string labels, true value
 
-use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
+use "$testpath/data/simlongESTPM_longE_wideM1.dta", clear
 encode estimand, gen(estimand_new)
 gen dgm_new = "1"
 replace dgm_new = "2" if dgm == 2
@@ -197,7 +197,7 @@ siman table, tabdisp
 * DGM missing
 ************** 
 * true variable with >1 level, method missing
-use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
+use "$testpath/data/simlongESTPM_longE_wideM1.dta", clear
 drop if dgm==2
 drop dgm est_2 se_2
 replace true = 0.5 if estimand == "gamma"
@@ -209,7 +209,7 @@ siman table, tabdisp
 
 * Target missing
 ****************
-use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
+use "$testpath/data/simlongESTPM_longE_wideM1.dta", clear
 drop if estimand == "gamma"
 drop estimand
 siman setup, rep(rep) dgm(dgm) est(est) se(se) method(_1 _2) true(true)
@@ -218,12 +218,17 @@ siman table, tabdisp
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
-use $testpath/data/extendedtestdata.dta, clear
+use "$testpath/data/extendedtestdata.dta", clear
 order beta pmiss
 * reshape to long-wide format
 reshape wide b se, i(rep mech pmiss beta estimand) j(method "Noadj" "CCA" "MeanImp") string
 
 siman setup, rep(rep) dgm(beta pmiss mech) method(Noadj CCA MeanImp) target(estimand) est(b) se(se) true(true)
+
+* check methods are labelled in correct order
+local m1 : label (method) 1
+assert "`m1'" == "Noadj"
+
 siman analyse
 siman table, tabdisp
 
@@ -236,14 +241,14 @@ siman table, tabdisp
 * DGM numeric, 1 var
 *********************
 
-use $testpath/data/simlongESTPM_wideE_wideM.dta, clear
+use "$testpath/data/simlongESTPM_wideE_wideM.dta", clear
 * true variable, 1 value
 siman setup, rep(rep) dgm(dgm) est(est) se(se) method(1_ 2_) target(beta gamma) true(true) order(method)
 
 * DGM numeric with string labels, 1 var
 *****************************************
 * true missing
-use $testpath/data/simlongESTPM_wideE_wideM.dta, clear
+use "$testpath/data/simlongESTPM_wideE_wideM.dta", clear
 label define dgmlabel 1 "MCAR" 2 "MNAR"
 label values dgm dgmlabel
 bysort rep dgm: gen n = _n
@@ -257,7 +262,7 @@ siman table, tabdisp
 * DGM string, 1 var
 ********************
 * true numeric value
-use $testpath/data/simlongESTPM_wideE_wideM.dta, clear
+use "$testpath/data/simlongESTPM_wideE_wideM.dta", clear
 gen dgm_new = "1"
 replace dgm_new = "2" if dgm == 2
 drop dgm true
@@ -269,7 +274,7 @@ siman table, tabdisp
 * DGM missing
 ************** 
 
-use $testpath/data/simlongESTPM_wideE_wideM.dta, clear
+use "$testpath/data/simlongESTPM_wideE_wideM.dta", clear
 drop dgm
 bysort rep: gen n = _n
 drop if n==2
@@ -280,7 +285,7 @@ siman table, tabdisp
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
-use $testpath/data/extendedtestdata.dta, clear
+use "$testpath/data/extendedtestdata.dta", clear
 order beta pmiss
 * data are long-long
 * reshape method to wide
@@ -301,7 +306,7 @@ siman table, tabdisp
 * DGM numeric, 1 var
 *********************
 * true variable 1 level
-use $testpath/data/simlongESTPM_wideE_wideM2.dta, clear
+use "$testpath/data/simlongESTPM_wideE_wideM2.dta", clear
 siman setup, dgm(dgm) rep(rep) est(est) se(se) target(beta_ gamma_) method(1 2) true(true) order(target)
 siman analyse
 siman table, tabdisp
@@ -309,7 +314,7 @@ siman table, tabdisp
 * DGM numeric with string labels, 1 var
 *****************************************
 * true missing
-use $testpath/data/simlongESTPM_wideE_wideM2.dta, clear
+use "$testpath/data/simlongESTPM_wideE_wideM2.dta", clear
 label define dgmlabel 1 "MCAR" 2 "MNAR"
 label values dgm dgmlabel
 bysort rep dgm: gen n = _n
@@ -322,7 +327,7 @@ siman table, tabdisp
 * DGM string, 1 var
 ********************
 * true numeric value
-use $testpath/data/simlongESTPM_wideE_wideM2.dta, clear
+use "$testpath/data/simlongESTPM_wideE_wideM2.dta", clear
 gen dgm_new = "1"
 replace dgm_new = "2" if dgm == 2
 drop dgm true
@@ -333,7 +338,7 @@ siman table, tabdisp
 
 * DGM missing
 ************** 
-use $testpath/data/simlongESTPM_wideE_wideM2.dta, clear
+use "$testpath/data/simlongESTPM_wideE_wideM2.dta", clear
 drop dgm
 bysort rep: gen n = _n
 drop if n==2
@@ -344,7 +349,7 @@ siman table, tabdisp
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
-use $testpath/data/extendedtestdata.dta, clear
+use "$testpath/data/extendedtestdata.dta", clear
 order beta pmiss
 * reshape target to wide
 reshape wide b se true, i(rep mech pmiss beta method) j(estimand "effect" "mean0" "mean1") string
@@ -363,7 +368,7 @@ siman table, tabdisp
 * DGM numeric, 1 var
 *********************
 * method numeric, true variable 1 level
-use $testpath/data/simlongESTPM_longM_wideE1.dta, clear
+use "$testpath/data/simlongESTPM_longM_wideE1.dta", clear
 siman setup, rep(rep) dgm(dgm) est(est) se(se) target(_beta _gamma) method(method) true(true)
 siman analyse
 siman table, tabdisp
@@ -371,7 +376,7 @@ siman table, tabdisp
 * DGM numeric with string labels, 1 var
 *****************************************
 * method string, true missing
-use $testpath/data/simlongESTPM_longM_wideE1.dta, clear
+use "$testpath/data/simlongESTPM_longM_wideE1.dta", clear
 label define dgmlabel 1 "MCAR" 2 "MNAR"
 label values dgm dgmlabel
 gen method_new = "1"
@@ -387,7 +392,7 @@ siman table, tabdisp
 ********************
 * method numeric with string labels, true value
 
-use $testpath/data/simlongESTPM_longM_wideE.dta, clear
+use "$testpath/data/simlongESTPM_longM_wideE.dta", clear
 label define mlabel 1 "Method1" 2 "Method2"
 label values method mlabel
 gen dgm_new = "1"
@@ -401,7 +406,7 @@ siman table, tabdisp
 
 * DGM missing
 ************** 
-use $testpath/data/simlongESTPM_longM_wideE2.dta, clear
+use "$testpath/data/simlongESTPM_longM_wideE2.dta", clear
 drop if dgm==2
 drop dgm
 siman setup, rep(rep) est(est) se(se) method(method) target(1 2) true(true)
@@ -409,7 +414,7 @@ siman analyse
 siman table, tabdisp
 
 * missing method
-use $testpath/data/simlongESTPM_longM_wideE.dta, clear
+use "$testpath/data/simlongESTPM_longM_wideE.dta", clear
 drop method
 bysort rep dgm: gen n = _n
 drop if n==2
@@ -420,7 +425,7 @@ siman table, tabdisp
 
 * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 ************************************************************************************************
-use $testpath/data/extendedtestdata.dta, clear
+use "$testpath/data/extendedtestdata.dta", clear
 order beta pmiss
 * reshape in to wide-long format
 reshape wide b se true, i(rep mech pmiss beta method) j(estimand "effect" "mean0" "mean1") string
@@ -431,7 +436,7 @@ siman table, tabdisp
 
 * Test -analyse if-
 *******************
-use https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
 siman analyse
@@ -445,7 +450,7 @@ assert reldif(`ref', r(mean)) < 1E-10
 
 * Test handling of string method containing spaces and hyphens
 **************************************************************
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 keep if float(pmiss)==float(0.2) & beta==0 & estimand=="effect"
 drop beta pmiss estimand
 replace meth="Mean Imp" if meth=="MeanImp"
@@ -457,7 +462,7 @@ siman table, tabdisp
 
 * Check calculation works when SE is part-missing
 *************************************************
-use $testpath/data/simcheck, clear
+use "$testpath/data/simcheck.dta", clear
 replace se = . if dgm=="MNAR" & method=="MI":method
 siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)
 tab dgm method, sum(se)
@@ -471,14 +476,14 @@ siman table mean modelse, col(dgm method) nomcse mcci mclevel(50) tabdisp format
 
 * bug fixed 15/7/2025
 *********************
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 sencode method, gen(meth)
 siman setup, rep(re) dgm(beta pmiss mech) method(meth) estimate(b) se(se) true(true) target(estimand)
 
 
 * bug fixed 24/7/2025: swarm failed when method wasn't coded 1, 2, ...
 **********************************************************************
-use $testpath/data/extendedtestdata, clear
+use "$testpath/data/extendedtestdata.dta", clear
 sencode method, gen(meth)
 drop if meth==1
 keep if beta==0 

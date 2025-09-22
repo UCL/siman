@@ -11,7 +11,7 @@ DATA STRUCTURE
 local filename test_setup_target
 
 prog drop _all
-cd $testpath
+cd "$testpath"
 cap log close
 set linesize 100
 

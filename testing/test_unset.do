@@ -8,7 +8,7 @@ IW 10jun2025
 local filename test_unset
 
 prog drop _all
-cd $testpath
+cd "$testpath"
 cap log close
 set linesize 100
 graph drop _all
@@ -38,26 +38,26 @@ exit `error'
 end
 
 
-use $testpath/data/simcheck, clear
+use "$testpath/data/simcheck.dta", clear
 siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)
 siman unset
 charcheck
 
 
-use $testpath/data/extendedtestdata.dta, clear
+use "$testpath/data/extendedtestdata.dta", clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman unset
 charcheck
 
 
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) ///
 	estimate(est) se(se) true(true)
 siman unset
 charcheck
 
 
-use $testpath/data/msgbsl_inter_try_postfile.dta, clear
+use "$testpath/data/msgbsl_inter_try_postfile.dta", clear
 rename inter binter
 rename main bmain
 gen trueinter=.3

@@ -7,7 +7,7 @@ Various tables to check by eye
 local filename test_table
 
 prog drop _all
-cd $testpath
+cd "$testpath"
 cap log close
 set linesize 100
 graph drop _all

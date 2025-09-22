@@ -3,7 +3,7 @@
 . 
 .  
 . * dgm defined by 1 variable
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . encode estimand, gen(estimand_num)
 
@@ -269,7 +269,7 @@ siman lollyplot will draw 2 graphs with 6 panels (3 PMs by 2 DGMs)
 . * testing setup and reshape via the chars (could be expanded)
 . 
 . * setup data in LW - this is known to be correct (makes other programs work)
-. use $testpath/data/extendedtestdata.dta, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . reshape wide b se, i(rep beta pmiss mech estimand) j(method) string
 (j = CCA MeanImp Noadj)
@@ -328,7 +328,7 @@ _____________________________________________________
 
 . 
 . * setup data in LL and reshape to LW
-. use $testpath/data/extendedtestdata.dta, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )
@@ -375,7 +375,7 @@ _____________________________________________________
 . 
 . 
 . * dgm defined by >1 variable
-. use $testpath/data/extendedtestdata.dta, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . order beta pmiss
 
@@ -508,7 +508,7 @@ siman nestloop will draw 3 graphs (3 targets * 1 performance measures)
 . 
 . 
 . * examples in paper
-. use "https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simcheck.dta", clear
+. use "$testpath/data/simcheck.dta", clear
 (Simulation results from simcheck99.do in paper doi:10.1093/ije/dyad134)
 
 . siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) true(0)
@@ -622,6 +622,12 @@ Performance statistics            not in data
 _____________________________________________________
 
 . 
+. * make sure method is coded in requested order
+. local m1 : label (method) 1
+
+. assert "`m1'" == "peto"
+
+. 
 . * siman analyse needs force option to cope with only 1 repetition per dgm [NB gets many lines of r
 > ed output, suppressed by cap]
 . cap siman analyse, force
@@ -638,7 +644,7 @@ siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 . 
 . // bug fixed 24/7/2025: graphs esp swarm and lollyplot when method is numeric and not 1,2,3
 . * method = 2,3 labelled
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . sencode method, gen(meth)
 
@@ -700,7 +706,7 @@ siman lollyplot will draw 1 graph with 6 panels (3 PMs by 2 DGMs)
 
 . 
 . * method = 0, 5, 100 unlabelled
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . gen meth = 0 if method=="CCA"
 (72,000 missing values generated)

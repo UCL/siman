@@ -1,6 +1,6 @@
 
 . 
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . 
 . * more than 1 entry in est()
@@ -30,7 +30,7 @@ true(true true2) not allowed with long target: must be true(#|var)
 
 . prog drop _all
 
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . drop est se
 
@@ -106,8 +106,8 @@ Performance statistics            not in data
 _____________________________________________________
 
 . cap noi siman ana
-Error for method 1:  observation(s) have standardised estimate > 10 and  observation(s) have scaled 
-> SE > 100
+Error for method 1: 0 observation(s) have standardised estimate > 10 and 1 observation(s) have scale
+> d SE > 100
 --> use dropbig option to drop these observation(s)
 --> use max() option to change acceptable limit of point estimates
 --> use semax() option to change acceptable limit of standard errors
@@ -165,8 +165,8 @@ Performance statistics            not in data
 _____________________________________________________
 
 . cap noi siman ana
-Error for method 1:  observation(s) have standardised estimate > 10 and  observation(s) have scaled 
-> SE > 100
+Error for method 1: 1 observation(s) have standardised estimate > 10 and 0 observation(s) have scale
+> d SE > 100
 --> use dropbig option to drop these observation(s)
 --> use max() option to change acceptable limit of point estimates
 --> use semax() option to change acceptable limit of standard errors

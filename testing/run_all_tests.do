@@ -11,6 +11,7 @@ updated 3apr2024 - runs in 5 minutes!
 21oct2024 - removed all "which" lines so that log files can show no change
 28oct2024 - test files renamed to make more sense
 12mar2025 - it's grown, now takes ~18 minutes
+22sep2025 - all file names are in quotes, and all outside help files are local
 */
 
 // USER-SPECIFIC SETUP

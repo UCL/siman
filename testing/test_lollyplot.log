@@ -2041,7 +2041,7 @@ siman lollyplot will draw 1 graph with 18 panels (3 PMs by 6 DGMs)
 . 
 . // ONE DGMVAR
 . * multiple targets
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . foreach var in rep dgm estimand method est se true {
   2.         rename `var' my`var'
@@ -2090,7 +2090,7 @@ siman lollyplot will draw 1 graph with 8 panels (4 PMs by 2 DGMs)
 
 . 
 . * no target
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . drop if esti=="gamma"
 (4,000 observations deleted)
@@ -2139,7 +2139,7 @@ siman lollyplot will draw 1 graph with 8 panels (4 PMs by 2 DGMs)
 . // COMPARE METHOD AS UNLABELLED/LABELLED NUMERIC OR STRING
 . 
 . * method is numeric unlabelled
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . drop if esti=="gamma"
 (4,000 observations deleted)
@@ -2156,7 +2156,7 @@ siman lollyplot will draw 1 graph with 8 panels (4 PMs by 2 DGMs)
 
 . 
 . * method is numeric labelled
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . drop if esti=="gamma"
 (4,000 observations deleted)
@@ -2177,7 +2177,7 @@ siman lollyplot will draw 1 graph with 8 panels (4 PMs by 2 DGMs)
 
 . 
 . * method is string
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . drop if esti=="gamma"
 (4,000 observations deleted)
@@ -2200,7 +2200,7 @@ file mstring.pdf saved as PDF format
 . ** NB name(string) gives funny error
 . 
 . * method is not 1...
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . drop if esti=="gamma"
 (4,000 observations deleted)
@@ -2233,7 +2233,7 @@ FC: no differences encountered
 . * Check "no differences encountered" above
 . 
 . * method orderings disagree: numeric ordering should be used
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . drop if esti=="gamma"
 (4,000 observations deleted)
@@ -2269,7 +2269,7 @@ FC: no differences encountered
 
 . 
 . // RESTRICTING METHODS
-. use $testpath/data/extendedtestdata.dta, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . sencode met, replace
 
@@ -2364,7 +2364,7 @@ Debug: graph command is: twoway (line method __000003 , msym(i) c(l) col(gray) l
 . * Compare graphs meth3 and meth2
 . 
 . // MULTIPLE DGMVARS
-. use $testpath/data/extendedtestdata.dta, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true
 > )

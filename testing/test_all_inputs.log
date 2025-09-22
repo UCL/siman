@@ -39,7 +39,7 @@
 . * DGM numeric, 1 var
 . *********************
 . * target long and string, method long and numeric, true variable 1 level
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . * check that failed -siman setup- with no method() option doesn't leave unwanted _methodvar in dat
 > a 
@@ -201,7 +201,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . *****************************************
 . 
 . * target wide and numeric with string labels, method wide and string, true value
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . encode estimand, gen(estimand_num)
 
@@ -365,7 +365,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . * DGM string, 1 var
 . ********************
 . * method long numeric string labels, target numeric, true missing
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . gen estimand_num = 1 if estimand == "beta"
 (4,000 missing values generated)
@@ -503,7 +503,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . * DGM missing
 . ************** 
 . * Target numeric, method missing, true > 1 level (different true values per target)
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . replace true=0.5 if estimand=="beta" // the wrong true value, done only to test
 (4,000 real changes made)
@@ -617,7 +617,7 @@ Note: where there are multiple entries per performance measure, these are estima
 
 . 
 . * missing target
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . keep if estimand=="beta"
 (4,000 observations deleted)
@@ -760,7 +760,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . 
 . * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 . ************************************************************************************************
-. use $testpath/data/extendedtestdata.dta, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . order beta pmiss
 
@@ -1369,7 +1369,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . * DGM numeric, 1 var
 . *********************
 . * target string, true variable 1 level
-. use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
+. use "$testpath/data/simlongESTPM_longE_wideM1.dta", clear
 
 . siman setup, rep(rep) dgm(dgm) est(est) se(se) target(estimand) method(_1 _2) true(true)
 
@@ -1507,7 +1507,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . * DGM numeric with string labels, 1 var
 . *****************************************
 . * target numeric, true missing
-. use $testpath/data/simlongESTPM_longE_wideM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_wideM.dta", clear
 
 . label define dgmlabel 1 "MCAR" 2 "MNAR"
 
@@ -1631,7 +1631,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . ********************
 . * target numeric with string labels, true value
 . 
-. use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
+. use "$testpath/data/simlongESTPM_longE_wideM1.dta", clear
 
 . encode estimand, gen(estimand_new)
 
@@ -1784,7 +1784,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . * DGM missing
 . ************** 
 . * true variable with >1 level, method missing
-. use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
+. use "$testpath/data/simlongESTPM_longE_wideM1.dta", clear
 
 . drop if dgm==2
 (2,000 observations deleted)
@@ -1890,7 +1890,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . 
 . * Target missing
 . ****************
-. use $testpath/data/simlongESTPM_longE_wideM1.dta, clear
+. use "$testpath/data/simlongESTPM_longE_wideM1.dta", clear
 
 . drop if estimand == "gamma"
 (2,000 observations deleted)
@@ -2032,7 +2032,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . 
 . * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 . ************************************************************************************************
-. use $testpath/data/extendedtestdata.dta, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . order beta pmiss
 
@@ -2045,8 +2045,8 @@ Number of observations          108,000   ->   36,000
 Number of variables                   9   ->   12          
 j variable (3 values)            method   ->   (dropped)
 xij variables:
-                                      b   ->   bNoadj bCCA bMeanImp
-                                     se   ->   seNoadj seCCA seMeanImp
+                                      b   ->   bCCA bMeanImp bNoadj
+                                     se   ->   seCCA seMeanImp seNoadj
 -----------------------------------------------------------------------------
 
 . 
@@ -2088,6 +2088,13 @@ Estimates data                    in data
 Performance statistics            not in data
 _____________________________________________________
 
+. 
+. * check methods are labelled in correct order
+. local m1 : label (method) 1
+
+. assert "`m1'" == "Noadj"
+
+. 
 . siman analyse
 siman analyse has run successfully
 
@@ -2655,7 +2662,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . * DGM numeric, 1 var
 . *********************
 . 
-. use $testpath/data/simlongESTPM_wideE_wideM.dta, clear
+. use "$testpath/data/simlongESTPM_wideE_wideM.dta", clear
 
 . * true variable, 1 value
 . siman setup, rep(rep) dgm(dgm) est(est) se(se) method(1_ 2_) target(beta gamma) true(true) order(m
@@ -2694,7 +2701,7 @@ _____________________________________________________
 . * DGM numeric with string labels, 1 var
 . *****************************************
 . * true missing
-. use $testpath/data/simlongESTPM_wideE_wideM.dta, clear
+. use "$testpath/data/simlongESTPM_wideE_wideM.dta", clear
 
 . label define dgmlabel 1 "MCAR" 2 "MNAR"
 
@@ -2815,7 +2822,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . * DGM string, 1 var
 . ********************
 . * true numeric value
-. use $testpath/data/simlongESTPM_wideE_wideM.dta, clear
+. use "$testpath/data/simlongESTPM_wideE_wideM.dta", clear
 
 . gen dgm_new = "1"
 
@@ -2965,7 +2972,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . * DGM missing
 . ************** 
 . 
-. use $testpath/data/simlongESTPM_wideE_wideM.dta, clear
+. use "$testpath/data/simlongESTPM_wideE_wideM.dta", clear
 
 . drop dgm
 
@@ -3066,7 +3073,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . 
 . * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 . ************************************************************************************************
-. use $testpath/data/extendedtestdata.dta, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . order beta pmiss
 
@@ -3080,8 +3087,8 @@ Number of observations          108,000   ->   36,000
 Number of variables                   9   ->   12          
 j variable (3 values)            method   ->   (dropped)
 xij variables:
-                                      b   ->   bNoadj bCCA bMeanImp
-                                     se   ->   seNoadj seCCA seMeanImp
+                                      b   ->   bCCA bMeanImp bNoadj
+                                     se   ->   seCCA seMeanImp seNoadj
 -----------------------------------------------------------------------------
 
 . * reshape target to wide
@@ -3709,7 +3716,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . * DGM numeric, 1 var
 . *********************
 . * true variable 1 level
-. use $testpath/data/simlongESTPM_wideE_wideM2.dta, clear
+. use "$testpath/data/simlongESTPM_wideE_wideM2.dta", clear
 
 . siman setup, dgm(dgm) rep(rep) est(est) se(se) target(beta_ gamma_) method(1 2) true(true) order(t
 > arget)
@@ -3848,7 +3855,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . * DGM numeric with string labels, 1 var
 . *****************************************
 . * true missing
-. use $testpath/data/simlongESTPM_wideE_wideM2.dta, clear
+. use "$testpath/data/simlongESTPM_wideE_wideM2.dta", clear
 
 . label define dgmlabel 1 "MCAR" 2 "MNAR"
 
@@ -3967,7 +3974,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . * DGM string, 1 var
 . ********************
 . * true numeric value
-. use $testpath/data/simlongESTPM_wideE_wideM2.dta, clear
+. use "$testpath/data/simlongESTPM_wideE_wideM2.dta", clear
 
 . gen dgm_new = "1"
 
@@ -4116,7 +4123,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . 
 . * DGM missing
 . ************** 
-. use $testpath/data/simlongESTPM_wideE_wideM2.dta, clear
+. use "$testpath/data/simlongESTPM_wideE_wideM2.dta", clear
 
 . drop dgm
 
@@ -4217,7 +4224,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . 
 . * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 . ************************************************************************************************
-. use $testpath/data/extendedtestdata.dta, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . order beta pmiss
 
@@ -4245,12 +4252,12 @@ Number of observations           36,000   ->   12,000
 Number of variables                  14   ->   25          
 j variable (3 values)            method   ->   (dropped)
 xij variables:
-                                beffect   ->   beffectNoadj beffectCCA beffectMeanImp
-                               seeffect   ->   seeffectNoadj seeffectCCA seeffectMeanImp
-                                 bmean0   ->   bmean0Noadj bmean0CCA bmean0MeanImp
-                                semean0   ->   semean0Noadj semean0CCA semean0MeanImp
-                                 bmean1   ->   bmean1Noadj bmean1CCA bmean1MeanImp
-                                semean1   ->   semean1Noadj semean1CCA semean1MeanImp
+                                beffect   ->   beffectCCA beffectMeanImp beffectNoadj
+                               seeffect   ->   seeffectCCA seeffectMeanImp seeffectNoadj
+                                 bmean0   ->   bmean0CCA bmean0MeanImp bmean0Noadj
+                                semean0   ->   semean0CCA semean0MeanImp semean0Noadj
+                                 bmean1   ->   bmean1CCA bmean1MeanImp bmean1Noadj
+                                semean1   ->   semean1CCA semean1MeanImp semean1Noadj
 -----------------------------------------------------------------------------
 
 . siman setup, rep(rep) dgm(beta pmiss mech) method(Noadj CCA MeanImp) target(effect mean0 mean1) es
@@ -4858,7 +4865,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . * DGM numeric, 1 var
 . *********************
 . * method numeric, true variable 1 level
-. use $testpath/data/simlongESTPM_longM_wideE1.dta, clear
+. use "$testpath/data/simlongESTPM_longM_wideE1.dta", clear
 
 . siman setup, rep(rep) dgm(dgm) est(est) se(se) target(_beta _gamma) method(method) true(true)
 
@@ -4996,7 +5003,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . * DGM numeric with string labels, 1 var
 . *****************************************
 . * method string, true missing
-. use $testpath/data/simlongESTPM_longM_wideE1.dta, clear
+. use "$testpath/data/simlongESTPM_longM_wideE1.dta", clear
 
 . label define dgmlabel 1 "MCAR" 2 "MNAR"
 
@@ -5119,7 +5126,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . ********************
 . * method numeric with string labels, true value
 . 
-. use $testpath/data/simlongESTPM_longM_wideE.dta, clear
+. use "$testpath/data/simlongESTPM_longM_wideE.dta", clear
 
 . label define mlabel 1 "Method1" 2 "Method2"
 
@@ -5272,7 +5279,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . 
 . * DGM missing
 . ************** 
-. use $testpath/data/simlongESTPM_longM_wideE2.dta, clear
+. use "$testpath/data/simlongESTPM_longM_wideE2.dta", clear
 
 . drop if dgm==2
 (2,000 observations deleted)
@@ -5368,7 +5375,7 @@ Note: where there are multiple entries per performance measure, these are estima
 
 . 
 . * missing method
-. use $testpath/data/simlongESTPM_longM_wideE.dta, clear
+. use "$testpath/data/simlongESTPM_longM_wideE.dta", clear
 
 . drop method
 
@@ -5516,7 +5523,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . 
 . * DGM defined by multiple variables with multiple levels (numeric, labelled numeric and string)
 . ************************************************************************************************
-. use $testpath/data/extendedtestdata.dta, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . order beta pmiss
 
@@ -6133,8 +6140,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . 
 . * Test -analyse if-
 . *******************
-. use https://raw.githubusercontent.com/UCL/siman/dev/testing/data/simlongESTPM_longE_longM.dta, cle
-> ar
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
@@ -6195,7 +6201,7 @@ siman analyse has run successfully
 . 
 . * Test handling of string method containing spaces and hyphens
 . **************************************************************
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . keep if float(pmiss)==float(0.2) & beta==0 & estimand=="effect"
 (102,000 observations deleted)
@@ -6349,7 +6355,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . 
 . * Check calculation works when SE is part-missing
 . *************************************************
-. use $testpath/data/simcheck, clear
+. use "$testpath/data/simcheck.dta", clear
 (Simulation results from simcheck99.do in paper doi:10.1093/ije/dyad134)
 
 . replace se = . if dgm=="MNAR" & method=="MI":method
@@ -6464,7 +6470,7 @@ Note: where there are multiple entries per performance measure, these are estima
 . 
 . * bug fixed 15/7/2025
 . *********************
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . sencode method, gen(meth)
 
@@ -6511,7 +6517,7 @@ _____________________________________________________
 . 
 . * bug fixed 24/7/2025: swarm failed when method wasn't coded 1, 2, ...
 . **********************************************************************
-. use $testpath/data/extendedtestdata, clear
+. use "$testpath/data/extendedtestdata.dta", clear
 
 . sencode method, gen(meth)
 

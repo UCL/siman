@@ -6,7 +6,7 @@ IW 19jun2024
 local filename test_zipplot
 
 prog drop _all
-cd $testpath
+cd "$testpath"
 cap log close
 set linesize 100
 graph drop _all

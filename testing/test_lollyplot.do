@@ -7,7 +7,7 @@ NB includes some pause points when graphs or output need to be checked
 local filename test_lollyplot
 
 prog drop _all
-cd $testpath
+cd "$testpath"
 cap log close
 set linesize 100
 graph drop _all
@@ -40,7 +40,7 @@ local i 0
 
 // ONE DGMVAR
 * multiple targets
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 foreach var in rep dgm estimand method est se true {
 	rename `var' my`var'
 }
@@ -51,7 +51,7 @@ siman lol bias relprec power cover, refpower(10)  name(l`++i', replace)
 siman lol bias relprec power cover if myesti=="gamma", refpower(10) name(l`++i', replace)
 
 * no target
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 drop if esti=="gamma"
 drop esti
 siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true)
@@ -62,7 +62,7 @@ siman lol bias relprec power cover, refpower(10)  name(l`++i', replace)
 // COMPARE METHOD AS UNLABELLED/LABELLED NUMERIC OR STRING
 
 * method is numeric unlabelled
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 drop if esti=="gamma"
 drop esti
 qui siman setup, rep(rep) dgm(dgm) method(method) estimate(est) se(se) true(true) 
@@ -70,7 +70,7 @@ siman analyse
 siman lol bias relprec power cover, refpower(10) name(munlabelled,replace)
 
 * method is numeric labelled
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 drop if esti=="gamma"
 drop esti
 label def method 1 "1good" 2 "2bad"
@@ -80,7 +80,7 @@ siman analyse
 siman lol bias relprec power cover, refpower(10) name(mlabelled,replace)
 
 * method is string
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 drop if esti=="gamma"
 gen methchar = cond(method==1,"1good","2bad")
 drop esti method
@@ -91,7 +91,7 @@ graph export mstring.pdf, replace
 ** NB name(string) gives funny error
 
 * method is not 1...
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 drop if esti=="gamma"
 replace method = method+1
 gen methchar = cond(method==2,"1good","2bad")
@@ -106,7 +106,7 @@ type result
 * Check "no differences encountered" above
 
 * method orderings disagree: numeric ordering should be used
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 drop if esti=="gamma"
 label def method 1 "good" 2 "bad"
 label val method method
@@ -124,7 +124,7 @@ foreach file in mstring.pdf mstringplus.pdf mstringrev.pdf result {
 }
 
 // RESTRICTING METHODS
-use $testpath/data/extendedtestdata.dta, clear
+use "$testpath/data/extendedtestdata.dta", clear
 sencode met, replace
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman analyse
@@ -133,7 +133,7 @@ siman lol if esti=="effect" & float(beta)==float(0) & float(pmiss)==float(0.2) &
 * Compare graphs meth3 and meth2
 
 // MULTIPLE DGMVARS
-use $testpath/data/extendedtestdata.dta, clear
+use "$testpath/data/extendedtestdata.dta", clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 
 siman analyse

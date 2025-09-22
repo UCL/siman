@@ -9,7 +9,7 @@ IW test siman analyse if but not siman reshape 11/6/2024
 local filename test_siman_widelong
 
 prog drop _all
-cd $testpath
+cd "$testpath"
 cap log close
 set linesize 100
 
@@ -21,7 +21,7 @@ log close
 
 log using `filename', replace text nomsg
 
-use $testpath/data/msgbsl_inter_try_postfile.dta, clear
+use "$testpath/data/msgbsl_inter_try_postfile.dta", clear
 
 * targets are wide, methods are long 
 * so data are in wide-long format (format 4)
@@ -46,7 +46,7 @@ siman analyse, ref(IMPALL) replace
 siman table, tabdisp
 
 * check get error if true is not constant across methods
-use $testpath/data/msgbsl_inter_try_postfile.dta, clear
+use "$testpath/data/msgbsl_inter_try_postfile.dta", clear
 rename inter binter
 rename main bmain
 gen trueinter=.3
@@ -63,7 +63,7 @@ TEST LCI, UCI, P OPTIONS
 */
 
 * using SE: store results as comparators
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 siman analyse bias ciwidth cover power, level(80) debug
 siman table, tabdisp
@@ -73,7 +73,7 @@ foreach pm in bias ciwidth cover power {
 }
 
 * using LCI and UCI: compare ciwidth, coverage and power
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 gen lower = est - invnorm(.9)*se
 gen upper = est + invnorm(.9)*se
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) lci(lower) uci(upper)
@@ -90,7 +90,7 @@ di `powerref', r(mean),reldif(`powerref', r(mean))
 assert reldif(`powerref', r(mean))<1E-8
 
 * using P: compare ciwidth and power
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 gen pvalue = 2*normprob(-abs(est)/se)
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) p(pvalue)
 siman analyse ciwidth power, level(80) debug
@@ -103,7 +103,7 @@ di `powerref', r(mean),reldif(`powerref', r(mean))
 assert reldif(`powerref', r(mean))<1E-8
 
 * using P wrongly: compare ciwidth and power
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 gen pvalue = 2*normprob(-abs(est)/se)
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true) p(pvalue)
 siman analyse ciwidth power, debug // NB default level
@@ -116,7 +116,7 @@ di `powerref', r(mean),reldif(`powerref', r(mean))
 assert reldif(`powerref', r(mean))>1E-2
 
 * test with no se: compare bias
-use $testpath/data/simlongESTPM_longE_longM.dta, clear
+use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 drop se
 siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) true(true)
 siman analyse bias

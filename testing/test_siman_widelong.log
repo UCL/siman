@@ -1,6 +1,6 @@
 
 . 
-. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
+. use "$testpath/data/msgbsl_inter_try_postfile.dta", clear
 
 . 
 . * targets are wide, methods are long 
@@ -222,7 +222,7 @@ Note: where there are multiple entries per performance measure, these are estima
 
 . 
 . * check get error if true is not constant across methods
-. use $testpath/data/msgbsl_inter_try_postfile.dta, clear
+. use "$testpath/data/msgbsl_inter_try_postfile.dta", clear
 
 . rename inter binter
 
@@ -248,7 +248,7 @@ Note: where there are multiple entries per performance measure, these are estima
 > */
 . 
 . * using SE: store results as comparators
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . siman setup, rep(rep) dgm(dgm) target(estimand) method(method) estimate(est) se(se) true(true)
 
@@ -359,7 +359,7 @@ Note: where there are multiple entries per performance measure, these are estima
 
 . 
 . * using LCI and UCI: compare ciwidth, coverage and power
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . gen lower = est - invnorm(.9)*se
 
@@ -482,7 +482,7 @@ Note: where there are multiple entries per performance measure, these are estima
 
 . 
 . * using P: compare ciwidth and power
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . gen pvalue = 2*normprob(-abs(est)/se)
 
@@ -585,7 +585,7 @@ Note: where there are multiple entries per performance measure, these are estima
 
 . 
 . * using P wrongly: compare ciwidth and power
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . gen pvalue = 2*normprob(-abs(est)/se)
 
@@ -688,7 +688,7 @@ Note: where there are multiple entries per performance measure, these are estima
 
 . 
 . * test with no se: compare bias
-. use $testpath/data/simlongESTPM_longE_longM.dta, clear
+. use "$testpath/data/simlongESTPM_longE_longM.dta", clear
 
 . drop se
 
