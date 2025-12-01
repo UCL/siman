@@ -60,6 +60,8 @@ filetype, which must be one of the suffices listed in {help graph export}.{p_end
 press F9 to view the graph command, and may edit it to create a more customised graph.{p_end}
 {synoptline}
 
+{pstd} Note: {bf:level()} sets the nominal confidence level for the plotted intervals, whereas {bf:coverlevel()} specifies
+the level to use for confidence limits around the achieved coverage.
 
 {marker description}{...}
 {title:Description}
