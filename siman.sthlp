@@ -64,6 +64,9 @@ from different methods when multiple methods have been applied to the same simul
 {cmd:siman} is a suite of programs for the analysis of simulation studies, importing estimates data, 
 analysing the results of simulation studies and graphing the data. 
 
+{pstd}The typical workflow is either
+{cmd:siman setup} → descriptive graphs, or {cmd:siman setup} → {siman_analyse} → tables and graphs of performance.
+
 
 {marker formats}{...}
 {title:Data and formats}
@@ -134,7 +137,7 @@ to evaluate statistical methods. Statistics in Medicine 2019; 38: 2074–2102.
 {pstd}Ian White, MRC Clinical Trials Unit at UCL, London, UK.{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
-{pstd}Tim Morris, Novartis Pharmaceuticals UK Ltd., London, UK.{break}
+{pstd}Tim Morris, Statistical Methodology, Novartis Pharmaceuticals UK Ltd., London, UK.{break}
 Email: {browse "mailto:tim.morris@novartis.com":Tim Morris}
 
 {pstd}Updates can be obtained from {browse "https://github.com/UCL/siman"} or installed directly using {stata "net from https://raw.githubusercontent.com/UCL/siman/master/"}.
