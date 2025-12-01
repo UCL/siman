@@ -40,7 +40,7 @@ Each result relates to one simulation combination of data generating method ({bf
 (4) wide-wide format (wide targets, wide methods): one record per repetition.
 
 {pstd}
-Where there are multiple data-generating mechanisms, these should always be held in a long format.
+{bf: Importantly, where there are multiple data-generating mechanisms, these should always be held in a long format.}
 
 
 {marker syntax}{...}
