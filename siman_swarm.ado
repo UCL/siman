@@ -1,4 +1,6 @@
-*!  version 1.0		24jul2025
+*!  version 1.01	15dec2025	
+*  version 1.01		15dec2025	IW remove graphoptions()
+*  version 1.0		24jul2025
 *   version 0.11.8  24jul2025   IW fix method bugs: crashed when not 1,2,3,...; ylabels are now values not 1,2,3 
 *   version 0.11.7  08apr2025   IW use Stata15 syntax
 *   version 0.11.6  02apr2025   IW graphs are now sorted by rep
@@ -37,12 +39,19 @@
 program define siman_swarm
 version 15
 
-syntax [anything] [if][in] [, * nomean MEANGRaphoptions(string) BY(varlist) BYGRaphoptions(string) GRAPHOPtions(string) SCatteroptions(string) name(string) msymbol(passthru) msize(passthru) mcolor(passthru) title(passthru) note(passthru) row(passthru) col(passthru) xtitle(passthru) ytitle(passthru) debug pause gap(real .1) SAVing(string) EXPort(string)]
+syntax [anything] [if][in] [, BY(varlist) ///
+	nomean MEANGRaphoptions(string) ///
+	SCatteroptions(string) Msymbol(passthru) MSIZe(passthru) MColor(passthru) ///
+	BYGRaphoptions(string) TItle(passthru) note(passthru) row(passthru) col(passthru) ///
+	XTItle(passthru) YTItle(passthru) * /// whole-graph options
+	name(string) SAVing(string) EXPort(string) pause ///
+	debug gap(real .1) /// undocumented
+	]
 
 * attempt to assign graph options correctly
-local scatteroptions `scatteroptions' `msymbol' `msize' `mcolor' `options'
+local scatteroptions `scatteroptions' `msymbol' `msize' `mcolor'
 local bygraphoptions `bygraphoptions' `title' `note' `row' `col'
-local graphoptions `graphoptions' `xtitle' `ytitle'
+local graphoptions `options' `xtitle' `ytitle'
 
 foreach thing in `_dta[siman_allthings]' {
     local `thing' : char _dta[siman_`thing']
