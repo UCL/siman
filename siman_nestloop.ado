@@ -1,4 +1,6 @@
-*!  version 1.0		24jul2025
+*!  version 1.0		30sep2025
+*  version 1.0.1	30sep2025	IW add refline for pctbias
+*  version 1.0		24jul2025
 *   version 0.11.6   16apr2025   IW allow incomplete dgmorder()
 *   version 0.11.5   11mar2025   IW/TM make norefline option work
 *   version 0.11.4   02jan2025   IW use new char cilevel = the level at which coverage was computed
@@ -228,7 +230,7 @@ foreach thispm of local pmlist { // loop over PMs
     * reference lines
     if "`refline'"!="norefline" {
         if "`thispm'"=="cover" local ref `cilevel'
-        else if inlist("`thispm'", "bias", "relprec", "relerror") local ref 0
+        else if inlist("`thispm'", "bias", "pctbias", "relprec", "relerror") local ref 0
         else local ref
         if !mi("`ref'") local options yline(`ref',lcol(gs12)) `options'
     }
