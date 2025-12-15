@@ -47,7 +47,8 @@ then this option only changes how the confidence intervals are described in the 
 coverage. # is any number between 10.00 and 99.99 (see {help level}). The 
 default is the current system default confidence level.{p_end}
 {synopt:{opt ymin(pct)}}omits the lowest {it:pct}% of the confidence intervals from the zip plot{p_end}
-{synopt:{opt bygr:aphoptions(string)}}options for {help twoway} that go inside its {cmd:by()} option.{p_end}
+{synopt:{opt bygr:aphoptions(string)}}options for {help twoway} that go inside its {cmd:by()} option{p_end}
+{synopt:{it:graph_options}}options for {help twoway} that do not go inside its {cmd:by()} option.{p_end}
 
 {syntab:Saving options}
 {synopt:{opt name}({it:name}[{cmd:, replace}])}the graph name. Default {it:name} is "zipplot".{p_end}

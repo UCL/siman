@@ -35,8 +35,8 @@ Specifying for example {cmd:by(}{it:target method}{cmd:)} will combine the diffe
 Do not exclude {it:method} from the {cmd:by()} option.
 
 {syntab:Graph options}
-{synopt:{it:graph_options}}options for {help scatter} that do not go inside its {cmd:by()} option.{p_end}
 {synopt:{opt bygr:aphoptions(string)}}options for {help scatter} that go inside its {cmd:by()} option.{p_end}
+{synopt:{it:graph_options}}options for {help scatter} that do not go inside its {cmd:by()} option.{p_end}
 {synopt:{opt m:ethlist(string)}}display the graphs for a subgroup of methods.  
 For example, in a dataset with methods A, B, C and D, if the user would like to compare 
 methods A and C, they would enter {bf: methlist(A C)}, which would plot graphs for the difference C - A.

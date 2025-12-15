@@ -37,11 +37,13 @@ Each panel displays all methods, so do not include {it:method} in {cmd:by()}.
 {syntab:Graph options}
 {synopt:{opt nomean}}do not add the mean to the graph{p_end}
 {synopt:{opt meangr:aphoptions(string)}}options for {help scatter} to be applied to the mean: e.g. {cmd:mcolor()}{p_end}
-{synopt:{opt sc:atteroptions(string)}}options for {help scatter} to be applied to the scatterplot: e.g. msymbol(), mcolor(){p_end}
-{synopt:{opt bygr:aphoptions(string)}}graph options for the overall graph that need to be within the {it:by} option: e.g. title(), note(), row(), col(){p_end}
-{synopt:{opt graphop:tions(string)}}graph options for the overall graph that need to be outside the 
-{it:by} option: e.g. xtitle(), ytitle(). This must not include {opt name()}.{p_end}
-{synopt:{it:graph_options}}siman swarm attempts to allocate graph options as {opt scatteroptions()}, {opt bygraphoptions()} or {opt graphoptions()}.{p_end}
+{synopt:{opt sc:atteroptions(string)}}options for {help scatter} to be applied to the scatterplot: e.g. {cmd:msymbol()}, {cmd:msize()}, {cmd:mcolor()}{p_end}
+{synopt:{opt bygr:aphoptions(string)}}graph options for the overall graph that need to be within the {cmd:by()} option: e.g. {cmd:title()}, {cmd:note()}, {cmd:row()}, {cmd:col()}{p_end}
+{synopt:{it:graph_options}}graph options for the overall graph that need to be outside the 
+{cmd:by()} option: e.g. {cmd:xtitle()}, {cmd:ytitle()}. If options noted above 
+under {opt scatteroptions()} or {opt bygraphoptions()} are specified here, then
+{cmd:siman swarm} attempts to re-allocate them correctly.{p_end}
+
 
 {syntab:Saving options}
 {synopt:{opt name}({it:namestub}[{cmd:, replace}])}the stub for the graph name, to which "_estimate" or "_se" is appended. Default {it:namestub} is "swarm".{p_end}
@@ -98,7 +100,7 @@ named simcheck.dta available on the {cmd: siman} GitHub repository {browse "http
 
 {phang}Plot the swarm graph (showing various options)
 
-{phang}. {stata `"siman swarm, nomean scheme(s1color) bygraphoptions(title("main-title")) graphoptions(ytitle("test y-title"))"'}
+{phang}. {stata `"siman swarm, nomean scheme(s1color) bygraphoptions(title("main-title")) ytitle("test y-title")"'}
 
 {phang}. {stata `"siman swarm, scheme(economist) row(1) name("swarm", replace)"'}
 
