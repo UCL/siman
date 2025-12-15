@@ -21,7 +21,7 @@
 
 {pstd}If neither {cmd:estimate} nor {cmd:se} is specified, then {cmd:estimate} is assumed. If 
 both are specified, then the estimates are compared in the top-right triangle and the SEs are compared in the
-bottom triangle, provided the combine method is used (see below).
+bottom triangle, provided the {cmd:combine} method is used (see below).
 
 {pstd}The subcommand {cmd:comparemethodsscatter} may be abbreviated to three or more characters (e.g. {cmd:com}) or to {cmd:cms}.
 
@@ -33,9 +33,9 @@ bottom triangle, provided the combine method is used (see below).
 {synopthdr}
 {synoptline}
 {syntab:Main}
-{synopt:{opt com:bine}}forces use of the slower "combine" method: the graph is made by combining 
+{synopt:{opt com:bine}}forces use of the slower {cmd:combine} method: the graph is made by combining 
 individual graphs, potentially showing both estimate and SE. This is the default with 2 or 3 methods.{p_end}
-{synopt:{opt mat:rix}}forces use of the faster "matrix" method: the graph is made by {help graph matrix}, 
+{synopt:{opt mat:rix}}forces use of the faster {cmd:matrix} method: the graph is made by {help graph matrix}, 
 showing only estimate or SE. This is the default with more than 3 methods.{p_end}
 {synopt:{opt coll:apse(varlist)}}collapses the graphs over the specified variables.
 By default, one graph is drawn per DGM and target. 
@@ -49,12 +49,12 @@ For example, in a dataset with methods A, B, C and D, the option {cmd:methlist(B
 graphs for B vs. D, the same as using {cmd:if method=="B" | method=="D"};
 but the option {cmd:methlist(D B)} would also change the ordering of the graphs.
 {it:string} may be a numlist if method is numeric.{p_end}
-{synopt:{opt noeq:uality}}does not draw the line of equality when the combine method is used. The line of equality 
-is never drawn when the matrix method is used.{p_end}
-{synopt:{it:graph_options}}most options for {help graph combine:graph combine} are available.{p_end}
+{synopt:{opt noeq:uality}}does not draw the line of equality when the {cmd:combine} method is used. The line of equality 
+is never drawn when the {cmd:matrix} method is used.{p_end}
 {synopt:{opt subgr:aphoptions(string)}}to change the format of the constituent scatter graphs, which are drawn
-if and only if the "combine" method is used. For example, to use the red plotting symbol with the "combine" method,
-use {bf:subgr(mcol(red))}; with the matrix method, use {bf:mcol(red)}.{p_end}
+if and only if the {cmd:combine} method is used. For example, to use the red plotting symbol with the {cmd:combine} method,
+use {cmd:subgr(mcol(red))}; with the {cmd:matrix} method, use {cmd:mcol(red)}.{p_end}
+{synopt:{it:graph_options}}most options for {help graph combine} are available.{p_end}
 
 {syntab:Saving options}
 {synopt:{opt name}({it:namestub}[{cmd:, replace}])}the stub for the graph name, to which "_#" is appended, where # is the group 
@@ -80,9 +80,9 @@ These graphs help the user to look for correlations between methods and any syst
 Where more than two methods are compared, a graph comparing each pair of methods is plotted.
 
 {pstd}
-The default graphing approach for two or three methods, "combine", plots both the estimate {it:and} the standard error.
+The default graphing approach for two or three methods, {cmd:combine}, plots both the estimate {it:and} the standard error.
 The upper triangle displays the estimates, the lower triangle displays the standard errors.  
-The default graphing approach for more than 3 methods, "matrix", 
+The default graphing approach for more than 3 methods, {cmd:matrix}, 
 plots {it:either} the estimate {it:or} the standard error depending on 
 which the user specifies, with the default being estimate if no variables are specified. The 
 graph for the larger number of methods is plotted using the {help graph matrix} command. The 

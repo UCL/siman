@@ -25,12 +25,12 @@
 
 {pstd}Descriptive graphs of results using estimates data
 
+{p2col:{bf:{help siman swarm}}}swarm plot of estimates or the standard errors, for different methods, by data-generating mechanisms
+
 {p2col:{bf:{help siman scatter}}}scatter plot of standard error against point estimate
 
 {p2col:{bf:{help siman comparemethodsscatter}}}scatter plot of point estimates and/or standard errors obtained 
 from different methods when multiple methods have been applied to the same simulated data sets
-
-{p2col:{bf:{help siman swarm}}}swarm plot of estimates or the standard errors, for different methods, by data-generating mechanisms
 
 {p2col:{bf:{help siman blandaltman}}}Bland–Altman plot of difference between methods vs. mean of methods, for point estimates or standard errors
 
@@ -65,7 +65,7 @@ from different methods when multiple methods have been applied to the same simul
 analysing the results of simulation studies and graphing the data. 
 
 {pstd}The typical workflow is either
-{cmd:siman setup} → descriptive graphs, or {cmd:siman setup} → {siman_analyse} → tables and graphs of performance.
+{cmd:siman setup} → descriptive graphs, or {cmd:siman setup} → {cmd:siman analyse} → tables and graphs of performance.
 
 
 {marker formats}{...}
@@ -99,9 +99,9 @@ GitHub repository {browse "https://github.com/UCL/siman/":here}, named simcheck.
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) method(method) est(b) se(se) df(df) true(0)"}
 
-{phang}. {stata "siman scatter"}
-
 {phang}. {stata "siman swarm"}
+
+{phang}. {stata "siman scatter"}
 
 {phang}. {stata "siman comparemethodsscatter if dgm == 3"}
 

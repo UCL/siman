@@ -65,7 +65,7 @@ item or as the legend title. The default is neither.{p_end}
 {synopt:{opt scena:riolabel}}labels the horizontal axis with scenario numbers. 
 The default is an unlabelled axis, since the descriptor graphs describe the scenarios.{p_end}
 {synopt:{it:graph_options}}Most of the valid options for {help line:line} are available.
-We find these especially useful: {cmd:ylabel()} to stop the y-labels extending to the descriptor graph; 
+We find the following especially useful: {cmd:ylabel()} to stop the y-labels extending to the descriptor graph; 
 {cmd:legend()} to arrange legends in a single row or column, e.g.
 {cmd:legend(pos(6) row(1))} or {cmd:legend(pos(3) col(1))}.{p_end}
 
