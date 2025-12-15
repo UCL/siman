@@ -76,8 +76,7 @@ Graph cms_1 is for dgm=2, estimand=beta
 siman scatter will draw 1 graph with 8 panels
 
 . 
-. siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_test1", repla
-> ce)
+. siman swarm, ytitle("test y-title") xtitle("test x-title") name("swarm_test1", replace)
 siman swarm will draw 1 graph with 4 panels
 
 . 
@@ -315,8 +314,7 @@ _____________________________________________________
 siman scatter will draw 1 graph with 8 panels
 
 . 
-. siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_test2", repla
-> ce)
+. siman swarm, ytitle("test y-title") xtitle("test x-title") name("swarm_test2", replace)
 siman swarm will draw 1 graph with 4 panels
 
 . 
@@ -521,8 +519,7 @@ _____________________________________________________
 siman scatter will draw 1 graph with 8 panels
 
 . 
-. siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_test3", repla
-> ce)
+. siman swarm, ytitle("test y-title") xtitle("test x-title") name("swarm_test3", replace)
 siman swarm will draw 1 graph with 4 panels
 
 . 
@@ -769,8 +766,7 @@ _____________________________________________________
 siman scatter will draw 1 graph with 4 panels
 
 . 
-. siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_test5", repla
-> ce)
+. siman swarm, ytitle("test y-title") xtitle("test x-title") name("swarm_test5", replace)
 siman swarm will draw 1 graph with 2 panels
 
 . 
@@ -951,8 +947,7 @@ _____________________________________________________
 siman scatter will draw 1 graph with 8 panels
 
 . 
-. siman swarm, graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_test5a", repl
-> ace)
+. siman swarm, ytitle("test y-title") xtitle("test x-title") name("swarm_test5a", replace)
 siman swarm will draw 1 graph with 4 panels
 
 . 
@@ -1265,8 +1260,8 @@ siman scatter will draw 1 graph with 32 panels
 Consider reducing the number of panels using 'if' condition or 'by' option
 
 . 
-. siman swarm if `useit4', graphoptions(ytitle("test y-title") xtitle("test x-title")) name("swarm_t
-> est7", replace)
+. siman swarm if `useit4', ytitle("test y-title") xtitle("test x-title") name("swarm_test7", replace
+> )
 Ignoring non-varying theta
 Ignoring non-varying rho
 Ignoring non-varying k
