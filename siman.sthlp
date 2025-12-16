@@ -64,8 +64,10 @@ from different methods when multiple methods have been applied to the same simul
 {cmd:siman} is a suite of programs for the analysis of simulation studies, importing estimates data, 
 analysing the results of simulation studies and graphing the data. 
 
-{pstd}The typical workflow is either
-{cmd:siman setup} → descriptive graphs, or {cmd:siman setup} → {cmd:siman analyse} → tables and graphs of performance.
+{pstd}The typical workflow is 
+{cmd:siman setup} → descriptive graphs → {cmd:siman analyse} → 
+tables and graphs of performance, 
+but descriptive graphs remain available after siman analyse.
 
 
 {marker formats}{...}
