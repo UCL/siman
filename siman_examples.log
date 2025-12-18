@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  c:\ian\git\siman\siman_examples.log
   log type:  text
- opened on:  24 Jul 2025, 19:10:16
+ opened on:  18 Dec 2025, 09:51:52
 
 . /* 
 > siman demonstration for paper
@@ -73,7 +73,7 @@ _____________________________________________________
 . // GRAPHS OF ESTIMATES 
 . 
 . * siman swarm
-. siman swarm, row(1) xsize(5) ysize(3)
+. siman swarm, row(1) xsize(5) ysize(3) meangr(mcol(black))
 Ignoring non-varying estimand
 siman swarm will draw 1 graph with 3 panels
 
@@ -195,8 +195,8 @@ _____________________________________________________
 . siman analyse
 siman analyse has run successfully
 
-. siman nestloop empse if estimand=="effect", stagger(.05) lcol(red green blue) 
-> xsize(5) ysize(3)
+. siman nestloop empse if estimand=="effect", stagger(.05) lcol(black = =) lwidt
+> h(1 = =) xsize(5) ysize(3)
 siman nestloop will draw 1 graphs (1 targets * 1 performance measures)
 
 . 
@@ -204,5 +204,5 @@ end of do-file
       name:  <unnamed>
        log:  c:\ian\git\siman\siman_examples.log
   log type:  text
- closed on:  24 Jul 2025, 19:10:37
+ closed on:  18 Dec 2025, 09:52:10
 --------------------------------------------------------------------------------

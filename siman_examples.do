@@ -21,7 +21,7 @@ siman setup, rep(rep) dgm(dgm) method(method) target(estimand) est(b) se(se) df(
 // GRAPHS OF ESTIMATES 
 
 * siman swarm
-siman swarm, row(1) xsize(5) ysize(3)
+siman swarm, row(1) xsize(5) ysize(3) meangr(mcol(black))
 
 * siman scatter
 siman scatter, xsize(5) ysize(3)
@@ -51,4 +51,4 @@ siman lollyplot, legend(row(1)) labformat(%6.3f %6.0f) xsize(5) ysize(3)
 use extendedtestdata, clear
 siman setup, rep(rep) dgm(beta pmiss mech) method(method) target(estimand) est(b) se(se) true(true)
 siman analyse
-siman nestloop empse if estimand=="effect", stagger(.05) lcol(red green blue) xsize(5) ysize(3)
+siman nestloop empse if estimand=="effect", stagger(.05) lcol(black = =) lwidth(1 = =) xsize(5) ysize(3)
