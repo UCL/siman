@@ -1,4 +1,6 @@
-*!  version 1.0		24jul2025
+*!  version 1.1		18dec2025
+*  version 1.1		18dec2025	resubmit to SJ
+*  version 1.0		24jul2025	submit to SJ
 *   version 0.11.3   11apr2025  IW add siman import
 *   version 0.11.2   15jan2025
 *!  Type -siman which- to see versions of siman's subprograms

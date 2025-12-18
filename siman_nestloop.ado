@@ -1,6 +1,7 @@
-*!  version 1.0		30sep2025
+*!  version 1.1		18dec2025
+*  version 1.1		18dec2025	resubmit to SJ
 *  version 1.0.1	30sep2025	IW add refline for pctbias
-*  version 1.0		24jul2025
+*  version 1.0		24jul2025	submit to SJ
 *   version 0.11.6   16apr2025   IW allow incomplete dgmorder()
 *   version 0.11.5   11mar2025   IW/TM make norefline option work
 *   version 0.11.4   02jan2025   IW use new char cilevel = the level at which coverage was computed

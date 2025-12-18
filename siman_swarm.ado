@@ -1,6 +1,7 @@
-*!  version 1.01	15dec2025	
-*  version 1.01		15dec2025	IW remove graphoptions()
-*  version 1.0		24jul2025
+*!  version 1.1		18dec2025
+*  version 1.1		18dec2025	resubmit to SJ
+*  version 1.0.1	15dec2025	IW remove graphoptions()
+*  version 1.0		24jul2025	submit to SJ
 *   version 0.11.8  24jul2025   IW fix method bugs: crashed when not 1,2,3,...; ylabels are now values not 1,2,3 
 *   version 0.11.7  08apr2025   IW use Stata15 syntax
 *   version 0.11.6  02apr2025   IW graphs are now sorted by rep

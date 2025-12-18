@@ -1,4 +1,6 @@
-*!  version 1.0		24jul2025
+*!  version 1.1		18dec2025
+*  version 1.1		18dec2025	resubmit to SJ
+*  version 1.0		24jul2025	submit to SJ
 *   version 0.11.6   05jun2025    IW add pause option
 *   version 0.11.5   06jan2025   IW new collapse() option
 *   version 0.11.4   11nov2024   IW correct handling of aspect()

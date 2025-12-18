@@ -1,6 +1,7 @@
-*!  version 1.0.1	04sep2025
+*!  version 1.1		18dec2025
+*  version 1.1		18dec2025	resubmit to SJ
 *  version 1.0.1	04sep2025	IW can pass max() to simsum
-*  version 1.0		24jul2025
+*  version 1.0		24jul2025	submit to SJ
 *  version 0.11.5   17apr2025    IW remove notable option
 *  version 0.11.4   08apr2025    IW doesn't auto-call siman table
 *  version 0.11.3   01apr2025    IW calls simsum with new semissingok option

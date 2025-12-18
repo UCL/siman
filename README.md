@@ -2,8 +2,8 @@
 # siman
 ## Suite of commands for analysing the results of simulation studies and producing graphs
 
-Version: 1.0
-Date: 24jul2025
+Version: 1.1
+Date: 18dec2025
 
 ## Installation within Stata
 In due course, you will be able to install this package from SSC.

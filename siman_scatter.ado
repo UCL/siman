@@ -1,4 +1,6 @@
-*!  version 1.0		24jul2025
+*!  version 1.1		18dec2025
+*  version 1.1		18dec2025	resubmit to SJ
+*  version 1.0		24jul2025	submit to SJ
 *   version 0.11.4   05jun2025   IW syntax uses the words estimate|se not the variable names
 *   version 0.11.3   31mar2025   TM moved default placement of by() note to clock pos 11 to make more prominent (based on feedback)
 *   version 0.11.2   24oct2024   IW by default se on y not x axis; nicer labels

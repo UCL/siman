@@ -1,4 +1,6 @@
-*!  version 1.0		24jul2025
+*!  version 1.1		18dec2025
+*  version 1.1		18dec2025	resubmit to SJ
+*  version 1.0		24jul2025	submit to SJ
 *   v0.11.1   11apr2025  IW remove unwanted output, add level(), call siman describe
 *   v0.11     27mar2025  IW Broaden to include missing dgm/target/method and all method types; test properly
 *   v0.1      28oct2024  IW Rough starter

@@ -1,7 +1,8 @@
-*!  version 1.0.2	22sep2025	
+*!  version 1.1		18dec2025
+*  version 1.1		18dec2025	resubmit to SJ
 *  version 1.0.2	22sep2025	IW clearer error message if stubvar is also a varname; respects order of wide string methods again
 *  version 1.0.1	24jul2025	IW check for negative SEs
-*  version 1.0		24jul2025
+*  version 1.0		24jul2025	submit to SJ
 *   version 0.11.6   24jul2025   IW make estimate() required; new suboption method(,categorical)
 *   version 0.11.5   15jul2025   IW bug fix: one instance of method changed to `method'
 *   version 0.11.4   12mar2025   IW impose sensible sort order; dgmvar encoding respects order in data

@@ -1,4 +1,6 @@
-*!  version 1.0		24jul2025
+*!  version 1.1		18dec2025
+*  version 1.1		18dec2025	resubmit to SJ
+*  version 1.0		24jul2025	submit to SJ
 *   version 0.11.4   11mar2025   IW/TM add transparency to plot
 *   version 0.11.3   02jan2025   IW specify estimate/se as variables, not keywords
 *   version 0.11.2   24oct2024   IW improve graph titles and note
