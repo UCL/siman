@@ -91,7 +91,7 @@ default approach can be changed with the {cmd:combine} and {cmd:matrix} options.
 {pstd}
 If there are many methods in the data set and the user wishes to compare subsets of methods,
 this can be achieved using the {bf: methlist()} option.  
-Note that the value and not the label needs to be entered in {bf: methlist()} 
+The value, not the label, needs to be entered in {bf: methlist()} 
 (if these are different).
 For example if method is a numeric labelled variable with values 1, 2, 3 and corresponding labels A, B, and C,
 then {bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)}.  

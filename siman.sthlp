@@ -83,7 +83,7 @@ confidence intervals, an indicator of rejection of a hypothesis, and more.
 {pstd}{bf:Performance statistics data set.}{p_end}
 {pstd}Contains performance statistics, including Monte Carlo error, for performance measures of interest 
 (computed by {bf:{help siman analyse}}). These can be visualised with {bf:{help siman lollyplot}} and 
-{bf:{help siman nestloop}}. Note that the performance data set will usually be appended to the estimates data set.
+{bf:{help siman nestloop}}. The performance data set will usually be appended to the estimates data set.
 
 {pstd}For troubleshooting and limitations, see {help siman setup##limitations:troubleshooting and limitations}.
 

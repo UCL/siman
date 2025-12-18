@@ -40,7 +40,7 @@ Do not exclude {it:method} from the {cmd:by()} option.
 {synopt:{opt m:ethlist(string)}}display the graphs for a subgroup of methods.  
 For example, in a dataset with methods A, B, C and D, if the user would like to compare 
 methods A and C, they would enter {bf: methlist(A C)}, which would plot graphs for the difference C - A.
-Note that the value needs to be entered in to {bf: methlist()} and not the label 
+The value needs to be entered in to {bf: methlist()} and not the label 
 (if these are different).  For example if method is a numeric labelled variable with values 1, 2, 3 and corresponding labels A, B, and C, then 
 {bf: methlist(1 2)} would need to be entered instead of {bf: methlist(A B)}.  The {bf: methlist()} option needs to be specified to subset on methods, 
 using <= and >= will not work.  The components of {bf: methlist()}  need to be written out in full, for example {bf: methlist(1 2 3 4)} and not

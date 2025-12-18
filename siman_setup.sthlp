@@ -274,7 +274,7 @@ because in these data its value is constant.
 
 {phang}. {stata "siman setup, rep(rep) dgm(dgm) target(beta gamma) method(1 2) estimate(est) se(se) true(true) order(method)"}
 
-{phang}Note that whatever the input format, the output dataset is in long-long format. 
+{phang}Whatever the input format, the output dataset is in long-long format. 
 
 
 {marker chars}{...}
