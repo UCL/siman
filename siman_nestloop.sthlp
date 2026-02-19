@@ -76,7 +76,7 @@ with two targets, beta and gamma, and two performance measures, bias and relerro
 names would be "nestloop_beta_bias", "nestloop_gamma_bias", "nestloop_beta_relerror" and "nestloop_gamma_relerror".{p_end}
 {synopt:{opt sav:ing}({it:namestub}[{cmd:, replace}])}saves each graph to disk in Stata’s .gph format.
 The graph name is {it:namestub}, to which "_", the target name, 
-"_" and the performance measure are appended. Default is "nestloop". {p_end}
+"_" and the performance measure are appended.{p_end}
 {synopt:{opt exp:ort}({it:filetype}[{cmd:, replace}])}exports each graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} with the appropriate 
 filetype, which must be one of the suffices listed in {help graph export}.{p_end}
@@ -101,9 +101,9 @@ for different methods on top of each other in a full factorial design.
 
 {pstd}The user can select a set of performance measures to be graphed from those listed in 
 {help siman analyse##perfmeas:performance measures}.
-If no performance measures are specified, then the default choice is {help siman analyse##bias:bias};
-however, if {cmd:true()} was not specified in {help siman setup}, graphs will be drawn for 
-{help siman analyse##mean:mean}.
+If no performance measures are specified, then the default is {help siman analyse##bias:bias}
+if {cmd:true()} was specified in {help siman setup}, 
+and otherwise {help siman analyse##mean:mean}.
 
 {pstd}
 The user can specify {it:if} within the {cmd:siman nestloop} syntax. The

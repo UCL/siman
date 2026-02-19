@@ -40,8 +40,7 @@ Specifying for example {cmd:by(}{it:target method}{cmd:)} will overlay DGMs.
 
 {syntab:Saving options}
 {synopt:{opt name}({it:name}[{cmd:, replace}])}the graph name. Default {it:name} is "scatter".{p_end}
-{synopt:{opt sav:ing}({it:name}[{cmd:, replace}])}saves the graph to disk in Stata’s .gph format.
-Default {it:name} is "scatter".{p_end}
+{synopt:{opt sav:ing}({it:name}[{cmd:, replace}])}saves the graph to disk in Stata’s .gph format.{p_end}
 {synopt:{opt exp:ort}({it:filetype}[{cmd:, replace}])}exports the graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified. The exported file name is the same as for {cmd:saving()} with the appropriate 
 filetype, which must be one of the suffices listed in {help graph export}.{p_end}

@@ -48,8 +48,7 @@ under {opt scatteroptions()} or {opt bygraphoptions()} are specified here, then
 {syntab:Saving options}
 {synopt:{opt name}({it:namestub}[{cmd:, replace}])}the stub for the graph name, to which "_estimate" or "_se" is appended. Default {it:namestub} is "swarm".{p_end}
 {synopt:{opt sav:ing}({it:namestub}[{cmd:, replace}])}saves the graph(s) to disk in Stata’s .gph format.
-The graph name is {it:namestub}, to which "_estimate" or "_se" is appended. Default 
-{it:namestub} is "swarm".{p_end}
+The graph name is {it:namestub}, to which "_estimate" or "_se" is appended.{p_end}
 {synopt:{opt exp:ort}({it:filetype}[{cmd:, replace}])}exports each graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} with the appropriate 
 filetype, which must be one of the suffices listed in {help graph export}.{p_end}

@@ -60,7 +60,7 @@ use {cmd:subgr(mcol(red))}; with the {cmd:matrix} method, use {cmd:mcol(red)}.{p
 {synopt:{opt name}({it:namestub}[{cmd:, replace}])}the stub for the graph name, to which "_#" is appended, where # is the group 
 number. Default {it:namestub} is "cms".{p_end}
 {synopt:{opt sav:ing}{it:(namestub[}{cmd:, replace}{it:])}}saves each graph to disk in Stata’s .gph format.
-The graph name is {it:namestub} with "_#" appended, where # is the group number. Default {it:namestub} is "cms".{p_end}
+The graph name is {it:namestub} with "_#" appended, where # is the group number.{p_end}
 {synopt:{opt exp:ort}({it:filetype}[{cmd:, replace}])}exports each graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} with the appropriate 
 filetype, which must be one of the suffices listed in {help graph export}.{p_end}

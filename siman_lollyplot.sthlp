@@ -55,7 +55,7 @@ do not use the {help by_option:by} option, as this is called automatically.{p_en
 target) "_" and the target name are appended. Default is "lollyplot".{p_end}
 {synopt:{opt sav:ing}({it:namestub}[{cmd:, replace}])}saves each graph to disk in Stata format. The
 graph name is {it:namestub}, to which (if there are more than one 
-target) "_" and the target name are appended. Default is "lollyplot".{p_end}
+target) "_" and the target name are appended.{p_end}
 {synopt:{opt exp:ort}({it:filetype}[{cmd:, replace}])}exports each graph to disk in non-Stata format. 
 {cmd:saving()} must also be specified. Each exported file name is the same as for {cmd:saving()} with the appropriate 
 filetype, which must be one of the suffices listed in {help graph export}.{p_end}
