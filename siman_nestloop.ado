@@ -1,4 +1,5 @@
-*!  version 1.1		18dec2025
+*!  version 1.1.1	24apr2026
+*  version 1.1.1	24apr2026	bug fix: reflines carried over from one pm to the next
 *  version 1.1		18dec2025	resubmit to SJ
 *  version 1.0.1	30sep2025	IW add refline for pctbias
 *  version 1.0		24jul2025	submit to SJ
@@ -233,7 +234,8 @@ foreach thispm of local pmlist { // loop over PMs
         if "`thispm'"=="cover" local ref `cilevel'
         else if inlist("`thispm'", "bias", "pctbias", "relprec", "relerror") local ref 0
         else local ref
-        if !mi("`ref'") local options yline(`ref',lcol(gs12)) `options'
+        if !mi("`ref'") local reflines yline(`ref',lcol(gs12))
+        else local reflines
     }
 
     if "`thispm'" =="mean" & !mi("`true'") local trueopt true(`true')
@@ -244,7 +246,7 @@ foreach thispm of local pmlist { // loop over PMs
         local nameopt name(`name'_`thistarget'_`thispm'`nameopts')
         if !mi("`saving'") local savingopt saving(`"`saving'_`thistarget'_`thispm'"'`savingopts')
 
-        local nestloopcmd nestloop `estimate' if `target'=="`thistarget'" & _perfmeascode=="`thispm'", `descriptorsopt' method(`method') `trueopt' `nameopt' `savingopt' `options' ytitle(`thispm2') `debug'
+        local nestloopcmd nestloop `estimate' if `target'=="`thistarget'" & _perfmeascode=="`thispm'", `descriptorsopt' method(`method') `trueopt' `nameopt' `savingopt' `options' `reflines' ytitle(`thispm2') `debug'
         
         if !mi("`debug'") di as input `"Debug: `nestloopcmd'"'
         
