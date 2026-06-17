@@ -34,11 +34,16 @@
 Alternatively, {cmd:labformat(none)} removes the marker labels.{p_end}
 {synopt:{opt col:ors(string)}}specifies colours for the graphs: one per method.{p_end}
 {synopt:{opt ms:ymbol(string)}}specifies marker symbols for the graphs: one per method, or one for all methods.{p_end}
-{synopt:{opt refp:ower(string)}}draws a reference line for power. Default is no reference line for power.{p_end}
+{synopt:{opt refp:ower(#)}}draws a reference line for power at #%. Default is no reference line for power.{p_end}
 {synopt:{opt methleg:end}{cmd:(item|title)}}includes the name of the method variable in each legend item or as the legend title. The default is neither.{p_end}
 {synopt:{opt dgms:how}}shows in the top title the values of any DGM variables that are constant within the 'if' condition. The default is not to show them.{p_end}
 {synopt:{opt dgmti:tle}{cmd:(on|off)}}controls whether the top title shows the names of the DGM variables.
 The default is {cmd:dgmtitle(on)} with one DGM variable and {cmd:dgmtitle(off)} with more than one DGM variable.{p_end}
+{synopt:{opt dgmw:idth(#)}}changes the spacing between the DGMs in the title at 
+the top of the lollyplot. Default is 30.{p_end}
+{synopt:{opt pmw:idth(#)}}changes the spacing between the performance measures 
+in the title on the left of the lollyplot. Default is 24.{p_end}
+
 {syntab:Calculation options}
 {synopt:{opt mcl:evel(#)}}sets the level for Monte Carlo confidence intervals. Default is the current level (taken from c(level); see {help level}).{p_end}
 {synopt:{opt logit}}calculates Monte Carlo confidence intervals for power and coverage on the logit scale. This

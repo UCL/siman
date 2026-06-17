@@ -53,11 +53,12 @@ version 15
 
 syntax [anything] [if] [, ///
     LABFormat(string) COLors(string) MFColors(string) MLColors(string) MSymbol(string)  ///
-    REFPower(real -1) METHLEGend(string) DGMShow DGMTItle(string) /// specific graph options
+    REFPower(real -1) METHLEGend(string) DGMShow DGMTItle(string) /// 
+	DGMWidth(int 30) PMWidth(int 24) /// specific graph options
     MCLevel(cilevel) logit /// calculation options
     BYGRaphoptions(string) name(string) * /// general graph options
     pause SAVing(string) EXPort(string) /// advanced graph option
-    dgmwidth(int 30) pmwidth(int 24) debug rangeadd(real 0.2) by(string) /// undocumented options
+    debug rangeadd(real 0.2) by(string) /// undocumented options
     ]
 
 foreach thing in `_dta[siman_allthings]' {
