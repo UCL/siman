@@ -1,4 +1,5 @@
-*!  version 1.1		18dec2025
+*!  version 1.1.1	2jul2026
+*  version 1.1.1	2jul2026	remove checks for _perfmeascode (checked in analyse), _pm _dataset _scenario (no longer used)
 *  version 1.1		18dec2025	resubmit to SJ
 *  version 1.0.2	22sep2025	IW clearer error message if stubvar is also a varname; respects order of wide string methods again
 *  version 1.0.1	24jul2025	IW check for negative SEs
@@ -81,7 +82,7 @@ if "`setuprun'" == "1" {
 local setuprun 0
 
 * check for forbidden varnames in data
-foreach varname in _perfmeascode _pm _dataset _scenario _true {
+foreach varname in _true {
     capture confirm variable `varname'
     if !_rc {
         di as error "{p 0 2}siman would like to name a variable '`varname'', but that name already exists in your data. Please rename your variable `varname' as something else.{p_end}"
@@ -508,6 +509,7 @@ if "`targetformat'"=="wide" & "`methodformat'"=="wide" & "`order'"=="target" {
         }
     }
     `dicmd' reshape long `stubvarsinterim', i(`rep' `longvars') j(method `method') `methodstring'
+		// this is where newvar method is created
     local methodformat long
     local method method
     local longvars `longvars' `method'
