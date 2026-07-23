@@ -550,7 +550,7 @@ if "`targetformat'"=="wide" & "`methodformat'"=="long" {
 if !mi("`dgm'") & !mi("`true'") {
     cap bysort `dgm' `target': assert `true'==`true'[1]
     if _rc {
-        di as error "{p 0 2}True value is not constant within dgm{p_end}"
+        di as error "{p 0 2}True value is not constant within dgm and target{p_end}"
         exit 498
     }
 }
