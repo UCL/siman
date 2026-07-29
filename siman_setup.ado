@@ -1,4 +1,5 @@
-*!  version 1.1.1	2jul2026
+*!  version 1.1.2	29jul2026
+*  version 1.1.2	29jul2026	add check for true(varlist)
 *  version 1.1.1	2jul2026	remove checks for _perfmeascode (checked in analyse), _pm _dataset _scenario (no longer used)
 *  version 1.1		18dec2025	resubmit to SJ
 *  version 1.0.2	22sep2025	IW clearer error message if stubvar is also a varname; respects order of wide string methods again
@@ -407,7 +408,14 @@ if mi("`truetype'") {
 }
 if mi("`truetype'") {
     cap confirm numeric variable `true'
-    if !_rc local truetype variable
+    if !_rc {
+		local truetype variable
+		cap unab true2 : `true', max(1)
+		if _rc {
+			di as error "{p 0 2}true(`true') not allowed: must be true(#|var|stub){p_end}"
+			exit 198
+		}
+	}
 }
 if mi("`truetype'") {
     cap confirm name `true'
@@ -417,7 +425,6 @@ if mi("`truetype'") {
     di as error "true(`true') not allowed: must be true(#|var|stub)"
     exit 498
 }
-if "`truetype'"=="variable" unab true : `true'
 
 * checks
 if "`truetype'"=="variable" {
