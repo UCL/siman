@@ -19,9 +19,9 @@
 
 {pstd}Get started
 
-{p2col:{bf:{help siman setup}}}set up data in the format required by siman, using the user’s raw simulation data (so-called ‘estimates data set’)
+{p2col:{bf:{help siman setup}}}set up data in the format required by {cmd:siman}, using the user’s raw simulation data (so-called ‘estimates data set’)
 
-{p2col:{bf:{help siman describe}}}provides a summary table of the estimates data imported by {help siman setup}
+{p2col:{bf:{help siman describe}}}provide a summary table of the estimates data imported by {help siman setup}
 
 {pstd}Descriptive graphs of results using estimates data
 
@@ -38,11 +38,11 @@ from different methods when multiple methods have been applied to the same simul
 
 {pstd}Analyses to estimate performance
 
-{p2col:{bf:{help siman analyse}}}creates performance statistics data set from the estimates data set, and can hold both in memory
+{p2col:{bf:{help siman analyse}}}create performance statistics data set from the estimates data set, and can hold both in memory
 
 {pstd}Graphs and tables of performance statistics
 
-{p2col:{bf:{help siman table}}}tabulates performance statistics
+{p2col:{bf:{help siman table}}}tabulate performance statistics
 
 {p2col:{bf:{help siman lollyplot}}}lollyplot of performance statistics with Monte Carlo confidence intervals
 
@@ -50,9 +50,9 @@ from different methods when multiple methods have been applied to the same simul
 
 {pstd}Utilities
 
-{p2col:{bf:siman which}}reports the version number and date for each siman subcommand
+{p2col:{bf:siman which}}report the version number and date for each {cmd:siman} subcommand
 
-{p2col:{bf:{help siman import}}}imports a user's dataset of performance statistics, bypassing {help siman setup} and {help siman analyse}
+{p2col:{bf:{help siman import}}}import a user's dataset of performance statistics, bypassing {help siman setup} and {help siman analyse}
 
 {pstd}Subcommands may be abbreviated to 3 or more characters, and {cmd:comparemethodsscatter} may be abbreviated to {cmd:cms}.
 
@@ -62,12 +62,14 @@ from different methods when multiple methods have been applied to the same simul
 
 {pstd}
 {cmd:siman} is a suite of programs for the analysis of simulation studies, importing estimates data, 
-analysing the results of simulation studies and graphing the data. 
+analysing the results of simulation studies and graphing the data. It is based 
+around the ADEMP structure of {help siman##Morris19:Morris et al (2019)}
+and builds on the analysis facilities in {help siman##White10:White (2010)}.
 
 {pstd}The typical workflow is 
 {cmd:siman setup} → descriptive graphs → {cmd:siman analyse} → 
 tables and graphs of performance, 
-but descriptive graphs remain available after siman analyse.
+but descriptive graphs remain available after {cmd:siman analyse}.
 
 
 {marker formats}{...}
@@ -92,10 +94,10 @@ confidence intervals, an indicator of rejection of a hypothesis, and more.
 {title:Examples}
 
 {pstd} An example estimates data set with three data-generating mechanisms (MCAR, MAR, MNAR missing data) 
-and three methods of analysis (Full, CCA, MI) with 1,000 repetitions is available on the {cmd: siman} 
+and three methods of analysis (Full, CCA, MI) with 1,000 repetitions is available on the {cmd:siman} 
 GitHub repository {browse "https://github.com/UCL/siman/":here}, named simcheck.dta.
 
-{phang} To plot the estimates data graphs, first load the data set in to {cmd: siman}.
+{phang} To plot the estimates data graphs, first load the data set in to {cmd:siman}.
 
 {phang}. {stata "use https://raw.githubusercontent.com/UCL/siman/master/testing/data/simcheck.dta, clear"}
 
@@ -128,8 +130,12 @@ GitHub repository {browse "https://github.com/UCL/siman/":here}, named simcheck.
 {title:References}{marker refs}
 
 {phang}{marker Morris19}Morris TP, White IR, Crowther MJ. Using simulation studies
-to evaluate statistical methods. Statistics in Medicine 2019; 38: 2074–2102.
+to evaluate statistical methods. {it:Statistics in Medicine} 2019; 38: 2074–2102.
 {browse "https://doi.org/10.1002/sim.8086":doi:10.1002/sim.8086}
+
+{phang}{marker White10}White IR. simsum: Analyses of simulation studies including Monte
+Carlo error. {it:Stata Journal} 2010; 10: 369-385. 
+{browse "https://doi.org/10.1177/1536867X1001000305":doi:10.1177/1536867X1001000305}.
 
 
 {title:Authors and updates}{marker updates}
@@ -156,6 +162,7 @@ Tra My Pham, Nick Latimer, Matteo Quartagno.
 
 {title:See Also}
 
-{pstd}{help simsum} (installed with siman)
-{pstd}{help nestloop} (installed with siman)
+{pstd}{help simsum}{p_end}
+{pstd}{help nestloop} (installed with {cmd:siman}){p_end}
+{pstd}Article:  {it:Stata Journal}, volume 26, number 3: {browse "https://doi.org/10.1177/1536867X261477504":st0807}{p_end}
 
