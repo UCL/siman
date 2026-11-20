@@ -22,7 +22,7 @@ for which performance has been calculated by {help siman analyse}. If not specif
 performance is displayed for all available measures.
 
 {pstd}
-{opt if} must only be applied to variables defining {bf:dgm}, {bf:target} and/or {bf:method} from siman setup.
+{opt if} must only be applied to variables defining {bf:dgm}, {bf:target} and/or {bf:method} from {cmd:siman setup}.
 
 {synoptset 20 tabbed}{...}
 {synopthdr}

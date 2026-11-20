@@ -2,11 +2,15 @@
 # siman
 ## Suite of commands for analysing the results of simulation studies and producing graphs
 
-Version: 1.1
-Date: 18dec2025
+Version: 1.1.2
+Date: 20nov2026
 
 ## Installation within Stata
-In due course, you will be able to install this package from SSC.
+From Stata Journal:
+- `net sj 26-3 st0807`
 
-To install it from github, use
+From SSC:
+- `ssc install siman`
+
+From this github repo (usually the latest version):
 - `net from https://raw.githubusercontent.com/UCL/siman/master/`

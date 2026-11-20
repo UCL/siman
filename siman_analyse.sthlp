@@ -11,7 +11,7 @@
 {title:Title}
 
 {phang}
-{bf:siman analyse} {hline 2} Estimates performance from data imported by the {bf:siman suite}, using the program {help simsum:simsum}
+{bf:siman analyse} {hline 2} Estimates performance from data imported by the {bf:siman} suite, using the program {help simsum:simsum}
 
 
 {marker syntax}{...}

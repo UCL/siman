@@ -13,7 +13,7 @@
 {title:Title}
 
 {p2colset 5 15 17 2}{...}
-{p2col :{hi:siman setup} - Prepare data for siman suite}{p_end}
+{p2col :{hi:siman setup} - Prepare data for {cmd:siman} suite}{p_end}
 {p2colreset}{...}
 
 
@@ -175,7 +175,7 @@ the {opt method} which identifies the different methods of analysis.
 Results of the analysis typically include the {opt estimate} and its standard error ({opt se}).
  
 {pstd}
-Four data set formats are permitted by the siman suite as detailed {help siman setup##data:above}.
+Four data set formats are permitted by the {cmd:siman} suite as detailed {help siman setup##data:above}.
 {cmd:siman setup} automatically reshapes the data into long-long format. It also converts {cmd:dgmvars} from string to numeric, or (if they have non-integer values) from float to double.
 
 {pstd}
@@ -219,7 +219,7 @@ two targets (beta, gamma), and two methods of analysis (A, B).
 {title:Troubleshooting and limitations}
 
 {pstd}If the method variable (or value) is not specified (e.g. if there is only one), then {cmd:siman setup} 
-will create a variable {bf:_method} in the dataset with a value of 1 in order that other {bf: siman} programs can run.
+will create a variable {bf:_method} in the dataset with a value of 1 in order that other {cmd:siman} programs can run.
 
 {pstd}{bf:dgm} can contain missing values if the {opt dgmmissingok} option is used.
 
