@@ -61,8 +61,8 @@ from different methods when multiple methods have been applied to the same simul
 {title:Description}
 
 {pstd}
-{cmd:siman} is a suite of programs for the analysis of simulation studies, importing estimates data, 
-analysing the results of simulation studies and graphing the data. It is based 
+{cmd:siman} is a suite of programs for the analysis of simulation studies: importing 
+estimates data, computing performance measures and graphing the results. It is based 
 around the ADEMP structure of {help siman##Morris19:Morris et al (2019)}
 and builds on the analysis facilities in {help siman##White10:White (2010)}.
 
