@@ -142,7 +142,7 @@ Carlo error. {it:Stata Journal} 2010; 10: 369-385.
 
 {pstd}Ella Marley-Zagar, MRC Clinical Trials Unit at UCL, London, UK.
 
-{pstd}Ian White, MRC Clinical Trials Unit at UCL, London, UK.{break}
+{pstd}Ian White, UCL Innovative Clinical Trials Unit, London, UK.{break}
 Email: {browse "mailto:ian.white@ucl.ac.uk":Ian White}
 
 {pstd}Tim Morris, Statistical Methodology, Novartis Pharmaceuticals UK Ltd., London, UK.{break}
